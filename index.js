@@ -27,6 +27,7 @@ client.once('ready', () => {
     client.user.setActivity(`${prefix}help for help.`);
 });
 //641911773208772608
+//noocmd
 //Mdwb3P0OGh4018TaSBHx7cw0JAlr7cXegURIs0MJXU_wPRMUlR4O9dlofXaqr_TpylIe
 function hook(img1, img2){
     client.fetchWebhook('641230865082482708', 'UufFBR5LEY5NcmAEqz67-yuqQr7XBtAGTGZ3Cr4rhTB6vR0TMIKo-l63KAnrS_HQLfTc')

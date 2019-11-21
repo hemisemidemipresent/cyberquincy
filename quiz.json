@@ -1,0 +1,178 @@
+[
+    {
+        "question": "In Bloons TD 4, Boomerang Throwers had an upgrade that exchanged their Boomerangs for Glaives. What was the name of the upgrade?",
+        "optns":["Glaive Chucker","Glaive Thrower","Glaive Monkey","King of Glaives"],
+        "answers": "b"
+    },
+    {
+        "question": "Which tower in Bloons TD 4 doesn't provide any attack power at all?",
+        "optns":["Banana Farm","Monkey Ace","Monkey Apprentice","Glue Gunner"],
+        "answers": "a"
+    },
+    {
+        "question": "What fruit explodes?",
+        "optns":["Pineapples","Oranges","Guavas","Bananas"],
+        "answers": "a"
+    },
+    {
+        "question": "In Bloons TD 4, what is the name of the upgrade that allows Ice towers to pop Bloons?",
+        "optns":["Snap Freeze","Sharp Shards","Permafrost","Spikey Ice"],
+        "answers": "a"
+    },
+    {
+        "question": "How many base tower types are there in Bloons TD 2?",
+        "optns":["6","8","7","5"],
+        "answers": "a"
+    },
+    {
+        "question": "What is the cheapest tower in Bloons TD 4?",
+        "optns":["Dart Monkey","Super Monkey","Monkey Ace","Tack Tower"],
+        "answers": "a"
+    },
+    {
+        "question": "White Bloons are immune to what effect?",
+        "optns":["Freezing","Piercing","Wind","Bombs"],
+        "answers": "a"
+    },
+    {
+        "question": "What does RBE stand for?",
+        "optns":["Red Bloon Equivalent","Roy's BBQ Extravaganza","Royal Beagle Excitement","Real Bloon Engagement"],
+        "answers": "a"
+    },
+    {
+        "question": "Roses are red, Violets are blue. What colour is a Tack Shooter?",
+        "optns":["Purple","Green","Brown","Pink"],
+        "answers": "d"
+    },
+    {
+        "question": "Which of the following basic towers can pop lead Bloons?",
+        "optns":["Ice Tower","Dart Monkey","Bomb Tower","Tack Tower"],
+        "answers": "c"
+    },
+    
+    {
+        "question": "How many Ceramic Bloons does an MOAB contain?",
+        "optns":["8","4","2","6"],
+        "answers": "b"
+    },
+    {
+        "question": "Bloons Tower Defense for iPhone and iPod touch was a port of which version of the web games?",
+        "optns":["Bloons TD 2","Bloons TD 4","Bloons TD 3","Bloons TD"],
+        "answers": "c"
+    },
+    {
+        "question": "In Bloons TD 2, each tower had 2 upgrades. In Bloons TD 3 there were 4. How many upgrades for each tower are there in Bloons TD 4?",
+        "optns":["4","3","5","2"],
+        "answers": "a"
+    },
+    {
+        "question": "What upgrade to the Monkey Apprentice is able to send Bloons back down the path?",
+        "optns":["Summon Tornado","Fireball","Reverso","Bloon Control"],
+        "answers": "a"
+    },
+    {
+        "question": "There were two new towers added as updates to Bloons TD 4 after initial release. What were they?",
+        "optns":["Monkey Buccaneer and Monkey Ace","Dartling Gun and Ninja Monkey","Dartling Gun and Spike Factory","Banana Farm and Dartling Gun"],
+        "answers": "c"
+    },
+    {
+        "question": "Bloons come in all colours of the rainbow. In the original Bloons Tower Defense, which colour of the rainbow is missing?",
+        "optns":["Green","Orange","Blue","Red"],
+        "answers": "b"
+    },
+    {
+        "question": "Black Bloons are immune to what effect?",
+        "optns":["Bombs","Freezing","Plasma","Glue"],
+        "answers": "a"
+    },
+    {
+        "question": "How much money do you start a game of Bloons TD with?",
+        "optns":["650","500","900","750"],
+        "answers": "a"
+    },
+    {
+        "question": "On easy mode in Bloons TD 2, how many tracks can you choose from?",
+        "optns":["12","1","8","3"],
+        "answers": "b"
+    },
+    {
+        "question": "Which version of Bloons Tower Defense introduced the Super Monkey?",
+        "optns":["Bloons TD 2","Bloons TD 4","Bloons TD ","Bloons TD 3"],
+        "answers": "c"
+    },
+    {
+        "question": "In Bloons TD 4, which of the following towers has the biggest attack radius?",
+        "optns":["Boomerang Thrower","Bomb Tower","Glue Gunner","Monkey Apprentice"],
+        "answers": "d"
+    },
+    {
+        "question": "How many waves were there in hard mode in Bloons TD 2?",
+        "optns":["50","75","40","60"],
+        "answers": "a"
+    },
+    {
+        "question": "What is the secret of the Monkey Temple in Bloons TD 4 Expansion?",
+        "optns":["You win the game","If you made a sacrifice, the Temple is activated","The Bloons move in slow motion","It unlocked a new game mode"],
+        "answers": "b"
+    },
+    {
+        "question": "Which version of Bloons TD introduced road spikes?",
+        "optns":["Bloons TD 3","Bloons TD","Bloons TD 2","Bloons TD 4"],
+        "answers": "c"
+    },
+    {
+        "question": "How many different Bloon types were there in the original Bloons Tower Defense?",
+        "optns":["6","5","4","8"],
+        "answers": "a"
+    },
+    {
+        "question": "What is the most expensive tower?",
+        "optns":["Banana Farm","Super Monkey","Tack Shooter","Monkey Beacon        "],
+        "answers": "b"
+    },
+    {
+        "question": "Bloons TD 3 introduced a new tower that didn't actually attack Bloons. Name the final upgrade for this tower.",
+        "optns":["Monkey Storm Beacon","Epic Storm","Super Beacon","Super Monkey Beacon"],
+        "answers": "a"
+    },
+    {
+        "question": "There is a tower that allows you to summon a wave of supermonkeys to destroy everything. Name the tower that offers this upgrade.",
+        "optns":["Monkey Beacon","Monkey Storm","Super Monkey","Dart Monkey"],
+        "answers": ""
+    },
+    {
+        "question": "In Bloons TD 2, Dart Monkeys had an upgrade that allowed them to pop 3 Bloons. In Bloons TD 4 this was replaced by what upgrade?",
+        "optns":["Razor Darts","Pineapples","Exploding Darts","Spike-o-pult"],
+        "answers": "d"
+    },
+    {
+        "question": "Ceramic Bloons were first introduced in Bloons TD 3. What attack has a reduced effect against them?",
+        "optns":["Glue","Tacks","Lollipops","Water"],
+        "answers": "a"
+    },
+    {
+        "question": "What year was the original Bloons Tower Defense launched?",
+        "optns":["2005","2006","2007","2008"],
+        "answers": "c"
+    },
+    {
+        "question": "Frozen Bloons can't be popped with regular darts. What tower is needed with Ice Towers in order to maximise their effect?",
+        "optns":["Bomb Tower","Boomerang Thrower","Super Monkey","Spike-o-pult"],
+        "answers": "a"
+    },
+    {
+        "question": "What is the most expensive upgrade?",
+        "optns":["Sun God","Tempest Tornado","Battleship","Arctic Wind"],
+        "answers": "a"
+    },
+    {
+        "question": "What do the letters M.O.A.B. stand for in Bloons TD 3?",
+        "optns":["Mother of All Bloons","Mary's Only Albino Bear","Mobile Ordinance Air Bloon","Massive Ornary Air Blimp"],
+        "answers": "d"
+    },
+    {
+        "question": "In Bloons TD 4, which of the following towers does not have an upgrade allowing it to detect Camo Bloons?",
+        "optns":["Super Monkey","Monkey Ace","Monkey Buccaneer","Monkey Beacon"],
+        "answers": "c"
+    }
+]

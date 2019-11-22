@@ -7,9 +7,6 @@ module.exports = {
 	usage: '[command name]',
 	cooldown: 5,
 	execute(message, args) {
-		const data = [];
-		const { commands } = message.client;
-
 		if (!args.length) {
 			userneedhelp=message.author
       	const helpembed = new Discord.RichEmbed()
@@ -27,6 +24,16 @@ module.exports = {
 					console.error(`Could not send help DM to ${message.author.tag}.\n`, error);
 					message.reply('it seems like I can\'t DM you!');
 				});
+		}else if(args[0]=='test'){
+			const hembed = new Discord.RichEmbed()
+			.setTitle('helpembed')
+			.addField('Hero Commands',`\`\`${prefix}help hero\`\``,true)
+			.addField('Round Commands',`\`\`${prefix}help round\`\``,true)
+			.addField('Freeplay Commands',`\`\`${prefix}help freeplay\`\``,true)
+			.addField('Advanced Popology Commands',`\`\`${prefix}help ap\`\``,true)
+			.addField('BTD miscellanious Commands',`\`\`${prefix}help misc\`\``,true)
+			.addField('Other commands',`\`\`${prefix}help misc\`\``,true)
+			message.channel.send(hembed)
 		}	
-	},
+	}
 }

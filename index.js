@@ -196,7 +196,7 @@ client.on('message',async message => {
     const now = Date.now();
     const timestamps = cooldowns.get(command.name);
     const cooldownAmount = (command.cooldown || 3) * 1000;
-    if (timestamps.has(message.author.id)&&noocmd.test(cont)===false) {
+    if (timestamps.has(message.author.id)&&noocmd.test(message.channel.topic)===false) {
         const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
     
         if (now < expirationTime) {

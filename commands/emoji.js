@@ -31,16 +31,17 @@ module.exports = {
       }else if(args[0]=='bfb'){
         message.channel.send('<a:rohan:408044760331452416><a:rohan2:408045435005960204>')
       }else if(args[0]=='cry'){
-		  message.channel.send('<a:cry:644398761409511434>')
-	  }else if(args[0]==help){
+		message.channel.send('<a:cry:644398761409511434>')
+	  }else if(args[0]=='help'){
       const helpembed = new Discord.RichEmbed()
-      .setTitle('Emoji help page')
-      .setDescription('how to use it:\nthere are 2 types of text here:\ntop text\n**bottom text(s)**\nuse it like so:\nq!emoji ``<top text>`` ``<bottom text>``(select **one** bottom text)\n**e.g.q!emoji supermonkey ha[[y')
-      .addField('supermonkey','happy,sleep,dizzy,cry,eyebrows',true)
-      .addField('drmonkey','nod,shake',true)
-      .addField('**crouch**','(just use q!emoji crouch)',true)
-      .addField('**bfb**','again, just use ``q!emoji bfb``',true)
-      .addField('**cry**','just like the previous',true)
+      	.setTitle('Emoji help page')
+      	.setDescription('how to use it:\nthere are 2 types of text here:\ntop text\n**bottom text(s)**\nuse it like so:\nq!emoji ``<top text>`` ``<bottom text>``(select **one** bottom text)\n**e.g.q!emoji supermonkey ha[[y')
+      	.addField('supermonkey','happy,sleep,dizzy,cry,eyebrows',true)
+      	.addField('drmonkey','nod,shake',true)
+      	.addField('**crouch**','(just use q!emoji crouch)',true)
+      	.addField('**bfb**','again, just use ``q!emoji bfb``',true)
+      	.addField('**cry**','just like the previous',true)
+	  	message.channel.send(helpembed)
     }
     
     },

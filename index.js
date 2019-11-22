@@ -2,11 +2,10 @@
 const keepAlive = require('./server');
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix,colour} = require('./config.json');
+const { prefix,colour, token} = require('./config.json');
 const package = require('./package-lock.json')
 const version = package.version
 const xp = require('./xp.json')
-const token = require('./.gitignore/config.json')
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));

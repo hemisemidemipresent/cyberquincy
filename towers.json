@@ -287,7 +287,7 @@
 	},
 	"dart": {
 		"base": {
-			"desc": "dummy attack (22r)\nradial-dart attack (1 damage, 5 pierce, 8 projectiles, 1 attack/2.1s, sharp type)\nflies on a circular path with radius 80, or a figure 8 or figure infinite with radii 40",
+			"desc": "dart attack (1d, 2p, 0.95s, 32r, sharp type)",
 			"name": "Rapid Fire",
 			"cost": "650"
 		},

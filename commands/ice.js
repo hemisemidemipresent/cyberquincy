@@ -28,19 +28,21 @@ module.exports = {
         }
         var u = t[name][`s${path}${tier}`]
         if (args[0]==='help'){
-			message.channel.send(`I cant recognise what you sent, here is the syntax fo the command: \`\`${name}\`\` \`\`<path1>`` ``<path2>`` ``path3>``. e.g. (q!ace 003 provides the description for the third upgrade on the third path) please remember that crosspaths e.g.(q!ace 205) are not accepted. All upgrades provided by topper64\'s advanced popology`)
+            message.channel.send(`here is the syntax fo the command: \`\`${name}\`\` \`\`<path1>\`\` \`\`<path2>\`\` \`\`path3>\`\`. please remember that crosspaths are not accepted. All upgrades provided by topper64\'s advanced popology`)
         }else if (path===0||tier==0||args[0]==='base'){
             var u = t[name]['base']
         }if (u === undefined ){
-          message.channel.send(`I cant recognise what you sent, here is the syntax fo the command: \`\`${name}\`\` \`\`<path1>`` ``<path2>`` ``path3>``. e.g. (q!ace 003 provides the description for the third upgrade on the third path) please remember that crosspaths e.g.(q!ace 205) are not accepted. All upgrades provided by topper64\'s advanced popology`)
+          message.channel.send(`I cant recognise what you sent, here is the syntax fo the command: \`\`${name}\`\` \`\`<path1>\`\` \`\`<path2>\`\` \`\`path3>\`\`. please remember that crosspaths are not accepted. All upgrades provided by topper64\'s advanced popology`)
         }else{
-            let de = u.desc
-            let na = u.name
-            let co = u.cost
+            var tcost = parseInt(t[name].base.cost)
+            for(i=tier;i>0;i--){
+                tcost = parseInt(t[name][`s${path}${i}`]['cost']) + tcost
+            }
             const infoembed = new Discord.RichEmbed()
-                .addField('name',`${na}`)
-                .addField('cost',`$${co} (on medium)`)
-                .addField('description',`${de}`)
+                .addField('name',`${u.name}`)
+                .addField('cost',`$${u.cost} (on medium)`)
+                .addField('description',`${u.desc}`)
+                .addField(`total cost of all the upgrades (including base tower cost)`,`${tcost} (on medium)`)
                 .setColor(colour)
             message.channel.send(infoembed)
         }

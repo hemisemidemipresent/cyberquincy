@@ -16,70 +16,48 @@ for (const file of commandFiles) {
 const cooldowns = new Discord.Collection();
 client.once('ready', () => {
     let channel = client.guilds.get('598768024761139240').channels.get('644712318222991374');
-	//let server = client.guilds.map(g=>g.name)
-	//console.log(server)
-	//let servers = client.guilds.find(name=>name='Cyber Quincy Bot Support')
-	//let invite = servers.fetchInvites()
-	//console.log(servers)
-	//console.log(invite)
+	/*let static = [], animated = [];
+    client.guilds.get('406530781964533780').emojis.forEach(emoji => emoji.animated ? animated.push([emoji.id, emoji.name]) : static.push([emoji.id, emoji.name]));
+    console.log('Static Emojis\n');
+    static.forEach(emoji => console.log('<:' + emoji[1] + ':' + emoji[0] + '>'));
+    console.log('\nAnimated Emojis\n');
+    animated.forEach(emoji => console.log('<a:' + emoji[1] + ':' + emoji[0] + '>'));
+    */
+    console.log('<Program Directive>')
+    function too(){console.log('<Eradicate Bloons>')}
+    setTimeout(too,1000)
+    function three(){console.log('<INITIATE>')}
+    setTimeout(three,2000)
     channel.send('restarted!');
-    console.log('Ready!');
     client.user.setActivity(`${prefix}help for help.`);
 });
 //641911773208772608
 //Mdwb3P0OGh4018TaSBHx7cw0JAlr7cXegURIs0MJXU_wPRMUlR4O9dlofXaqr_TpylIe
-function hook(img1, img2){
-    client.fetchWebhook('641230865082482708', 'UufFBR5LEY5NcmAEqz67-yuqQr7XBtAGTGZ3Cr4rhTB6vR0TMIKo-l63KAnrS_HQLfTc')
+function hook(img1){
+    client.fetchWebhook('647815493146771467', 'jeYFritoenhIA4EJ6dpQmVqMpEkFSNjLJFYLL6BiwbXY_jJWR5VODozWHh_-JVt4JaT7')
         .then(webhook => {
             console.log(`Obtained webhook with name: ${webhook.name}`)
             webhook.send({
                 files: [img1]
-              })
-                //.then(console.log)
-                .catch(console.error);
-            
-            webhook.send({
-                files: [img2]
-              })
-                //.then(console.log)
-                .catch(console.error);
             })
+                .then(console.log)
+                .catch(console.error);
+        })
         .catch(console.error)
-    client.fetchWebhook('641911773208772608', 'Mdwb3P0OGh4018TaSBHx7cw0JAlr7cXegURIs0MJXU_wPRMUlR4O9dlofXaqr_TpylIe')
-        .then(webhook => {
-            console.log(`Obtained webhook with name: ${webhook.name}`)
-            webhook.send({
-                files: [img1]
-              })
-                //.then(console.log)
-                .catch(console.error);
-            
-            webhook.send({
-                files: [img2]
-              })
-                //.then(console.log)
-                .catch(console.error);
-            })
-        .catch(console.error)
-    /*
-    client.fetchWebhook('641911773208772608', 'Mdwb3P0OGh4018TaSBHx7cw0JAlr7cXegURIs0MJXU_wPRMUlR4O9dlofXaqr_TpylIe')
-        .then(webhook => {
-            console.log(`Obtained webhook with name: ${webhook.name}`)
-            webhook.send({
-                files: [img1]
-              })
-                //.then(console.log)
-                .catch(console.error);
-            
-            webhook.send({
-                files: [img2]
-              })
-                //.then(console.log)
-                .catch(console.error);
-            })
-        .catch(console.error)
-    */
 }
+client.on('messageUpdate',async(newMessage,oldMessage)=>{
+	if(newMessage.pinned==true){
+		console.log('ye')
+		if(!oldMessage.attachments.array().length){
+            var Attachment = (oldMessage.attachments).array();
+            hook(Attachment[0].url)
+			console.log('et')
+            if(Attachment[1]!=undefined){
+                hook(Attachment[1].url)
+            }
+        }
+	}
+})
 client.on('guildCreate',guild =>{
     var channeltosend = guild.channels.find(channel => channel.name.includes('general')===true);
     if (channeltosend === null){
@@ -126,7 +104,18 @@ client.on('guildMemberRemove',member =>{
 })
 //messGAE
 client.on('message',async message => {
-    
+    /*if (message.author.id=='231934333609312256'||message.channel.id=='451930301875224587'){
+        if(!message.attachments.array().length){
+            var Attachment = (message.attachments).array();
+            hook(Attachment[0].url)
+            if(Attachment[1].url.length==0){
+                hook(Attachment[1].url)
+            }
+        }
+    }*/
+	if(message.pinned==true){
+		console.log('bu')
+	}
     var noocmd= /noo+cmd/i
     //autohelp
     if (message.content.startsWith('29999')){

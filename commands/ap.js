@@ -63,7 +63,7 @@ module.exports = {
 			}else{
 				const mainpropembed = new Discord.RichEmbed()
 					.setTitle('which of the following letters do you not understand?')
-					.setDescription('use **!ap 1 <whichever funny letter you want elaboration>** from the list below:')
+					.setDescription('use **q!ap 1 <whichever funny letter you want elaboration>** from the list below:')
 					.addField('**d**','Damage',true)
 					.addField('**md**/**cd**/**fd**','MOAB-class bloon Damage/ceramic damage/fortified bloon damage',true)
 					.addField('**p**','Pierce',true)
@@ -95,6 +95,8 @@ module.exports = {
 			.setFooter('If an upgrade adds or replaces an attack, the new attack will not be affected by buffs from earlier in the same path.')
 			.setColor(colour)
 			message.channel.send(buffembed)
+		}else{
+			message.channel.send('I cant understand what you are saying!')
 		}
 			
     }

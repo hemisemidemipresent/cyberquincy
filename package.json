@@ -1,13 +1,22 @@
 {
-  "name": "cyber_quincy_bot",
+  "name": "runner",
   "version": "1.0.0",
+  "description": "yeah man i dont need you stealing my stuff thanks",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "hnngggrrrr",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hnngggrrrr/cyberquincy.git"
+  },
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "description": "a btd6 bot",
+  "bugs": {
+    "url": "https://github.com/hnngggrrrr/cyberquincy/issues"
+  },
+  "homepage": "https://github.com/hnngggrrrr/cyberquincy#readme",
   "dependencies": {
     "discord.js": "^11.5.1",
     "express": "^4.17.1"

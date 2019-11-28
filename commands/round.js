@@ -1,5 +1,6 @@
 const r1 = require('../rounds.json')
 const round2 = require('../round2.json')
+const Discord = require('discord.js')
 module.exports = {
     name: 'round',
     description:'tells you about the rounds (below 100)',
@@ -34,7 +35,13 @@ module.exports = {
         }
         const index = parseInt(args[0])
         var data = r1[`r${index}`]
-        message.channel.send(`${data}\nBeta Feature: you earn \`\`${xp}\`\` xp in that round and you gained ${totalxp} since you played from round 1 \n**if**\n1) you are not in freeplay (then divide xp by 10 for value) AND\n2) you are playing beginner maps (intermediate +10%, advanced +20%, expert +30%)`)
-        message.channel.send('for more data use ``!income``')
+		const roundembed = new Discord.RichEmbed()
+		.setTitle(`round ${round}`)
+		.setDescription(`${data}`)
+		.addField('xp earned in that round',`${xp}`)
+		.addField('total xp if you started at round 1',`${totalxp}`)
+		.addField('**if:**','you are not in freeplay (then divide xp by 10 for value) AND\n2) you are playing beginner maps (intermediate +10%, advanced +20%, expert +30%)')
+		.setFooter('for more data use q!income')
+        message.channel.send(roundembed)
     }
 }

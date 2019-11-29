@@ -288,8 +288,8 @@
 	"dart": {
 		"base": {
 			"desc": "dart attack (1d, 2p, 0.95s, 32r, sharp type)",
-			"name": "Rapid Fire",
-			"cost": "650"
+			"name": "Dart Monkey",
+			"cost": "200"
 		},
 		"s11": { "desc": "+1p (3)", "name": "Sharp Shots ", "cost": "140" },
 		"s12": { "desc": "+2p (5)", "name": "Razor Sharp Shots", "cost": "220" },

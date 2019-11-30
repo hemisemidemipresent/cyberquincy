@@ -44,6 +44,7 @@ module.exports = {
                 .addField('description',`${u.desc}`)
                 .addField(`total cost of all the upgrades (including base tower cost)`,`${tcost} (on medium)`)
                 .setColor(colour)
+                .setFooter("d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help");
             message.channel.send(infoembed)
         }
     

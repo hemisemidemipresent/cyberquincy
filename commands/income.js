@@ -3,10 +3,10 @@ module.exports ={
     name: 'income',
     execute(message,args){
         if(args[0]==undefined){
-          return message.channel.send('use ``!income help``')
+          return message.channel.send('use ``q!income help``')
         }
         if (args[0]=='help'){
-          return message.channel.send('1. !income <startround> <endround>\n(if startround = 0, that means starting cash is included)\n2. !income <difficulty> <endround>\n(includes starting cash; deflation, half cash, abr not yet, apop is random)', { code: "md" })
+          return message.channel.send('1. q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)\n2. q!income <difficulty> <endround>\n(includes starting cash; deflation, half cash, abr not yet, apop is random)', { code: "md" })
         }
         if (args[1]==undefined){
             let endround = parseInt(args[0])
@@ -15,7 +15,7 @@ module.exports ={
             }
             let end = r[endround]
             let income = end.cch
-            return message.channel.send(`${income} total cash (including starting cash)`)
+            return message.channel.send(`${income} total cash from round 1 to roun(including starting cash)`)
         }
         let endround = parseInt(args[1])
         if(endround<0||endround>100){

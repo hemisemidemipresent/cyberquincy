@@ -21,6 +21,19 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
+function getUserFromMention(mention) {
+	if (!mention) return;
+
+	if (mention.startsWith('<@') && mention.endsWith('>')) {
+		mention = mention.slice(2, -1);
+
+		if (mention.startsWith('!')) {
+			mention = mention.slice(1);
+		}
+
+		return client.users.get(mention);
+	}
+}
 const sequelize = new Sequelize('database', 'user', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
@@ -129,11 +142,20 @@ client.on('message', async (message) => {
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	if (commandName == 'level') {
-		if (message.mentions != undefined) {
-			let mentions = message.mentions.members.array();
-			let id = mentions[0].id;
+		if (args[0]) {
+			const user = getUserFromMention(args[0]);
+			if (!user) {
+			return message.reply('Please use a proper mention if you want to see someone else\'s level');
+		}
 			try {
-				const tagg = await Tags.findOne({ where: { name: id } });
+				const tagg = await Tags.findOne({ where: { name: user.id} });
+        if(tagg==null){
+          const tag = await Tags.create({
+					name: user.id,
+					xp: 0,
+					level: 1
+				});
+        }
 				return message.channel.send(`level : ${tagg.level}\n xp: ${tagg.xp}`);
 			} catch (e) {
 				console.log(e);

@@ -316,7 +316,13 @@ client.on("message", async message => {
   if (noocmd.test(message.channel.topic) === false) {
     try {
       command.execute(message, args);
-      let xpAdd = Math.floor(Math.random() * 8) + 5;
+      if(message.channel.type=='dm'){
+        let xpAdd = Math.floor(Math.random() * 4) + 2
+      }else if(message.channel.id=='598835766113861633'){
+        let xpAdd = Math.floor(Math.random() * 16) + 10;
+      }else {
+        let xpAdd = Math.floor(Math.random() * 8) + 5;
+      }
       let guildmember = message.member;
       try {
         // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);

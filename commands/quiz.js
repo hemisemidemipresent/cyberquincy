@@ -1,6 +1,5 @@
 const Discord = require('discord.js')
 const quiz = require('../quiz.json');
-const xp = require('../xp.json')
 module.exports ={
     name: 'quiz',
     execute(message,args){

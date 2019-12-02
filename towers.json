@@ -6,7 +6,7 @@
 			"cost": "650"
 		},
 		"s11": { "name": "Rapid Fire", "cost": "650", "desc": "60%s (1.26)" },
-		"s12": { "desc": "radial-dart buffed: +4j (12)", "name": "", "cost": "" },
+		"s12": { "desc": "radial-dart buffed: +4j (12)", "name": "Lots More Darts", "cost": "650" },
 		"s13": {
 			"desc": "flies 20% faster\ngains moab-missile attack (25md, 1p, 3.0s, 2j, explosion type, homing, can only target blimps)",
 			"name": "Fighter Plane",

@@ -317,11 +317,12 @@ client.on("message", async message => {
     try {
       command.execute(message, args);
       if(message.channel.type=='dm'){
-        let xpAdd = Math.floor(Math.random() * 4) + 2
+        var xpAdd = Math.floor(Math.random() * 4) + 2
       }else if(message.channel.id=='598835766113861633'){
-        let xpAdd = Math.floor(Math.random() * 16) + 10;
+        var xpAdd = Math.floor(Math.random() * 16) + 10;
       }else {
-        let xpAdd = Math.floor(Math.random() * 8) + 5;
+        var xpAdd = Math.floor(Math.random() * 8) + 5;
+
       }
       let guildmember = message.member;
       try {

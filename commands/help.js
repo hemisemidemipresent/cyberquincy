@@ -11,13 +11,18 @@ module.exports = {
 		const { commands } = message.client;
 
 		if (!args.length) {
-			userneedhelp=message.author
+			let userneedhelp=message.author
       	const helpembed = new Discord.RichEmbed()
-          .setColor(colour) 
-          .setDescription(`Hi! I am Cyber Quincy. I am a btd6 bot made by hnngggrrrr#8734.`)
-          .addField('general information:','[List of commands](https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing)\n[support server](https://discord.gg/8agRm6c)')
-          .addField('Please note that this bot\'s name and avatar are owned by ninja Kiwi. This bot has no association with them.',' (yet);P')
-          .setFooter('have a popping day')
+		  .setColor(colour) 
+		  .setTitle('Cyber Quincy Command List')
+          .setDescription(`[support server](https://discord.gg/8agRm6c)`)
+          .addField('Hero Commands','``q!help hero``',true)
+		  .addField('Round Commands','``q!help round``',true)
+		  .addField('Freeplay Commands','``q!help free``',true)
+		  .addField('Advanced Popology','``q!help ap``',true)
+		  .addField('Miscellanious BTD','``q!help misc``',true)
+		  .addField('Other Commands','``q!help other``',true)
+          .setFooter('Please note that this bot\'s name and avatar are owned by ninja Kiwi. This bot has no association with them. and probably wont')
 			userneedhelp.send(helpembed)
 				.then(() => {
 					if (message.channel.type === 'dm') return;
@@ -27,6 +32,44 @@ module.exports = {
 					console.error(`Could not send help DM to ${message.author.tag}.\n`, error);
 					message.reply('it seems like I can\'t DM you!');
 				});
-		}	
+		}
+    if(!args[0])return
+    if(args[0].includes('hero')){
+			const heroembed = new Discord.RichEmbed()
+			.setColor(colour)
+			.setTitle('**Hero Commands**')
+			.setDescription('q!pat, q!benjamin, q!gwen, q!ezili, q!quincy, q!obyn, q!striker, q!churchill')
+			message.channel.send(heroembed)
+		}else if(args[0].includes('round')){
+			const rembed = new Discord.RichEmbed()
+			.setColor(colour)
+			.setTitle('**Round Commands**')
+			.setDescription('q!round, q!abround')
+			message.channel.send(rembed)
+		}else if(args[0].includes('free')){
+			const fembed = new Discord.RichEmbed()
+			.setColor(colour)
+			.setTitle('**Hero Commands**')
+			.setDescription('q!speed, q!health')
+			message.channel.send(fembed)
+		}else if(args[0].includes('ap')){
+			const apembed = new Discord.RichEmbed()
+			.setColor(colour)
+			.setTitle('**Advanced Popology Commands**')
+			.setDescription('q!ap, q!dart, q!boomerang, q!bomb, q!ice, q!glue, q!sniper, q!heli, q!sub, q!boat, q!ace, q!mortar, q!wizard, q!ninja, q!super, q!alchemist, q!druid, q!spactory, q!farm, q!engineer, q!village')
+			message.channel.send(apembed)
+		}else if(args[0].includes('misc')){
+			const membed = new Discord.RichEmbed()
+			.setColor(colour)
+			.setTitle('**BTD miscellanious Commands**')
+			.setDescription('q!monkeyopolis, q!quiz, q!fact, q!map, q!pic')
+			message.channel.send(membed)
+		}else if(args[0].includes('other')){
+			const oembed = new Discord.RichEmbed()
+			.setColor(colour)
+			.setTitle('**Other Commands**')
+			.setDescription('q!help, q!credits, q!server, q!info, q!ping')
+			message.channel.send(oembed)
+		}
 	},
 }

@@ -19,6 +19,8 @@
   "homepage": "https://github.com/hnngggrrrr/cyberquincy#readme",
   "dependencies": {
     "discord.js": "^11.5.1",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "sequelize": "^5.21.2",
+    "sqlite3": "^4.1.0"
   }
 }

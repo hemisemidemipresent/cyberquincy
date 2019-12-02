@@ -123,15 +123,7 @@ client.on('guildMemberAdd', (member) => {
 		tchannel.send(`welcome to the only rAcE sErVer`);
 	}
 });
-client.on('guildMemberRemove', (member) => {
-	if (member.guild.id === '598768024761139240') {
-		const tchannel = member.guild.channels.find((channel) => channel.name.includes('welcome'));
-		tchannel.send(`Goodbye, **${member.displayName}**`);
-	} else if (member.guild.id === '543957081183617024') {
-		const tchannel = member.guild.channels.find((channel) => channel.name.includes('general'));
-		tchannel.send(`${member.displayName} gave up on races and decided to watch sjb instead`);
-	}
-});
+
 //messGAE
 client.on('message', async (message) => {
 	//autohelp
@@ -145,17 +137,36 @@ client.on('message', async (message) => {
 		if (args[0]) {
 			const user = getUserFromMention(args[0]);
 			if (!user) {
-			return message.reply('Please use a proper mention if you want to see someone else\'s level');
-		}
+				if (args[0].includes('r') && args[0].includes('e')) {
+					const lvlMebed = new Discord.RichEmbed()
+						.setTitle(`xp rewards`)
+						.addField('level 3', `<@&645126928340353036> `)
+						.addField('level 10', `<@&645629187322806272>`)
+						.setColor(colour)
+						.addField(
+							'you only get role rewards in the bot support server',
+							'[support server](https://discord.gg/8agRm6c)'
+						)
+						.setFooter(`you only get role rewards in the bot support server`);
+					return message.channel.send(lvlMebed);
+				}
+				return message.reply("Please use a proper mention if you want to see someone else's level");
+			}
 			try {
-				const tagg = await Tags.findOne({ where: { name: user.id} });
-        if(tagg==null){
-          const tag = await Tags.create({
-					name: user.id,
-					xp: 0,
-					level: 1
-				});
-        }
+				const tagg = await Tags.findOne({ where: { name: user.id } });
+				if (tagg == null) {
+					const tag = await Tags.create({
+						name: user.id,
+						xp: 0,
+						level: 1
+					});
+				}
+				const xpembed = new Discord.RichEmbed()
+					.setTitle(`${user.username}'s xp'`)
+					.addField('level', tagg.level)
+					.addField('xp', tagg.xp)
+					.addField('have a suggestion or found a bug?', 'Please tell us [here](https://discord.gg/8agRm6c)!')
+					.setFooter('use q!level rewards to see role rewards');
 				return message.channel.send(`level : ${tagg.level}\n xp: ${tagg.xp}`);
 			} catch (e) {
 				console.log(e);
@@ -202,7 +213,7 @@ client.on('message', async (message) => {
 				true
 			)
 			.addField('support server, join for updates (happens pretty often)', 'https://discord.gg/8agRm6c', true)
-			.setFooter("thank you for using it! waiting for NK's approval");
+			.setFooter('thank you for using it! waiting for popularity');
 		message.channel.send(infoEmbed);
 	}
 	/*if(commandName=='edit'&&message.channel.id=='643773699916431361'){
@@ -251,7 +262,6 @@ client.on('message', async (message) => {
 					xp: 0,
 					level: 1
 				});
-				return message.reply(`xp added.`);
 			} catch (e) {
 				if (e.name === 'SequelizeUniqueConstraintError') {
 					const tag = await Tags.findOne({

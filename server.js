@@ -110,7 +110,7 @@ client.on('guildMemberAdd', (member) => {
 			'have a popping day'
 		)
 		.addField(`use ${prefix}info for more information`, 'this bot was made by hnngggrrrr#8734');
-	if (member.guild.id === '598768024761139240') {
+	if (member.guild.id == '598768024761139240') {
 		const tchannel = member.guild.channels.find((channel) => channel.name.includes('welcome'));
 		tchannel.send(
 			`Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and you are our **${member
@@ -123,7 +123,17 @@ client.on('guildMemberAdd', (member) => {
 		tchannel.send(`welcome to the only rAcE sErVer`);
 	}
 });
+client.on('guildMemberRemove',async (member)=>{
+	if (member.guild.id == '598768024761139240') {
+		const tchannel = member.guild.channels.find((channel) => channel.name.includes('welcome'));
+		tchannel.send(`${member.username} was lost in battle`);
 
+		member.send(helpembed);
+	} else if (member.guild.id === '543957081183617024') {
+		const tchannel = member.guild.channels.find((channel) => channel.name.includes('general'));
+		tchannel.send(`${member.username} is a sjb dick sucker`);
+	}
+})
 //messGAE
 client.on('message', async (message) => {
 	//autohelp

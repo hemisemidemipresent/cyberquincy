@@ -322,6 +322,7 @@ client.on("message", async message => {
         var xpAdd = Math.floor(Math.random() * 16) + 10;
       }else {
         var xpAdd = Math.floor(Math.random() * 8) + 5;
+
       }
       let guildmember = message.member;
       try {

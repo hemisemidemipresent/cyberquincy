@@ -259,118 +259,131 @@ client.on('message', async (message) => {
 		
 	}*/
 
-	const command =
-		client.commands.get(commandName) ||
-		client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
-	if (!command) return;
-	//cooldown
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
-	}
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
-	if (timestamps.has(message.author.id) && noocmd.test(message.channel.topic) === false) {
-		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(
-				`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`
-			);
-		}
-	}
-	timestamps.set(message.author.id, now);
-	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-	//command user
-	if (noocmd.test(message.channel.topic) === false) {
-		try {
-			command.execute(message, args);
-			if (message.channel.type == 'dm') {
-				var xpAdd = Math.floor(Math.random() * 4) + 2;
-			} else if (message.channel.id == '598835766113861633') {
-				var xpAdd = Math.floor(Math.random() * 16) + 10;
-			} else {
-				var xpAdd = Math.floor(Math.random() * 8) + 5;
-			}
-			let guildmember = message.member;
-			try {
-				// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-				const tag = await Tags.create({
-					name: message.author.id,
-					xp: 0,
-					level: 1
-				});
-			} catch (e) {
-				if (e.name === 'SequelizeUniqueConstraintError') {
-					const tag = await Tags.findOne({
-						where: { name: message.author.id }
-					});
-					const affectedRows = await Tags.update(
-						{ xp: tag.xp + xpAdd },
-						{ where: { name: message.author.id } }
-					);
-					if (affectedRows > 0) {
-						const tag1 = await Tags.findOne({
-							where: { name: message.author.id }
-						});
-						if (tag1.xp > tag1.level * 100) {
-							const affectedRows1 = await Tags.update(
-								{ level: tag1.level + 1 },
-								{ where: { name: message.author.id } }
-							);
-							let ran = Math.floor(Math.random() * 8);
-							switch (ran) {
-								case 0:
-									var ltxt = 'Haha!';
-									break;
-								case 1:
-									var ltxt = 'Ha!';
-									break;
-								case 2:
-									var ltxt = 'Oh Yeah!';
-									break;
-								case 3:
-									var ltxt = 'Alright!';
-									break;
-								case 4:
-									var ltxt = 'Sweet!';
-									break;
-								case 5:
-									var ltxt = 'Yes!';
-									break;
-								case 6:
-									var ltxt = 'Nice!';
-									break;
-								case 7:
-									var ltxt = 'Awesome!';
-							}
-							message.channel.send(`${ltxt} you advanced to level ${tag1.level}`);
-							if (tag1.level == 3) {
-								guildmember.addRole('645126928340353036');
-							}
-							if (tag1.level == 10) {
-								guildmember.addRole('645629187322806272');
-							}
-						}
-						return;
-					}
-				}
-				const errorEmbed = new Discord.RichEmbed()
-					.setColor(colour)
-					.addField(
-						'Oops! something went wrong!',
-						'Please join the [support server](https://discord.gg/8agRm6c)'
-					);
-				return message.reply(errorEmbed);
-			}
-		} catch (error) {
-			console.error(error);
-			const errorEmbed = new Discord.RichEmbed()
-				.setColor(colour)
-				.addField('something went wrong', 'Please join the [support server](https://discord.gg/8agRm6c)');
-			message.reply(errorEmbed);
-		}
-	}
+  const command =
+    client.commands.get(commandName) ||
+    client.commands.find(
+      cmd => cmd.aliases && cmd.aliases.includes(commandName)
+    );
+  if (!command) return;
+  //cooldown
+  if (!cooldowns.has(command.name)) {
+    cooldowns.set(command.name, new Discord.Collection());
+  }
+  const now = Date.now();
+  const timestamps = cooldowns.get(command.name);
+  const cooldownAmount = (command.cooldown || 3) * 1000;
+  if (
+    timestamps.has(message.author.id) &&
+    noocmd.test(message.channel.topic) === false
+  ) {
+    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+    if (now < expirationTime) {
+      const timeLeft = (expirationTime - now) / 1000;
+      return message.reply(
+        `please wait ${timeLeft.toFixed(
+          1
+        )} more second(s) before reusing the \`${command.name}\` command.`
+      );
+    }
+  }
+  timestamps.set(message.author.id, now);
+  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+  //command user
+  if (noocmd.test(message.channel.topic) === false) {
+    try {
+      command.execute(message, args);
+      if(message.channel.type=='dm'){
+        var xpAdd = Math.floor(Math.random() * 4) + 2
+      }else if(message.channel.id=='598835766113861633'){
+        var xpAdd = Math.floor(Math.random() * 16) + 10;
+      }else {
+        var xpAdd = Math.floor(Math.random() * 8) + 5;
+      }
+      let guildmember = message.member;
+      try {
+        // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
+        const tag = await Tags.create({
+          name: message.author.id,
+          xp: 0,
+          level: 1
+        });
+      } catch (e) {
+        if (e.name === "SequelizeUniqueConstraintError") {
+          const tag = await Tags.findOne({
+            where: { name: message.author.id }
+          });
+          const affectedRows = await Tags.update(
+            { xp: tag.xp + xpAdd },
+            { where: { name: message.author.id } }
+          );
+          if (affectedRows > 0) {
+            const tag1 = await Tags.findOne({
+              where: { name: message.author.id }
+            });
+            if (tag1.xp > tag1.level * 100) {
+              const affectedRows1 = await Tags.update(
+                { level: tag1.level + 1 },
+                { where: { name: message.author.id } }
+              );
+              let ran = Math.floor(Math.random() * 8);
+              switch (ran) {
+                case 0:
+                  var ltxt = "Haha!";
+                  break;
+                case 1:
+                  var ltxt = "Ha!";
+                  break;
+                case 2:
+                  var ltxt = "Oh Yeah!";
+                  break;
+                case 3:
+                  var ltxt = "Alright!";
+                  break;
+                case 4:
+                  var ltxt = "Sweet!";
+                  break;
+                case 5:
+                  var ltxt = "Yes!";
+                  break;
+                case 6:
+                  var ltxt = "Nice!";
+                  break;
+                case 7:
+                  var ltxt = "Awesome!";
+              }
+              message.channel.send(
+                `${ltxt} You advanced to level ${tag1.level}`
+              );
+              if (tag1.level == 3) {
+                guildmember.addRole("645126928340353036");
+              }
+              if (tag1.level == 10) {
+                guildmember.addRole("645629187322806272");
+              }
+            }
+            return;
+          }
+        }
+        const errorEmbed = new Discord.RichEmbed()
+          .setColor(colour)
+          .addField(
+            "Oops! something went wrong!",
+            "Please join the [support server](https://discord.gg/8agRm6c)"
+          );
+        return message.reply(errorEmbed);
+      }
+    } catch (error) {
+      console.error(error);
+      const errorEmbed = new Discord.RichEmbed()
+        .setColor(colour)
+        .addField(
+          "something went wrong",
+          "Please join the [support server](https://discord.gg/8agRm6c)"
+        );
+      message.reply(errorEmbed);
+    }
+  }
 });
 client.login(token);

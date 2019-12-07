@@ -120,7 +120,7 @@
 		"s35": {
 			"desc": "gains red-potion attack (200p, 10.0s, ∞r, transforms target into a red bloon, MOABs use 20p, BFBs and DDTs use 50p, and ZOMGs use 100p, BADs cannot be targeted at all)",
 			"name": "Bloon Master Alchemist",
-			"cost": "4000"
+			"cost": "40000"
 		}
 	},
 	"boat": {

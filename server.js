@@ -1,278 +1,255 @@
-const http = require("http");
-const express = require("express");
+const http = require('http');
+const express = require('express');
 const app = express();
-app.use(express.static("public"));
-app.get("/", (request, response) => {
-  console.log(Date.now() + " Ping Received");
-  response.sendStatus(200);
+app.use(express.static('public'));
+app.get('/', (request, response) => {
+	console.log(Date.now() + ' Ping Received');
+	response.sendStatus(200);
 });
 app.listen(process.env.PORT);
-const p = require("./package.json");
+const p = require('./package.json');
 const version = p.version;
-const fs = require("fs");
-const Discord = require("discord.js");
-const Sequelize = require("sequelize");
-const { prefix, colour, token } = require("./config.json");
+const fs = require('fs');
+const Discord = require('discord.js');
+const Sequelize = require('sequelize');
+const { prefix, colour, token } = require('./config.json');
 const client = new Discord.Client();
 var noocmd = /noo+cmd/i;
 client.commands = new Discord.Collection();
-const commandFiles = fs
-  .readdirSync("./commands")
-  .filter(file => file.endsWith(".js"));
+const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  client.commands.set(command.name, command);
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
 }
 function getUserFromMention(mention) {
-  if (!mention) return;
+	if (!mention) return;
 
-  if (mention.startsWith("<@") && mention.endsWith(">")) {
-    mention = mention.slice(2, -1);
+	if (mention.startsWith('<@') && mention.endsWith('>')) {
+		mention = mention.slice(2, -1);
 
-    if (mention.startsWith("!")) {
-      mention = mention.slice(1);
-    }
+		if (mention.startsWith('!')) {
+			mention = mention.slice(1);
+		}
 
-    return client.users.get(mention);
-  }
+		return client.users.get(mention);
+	}
 }
-const sequelize = new Sequelize("database", "user", "password", {
-  host: "localhost",
-  dialect: "sqlite",
-  logging: false,
-  // SQLite only
-  storage: "database.sqlite"
+const sequelize = new Sequelize('database', 'user', 'password', {
+	host: 'localhost',
+	dialect: 'sqlite',
+	logging: false,
+	// SQLite only
+	storage: 'database.sqlite'
 });
-const Tags = sequelize.define("tags", {
-  name: {
-    type: Sequelize.STRING,
-    unique: true
-  },
-  xp: Sequelize.INTEGER,
-  level: Sequelize.INTEGER
+const Tags = sequelize.define('tags', {
+	name: {
+		type: Sequelize.STRING,
+		unique: true
+	},
+	xp: Sequelize.INTEGER,
+	level: Sequelize.INTEGER
 });
 const cooldowns = new Discord.Collection();
-client.once("ready", () => {
-  Tags.sync();
-  console.log("<Program Directive>");
-  function too() {
-    console.log("<Eradicate Bloons>");
-  }
-  setTimeout(too, 1000);
-  function three() {
-    console.log("<INITIATE>");
-  }
-  setTimeout(three, 2000);
-  client.user.setActivity(`${prefix}help for help.`);
+client.once('ready', () => {
+	Tags.sync();
+	console.log('<Program Directive>');
+	function too() {
+		console.log('<Eradicate Bloons>');
+	}
+	setTimeout(too, 1000);
+	function three() {
+		console.log('<INITIATE>');
+	}
+	setTimeout(three, 2000);
+	client.user.setActivity(`${prefix}help for help.`);
 });
-client.on("guildCreate", guild => {
-  var channeltosend = guild.channels.find(
-    channel => channel.name.includes("general") === true
-  );
-  if (channeltosend === null) {
-    return console.log("wtf");
-  } else {
-    const helpembed = new Discord.RichEmbed()
-      .setColor(colour)
-      .setDescription(`Hi! I am Cyber Quincy. I am a btd6 bot.`)
-      .addField(
-        "general information:",
-        "[List of commands](https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing)\n[support server](https://discord.gg/8agRm6c)"
-      )
-      .addField(
-        "Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them."
-      )
-      .addField(
-        `use ${prefix}help <command name> for help on that command`,
-        `use ${prefix}info for more information`
-      )
-      .setFooter("have a popping day");
-    channeltosend.send(helpembed);
-  }
+client.on('guildCreate', (guild) => {
+	var channeltosend = guild.channels.find((channel) => channel.name.includes('general') === true);
+	if (channeltosend === null) {
+		return console.log('wtf');
+	} else {
+		const helpembed = new Discord.RichEmbed()
+			.setColor(colour)
+			.setDescription(`Hi! I am Cyber Quincy. I am a btd6 bot.`)
+			.addField(
+				'general information:',
+				'[List of commands](https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing)\n[support server](https://discord.gg/8agRm6c)'
+			)
+			.addField(
+				"Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them."
+			)
+			.addField(
+				`use ${prefix}help <command name> for help on that command`,
+				`use ${prefix}info for more information`
+			)
+			.setFooter('have a popping day');
+		channeltosend.send(helpembed);
+	}
 });
-client.on("guildMemberAdd", member => {
-  const helpembed = new Discord.RichEmbed()
-    .setColor(colour)
-    .setTitle("Welcome to **Cyber Quincy Bot Support**! Thank you for joining!")
-    .setDescription(
-      `Hi! I am Cyber Quincy, a bot made by hnngggrrrr#8734. for more information, type ${prefix}help`
-    )
-    .addField(
-      "if you are experiencing an error:",
-      "check with <#615159685477040135>, <#616603947481694209> or <#605712758595649566>."
-    )
-    .addField(
-      "if you think that there is a bug:",
-      "go to <#598768319625035776> and please tell us what went wrong. If you have any questions on how to use this bot, go to <#611808489047719937>. if you have a suggestion, please let us know in <#598768278550085633>"
-    )
-    .addField(
-      "general information:",
-      "[List of commands](https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing)\n[support server](https://discord.gg/8agRm6c), join for updates and important uptimes and downtimes"
-    )
-    .addField(
-      "Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them.",
-      "have a popping day"
-    )
-    .addField(
-      `use ${prefix}info for more information`,
-      "this bot was made by hnngggrrrr#8734"
-    );
-  if (member.guild.id === "598768024761139240") {
-    const tchannel = member.guild.channels.find(channel =>
-      channel.name.includes("welcome")
-    );
-    tchannel.send(
-      `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and you are our **${member.guild.memberCount}**th member!`
-    );
+client.on('guildMemberAdd', (member) => {
+	const helpembed = new Discord.RichEmbed()
+		.setColor(colour)
+		.setTitle('Welcome to **Cyber Quincy Bot Support**! Thank you for joining!')
+		.setDescription(
+			`Hi! I am Cyber Quincy, a bot made by hnngggrrrr#8734. for more information, type ${prefix}help`
+		)
+		.addField(
+			'if you are experiencing an error:',
+			'check with <#615159685477040135>, <#616603947481694209> or <#605712758595649566>.'
+		)
+		.addField(
+			'if you think that there is a bug:',
+			'go to <#598768319625035776> and please tell us what went wrong. If you have any questions on how to use this bot, go to <#611808489047719937>. if you have a suggestion, please let us know in <#598768278550085633>'
+		)
+		.addField(
+			'general information:',
+			'[List of commands](https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing)\n[support server](https://discord.gg/8agRm6c), join for updates and important uptimes and downtimes'
+		)
+		.addField(
+			"Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them.",
+			'have a popping day'
+		)
+		.addField(`use ${prefix}info for more information`, 'this bot was made by hnngggrrrr#8734');
+	if (member.guild.id === '598768024761139240') {
+		const tchannel = member.guild.channels.find((channel) => channel.name.includes('welcome'));
+		tchannel.send(
+			`Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and you are our **${member
+				.guild.memberCount}**th member!`
+		);
 
-    member.send(helpembed);
-  } else if (member.guild.id === "543957081183617024") {
-    const tchannel = member.guild.channels.find(channel =>
-      channel.name.includes("general")
-    );
-    tchannel.send(`welcome to the only rAcE sErVer`);
-  }
+		member.send(helpembed);
+	} else if (member.guild.id === '543957081183617024') {
+		const tchannel = member.guild.channels.find((channel) => channel.name.includes('general'));
+		tchannel.send(`welcome to the only rAcE sErVer`);
+	}
 });
-client.on("guildMemberRemove", async member => {
-  if (member.guild.id == "598768024761139240") {
-    const tchannel = member.guild.channels.find(channel =>
-      channel.name.includes("welcome")
-    );
-    tchannel.send(`${member.username} was lost in battle`);
-  } else if (member.guild.id === "543957081183617024") {
-    const tchannel = member.guild.channels.find(channel =>
-      channel.name.includes("general")
-    );
-    tchannel.send(`**${member.displayName}** is a sjb subscriber`);
-  }
+client.on('guildMemberRemove', async (member) => {
+	if (member.guild.id == '598768024761139240') {
+		const tchannel = member.guild.channels.find((channel) => channel.name.includes('welcome'));
+		tchannel.send(`${member.username} was lost in battle`);
+	} else if (member.guild.id === '543957081183617024') {
+		const tchannel = member.guild.channels.find((channel) => channel.name.includes('general'));
+		tchannel.send(`**${member.displayName}** is a sjb subscriber`);
+	}
 });
 //messGAE
-client.on("message", async message => {
-  //autohelp
-  if (message.content.startsWith("29999")) {
-    message.channel.send("give nitro to him\n|\nv");
-  }
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
-  const args = message.content.slice(prefix.length).split(/ +/);
-  const commandName = args.shift().toLowerCase();
-  if (commandName == "level" || commandName == "xp") {
-    if (args[0]) {
-      const user = getUserFromMention(args[0]);
-      if (!user) {
-        if (args[0].includes("h")) {
-          const hembed = new Discord.RichEmbed().setDescription(
-            "proprties of xp system:\n1.you get xp by using commands (cooldowns apply)\n2. you get a anywhere from 5 to 12 xp for each command\n3. xp is gained in dms.\n4.role rewards only for those in the support server.\n5.this xp is universal, it is not confined to 1 server.\n6. hidden multipliers exist, you just need to find them.",
-            { code: "md" }
-          );
-          return message.channel.send(hembed);
-        }
-        if (args[0].includes("r") && args[0].includes("e")) {
-          const lvlMebed = new Discord.RichEmbed()
-            .setTitle(`xp rewards`)
-            .addField("level 3", `<@&645126928340353036> `)
-            .addField("level 10", `<@&645629187322806272>`)
-            .setColor(colour)
-            .addField(
-              "you only get role rewards in the bot support server",
-              "[support server](https://discord.gg/8agRm6c)"
-            )
-            .setFooter(`you only get role rewards in the bot support server`);
-          return message.channel.send(lvlMebed);
-        }
-        return message.reply(
-          "Please use a proper mention if you want to see someone else's level"
-        );
-      }
-      try {
-        const tagg = await Tags.findOne({ where: { name: user.id } });
-        if (tagg == null) {
-          const tag = await Tags.create({
-            name: user.id,
-            xp: 0,
-            level: 1
-          });
-        }
-        const xpembed = new Discord.RichEmbed()
-          .setTitle(`${user.username}'s xp'`)
-          .addField("level", tagg.level)
-          .addField("xp", tagg.xp)
-          .setColor(colour)
-          .addField(
-            "have a suggestion or found a bug?",
-            "Please tell us [here](https://discord.gg/8agRm6c)!"
-          )
-          .setFooter("use q!level rewards to see role rewards");
-        return message.channel.send(xpembed);
-      } catch (e) {
-        console.log(e);
-        const errorEmbed = new Discord.RichEmbed()
-          .setColor(colour)
-          .addField(
-            "something went wrong",
-            "Please join the [support server](https://discord.gg/8agRm6c)"
-          );
-        message.reply(errorEmbed);
-      }
-    }
-    const tagg = await Tags.findOne({ where: { name: message.author.id } });
-    const xpembed = new Discord.RichEmbed()
-      .setTitle(`${message.author.username}'s xp`)
-      .addField("level", tagg.level)
-      .addField("xp", tagg.xp)
-      .setColor(colour)
-      .addField(
-        "have a suggestion or found a bug?",
-        "Please tell us [here](https://discord.gg/8agRm6c)!"
-      )
-      .setFooter("use q!level rewards to see role rewards");
-    return message.channel.send(xpembed);
-  }
-  if (commandName == "info") {
-    const apiPing = Math.round(message.client.ping);
-    const responseTime = Math.round(Date.now() - message.createdTimestamp);
-    let totalSeconds = client.uptime / 1000;
-    let days = Math.floor(totalSeconds / 86400);
-    let hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-    let minutes = Math.floor(totalSeconds / 60);
-    let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
-    const infoEmbed = new Discord.RichEmbed()
-      .setColor("#23dbb6")
-      .setTitle("access help here")
-      .setURL("https://discord.gg/8agRm6c")
-
-      .setDescription(
-        `Cyber Quincy is battling ${client.guilds.size} waves of bloons and training ${client.users.size} monkeys`
-      )
-      .addField(
-        "ping:",
-        `API ping ${apiPing}\nResponse time: ${responseTime}ms`,
-        true
-      )
-      .setThumbnail(
-        "https://vignette.wikia.nocookie.net/b__/images/d/d3/QuincyCyberPortrait.png/revision/latest?cb=20190612021929&path-prefix=bloons"
-      )
-      .addField("time since last restart:", `${uptime}`, true)
-      .addField("version running", `${version}`)
-      .addField("bot developer:", "hnngggrrrr#8734", true)
-      .addField(
-        "bot invite link",
-        "https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=805432400"
-      )
-      .addField(
-        "commands list",
-        " https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing",
-        true
-      )
-      .addField(
-        "support server, join for updates (happens pretty often)",
-        "https://discord.gg/8agRm6c",
-        true
-      )
-      .setFooter("thank you for using it! waiting for popularity");
-    message.channel.send(infoEmbed);
-  }
-  /*if(commandName=='edit'&&message.channel.id=='643773699916431361'){
+client.on('message', async (message) => {
+	//autohelp
+	if (message.content.startsWith('29999')) {
+		message.channel.send('give nitro to him\n|\nv');
+	}
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	const args = message.content.slice(prefix.length).split(/ +/);
+	const commandName = args.shift().toLowerCase();
+	if (commandName == 'level' || commandName == 'xp') {
+		if (args[0]) {
+			const user = getUserFromMention(args[0]);
+			if (!user) {
+				if (args[0].includes('h')) {
+					const hembed = new Discord.RichEmbed().setDescription(
+						'proprties of xp system:\n1.you get xp by using commands (cooldowns apply)\n2. you get a anywhere from 5 to 12 xp for each command\n3. xp is gained in dms.\n4.role rewards only for those in the support server.\n5.this xp is universal, it is not confined to 1 server.\n6. hidden multipliers exist, you just need to find them.',
+						{ code: 'md' }
+					);
+					return message.channel.send(hembed);
+				}
+				if (args[0].includes('r') && args[0].includes('e')) {
+					const lvlMebed = new Discord.RichEmbed()
+						.setTitle(`xp rewards`)
+						.addField('level 3', `<@&645126928340353036> `)
+						.addField('level 10', `<@&645629187322806272>`)
+						.setColor(colour)
+						.addField(
+							'you only get role rewards in the bot support server',
+							'[support server](https://discord.gg/8agRm6c)'
+						)
+						.setFooter(`you only get role rewards in the bot support server`);
+					return message.channel.send(lvlMebed);
+				}
+				return message.reply("Please use a proper mention if you want to see someone else's level");
+			}
+			try {
+				const tagg = await Tags.findOne({ where: { name: user.id } });
+				if (tagg == null) {
+					const tag = await Tags.create({
+						name: user.id,
+						xp: 0,
+						level: 1
+					});
+				}
+				const xpembed = new Discord.RichEmbed()
+					.setTitle(`${user.username}'s xp'`)
+					.addField('level', tagg.level)
+					.addField('xp', tagg.xp)
+					.setColor(colour)
+					.addField('have a suggestion or found a bug?', 'Please tell us [here](https://discord.gg/8agRm6c)!')
+					.setFooter('use q!level rewards to see role rewards');
+				return message.channel.send(xpembed);
+			} catch (e) {
+				console.log(e);
+				const errorEmbed = new Discord.RichEmbed()
+					.setColor(colour)
+					.addField('something went wrong', 'Please join the [support server](https://discord.gg/8agRm6c)');
+				message.reply(errorEmbed);
+			}
+		}
+		const tagg = await Tags.findOne({ where: { name: message.author.id } });
+		const xpembed = new Discord.RichEmbed()
+			.setTitle(`${message.author.username}'s xp`)
+			.addField('level', tagg.level)
+			.addField('xp', tagg.xp)
+			.setColor(colour)
+			.addField('have a suggestion or found a bug?', 'Please tell us [here](https://discord.gg/8agRm6c)!')
+			.setFooter('use q!level rewards to see role rewards');
+		return message.channel.send(xpembed);
+	}
+	/*if (commandName == 'lb') {
+		return message.channel.send(
+			Tags.sort((a, b) => b.xp - a.xp)
+				.filter((user) => client.users.has(Tags.name))
+				.first(10)
+				.map((user, position) => `(${position + 1}) ${client.users.get(Tags.name).tag}: ${Tags.xp} xp`)
+				.join('\n'),
+			{ code: true }
+		);
+	}*/
+	if (commandName == 'info') {
+		const apiPing = Math.round(message.client.ping);
+		const responseTime = Math.round(Date.now() - message.createdTimestamp);
+		let totalSeconds = client.uptime / 1000;
+		let days = Math.floor(totalSeconds / 86400);
+		let hours = Math.floor(totalSeconds / 3600);
+		totalSeconds %= 3600;
+		let minutes = Math.floor(totalSeconds / 60);
+		let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
+		const infoEmbed = new Discord.RichEmbed()
+			.setColor('#23dbb6')
+			.setTitle('access help here')
+			.setURL('https://discord.gg/8agRm6c')
+			.setDescription(
+				`Cyber Quincy is battling ${client.guilds.size} waves of bloons and training ${client.users
+					.size} monkeys`
+			)
+			.addField('ping:', `API ping ${apiPing}\nResponse time: ${responseTime}ms`, true)
+			.setThumbnail(
+				'https://vignette.wikia.nocookie.net/b__/images/d/d3/QuincyCyberPortrait.png/revision/latest?cb=20190612021929&path-prefix=bloons'
+			)
+			.addField('time since last restart:', `${uptime}`, true)
+			.addField('version running', `${version}`)
+			.addField('bot developer:', 'hnngggrrrr#8734', true)
+			.addField(
+				'bot invite link',
+				'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=805432400'
+			)
+			.addField(
+				'commands list',
+				' https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing',
+				true
+			)
+			.addField('support server, join for updates (happens pretty often)', 'https://discord.gg/8agRm6c', true)
+			.setFooter('thank you for using it! waiting for popularity');
+		message.channel.send(infoEmbed);
+	}
+	/*if(commandName=='edit'&&message.channel.id=='643773699916431361'){
 		const h = require('./heroes.json')
 		h['churchill'][args[0]].cost = args[1]*1.2
 		h['ben'][args[0]].cost = args[1]
@@ -281,6 +258,7 @@ client.on("message", async message => {
         })
 		
 	}*/
+
 
   const command =
     client.commands.get(commandName) ||

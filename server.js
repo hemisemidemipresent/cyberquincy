@@ -322,7 +322,6 @@ client.on("message", async message => {
         var xpAdd = Math.floor(Math.random() * 16) + 10;
       }else {
         var xpAdd = Math.floor(Math.random() * 8) + 5;
-
       }
       let guildmember = message.member;
       try {
@@ -377,7 +376,7 @@ client.on("message", async message => {
                   var ltxt = "Awesome!";
               }
               message.channel.send(
-                `${ltxt} you advanced to level ${tag1.level}`
+                `${ltxt} You advanced to level ${tag1.level}`
               );
               if (tag1.level == 3) {
                 guildmember.addRole("645126928340353036");

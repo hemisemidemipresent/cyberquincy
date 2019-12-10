@@ -6,6 +6,9 @@ module.exports = {
     aliases: ['p', 'pf', 'fusty', 'patfusty'],
     usage: '!pat <level>',
 	execute(message, args) {
+		if(!args){
+			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
+		}
 		const hh = h['pat'][parseInt(args[0])];
 		const heroEmbed = new Discord.RichEmbed()
 		.setTitle('Pat Fusty')

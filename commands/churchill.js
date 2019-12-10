@@ -6,6 +6,9 @@ module.exports = {
     aliases: ['c', 'ch', 'CHURCHILL', 'C'],
     usage: '!churchill <level>',
 	execute(message, args) {
+		if(!args){
+			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
+		}
 		const hh = h['churchill'][parseInt(args[0])];
 		const heroEmbed = new Discord.RichEmbed()
 		.setTitle('Captain Churchill')

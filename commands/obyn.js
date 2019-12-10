@@ -6,6 +6,9 @@ module.exports = {
     aliases: ['o', 'O'],
     usage: '!obyn <level>',
 	execute(message, args) {
+		if(!args){
+			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
+		}
 		const hh = h['obyn'][parseInt(args[0])];
 		const heroEmbed = new Discord.RichEmbed()
 		.setTitle('Obyn')

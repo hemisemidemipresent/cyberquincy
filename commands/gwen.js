@@ -6,6 +6,9 @@ module.exports = {
     aliases: ['g', 'G', 'gwendolyn'],
     usage: '!gwen <level>',
 	execute(message, args) {
+		if(!args){
+			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
+		}
 		const hh = h['gwen'][parseInt(args[0])];
 		const heroEmbed = new Discord.RichEmbed()
 		.setTitle('Gwen')

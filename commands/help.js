@@ -49,7 +49,7 @@ module.exports = {
 		}else if(args[0].includes('free')){
 			const fembed = new Discord.RichEmbed()
 			.setColor(colour)
-			.setTitle('**Hero Commands**')
+			.setTitle('**Freeplay Commands**')
 			.setDescription('q!speed, q!health');
 			message.channel.send(fembed)
 		}else if(args[0].includes('ap')){

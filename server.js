@@ -121,14 +121,14 @@ client.on('guildMemberAdd', (member) => {
 		member.send(helpembed);
 		try {
 			// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-			const tag = await Tags.create({
+			const tag =  Tags.create({
 				name: member.id,
 				xp: 0,
 				level: 1
 			});
 		}catch (e) {
 			if (e.name === 'SequelizeUniqueConstraintError') {
-				const tag = await Tags.findOne({
+				const tag = Tags.findOne({
 					where: { name: member.id }
 				});
 				if(tag.level>2){

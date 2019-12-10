@@ -53,7 +53,7 @@ module.exports = {
 		}
 		var bhealth = Math.floor(bloon*pi);
 		if (round>80){
-      var btype = b.toLowerCase()
+      var btype = b.toLowerCase();
 			return message.channel.send(`${b} bloon/blimp has ${bhealth} RBS (red bloon seconds, 3RBS is a red bloon speed) at round ${round}`);
 
 		}else if (round<1){

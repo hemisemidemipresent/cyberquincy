@@ -1,5 +1,5 @@
-const Discord = require('discord.js')
-const {colour} = require('../config.json')
+const Discord = require('discord.js');
+const {colour} = require('../config.json');
 module.exports ={
     name: 'monkeyopolis',
     aliases:['mp'],
@@ -16,10 +16,10 @@ module.exports ={
         else {
 			var farmcount = args[1]
 		}
-        let money = 300*Math.floor(args[0]/2000)
-        let price = farmcount*5000
-        let profit = money - price
-        let even = Math.ceil(price/money)
+        let money = 300*Math.floor(args[0]/2000);
+        let price = farmcount*5000;
+        let profit = money - price;
+        let even = Math.ceil(price/money);
         const mpembed = new Discord.RichEmbed()
 		.setTitle('Monkeyopolis Simulator')
 		.setColor(colour)
@@ -27,7 +27,7 @@ module.exports ={
 		.addField('farms sacrificed',`${farmcount}`)
 		.addField('Money produced in a round',`${money}`,true)
 		.addField('cost of upgrade',`${price}`,true)
-		.addField('rounds until breaking even',`${even}`,true)
+		.addField('rounds until breaking even',`${even}`,true);
 		message.channel.send(mpembed)
     }
-}
+};

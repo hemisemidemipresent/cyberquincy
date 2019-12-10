@@ -12,7 +12,7 @@ const picEmbed1 = new Discord.RichEmbed()
   .addField('BloonFuzzli\'s Emojis **(use `emoji` in the argument)**','`think`,`ping`,`red`,`embarassed`,`laugh`,`supermonkey`,`rainbow`')
 	.addField('fanart','use numbers \`1\`,\`2\`,\`3\`,\`...\`,\`10\`')
   .addField('wall of fire','`wof`,`wof2`')
-  .setFooter('page 1 out of 3')
+  .setFooter('page 1 out of 3');
 const picEmbed2 = new Discord.RichEmbed()
 	.setColor('#23dbb6')
 	.setTitle('Suggest an idea')
@@ -21,14 +21,14 @@ const picEmbed2 = new Discord.RichEmbed()
 	.addField('competition (put \`comp\` in args', '\`2018\`, \`2019\` ;to use, type the year in th args, to show which year you are talking about',true)
 	.addField('year 2018 fanart competition (put\`2018\`in the args', 'slideshow1st\` (shows 1st place),\`2nd\`,\`3rd\`,\`creative\`,\`intro\`,\`colourful\`,\`transform\`,\`real\`,\`slideshow\`', true)
 	.addField('year 2019 fanart competition','\`winner\`,\`2,3,...,9\`,`GD`')
-	.setFooter('page 2 out of 3')
+	.setFooter('page 2 out of 3');
 const picEmbed3 = new Discord.RichEmbed()
 	.setColor(colour)
 	.setTitle('Suggest an idea')
 	.setURL('https://discord.gg/8agRm6c')
 	.setDescription('**More arguments**')
 	.addField('towers **put "tower" in argument', '\`ultrajug\`, \`impale\`,`marine`',true)
-  .setFooter('page 3 out of 3')
+  .setFooter('page 3 out of 3');
 module.exports = {
 	name: 'pic',
 	description: 'send a picture',
@@ -36,7 +36,7 @@ module.exports = {
 	cooldown: 5,
 	execute(message, args) {
 		
-		var arg = message.content.slice(4).toLowerCase()
+		var arg = message.content.slice(4).toLowerCase();
 		if (arg.includes('ang')&&arg.includes('sub')&&!arg.includes('iest')){
 			message.channel.send('angry sub, u/HelixSansTheSkeleton:',{files: ['./commands/images/angrysub.png']})
 		}else if (arg.includes('ang')&&arg.includes('sub')&&arg.includes('est')){
@@ -101,7 +101,7 @@ module.exports = {
         }
 			}
 		}else if(arg.includes('emoji')){
-			message.channel.send('credits to Bloonfuzzli')
+			message.channel.send('credits to Bloonfuzzli');
 			if (arg.includes('think')){
 				message.channel.send('https://cdn.discordapp.com/attachments/408694070794256396/628413688646336513/monkey_thin.png')
 			}else if (arg.includes('ping')){

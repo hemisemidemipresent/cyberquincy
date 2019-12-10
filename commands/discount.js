@@ -1,4 +1,4 @@
-const Discord=require('discord.js')
+const Discord=require('discord.js');
 module.exports ={
     name:"price",
     description:"tells you about price",
@@ -6,7 +6,7 @@ module.exports ={
         if(args[0].isNaN()==false){
             return message.channel.send('Please specify a number for cost. No dollar signs too.')
         }
-        let cost = args[0]
+        let cost = args[0];
         const costembed = new Discord.RichEmbed()
         .setTitle('Price calculator')
         .setDescription(`original price: ${cost}`)
@@ -20,7 +20,7 @@ module.exports ={
         .addField('3 001 villages',cost*0.9*0.9*0.9)
         .addField('2 001 villages + 002 villages',cost*0.9*0.9*0.85)
         .addField('001 village + 2 002 villages',cost*0.9*0.85*0.85)
-        .addField('3 002 villages',cost*0.85*0.85*0.85)
+        .addField('3 002 villages',cost*0.85*0.85*0.85);
         message.channel.send(costembed) 
     },
-}
+};

@@ -1,4 +1,4 @@
-const r = require('../round2.json')
+const r = require('../round2.json');
 module.exports ={
     name: 'income',
     execute(message,args){
@@ -9,15 +9,15 @@ module.exports ={
           return message.channel.send('1. q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)\n2. q!income <difficulty> <endround>\n(includes starting cash; deflation, half cash, abr not yet, apop is random)', { code: "md" })
         }
         if (!args[1]){
-            let endround = parseInt(args[0])
+            let endround = parseInt(args[0]);
             if(endround<0||endround>100){
                 return message.channel.send('please specify a round from 1 to 100')
             }
-            let end = r[endround]
-            let income = end.cch
+            let end = r[endround];
+            let income = end.cch;
             return message.channel.send(`${income} total cash from round 1 to round ${endround} (including starting cash and all the bloons popped on round ${endround})`)
         }
-        let endround = parseInt(args[1])
+        let endround = parseInt(args[1]);
         if(endround<0||endround>100){
             return message.channel.send('please specify a round from 1 to 100. ``!income`` ``help`` for help')
         }
@@ -33,16 +33,16 @@ module.exports ={
           return message.channel.send('$20000 start cash. You dont earn any')
         }
         else{
-            var startround = parseInt(args[0])
+            var startround = parseInt(args[0]);
             if(startround<0||startround>100){
                 return message.channel.send('please specify a round from 1 to 100. ``!income`` ``help`` for help')
             }
         }
-        let start = r[startround]
-        let end = r[endround]
-        let income =  end.cch - start.cch 
-        var startround = startround + 1
+        let start = r[startround];
+        let end = r[endround];
+        let income =  end.cch - start.cch;
+        var startround = startround + 1;
         message.channel.send(`earns $${income} from popping bloons in round ${startround} to popping bloons in ${endround} (not including starting cash)`)
         
     }
-}
+};

@@ -1,9 +1,9 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
 module.exports = {
 	name: 'race',
 	description: 'race info',
 	execute(message, args) {
-        racenum = parseInt(args[0])
+        racenum = parseInt(args[0]);
         if (racenum === 1){
             const raceEmbed = new Discord.RichEmbed()
                 .setColor('#23dbb6')
@@ -18,7 +18,7 @@ module.exports = {
                 .addField('5th place','ddkkoomm (1:37.21)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/9H7PKJ3.jpg) [2](https://i.imgur.com/fqcYHtz.png)')
-                .setFooter('date: December 12 - 19 08:00 UTC')
+                .setFooter('date: December 12 - 19 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 2){
             const raceEmbed = new Discord.RichEmbed()
@@ -34,7 +34,7 @@ module.exports = {
                 .addField('5th place','Matthew Lim (2:37.00)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/8rY3usd.png)\nremarks: Extra second place medal awarded')
-                .setFooter('date: December 20 - 23 08:00 UTC')
+                .setFooter('date: December 20 - 23 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 3){
             const raceEmbed = new Discord.RichEmbed()
@@ -50,7 +50,7 @@ module.exports = {
                 .addField('5th place','Pie (2:01.701)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/TtcGgNt.png)\nremarks: Hackers, Avocado got rewards for 1st and 2nd')
-                .setFooter('date: December 28 - 31 08:00 UTC')
+                .setFooter('date: December 28 - 31 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 4){
             const raceEmbed = new Discord.RichEmbed()
@@ -66,7 +66,7 @@ module.exports = {
                 .addField('5th place','frds (3:06.50)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/454395715834216459/529139336998944782/unknown.png),[2](https://cdn.discordapp.com/attachments/543959759133474817/610940376542478338/Screenshot_20190813_225836.jpg),[3](https://i.imgur.com/qvm4XUx.jpg)\nremarks: Hackers, Avocado got rewards for 1st and 2nd')
-                .setFooter('date: December 28 - 31 08:00 UTC')
+                .setFooter('date: December 28 - 31 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 5){
             const raceEmbed = new Discord.RichEmbed()
@@ -82,7 +82,7 @@ module.exports = {
                 .addField('5th place','ZX Cai (1:11.534)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/6OAoAkQ.jpg),[2](https://i.imgur.com/qKy8ZhW.png)\nremarks: Hacker, 1st, 2nd & 3rd compensated')
-                .setFooter('date: January 1 - 4  08:00 UTC')
+                .setFooter('date: January 1 - 4  08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 6){
             const raceEmbed = new Discord.RichEmbed()
@@ -98,7 +98,7 @@ module.exports = {
                 .addField('5th place','FX420blazeit (5:15.884)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/454395715834216459/580201485997047816/image0.png),[2](https://i.imgur.com/YAegLTa.jpg)')
-                .setFooter('date: January 4 - 7  08:00 UTC')
+                .setFooter('date: January 4 - 7  08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 7){
             const raceEmbed = new Discord.RichEmbed()
@@ -114,7 +114,7 @@ module.exports = {
                 .addField('5th place','Krzysztofsuski (3:09.75) [potentially incorrect]')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/543959759133474817/610942819166847012/image0.png),[2](https://i.imgur.com/YcVHT8F.jpg)\nRemarks: ISAB accquired free 3rd place medal')
-                .setFooter('date: January 11 - 14 08:00 UTC')
+                .setFooter('date: January 11 - 14 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 8){
             const raceEmbed = new Discord.RichEmbed()
@@ -130,7 +130,7 @@ module.exports = {
                 .addField('5th place','Kinsboy (2:12.08)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/sACEwmB.jpg),[2](https://i.imgur.com/Dp2k2zt.jpg)\nremarks: Hacker, 1st, 2nd & 3rd not compensated, screenshots differ for unknown reasons')
-                .setFooter('date: January 18 - 21 08:00 UTC')
+                .setFooter('date: January 18 - 21 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 9){
             const raceEmbed = new Discord.RichEmbed()
@@ -146,7 +146,7 @@ module.exports = {
                 .addField('5th place','Tobi(?) [missing info]')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/darWojH.png),[2](https://i.imgur.com/DMEinvq.png),[3](https://i.imgur.com/zUnc5Os.png)')
-                .setFooter('date: January 25 - 28 08:00 UTC')
+                .setFooter('date: January 25 - 28 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 10){
             const raceEmbed = new Discord.RichEmbed()
@@ -162,7 +162,7 @@ module.exports = {
                 .addField('5th place','VIII (6:30.36)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://media.discordapp.net/attachments/454395715834216459/544731030033006602/Screenshot_2019-02-10-23-59-46-799_com.ninjakiwi.bloonstd6.png?width=1352&height=676),[2](https://i.imgur.com/zvIApXl.jpg)')
-                .setFooter('date: February 8 - 11 08:00 UTC')
+                .setFooter('date: February 8 - 11 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 11){
             const raceEmbed = new Discord.RichEmbed()
@@ -178,7 +178,7 @@ module.exports = {
                 .addField('5th place','Wind (3:09.36)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/weWGyh3.jpg)')
-                .setFooter('date: Feburary 15 - 18 08:00 UTC')
+                .setFooter('date: Feburary 15 - 18 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 12){
             const raceEmbed = new Discord.RichEmbed()
@@ -194,7 +194,7 @@ module.exports = {
                 .addField('5th place','Polaritz (1:14.66)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/BAHmiF8.jpg)')
-                .setFooter('date: Febuary 22 - 25 08:00 UTC')
+                .setFooter('date: Febuary 22 - 25 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 13){
             const raceEmbed = new Discord.RichEmbed()
@@ -210,7 +210,7 @@ module.exports = {
                 .addField('5th place','Chalupa (2:45.68)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/x4QtY0X.jpg)\nremarks: 1st, 2nd & 3rd acquired Double Medals')
-                .setFooter('date: March 1 - 4     08:00 UTC')
+                .setFooter('date: March 1 - 4     08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 14){
             const raceEmbed = new Discord.RichEmbed()
@@ -226,7 +226,7 @@ module.exports = {
                 .addField('5th place','Mahersmg (7:18.10)')
                 .addField('Total # of people playing: <350','position for top 1%: none')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/454395715834216459/554805328731176970/Screenshot_247.png),[2](https://i.imgur.com/WRkuln6.jpg),[3](https://i.imgur.com/Psv7aLc.png)')
-                .setFooter('date: March 8 - 11   08:00 UTC')
+                .setFooter('date: March 8 - 11   08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 15){
             const raceEmbed = new Discord.RichEmbed()
@@ -242,7 +242,7 @@ module.exports = {
                 .addField('5th place','Wind (2:40.75)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/503775607511973897/557405421468516371/Screenshot_20190318-202956.png)')
-                .setFooter('date: March 15 - 18 08:00 UTC')
+                .setFooter('date: March 15 - 18 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 16){
             const raceEmbed = new Discord.RichEmbed()
@@ -258,7 +258,7 @@ module.exports = {
                 .addField('5th place','Wind (2:34.11)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/543959759133474817/610938968628002846/image0.jpg),[2](https://cdn.discordapp.com/attachments/543959759133474817/610939852921241601/IMG_0915.JPG),[3](https://cdn.discordapp.com/attachments/528760157279092738/559669291725881344/unknown.png)')
-                .setFooter('date: March 22 - 25 08:00 UTC')
+                .setFooter('date: March 22 - 25 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 17){
             const raceEmbed = new Discord.RichEmbed()
@@ -274,7 +274,7 @@ module.exports = {
                 .addField('5th place','Fenix (1:36.23)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/454395715834216459/562396864096370698/Screenshot_264.png),[2](https://i.imgur.com/nTCEgXh.jpg)')
-                .setFooter('date: March 29 - April 1 08:00 UTC')
+                .setFooter('date: March 29 - April 1 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 18){
             const raceEmbed = new Discord.RichEmbed()
@@ -290,7 +290,7 @@ module.exports = {
                 .addField('5th place','Gift (2:22.01)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/503775607511973897/565136029271588864/Screenshot_20190408-203352.png)')
-                .setFooter('date: April 5 - 8        08:00 UTC')
+                .setFooter('date: April 5 - 8        08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 19){
             const raceEmbed = new Discord.RichEmbed()
@@ -306,7 +306,7 @@ module.exports = {
                 .addField('5th place','Fighter (1:50.86)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/543959759133474817/611103739306311690/Screenshot_2019-04-22-23-02-57-767_com.ninjakiwi.bloonstd6.png),[2](https://i.imgur.com/ykBA83E.jpg)')
-                .setFooter('date: April 19 - 22    08:00 UTC')
+                .setFooter('date: April 19 - 22    08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 20){
             const raceEmbed = new Discord.RichEmbed()
@@ -322,7 +322,7 @@ module.exports = {
                 .addField('5th place','Kinsboy Alt(?) (1:58.41)')
                 .addField('Total # of people playing: unknown','position for top 1%: unknown')
                 .addField('source','[1](https://i.imgur.com/SPAXEjG.png)')
-                .setFooter('date: April 26 - 29    08:00 UTC')
+                .setFooter('date: April 26 - 29    08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 21){
             const raceEmbed = new Discord.RichEmbed()
@@ -338,7 +338,7 @@ module.exports = {
                 .addField('5th place','[missing all infomation here]')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://i.imgur.com/a2ORwyp.jpg)')
-                .setFooter('date: ')
+                .setFooter('date: ');
             message.channel.send(raceEmbed)
         }else if (racenum === 22){
             const raceEmbed = new Discord.RichEmbed()
@@ -354,7 +354,7 @@ module.exports = {
                 .addField('5th place','chalupa (2.30.63)')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://i.imgur.com/QPb1lFG.jpg)')
-                .setFooter('date: May 10 - 13    08:00 UTC')
+                .setFooter('date: May 10 - 13    08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 23){
             const raceEmbed = new Discord.RichEmbed()
@@ -370,7 +370,7 @@ module.exports = {
                 .addField('5th place','Wind (1:22.78)')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/543959759133474817/610952291280879780/Screenshot_20190813_234559_com.google.android.youtube.jpg),[2](https://cdn.discordapp.com/attachments/503775607511973897/580155336388771856/unknown.png)')
-                .setFooter('date: May 17 - 20     08:00 UTC')
+                .setFooter('date: May 17 - 20     08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 24){
             const raceEmbed = new Discord.RichEmbed()
@@ -386,7 +386,7 @@ module.exports = {
                 .addField('5th place','Tobi (1:59.33)')
                 .addField('Total # of people playing: 5032','position for top 1%: 50')
                 .addField('source','[1](https://i.imgur.com/4UDb4phr.jpg)')
-                .setFooter('date: May 24 - 27    08:00 UTC')
+                .setFooter('date: May 24 - 27    08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 25){
             const raceEmbed = new Discord.RichEmbed()
@@ -402,7 +402,7 @@ module.exports = {
                 .addField('5th place','Dueave (2:05.28)')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://i.imgur.com/rnTymGr.png)')
-                .setFooter('date: May 31 - June 3 08:00 UTC')
+                .setFooter('date: May 31 - June 3 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 26){
             const raceEmbed = new Discord.RichEmbed()
@@ -418,7 +418,7 @@ module.exports = {
                 .addField('5th place','NinjaB (2:30.18)')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://i.imgur.com/QeXyFYk.jpg)')
-                .setFooter('date: June 7 - 10     08:00 UTC')
+                .setFooter('date: June 7 - 10     08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 27){
             const raceEmbed = new Discord.RichEmbed()
@@ -434,7 +434,7 @@ module.exports = {
                 .addField('5th place','Dueave (1:49.00)')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://i.imgur.com/4o0GUoz.jpg)')
-                .setFooter('date: June 14 - 17   08:00 UTC')
+                .setFooter('date: June 14 - 17   08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 28){
             const raceEmbed = new Discord.RichEmbed()
@@ -450,7 +450,7 @@ module.exports = {
                 .addField('5th place','Tobi (1:55.23)')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://i.imgur.com/yKp5Nx7.jpg)')
-                .setFooter('date: June 21 - 24   08:00 UTC')
+                .setFooter('date: June 21 - 24   08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 29){
             const raceEmbed = new Discord.RichEmbed()
@@ -466,7 +466,7 @@ module.exports = {
                 .addField('5th place','NinjaB (1:33.45)')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/543959759133474817/611209041821302804/Screenshot_20190814_164544_com.google.android.youtube.jpg),[2](https://i.imgur.com/oCCCYtf.jpg)')
-                .setFooter('date: June 28 - July 1 08:00 UTC')
+                .setFooter('date: June 28 - July 1 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 42){
             const raceEmbed = new Discord.RichEmbed()
@@ -482,7 +482,7 @@ module.exports = {
                 .addField('5th place','')
                 .addField('Total # of people playing: 11008','position for top 1%: 110')
                 .addField('source','[1](https://i.imgur.com/gQUHZgm.png)')
-                .setFooter('date: September 27 - 30 08:00 UTC')
+                .setFooter('date: September 27 - 30 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 43){
             const raceEmbed = new Discord.RichEmbed()
@@ -496,7 +496,7 @@ module.exports = {
                 .addField('3rd place','Shwax (2:17.58)')
                 .addField('4th place','TSP (2:19.18)')
                 .addField('5th place','Tobi (2:19.75)')
-                .addField('source','[1](https://cdn.discordapp.com/attachments/612981354665082880/633506907616837632/unknown.png)')
+                .addField('source','[1](https://cdn.discordapp.com/attachments/612981354665082880/633506907616837632/unknown.png)');
             message.channel.send(raceEmbed)
         }else if (racenum === 44){
             const raceEmbed = new Discord.RichEmbed()
@@ -512,7 +512,7 @@ module.exports = {
                 .addField('5th place','exephur (2:09.96)')
                 .addField('Total # of people playing: 12442','position for top 1%: 124')
                 .addField('source','[1](https://cdn.discordapp.com/attachments/612981354665082880/633506907616837632/unknown.png)')
-                .setFooter('date: October 11 - 14 08:00 UTC')
+                .setFooter('date: October 11 - 14 08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 45){
             const raceEmbed = new Discord.RichEmbed()
@@ -528,7 +528,7 @@ module.exports = {
                 .addField('5th place','TSP')
                 .addField('Total # of people playing: ','position for top 1%: ')
                 .addField('source','[1](https://i.imgur.com/JNRQZts.png)')
-                .setFooter('date: October 18 - 21   08:00 UTC')
+                .setFooter('date: October 18 - 21   08:00 UTC');
             message.channel.send(raceEmbed)
         }else if (racenum === 45){
             const raceEmbed = new Discord.RichEmbed()
@@ -544,7 +544,7 @@ module.exports = {
                 .addField('5th place','TSP')
                 .addField('Total # of people playing: 13903','position for top 1%: 139')
                 .addField('source','[1](https://i.imgur.com/JNRQZts.png)')
-                .setFooter('date: October 18 - 21   08:00 UTC')
+                .setFooter('date: October 18 - 21   08:00 UTC');
             message.channel.send(raceEmbed)
         }else{
           const embed = new Discord.RichEmbed()

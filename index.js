@@ -14,7 +14,7 @@ const Discord = require("discord.js");
 const Sequelize = require("sequelize");
 const { prefix, colour, token } = require("./config.json");
 const client = new Discord.Client();
-var noocmd = /noo+cmd/i
+var noocmd = /noo+cmd/i;
 client.commands = new Discord.Collection();
 const commandFiles = fs
   .readdirSync("./commands")
@@ -137,7 +137,6 @@ client.on("guildMemberRemove", member => {
 });
 //messGAE
 client.on("message", async message => {
-  //autohelp
   if (message.content.startsWith("29999")) {
     message.channel.send("give nitro to him\n|\nv");
   }
@@ -145,14 +144,14 @@ client.on("message", async message => {
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
   if (commandName == "level") {
-    if(message.mentions!=undefined){
-      let mentions = message.mentions.members.array()
-      let id = mentions[0].id
+    if(message.mentions!==undefined){
+      let mentions = message.mentions.members.array();
+      let id = mentions[0].id;
       try{
         const tagg = await Tags.findOne({ where: { name: id } });
         return message.channel.send(`level : ${tagg.level}\n xp: ${tagg.xp}`);
       }catch(e){
-        console.log(e)
+        console.log(e);
         const errorEmbed = new Discord.RichEmbed()
         .setColor(colour)
         .addField(
@@ -165,7 +164,7 @@ client.on("message", async message => {
     const tagg = await Tags.findOne({ where: { name: message.author.id } });
     message.channel.send(`level : ${tagg.level}\n xp: ${tagg.xp}`);
   }
-  if (commandName == "info") {
+  if (commandName === "info") {
     const apiPing = Math.round(message.client.ping);
     const responseTime = Math.round(Date.now() - message.createdTimestamp);
     let totalSeconds = client.uptime / 1000;
@@ -249,7 +248,6 @@ client.on("message", async message => {
   }
   timestamps.set(message.author.id, now);
   setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-  //command user
   if (noocmd.test(message.channel.topic) === false) {
     try {
       command.execute(message, args);

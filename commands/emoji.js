@@ -11,7 +11,7 @@ module.exports = {
       return message.channel.send("q!emoji help");
     }
     if (args[0] == "all") {
-      let emojisGuild = message.guild.emojis.array().join(" ")
+      let emojisGuild = message.guild.emojis.array().join(" ");
   let emojisArray = Discord.splitMessage(emojisGuild, { maxLength: 1024, char: " " });
   if (typeof emojisArray === "string") emojisArray = [emojisArray];
   

@@ -1,5 +1,5 @@
-const Discord = require('discord.js')
-const {colour} = require('../config.json')
+const Discord = require('discord.js');
+const {colour} = require('../config.json');
 module.exports = {
     name: 'ap',
     description:'tells you about the abr rounds (below 100 cos freeplay abr is the same as normal)',
@@ -13,7 +13,7 @@ module.exports = {
 			.addField('1','I dont understand what s,d,p,md,fd,cd,j,etc... means')
 			.addField('2','i dont understad what is \'normal type\',\'sharp type\',etc... is')
 			.addField('3','i dont understand buffs')
-			.setColor(colour)
+			.setColor(colour);
         	return message.channel.send(choosemebed)
 		}
 		if(args[0]==1){
@@ -22,13 +22,13 @@ module.exports = {
 				.setTitle('Damage')
 				.setDescription('the amount of health a single attack removes. Because most bloons have only 1 health, any excess damage is (usually) carried over to the children spawned. If damage is not passed on to child bloons, it will be qualified with "up to".')
 				.addField('Layers','"Layers" is sometimes used in in-game descriptions to mean damage. This is misleading, as most people would consider eg a ceramic to have 1 more layer than a rainbow, but it requires 10 damage to remove this layer.')
-				.setColor(colour)
+				.setColor(colour);
 				message.channel.send(damageembed)
 			}else if(args[1]=='md'||args[1]=='cd'||args[1]=='fd'){
 				const additionaldamageEmbed = new Discord.RichEmbed()
 				.setTitle('Some attacks do additional damage to ceramic bloons, MOAB-class bloons, or fortified bloons.')
 				.setDescription('These will be indicated by cd, md, and fd respectively, and the total damage will be written in parentheses for convenience, eg "2d, 1md (3)". Other bonuses are possible, but will not be abbreviated due to how uncommon they are.')
-				.setColor(colour)
+				.setColor(colour);
 				message.channel.send(additionaldamageEmbed)
 			}else if(args[1]=='p'){
 				const pierceembed = new Discord.RichEmbed()
@@ -39,26 +39,26 @@ module.exports = {
 				.addField('impact','projectiles have no meaningful concept of pierce, and usually create an effect (eg an explosion) as soon as they hit something instead of dealing damage directly.',true)
 				.addField('Zone','no projectile, anything in range up to the pierce limit takes damage.',true)
 				.setFooter('"Popping power" is a vague term and is best avoided entirely. Despite this, in-game descriptions continually use it to mean pierce.')
-				.setColor(colour)
+				.setColor(colour);
 				message.channel.send(pierceembed)
 			}else if(args[1]=='r'){
 				const rangeembed = new Discord.RichEmbed()
 				.setTitle('Range (r)')
 				.setDescription('Range (r) is the radius of the range circle, given in arbitrary "units", because pixel values depend entirely on the resolution of the device running the game. While it is hard to imagine what a "unit" is, providing these numbers does allow for very useful comparisons between towers.')
-				.setColor(colour)
+				.setColor(colour);
 				message.channel.send(rangeembed)
 			}else if(args[1]=='s'){
 				const sembed = new Discord.RichEmbed()
 				.setTitle('Seconds per attack (s)')
 				.setDescription('Attack speed, or more precisely "attacks per second" is never referred to directly, only "seconds per attack" (s), more commonly referred to as a "cooldown" or a "reload". One value can be found from the other by taking the reciprocal (1 divided by it). For example, "0.4s" would mean "one attack every 0.4 seconds", and the speed is then 1/0.4 = 2.5 attacks per second.')
 				.addField('Reload times greater than 0.1s','they are only accurate to the nearest frame (1/60th of a second). Times less than 0.1s are accurate on average - towers will release multiple projectiles on the same frame as necessary to maintain this average.')
-				.setColor(colour)
+				.setColor(colour);
 				message.channel.send(sembed)
 			}else if(args[1]=='j'){
 				const jembed = new Discord.RichEmbed()
 				.setTitle('Projectile count (j)')
 				.setDescription('Projectile count is quite simply the number of projectiles emitted at once. If the count is not 1, it will be stated with the abbreviation **j**. No attempt will be made to describe how spread out the projectiles are (compare tack shooter to triple darts).')
-				.setColor(colour)
+				.setColor(colour);
 				message.channel.send(jembed)
 			}else{
 				const mainpropembed = new Discord.RichEmbed()
@@ -70,7 +70,7 @@ module.exports = {
 					.addField('**r**','range',true)
 					.addField('**s**','seconds per attack/cooldown/reload',true)
 					.addField('**j**','projectile count',true)
-					.setColor(colour)
+					.setColor(colour);
 					message.channel.send(mainpropembed)
 			}
 		}
@@ -82,7 +82,7 @@ module.exports = {
 			.addField('towers','A tower can have any number of attacks, with completely independent values for all of the above stats. The range for a secondary attack is usually the same as the main attack, and so is omitted in this case.')
 			.addField('Most attacks are active','they aim at a particular bloon, which is usually possible to influence by changing the tower\'s targeting option. Furthermore, some of them can only target certain types of bloon - most obvious example is camo bloons, but also some attacks can only see blimps, or cannot see blimps, or all blimps except BAD, etc.On the other hand, a passive attack happens regardless of any bloons, such as placing something on the track.')
 			.setFooter('This is not enough to fully describe all attacks! There are many special cases that simply need more words.')
-			.setColor(colour)
+			.setColor(colour);
 			message.channel.send(typembed)
 		}else if(args[0]=3){
 			const buffembed = new Discord.RichEmbed()
@@ -93,11 +93,11 @@ module.exports = {
 			.addField('impact','Impact projectiles are completely unaffected by pierce buffs, it is always effectively 1. Effects can still inherit the buff.')
 			.addField('buffs to speed','Buffs to speed in fact work by decreasing the reload time, instead of increasing the speed directly. These are different: a 20% buff to the reload, ie multiplying it by 0.8, is equivalent to multiplying the speed by 1/0.8 = 1.25×, so a 25% buff to the speed. Numbers in in-game descriptions usually mean a reload buff, which can be slightly misleading.\nThe new reload time will be expressed as a percentage of the current reload, so a 20% buff to an attack with 1.5s reload will be written "80%s (1.2)". Another 20% buff later in the same upgrade path will be written "80%s (0.96)".')
 			.setFooter('If an upgrade adds or replaces an attack, the new attack will not be affected by buffs from earlier in the same path.')
-			.setColor(colour)
+			.setColor(colour);
 			message.channel.send(buffembed)
 		}else{
 			message.channel.send('I cant understand what you are saying!')
 		}
 			
     }
-}
+};

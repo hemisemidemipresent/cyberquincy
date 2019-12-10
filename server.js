@@ -1,4 +1,3 @@
-const http = require('http');
 const express = require('express');
 const app = express();
 app.use(express.static('public'));
@@ -119,8 +118,26 @@ client.on('guildMemberAdd', (member) => {
 			`Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and you are our **${member
 				.guild.memberCount}**th member!`
 		);
-
 		member.send(helpembed);
+		try {
+			// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
+			const tag = await Tags.create({
+				name: member.id,
+				xp: 0,
+				level: 1
+			});
+		}catch (e) {
+			if (e.name === 'SequelizeUniqueConstraintError') {
+				const tag = await Tags.findOne({
+					where: { name: member.id }
+				});
+				if(tag.level>2){
+					member.addRole('645126928340353036')
+				}if(tag.level>9){
+					member.addRole('645629187322806272')
+				}
+			}
+		}
 	} else if (member.guild.id === '543957081183617024') {
 		const tchannel = member.guild.channels.find((channel) => channel.name.includes('general'));
 		tchannel.send(`welcome to the only rAcE sErVer`);
@@ -144,7 +161,7 @@ client.on('message', async (message) => {
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
-	if (commandName == 'level' || commandName == 'xp') {
+	if (commandName === 'level' || commandName === 'xp') {
 		if (args[0]) {
 			const user = getUserFromMention(args[0]);
 			if (!user) {
@@ -220,7 +237,7 @@ client.on('message', async (message) => {
 			.setFooter('use q!level rewards to see role rewards');
 		return message.channel.send(xpembed);
 	}
-	if (commandName == 'info') {
+	if (commandName === 'info') {
 		const apiPing = Math.round(message.client.ping);
 		const responseTime = Math.round(Date.now() - message.createdTimestamp);
 		let totalSeconds = client.uptime / 1000;
@@ -257,7 +274,7 @@ client.on('message', async (message) => {
 			.setFooter('thank you for using it! waiting for popularity');
 		message.channel.send(infoEmbed);
 	}
-	if (commandName == 'yeetda') {
+	if (commandName === 'yeetda') {
 		let emojisGuild = message.guild.emojis.array().join(' ');
 		let emojisArray = Discord.splitMessage(emojisGuild, { maxLength: 1024, char: ' ' });
 		if (typeof emojisArray === 'string') emojisArray = [ emojisArray ];

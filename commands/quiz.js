@@ -1,4 +1,4 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
 const quiz = require('../quiz.json');
 module.exports ={
     name: 'quiz',
@@ -14,8 +14,8 @@ module.exports ={
             .addField('option c',`${item.optns[2]}`,true)
             .addField('option d',`${item.optns[3]}`,true)
             .addField('Suggest a question idea PLEASE','suggest ideas [here](https://discord.gg/8agRm6c) or DM hnngggrrr#8734. [original game information](https://bloons.fandom.com/wiki/Who_Wants_To_Be_A_Bloonionaire%3F)')
-            .setFooter('This command is unstable and dont expect it to be 100% working')
-        const filter = msg => msg.author.id === `${message.author.id}`//&&item.answers.toLowerCase() === msg.content.toLowerCase()
+            .setFooter('This command is unstable and dont expect it to be 100% working');
+        const filter = msg => msg.author.id === `${message.author.id}`;//&&item.answers.toLowerCase() === msg.content.toLowerCase()
         message.channel.send(QuestionEmbed).then(() => {
             message.channel.awaitMessages(filter, { maxMatches: 1, time: 10000, errors: ['time'] })
                 .then(collected => {
@@ -30,4 +30,4 @@ module.exports ={
                 });
             });
     }
-}
+};

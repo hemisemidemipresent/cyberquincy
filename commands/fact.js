@@ -1,4 +1,4 @@
-const fact = require('../fact.json')
+const fact = require('../fact.json');
 module.exports = {
 	name: 'fact',
 	description: 'random fact/lore from the NK blog. BIG credit to it',
@@ -9,7 +9,7 @@ module.exports = {
 		else{
 			var randex = parseInt(args[0])
 		}
-		let fac = fact[`r${randex}`]
+		let fac = fact[`r${randex}`];
 		message.channel.send(`${fac}`)
 	},
-}
+};

@@ -16,7 +16,9 @@
   "bugs": {
     "url": "https://github.com/hnngggrrrr/cyberquincy/issues"
   },
-  "engines": { "node": "10.x" },
+  "engines": {
+    "node": "10.x"
+  },
   "homepage": "https://github.com/hnngggrrrr/cyberquincy#readme",
   "dependencies": {
     "discord.js": "^11.5.1",

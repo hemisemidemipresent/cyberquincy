@@ -30,7 +30,6 @@ function getUserFromMention(mention) {
 		if (mention.startsWith('!')) {
 			mention = mention.slice(1);
 		}
-
 		return client.users.get(mention);
 	}
 }
@@ -61,6 +60,10 @@ client.once('ready', () => {
 		console.log('<INITIATE>');
 	}
 	setTimeout(three, 2000);
+	//let servers = client.guilds.map(g=>g.name)
+	//console.log(servers)
+	//let d = client.guilds.find(n=>n.name='Enlighten-mint\'s Hideout')
+	//console.log(d.fetchInvites())
 	client.user.setActivity(`${prefix}help for help.`);
 });
 client.on('guildCreate', (guild) => {
@@ -152,7 +155,7 @@ client.on('message', async (message) => {
 					);
 					return message.channel.send(hembed);
 				}
-				if (args[0].includes('rew')) {
+				if (args[0].includes('rewa')) {
 					const lvlMebed = new Discord.RichEmbed()
 						.setTitle(`xp rewards`)
 						.addField('level 3', `<@&645126928340353036> `)
@@ -227,7 +230,7 @@ client.on('message', async (message) => {
 		let minutes = Math.floor(totalSeconds / 60);
 		let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 		const infoEmbed = new Discord.RichEmbed()
-			.setColor('#23dbb6')
+			.setColor(colour)
 			.setTitle('access help here')
 			.setURL('https://discord.gg/8agRm6c')
 			.setDescription(
@@ -253,6 +256,22 @@ client.on('message', async (message) => {
 			.addField('support server, join for updates (happens pretty often)', 'https://discord.gg/8agRm6c', true)
 			.setFooter('thank you for using it! waiting for popularity');
 		message.channel.send(infoEmbed);
+	}
+	if (commandName == 'yeetda') {
+		let emojisGuild = message.guild.emojis.array().join(' ');
+		let emojisArray = Discord.splitMessage(emojisGuild, { maxLength: 1024, char: ' ' });
+		if (typeof emojisArray === 'string') emojisArray = [ emojisArray ];
+
+		const embed = new Discord.RichEmbed()
+			.setTitle('There Are ' + message.guild.emojis.size + ' Emojis on ' + message.guild.name)
+			.setColor(colour)
+			.setDescription('These Are All The Emojis:')
+			.setThumbnail(message.guild.iconURL);
+
+		emojisArray.forEach((emojis, i) => {
+			embed.addField(`Page ${i + 1}:`, emojis);
+		});
+		message.channel.send(embed);
 	}
 	/*if(commandName=='edit'&&message.channel.id=='643773699916431361'){
 		const h = require('./heroes.json')

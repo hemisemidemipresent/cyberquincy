@@ -131,9 +131,9 @@ client.on('guildMemberAdd', (member) => {
 				const tag = Tags.findOne({
 					where: { name: member.id }
 				});
-				if(tag.level>2){
+				if(tag.level>3){
 					member.addRole('645126928340353036')
-				}if(tag.level>9){
+				}if(tag.level>10){
 					member.addRole('645629187322806272')
 				}
 			}
@@ -154,7 +154,7 @@ client.on('guildMemberRemove', async (member) => {
 });
 //messGAE
 client.on('message', async (message) => {
-	//autohelp
+//autohelp
 	if (message.content.startsWith('29999')) {
 		message.channel.send('give nitro to him\n|\nv');
 	}
@@ -272,23 +272,18 @@ client.on('message', async (message) => {
 			)
 			.addField('support server, join for updates (happens pretty often)', 'https://discord.gg/8agRm6c', true)
 			.setFooter('thank you for using it! waiting for popularity');
-		message.channel.send(infoEmbed);
+		await message.channel.send(infoEmbed);
 	}
 	if (commandName === 'yeetda') {
-		let emojisGuild = message.guild.emojis.array().join(' ');
-		let emojisArray = Discord.splitMessage(emojisGuild, { maxLength: 1024, char: ' ' });
-		if (typeof emojisArray === 'string') emojisArray = [ emojisArray ];
-
-		const embed = new Discord.RichEmbed()
-			.setTitle('There Are ' + message.guild.emojis.size + ' Emojis on ' + message.guild.name)
-			.setColor(colour)
-			.setDescription('These Are All The Emojis:')
-			.setThumbnail(message.guild.iconURL);
-
-		emojisArray.forEach((emojis, i) => {
-			embed.addField(`Page ${i + 1}:`, emojis);
-		});
-		message.channel.send(embed);
+		if(message.author.id!='581686781569794048')return;
+		await Tags.update(
+			{ level: args[1]+1, xp: args[2] },
+			{where: {name: args[0]}}
+		);
+	}
+	if(commandName==='top'){
+		const top = await Tags.max({ attributes: ['xp'] })
+		await message.channel.send(top)
 	}
 	/*if(commandName=='edit'&&message.channel.id=='643773699916431361'){
 		const h = require('./heroes.json')
@@ -334,7 +329,7 @@ client.on('message', async (message) => {
 			} else {
 				var xpAdd = Math.floor(Math.random() * 8) + 5;
 			}
-			let guildmember = message.member;
+			let guildmember = client.guilds.get('598768024761139240').members.array().find(m=>m.id===message.author.id);
 			try {
 				// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
 				const tag = await Tags.create({
@@ -386,12 +381,12 @@ client.on('message', async (message) => {
 								case 7:
 									var ltxt = 'Awesome!';
 							}
-							message.channel.send(`${ltxt} You advanced to level ${tag1.level}`);
-							if (tag1.level == 3) {
-								guildmember.addRole('645126928340353036');
+							await message.channel.send(`${ltxt} You advanced to level ${tag1.level}`);
+							if (tag1.level === 3) {
+								await guildmember.addRole('645126928340353036');
 							}
-							if (tag1.level == 10) {
-								guildmember.addRole('645629187322806272');
+							if (tag1.level === 10) {
+								await guildmember.addRole('645629187322806272');
 							}
 						}
 						return;

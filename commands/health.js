@@ -7,7 +7,7 @@ module.exports = {
 	execute(message, args) {
 		//rounds
 		const b = args[0].toUpperCase();
-		var round = args[1];
+		let round = args[1];
 		var round1 = round-80;
 		var round2 = round-100;
 		var round3 = round-125;

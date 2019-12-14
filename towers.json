@@ -2,7 +2,7 @@
 	"ace": {
 		"base": {
 			"desc": "dummy attack (22r)\nradial-dart attack (1 damage, 5 pierce, 8 projectiles, 1 attack/2.1s, sharp type)\nflies on a circular path with radius 80, or a figure 8 or figure infinite with radii 40",
-			"name": "Rapid Fire",
+			"name": "Monkey Ace",
 			"cost": "650"
 		},
 		"s11": { "name": "Rapid Fire", "cost": "650", "desc": "60%s (1.26)" },
@@ -125,8 +125,8 @@
 	},
 	"boat": {
 		"base": {
-			"desc": "dummy attack (22r)\nradial-dart attack (1 damage, 5 pierce, 8 projectiles, 1 attack/2.1s, sharp type)\nflies on a circular path with radius 80, or a figure 8 or figure infinite with radii 40",
-			"name": "Rapid Fire",
+			"desc": "dart attack (1d, 4p, 1.0s, 60r, sharp type)\nif there are targets behind the tower when it attacks, the attack is duplicated in both directions",
+			"name": "Monkey Buccaneer",
 			"cost": "650"
 		},
 		"s11": { "desc": "75%s (0.75)", "name": "Faster Shooting ", "cost": "350" },
@@ -230,7 +230,7 @@
 	"boomer": {
 		"base": {
 			"desc": "boomerang attack (1d, 4p, 43r, 1.42s, sharp type)\nboomerangs follow an anticlockwise arc instead of a straight line",
-			"name": "Rapid Fire",
+			"name": "Boomerang Monkey",
 			"cost": "325"
 		},
 		"s11": { "desc": "+4p (8)", "name": "Improved Rangs ", "cost": "200" },
@@ -411,12 +411,12 @@
 			"cost": "525"
 		},
 		"s14": {
-			"desc": "build-sentry buffed: places crushing-sentry, boom-sentry, cold-sentry, energy-sentry on a cycle, but sentries may be skipped depending on the bloons on screen\ncrushing-sentry has a spiked-ball attack (1d, 1cd (2), 22p, 1.25s, shatter type), skipped if there are leads (unless black and white are also present), but never skipped there are ceramics\nboom-sentry has a bomb attack (1d, 30p, 1.5s, explosion type), skipped if there are blacks (unless white and lead are also present)f\ncold-sentry has a ice-ball attack (1d, 15p, 1.5s, cold type, applies frozen status for 1.5s, applies permafrost status), skipped if there are whites (unless lead and black are also present)\nenergy-sentry has a laser attack (1d, 4p, 0.57s, energy type), skipped if there are leads (unless black and white are also present), and always skipped if there are purples",
+			"desc": "build-sentry buffed: places crushing-sentry, boom-sentry, cold-sentry, energy-sentry on a cycle, but sentries may be skipped depending on the bloons on screen\ncrushing-sentry has a spiked-ball attack (1d, 1cd (2), 22p, 1s, shatter type), skipped if there are leads (unless black and white are also present), but never skipped there are ceramics\nboom-sentry has a bomb attack (2d, 30p, 1.4s, explosion type), skipped if there are blacks (unless white and lead are also present)f\ncold-sentry has a ice-ball attack (1d, 15p, 1.5s, cold type, applies frozen status for 1.5s, applies permafrost status), skipped if there are whites (unless lead and black are also present)\nenergy-sentry has a laser attack (2d, 4p, 0.57s, energy type), skipped if there are leads (unless black and white are also present), and always skipped if there are purples",
 			"name": "Sentry Expert",
 			"cost": "2800"
 		},
 		"s15": {
-			"desc": "build-sentry buffed: places paragon-sentry\nparagon-sentry has a plasma attack (2d, 3p, 0.06s, plasma type) and a selfdestruct attack (70d, 50p, plasma type, activates 2s after expiring)",
+			"desc": "build-sentry buffed: places paragon-sentry\nparagon-sentry has a plasma attack (2d, 3p, 0.06s, plasma type) and a selfdestruct attack (85d, 50p, plasma type, activates instantly after expiring)",
 			"name": "Sentry Paragon",
 			"cost": "32000"
 		},
@@ -428,12 +428,12 @@
 			"cost": "800"
 		},
 		"s24": {
-			"desc": "activated ability (45s cooldown): doubles attack speed of chosen tower for the next 60s (if it cost less than 15k), or 45s (if it cost less than 40k), or 30s (otherwise)\nthis considers the amount spent on a tower, so is affected by difficulty and any discounts\nfarms can be overclocked: bananas have a reload like any other attack, it just happens to change according to the round length\nvillages can be overclocked even when not upgrade to 5xx: the buff applies to range instead, but half as much (ie 25% more range instead of 50% shorter reload)",
+			"desc": "activated ability (45s cooldown): +80% attack speed (farms 2x attack speed) of chosen tower for the next 60s (if it cost less than 15k), or 45s (if it cost less than 40k), or 30s (otherwise)\nthis considers the amount spent on a tower, so is affected by difficulty and any discounts\nfarms can be overclocked: bananas have a reload like any other attack, it just happens to change according to the round length\nvillages can be overclocked even when not upgrade to 5xx: the buff applies to range instead, but half as much (ie 25% more range instead of 50% shorter reload)",
 			"name": "Overclock",
 			"cost": "13500"
 		},
 		"s25": {
-			"desc": "activated ability (45s cooldown): when overclock expires, the affected tower gains a permanent 5% reload buff, which stacks additively up to 10 times\nthis means that after the first ultraboost, the tower has a 95% reload multiplier, after the second it is replaced by 90%, and so on down to 50% (twice as fast)\nin the case of villages, this is +2.5% to range, then 5%, etc, up to +50%r",
+			"desc": "activated ability (45s cooldown): when overclock expires, the affected tower gains a permanent 5% reload buff, which stacks additively up to 10 times\nthis means that after the first ultraboost, the tower has a 95% reload multiplier, after the second it is replaced by 90%, and so on down to 50% (twice as fast)\nin the case of villages, this is +2.5% to range, then 5%, etc, up to +50%r [outdated for 14.0]",
 			"name": "Ultraboost",
 			"cost": "120000"
 		},
@@ -785,8 +785,8 @@
 	},
 	"sniper": {
 		"base": {
-			"desc": "dummy attack (22r)\nradial-dart attack (1 damage, 5 pierce, 8 projectiles, 1 attack/2.1s, sharp type)\nflies on a circular path with radius 80, or a figure 8 or figure infinite with radii 40",
-			"name": "Rapid Fire",
+			"desc": "dummy attack (20r), purely to provide a range circle that subs' advanced intel can use\nbullet attack (2d, 1p, 2.0s, ∞r, sharp type, impact)",
+			"name": "Sniper Monkey",
 			"cost": "650"
 		},
 		"s11": { "desc": "+2d (4), normal type", "name": "Full Metal Jacket", "cost": "350" },
@@ -877,7 +877,7 @@
 			"name": "Pre-emptive Strike ",
 			"cost": "35000"
 		},
-		"s31": { "desc": "50%s (0.375)", "name": "", "cost": "" },
+		"s31": { "desc": "50%s (0.375)", "name": "Twin guns", "cost": "450" },
 		"s32": {
 			"desc": "dart is now an impact projectile, emits airbursts on hit (1d, 2p, 3j, sharp type)\nnote that unlike most impact projectiles, the dart still has 1 damage not 0, and is therefore able to gain more from eg alchemist or support temple\nnote also that airbursts are able to hit the same target that the dart did",
 			"name": "Airburst Darts ",
@@ -950,13 +950,13 @@
 	},
 	"tack": {
 		"base": { "desc": "tacks attack (1d, 1p, 1.4s, 23r, 8j, sharp type)", "name": "Tack Shooter", "cost": "280" },
-		"s11": { "desc": "75%s (1.05)", "name": "", "cost": "" },
-		"s12": { "desc": "60%s (0.63)", "name": "", "cost": "" },
-		"s13": { "desc": "+1d (2), normal type", "name": "", "cost": "" },
+		"s11": { "desc": "75%s (1.05)", "name": "Faster Shooting", "cost": "150" },
+		"s12": { "desc": "60%s (0.63)", "name": "Even Faster Shooting", "cost": "300" },
+		"s13": { "desc": "+1d (2), normal type", "name": "Hot Shots", "cost": "600" },
 		"s14": {
 			"desc": "tacks replaced by firezone (3d, 60p, 0.535s, 23r zone, fire type)\nspecial crosspath handling: xx1 gives +10p, xx2 gives a further +10p",
-			"name": "",
-			"cost": ""
+			"name": "Ring of Fire",
+			"cost": "4500"
 		},
 		"s15": {
 			"desc": "+1d (4), +6md (10), 0.1s, +11.5r (34.5)\ngains meteor attack (700d, 1p, 4.0s, ∞r, fire type, camo, always targets strong)",
@@ -1144,8 +1144,8 @@
 		},
 		"s31": { "desc": "+8r (42)", "name": "Long Reach", "cost": "150" },
 		"s32": {
-			"desc": "gains extra targetting options: close (closest point(s) in range), far (futhest point(s) in range), and smart (earliest point in range that bloons have not yet reached)",
-			"name": "Directed Spikes",
+			"desc": "gains extra targetting options: close (closest point(s) in range), far (futhest point(s) in range), and smart (earliest point in range that bloons have not yet reached)\n25%s for the first 2.5s in start of the round",
+			"name": "Smart Spikes",
 			"cost": "400"
 		},
 		"s33": { "desc": "140s or end of 2 rounds lifespan", "name": "Long Life Spikes", "cost": "1400" },

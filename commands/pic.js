@@ -34,7 +34,7 @@ module.exports = {
 	description: 'send a picture',
 	usage: '!pic <pic name>',
 	cooldown: 5,
-	execute(message, args) {
+	execute(message, args, client) {
 		
 		var arg = message.content.slice(4).toLowerCase();
 		if (arg.includes('ang')&&arg.includes('sub')&&!arg.includes('iest')){

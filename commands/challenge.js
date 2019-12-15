@@ -6,7 +6,7 @@ module.exports = {
 	description: 'very epic thing inspired from https://unforgivenjake.github.io/btd6rc/',
 	usage: '[command name]',
 	cooldown: 5,
-	execute(message, args) {
+	execute(message, args, client) {
 		if (args[0]==='help'){
 			message.channel.send(`${prefix}rc <1 or 0, 1 means hero; 0 means no hero> <0 to 4: 0 is for random, 1 is for easy maps, 2 is for intermediate maps, 3 is for advanced and 4 is for expert> <0 to well.. any number: the start round for the challenge, 0 for random> <startround value and above: the end round for this challenge> <number of primary towers> <number of military towers> <number of magic towers> <number of support towers>`)
 		}

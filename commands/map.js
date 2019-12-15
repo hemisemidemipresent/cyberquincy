@@ -4,7 +4,7 @@ module.exports = {
     description: 'info about maps',
     aliases: ['m'],
     usage: '!map <map name with perfect spelling>',
-	execute(message, args) {
+	execute(message, args, client) {
         let map = args.join(' ');
         if(map.includes('mm')||(map.includes('monkey')&&map.includes('meadow'))){
             var wbp = 0;

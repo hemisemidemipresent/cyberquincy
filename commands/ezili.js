@@ -5,7 +5,7 @@ module.exports = {
     description: 'ezili upgrades',
     aliases: ['e', 'ez', 'EZILI', 'E'],
     usage: '!ezili <level>',
-	execute(message, args) {
+	execute(message, args, client) {
 		if(!args){
 			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
 		}

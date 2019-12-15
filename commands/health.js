@@ -4,7 +4,7 @@ module.exports = {
 	aliases: ['h'],
 	description: 'calculates the health of blimps, even in freeplay',
 	usage:'!health <bloon> <round>',
-	execute(message, args) {
+	execute(message, args, client) {
 		//rounds
 		const b = args[0].toUpperCase();
 		var round = args[1];

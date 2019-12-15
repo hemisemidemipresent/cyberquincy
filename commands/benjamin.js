@@ -5,7 +5,7 @@ module.exports = {
     description: 'benjamin upgrades',
     aliases: ['b', 'dj', 'ben', 'B'],
     usage: '!benjamin <level>',
-	execute(message, args) {
+	execute(message, args, client) {
 		if(!args){
 			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
 		}

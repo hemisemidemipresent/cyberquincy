@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ['cred','creds','cr'],
 	usage: '[command name]',
 	cooldown: 5,
-	execute(message, args) {
+	execute(message, args, client) {
 		const data = [];
 			data.push('Here\'s a list of all the people who helped:');
             data.push('Firstly, all the beta testers who were here from the start. They were there when this bot was nothing more than just a handful of underdeveloped commands.\nSecondly, all the active users and members in the support server. \nThird, all the updaters for helping in updating the data.\nFourth, the makers of BTD 6 Index and advanced popology. Lastly, you, for reading this.');

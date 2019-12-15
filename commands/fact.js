@@ -4,7 +4,7 @@ module.exports = {
 	description: 'random fact/lore from the NK blog. BIG credit to it',
 	aliases: ['random','f'],
 	usage: '[command name]',
-	execute(message, args) {
+	execute(message, args, client) {
 		if(args[0]==undefined){var randex = Math.ceil(Math.random()*158)}
 		else{
 			var randex = parseInt(args[0])

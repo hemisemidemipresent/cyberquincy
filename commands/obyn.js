@@ -5,7 +5,7 @@ module.exports = {
     description: 'obyn upgrades/cost',
     aliases: ['o', 'O'],
     usage: '!obyn <level>',
-	execute(message, args) {
+	execute(message, args, client) {
 		if(!args){
 			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
 		}

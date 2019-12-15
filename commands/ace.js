@@ -6,7 +6,7 @@ module.exports = {
     description: 'ace upgrades desc', 
     aliases: ['pilot'],
     usage:'<path1> <path2> <path3>',
-	  execute(message, args) {
+	  execute(message, args, client) {
         let name = 'ace';
         var path1=Math.floor(parseInt(args[0])/100);
         var path2=Math.floor((parseInt(args[0])-path1*100)/10);

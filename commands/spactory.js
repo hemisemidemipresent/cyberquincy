@@ -6,7 +6,7 @@ module.exports = {
     description: 'spike factory upgrades desc', 
     aliases: ['factory','spike'],
     usage:'<path1> <path2> <path3>',
-	  execute(message, args) {
+	  execute(message, args, client) {
         let name = 'spac';
         var path1=Math.floor(parseInt(args[0])/100);
         var path2=Math.floor((parseInt(args[0])-path1*100)/10);

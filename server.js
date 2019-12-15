@@ -330,7 +330,7 @@ client.on('message', async (message) => {
 	//command user
 	if (noocmd.test(message.channel.topic) === false) {
 		try {
-			command.execute(message, args);
+			command.execute(message, args, client);
       if(message.author.id=='581686781569794048')return
 			if (message.channel.type == 'dm') {
 				var xpAdd = Math.floor(Math.random() * 4) + 2;

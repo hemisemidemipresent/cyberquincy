@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'race',
 	description: 'race info',
-	execute(message, args) {
+	execute(message, args, client) {
         racenum = parseInt(args[0]);
         if (racenum === 1){
             const raceEmbed = new Discord.RichEmbed()

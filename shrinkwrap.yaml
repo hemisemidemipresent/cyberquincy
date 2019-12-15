@@ -2,12 +2,12 @@ dependencies:
   discord.js: 11.5.1
   express: 4.17.1
   sequelize: 5.21.2
-  sqlite3: 4.1.0
+  sqlite3: 4.1.1
 packages:
-  /@types/node/12.12.14:
+  /@types/node/12.12.17:
     dev: false
     resolution:
-      integrity: sha512-u/SJDyXwuihpwjXy7hOOghagLEV1KdAST6syfnOk6QZAMzZuWZqXy5aYYZbh8Jdpd4escVFP0MvftHNDb9pruA==
+      integrity: sha512-Is+l3mcHvs47sKy+afn2O1rV4ldZFU7W8101cNlOd+MRbjM4Onida8jSZnJdTe/0Pcf25g9BNIUsuugmE6puHA==
   /abbrev/1.1.1:
     dev: false
     resolution:
@@ -277,10 +277,10 @@ packages:
       sodium: ^2.0.3
     resolution:
       integrity: sha512-tGhV5xaZXE3Z+4uXJb3hYM6gQ1NmnSxp9PClcsSAYFVRzH6AJH74040mO3afPDMWEAlj8XsoPXXTJHTxesqcGw==
-  /dottie/2.0.1:
+  /dottie/2.0.2:
     dev: false
     resolution:
-      integrity: sha512-ch5OQgvGDK2u8pSZeSYAQaV/lczImd7pMJ7BcEPXmnFVjy4yJIzP6CsODJUTH8mg1tyH1Z2abOiuJO3DjZ/GBw==
+      integrity: sha512-fmrwR04lsniq/uSr8yikThDTrM7epXHBAAjH9TbeH3rEA8tdCO7mRzB9hdmdGyJCxF8KERo9CITcm3kGuoyMhg==
   /ecc-jsbn/0.1.2:
     dependencies:
       jsbn: 0.1.1
@@ -735,7 +735,7 @@ packages:
       mkdirp: 0.5.1
       needle: 2.4.0
       nopt: 4.0.1
-      npm-packlist: 1.4.6
+      npm-packlist: 1.4.7
       npmlog: 4.1.2
       rc: 1.2.8
       rimraf: 2.7.1
@@ -753,17 +753,23 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-0NRoWv1UFRk8jHUFYC0NF81kR00=
-  /npm-bundled/1.0.6:
+  /npm-bundled/1.1.1:
+    dependencies:
+      npm-normalize-package-bin: 1.0.1
     dev: false
     resolution:
-      integrity: sha512-8/JCaftHwbd//k6y2rEWp6k1wxVfpFzB6t1p825+cUb7Ym2XQfhwIC5KwhrvzZRJu+LtDE585zVaS32+CGtf0g==
-  /npm-packlist/1.4.6:
+      integrity: sha512-gqkfgGePhTpAEgUsGEgcq1rqPXA+tv/aVBlgEzfXwA1yiUJF7xtEt3CtVwOjNYQOVknDk0F20w58Fnm3EtG0fA==
+  /npm-normalize-package-bin/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-EPfafl6JL5/rU+ot6P3gRSCpPDW5VmIzX959Ob1+ySFUuuYHWHekXpwdUZcKP5C+DS4GEtdJluwBjnsNDl+fSA==
+  /npm-packlist/1.4.7:
     dependencies:
       ignore-walk: 3.0.3
-      npm-bundled: 1.0.6
+      npm-bundled: 1.1.1
     dev: false
     resolution:
-      integrity: sha512-u65uQdb+qwtGvEJh/DgQgW1Xg7sqeNbmxYyrvlNznaVTjV3E5P6F/EFjM+BVHXl7JJlsdG8A64M0XI8FI/IOlg==
+      integrity: sha512-vAj7dIkp5NhieaGZxBJB8fF4R0078rqsmhJcAfXZ6O7JJhjhPK96n5Ry1oZcfLXgfun0GWTZPOxaEyqv8GBykQ==
   /npmlog/4.1.2:
     dependencies:
       are-we-there-yet: 1.1.5
@@ -859,10 +865,10 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha512-t/7RxHXPH6cJtP0pRG6smSr9QJidhB+3kXu0KgXnbGYMgzEnUxRQ4/LDdfOwZEMyIh3/xHb8PX3t+lfL9z+YVQ==
-  /psl/1.5.0:
+  /psl/1.6.0:
     dev: false
     resolution:
-      integrity: sha512-4vqUjKi2huMu1OJiLhi3jN6jeeKvMZdI1tYgi/njW5zV52jNLgSAZSdN16m9bJFe61/cT8ulmw4qFitV9QRsEA==
+      integrity: sha512-SYKKmVel98NCOYXpkwUqZqh0ahZeeKfmisiLIcEZdsb+WbLv02g/dI5BUmZnIyOe7RzZtLax81nnb2HbvC2tzA==
   /punycode/1.4.1:
     dev: false
     resolution:
@@ -1021,7 +1027,7 @@ packages:
       bluebird: 3.7.2
       cls-bluebird: 2.1.0
       debug: 4.1.1
-      dottie: 2.0.1
+      dottie: 2.0.2
       inflection: 1.12.0
       lodash: 4.17.15
       moment: 2.24.0
@@ -1070,7 +1076,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-NjxjITIj04Ffqid5lqr7XdgwM7X61c/Dns073Ly170bPQHLm6jkmelye/eglS++1nfTWktpP6Y2bFXjdPlQqdw==
-  /sqlite3/4.1.0:
+  /sqlite3/4.1.1:
     dependencies:
       nan: 2.14.0
       node-pre-gyp: 0.11.0
@@ -1078,7 +1084,7 @@ packages:
     dev: false
     requiresBuild: true
     resolution:
-      integrity: sha512-RvqoKxq+8pDHsJo7aXxsFR18i+dU2Wp5o12qAJOV5LNcDt+fgJsc2QKKg3sIRfXrN9ZjzY1T7SNe/DFVqAXjaw==
+      integrity: sha512-CvT5XY+MWnn0HkbwVKJAyWEMfzpAPwnTiB3TobA5Mri44SrTovmmh499NPQP+gatkeOipqPlBLel7rn4E/PCQg==
   /sshpk/1.16.1:
     dependencies:
       asn1: 0.2.4
@@ -1175,7 +1181,7 @@ packages:
       integrity: sha1-f/0feMi+KMO6Rc1OGj9e4ZO9mYg=
   /tough-cookie/2.4.3:
     dependencies:
-      psl: 1.5.0
+      psl: 1.6.0
       punycode: 1.4.1
     dev: false
     engines:
@@ -1262,7 +1268,7 @@ packages:
       integrity: sha512-QGkOQc8XL6Bt5PwnsExKBPuMKBxnGxWWW3fU55Xt4feHozMUhdUMaBCk290qpm/wG5u/RSKzwdAC4i51YigihA==
   /wkx/0.4.8:
     dependencies:
-      '@types/node': 12.12.14
+      '@types/node': 12.12.17
     dev: false
     resolution:
       integrity: sha512-ikPXMM9IR/gy/LwiOSqWlSL3X/J5uk9EO2hHNRXS41eTLXaUFEVw9fn/593jW/tE5tedNg8YjT5HkCa4FqQZyQ==
@@ -1287,4 +1293,4 @@ specifiers:
   discord.js: ^11.5.1
   express: ^4.17.1
   sequelize: ^5.21.2
-  sqlite3: ^4.1.0
+  sqlite3: ^4.1.1

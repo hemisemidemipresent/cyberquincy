@@ -6,8 +6,7 @@ app.get('/', (request, response) => {
 	response.sendStatus(200);
 });
 app.listen(process.env.PORT);
-const p = require('./package.json');
-const version = p.version;
+
 const fs = require('fs');
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
@@ -126,15 +125,16 @@ client.on('guildMemberAdd', async (member) => {
 				xp: 0,
 				level: 1
 			});
-		}catch (e) {
+		} catch (e) {
 			if (e.name === 'SequelizeUniqueConstraintError') {
-				const tag = await Tags.findOne({where: { name: member.id }});
-				if(tag.level>3){
-					member.addRole('645126928340353036')
-          member.send('It seems that you are already level 3! the role has been given!')
-				}if(tag.level>10){
-					member.addRole('645629187322806272')
-          member.send('It seems that you are already level 10! the role has been given!')
+				const tag = await Tags.findOne({ where: { name: member.id } });
+				if (tag.level > 3) {
+					member.addRole('645126928340353036');
+					member.send('It seems that you are already level 3! the role has been given!');
+				}
+				if (tag.level > 10) {
+					member.addRole('645629187322806272');
+					member.send('It seems that you are already level 10! the role has been given!');
 				}
 			}
 		}
@@ -192,17 +192,17 @@ client.on('message', async (message) => {
 						message.channel.send('resetted your xp');
 					}
 				}
-        const taggg = await Tags.findOne({where:{name:args[0]}})
-        if(!taggg)return message.reply("Please use a proper mention if you want to see someone else's level");
-        let user = client.users.find(u=>u.id==taggg.name)
-        const xpembed = new Discord.RichEmbed()
+				const taggg = await Tags.findOne({ where: { name: args[0] } });
+				if (!taggg) return message.reply("Please use a proper mention if you want to see someone else's level");
+				let user = client.users.find((u) => u.id == taggg.name);
+				const xpembed = new Discord.RichEmbed()
 					.setTitle(`${user.username}'s xp'`)
-					.addField('level', taggg.level-1)
+					.addField('level', taggg.level - 1)
 					.addField('xp', taggg.xp)
 					.setColor(colour)
 					.addField('have a suggestion or found a bug?', 'Please tell us [here](https://discord.gg/8agRm6c)!')
 					.setFooter('use q!level rewards to see role rewards');
-				return message.channel.send(xpembed)
+				return message.channel.send(xpembed);
 			}
 			try {
 				const tagg = await Tags.findOne({ where: { name: user.id } });
@@ -221,7 +221,7 @@ client.on('message', async (message) => {
 				}
 				const xpembed = new Discord.RichEmbed()
 					.setTitle(`${user.username}'s xp'`)
-					.addField('level', tagg.level-1)
+					.addField('level', tagg.level - 1)
 					.addField('xp', tagg.xp)
 					.setColor(colour)
 					.addField('have a suggestion or found a bug?', 'Please tell us [here](https://discord.gg/8agRm6c)!')
@@ -238,62 +238,23 @@ client.on('message', async (message) => {
 		const tagg = await Tags.findOne({ where: { name: message.author.id } });
 		const xpembed = new Discord.RichEmbed()
 			.setTitle(`${message.author.username}'s xp`)
-			.addField('level', tagg.level-1)
+			.addField('level', tagg.level - 1)
 			.addField('xp', tagg.xp)
 			.setColor(colour)
 			.addField('have a suggestion or found a bug?', 'Please tell us [here](https://discord.gg/8agRm6c)!')
 			.setFooter('use q!level rewards to see role rewards');
 		return message.channel.send(xpembed);
 	}
-	if (commandName === 'info') {
-		const apiPing = Math.round(message.client.ping);
-		const responseTime = Math.round(Date.now() - message.createdTimestamp);
-		let totalSeconds = client.uptime / 1000;
-		let days = Math.floor(totalSeconds / 86400);
-		let hours = Math.floor(totalSeconds / 3600);
-		totalSeconds %= 3600;
-		let minutes = Math.floor(totalSeconds / 60);
-		let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
-		const infoEmbed = new Discord.RichEmbed()
-			.setColor(colour)
-			.setTitle('access help here')
-			.setURL('https://discord.gg/8agRm6c')
-			.setDescription(
-				`Cyber Quincy is battling ${client.guilds.size} waves of bloons and training ${client.users
-					.size} monkeys`
-			)
-			.addField('ping:', `API ping ${apiPing}\nResponse time: ${responseTime}ms`, true)
-			.setThumbnail(
-				'https://vignette.wikia.nocookie.net/b__/images/d/d3/QuincyCyberPortrait.png/revision/latest?cb=20190612021929&path-prefix=bloons'
-			)
-			.addField('time since last restart:', `${uptime}`, true)
-			.addField('version running', `${version}`)
-			.addField('bot developer:', 'hnngggrrrr#8734', true)
-			.addField(
-				'bot invite link',
-				'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=805432400'
-			)
-			.addField(
-				'commands list',
-				' https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing',
-				true
-			)
-			.addField('support server, join for updates (happens pretty often)', 'https://discord.gg/8agRm6c', true)
-			.setFooter('thank you for using it! waiting for popularity');
-		message.channel.send(infoEmbed);
-	}
+
 	if (commandName === 'yeetda') {
-		if(message.author.id!='581686781569794048')return;
-		await Tags.update(
-			{ level: parseInt(args[1])+1, xp: args[2] },
-			{where: {name: args[0]}}
-		);
+		if (message.author.id != '581686781569794048') return;
+		await Tags.update({ level: parseInt(args[1]) + 1, xp: args[2] }, { where: { name: args[0] } });
 	}
-		if(commandName==='top'){
-		const top = await Tags.max({ attributes: ['xp'] })
-		console.log(top)
+	if (commandName === 'top') {
+		const top = await Tags.max({ attributes: [ 'xp' ] });
+		console.log(top);
 	}
-	
+
 	/*if(commandName=='edit'&&message.channel.id=='643773699916431361'){
 		const h = require('./heroes.json')
 		h['churchill'][args[0]].cost = args[1]*1.2
@@ -331,7 +292,7 @@ client.on('message', async (message) => {
 	if (noocmd.test(message.channel.topic) === false) {
 		try {
 			command.execute(message, args, client);
-      if(message.author.id=='581686781569794048')return
+			if (message.author.id == '581686781569794048') return;
 			if (message.channel.type == 'dm') {
 				var xpAdd = Math.floor(Math.random() * 4) + 2;
 			} else if (message.channel.id == '598835766113861633') {
@@ -392,7 +353,10 @@ client.on('message', async (message) => {
 									var ltxt = 'Awesome!';
 							}
 							await message.channel.send(`${ltxt} You advanced to level ${tag1.level}`);
-              let guildmember = client.guilds.get('598768024761139240').members.array().find(m=>m.id===message.author.id);
+							let guildmember = client.guilds
+								.get('598768024761139240')
+								.members.array()
+								.find((m) => m.id === message.author.id);
 							if (tag1.level === 3) {
 								await guildmember.addRole('645126928340353036');
 							}

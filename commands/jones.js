@@ -10,6 +10,7 @@ module.exports = {
 			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
 		}
 		const hh = h['jones'][parseInt(args[0])];
+		if(!hh)return message.channel.send('Please specify a valid hero level!')
 		const heroEmbed = new Discord.RichEmbed()
 		.setTitle('Striker Jones')
 		.addField('cost',`${hh.cost}`)

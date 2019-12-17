@@ -433,7 +433,7 @@
 			"cost": "13500"
 		},
 		"s25": {
-			"desc": "activated ability (45s cooldown): when overclock expires, the affected tower gains a permanent 5% reload buff, which stacks additively up to 10 times\nthis means that after the first ultraboost, the tower has a 95% reload multiplier, after the second it is replaced by 90%, and so on down to 50% (twice as fast)\nin the case of villages, this is +2.5% to range, then 5%, etc, up to +50%r [outdated for 14.0]",
+			"desc": "activated ability (45s cooldown): when overclock expires, the affected tower gains a permanent +8% attack speed buff, which stacks additively up to 10 times\nthis means that after the first ultraboost, the tower has a permanent +8% attack speed, after the second it is replaced by +16%, and so on up to 80%\nin the case of villages, this is +2.5% to range, then 5%, etc, up to +50%r",
 			"name": "Ultraboost",
 			"cost": "120000"
 		},

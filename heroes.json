@@ -282,45 +282,36 @@
 	},
 	"adora": {
 		"1": {
-			"desc": " ",
-			"cost": " "
+			"desc": "Soon™",
+			"cost": "2000"
 		},
-		"2": { "desc": " ", "cost": " " },
-		"3": { "desc": " ", "cost": " " },
+		"2": { "desc": "Soon™", "cost": "324" },
+		"3": { "desc": "Soon™", "cost": "828" },
 		"4": {
-			"desc": " ",
-			"cost": " "
+			"desc": "Soon™",
+			"cost": "1800"
 		},
-		"5": { "desc": " ", "cost": " " },
-		"6": { "desc": " ", "cost": " " },
-		"7": {
-			"desc": " ",
-			"cost": " "
-		},
-		"8": { "desc": " ", "cost": " " },
-		"9": {
-			"desc": " ",
-			"cost": " "
-		},
+		"5": { "desc": "Soon™", "cost": 3348 },
+		"6": { "desc": "Soon™", "cost": 5904 },
+		"7": { "desc": "Soon™", "cost": 9324 },
+		"8": { "desc": "Soon™", "cost": 14976 },
+		"9": { "desc": "Soon™", "cost": 16884 },
 		"10": {
-			"desc": " ",
-			"cost": " "
+			"desc": "Soon™",
+			"cost": 24516
 		},
-		"11": { "desc": " ", "cost": " " },
-		"12": {
-			"desc": " ",
-			"cost": " "
-		},
-		"13": { "desc": " ", "cost": " " },
-		"14": { "desc": " ", "cost": " " },
-		"15": { "desc": " ", "cost": " " },
-		"16": { "desc": " ", "cost": " " },
-		"17": { "desc": " ", "cost": " " },
-		"18": { "desc": " ", "cost": " " },
-		"19": { "desc": " ", "cost": " " },
+		"11": { "desc": "Soon™", "cost": 29484 },
+		"12": { "desc": "Soon™", "cost": 25920 },
+		"13": { "desc": "Soon™", "cost": 29970 },
+		"14": { "desc": "Soon™", "cost": 26892 },
+		"15": { "desc": "Soon™", "cost": 29484 },
+		"16": { "desc": "Soon™", "cost": 32076 },
+		"17": { "desc": "Soon™", "cost": 34668 },
+		"18": { "desc": "Soon™", "cost": 37260 },
+		"19": { "desc": "Soon™", "cost": 29646 },
 		"20": {
-			"desc": " ",
-			"cost": " "
+			"desc": "Soon™",
+			"cost": 31104
 		}
 	}
 }

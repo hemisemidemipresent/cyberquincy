@@ -281,36 +281,36 @@
 		}
 	},
 	"adora": {
-		"1": {
-			"desc": "Soon™",
-			"cost": "2000"
+		"1": { "desc": "bolt attack: 1d, 5p, 45r, 1.0s, plasma type", "cost": "2000" },
+		"2": { "desc": "+4r (49)", "cost": "324" },
+		"3": {
+			"desc": "activated ability 1 (45 seconds): doubles pierce and range and grants normal type for 10s",
+			"cost": "828"
 		},
-		"2": { "desc": "Soon™", "cost": "324" },
-		"3": { "desc": "Soon™", "cost": "828" },
-		"4": {
-			"desc": "Soon™",
-			"cost": "1800"
+		"4": { "desc": "+1j (2)", "cost": "1800" },
+		"5": { "desc": "+3p (8)", "cost": 3348 },
+		"6": { "desc": "+1j (3)", "cost": 5904 },
+		"7": {
+			"desc": "activated ability 2 (10s cooldown) sacrifices a chosen tower to gain 4x the amount spent on it as XP",
+			"cost": 9324
 		},
-		"5": { "desc": "Soon™", "cost": 3348 },
-		"6": { "desc": "Soon™", "cost": 5904 },
-		"7": { "desc": "Soon™", "cost": 9324 },
-		"8": { "desc": "Soon™", "cost": 14976 },
-		"9": { "desc": "Soon™", "cost": 16884 },
+		"8": { "desc": "+1j (4)", "cost": 14976 },
+		"9": { "desc": "+5r (54)", "cost": 16884 },
 		"10": {
-			"desc": "Soon™",
+			"desc": "activated ability 3 (60s cooldown): gains ball-of-light attack (2d, 8p, 0.05s, plasma type) for 12s",
 			"cost": 24516
 		},
-		"11": { "desc": "Soon™", "cost": 29484 },
-		"12": { "desc": "Soon™", "cost": 25920 },
-		"13": { "desc": "Soon™", "cost": 29970 },
-		"14": { "desc": "Soon™", "cost": 26892 },
-		"15": { "desc": "Soon™", "cost": 29484 },
-		"16": { "desc": "Soon™", "cost": 32076 },
-		"17": { "desc": "Soon™", "cost": 34668 },
-		"18": { "desc": "Soon™", "cost": 37260 },
-		"19": { "desc": "Soon™", "cost": 29646 },
+		"11": { "desc": "0.8s", "cost": 29484 },
+		"12": { "desc": "+1j (5)", "cost": 25920 },
+		"13": { "desc": "+5p (13)\nactivated ability 3 buffed: +5p (13)", "cost": 29970 },
+		"14": { "desc": "+1j (6)", "cost": 26892 },
+		"15": { "desc": "+1d (2, or 3 for ball-of-light)", "cost": 29484 },
+		"16": { "desc": "ability 1 buffed: also doubles damage", "cost": 32076 },
+		"17": { "desc": "0.6s", "cost": 34668 },
+		"18": { "desc": "+2j (8)", "cost": 37260 },
+		"19": { "desc": "+5r (59)", "cost": 29646 },
 		"20": {
-			"desc": "Soon™",
+			"desc": "ability 3 buffed: 20d, 20s duration, normal\nif a super monkey is upgraded to 5xx in range, Adora transforms into sun-form (+5d, +30p)",
 			"cost": 31104
 		}
 	}

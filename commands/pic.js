@@ -237,7 +237,51 @@ module.exports = {
 					});
 				}
 			}
-		}  else if (arg.includes('emoji')) {
+		} else if (arg.includes('adora')) {
+			if (arg.includes('v')) {
+				return message.channel.send({
+					files: [
+						'https://cdn.discordapp.com/attachments/594348433922457610/655941779748814878/AdoraPortraitLvl20SunGodVengeful.png'
+					]
+				});
+			} else if (arg.includes('tsg')) {
+				message.channel.send({
+					files: [
+						'https://cdn.discordapp.com/attachments/594348433922457610/655941786971144202/AdoraPortraitLvl20SunGod.png'
+					]
+				});
+			} else if (arg.includes('10')) {
+				message.channel.send({
+					files: [
+						'https://cdn.discordapp.com/attachments/594624229958352906/632569498276200468/BenjaminPortraitLvl10.png'
+					]
+				});
+			} else if (arg.includes('20')) {
+				message.channel.send({
+					files: [
+						'https://cdn.discordapp.com/attachments/594348433922457610/655941717345959946/AdoraPortraitLvl20.png'
+					]
+				});
+			} else if (arg.includes('7')) {
+				message.channel.send({
+					files: [
+						'https://cdn.discordapp.com/attachments/594348433922457610/655941693580771328/AdoraPortraitLvl7_1.png'
+					]
+				});
+			} else if (arg.includes('3')) {
+				message.channel.send({
+					files: [
+						'https://cdn.discordapp.com/attachments/594348433922457610/655941757938302998/AdoraPortraitLvl3.png'
+					]
+				});
+			} else {
+				message.channel.send({
+					files: [
+						'https://cdn.discordapp.com/attachments/594348433922457610/655944321756823572/AdoraPortrait.png'
+					]
+				});
+			}
+		} else if (arg.includes('emoji')) {
 			message.channel.send('credits to Bloonfuzzli');
 			if (arg.includes('think')) {
 				message.channel.send({

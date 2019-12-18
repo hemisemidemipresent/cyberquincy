@@ -155,10 +155,20 @@ client.on('guildMemberRemove', async (member) => {
 //messGAE
 client.on('message', async (message) => {
 	//autohelp
-
+  
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
+  if(commandName=='edit'&&message.channel.id=='643773699916431361'){
+        const t = require('./heroes.json')
+        let sargs = [...args]
+        sargs.splice(0,1)
+        let yargs = sargs.join(' ')
+        t[`adora`][`${args[0]}`].desc = yargs
+        fs.writeFile('./heroes.json',JSON.stringify(t),(err)=>{
+            if(err)console.log(err)
+        })
+    }
 	if (commandName === 'level' || commandName === 'xp') {
 		if (args[0]) {
 			const user = getUserFromMention(args[0]);

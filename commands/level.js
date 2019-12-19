@@ -39,10 +39,10 @@ module.exports = {
                                     message.channel.send('Please select map difficulty and type the number into the chat\n1 - beginner\n2 - intermediate\n3 - advanced\n4 - expert').then(()=>{
                                         message.channel.awaitMessages(filter, { maxMatches: 1, time: 10000, errors: [ 'time' ] })
                                         .then((collectt)=>{
-                                            let h = collectt.first().content
+                                            let h = collectt.first().content;
                                             if(isNaN(h)||h<1||h>4){
                                                 return message.channel.send('sorry, please specify a valid difficulty');
-                                            } let B17 = 0.1*h+0.9
+                                            } let B17 = 0.1*h+0.9;
                                             message.channel.send(`${B15}\n${B16}\n${B17}`)
                                         })
                                     })

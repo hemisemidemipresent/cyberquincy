@@ -3,10 +3,11 @@ const { colour } = require('../config.json');
 module.exports = {
 	name: 'herolevel',
 	execute(message, args, client) {
+		if(args)return message.channel.send('Just use \`\`q!herolevel\`\`')
 		const filter = (msg) => msg.author.id === `${message.author.id}`;
 		message.channel
 			.send(
-				'Please select hero and type the number into chat\n1 - quincy\n2 - gwen\n3 - obyn\n4 - jones\n5 - ezili\n6 - ben\n7 - churchill\n8 - pat\n9 - adora'
+				'Please select hero and type the number into chat\n1 - quincy\n2 - gwen\n3 - obyn\n4 - jones\n5 - ezili\n6 - pat\n7 - churchill\n8 - ben\n9 - adora'
 			)
 			.then(() => {
 				message.channel
@@ -16,13 +17,13 @@ module.exports = {
 						if (isNaN(f) || f < 1 || f > 9) {
 							return message.channel.send('sorry, please specify a hero');
 						}
-						if (f > 0 && f < 5) {
+						if (f >= 1 && f <= 4) {
 							var B15 = 1;
-						} else if (f > 4 && f < 7) {
+						} else if (f ==7) {
 							var B15 = 1.8;
-						} else if (f == 6) {
-							var B15 = 1.5;
-						} else if (f == 5 || f == 8) {
+						} else if (f == 8) {
+							var B15 = 1.5;//ben
+						} else if (f == 5 || f == 6) {
 							var B15 = 1.425;
 						}
 						message.channel.send('Please type the starting round in the chat').then(() => {
@@ -54,13 +55,13 @@ module.exports = {
 											var heroname = 'Ezili';
 											break;
 										case 6:
-											var heroname = 'Benjamin';
+											var heroname = 'Pat';
 											break;
 										case 7:
 											var heroname = 'Churchill';
 											break;
 										case 8:
-											var heroname = 'Pat';
+											var heroname = 'Benjamin';
 											break;
 										case 9:
 											var heroname = 'Adora';

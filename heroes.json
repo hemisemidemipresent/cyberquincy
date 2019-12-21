@@ -284,7 +284,7 @@
 		"1": { "desc": "bolt attack: 1d, 5p, 45r, 1.0s, plasma type", "cost": "2000" },
 		"2": { "desc": "+4r (49)", "cost": "324" },
 		"3": {
-			"desc": "activated ability 1 (45 seconds): doubles pierce and range and grants normal type for 10s",
+			"desc": "**activated ability 1** (45s cooldown): for 10s, pierce and range are doubled, and damage type is normal",
 			"cost": "828"
 		},
 		"4": { "desc": "+1j (2)", "cost": "1800" },
@@ -305,12 +305,12 @@
 		"13": { "desc": "+5p (13)\nactivated ability 3 buffed: +5p (13)", "cost": 29970 },
 		"14": { "desc": "+1j (6)", "cost": 26892 },
 		"15": { "desc": "+1d (2, or 3 for ball-of-light)", "cost": 29484 },
-		"16": { "desc": "ability 1 buffed: also doubles damage", "cost": 32076 },
+		"16": { "desc": "*ability 1* buffed: also doubles damage, 15s duration", "cost": 32076 },
 		"17": { "desc": "0.6s", "cost": 34668 },
 		"18": { "desc": "+2j (8)", "cost": 37260 },
 		"19": { "desc": "+5r (59)", "cost": 29646 },
 		"20": {
-			"desc": "ability 3 buffed: 20d, 20s duration, normal\nif a super monkey is upgraded to 5xx in range, Adora transforms into sun-form (+5d, +30p)",
+			"desc": "*ability 3* buffed: 20d, normal type, 20s duration\nif a super monkey is upgraded to 5xx in range, Adora transforms into *sun-form* (+5d, +30p)",
 			"cost": 31104
 		}
 	}

@@ -140,7 +140,7 @@ client.on('guildMemberAdd', async (member) => {
 		}
 	} else if (member.guild.id === '543957081183617024') {
 		const tchannel = member.guild.channels.find((channel) => channel.name.includes('general'));
-		tchannel.send(`welcome to the only rAcE sErVer`);
+		tchannel.send(`welcome to the only rAcE sErVer. \nIf you cant get a top 1%, you have to read <#543962107918549027> 100 times before enetering`);
 	}
 });
 client.on('guildMemberRemove', async (member) => {
@@ -149,7 +149,7 @@ client.on('guildMemberRemove', async (member) => {
 		tchannel.send(`${member.displayName} was lost in battle`);
 	} else if (member.guild.id === '543957081183617024') {
 		const tchannel = member.guild.channels.find((channel) => channel.name.includes('general'));
-		tchannel.send(`**${member.displayName}** is a sjb subscriber`);
+		tchannel.send(`**${member.displayName}** couldnt resist it and accidentally revealed that he/she is a sjb subscriber`);
 	}
 });
 //messGAE

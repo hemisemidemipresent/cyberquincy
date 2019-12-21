@@ -1,1 +1,317 @@
-{"quincy":{"1":{"desc":"arrow attack (1d, 3p, 50r, 0.95s)","cost":"540"},"2":{"desc":"arrow buffed: +1p (4)","cost":"460"},"3":{"desc":"+2r (52)","cost":"460"},"4":{"desc":"activated ability 1 (60s cooldown): 33.3%s for ~(2 + 0.5 level)s","cost":"1000"},"5":{"desc":"camo","cost":"1860"},"6":{"desc":"arrow buffed: +1j (2)","cost":" "},"7":{"desc":"every third shot, each arrow creates an explosion (1d, 10p, explosion type) on first hit\nnote: bloons can be hit by both the arrow and the explosion, unlike most secondary effects","cost":"5180"},"8":{"desc":"+2md (3)","cost":"8320"},"9":{"desc":"arrow buffed: +2p (6)","cost":"9380"},"10":{"desc":"activated ability 2 (70s cooldown): arrow-storm attack (6d, 12md, ∞p, 100r centred according to Quincy's targetting, 3s duration, each target has a small chance of being hit on any given frame)\nnote: the above description is only speculative, based on an observed average of about 8.58 hits per bloon","cost":"13620"},"11":{"desc":"0.6s","cost":"16380"},"12":{"desc":"arrow buffed: +1p (7)","cost":"14400"},"13":{"desc":"+2r (54)","cost":"16650"},"14":{"desc":"+1md (4)","cost":"14940"},"15":{"desc":"ability 1 cooldown reduced to 45s\nability 1 buffed: 25%s","cost":"16380"},"16":{"desc":"0.4s","cost":"17820"},"17":{"desc":"'arrows last 25% longer'","cost":"19260"},"18":{"desc":"ability 2 cooldown reduced to 56s\narrow-storm buffed: now averages about 12.518 hits per bloon","cost":"20700"},"19":{"desc":"arrow buffed: +2p (9)","cost":"16470"},"20":{"desc":"arrow-storm buffed: +4d (10), +4md (20), about 16.29 hits per bloon","cost":"17280"}},"gwen":{"1":{"desc":"fire attack (1d, 3p, 38r, 0.5s, fire type)","cost":"900"},"2":{"desc":"+1p (4)","cost":"180"},"3":{"desc":"every 30th shot comes with a heatwave (3d, ∞p, applies a buff (lead, +1p) to towers in range for 8s)","cost":"460"},"4":{"desc":"activated ability 1 (30s cooldown): places firewall (1d, 40p, 0.1s, 12s lifetime) on the track","cost":"1000"},"5":{"desc":"fire buffed: +2p (6)","cost":"1860"},"6":{"desc":"fire attack buffed: applies burn status (1d/1.5s, 3s duration)","cost":"3280"},"7":{"desc":"heatwave buffed: +5r (43)","cost":"5180"},"8":{"desc":"fire buffed: +1j (2)","cost":"8320"},"9":{"desc":"fire buffed: +1d (2)","cost":"9380"},"10":{"desc":"activated ability 2 (60s cooldown): firestorm attack (2d, ∞p, ∞r, fire type, applies a burn (1d/0.5s or 10md/1s, 8s duration))","cost":"13620"},"11":{"desc":"+3r (41)","cost":"16380"},"12":{"desc":"0.4s","cost":"14400"},"13":{"desc":"+3p (9)","cost":"16650"},"14":{"desc":"firewall buffed: +1d (2)","cost":"14940"},"15":{"desc":"0.3s","cost":"16380"},"16":{"desc":"normal type\nfirestorm buffed: 10.4s duration","cost":"17820"},"17":{"desc":"heatwave buffed: buff also grants +1d, +1 lead damage (2)","cost":"19260"},"18":{"desc":"0.15s","cost":"20700"},"19":{"desc":"+1j (3)","cost":"16470"},"20":{"desc":"firestorm buffed: +3d (5), burn deals 2d/0.5s or 15md/1s","cost":"17280"}},"jones":{"1":{"desc":"bomb attack: (1d, 10p, 55r, 1.2s, explosion type)","cost":"750"},"2":{"desc":"'increased blast radius'","cost":"180"},"3":{"desc":"gains a buff (90%s, target: bombs and mortars)","cost":"460"},"4":{"desc":"activated ability 1 (16s cooldown): concussive-shell attack (2d, 48p, normal type, 1.5s stun, targets strongest)","cost":"1000"},"5":{"desc":"any explosion hitting a black bloon has a 50% chance to damage it","cost":"1860"},"6":{"desc":"+10p (20), 'increased blast radius'","cost":"3280"},"7":{"desc":"+1d (2)\ngains a buff (+10% blast radius, target: mortars)","cost":"5180"},"8":{"desc":"gains a buff (+25%p, +5%r, target: bombs in range)","cost":"8320"},"9":{"desc":"0.9s","cost":"9380"},"10":{"desc":"activated ability 2 (80s cooldown): every bomb or mortar ability is immediately ready to use","cost":"13620"},"11":{"desc":"0.65s","cost":"16380"},"12":{"desc":"+1d (3), +3r (58)","cost":"14400"},"13":{"desc":"0.5s","cost":"16650"},"14":{"desc":"concussive-shell buffed: 50% longer stun (2.25s), ~50 blast radius","cost":"14940"},"15":{"desc":"ability 1 cooldown reduced to 11s","cost":"16380"},"16":{"desc":"0.35s","cost":"17820"},"17":{"desc":"+1d (4), +2r (60)","cost":"19260"},"18":{"desc":"gains a buff (90%s, target: bombs and mortars), which stacks multiplicatively with the level 4 buff","cost":"20700"},"19":{"desc":"0.2s","cost":"16470"},"20":{"desc":"ability 2 buffed: for the next 10s, every bomb and mortar has double damage and double pierce","cost":"17280"}},"obyn":{"1":{"desc":"spirit attack (2d, 4p, 43r, 1.35s, plasma type)","cost":"650"},"2":{"desc":"gains a buff (+1p, target: magic in range)","cost":"180"},"3":{"desc":"gains natures-ward attack (18s, places a ward on the track)\nward has a 15s lifetime, and a slow attack (32r, 30% slow)\nnote: camos can be slowed, but the ward does not allow camos in range to be targetted by subs","cost":"460"},"4":{"desc":"activated ability 1 (35s cooldown) places brambles (1d, 50p, sharp type) on the track","cost":"1000"},"5":{"desc":"spirit buffed: 1.1s","cost":"1860"},"6":{"desc":"spirit buffed: +5p (9)","cost":"3280"},"7":{"desc":"brambles buffed: +50p (100)","cost":"5180"},"8":{"desc":"slow buffed: 40% slow","cost":"8320"},"9":{"desc":"spirit buffed: +2d (4)","cost":"9380"},"10":{"desc":"activated ability 2 (90s cooldown): places a tree (3000p) on the track, which pops anything up to its pierce limit with a +1 cash modifier, but stores this cash until the pierce is entirely used up\nnote: blimps can only be captured if their remaining RBE does not exceed the tree's remaining pierce, while bloons are always captured even if this overshoots","cost":"13620"},"11":{"desc":"buff improved: now grants +3p and +5r to magic monkeys","cost":"16380"},"12":{"desc":"spirit buffed: 0.8s","cost":"14400"},"13":{"desc":"spirit buffed: +5p (14)","cost":"16650"},"14":{"desc":"spirit buffed: +2d (6)","cost":"14940"},"15":{"desc":"natures-ward buffed: 12s\nslow buffed: 60% slow","cost":"16380"},"16":{"desc":"brambles buffed: +400p (500), normal type","cost":"17820"},"17":{"desc":"spirit buffed: 0.5s","cost":"19260"},"18":{"desc":"ains a buff: whenever a round starts, all xx3 druids gain the maximum 200 pops for +100% speed\nnote: idle time before a druid has started attacking on a round does not count for resetting the pop counter","cost":"20700"},"19":{"desc":"spirit buffed: +2d (8)","cost":"16470"},"20":{"desc":"tree buffed: +2000p (5000)","cost":"17280"}},"pat":{"1":{"desc":"slam attack (2d, 2cd (4), 24r, 1.1s, impact, normal type, has an aoe (1d, 2cd (3), 10p))\nnote: the aoe (area of effect) can affect the original target","cost":"800"},"2":{"desc":"slam aoe buffed: +1d (2)","cost":"257"},"3":{"desc":"0.9s","cost":"656"},"4":{"desc":"activated ability 1 (40s cooldown): gains a buff (+1d, target: anything within 30 units, including self) for 7s","cost":"1425"},"5":{"desc":"every 5th slam is replaced by slap (2d, 10p, applies knockback status (move backwards at 3× normal speed, 1s duration) to targets up to MOABs)","cost":"2651"},"6":{"desc":"both attacks apply a 0.3s stun to bloons\nnote: this results in less knockback because the bloons spend some of the time stunned","cost":"4674"},"7":{"desc":"slam aoe buffed: +10p (20)","cost":"7382"},"8":{"desc":"0.75s","cost":"11856"},"9":{"desc":"+3r (27)","cost":"13367"},"10":{"desc":"activated ability 2 (20s cooldown): grabs the strongest non-BAD blimp in range, spends 4s removing the top layer, then stuns the children for 2s","cost":"19409"},"11":{"desc":"+2d (4)","cost":"23342"},"12":{"desc":"0.65s","cost":"20520"},"13":{"desc":"stun buffed: affects blimps for 0.2s\nnote: there is no additional stun for regular bloons, contrary to the description","cost":"23727"},"14":{"desc":"ability 1 buffed: +10r (40), 12s duration; also grants +3cd and +3md","cost":"21290"},"15":{"desc":"slap buffed: +10p (20)","cost":"23342"},"16":{"desc":"+2r (29)","cost":"25394"},"17":{"desc":"0.55s","cost":"27446"},"18":{"desc":"aoe buffed: +10p (30)","cost":"29498"},"19":{"desc":"+5d (9), and a further +1d to slam","cost":"23470"},"20":{"desc":"ability 2 buffed: affects up to 4 blimps","cost":"24624"}},"churchill":{"1":{"desc":"shell attack (0d, 0.7s, 63r, creates an explosion on hit (1d, 15p, explosion type, ~24 blast radius) up to three times)","cost":"2000"},"2":{"desc":"explosion buffed: +3p (18)","cost":"324"},"3":{"desc":"+3r (66)","cost":"828"},"4":{"desc":"activated ability 1 (30s cooldown): for the next ~(7.6 + 0.51 level)s, shell can create 2 additional explosions, explosion has +3cd (4), +3md (4), and all attacks have normal type","cost":"1800"},"5":{"desc":"gains machine-gun attack (1d, 1p, 0.1s, sharp type, targets first)","cost":3348},"6":{"desc":"camo","cost":5904},"7":{"desc":"shell buffed: can create 4 explosions\nexplosion buffed: +1d (2)","cost":9324},"8":{"desc":"shell buffed: 0.5s","cost":14976},"9":{"desc":"shell buffed: can create 5 explosions","cost":16884},"10":{"desc":"activated ability 2 (60s cooldown): deals up to 1600d to the strongest and the 9 last blimps, spread out over 7.5s into 16 100d missiles","cost":24516},"11":{"desc":"explosion buffed: +5p (23)","cost":29484},"12":{"desc":"shell buffed: can create 6 explosions\nexplosion buffed: +1d (3)","cost":25920},"13":{"desc":"ability 1 buffed: now grants +1d (2), +7cd (9), and +7md (9)","cost":29970},"14":{"desc":"explosion buffed: +1d (4)\nmachine-gun buffed: +1d (2)","cost":26892},"15":{"desc":"explosion buffed: +1fd\nmachine-gun buffed: +1fd","cost":29484},"16":{"desc":"shell buffed: 0.3s","cost":32076},"17":{"desc":"ability 1 buffed: now grants +2d (4), +11cd (15), and +11md (15)","cost":34668},"18":{"desc":"explosion buffed: +1d (5)","cost":37260},"19":{"desc":"shell buffed: can create 7 explosions","cost":29646},"20":{"desc":"ability 2 cooldown reduced to 30s\nability 2 buffed: missiles now do 250d each for 4000d total, and explosion has +3d for the duration of the barrage","cost":31104}},"ben":{"1":{"desc":"dummy attack: 20r\n$100 end of round income","cost":"1200"},"2":{"desc":"+50 end of round income ($150)","cost":"270"},"3":{"desc":"gains skimming attack: earns $1 for every new bloon spawned, regardless of the round income modifier","cost":"690"},"4":{"desc":"activated ability 1 (30s cooldown): grants a buff (+1d, target: nearest 4 towers) for 6s, then disables the same towers for 2s","cost":"1500"},"5":{"desc":"gains a buff: (+5% income, target: x3+x farms)","cost":"2790"},"6":{"desc":"+5 end of round healing","cost":"4920"},"7":{"desc":"gains trojan attack: (random from ~5s-7s, targets a random bloon from rank 5 (pink) to 10 (MOAB), applies corrupted status (spawns no children, +rank cash modifier))\nnote: cash due to trojan is not affected by the round income modifier","cost":"7770"},"8":{"desc":"+100 end of round income ($250)","cost":"12480"},"9":{"desc":"buff improved: now +12% income","cost":"14070"},"10":{"desc":"activated ability 2 (65s cooldown): anything other than a DDT or BAD spawning in the next 10s will be one rank lower, and give double cash\nnote: the double is applied after all other cash buffs","cost":"20430"},"11":{"desc":"+50 end of round income ($300)","cost":"24570"},"12":{"desc":"skimming buffed to $2","cost":"21600"},"13":{"desc":"ability 1 buffed: now +2d to the nearest 6 towers for 8s","cost":"24975"},"14":{"desc":"+5 end of round healing (10), starting lives +100","cost":"22410"},"15":{"desc":"+200 end of round income ($500)","cost":"24570"},"16":{"desc":"trojan buffed: ~3-4s\ncorrupted status now gives +2 rank cash modifier","cost":"26730"},"17":{"desc":"+300 end of round income ($800)","cost":"28890"},"18":{"desc":"trojan buffed: can now also target camo bloons, BFBs, and DDTs","cost":"31050"},"19":{"desc":"ability 1 buffed: now +3d for 9s","cost":"24705"},"20":{"desc":"ability 2 buffed: lasts 20s, affected bloons now give triple cash","cost":"25920"}},"ezili":{"1":{"desc":"curse attack (1d, 40r, 1.2s, impact, plasma type, applies cursed status (1d/2.5s, 2.6s duration), creates a splash (1d, 5p))\ncamo\nnote: curses can be stacked, but with a 1s shorter maximum duration each time. All existing durations are also refreshed to their original value regardless of whether a new one is added. So at this level, curses of duration 2.6s, 1.6s, and 0.6s can be placed, although only the first two last long enough to be sustained.\nnote: the splash does not affect the original target","cost":"600"},"2":{"desc":"+3r (43)","cost":"257"},"3":{"desc":"curse buffed: +1d (2)\nsplash buffed: now also applies the cursed status","cost":"656"},"4":{"desc":"activated ability 1 (60s cooldown): for the next 6 seconds, constantly applies antigrow status (cannot regrow, 6s duration) to everything","cost":"1425"},"5":{"desc":"curse buffed: 1s","cost":"2651"},"6":{"desc":"cursed status buffed: 1d/1.8s, 5.5s duration","cost":"4674"},"7":{"desc":"activated ability 2 (90s cooldown): uses 10 lives to create a totem\ntotem has a 30s lifetime, and grants a buff (+1p, 85%s, +15%r, camo, target: anything within 78 units)\nnote/possible bug: primary towers get +25% range rather than +15%","cost":"7382"},"8":{"desc":"cursed status buffed: 20md/1.8s","cost":"11856"},"9":{"desc":"curse buffed (including splash): gains decamo, degrow, and defortify on-damage effects","cost":"13367"},"10":{"desc":"activated ability 3 (60s cooldown): applies hex status ((4%+1)d/1s, 25s duration, spawns no children) to the strongest blimp on screen other than BADs; transfers to the next strongest target if it pops with time remaining","cost":"19409"},"11":{"desc":"+2r (45)","cost":"23342"},"12":{"desc":"ability 1 cooldown reduced to 45s\nability 1 buffed: ability and antigrow status now both last 15s","cost":"20520"},"13":{"desc":"splash buffed: +10p (15)","cost":"23727"},"14":{"desc":"cursed status buffed: 1d/1s or 20md/1s, 4.1s duration","cost":"21290"},"15":{"desc":"+2r (47)","cost":"23342"},"16":{"desc":"totem buffed: 60s lifetime, costs 1 life","cost":"25394"},"17":{"desc":"+10p (25)","cost":"27446"},"18":{"desc":"0.8s","cost":"29498"},"19":{"desc":"cursed status buffed: 2d/1s or 21md/1s","cost":"23470"},"20":{"desc":"ability 3 cooldown reduced to 40s\nhex status buffed: (5%+1)d/1s, can affect BADs","cost":"24624"}},"adora":{"1":{"desc":"bolt attack: 1d, 5p, 45r, 1.0s, plasma type","cost":"2000"},"2":{"desc":"+4r (49)","cost":"324"},"3":{"desc":"activated ability 1 (45 seconds): doubles pierce and range and grants normal type for 10s","cost":"828"},"4":{"desc":"+1j (2)","cost":"1800"},"5":{"desc":"+3p (8)","cost":3348},"6":{"desc":"+1j (3)","cost":5904},"7":{"desc":"activated ability 2 (10s cooldown) sacrifices a chosen tower to gain 4x the amount spent on it as XP","cost":9324},"8":{"desc":"+1j (4)","cost":14976},"9":{"desc":"+5r (54)","cost":16884},"10":{"desc":"activated ability 3 (60s cooldown): gains ball-of-light attack (2d, 8p, 0.05s, plasma type) for 12s","cost":24516},"11":{"desc":"0.8s","cost":29484},"12":{"desc":"+1j (5)","cost":25920},"13":{"desc":"+5p (13)\nactivated ability 3 buffed: +5p (13)","cost":29970},"14":{"desc":"+1j (6)","cost":26892},"15":{"desc":"+1d (2, or 3 for ball-of-light)","cost":29484},"16":{"desc":"ability 1 buffed: also doubles damage","cost":32076},"17":{"desc":"0.6s","cost":34668},"18":{"desc":"+2j (8)","cost":37260},"19":{"desc":"+5r (59)","cost":29646},"20":{"desc":"ability 3 buffed: 20d, 20s duration, normal\nif a super monkey is upgraded to 5xx in range, Adora transforms into sun-form (+5d, +30p)","cost":31104}}}
+{
+	"quincy": {
+		"1": { "desc": "arrow attack (1d, 3p, 50r, 0.95s)", "cost": "540" },
+		"2": { "desc": "arrow buffed: +1p (4)", "cost": "460" },
+		"3": { "desc": "+2r (52)", "cost": "460" },
+		"4": { "desc": "activated ability 1 (60s cooldown): 33.3%s for ~(2 + 0.5 level)s", "cost": "1000" },
+		"5": { "desc": "camo", "cost": "1860" },
+		"6": { "desc": "arrow buffed: +1j (2)", "cost": " " },
+		"7": {
+			"desc": "every third shot, each arrow creates an explosion (1d, 10p, explosion type) on first hit\nnote: bloons can be hit by both the arrow and the explosion, unlike most secondary effects",
+			"cost": "5180"
+		},
+		"8": { "desc": "+2md (3)", "cost": "8320" },
+		"9": { "desc": "arrow buffed: +2p (6)", "cost": "9380" },
+		"10": {
+			"desc": "activated ability 2 (70s cooldown): arrow-storm attack (6d, 12md, ∞p, 100r centred according to Quincy's targetting, 3s duration, each target has a small chance of being hit on any given frame)\nnote: the above description is only speculative, based on an observed average of about 8.58 hits per bloon",
+			"cost": "13620"
+		},
+		"11": { "desc": "0.6s", "cost": "16380" },
+		"12": { "desc": "arrow buffed: +1p (7)", "cost": "14400" },
+		"13": { "desc": "+2r (54)", "cost": "16650" },
+		"14": { "desc": "+1md (4)", "cost": "14940" },
+		"15": { "desc": "ability 1 cooldown reduced to 45s\nability 1 buffed: 25%s", "cost": "16380" },
+		"16": { "desc": "0.4s", "cost": "17820" },
+		"17": { "desc": "'arrows last 25% longer'", "cost": "19260" },
+		"18": {
+			"desc": "ability 2 cooldown reduced to 56s\narrow-storm buffed: now averages about 12.518 hits per bloon",
+			"cost": "20700"
+		},
+		"19": { "desc": "arrow buffed: +2p (9)", "cost": "16470" },
+		"20": { "desc": "arrow-storm buffed: +4d (10), +4md (20), about 16.29 hits per bloon", "cost": "17280" }
+	},
+	"gwen": {
+		"1": { "desc": "fire attack (1d, 3p, 38r, 0.5s, fire type)", "cost": "900" },
+		"2": { "desc": "+1p (4)", "cost": "180" },
+		"3": {
+			"desc": "every 30th shot comes with a heatwave (3d, ∞p, applies a buff (lead, +1p) to towers in range for 8s)",
+			"cost": "460"
+		},
+		"4": {
+			"desc": "activated ability 1 (30s cooldown): places firewall (1d, 40p, 0.1s, 12s lifetime) on the track",
+			"cost": "1000"
+		},
+		"5": { "desc": "fire buffed: +2p (6)", "cost": "1860" },
+		"6": { "desc": "fire attack buffed: applies burn status (1d/1.5s, 3s duration)", "cost": "3280" },
+		"7": { "desc": "heatwave buffed: +5r (43)", "cost": "5180" },
+		"8": { "desc": "fire buffed: +1j (2)", "cost": "8320" },
+		"9": { "desc": "fire buffed: +1d (2)", "cost": "9380" },
+		"10": {
+			"desc": "activated ability 2 (60s cooldown): firestorm attack (2d, ∞p, ∞r, fire type, applies a burn (1d/0.5s or 10md/1s, 8s duration))",
+			"cost": "13620"
+		},
+		"11": { "desc": "+3r (41)", "cost": "16380" },
+		"12": { "desc": "0.4s", "cost": "14400" },
+		"13": { "desc": "+3p (9)", "cost": "16650" },
+		"14": { "desc": "firewall buffed: +1d (2)", "cost": "14940" },
+		"15": { "desc": "0.3s", "cost": "16380" },
+		"16": { "desc": "normal type\nfirestorm buffed: 10.4s duration", "cost": "17820" },
+		"17": { "desc": "heatwave buffed: buff also grants +1d, +1 lead damage (2)", "cost": "19260" },
+		"18": { "desc": "0.15s", "cost": "20700" },
+		"19": { "desc": "+1j (3)", "cost": "16470" },
+		"20": { "desc": "firestorm buffed: +3d (5), burn deals 2d/0.5s or 15md/1s", "cost": "17280" }
+	},
+	"jones": {
+		"1": { "desc": "bomb attack: (1d, 10p, 55r, 1.2s, explosion type)", "cost": "750" },
+		"2": { "desc": "'increased blast radius'", "cost": "180" },
+		"3": { "desc": "gains a buff (90%s, target: bombs and mortars)", "cost": "460" },
+		"4": {
+			"desc": "activated ability 1 (16s cooldown): concussive-shell attack (2d, 48p, normal type, 1.5s stun, targets strongest)",
+			"cost": "1000"
+		},
+		"5": { "desc": "any explosion hitting a black bloon has a 50% chance to damage it", "cost": "1860" },
+		"6": { "desc": "+10p (20), 'increased blast radius'", "cost": "3280" },
+		"7": { "desc": "+1d (2)\ngains a buff (+10% blast radius, target: mortars)", "cost": "5180" },
+		"8": { "desc": "gains a buff (+25%p, +5%r, target: bombs in range)", "cost": "8320" },
+		"9": { "desc": "0.9s", "cost": "9380" },
+		"10": {
+			"desc": "activated ability 2 (80s cooldown): every bomb or mortar ability is immediately ready to use",
+			"cost": "13620"
+		},
+		"11": { "desc": "0.65s", "cost": "16380" },
+		"12": { "desc": "+1d (3), +3r (58)", "cost": "14400" },
+		"13": { "desc": "0.5s", "cost": "16650" },
+		"14": { "desc": "concussive-shell buffed: 50% longer stun (2.25s), ~50 blast radius", "cost": "14940" },
+		"15": { "desc": "ability 1 cooldown reduced to 11s", "cost": "16380" },
+		"16": { "desc": "0.35s", "cost": "17820" },
+		"17": { "desc": "+1d (4), +2r (60)", "cost": "19260" },
+		"18": {
+			"desc": "gains a buff (90%s, target: bombs and mortars), which stacks multiplicatively with the level 4 buff",
+			"cost": "20700"
+		},
+		"19": { "desc": "0.2s", "cost": "16470" },
+		"20": {
+			"desc": "ability 2 buffed: for the next 10s, every bomb and mortar has double damage and double pierce",
+			"cost": "17280"
+		}
+	},
+	"obyn": {
+		"1": { "desc": "spirit attack (2d, 4p, 43r, 1.35s, plasma type)", "cost": "650" },
+		"2": { "desc": "gains a buff (+1p, target: magic in range)", "cost": "180" },
+		"3": {
+			"desc": "gains natures-ward attack (18s, places a ward on the track)\nward has a 15s lifetime, and a slow attack (32r, 30% slow)\nnote: camos can be slowed, but the ward does not allow camos in range to be targetted by subs",
+			"cost": "460"
+		},
+		"4": {
+			"desc": "activated ability 1 (35s cooldown) places brambles (1d, 50p, sharp type) on the track",
+			"cost": "1000"
+		},
+		"5": { "desc": "spirit buffed: 1.1s", "cost": "1860" },
+		"6": { "desc": "spirit buffed: +5p (9)", "cost": "3280" },
+		"7": { "desc": "brambles buffed: +50p (100)", "cost": "5180" },
+		"8": { "desc": "slow buffed: 40% slow", "cost": "8320" },
+		"9": { "desc": "spirit buffed: +2d (4)", "cost": "9380" },
+		"10": {
+			"desc": "activated ability 2 (90s cooldown): places a tree (3000p) on the track, which pops anything up to its pierce limit with a +1 cash modifier, but stores this cash until the pierce is entirely used up\nnote: blimps can only be captured if their remaining RBE does not exceed the tree's remaining pierce, while bloons are always captured even if this overshoots",
+			"cost": "13620"
+		},
+		"11": { "desc": "buff improved: now grants +3p and +5r to magic monkeys", "cost": "16380" },
+		"12": { "desc": "spirit buffed: 0.8s", "cost": "14400" },
+		"13": { "desc": "spirit buffed: +5p (14)", "cost": "16650" },
+		"14": { "desc": "spirit buffed: +2d (6)", "cost": "14940" },
+		"15": { "desc": "natures-ward buffed: 12s\nslow buffed: 60% slow", "cost": "16380" },
+		"16": { "desc": "brambles buffed: +400p (500), normal type", "cost": "17820" },
+		"17": { "desc": "spirit buffed: 0.5s", "cost": "19260" },
+		"18": {
+			"desc": "ains a buff: whenever a round starts, all xx3 druids gain the maximum 200 pops for +100% speed\nnote: idle time before a druid has started attacking on a round does not count for resetting the pop counter",
+			"cost": "20700"
+		},
+		"19": { "desc": "spirit buffed: +2d (8)", "cost": "16470" },
+		"20": { "desc": "tree buffed: +2000p (5000)", "cost": "17280" }
+	},
+	"pat": {
+		"1": {
+			"desc": "slam attack (2d, 2cd (4), 24r, 1.1s, impact, normal type, has an aoe (1d, 2cd (3), 10p))\nnote: the aoe (area of effect) can affect the original target",
+			"cost": "800"
+		},
+		"2": { "desc": "slam aoe buffed: +1d (2)", "cost": "257" },
+		"3": { "desc": "0.9s", "cost": "656" },
+		"4": {
+			"desc": "activated ability 1 (40s cooldown): gains a buff (+1d, target: anything within 30 units, including self) for 7s",
+			"cost": "1425"
+		},
+		"5": {
+			"desc": "every 5th slam is replaced by slap (2d, 10p, applies knockback status (move backwards at 3× normal speed, 1s duration) to targets up to MOABs)",
+			"cost": "2651"
+		},
+		"6": {
+			"desc": "both attacks apply a 0.3s stun to bloons\nnote: this results in less knockback because the bloons spend some of the time stunned",
+			"cost": "4674"
+		},
+		"7": { "desc": "slam aoe buffed: +10p (20)", "cost": "7382" },
+		"8": { "desc": "0.75s", "cost": "11856" },
+		"9": { "desc": "+3r (27)", "cost": "13367" },
+		"10": {
+			"desc": "activated ability 2 (20s cooldown): grabs the strongest non-BAD blimp in range, spends 4s removing the top layer, then stuns the children for 2s",
+			"cost": "19409"
+		},
+		"11": { "desc": "+2d (4)", "cost": "23342" },
+		"12": { "desc": "0.65s", "cost": "20520" },
+		"13": {
+			"desc": "stun buffed: affects blimps for 0.2s\nnote: there is no additional stun for regular bloons, contrary to the description",
+			"cost": "23727"
+		},
+		"14": { "desc": "ability 1 buffed: +10r (40), 12s duration; also grants +3cd and +3md", "cost": "21290" },
+		"15": { "desc": "slap buffed: +10p (20)", "cost": "23342" },
+		"16": { "desc": "+2r (29)", "cost": "25394" },
+		"17": { "desc": "0.55s", "cost": "27446" },
+		"18": { "desc": "aoe buffed: +10p (30)", "cost": "29498" },
+		"19": { "desc": "+5d (9), and a further +1d to slam", "cost": "23470" },
+		"20": { "desc": "ability 2 buffed: affects up to 4 blimps", "cost": "24624" }
+	},
+	"churchill": {
+		"1": {
+			"desc": "shell attack (0d, 0.7s, 63r, creates an explosion on hit (1d, 15p, explosion type, ~24 blast radius) up to three times)",
+			"cost": "2000"
+		},
+		"2": { "desc": "explosion buffed: +3p (18)", "cost": "324" },
+		"3": { "desc": "+3r (66)", "cost": "828" },
+		"4": {
+			"desc": "activated ability 1 (30s cooldown): for the next ~(7.6 + 0.51 level)s, shell can create 2 additional explosions, explosion has +3cd (4), +3md (4), and all attacks have normal type",
+			"cost": "1800"
+		},
+		"5": { "desc": "gains machine-gun attack (1d, 1p, 0.1s, sharp type, targets first)", "cost": 3348 },
+		"6": { "desc": "camo", "cost": 5904 },
+		"7": { "desc": "shell buffed: can create 4 explosions\nexplosion buffed: +1d (2)", "cost": 9324 },
+		"8": { "desc": "shell buffed: 0.5s", "cost": 14976 },
+		"9": { "desc": "shell buffed: can create 5 explosions", "cost": 16884 },
+		"10": {
+			"desc": "activated ability 2 (60s cooldown): deals up to 1600d to the strongest and the 9 last blimps, spread out over 7.5s into 16 100d missiles",
+			"cost": 24516
+		},
+		"11": { "desc": "explosion buffed: +5p (23)", "cost": 29484 },
+		"12": { "desc": "shell buffed: can create 6 explosions\nexplosion buffed: +1d (3)", "cost": 25920 },
+		"13": { "desc": "ability 1 buffed: now grants +1d (2), +7cd (9), and +7md (9)", "cost": 29970 },
+		"14": { "desc": "explosion buffed: +1d (4)\nmachine-gun buffed: +1d (2)", "cost": 26892 },
+		"15": { "desc": "explosion buffed: +1fd\nmachine-gun buffed: +1fd", "cost": 29484 },
+		"16": { "desc": "shell buffed: 0.3s", "cost": 32076 },
+		"17": { "desc": "ability 1 buffed: now grants +2d (4), +11cd (15), and +11md (15)", "cost": 34668 },
+		"18": { "desc": "explosion buffed: +1d (5)", "cost": 37260 },
+		"19": { "desc": "shell buffed: can create 7 explosions", "cost": 29646 },
+		"20": {
+			"desc": "ability 2 cooldown reduced to 30s\nability 2 buffed: missiles now do 250d each for 4000d total, and explosion has +3d for the duration of the barrage",
+			"cost": 31104
+		}
+	},
+	"ben": {
+		"1": { "desc": "dummy attack: 20r\n$100 end of round income", "cost": "1200" },
+		"2": { "desc": "+50 end of round income ($150)", "cost": "270" },
+		"3": {
+			"desc": "gains skimming attack: earns $1 for every new bloon spawned, regardless of the round income modifier",
+			"cost": "690"
+		},
+		"4": {
+			"desc": "activated ability 1 (30s cooldown): grants a buff (+1d, target: nearest 4 towers) for 6s, then disables the same towers for 2s",
+			"cost": "1500"
+		},
+		"5": { "desc": "gains a buff: (+5% income, target: x3+x farms)", "cost": "2790" },
+		"6": { "desc": "+5 end of round healing", "cost": "4920" },
+		"7": {
+			"desc": "gains trojan attack: (random from ~5s-7s, targets a random bloon from rank 5 (pink) to 10 (MOAB), applies corrupted status (spawns no children, +rank cash modifier))\nnote: cash due to trojan is not affected by the round income modifier",
+			"cost": "7770"
+		},
+		"8": { "desc": "+100 end of round income ($250)", "cost": "12480" },
+		"9": { "desc": "buff improved: now +12% income", "cost": "14070" },
+		"10": {
+			"desc": "activated ability 2 (65s cooldown): anything other than a DDT or BAD spawning in the next 10s will be one rank lower, and give double cash\nnote: the double is applied after all other cash buffs",
+			"cost": "20430"
+		},
+		"11": { "desc": "+50 end of round income ($300)", "cost": "24570" },
+		"12": { "desc": "skimming buffed to $2", "cost": "21600" },
+		"13": { "desc": "ability 1 buffed: now +2d to the nearest 6 towers for 8s", "cost": "24975" },
+		"14": { "desc": "+5 end of round healing (10), starting lives +100", "cost": "22410" },
+		"15": { "desc": "+200 end of round income ($500)", "cost": "24570" },
+		"16": { "desc": "trojan buffed: ~3-4s\ncorrupted status now gives +2 rank cash modifier", "cost": "26730" },
+		"17": { "desc": "+300 end of round income ($800)", "cost": "28890" },
+		"18": { "desc": "trojan buffed: can now also target camo bloons, BFBs, and DDTs", "cost": "31050" },
+		"19": { "desc": "ability 1 buffed: now +3d for 9s", "cost": "24705" },
+		"20": { "desc": "ability 2 buffed: lasts 20s, affected bloons now give triple cash", "cost": "25920" }
+	},
+	"ezili": {
+		"1": {
+			"desc": "curse attack (1d, 40r, 1.2s, impact, plasma type, applies cursed status (1d/2.5s, 2.6s duration), creates a splash (1d, 5p))\ncamo\nnote: curses can be stacked, but with a 1s shorter maximum duration each time. All existing durations are also refreshed to their original value regardless of whether a new one is added. So at this level, curses of duration 2.6s, 1.6s, and 0.6s can be placed, although only the first two last long enough to be sustained.\nnote: the splash does not affect the original target",
+			"cost": "600"
+		},
+		"2": { "desc": "+3r (43)", "cost": "257" },
+		"3": { "desc": "curse buffed: +1d (2)\nsplash buffed: now also applies the cursed status", "cost": "656" },
+		"4": {
+			"desc": "activated ability 1 (60s cooldown): for the next 6 seconds, constantly applies antigrow status (cannot regrow, 6s duration) to everything",
+			"cost": "1425"
+		},
+		"5": { "desc": "curse buffed: 1s", "cost": "2651" },
+		"6": { "desc": "cursed status buffed: 1d/1.8s, 5.5s duration", "cost": "4674" },
+		"7": {
+			"desc": "activated ability 2 (90s cooldown): uses 10 lives to create a totem\ntotem has a 30s lifetime, and grants a buff (+1p, 85%s, +15%r, camo, target: anything within 78 units)\nnote/possible bug: primary towers get +25% range rather than +15%",
+			"cost": "7382"
+		},
+		"8": { "desc": "cursed status buffed: 20md/1.8s", "cost": "11856" },
+		"9": {
+			"desc": "curse buffed (including splash): gains decamo, degrow, and defortify on-damage effects",
+			"cost": "13367"
+		},
+		"10": {
+			"desc": "activated ability 3 (60s cooldown): applies hex status ((4%+1)d/1s, 25s duration, spawns no children) to the strongest blimp on screen other than BADs; transfers to the next strongest target if it pops with time remaining",
+			"cost": "19409"
+		},
+		"11": { "desc": "+2r (45)", "cost": "23342" },
+		"12": {
+			"desc": "ability 1 cooldown reduced to 45s\nability 1 buffed: ability and antigrow status now both last 15s",
+			"cost": "20520"
+		},
+		"13": { "desc": "splash buffed: +10p (15)", "cost": "23727" },
+		"14": { "desc": "cursed status buffed: 1d/1s or 20md/1s, 4.1s duration", "cost": "21290" },
+		"15": { "desc": "+2r (47)", "cost": "23342" },
+		"16": { "desc": "totem buffed: 60s lifetime, costs 1 life", "cost": "25394" },
+		"17": { "desc": "+10p (25)", "cost": "27446" },
+		"18": { "desc": "0.8s", "cost": "29498" },
+		"19": { "desc": "cursed status buffed: 2d/1s or 21md/1s", "cost": "23470" },
+		"20": {
+			"desc": "ability 3 cooldown reduced to 40s\nhex status buffed: (5%+1)d/1s, can affect BADs",
+			"cost": "24624"
+		}
+	},
+	"adora": {
+		"1": { "desc": "bolt attack: 1d, 5p, 45r, 1.0s, plasma type", "cost": "2000" },
+		"2": { "desc": "+4r (49)", "cost": "324" },
+		"3": {
+			"desc": "**activated ability 1** (45s cooldown): for 10s, pierce and range are doubled, and damage type is normal",
+			"cost": "828"
+		},
+		"4": { "desc": "+1j (2)", "cost": "1800" },
+		"5": { "desc": "+3p (8)", "cost": 3348 },
+		"6": { "desc": "+1j (3)", "cost": 5904 },
+		"7": {
+			"desc": "activated ability 2 (10s cooldown) sacrifices a chosen tower to gain 4x the amount spent on it as XP",
+			"cost": 9324
+		},
+		"8": { "desc": "+1j (4)", "cost": 14976 },
+		"9": { "desc": "+5r (54)", "cost": 16884 },
+		"10": {
+			"desc": "activated ability 3 (60s cooldown): gains ball-of-light attack (2d, 8p, 0.05s, plasma type) for 12s",
+			"cost": 24516
+		},
+		"11": { "desc": "0.8s", "cost": 29484 },
+		"12": { "desc": "+1j (5)", "cost": 25920 },
+		"13": { "desc": "+5p (13)\nactivated ability 3 buffed: +5p (13)", "cost": 29970 },
+		"14": { "desc": "+1j (6)", "cost": 26892 },
+		"15": { "desc": "+1d (2, or 3 for ball-of-light)", "cost": 29484 },
+		"16": { "desc": "*ability 1* buffed: also doubles damage, 15s duration", "cost": 32076 },
+		"17": { "desc": "0.6s", "cost": 34668 },
+		"18": { "desc": "+2j (8)", "cost": 37260 },
+		"19": { "desc": "+5r (59)", "cost": 29646 },
+		"20": {
+			"desc": "*ability 3* buffed: 20d, normal type, 20s duration\nif a super monkey is upgraded to 5xx in range, Adora transforms into *sun-form* (+5d, +30p)",
+			"cost": 31104
+		}
+	}
+}

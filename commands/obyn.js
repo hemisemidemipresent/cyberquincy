@@ -14,7 +14,7 @@ module.exports = {
 		.setTitle('Obyn')
 		.addField('cost',`${hh.cost}`)
 		.addField('desc',`${hh.desc}`)
-		.setFooter('use q!ap for help and elaboration');
+		.setFooter('use q!ap for help and elaboration').setColor(colour)
 		message.channel.send(heroEmbed)
 	},
 };

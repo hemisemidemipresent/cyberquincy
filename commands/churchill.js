@@ -1,4 +1,4 @@
-const h = require('../heroes.json');
+const h = require('../heroes.json'); const {colour} = require('../config.json')
 const Discord = require('discord.js');
 module.exports = {
 	name: 'churchill',
@@ -15,7 +15,7 @@ module.exports = {
 		.setTitle('Captain Churchill')
 		.addField('cost',`${hh.cost}`)
 		.addField('desc',`${hh.desc}`)
-		.setFooter('use q!ap for help and elaboration');
+		.setFooter('use q!ap for help and elaboration').setColor(colour)
 		message.channel.send(heroEmbed)
     },
 };

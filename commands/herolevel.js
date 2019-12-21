@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const { colour } = require("../config.json");
 module.exports = {
   name: "herolevel",
+  aliases:['hero','hl'],
   execute(message, args, client) {
     const filter = msg => msg.author.id === `${message.author.id}`;
     message.channel

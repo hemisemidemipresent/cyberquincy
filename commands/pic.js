@@ -186,9 +186,7 @@ module.exports = {
 				});
 			} else if (arg.includes('10')) {
 				message.channel.send({
-					files: [
-						'https://cdn.discordapp.com/attachments/594624229958352906/632569498276200468/BenjaminPortraitLvl10.png'
-					]
+					files: [ 'https://cdn.discordapp.com/attachments/594348433922457610/657753740257787921/latest.png' ]
 				});
 			} else if (arg.includes('20')) {
 				message.channel.send({

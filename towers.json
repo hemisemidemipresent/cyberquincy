@@ -945,6 +945,7 @@
 		},
 		"s35": {
 			"desc": "+3d (5, 8md), +15p (22), +4r (57)\npassive ability (120s cooldown): when something leaks, delete it (no cash gain nor damage on the super monkey's counter), and anything else that leaks in the next 8s",
+			"name": "Legend of the Night",
 			"cost": "240000"
 		}
 	},

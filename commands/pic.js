@@ -45,6 +45,7 @@ const picEmbed3 = new Discord.RichEmbed()
 	.setURL('https://discord.gg/8agRm6c')
 	.setDescription('**More arguments**')
 	.addField('towers **put "tower" in argument', '`ultrajug`, `impale`,`marine`', true)
+	.addField('unclassified', '``extreme``')
 	.setFooter('page 3 out of 3');
 module.exports = {
 	name: 'pic',
@@ -63,6 +64,8 @@ module.exports = {
 			message.channel.send('cyber quincy', { files: [ './commands/images/cq.png' ] });
 		} else if (arg.includes('cyber') === false && arg.includes('quincy')) {
 			message.channel.send('quincy', { files: [ './commands/images/Quincy.png' ] });
+		} else if (arg.includes('extreme')) {
+			message.channel.send({ files: [ 'https://cdn.discordapp.com/emojis/455521544811184128.png?v=1' ] });
 		} else if (arg.includes('caltrops')) {
 			if (args.includes('path')) {
 				message.channel.send(

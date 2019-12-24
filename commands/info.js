@@ -3,7 +3,7 @@ const version = p.version;
 module.exports = {
 	name: 'buccaneer',
 	description: 'buccaneer upgrades desc',
-	aliases: [ 'boat', 'buc' ],
+	aliases: [ 'i' ],
 	usage: '<path1> <path2> <path3>',
 	execute(message, args, client) {
 		const apiPing = Math.round(message.client.ping);

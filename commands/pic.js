@@ -66,6 +66,7 @@ module.exports = {
 			message.channel.send('quincy', { files: [ './commands/images/Quincy.png' ] });
 		} else if (arg.includes('extreme')) {
 			message.channel.send('https://cdn.discordapp.com/emojis/455521544811184128.png?v=1');
+
 		} else if (arg.includes('caltrops')) {
 			if (args.includes('path')) {
 				message.channel.send(

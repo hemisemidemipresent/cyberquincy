@@ -18,11 +18,15 @@ module.exports = {
 				var yeet = cost;
 			}
 		}
+		let easy = Math.floor(yeet * 0.85);
+		let normal = Math.floor(yeet);
+		let hard = Math.floor(yeet * 1.08);
+		let impoppable = Math.floor(yeet * 1.2);
 		const embed = new Discord.RichEmbed()
-			.addField('easy', yeet * 0.85, true)
-			.addField('normal', yeet, true)
-			.addField('hard', yeet * 1.08, true)
-			.addField('impoppable', yeet * 1.2, true);
+			.addField('easy', `${easy}`, true)
+			.addField('normal', `${normal}`, true)
+			.addField('hard', `${hard}`, true)
+			.addField('impoppable', `${impoppable}`, true);
 		message.channel.send(embed);
 	}
 };

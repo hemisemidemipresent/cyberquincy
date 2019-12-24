@@ -32,14 +32,14 @@ module.exports = {
 		var u = t[name][`s${path}${tier}`];
 		if (args[0] === 'help') {
 			message.channel.send(
-				`here is the syntax fo the command: \`\`${name}\`\` \`\`<path1>\`\` \`\`<path2>\`\` \`\`path3>\`\`. please remember that crosspaths are not accepted. All upgrades provided by topper64\'s advanced popology`
+				`here is the syntax fo the command: \`\`${name} <path1><path2><path3>\`\`. (e.g. \`\`q!${name} 003\`\`. )\nplease remember that crosspaths are not accepted (i.e. no q!${name} 023) . All upgrades provided by topper64\'s advanced popology`
 			);
 		} else if (path === 0 || tier == 0 || args[0] === 'base') {
 			var u = t[name]['base'];
 		}
 		if (u === undefined) {
 			message.channel.send(
-				`I cant recognise what you sent, here is the syntax fo the command: \`\`${name}\`\` \`\`<path1>\`\` \`\`<path2>\`\` \`\`path3>\`\`. please remember that crosspaths are not accepted. All upgrades provided by topper64\'s advanced popology`
+				`I cant recognise what you sent, here is the syntax fo the command: \`\`${name} <path1><path2><path3>\`\`. (e.g. \`\`q!${name} 003\`\`. )\nplease remember that crosspaths are not accepted (i.e. no q!${name} 023) . All upgrades provided by topper64\'s advanced popology`
 			);
 		} else {
 			var tcost = parseInt(t[name].base.cost);

@@ -1,8 +1,10 @@
 const p = require('../package.json');
+const {colour} = require('../config.json')
+const Discord = require('discord.js')
 const version = p.version;
 module.exports = {
-	name: 'buccaneer',
-	description: 'buccaneer upgrades desc',
+	name: 'info',
+	description: 'info',
 	aliases: [ 'boat', 'buc' ],
 	usage: '<path1> <path2> <path3>',
 	execute(message, args, client) {

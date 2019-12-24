@@ -8,7 +8,7 @@ module.exports = {
 		if (args[1]) {
 			if (args[1].includes('ea')) {
 				var yeet = cost / 0.85;
-			} else if (args[1].includes('me')) {
+			} else if (args[1].includes('me') || args[1].includes('no')) {
 				var yeet = cost;
 			} else if (args[1].includes('ha')) {
 				var yeet = cost / 1.08;

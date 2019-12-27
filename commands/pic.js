@@ -65,8 +65,7 @@ module.exports = {
 		} else if (arg.includes('cyber') === false && arg.includes('quincy')) {
 			message.channel.send('quincy', { files: [ './commands/images/Quincy.png' ] });
 		} else if (arg.includes('extreme')) {
-			message.channel.send('https://cdn.discordapp.com/emojis/455521544811184128.png?v=1');
-
+			message.channel.send({ files: [ 'https://cdn.discordapp.com/emojis/455521544811184128.png?v=1' ] });
 		} else if (arg.includes('caltrops')) {
 			if (args.includes('path')) {
 				message.channel.send(

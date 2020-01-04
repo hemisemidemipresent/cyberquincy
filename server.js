@@ -183,13 +183,12 @@ client.on("guildMemberRemove", async member => {
 client.on("message", async message => {
   //autohelp
   if (message.channel.id == "598768185281609738") {
-    Hook.send(message.content);
+    Hook.send(`${message.content}\njoin https://discord.gg/Wcp28bv`);
   }
   if (!message.content.startsWith(prefix) || message.author.bot) return;
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 
-  
   if (commandName === "level" || commandName === "xp") {
     if (args[0]) {
       const user = getUserFromMention(args[0]);
@@ -294,7 +293,6 @@ client.on("message", async message => {
       .setFooter("use q!level rewards to see role rewards");
     return message.channel.send(xpembed);
   }
-
   if (commandName === "yeetda") {
     if (message.author.id != "581686781569794048") return;
     await Tags.update(
@@ -316,7 +314,6 @@ client.on("message", async message => {
         })
 		
 	}*/
-
   const command =
     client.commands.get(commandName) ||
     client.commands.find(

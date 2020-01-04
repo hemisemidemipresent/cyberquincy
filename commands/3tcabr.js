@@ -3,8 +3,8 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const t = require('../3tcabr.json');
 module.exports = {
-	name: '3tc',
-	description: 'checks 2tc',
+	name: '3tcabr',
+	description: 'checks 3tcabr',
 	execute(message, args, client) {
 		if (isNaN(args[0])) {
 			if (args[0] == 'check') {
@@ -77,14 +77,7 @@ module.exports = {
 		if (k > t.length) {
 			return message.channel.send(`there is only ${t.length} combos left`);
 		}
-		let upgradearray = t[k]['Upgrades'].split(',');
-		let upgrade1 = upgradearray[0].split('-');
-		let upgrade2 = upgradearray[1].split('-');
-		let upgrade3 = upgradearray[2].split('-');
-		let u = [];
-		u.push(`${upgrade1[0]}${upgrade1[1]}${upgrade1[2]}`);
-		u.push(`${upgrade2[0]}${upgrade2[1]}${upgrade2[2]}`);
-		u.push(`${upgrade3[0]}${upgrade3[1]}${upgrade3[2]}`);
+		let u = t[k]['Upgrades'].split(',');
 		let tower1 = t[k]['Tower 1'];
 		let tower2 = t[k]['Tower 2'];
 		let tower3 = t[k]['Tower 3'];

@@ -86,6 +86,8 @@ module.exports = {
 			name = "Adora's Temple";
 		} else if (map.includes('wp') || (map.includes('win') && map.includes('pa'))) {
 			name = 'Winter Park';
+		} else if (map.includes('sw') || (map.includes('spi') && map.includes('way'))) {
+			name = 'Spillway';
 		} else {
 			return message.channel.send(
 				'cant seem to find that map. might want to check the spelling. here is all i can find from it:'

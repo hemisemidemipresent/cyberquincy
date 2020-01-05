@@ -14,6 +14,10 @@ const Hook = new Discord.WebhookClient(
   "660867181071826945",
   "l-a0w6Udy0GDG6D-RD-LDszI9qEWJ-2aU2MAhYZ6kgCb0AYmZtI7UphcaBKhY3S-1Lq8"
 );
+const ook = new Discord.WebhookClient(
+  "663176908501942283",
+  "fB6NX97aTmMK5pVx2UQsz5v8isWabVd0fSUwOaRsJWjhwkurCwc391vBwS_adWUQ3AFw"
+);
 const Sequelize = require("sequelize");
 const { prefix, colour, token } = require("./config.json");
 const client = new Discord.Client();
@@ -179,13 +183,14 @@ client.on("guildMemberRemove", async member => {
     );
   }
 });
-//messGAE
 client.on("message", async message => {
-  //autohelp
   if (message.channel.id == "598768185281609738") {
     Hook.send(`${message.content}\njoin https://discord.gg/Wcp28bv`);
   }
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (message.channel.id == "661888246090825749") {
+    ook.send(message.content);
+  }
+  if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return;
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 

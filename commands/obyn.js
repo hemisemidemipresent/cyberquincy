@@ -1,4 +1,5 @@
 const h=require('../heroes.json');
+const {colour} = require('../config.json')
 const Discord = require('discord.js');
 module.exports = {
 	name: 'obyn',

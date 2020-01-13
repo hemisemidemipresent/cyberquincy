@@ -1,7 +1,9 @@
 const p = require('../package.json');
 const version = p.version;
+const {colour} = require('../config.json')
+const Discord = require('discord.js')
 module.exports = {
-	name: 'buccaneer',
+	name: 'info',
 	description: 'buccaneer upgrades desc',
 	aliases: [ 'i' ],
 	usage: '<path1> <path2> <path3>',

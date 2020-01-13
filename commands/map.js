@@ -3,7 +3,7 @@ const { colour } = require('../config.json');
 module.exports = {
 	name: 'map',
 	description: 'info about maps',
-	aliases: [ 'm' ],
+	aliases: ['m'],
 	usage: '!map <map name with perfect spelling>',
 	execute(message, args, client) {
 		let map = args.join(' ');
@@ -52,13 +52,13 @@ module.exports = {
 			name = 'Chutes';
 		} else if (map.includes('ra')) {
 			name = 'Rake';
-		} else if (map.includes('si') || (map.includes('spice') && map.includes('island'))) {
+		} else if (map.includes('si') || (map.includes('spi') && map.includes('is'))) {
 			name = 'Spice Islands';
 		} else if (map.includes('pa') || (map.includes('pat') && map.includes('pond'))) {
 			name = "Pat's Pond";
 		} else if (map.includes('pe')) {
 			name = 'Peninsula';
-		} else if (map.includes('hf') || (map.includes('high') && map.includes('finance'))) {
+		} else if (map.includes('hf') || (map.includes('hi') && map.includes('f')) || (map.includes('high') && map.includes('finance'))) {
 			name = 'High Finance';
 		} else if (map.includes('ab') || (map.includes('another') && map.includes('brick'))) {
 			name = 'Another Brick';

@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ['random','f'],
 	usage: '[command name]',
 	execute(message, args, client) {
-		if(args[0]==undefined){var randex = Math.ceil(Math.random()*158)}
+		if(args[0]==undefined){var randex = Math.ceil(Math.random()*175)}
 		else{
 			var randex = parseInt(args[0])
 		}

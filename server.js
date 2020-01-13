@@ -21,7 +21,7 @@ const ook = new Discord.WebhookClient(
 const Sequelize = require("sequelize");
 const { prefix, colour, token } = require("./config.json");
 const client = new Discord.Client();
-var noocmd = /noo+cmd/i;
+var noocmd = /no+c/i;
 client.commands = new Discord.Collection();
 const commandFiles = fs
   .readdirSync("./commands")
@@ -159,6 +159,30 @@ client.on("guildMemberAdd", async member => {
         }
       }
     }
+  } else if (member.guild.id == 661812833771847700) {
+    const wel = new Discord.RichEmbed()
+      .setTitle("Welcome to the BTD6 Index Discord Server!")
+      .setThumbnail(
+        "https://cdn.discordapp.com/icons/661812833771847700/94e0818cefedd71655d7e4e84a951a37.webp?size=128"
+      )
+      .setDescription(
+        "**remember to read <#661822473246998548>!**\n**Useful external resources can be found in <#661842199679467541>**"
+      )
+
+      .addField(
+        "What is the BTD6 Index?",
+        "The BTD6 Index is a community-maintained spreadsheet that was created for the purpose of compiling resources, documenting challenges, and archiving additional information for BTD6. The goal is to have a vast array of game knowledge all condensed into one area for easy reference and viewing. This post breaks down what each section strives to accomplish as well as addition resources and information that might help you at the game."
+      )
+      .addField(
+        "related links",
+        "[reddit post](https://www.reddit.com/r/btd6/comments/ejuqcj/official_btd6_index_overview/)\n[BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit?usp=sharing)"
+      )
+      .addField(
+        "Who am I?",
+        "I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881),[discord server](https://discord.gg/XBhHWh9)\nmade by hnngggrrrr#8734, contact via discord server linked above."
+      )
+      .setColor(colour);
+    member.send(wel);
   } else if (member.guild.id === "543957081183617024") {
     const tchannel = member.guild.channels.find(channel =>
       channel.name.includes("general")
@@ -181,6 +205,13 @@ client.on("guildMemberRemove", async member => {
     tchannel.send(
       `**${member.displayName}** couldnt resist it and accidentally revealed that he/she is a sjb subscriber`
     );
+  } else if (member.guild.id === "661812833771847700") {
+    const tchannel = member.guild.channels.find(channel =>
+      channel.name.includes("general")
+    );
+    tchannel.send(
+      `**${member.displayName}** got nerfed. hard.`
+    );
   }
 });
 client.on("message", async message => {
@@ -190,7 +221,8 @@ client.on("message", async message => {
   if (message.channel.id == "661888246090825749") {
     ook.send(message.content);
   }
-  if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return;
+  if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot)
+    return;
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 

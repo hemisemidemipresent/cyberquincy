@@ -1,11 +1,11 @@
 const p = require('../package.json');
 const version = p.version;
-const {colour} = require('../config.json')
+const { colour } = require('../config.json')
 const Discord = require('discord.js')
 module.exports = {
 	name: 'info',
-	description: 'buccaneer upgrades desc',
-	aliases: [ 'i' ],
+	description: 'shows info',
+	aliases: ['i'],
 	usage: '<path1> <path2> <path3>',
 	execute(message, args, client) {
 		const apiPing = Math.round(message.client.ping);

@@ -4,7 +4,7 @@ const {colour} = require('../config.json');
 module.exports = {
 	name: 'spactory',
     description: 'spike factory upgrades desc', 
-    aliases: ['factory','spike'],
+    aliases: ['factory','spike','spac'],
     usage:'<path1> <path2> <path3>',
 	  execute(message, args, client) {
         let name = 'spac';

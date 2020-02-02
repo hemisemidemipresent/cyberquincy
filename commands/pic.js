@@ -354,6 +354,10 @@ module.exports = {
 				message.channel.send(
 					'by u/FrostBurnSpirit: https://www.reddit.com/r/btd6/comments/dslysh/i_made_a_glavie_lord_in_this_awesome_rplace_clone/'
 				);
+			} else if (arg.includes('16')) {
+				message.channel.send(
+					'by Babipoki#0001 and Pat/Striker061#2896: https://cdn.discordapp.com/attachments/408694070794256396/668052772926783518/JAN17_-_Bloons_Collab4.png'
+				);
 			} else if (arg.includes('1')) {
 				message.channel.send(
 					'Made by Topaz: https://cdn.discordapp.com/attachments/425785341643980801/581930069984018465/ceramic_pixel_art.png'

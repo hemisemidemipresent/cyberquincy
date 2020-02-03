@@ -7,52 +7,28 @@ module.exports = {
 	usage: '[command name]',
 	cooldown: 5,
 	execute(message, args, client) {
-		if (args[0] === 'help') {
-			message.channel.send(`${prefix}rc <1 or 0, 1 means hero; 0 means no hero> <0 to 4: 0 is for random, 1 is for easy maps, 2 is for intermediate maps, 3 is for advanced and 4 is for expert> <0 to well.. any number: the start round for the challenge, 0 for random> <startround value and above: the end round for this challenge> <number of primary towers> <number of military towers> <number of magic towers> <number of support towers>`)
-		}
-		if (message.content === `${prefix}rc`) {
-			var heroyn = Math.floor(Math.random() * 2);
-			var mapdiff = 0;
-			var startround = 0;
-			var endround = 0;
-			var primarycount = Math.floor(Math.random() * 5);
-			var militarycount = Math.floor(Math.random() * 5);
-			var magiccount = Math.floor(Math.random() * 3);
-			var supportcount = Math.floor(Math.random() * 2);
-			var modeid = Math.floor(Math.random() * 10);
-			var cashdefyn = 0;
-			var lives = 0;
-			var mkyn = Math.floor(Math.random() * 2);
-			var camoyn = Math.floor(Math.random() * 2);
-			var regrow = Math.floor(Math.random() * 2);
-			var sell = Math.floor(Math.random() * 2);
-			var cont = Math.floor(Math.random() * 2);
-			var powers = Math.floor(Math.random() * 2)
-		} if (message.content !== `${prefix}rc`) {
-			var heroyn = parseInt(args[0]);//shows if the hero is included or not
-			var mapdiff = parseInt(args[1]);//map diff
-			var startround = parseInt(args[2]);
-			var endround = parseInt(args[3]);
-			var primarycount = parseInt(args[4]);
-			var militarycount = parseInt(args[5]);
-			var magiccount = parseInt(args[6]);
-			var supportcount = parseInt(args[7]);
-			var modeid = parseInt(args[8]);
-			var cashdefyn = parseInt(args[9])
-		} if (startround === 0) {
-			var startround = Math.ceil(Math.random() * 100)
-		} if (endround === 0) {
-			var endround = startround + Math.ceil(Math.random() * 30)
-		} if (endround < startround) {
-			return message.channel.send('your end round should be a higher number than the start round')
-		}
+		var heroyn = Math.floor(Math.random() * 2);
+		var mapdiff = Math.ceil(Math.random() * 4);
+		var startround = Math.ceil(Math.random() * 100);
+		var endround = startround + Math.ceil(Math.random() * 30);
+		var primarycount = Math.floor(Math.random() * 5);
+		var militarycount = Math.floor(Math.random() * 5);
+		var magiccount = Math.floor(Math.random() * 3);
+		var supportcount = Math.floor(Math.random() * 2);
+		var modeid = Math.floor(Math.random() * 10);
+		var lives = Math.ceil(Math.random() * 400);
+		var mkyn = Math.floor(Math.random() * 2);
+		var camoyn = Math.floor(Math.random() * 2);
+		var regrow = Math.floor(Math.random() * 2);
+		var sell = Math.floor(Math.random() * 2);
+		var cont = Math.floor(Math.random() * 2);
+		var bspeed = 100 + Math.floor((Math.random() - 1) * 10)
+		var Bspeed = 100 + Math.floor((Math.random() - 1) * 10)
+		var Bhealth = 100 + Math.floor((Math.random() - 1) * 10)
+		var chealth = 100 + Math.floor((Math.random() - 1) * 10)
 		if (heroyn === 0) {
 			var hero = 'none'
-		}
-		if (mapdiff === 0) {
-			var mapdiff = Math.ceil(Math.random() * 4)
-		}
-		if (heroyn === 1) {
+		} if (heroyn === 1) {
 			heroid = Math.ceil(Math.random() * 8);
 			switch (heroid) {
 				case 1: var hero = 'Quincy';
@@ -175,7 +151,6 @@ module.exports = {
 		if (primarygenerated.length === 0) {
 			var primarymonkeys = ' '
 		}
-
 		//military
 		var military = ['sub', 'boat', 'heli', 'ace', 'sniper', 'mortar'];
 		var militarycopy = [...military];
@@ -198,7 +173,6 @@ module.exports = {
 			magicgenerated.push(magiccopy[ranmagicindex]);
 			magiccopy.splice(ranmagicindex, 1)
 		}
-
 		var magicmonkeys = magicgenerated.toString();
 		if (magicgenerated.length === 0) {
 			var magicmonkeys = ' '
@@ -216,13 +190,11 @@ module.exports = {
 		if (supportgenerated.length === 0) {
 			var supportmonkeys = ' '
 		}
-		var modes = ['apopalypse', 'half cash', 'deflation', 'easy', 'medium', 'hard', 'impoppable', 'CHIMPS', 'double HP MOABs', 'Alternate Bloon Rounds'];
+		var modes = ['apopalypse', 'half cash', 'deflation', 'easy', 'medium', 'hard', 'impoppable', 'CHIMPS', 'Double HP MOABs', 'Alternate Bloon Rounds'];
 		var mode = modes[modeid];
 		var cash = 600 + 100 * startround + startround * startround * Math.ceil(Math.random() * 10);
-		if (lives === 0) {
-			var lives = Math.ceil(Math.random() * 400)
-		}
-		if (primarymonkeys === ' ' && militarymonkeys == ' ' && magicmonkeys == ' ' && supportmonkeys == ' ') {
+
+		if (primarymonkeys == ' ' && militarymonkeys == ' ' && magicmonkeys == ' ' && supportmonkeys == ' ') {
 			let yee = Math.floor(Math.random() * 21)
 			let monkeys = ['dart', 'boomerang', 'bomb', 'tack', 'ice', 'glue', 'sub', 'boat', 'heli', 'ace', 'sniper', 'mortar', 'wizard', 'super', 'druid', 'alchemist', 'ninja', 'farm', ' spactory', 'engineer', 'village']
 			var primarymonkeys = monkeys[yee]
@@ -262,8 +234,12 @@ module.exports = {
 			.addField('round', `${startround} to ${endround}`)
 			.addField(`monkeys`, `${primarymonkeys},${militarymonkeys},${magicmonkeys},${supportmonkeys}`)
 			.addField('other settings', ` MK ${MK}, all regrow ${grow}, all camo ${camo}, seling ${selling}, continues ${continues}`)
-			.setTimestamp()
-			.addField('this command is still in beta', 'pls click [here](https://discord.gg/8agRm6c) to report bugs and and support');
+			.addField('bloon speed', bspeed)
+			.addField('Blimp speed', Bspeed)
+			.addField('ceramic health', chealth)
+			.addField('Blimp health', Bhealth)
+			.addField('it is reccomended to tweak a few of these factors to mkae the challenge more intresting, instead of blindly copying from here.')
+			.addField('this command is prone to errors', 'pls click [here](https://discord.gg/8agRm6c) to report bugs and and support');
 		message.channel.send(ChallengeEmbed)
 
 	},

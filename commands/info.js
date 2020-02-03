@@ -5,7 +5,7 @@ const version = p.version;
 module.exports = {
 	name: 'info',
 	description: 'info',
-	aliases: [ 'i' ],
+	aliases: ['i'],
 	usage: '<path1> <path2> <path3>',
 	execute(message, args, client) {
 		const apiPing = Math.round(message.client.ping);

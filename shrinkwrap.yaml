@@ -1,6 +1,7 @@
 dependencies:
   discord.js: 11.5.1
   express: 4.17.1
+  google-spreadsheet: 2.0.8
   sequelize: 5.21.2
   sqlite3: 4.1.1
 packages:
@@ -77,6 +78,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
+  /async/1.5.2:
+    dev: false
+    resolution:
+      integrity: sha1-7GphrlZIDAw8skHJVhjiCJL5Zyo=
   /asynckit/0.4.0:
     dev: false
     resolution:
@@ -127,6 +132,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
+  /buffer-equal-constant-time/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
   /bytes/3.1.0:
     dev: false
     engines:
@@ -288,6 +297,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-OoOpBOVDUyh4dMVkt1SThoSamMk=
+  /ecdsa-sig-formatter/1.0.11:
+    dependencies:
+      safe-buffer: 5.2.0
+    dev: false
+    resolution:
+      integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==
   /ee-first/1.1.1:
     dev: false
     resolution:
@@ -449,6 +464,45 @@ packages:
     dev: false
     resolution:
       integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
+  /google-auth-library/0.10.0:
+    dependencies:
+      gtoken: 1.2.3
+      jws: 3.2.2
+      lodash.noop: 3.0.1
+      request: 2.88.0
+    dev: false
+    engines:
+      node: '>=0.10'
+    resolution:
+      integrity: sha1-bhW6vuhf0d0U2NEoopW2g41SE24=
+  /google-p12-pem/0.1.2:
+    dependencies:
+      node-forge: 0.7.6
+    dev: false
+    hasBin: true
+    resolution:
+      integrity: sha1-M8RqsCGqc0+gMys5YKmj/8svMXc=
+  /google-spreadsheet/2.0.8:
+    dependencies:
+      async: 1.5.2
+      google-auth-library: 0.10.0
+      lodash: 4.17.15
+      request: 2.88.0
+      xml2js: 0.4.23
+    dev: false
+    engines:
+      node: '>=0.8.0'
+    resolution:
+      integrity: sha512-mOcYls5JlJN/nVcqVLrdvQ9XV6Z2OnAPuh8t8FhirAYYVCXv3QuLple8kknQ6gO+8i88T+rxrpJZ8PLjx6BvuQ==
+  /gtoken/1.2.3:
+    dependencies:
+      google-p12-pem: 0.1.2
+      jws: 3.2.2
+      mime: 1.6.0
+      request: 2.88.0
+    dev: false
+    resolution:
+      integrity: sha512-wQAJflfoqSgMWrSBk9Fg86q+sd6s7y6uJhIvvIPz++RElGlMtEqsdAR2oWwZ/WTEtp7P9xFbJRrT976oRgzJ/w==
   /har-schema/2.0.0:
     dev: false
     engines:
@@ -607,6 +661,25 @@ packages:
       '0': node >=0.6.0
     resolution:
       integrity: sha1-MT5mvB5cwG5Di8G3SZwuXFastqI=
+  /jwa/1.4.1:
+    dependencies:
+      buffer-equal-constant-time: 1.0.1
+      ecdsa-sig-formatter: 1.0.11
+      safe-buffer: 5.2.0
+    dev: false
+    resolution:
+      integrity: sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==
+  /jws/3.2.2:
+    dependencies:
+      jwa: 1.4.1
+      safe-buffer: 5.2.0
+    dev: false
+    resolution:
+      integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
+  /lodash.noop/3.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-OBiPTWUKOkdCWEObluxFsyYXEzw=
   /lodash/4.17.15:
     dev: false
     resolution:
@@ -729,6 +802,10 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
+  /node-forge/0.7.6:
+    dev: false
+    resolution:
+      integrity: sha512-sol30LUpz1jQFBjOKwbjxijiE3b6pjd74YwfD0fJOKPjF+fONKb2Yg8rYgS6+bK6VDl+/wfr4IYpC7jDzLUIfw==
   /node-pre-gyp/0.11.0:
     dependencies:
       detect-libc: 1.0.3
@@ -1282,6 +1359,21 @@ packages:
     dev: false
     resolution:
       integrity: sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
+  /xml2js/0.4.23:
+    dependencies:
+      sax: 1.2.4
+      xmlbuilder: 11.0.1
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==
+  /xmlbuilder/11.0.1:
+    dev: false
+    engines:
+      node: '>=4.0'
+    resolution:
+      integrity: sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
   /yallist/3.1.1:
     dev: false
     resolution:
@@ -1292,5 +1384,6 @@ shrinkwrapVersion: 3
 specifiers:
   discord.js: ^11.5.1
   express: ^4.17.1
+  google-spreadsheet: ^2.0.8
   sequelize: ^5.21.2
   sqlite3: ^4.1.1

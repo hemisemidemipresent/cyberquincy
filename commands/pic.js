@@ -55,17 +55,17 @@ module.exports = {
 	execute(message, args, client) {
 		var arg = message.content.slice(4).toLowerCase();
 		if (arg.includes('ang') && arg.includes('sub') && !arg.includes('iest')) {
-			message.channel.send('angry sub, u/HelixSansTheSkeleton:', { files: [ './commands/images/angrysub.png' ] });
+			message.channel.send('angry sub, u/HelixSansTheSkeleton:', { files: ['./commands/images/angrysub.png'] });
 		} else if (arg.includes('ang') && arg.includes('sub') && arg.includes('est')) {
-			message.channel.send('angriest sub, by rohan:', { files: [ './commands/images/angriestsub.png' ] });
+			message.channel.send('angriest sub, by rohan:', { files: ['./commands/images/angriestsub.png'] });
 		} else if (arg.includes('patch') && arg.includes('note') && arg.includes('monkey')) {
-			message.channel.send('patch notes monkey', { files: [ './commands/images/patchnotesmonkey.jpg' ] });
+			message.channel.send('patch notes monkey', { files: ['./commands/images/patchnotesmonkey.jpg'] });
 		} else if (arg.includes('cyber') && arg.includes('quincy')) {
-			message.channel.send('cyber quincy', { files: [ './commands/images/cq.png' ] });
+			message.channel.send('cyber quincy', { files: ['./commands/images/cq.png'] });
 		} else if (arg.includes('cyber') === false && arg.includes('quincy')) {
-			message.channel.send('quincy', { files: [ './commands/images/Quincy.png' ] });
+			message.channel.send('quincy', { files: ['./commands/images/Quincy.png'] });
 		} else if (arg.includes('extreme')) {
-			message.channel.send({ files: [ 'https://cdn.discordapp.com/emojis/455521544811184128.png?v=1' ] });
+			message.channel.send({ files: ['https://cdn.discordapp.com/emojis/455521544811184128.png?v=1'] });
 		} else if (arg.includes('caltrops')) {
 			if (args.includes('path')) {
 				message.channel.send(
@@ -94,7 +94,7 @@ module.exports = {
 			}
 		} else if (arg.includes('quincy') && arg.includes('trig')) {
 			message.channel.send({
-				files: [ 'https://cdn.discordapp.com/attachments/598768278550085633/624160974156333057/triggered.jpg' ]
+				files: ['https://cdn.discordapp.com/attachments/598768278550085633/624160974156333057/triggered.jpg']
 			});
 		} else if (arg.includes('permacharge') && arg.includes('thanos')) {
 			message.channel.send({
@@ -172,7 +172,7 @@ module.exports = {
 			});
 		} else if (arg.includes('pat')) {
 			message.channel.send({
-				files: [ 'https://cdn.discordapp.com/attachments/598768278550085633/624168510515445780/PatFusty.png' ]
+				files: ['https://cdn.discordapp.com/attachments/598768278550085633/624168510515445780/PatFusty.png']
 			});
 		} else if (arg.includes('adora')) {
 			if (arg.includes('v')) {
@@ -189,7 +189,7 @@ module.exports = {
 				});
 			} else if (arg.includes('10')) {
 				message.channel.send({
-					files: [ 'https://cdn.discordapp.com/attachments/594348433922457610/657753740257787921/latest.png' ]
+					files: ['https://cdn.discordapp.com/attachments/594348433922457610/657753740257787921/latest.png']
 				});
 			} else if (arg.includes('20')) {
 				message.channel.send({
@@ -355,8 +355,26 @@ module.exports = {
 					'by u/FrostBurnSpirit: https://www.reddit.com/r/btd6/comments/dslysh/i_made_a_glavie_lord_in_this_awesome_rplace_clone/'
 				);
 			} else if (arg.includes('16')) {
+				message.channel.send('by u/JustAnAmpharos: https://www.reddit.com/r/btd6/comments/ekjmwo/fire_bomb/'
+				);
+			} else if (arg.includes('17')) {
 				message.channel.send(
-					'by Babipoki#0001 and Pat/Striker061#2896: https://cdn.discordapp.com/attachments/408694070794256396/668052772926783518/JAN17_-_Bloons_Collab4.png'
+					'by u/JustAnAmpharos: https://www.reddit.com/r/btd6/comments/ekjmwo/fire_bomb/'
+				);
+			} else if (arg.includes('18')) {
+				message.channel.send(
+					'by Okkward#1353: https://cdn.discordapp.com/attachments/567692469332869120/647100305070096394/image0.jpg'
+				);
+			} else if (arg.includes('19')) {
+				message.channel.send(
+					'by u/RegMeow: https://www.reddit.com/r/btd6/comments/eceht7/i_made_adora_in_human_form/'
+				);
+			} else if (arg.includes('20')) {
+				message.channel.send(
+					'by 5H0#5782: https://gyazo.com/a09e0e641bc1882b1923dee4aeac85e0?token=bdd5c441e6b7881968609851fb9e7916'
+      } else if (arg.includes('20')) {
+          message.channel.send(
+            'by Babipoki#0001 and Pat/Striker061#2896: https://cdn.discordapp.com/attachments/408694070794256396/668052772926783518/JAN17_-_Bloons_Collab4.png'
 				);
 			} else if (arg.includes('1')) {
 				message.channel.send(
@@ -483,11 +501,11 @@ module.exports = {
 			}
 		} else if (arg.includes('tower')) {
 			if (arg.includes('ultrajug')) {
-				message.channel.send({ files: [ 'https://cdn.discordapp.com/emojis/638082057804709928.png?v=1' ] });
+				message.channel.send({ files: ['https://cdn.discordapp.com/emojis/638082057804709928.png?v=1'] });
 			} else if (arg.includes('poper') || arg.includes('marine')) {
-				message.channel.send({ files: [ 'https://cdn.discordapp.com/emojis/638082060103188520.png?v=1' ] });
+				message.channel.send({ files: ['https://cdn.discordapp.com/emojis/638082060103188520.png?v=1'] });
 			} else if (arg.includes('impale')) {
-				message.channel.send({ files: [ 'https://cdn.discordapp.com/emojis/638082059197218817.png?v=1' ] });
+				message.channel.send({ files: ['https://cdn.discordapp.com/emojis/638082059197218817.png?v=1'] });
 			}
 		} else if (arg.includes('help')) {
 			if (arg.includes('2')) {

@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const version = p.version;
 module.exports = {
 	name: 'info',
-	description: 'info',
+	description: 'shows info',
 	aliases: ['i'],
 	usage: '<path1> <path2> <path3>',
 	execute(message, args, client) {

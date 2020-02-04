@@ -14,6 +14,10 @@ const Hook = new Discord.WebhookClient(
   "660867181071826945",
   "l-a0w6Udy0GDG6D-RD-LDszI9qEWJ-2aU2MAhYZ6kgCb0AYmZtI7UphcaBKhY3S-1Lq8"
 );
+const nook = new Discord.WebhookClient(
+  "667703656233172999",
+  "4uYZkE4vr7caOhyV3GZkQwzSicSsHTeZ3Fm7hH-ERHlWihjjJnp0BPbT9fvS3828TA7C"
+);
 const ook = new Discord.WebhookClient(
   "663176908501942283",
   "fB6NX97aTmMK5pVx2UQsz5v8isWabVd0fSUwOaRsJWjhwkurCwc391vBwS_adWUQ3AFw"
@@ -188,7 +192,7 @@ client.on("guildMemberAdd", async member => {
       channel.name.includes("general")
     );
     tchannel.send(
-      `welcome to the only rAcE sErVer. \nIf you cant get a top 1%, you have to read <#543962107918549027> 100 times before enetering`
+      `welcome to the only rAcE sErVer. \nIf you cant get a top 1%, you have to read <#667495608155635765> 100 times before enetering`
     );
   }
 });
@@ -203,23 +207,25 @@ client.on("guildMemberRemove", async member => {
       channel.name.includes("general")
     );
     tchannel.send(
-      `**${member.displayName}** couldnt resist it and accidentally revealed that he/she is a sjb subscriber`
+      `**${member.displayName}** couldnt resist it and accidentally revealed that he/she is hacking races`
     );
   } else if (member.guild.id === "661812833771847700") {
     const tchannel = member.guild.channels.find(channel =>
       channel.name.includes("general")
     );
-    tchannel.send(
-      `**${member.displayName}** got nerfed. hard.`
-    );
+    tchannel.send(`**${member.displayName}** got nerfed. hard.`);
   }
 });
 client.on("message", async message => {
   if (message.channel.id == "598768185281609738") {
+    if (!message.content.includes(":loudspeaker:")) return;
     Hook.send(`${message.content}\njoin https://discord.gg/Wcp28bv`);
   }
   if (message.channel.id == "661888246090825749") {
     ook.send(message.content);
+  }
+  if (message.channel.id == "614358164325924874") {
+    nook.send(message.content);
   }
   if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot)
     return;
@@ -388,9 +394,7 @@ client.on("message", async message => {
       if (message.author.id == "581686781569794048") return;
       if (message.channel.type == "dm") {
         var xpAdd = Math.floor(Math.random() * 4) + 2;
-      } else if (message.channel.id == "598835766113861633") {
-        var xpAdd = Math.floor(Math.random() * 16) + 10;
-      } else {
+      }  else {
         var xpAdd = Math.floor(Math.random() * 8) + 5;
       }
       let guildmember = message.member;
@@ -403,6 +407,9 @@ client.on("message", async message => {
         });
       } catch (e) {
         if (e.name === "SequelizeUniqueConstraintError") {
+          function up(){
+              
+            }
           const tag = await Tags.findOne({
             where: { name: message.author.id }
           });
@@ -414,51 +421,99 @@ client.on("message", async message => {
             const tag1 = await Tags.findOne({
               where: { name: message.author.id }
             });
-            if (tag1.xp > tag1.level * 100) {
+            if (tag1.level > 20) {
+              if (tag1.xp > 5 * ((tag1.level+20) * (tag1.level+20)) + 50 * (tag1.level+20) + 100) {
+                const affectedRows1 = await Tags.update(
+                  { level: tag1.level + 1 },
+                  { where: { name: message.author.id } }
+                );
+                let ran = Math.floor(Math.random() * 8);
+            switch (ran) {
+              case 0:
+                var ltxt = "Haha!";
+                break;
+              case 1:
+                var ltxt = "Ha!";
+                break;
+              case 2:
+                var ltxt = "Oh Yeah!";
+                break;
+              case 3:
+                var ltxt = "Alright!";
+                break;
+              case 4:
+                var ltxt = "Sweet!";
+                break;
+              case 5:
+                var ltxt = "Yes!";
+                break;
+              case 6:
+                var ltxt = "Nice!";
+                break;
+              case 7:
+                var ltxt = "Awesome!";
+            }
+            message.channel.send(
+              `${ltxt} You advanced to level ${tag1.level}`
+            );
+            let guildmember = client.guilds
+              .get("598768024761139240")
+              .members.array()
+              .find(m => m.id === message.author.id);
+            if (tag1.level === 3) {
+              await guildmember.addRole("645126928340353036");
+            }
+            if (tag1.level === 10) {
+              await guildmember.addRole("645629187322806272");
+            }
+              }
+            } else if (tag1.xp > tag1.level * 100) {
               const affectedRows1 = await Tags.update(
                 { level: tag1.level + 1 },
                 { where: { name: message.author.id } }
               );
               let ran = Math.floor(Math.random() * 8);
-              switch (ran) {
-                case 0:
-                  var ltxt = "Haha!";
-                  break;
-                case 1:
-                  var ltxt = "Ha!";
-                  break;
-                case 2:
-                  var ltxt = "Oh Yeah!";
-                  break;
-                case 3:
-                  var ltxt = "Alright!";
-                  break;
-                case 4:
-                  var ltxt = "Sweet!";
-                  break;
-                case 5:
-                  var ltxt = "Yes!";
-                  break;
-                case 6:
-                  var ltxt = "Nice!";
-                  break;
-                case 7:
-                  var ltxt = "Awesome!";
-              }
-              await message.channel.send(
-                `${ltxt} You advanced to level ${tag1.level}`
-              );
-              let guildmember = client.guilds
-                .get("598768024761139240")
-                .members.array()
-                .find(m => m.id === message.author.id);
-              if (tag1.level === 3) {
-                await guildmember.addRole("645126928340353036");
-              }
-              if (tag1.level === 10) {
-                await guildmember.addRole("645629187322806272");
-              }
+            switch (ran) {
+              case 0:
+                var ltxt = "Haha!";
+                break;
+              case 1:
+                var ltxt = "Ha!";
+                break;
+              case 2:
+                var ltxt = "Oh Yeah!";
+                break;
+              case 3:
+                var ltxt = "Alright!";
+                break;
+              case 4:
+                var ltxt = "Sweet!";
+                break;
+              case 5:
+                var ltxt = "Yes!";
+                break;
+              case 6:
+                var ltxt = "Nice!";
+                break;
+              case 7:
+                var ltxt = "Awesome!";
             }
+            message.channel.send(
+              `${ltxt} You advanced to level ${tag1.level}`
+            );
+            let guildmember = client.guilds
+              .get("598768024761139240")
+              .members.array()
+              .find(m => m.id === message.author.id);
+            if (tag1.level === 3) {
+              await guildmember.addRole("645126928340353036");
+            }
+            if (tag1.level === 10) {
+              await guildmember.addRole("645629187322806272");
+            }
+            }
+            
+            
             return;
           }
         }

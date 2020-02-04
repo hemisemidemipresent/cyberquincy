@@ -123,7 +123,7 @@
 		"16": { "desc": "brambles buffed: +400p (500), normal type", "cost": "17820" },
 		"17": { "desc": "spirit buffed: 0.5s", "cost": "19260" },
 		"18": {
-			"desc": "ains a buff: whenever a round starts, all xx3 druids gain the maximum 200 pops for +100% speed\nnote: idle time before a druid has started attacking on a round does not count for resetting the pop counter",
+			"desc": "gains a buff: whenever a round starts, all xx3 druids gain the maximum 200 pops for +100% speed\nnote: idle time before a druid has started attacking on a round does not count for resetting the pop counter",
 			"cost": "20700"
 		},
 		"19": { "desc": "spirit buffed: +2d (8)", "cost": "16470" },
@@ -281,7 +281,7 @@
 		}
 	},
 	"adora": {
-		"1": { "desc": "bolt attack: 1d, 5p, 45r, 1.0s, plasma type", "cost": "2000" },
+		"1": { "desc": "bolt attack: 1d, 5p, 45r, 1.0s, plasma type", "cost": "1000" },
 		"2": { "desc": "+4r (49)", "cost": "324" },
 		"3": {
 			"desc": "**activated ability 1** (45s cooldown): for 10s, pierce and range are doubled, and damage type is normal",

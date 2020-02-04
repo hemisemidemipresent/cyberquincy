@@ -355,8 +355,7 @@ module.exports = {
 					'by u/FrostBurnSpirit: https://www.reddit.com/r/btd6/comments/dslysh/i_made_a_glavie_lord_in_this_awesome_rplace_clone/'
 				);
 			} else if (arg.includes('16')) {
-				message.channel.send(
-					'by u/JustAnAmpharos: https://www.reddit.com/r/btd6/comments/ekjmwo/fire_bomb/'
+				message.channel.send('by u/JustAnAmpharos: https://www.reddit.com/r/btd6/comments/ekjmwo/fire_bomb/'
 				);
 			} else if (arg.includes('17')) {
 				message.channel.send(
@@ -373,6 +372,9 @@ module.exports = {
 			} else if (arg.includes('20')) {
 				message.channel.send(
 					'by 5H0#5782: https://gyazo.com/a09e0e641bc1882b1923dee4aeac85e0?token=bdd5c441e6b7881968609851fb9e7916'
+      } else if (arg.includes('20')) {
+          message.channel.send(
+            'by Babipoki#0001 and Pat/Striker061#2896: https://cdn.discordapp.com/attachments/408694070794256396/668052772926783518/JAN17_-_Bloons_Collab4.png'
 				);
 			} else if (arg.includes('1')) {
 				message.channel.send(

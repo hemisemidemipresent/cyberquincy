@@ -263,7 +263,7 @@
 			"cost": "4000"
 		},
 		"s25": {
-			"desc": "+3d (4, 5md), 0.04s\nactivated ability (40s cooldown): +8d (12) for 15s",
+			"desc": "+3d (4, 5md), 0.04s\nspecial crosspath handling: 052 grants +4d (8, 9md)\nactivated ability (40s cooldown): +8d (12) for 15s",
 			"name": "Perma Charge ",
 			"cost": "35000"
 		},
@@ -873,7 +873,7 @@
 			"cost": "13000"
 		},
 		"s25": {
-			"desc": "missile buffed: +6cd (11), +6md (11), 33.33%s (0.5s)\npassive ability: sends an assassin (up to 750d) at any blimp that enters the map",
+			"desc": "missile buffed: +6cd (11), +6md (11), 33.33%s (0.5s)\nability cooldown is now 45s\npassive ability: sends an assassin (up to 750d) at any blimp that enters the map",
 			"name": "Pre-emptive Strike ",
 			"cost": "35000"
 		},

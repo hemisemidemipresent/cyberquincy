@@ -2,6 +2,7 @@ const t = require('../towers.json');
 const Discord = require('discord.js');
 const { colour } = require('../config.json');
 module.exports = {
+
     name: 'spactory',
     description: 'spike factory upgrades desc',
     aliases: ['factory', 'spike', 'spac', 'spak', 'spanc', 'spikes', 'spikefactory', 'spi', 'sf', 'spacc', 'spikeshooter', 'basetrash'],

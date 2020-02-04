@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'adora',
 	description: 'adora upgrades',
-	aliases: [ 'ad', 'ador', 'ado', 'dora' ],
+	aliases: ['ad', 'ador', 'ado', 'dora', 'priestess', 'high', 'highpriestess'],
 	usage: 'q!adora <level>',
 	execute(message, args, client) {
 		if (!args) {

@@ -4,17 +4,14 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'jones',
 	description: 'jones upgrades',
-	aliases: [ 'SJ', 'sj', 'striker' ],
+	aliases: ['SJ', 'sj', 'striker', 'bones', 'biker', 'who'],
 	usage: '!jones <level>',
 	execute(message, args, client) {
 		if (!args) {
-			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``);
+			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
 		}
 		const hh = h['jones'][parseInt(args[0])];
-		if (!hh)
-			return message.channel.send(
-				'Please specify a valid hero level!\nThe command usage is ``q!<hero> <level>``'
-			);
+		if (!hh) return message.channel.send('Please specify a valid hero level!');
 		const heroEmbed = new Discord.RichEmbed()
 			.setTitle('Striker Jones')
 			.addField('cost', `${hh.cost}`)

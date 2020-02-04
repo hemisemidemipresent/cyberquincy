@@ -4,7 +4,7 @@ const { colour } = require('../config.json');
 module.exports = {
 	name: 'buccaneer',
 	description: 'buccaneer upgrades desc',
-	aliases: [ 'boat', 'buc' ],
+	aliases: ['boat', 'buc', 'bucc', 'buccaneer'],
 	usage: '<path1> <path2> <path3>',
 	execute(message, args, client) {
 		let name = 'boat';

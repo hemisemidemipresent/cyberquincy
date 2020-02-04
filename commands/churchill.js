@@ -4,17 +4,14 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'churchill',
 	description: 'churchill upgrades',
-	aliases: [ 'c', 'ch', 'CHURCHILL', 'C' ],
+	aliases: ['c', 'ch', 'chirch', 'church', 'captain', 'tank', 'winston', 'hill'],
 	usage: '!churchill <level>',
 	execute(message, args, client) {
 		if (!args) {
-			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``);
+			return message.channel.send(`Please specify a level \`\`e.g.: ${message.content} 4\`\``)
 		}
 		const hh = h['churchill'][parseInt(args[0])];
-		if (!hh)
-			return message.channel.send(
-				'Please specify a valid hero level!\nThe command usage is ``q!<hero> <level>``'
-			);
+		if (!hh) return message.channel.send('Please specify a valid hero level!');
 		const heroEmbed = new Discord.RichEmbed()
 			.setTitle('Captain Churchill')
 			.addField('cost', `${hh.cost}`)

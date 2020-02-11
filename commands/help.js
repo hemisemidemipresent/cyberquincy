@@ -7,6 +7,6 @@ module.exports = {
 	usage: '[command name]',
 	cooldown: 5,
 	execute(message, args, client) {
-		message.channel.send('The help page has moved to https://hnngggrrrr.github.io/cq/ !')
+		message.channel.send('The help page has moved to https://cq.netlify.com !')
 	}
 };

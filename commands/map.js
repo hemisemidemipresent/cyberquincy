@@ -16,7 +16,7 @@ module.exports = {
 			name = 'Town Center';
 		} else if (map.includes('pk') || (map.includes('park') && map.includes('path'))) {
 			name = 'Park Path';
-		} else if (map.includes('ar') || (map.includes('alpine') && map.includes('run'))) {
+		} else if (map.includes('alp') || (map.includes('alpine') && map.includes('run'))) {
 			name = 'Alpine Run';
 		} else if (map.includes('fo') || (map.includes('frozen') && map.includes('over'))) {
 			name = 'Frozen Over';
@@ -40,7 +40,7 @@ module.exports = {
 			name = 'Moon Landing';
 		} else if (map.includes('hau')) {
 			name = 'Haunted';
-		} else if (map.includes('ds') || map.includes('downstream')) {
+		} else if (map.includes('down') || map.includes('downstream')) {
 			name = 'Downstream';
 		} else if (map.includes('fr') || (map.includes('fir') && map.includes('rang'))) {
 			name = 'Firing Range';

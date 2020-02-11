@@ -371,7 +371,7 @@ module.exports = {
 				);
 			} else if (arg.includes('20')) {
 				message.channel.send(
-					'by 5H0#5782: https://gyazo.com/a09e0e641bc1882b1923dee4aeac85e0?token=bdd5c441e6b7881968609851fb9e7916'
+					'by 5H0#5782: https://gyazo.com/a09e0e641bc1882b1923dee4aeac85e0?token=bdd5c441e6b7881968609851fb9e7916')
       } else if (arg.includes('20')) {
           message.channel.send(
             'by Babipoki#0001 and Pat/Striker061#2896: https://cdn.discordapp.com/attachments/408694070794256396/668052772926783518/JAN17_-_Bloons_Collab4.png'

@@ -1,15 +1,14 @@
 const express = require("express");
 const app = express();
 const GoogleSpreadsheet = require("google-spreadsheet");
-  const { promisify } = require("util");
-  const creds = require("./shh/secret.json");
+const { promisify } = require("util");
+const creds = require("./shh/secret.json");
 app.use(express.static("public"));
 app.get("/", (request, response) => {
   console.log(Date.now() + " Ping Received");
   response.sendStatus(200);
 });
 app.listen(process.env.PORT);
-
 const fs = require("fs");
 const Discord = require("discord.js");
 const Hook = new Discord.WebhookClient(
@@ -239,7 +238,7 @@ client.on("message", async message => {
   }
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
-
+  if(c.startsWith('q! '))return message.channel.send('there isnt a space between q! and the command name')
   if (commandName === "level" || commandName === "xp") {
     if (args[0]) {
       const user = getUserFromMention(args[0]);
@@ -351,75 +350,10 @@ client.on("message", async message => {
       { where: { name: args[0] } }
     );
   }
-  
-  if(commandName=='3tcabr'){
-    
-  async function access(n) {
-    message.channel.send(
-      "This may take up to 20 seconds, please give us a moment"
-    );
-    const doc = new GoogleSpreadsheet(
-      "1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA"
-    );
-    await promisify(doc.useServiceAccountAuth)(creds);
-    await promisify(doc.useServiceAccountAuth)(creds);
-    const info = await promisify(doc.getInfo)();
-    console.log(`Loaded doc: ` + info.title + ` by ` + info.author.email);
-    const sheet = info.worksheets[2];
-    console.log(
-      `sheet 1: ` + sheet.title + ` ` + sheet.rowCount + `x` + sheet.colCount
-    );
-    let aa = [];
-    let cells = await promisify(sheet.getCells)({
-      "min-row": n + 11,
-      "max-row": n + 11,
-      "min-col": 3,
-      "max-col": 15,
-      "return-empty": true
-    });
-    for (const cell of cells) {
-      aa.push(`${cell.value}`);
+  if(commandName=='cmdc'||commandName=='cmdcount'||commandName=='commandcount'||commandName=='commandc'){
+     let tagrrr = await Tags.findOne({ where: { name: 1000 } });
+      message.channel.send(`${tagrrr.xp} (non-spaghetti) commands have been used since 12/2/20 10.51.38.339am UTC`)
     }
-    message.channel.send(
-      `First tower: ${aa[0]}\nSecond tower: ${aa[2]}\nThird tower: ${aa[4]}\nUpgrades: ${aa[6]}\nMap: ${aa[8]}\nversion: ${aa[10]}\ndate: ${aa[11]}\nPerson: ${aa[12]}`
-    );
-  }
-  if(isNaN(args[0]))return message.channel.send('Please specify a proper 3 towers chimps alternate bloon rounds combo **number**')
-  access(parseInt(args[0]));
-  }
-  if(commandName=='3tcrbs'){
-    async function access(n) {
-    message.channel.send(
-      "This may take up to 20 seconds, please give us a moment"
-    );
-    const doc = new GoogleSpreadsheet(
-      "1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA"
-    );
-    await promisify(doc.useServiceAccountAuth)(creds);
-    await promisify(doc.useServiceAccountAuth)(creds);
-    const info = await promisify(doc.getInfo)();
-    console.log(`Loaded doc: ` + info.title + ` by ` + info.author.email);
-    const sheet = info.worksheets[3];
-    console.log(
-      `sheet 1: ` + sheet.title + ` ` + sheet.rowCount + `x` + sheet.colCount
-    );
-    let aa = [];
-    let cells = await promisify(sheet.getCells)({
-      "min-row": n + 11,
-      "max-row": n + 11,
-      "min-col": 3,
-      "max-col": 15,
-      "return-empty": true
-    });
-    for (const cell of cells) {
-      aa.push(`${cell.value}`);
-    }
-    message.channel.send(
-      `First tower: ${aa[0]}\nSecond tower: ${aa[2]}\nThird tower: ${aa[4]}\nUpgrades: ${aa[6]}\nMap: ${aa[8]}\nversion: ${aa[10]}\ndate: ${aa[11]}\nPerson: ${aa[12]}`
-    );
-  }
-  access(parseInt(args[0]));
-  }
   /*
   if (commandName === "top") {
     const top = await Tags.max({ attributes: ["xp"] });
@@ -435,7 +369,9 @@ client.on("message", async message => {
         })
 		
 	}*/
-  
+  if(commandName=='Gytxvhyotemokbru'&&message.guild.id=='598768024761139240'){
+    return
+  }
   const command =
     client.commands.get(commandName) ||
     client.commands.find(
@@ -470,6 +406,22 @@ client.on("message", async message => {
   if (noocmd.test(message.channel.topic) === false) {
     try {
       command.execute(message, args, client);
+      try {
+      // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
+      const tag = await Tags.create({
+        name: 1000,
+        xp: 0,
+        level: 0
+      });
+    } catch (e) {
+      if (e.name === "SequelizeUniqueConstraintError") {
+        let tagrrr = await Tags.findOne({ where: { name: 1000 } });
+        await Tags.update(
+            { xp: tagrrr.xp + 1 },
+            { where: { name: 1000 } }
+          );
+      }
+    }
       if (message.author.id == "581686781569794048") return;
       if (message.channel.type == "dm") {
         var xpAdd = Math.floor(Math.random() * 4) + 2;

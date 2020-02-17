@@ -3,7 +3,7 @@
 		"base": {
 			"desc": "dummy attack (22r)\nradial-dart attack (1 damage, 5 pierce, 8 projectiles, 1 attack/2.1s, sharp type)\nflies on a circular path with radius 80, or a figure 8 or figure infinite with radii 40",
 			"name": "Monkey Ace",
-			"cost": "650"
+			"cost": "800"
 		},
 		"s11": { "name": "Rapid Fire", "cost": "650", "desc": "60%s (1.26)" },
 		"s12": { "desc": "radial-dart buffed: +4j (12)", "name": "Lots More Darts", "cost": "650" },
@@ -22,7 +22,7 @@
 			"name": "Sky Shredder",
 			"cost": "40000"
 		},
-		"s21": { "desc": "Exploding Pineapple", "name": "Exploding Pineapple ", "cost": "200" },
+		"s21": { "desc": "Exploding Pineapple", "name": "Exploding Pineapples", "cost": "200" },
 		"s22": { "desc": "camo", "name": "Spy Plane", "cost": "350" },
 		"s23": {
 			"desc": "pineapple replaced by bombing-run (3d, 40p, 1.7s, 4j, explosion type, can only be used above a path)",
@@ -413,7 +413,7 @@
 		"s14": {
 			"desc": "build-sentry buffed: places crushing-sentry, boom-sentry, cold-sentry, energy-sentry on a cycle, but sentries may be skipped depending on the bloons on screen\ncrushing-sentry has a spiked-ball attack (1d, 1cd (2), 22p, 1s, shatter type), skipped if there are leads (unless black and white are also present), but never skipped there are ceramics\nboom-sentry has a bomb attack (2d, 30p, 1.4s, explosion type), skipped if there are blacks (unless white and lead are also present)f\ncold-sentry has a ice-ball attack (1d, 15p, 1.5s, cold type, applies frozen status for 1.5s, applies permafrost status), skipped if there are whites (unless lead and black are also present)\nenergy-sentry has a laser attack (2d, 4p, 0.57s, energy type), skipped if there are leads (unless black and white are also present), and always skipped if there are purples",
 			"name": "Sentry Expert",
-			"cost": "2800"
+			"cost": "2500"
 		},
 		"s15": {
 			"desc": "build-sentry buffed: places paragon-sentry\nparagon-sentry has a plasma attack (2d, 3p, 0.06s, plasma type) and a selfdestruct attack (85d, 50p, plasma type, activates instantly after expiring)",
@@ -629,7 +629,7 @@
 		"s14": {
 			"desc": "+1d (2)\napplies brittle status (take +1d, 2s duration)",
 			"name": "Embrittlement  ",
-			"cost": "300"
+			"cost": "3000"
 		},
 		"s15": {
 			"desc": "+3d (5), 90%s (2.16), normal type\nbrittle status buffed: take +4d, 3s duration\nblimps can be targeted: they will take damage and receive brittle status, but cannot be frozen by this path",
@@ -932,7 +932,7 @@
 			"name": "Knockback  ",
 			"cost": "3000"
 		},
-		"s32": { "desc": "+3r (53), camo", "name": "Ultravision  ", "cost": "12000" },
+		"s32": { "desc": "+3r (53), camo", "name": "Ultravision  ", "cost": "1200" },
 		"s33": {
 			"desc": "dart replaced by monkeyrang (1d, 2md (3), 3p, 0.06s, 53r, sharp type)\nknockback status buffed: 100% slow to leads and ceramics",
 			"name": "Dark Knight ",
@@ -1098,7 +1098,7 @@
 			"cost": "60000"
 		},
 		"s31": { "desc": "bolt buffed: +5p (7)", "name": "Intense Magic", "cost": "275" },
-		"s32": { "desc": "camo", "name": "Monkey Sense", "cost": "800" },
+		"s32": { "desc": "camo", "name": "Monkey Sense", "cost": "300" },
 		"s33": { "desc": "gains shimmer attack (0d, 200p, 2.5s, 70r, decamo)", "name": "Shimmer", "cost": "1800" },
 		"s34": {
 			"desc": "keeps track of up to 2000 pops (layers not damage) that occur within 80 units, and every 1.5s uses these pops to create up to 5 zombloons (1d, 2-11p, normal type, 8s lifetime), such that the total pierce is 10% more than the pops used",

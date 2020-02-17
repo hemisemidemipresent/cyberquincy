@@ -2,17 +2,19 @@ const GoogleSpreadsheet = require("google-spreadsheet");
 const { promisify } = require("util");
 const creds = require("../shh/secret.json");
 module.exports = {
-  name: "race",
-  aliases: ["r", "rac", "ra", "racc", "rae"],
+  name: "3tcrb",
+  aliases: ["3tcrbs", "3tcrsb", "3crbs", "3tcbs", "rbs"],
   cooldown: 5,
   execute(message, args, client) {
     if (isNaN(args[0]))
       return message.channel.send("please specify a valid race number");
     async function access(n) {
-      if (isNaN(n)) return message.channel.send("please specify a number");
-      message.channel.send(
-        "This may time out, please give us a moment. If it doesnt respond, please try again"
-      );
+      message.channel
+        .send("This may take up to 20 seconds, please give us a moment")
+        .then(message => {
+          message.delete(5000);
+        })
+        .catch(/*Your Error handling if the Message isn't returned, sent, etc.*/);
       const doc = new GoogleSpreadsheet(
         "1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA"
       );
@@ -20,35 +22,23 @@ module.exports = {
       await promisify(doc.useServiceAccountAuth)(creds);
       const info = await promisify(doc.getInfo)();
       console.log(`Loaded doc: ` + info.title + ` by ` + info.author.email);
-      const sheet = info.worksheets[15];
+      const sheet = info.worksheets[3];
       console.log(
         `sheet 1: ` + sheet.title + ` ` + sheet.rowCount + `x` + sheet.colCount
       );
       let aa = [];
-      let bb = [];
-      n = n * 3;
       let cells = await promisify(sheet.getCells)({
-        "min-row": n + 9,
-        "max-row": n + 9,
-        "min-col": 3,
-        "max-col": 25,
-        "return-empty": true
-      });
-      let row2 = await promisify(sheet.getCells)({
-        "min-row": n + 10,
+        "min-row": n + 11,
         "max-row": n + 11,
-        "min-col": 7,
-        "max-col": 25,
+        "min-col": 3,
+        "max-col": 15,
         "return-empty": true
       });
       for (const cell of cells) {
         aa.push(`${cell.value}`);
       }
-      for (const cell of row2) {
-        bb.push(`${cell.value}`);
-      }
       message.channel.send(
-        `name: ${aa[0]}\ndate: ${aa[2]}\ninfo: ${aa[4]}, ${bb[0]}, ${bb[19]}\n1st: ${aa[12]}, ${bb[8]}, ${bb[27]}\n2nd: ${aa[14]}, ${bb[10]}, ${bb[29]}\n3rd: ${aa[16]}, ${bb[12]}, ${bb[31]}\n4th: ${aa[18]}, ${bb[14]}, ${bb[33]}\n5th: ${aa[20]}, ${bb[16]}, ${bb[35]}`
+        `First tower: ${aa[0]}\nSecond tower: ${aa[2]}\nThird tower: ${aa[4]}\nUpgrades: ${aa[6]}\nMap: ${aa[8]}\nversion: ${aa[10]}\ndate: ${aa[11]}\nPerson: ${aa[12]}`
       );
     }
     access(parseInt(args[0]));

@@ -1,6 +1,6 @@
 const GoogleSpreadsheet = require("google-spreadsheet");
 const { promisify } = require("util");
-const creds = require("../shh/secret.json");
+const creds = require("../shh/config.json");
 module.exports = {
   name: "2tc",
   aliases: ["2t", "2c", "tc", "tooteecee", "twotowerschimps"],

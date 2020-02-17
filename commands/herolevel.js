@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const { colour } = require("../config.json");
 module.exports = {
   name: "herolevel",
-  aliases:['hero','hl'],
+  aliases: ["hero", "hl"],
   execute(message, args, client) {
     const filter = msg => msg.author.id === `${message.author.id}`;
     message.channel
@@ -193,12 +193,14 @@ module.exports = {
                             message.channel.send(embed);
                           });
                       });
-                  }).catch(collectt => {
-					message.channel.send(`You took too long!`);
-				  });
-              }).catch(collect => {
-				message.channel.send(`You took too long!`);
-			  });
+                  })
+                  .catch(collectt => {
+                    message.channel.send(`You took too long!`);
+                  });
+              })
+              .catch(collect => {
+                message.channel.send(`You took too long!`);
+              });
           })
           .catch(collected => {
             message.channel.send(`You took too long!`);

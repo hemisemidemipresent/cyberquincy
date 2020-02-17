@@ -14,7 +14,7 @@ module.exports = {
 		let round2 = round - 100;
 		let round3 = round - 125;
 		let round4 = round - 152;
-		if (b === 'MOAB' || b === 'RED') {
+		if (b === 'MOAB' || b === 'RED'||b=='LEAD') {
 			var bloon = 3;
 		} else if (b === 'BFB') {
 			var bloon = 1;

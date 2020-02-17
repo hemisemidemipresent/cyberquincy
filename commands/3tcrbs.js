@@ -2,15 +2,17 @@ const GoogleSpreadsheet = require("google-spreadsheet");
 const { promisify } = require("util");
 const creds = require("../shh/config.json");
 module.exports = {
-  name: "2tc",
-  aliases: ["2t", "2c", "tc", "tooteecee", "twotowerschimps"],
+  name: "3tcrb",
+  aliases: ["3tcrbs", "3tcrsb", "3crbs", "3tcbs", "rbs"],
   cooldown: 5,
   execute(message, args, client) {
+    if (isNaN(args[0]))
+      return message.channel.send("please specify a valid race number");
     async function access(n) {
       message.channel
         .send("This may take up to 20 seconds, please give us a moment")
-        .then(msg => {
-          msg.delete(5000);
+        .then(message => {
+          message.delete(5000);
         })
         .catch(/*Your Error handling if the Message isn't returned, sent, etc.*/);
       const doc = new GoogleSpreadsheet(
@@ -20,7 +22,7 @@ module.exports = {
       await promisify(doc.useServiceAccountAuth)(creds);
       const info = await promisify(doc.getInfo)();
       console.log(`Loaded doc: ` + info.title + ` by ` + info.author.email);
-      const sheet = info.worksheets[1];
+      const sheet = info.worksheets[3];
       console.log(
         `sheet 1: ` + sheet.title + ` ` + sheet.rowCount + `x` + sheet.colCount
       );
@@ -29,20 +31,16 @@ module.exports = {
         "min-row": n + 11,
         "max-row": n + 11,
         "min-col": 3,
-        "max-col": 13,
+        "max-col": 15,
         "return-empty": true
       });
       for (const cell of cells) {
         aa.push(`${cell.value}`);
       }
       message.channel.send(
-        `First tower: ${aa[0]}\nSecond tower: ${aa[2]}\nUpgrades: ${aa[4]}\nMap: ${aa[6]}\nversion: ${aa[8]}\ndate: ${aa[9]}\nPerson: ${aa[10]}`
+        `First tower: ${aa[0]}\nSecond tower: ${aa[2]}\nThird tower: ${aa[4]}\nUpgrades: ${aa[6]}\nMap: ${aa[8]}\nversion: ${aa[10]}\ndate: ${aa[11]}\nPerson: ${aa[12]}`
       );
     }
-    if (isNaN(args[0]))
-      return message.channel.send(
-        "Please specify a proper 2 towers chimps combo **number**"
-      );
     access(parseInt(args[0]));
   }
 };

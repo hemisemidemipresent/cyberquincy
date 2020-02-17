@@ -8,7 +8,19 @@ module.exports = {
   usage: "q!tier <version>",
   execute(message, args, client) {
     if (!args[0]) {
-      return message.channel.send(`${t.t[3]}\nyou can use q!tier <version>`);
+      return message.channel.send(`${t.t[4]}\nyou can use q!tier <version>`);
+    }
+    let v = parseInt(args[0]) - 11;
+    if (!v) {
+      return message.channel.send(
+        "Please specify a proper version! not every version has a tier list!"
+      );
+    }
+    let cont = t.t[v];
+    if (!cont) {
+      return message.channel.send(
+        "Please specify a proper version! not every version has a tier list!"
+      );
     }
     let v = parseInt(args[0]) - 11;
     if (!v) {

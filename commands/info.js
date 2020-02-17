@@ -1,7 +1,7 @@
 const p = require("../package.json");
-const version = p.version;
 const { colour } = require("../config.json");
 const Discord = require("discord.js");
+const version = p.version;
 module.exports = {
   name: "info",
   description: "shows info",

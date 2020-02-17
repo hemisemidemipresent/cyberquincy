@@ -9,10 +9,6 @@ module.exports = {
     if (args[0] == undefined || args[0] == "help") {
       return message.channel.send("!round <round number>", { code: "md" });
     }
-    if (isNaN(args[0])) {
-      return;
-      let;
-    }
     var round = parseInt(args[0]);
     const r = round2[round - 1];
     if (round > 0 && round < 21) {
@@ -33,7 +29,7 @@ module.exports = {
       return message.channel.send("Quincy has no experience in these rounds");
     } else if (round > 100) {
       return message.channel.send(
-        "HEY! All rounds from 100 above are all random!"
+        "All rounds from 100 above are all random! fixed sandbox rounds: https://www.reddit.com/r/btd6/comments/9omw65/almost_every_single_special_freeplay_round/?utm_source=amp&utm_medium=&utm_content=post_body"
       );
     } else {
       return message.channel.send("please specify a **number**");

@@ -59,12 +59,6 @@ module.exports = {
       for (i = tier; i > 0; i--) {
         tcost = parseInt(t[name][`s${path}${i}`]["cost"]) + tcost;
       }
-      function rt5(c) {
-        c = c / 5;
-        c = c * 1.08;
-        Math.round(c);
-        c = c * 5;
-      }
       const infoembed = new Discord.RichEmbed()
         .addField("name", `${u.name}`)
         .addField("cost", `$${u.cost} (on medium)`)

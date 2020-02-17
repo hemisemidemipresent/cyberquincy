@@ -11,6 +11,9 @@ module.exports = {
         { code: "md" }
       );
     }
+    if (isNaN(args[0])) {
+      return message.channel.send("");
+    }
     if (!args[1]) {
       let endround = parseInt(args[0]);
       if (endround < 0 || endround > 100) {
@@ -20,6 +23,11 @@ module.exports = {
       let income = end.cch;
       return message.channel.send(
         `${income} total cash from round 1 to round ${endround} (including starting cash and all the bloons popped on round ${endround})`
+      );
+    }
+    if (isNaN(args[0]) || isNaN(args[1])) {
+      return message.channel.send(
+        "please specify a number for thr round from 1 to 100"
       );
     }
     let endround = parseInt(args[1]);

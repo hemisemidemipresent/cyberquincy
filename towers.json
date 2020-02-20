@@ -634,7 +634,7 @@
 		"s15": {
 			"desc": "+3d (5), 90%s (2.16), normal type\nbrittle status buffed: take +4d, 3s duration\nblimps can be targeted: they will take damage and receive brittle status, but cannot be frozen by this path",
 			"name": "Super Brittle ",
-			"cost": "3000"
+			"cost": "30000"
 		},
 		"s21": { "desc": "75%s (1.8s)\nfrozen status now lasts 2.2s", "name": "Enhanced Freeze ", "cost": "225" },
 		"s22": {

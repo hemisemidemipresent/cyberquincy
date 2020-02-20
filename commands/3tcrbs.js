@@ -19,7 +19,7 @@ module.exports = {
         "1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA"
       );
       await promisify(doc.useServiceAccountAuth)(creds);
-      await promisify(doc.useServiceAccountAuth)(creds);
+      
       const info = await promisify(doc.getInfo)();
       console.log(`Loaded doc: ` + info.title + ` by ` + info.author.email);
       const sheet = info.worksheets[3];

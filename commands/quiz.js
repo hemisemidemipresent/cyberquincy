@@ -19,8 +19,8 @@ module.exports = {
       .addField("option c", `${item.optns[2]}`, true)
       .addField("option d", `${item.optns[3]}`, true)
       .addField(
-        "Suggest a question idea PLEASE",
-        "suggest ideas [here](https://discord.gg/8agRm6c) or DM hnngggrrr#8734. [original game information](https://bloons.fandom.com/wiki/Who_Wants_To_Be_A_Bloonionaire%3F)"
+        "people **HAVE** contributed to this command!",
+        "join [this server](https://discord.gg/8agRm6c) to suggest an idea, as well as get the lastest updates, bug fixes and reports."
       )
       .setFooter(
         "This command is unstable and dont expect it to be 100% working"

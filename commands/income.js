@@ -1,4 +1,5 @@
 const r = require("../round2.json");
+const abr = require("../abrincome.json");
 module.exports = {
   name: "income",
   execute(message, args) {
@@ -11,9 +12,6 @@ module.exports = {
         { code: "md" }
       );
     }
-    if (isNaN(args[0])) {
-      return message.channel.send("");
-    }
     if (!args[1]) {
       let endround = parseInt(args[0]);
       if (endround < 0 || endround > 100) {
@@ -25,9 +23,9 @@ module.exports = {
         `${income} total cash from round 1 to round ${endround} (including starting cash and all the bloons popped on round ${endround})`
       );
     }
-    if (isNaN(args[0]) || isNaN(args[1])) {
+    if (isNaN(args[1])) {
       return message.channel.send(
-        "please specify a number for thr round from 1 to 100"
+        "please specify a number for a round from 1 to 100"
       );
     }
     let endround = parseInt(args[1]);
@@ -46,6 +44,24 @@ module.exports = {
       var startround = 6;
     } else if (args[0].includes("def")) {
       return message.channel.send("$20000 start cash. You dont earn any");
+    } else if (args[0].includes("alt") || args[0].includes("abr")) {
+      if (!args[2]) {
+        var start = 3;
+        var end = args[1];
+      } else var start = args[1];
+      let s_arr = abr[start];
+      let e_arr = abr[end];
+      let diff = e_arr[1] - s_arr[1];
+      if (!args[2]) {
+        return message.channel.send(
+          `${diff +
+            650} was made from popping bloons in round 3 to popping bloons in round ${end} (including starting cash)`
+        );
+      } else {
+        return message.channel.send(
+          `${diff} was made from popping bloons in round ${start} to popping bloons in round ${end} (not including starting cash)`
+        );
+      }
     } else {
       var startround = parseInt(args[0]);
       if (startround < 0 || startround > 100) {

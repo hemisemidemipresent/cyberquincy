@@ -173,7 +173,7 @@
   {
     "question": "There is a tower that allows you to summon a wave of supermonkeys to destroy everything. Name the tower that offers this upgrade.",
     "optns": ["Monkey Beacon", "Monkey Storm", "Super Monkey", "Dart Monkey"],
-    "answers": "a"
+    "answers": ""
   },
   {
     "question": "In Bloons TD 2, Dart Monkeys had an upgrade that allowed them to pop 3 Bloons. In Bloons TD 4 this was replaced by what upgrade?",
@@ -224,84 +224,5 @@
       "Monkey Beacon"
     ],
     "answers": "c"
-  },
-  {
-    "question": "How many tacks and how much pierce does Overdrive have?",
-    "optns": [
-      "12 tacks, 1 pierce",
-      "16 tacks, 1 pierce",
-      "16 tacks, 2 pierce",
-      "12 tacks, 2 pierce"
-    ],
-    "answers": "c"
-  },
-
-  {
-    "question": "What Intermediate map has the shortest path?",
-    "optns": ["Haunted", "Rake", "Spice Islands", "Chutes"],
-    "answers": "a"
-  },
-
-  {
-    "question": "Which hero has the voiceline \"You're on my list now!\"?",
-    "optns": ["Quincy", "Benjamin", "Captain Churchill", "Gwendolin"],
-    "answers": "d"
-  },
-
-  {
-    "question": "Which of these maps was added to the game first?",
-    "optns": ["Firing Range", "Quad", "High Finance", "Downstream"],
-    "answers": "a"
-  },
-
-  {
-    "question": "Which of these is the correct name?",
-    "optns": ["Permaspike", "Permabrew", "Permacharge", "Permafrost"],
-    "answers": "d"
-  },
-  {
-    "question": "Which of these towers is the most expensive? (No Monkey Knowledge)",
-    "optns": [
-      "2/4/0 Sniper Monkey",
-      "4/0/2 Wizard Monkey",
-      "2/0/2 Super Monkey",
-      "2/3/0 Monkey Village"
-    ],
-    "answers": "a"
-  },
-
-  {
-    "question": "Which of these upgrades does not increase the tower's attack speed?",
-    "optns": ["Pirate Lord", "Apache Prime", "Carrier Flagship", "Tech Terror"],
-    "answers": "b"
-  },
-
-  {
-    "question": "How much damage does Pre-Emptive Strike deal to spawning blimps?",
-    "optns": ["500", "700", "750", "1000"],
-    "answers": "c"
-  },
-
-  {
-    "question": "Which of these updates did not buff Wizard Lord Phoenix?",
-    "optns": ["4.0", "5.0", "6.0", "7.0"],
-    "answers": "b"
-  },
-
-  {
-    "question": "Which of these upgrades provides the greatest increase in attack speed?",
-    "optns": [
-      "Faster Shooting (Tack Shooter)",
-      "Faster Shooting (Monkey Buccaneer)",
-      "Faster Firing (Heli)",
-      "Rapid Fire (Ace)"
-    ],
-    "answers": "d"
-  },
-
-  {
-    "question": "How much damage does Juggernaut do to ceramic bloons?",
-    "optns": ["3", "4", "5", "6"],
-    "answers": "a"
   }
 ]

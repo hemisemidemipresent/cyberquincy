@@ -8,7 +8,7 @@ module.exports = {
     }
     if (args[0] == "help") {
       return message.channel.send(
-        "1. q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)\n2. q!income <difficulty> <endround>\n(includes starting cash; deflation, half cash, abr not yet, apop is random)",
+        "1. q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)\n2. q!income <difficulty> <endround>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)",
         { code: "md" }
       );
     }
@@ -46,20 +46,25 @@ module.exports = {
       return message.channel.send("$20000 start cash. You dont earn any");
     } else if (args[0].includes("alt") || args[0].includes("abr")) {
       if (!args[2]) {
-        var start = 3;
-        var end = args[1];
-      } else var start = args[1];
-      let s_arr = abr[start];
-      let e_arr = abr[end];
+        var abr_start = 3;
+        var abr_end = args[1];
+      } else {
+        var abr_start = args[1];
+        var abr_end = args[2];
+      }
+      let s_arr = abr[abr_start - 2];
+      let e_arr = abr[abr_end - 2];
       let diff = e_arr[1] - s_arr[1];
       if (!args[2]) {
         return message.channel.send(
-          `${diff +
-            650} was made from popping bloons in round 3 to popping bloons in round ${end} (including starting cash)`
+          `$${e_arr[1]} was made from popping bloons in round 3 to popping bloons in round ${abr_end} (including starting cash)`
         );
       } else {
         return message.channel.send(
-          `${diff} was made from popping bloons in round ${start} to popping bloons in round ${end} (not including starting cash)`
+          `$${diff} was made from popping bloons in round ${parseInt(
+            abr_start
+          ) +
+            1} to popping bloons in round ${abr_end} (not including starting cash)`
         );
       }
     } else {

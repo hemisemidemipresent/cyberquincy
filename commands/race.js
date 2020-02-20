@@ -9,14 +9,12 @@ module.exports = {
     if (isNaN(args[0]))
       return message.channel.send("please specify a valid race number");
     async function access(n) {
-      if (isNaN(n)) return message.channel.send("please specify a number");
       message.channel.send(
         "This may time out, please give us a moment. If it doesnt respond, please try again"
       );
       const doc = new GoogleSpreadsheet(
         "1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA"
       );
-      await promisify(doc.useServiceAccountAuth)(creds);
       await promisify(doc.useServiceAccountAuth)(creds);
       const info = await promisify(doc.getInfo)();
       console.log(`Loaded doc: ` + info.title + ` by ` + info.author.email);

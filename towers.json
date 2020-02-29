@@ -416,7 +416,7 @@
 			"cost": "2500"
 		},
 		"s15": {
-			"desc": "build-sentry buffed: places paragon-sentry\nparagon-sentry has a plasma attack (2d, 3p, 0.06s, plasma type) and a selfdestruct attack (85d, 50p, plasma type, activates instantly after expiring)",
+			"desc": "build-sentry buffed: places paragon-sentry\nparagon-sentry has a plasma attack (2d, 5p, 0.06s, plasma type) and a selfdestruct attack (85d, 50p, plasma type, activates either when sold or 2s after expiring)",
 			"name": "Sentry Paragon",
 			"cost": "32000"
 		},

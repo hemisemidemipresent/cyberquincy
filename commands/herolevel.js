@@ -113,7 +113,9 @@ module.exports = {
             .then(collected => {
               let f = collected.first().content;
               if (isNaN(f) || f < 1 || f > 9) {
-                return message.channel.send("sorry, please specify a hero");
+                return message.channel.send(
+                  "sorry, please specify a valid hero number next time. run the command again"
+                );
               }
               if (f == 1) {
                 var xp_slope = 1;
@@ -157,7 +159,7 @@ module.exports = {
                       let g = collect.first().content;
                       if (isNaN(g) || f < 1 || f > 100) {
                         return message.channel.send(
-                          "sorry, please specify a valid round"
+                          "sorry, please specify a valid round next time. run the commands again"
                         );
                       } else if (g <= 21) {
                         var B16 = 10 * g * g + 10 * g - 20;
@@ -183,7 +185,7 @@ module.exports = {
                               let h = collectt.first().content;
                               if (isNaN(h) || h < 1 || h > 4) {
                                 return message.channel.send(
-                                  "sorry, please specify a valid difficulty"
+                                  "sorry, please specify a valid difficulty next time. run the command again"
                                 );
                               }
                               let diff_mult = 0.1 * h + 0.9;
@@ -198,43 +200,43 @@ module.exports = {
                         });
                     })
                     .catch(collectt => {
-                      message.channel.send(`You took too long!`);
+                      message.channel.send(`You took too long to answer!`);
                     });
                 })
                 .catch(collect => {
-                  message.channel.send(`You took too long!`);
+                  message.channel.send(`You took too long to answer!`);
                 });
             })
             .catch(collected => {
-              message.channel.send(`You took too long!`);
+              message.channel.send(`You took too long to answer!`);
             });
         });
     } else {
-      if (args[0] == "quincy") {
+      if (args[0].includes("qui")) {
         var xp_slope = 1;
         var heroname = args[0];
-      } else if (args[0] == "gwen") {
+      } else if (args[0].includes("gw")) {
         var xp_slope = 1;
         var heroname = args[0];
-      } else if (args[0] == "obyn") {
+      } else if (args[0].includes("ob")) {
         var xp_slope = 1;
         var heroname = args[0];
-      } else if (args[0] == "striker" || args[0] == "jones") {
+      } else if (args[0].includes("str") || args[0].includes("jo")) {
         var xp_slope = 1;
         var heroname = args[0];
-      } else if (args[0] == "ezili") {
+      } else if (args[0].includes("ez")) {
         var xp_slope = 1.425;
         var heroname = args[0];
-      } else if (args[0] == "benjamin") {
+      } else if (args[0].includs("be")) {
         var xp_slope = 1.5;
         var heroname = args[0];
-      } else if (args[0] == "churchill") {
+      } else if (args[0].includes("ch")) {
         var xp_slope = 1.8;
         var heroname = args[0];
-      } else if (args[0] == "pat") {
+      } else if (args[0].includes("pa")) {
         var xp_slope = 1.425;
         var heroname = args[0];
-      } else if (args[0] == "adora") {
+      } else if (args[0].includes("ad")) {
         var xp_slope = 1.8;
         var heroname = args[0];
       } else {

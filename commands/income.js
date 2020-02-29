@@ -57,11 +57,11 @@ module.exports = {
       let diff = e_arr[1] - s_arr[1];
       if (!args[2]) {
         return message.channel.send(
-          `$${e_arr[1]} was made from popping bloons in round 3 to popping bloons in round ${abr_end} (including starting cash)`
+          `earns $${e_arr[1]} from popping bloons in round 3 to popping bloons in round ${abr_end} (including starting cash)`
         );
       } else {
         return message.channel.send(
-          `$${diff} was made from popping bloons in round ${parseInt(
+          `earns $${diff} from popping bloons in round ${parseInt(
             abr_start
           ) +
             1} to popping bloons in round ${abr_end} (not including starting cash)`

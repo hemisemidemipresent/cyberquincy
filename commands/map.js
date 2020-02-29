@@ -13,10 +13,7 @@ module.exports = {
       (map.includes("monkey") && map.includes("meadow"))
     ) {
       name = "Monkey Meadows";
-    } else if (
-      map.includes("ts") ||
-      (map.includes("tree") && map.includes("stump"))
-    ) {
+    } else if (map == "ts" || (map.includes("tree") && map.includes("stump"))) {
       name = "Tree Stump";
     } else if (
       map.includes("tc") ||
@@ -81,7 +78,7 @@ module.exports = {
       name = "Cracked";
     } else if (map.includes("sb") || map.includes("streambed")) {
       name = "Streambed";
-    } else if (map.includes("ch")) {
+    } else if (map.includes("chu")) {
       name = "Chutes";
     } else if (map.includes("ra")) {
       name = "Rake";
@@ -152,9 +149,14 @@ module.exports = {
       (map.includes("spi") && map.includes("way"))
     ) {
       name = "Spillway";
+    } else if (
+      map.includes("in") ||
+      (map.includes("fe") && map.includes("na"))
+    ) {
+      name = "Infernal";
     } else {
       return message.channel.send(
-        "cant seem to find that map. might want to check the spelling. here is all i can find from it:"
+        "cant seem to find that map. might want to check the spelling.\nThere are 42 maps in the game\n79% of maps include water\n57% of maps include L.O.S obstructions\n50% of maps include objects"
       );
     }
     const ma = require("../map.json");

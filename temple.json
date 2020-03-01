@@ -1,0 +1,50 @@
+{
+  "1": {
+    "0": "**gold-blade**:\ngold-blade-1: 15d, 10p, 2.0s, 8j\ngold-blade-2: 25d, 20p, 1.5s, 8j\n**gold-glaive**\ngold-glaive-1: 10d, 50p, 1.3s\ngold-glaive-2: 20d, 50p, 0.8s\ngold-glaive-3: 30d, 50p, 0.5s",
+    "1": "sunblast buffed: +5p (25)",
+    "2": "sunblast buffed: +1d (6), +5p (25)\ngains gold-blade-1 attack",
+    "3": "sunblast buffed: +1d (6), +5p (25), 90%s (0.054)\ngains gold-blade-1 attack",
+    "4": "sunblast buffed: +1d (6), +5p (25), 80%s (0.048)\ngains gold-blade-2 attack",
+    "5": "sunblast buffed: +2d (7), +5p (25), 80%s (0.048)\ngains gold-blade-2 attack",
+    "6": "sunblast buffed: +2d (7), +10p (30), 70%s (0.042)\ngains gold-blade-2 attack\ngains gold-glaive-1 attack",
+    "7": "sunblast buffed: +3d (8), +15p (35), 70%s (0.042)\ngains gold-blade-2 attack\ngains gold-glaive-1 attack",
+    "8": "sunblast buffed: +4d (9), +20p (40), 70%s (0.042)\ngains gold-blade-2 attack\ngains gold-glaive-2 attack",
+    "9": "sunblast buffed: +5d (10), +20p (40), 60%s (0.036)\ngains gold-blade-2 attack\ngains gold-glaive-3 attack"
+  },
+  "2": {
+    "0": "**moab-missile**\nmoab-missile-1: 1d, 74md (75), 50p, ∞r, 3.0s\nmoab-missile-2: 1d, 74md (75), 50p, ∞r, 1.5s\nmoab-missile-3: 1d, 74md (75), 50p, ∞r, 1.0s\nSubtowers:\n**gold-spectre**\ndart attack (10d, 10p, 0.3s)\nbomb attack (6d, 30p, 0.3s)\ngold-spectre-1 flies clockwise\ngold-spectre-2 flies anticlockwise\ninherits buffs provided by other towers, except alchemist",
+    "1": "nothing noticeable",
+    "2": "sunblast buffed: +5p (25)",
+    "3": "sunblast buffed: +5p (25)\ngains moab-missile-1 attack",
+    "4": "+1 damage multiplier (ie double)\nsunblast buffed: +5p (25)\ngains moab-missile-2 attack\ngains gold-spectre-1 subtower",
+    "5": "+1 damage multiplier (ie double)\nsunblast buffed: +10p (30)\ngains moab-missile-2 attack\ngains gold-spectre-1 subtower",
+    "6": "nothing noticeable over level 5",
+    "7": "+1 damage multiplier (ie double)\nsunblast buffed: +15p (35)\ngains moab-missile-3 attack\ngains gold-spectre-1 subtower",
+    "8": "+1 damage multiplier (ie double)\nsunblast buffed: +15p (35)\ngains moab-missile-3 attack\ngains gold-spectre-1 subtower",
+    "9": ""
+  },
+  "3": {
+    "0": "**arcane-blast**\narcane-blast-1: 20d, 7p, 4.0s, 4j\narcane-blast-2: 30d, 7p, 2.0s, 4j\narcane-blast-3: 35d, 7p, 2.0s, 6j\n**push**\npush-1: 0d, 500p, 5.0s, knock back bloons\npush-2: 0d, 500p, 5.0s, knock back bloons and moabs\n**mini-avatar:**\n30s\nhas beam attack (4d, 6p, 0.03s, 50r, 3j)\n65s lifetime",
+    "1": "nothing noticeable",
+    "2": "gains arcane-blast-1 attack",
+    "3": "sunblast buffed: 10% chance to knock back bloons\ngains arcane-blast-1 attack",
+    "4": "sunblast buffed: 10% chance to knock back bloons\ngains arcane-blast-2 attack",
+    "5": "sunblast buffed: 10% chance to knock back bloons\ngains arcane-blast-2 attack\ngains push-1 attack",
+    "6": "sunblast buffed: 20% chance to knock back bloons\ngains arcane-blast-2 attack\ngains push-1 attack",
+    "7": "sunblast buffed: 20% chance to knock back bloons\ngains arcane-blast-2 attack\ngains push-2 attack",
+    "8": "sunblast buffed: 20% chance to knock back bloons\ngains arcane-blast-3 attack\ngains push-2 attack",
+    "9": "sunblast buffed: 20% chance to knock back bloons\ngains arcane-blast-3 attack\ngains push-2 attack"
+  },
+  "4": {
+    "0": "nothing",
+    "1": "+5r (70)",
+    "2": "+5r (70)\ngains a buff to all towers in range: 10% discount",
+    "3": "+5r (70)\ngains a buff to all towers in range: 90%s, 10% discount\n$500 end of round income",
+    "4": "nothing noticeable over level 3",
+    "5": "+5r (70)\ngains a buff to all towers in range: +3p, 90%s, +20%r, 10% discount\n$2500 end of round income",
+    "6": "+5r (70)\ngains a buff to all towers in range: +1d, +3p, 90%s, +20%r, 10% discount\n$2500 end of round income",
+    "7": "+5r (70)\ngains a buff to all towers in range: +1d, +3p, 90%s, +20%r, 20% discount\n$2500 end of round income",
+    "8": "+5r (70)\ngains a buff to all towers in range: +1d, +3p, 81%s, +20%r, 20% discount\n$10000 end of round income",
+    "9": "+5r (70)\ngains a buff to all towers in range: +2d, +3p, 81%s, +20%r, 20% discount\n$10000 end of round income"
+  }
+}

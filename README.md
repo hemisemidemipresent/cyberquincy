@@ -1,12 +1,8 @@
-{
-    "type": "service_account",
-    "project_id": "cyber-quincy",
-    "private_key_id": "e7a248de8ac3dc733e2e08fbbb7fc168caabe559",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCt9PYMoOyF9Xu2\n8KLZV2umewT9SnKeYg0BTIZgBLb8fXR4687p/ZyMQGkWuwFQ0Z6K6nYwJ7d3QXJD\nIzr50Lf5jfVk9Jo4TaUDXzzHcpcOPlq0IQ5T+UCngQKLXMvzaOeZYGwpCz0/7jzi\n/o2dGMbqp2P2CRtmHuuWtQHDHhwxQELbsI9YhMJtOAUienrwIi+0iFoCf+8F3Z5r\n9lGIRk60woXvjkMFtTcP2uesy4klu5n8ny/QUP2JubaXD6dr8erSE8qEqeSzTNLM\nucFmMpIsT82gXddcM7WP+d+kR1R7fMWkF4AUOrVUYNTZk3wPsc6x7o48y1GkjE6H\nAN16Bn8bAgMBAAECggEARpQi2FDaZieJgFn12LTNaohzJ8ly46voluRTiNWg4KSO\nAxm5o9pQD996Q8yv5fiGmNo0Bam3mF0nXPIIVZ9HZashK0rK35kxIEMdx9ZIT3Eh\nIABhbdStVMjVHXITFbk0blheyfBTc4LXlUmub1TEMCSmPAbJ5Q8aitT52A55Zcl/\nPajkwudHwbX6ZbrorYjQCfKIFAmjczbh4/7dEw5Znw0Rp10hRCs7r2Lm4WZwh8HN\npeuOf/K1WNgFjhfdc1OMUzRugICuOQ7oZDiZ40A9Gt93Y19/4RI7L6TvhjyiwHdV\nd+fkQjIbeRXw+hax8xYkVfC2uCps/VO6JM9DLH5NAQKBgQDhGa5MpoYY6t0IKpOE\nRsC0NyPn41dwgsNc29pM6KhlZSqNnTnLw8wlnXDhhNEzha/1ftNNi9udIfBFxohz\niu9+I/rCW3kNR6poZzCvbXAS4V729cYRtqIJ1Vi1//GRbQk5F0Mhsg5gla6ZMR88\n2WCaFgPn0oeN9PHRK1ni5YFLwQKBgQDF1gh52Ddc4fELTBL1RV+UiKHLCZhLtVE9\nIDCmReR03DpmxCQNQ3Iv3UuFX5gJWlGQgco5TnC+KgCkVz6En9vl3bWA9cSA/FPb\n6lSAhKYSqZ0m+O8y1qFwQBtE1qXQ8r34u+pCrJdzqFO/E1f/urdXbAS3KKaSYBdY\ntbwLWprx2wKBgQCzFsh6yV4VAv752U3mRphYiSoy+sf9hrvB7FTBLbWUfimd48Iw\n4MVSA/HkKtR6Zll5Ov8ISkZevLq5+Ntk+dvTAvMloLstmp/0Um0ElVA+ZTo1x5Jf\nU2uV4TykCE58QkC9QEmzzELuCwiPbuqIcfYOgYd38CLTCVc+8HuiLrBwwQKBgAjH\nQoEFkw9QBz4VFhJEDcWtemBkAJn7ZatsrjvyhfyZeQ3uThs4juyIyT0VzM09cLkU\nyUBZtq75diXUqTWBUmSUveUHAr0mdSIg97bsK+JQHGUKTrLWyzsL3SnkzF7FJqDO\n1co3llDPe0fTN+hlBJWgeWUXLKz6Do8lIT7vukhZAoGBAINI8GLZyWD/8JjT5ZRv\nCU2DmoEy8lB+rpajzdcEV1UQ6R8OJ+omn5eYi1vhtLzQsssrrRdDFHpCzSOBGUOz\nETG49+R/i0XGCBKMii1hvXGk8Tx4ylvuq8Lut7AUQeRkbvd+nTsnftPApH24R0CR\nHmGza0/reDT965MW0KYmshRv\n-----END PRIVATE KEY-----\n",
-    "client_email": "cyber-quincy@cyber-quincy.iam.gserviceaccount.com",
-    "client_id": "114523533953989415579",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cyber-quincy%40cyber-quincy.iam.gserviceaccount.com"
-}
+# Cyber Quincy
+
+Cyber Quincy is a btd6 discord bot.  
+useful links:
+
+- [support server](https://discord.gg/8agRm6c) (join for updates)
+- [invite link](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881)  
+for help, simply use `q!help`

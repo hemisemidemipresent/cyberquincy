@@ -4,6 +4,7 @@ module.exports = {
   name: "quiz",
   execute(message, args, client) {
     const item = quiz[Math.floor(Math.random() * quiz.length)];
+    //for unkeyed {}s, just [index]
     const QuestionEmbed = new Discord.RichEmbed()
       .setTitle("Welcome to **Who Wants To Be A Bloonionaire**")
       .setThumbnail(

@@ -1,8 +1,5 @@
 const express = require("express");
 const app = express();
-const GoogleSpreadsheet = require("google-spreadsheet");
-const { promisify } = require("util");
-const creds = require("./shh/config.json");
 app.use(express.static("public"));
 app.get("/", (request, response) => {
   console.log(Date.now() + " Ping Received");

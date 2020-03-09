@@ -1,5 +1,5 @@
 const h = require('../heroes.json');
-const { colour } = require('../config.json');
+const { colour } = require('../shh/config.json');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'adora',

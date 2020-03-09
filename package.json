@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/hnngggrrrr/cyberquincy#readme",
   "dependencies": {
-    "discord.js": "^11.5.1",
+    "discord.js": "^11.6.1",
     "express": "^4.17.1",
     "google-spreadsheet": "^3.0.9",
     "node-fetch": "^2.6.0",

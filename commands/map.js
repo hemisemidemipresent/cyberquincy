@@ -154,9 +154,14 @@ module.exports = {
       (map.includes("fe") && map.includes("na"))
     ) {
       name = "Infernal";
+    } else if (
+      map.includes("gea") ||
+      (map.includes("gd") && map.includes("red"))
+    ) {
+      name = "Infernal";
     } else {
       return message.channel.send(
-        "cant seem to find that map. might want to check the spelling.\nThere are 42 maps in the game\n79% of maps include water\n57% of maps include L.O.S obstructions\n50% of maps include objects"
+        "cant seem to find that map. might want to check the spelling.\nThere are 43 maps in the game\n79% of maps include water\n57% of maps include L.O.S obstructions\n50% of maps include objects"
       );
     }
     const ma = require("../map.json");

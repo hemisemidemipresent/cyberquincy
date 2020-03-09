@@ -1,6 +1,6 @@
 const t = require('../towers.json');
 const Discord = require('discord.js');
-const { colour } = require('../config.json');
+const { colour } = require('../shh/config.json');
 module.exports = {
     name: 'ace',
     description: 'ace upgrades desc',

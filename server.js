@@ -73,9 +73,9 @@ client.once("ready", () => {
   setTimeout(three, 2000);
   //let servers = client.guilds.map(g=>g.name)
   //console.log(servers)
-  //let d = client.guilds.find(n=>n.name='Enlighten-mint\'s Hideout')
-  //console.log(d.fetchInvites())
-  client.user.setActivity(`${prefix}help for help.`);
+  
+  client.user.setActivity(`${prefix}help`);
+
 });
 client.on("guildCreate", guild => {
   var channeltosend = guild.channels.find(

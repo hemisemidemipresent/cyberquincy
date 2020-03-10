@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { colour } = require("../config.json");
+const { colour } = require("../shh/config.json");
 const fetch = require("node-fetch");
 const url = "http://topper64.co.uk/nk/btd6/dat/towers.json";
 const settings = { method: "Get" };
@@ -14,6 +14,11 @@ module.exports = {
     if (!args[0]) {
       return message.channel.send(
         `The syntax of this command is q!${name} <path1><path2><path3>, i.e. q!${name} 003 would represent the third tier tower of the third path. **no crosspaths are accepted**, i.e. no more that one path should be inputted`
+      );
+    }
+    if (args[1]) {
+      return message.channel.send(
+        `There are no spaces in between the paths; that is, it is, it is q!${name} 005, not q!${name} 0 0 5`
       );
     }
     let name = "boomerang-monkey";

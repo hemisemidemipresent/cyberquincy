@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { colour } = require("../config.json");
+const { colour } = require("../shh/config.json");
 module.exports = {
   name: "map",
   description: "info about maps",
@@ -164,7 +164,7 @@ module.exports = {
         "cant seem to find that map. might want to check the spelling.\nThere are 43 maps in the game\n79% of maps include water\n57% of maps include L.O.S obstructions\n50% of maps include objects"
       );
     }
-    const ma = require("../map.json");
+    const ma = require("../jsons/map.json");
     let m = ma[`${name}`];
     let thum = m.thu;
     if (!thum) {

@@ -1,5 +1,5 @@
 const r = require("../round2.json");
-const abr = require("../abrincome.json");
+const abr = require("../jsons/abrincome.json");
 module.exports = {
   name: "income",
   execute(message, args) {
@@ -61,9 +61,7 @@ module.exports = {
         );
       } else {
         return message.channel.send(
-          `earns $${diff} from popping bloons in round ${parseInt(
-            abr_start
-          ) +
+          `earns $${diff} from popping bloons in round ${parseInt(abr_start) +
             1} to popping bloons in round ${abr_end} (not including starting cash)`
         );
       }

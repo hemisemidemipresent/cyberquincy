@@ -1,5 +1,4 @@
-const t = require("../tier.json");
-const { colour } = require("../shh/config.json");
+const t = require("../jsons/tier.json");
 const Discord = require("discord.js");
 module.exports = {
   name: "tier",

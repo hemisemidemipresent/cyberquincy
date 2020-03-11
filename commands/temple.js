@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
-const { colour } = require("../shh/config.json");
-const t = require("../jsons/temple.json");
+const { colour } = require("../config.json");
+const t = require("../temple.json");
 module.exports = {
   name: "temple",
   aliases: ["t", "tsg", "sg", "monkeygod", "god", "totmg", "vtsg"],
@@ -59,8 +59,7 @@ module.exports = {
       .addField("primary", t["1"][k[0]])
       .addField("military", t["2"][k[1]])
       .addField("magic", t["3"][k[2]])
-      .addField("support", t["4"][k[3]])
-      .setColor(colour);
+      .addField("support", t["4"][k[3]]);
     message.channel.send(embed);
   }
 };

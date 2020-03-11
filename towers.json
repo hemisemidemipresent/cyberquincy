@@ -1,0 +1,1160 @@
+{
+	"ace": {
+		"base": {
+			"desc": "dummy attack (22r)\nradial-dart attack (1 damage, 5 pierce, 8 projectiles, 1 attack/2.1s, sharp type)\nflies on a circular path with radius 80, or a figure 8 or figure infinite with radii 40",
+			"name": "Monkey Ace",
+			"cost": "800"
+		},
+		"s11": { "name": "Rapid Fire", "cost": "650", "desc": "60%s (1.26)" },
+		"s12": { "desc": "radial-dart buffed: +4j (12)", "name": "Lots More Darts", "cost": "650" },
+		"s13": {
+			"desc": "flies 20% faster\ngains moab-missile attack (25md, 1p, 3.0s, 2j, explosion type, homing, can only target blimps)",
+			"name": "Fighter Plane",
+			"cost": "1000"
+		},
+		"s14": {
+			"desc": "50%s (radial-dart 0.63, moab-missile 1.5)\nradial-dart buffed: +4j (16)\nall crosspath attacks are affected by the speed buff",
+			"name": "Operation: Dart Storm",
+			"cost": "3000"
+		},
+		"s15": {
+			"desc": "camo\nradial-dart buffed: +2d (3), +3p (8), 50%s (0.315), +16j (32), normal type\nmoab-missile buffed: +125md (150), normal type",
+			"name": "Sky Shredder",
+			"cost": "40000"
+		},
+		"s21": { "desc": "Exploding Pineapple", "name": "Exploding Pineapples", "cost": "200" },
+		"s22": { "desc": "camo", "name": "Spy Plane", "cost": "350" },
+		"s23": {
+			"desc": "pineapple replaced by bombing-run (3d, 40p, 1.7s, 4j, explosion type, can only be used above a path)",
+			"name": "Bomber Ace",
+			"cost": "900"
+		},
+		"s24": {
+			"desc": "bombing-run buffed: +7d (10)\nactivated ability (45s cooldown): 700d to everything",
+			"name": "Ground Zero",
+			"cost": "14000"
+		},
+		"s25": {
+			"desc": "activated ability (45s cooldown): 3000d to everything, with an 8.2s stun to anything that survives",
+			"name": "Tsar Bomba",
+			"cost": "35000"
+		},
+		"s31": { "desc": "radial-dart buffed: +3p (8)", "name": "Sharper Darts", "cost": "500" },
+		"s32": {
+			"desc": "gains centred path targetting (fly on a circular path in the centre of the screen with radius 90)",
+			"name": "Centered Path ",
+			"cost": "300"
+		},
+		"s33": { "desc": "homing darts that move faster", "name": "Neva-Miss Targeting ", "cost": "2200" },
+		"s34": {
+			"desc": "radial-dart replaced by dart (2d, 30p, 0.06s, ∞r, sharp type)\ngains bomb attack (3d, 60p, 0.06s, ∞r, explosion type)\nspecial crosspath handling: only 75%s from 1xx, and dart gets +25%p (37.5) from 2xx",
+			"name": "Spectre  ",
+			"cost": "24000"
+		},
+		"s35": {
+			"desc": "dart buffed: +2d (4), +2j (3), normal type\nbomb buffed: +2d (5), +2j (3)normal type\nthe 3 projectiles of each attack have separate targeting (first, last, and close)",
+			"name": "Flying Fortress ",
+			"cost": "120000"
+		}
+	},
+	"alch": {
+		"base": {
+			"desc": "potion attack (1d, 15p, 2.0s, 45r, acid type, applies acid status (1d/2.0s, 4s duration))0",
+			"name": "Alchemist",
+			"cost": "550"
+		},
+		"s11": { "desc": "potion buffed: +5p (20), larger blast radius", "name": "Larger Potions", "cost": "250" },
+		"s12": {
+			"desc": "gains acid-dip attack (10.0s, applies acidified buff, targets random towers in range other than alchemists, prioritising those not currently buffed)\nacidified buff (+1cd, +1md, lead, lasts 10 shots, can stack by simply adding 10 more shots each time))",
+			"name": "Acidic Mixture Dip",
+			"cost": "350"
+		},
+		"s13": {
+			"desc": "gains brew attack (8.0s, applies berserk buff, targets closest tower in range not currently buffed, except alchemists and towers that don't attack)\nberserk buff (+1d, +2p, 90%s, +10%r, lasts 5.0s or 30 shots)",
+			"name": "Berserker Brew",
+			"cost": "1250"
+		},
+		"s14": {
+			"desc": "berserk buffed: buff is now +1d, +3p, 85%s, +15%r, lasts 12.0s or 50 shots, can be reapplied after 5.0s",
+			"name": "Stronger Stimulant",
+			"cost": "2500"
+		},
+		"s15": {
+			"desc": "acidified and berserk buffs are permanent (unless this alchemist is sold)",
+			"name": "Permanent Brew",
+			"cost": "60000"
+		},
+		"s21": { "desc": "acid status buffed: 1d/1.5s, 4.5s duration", "name": "Stronger Acid", "cost": "250" },
+		"s22": {
+			"desc": "potion buffed: +4md (5), removes fortified from bloons, or does an extra 15d to fortified blimps (20 total)",
+			"name": "Perishing Potions",
+			"cost": "475"
+		},
+		"s23": {
+			"desc": "gains unstable-potion attack (3p, 6.0s, 65r, can only target blimps, applies unstable status\nunstable status: when popped, creates an explosion (1%d, 10%md, 50p, blimps use 2p)",
+			"name": "Unstable Concoction",
+			"cost": "3000"
+		},
+		"s24": {
+			"desc": "activated ability (60s cooldown): transforms into an attack monster with a beam attack (2d, 4p, 72r, 0.03s, plasma type) for 20s",
+			"name": "Transforming Tonic",
+			"cost": "4500"
+		},
+		"s25": {
+			"desc": "activated ability (40s cooldown): also transforms 5 nearby towers (upgraded up to tier 3) into attack monsters with a beam attack (2d, 10p, 0.03s, 72r circle but actually 96r, plasma type) for 20s",
+			"name": "Total Transformation",
+			"cost": "45000"
+		},
+		"s31": { "desc": "potion buffed: can target path, leaving 5p puddles", "name": "Acid Pool", "cost": "600" },
+		"s32": { "desc": "80%s (1.6)", "name": "Faster Throwing", "cost": "500" },
+		"s33": {
+			"desc": "potion buffed: applies golden-lead status (gives $50 when the lead layer is popped, unaffected by income cuts or cash modifiers)",
+			"name": "Lead to Gold",
+			"cost": "1000"
+		},
+		"s34": {
+			"desc": "gains gold-potion attack (15p, 5.0s, applies golden status (+2 cash modifier), which soaks through bloons but not blimps, and cannot affect a BAD at all)\nnote: this means that golden bloons give triple cash on their own, but the bonus stacks additively with other bonuses (like monkey town)\nspecial crosspath handling: is affected by 1xx larger potions",
+			"name": "Rubber to Gold",
+			"cost": "2750"
+		},
+		"s35": {
+			"desc": "gains red-potion attack (200p, 10.0s, ∞r, transforms target into a red bloon, MOABs use 20p, BFBs and DDTs use 50p, and ZOMGs use 100p, BADs cannot be targeted at all)",
+			"name": "Bloon Master Alchemist",
+			"cost": "40000"
+		}
+	},
+	"boat": {
+		"base": {
+			"desc": "dart attack (1d, 4p, 1.0s, 60r, sharp type)\nif there are targets behind the tower when it attacks, the attack is duplicated in both directions",
+			"name": "Monkey Buccaneer",
+			"cost": "650"
+		},
+		"s11": { "desc": "75%s (0.75)", "name": "Faster Shooting ", "cost": "350" },
+		"s12": { "desc": "+1j (2)", "name": "Double Shot ", "cost": "500" },
+		"s13": { "desc": "20%s (0.15)", "name": "Destroyer  ", "cost": "2950" },
+		"s14": {
+			"desc": "spawns three planes that permanently fly around\nplanes have a dart attack (1d, 9p, 0.15s, 2j, sharp type)\nplanes also have a radial-dart attack (1d, 9p, 1.0s, 8j, sharp type, passive)",
+			"name": "Aircraft Carrier ",
+			"cost": "7500"
+		},
+		"s15": {
+			"desc": "dart buffed: normal type\nboth plane attacks buffed: +1d (2), +5p (14), normal type\nplanes' dart attack now has only one projectile, but is aimed according to the main tower's targeting instead of straight forward\ngains a buff: 85%s to all water towers (including self, which affects the planes)",
+			"name": "Carrier Flagship ",
+			"cost": "25000"
+		},
+		"s21": { "desc": "gains grape attack (1d, 1p, 1.3s, 5j, sharp type)", "name": "Grape Shot", "cost": "500" },
+		"s22": {
+			"desc": "grape buffed: fire type, applies a burn status (1d/1.5s, fire type, 3s duration)",
+			"name": "Hot Shot",
+			"cost": "500"
+		},
+		"s23": {
+			"desc": "gains cannonball attack (1d, 1.2s, impact, creates an explosion on hit (1d, 28p, explosion type), also emit frags on hit (1d, 8j, sharp type, impact))",
+			"name": "Cannon Ship",
+			"cost": "900"
+		},
+		"s24": {
+			"desc": "activated ability (60s cooldown): the strongest 'small' blimp (not ZOMG or BAD), immediately removing it and gaining the full amount of cash it would have given",
+			"name": "Monkey Pirates",
+			"cost": "4500"
+		},
+		"s25": {
+			"desc": "50%s\nactivated ability (30s cooldown): now has three hooks and gains double cash; can use two hooks at once to take down a ZOMG",
+			"name": "Pirate Lord",
+			"cost": "21000"
+		},
+		"s31": { "desc": "+11r (71)", "name": "Long Range", "cost": "180" },
+		"s32": { "desc": "camo", "name": "Crow's Nest", "cost": "400" },
+		"s33": { "desc": "200 end of round income", "name": "Merchantman", "cost": "2300" },
+		"s34": {
+			"desc": "+300 end of round income (500)\ngains a buff: +10% sellback price to anything in range (including self); this is stackable and additive, so 70% goes to 80% goes to 90% etc, but there is a hard cap on sellback prices at 95%",
+			"name": "Favored Trades",
+			"cost": "5500"
+		},
+		"s35": {
+			"desc": "+300 end of round income (800)\ngains a buff: increases income of up to 20 xx3 or xx4 buccaneers by $20 for every buccaneer being buffed",
+			"name": "Trade Empire",
+			"cost": "23000"
+		}
+	},
+	"bomb": {
+		"base": {
+			"desc": "bomb attack (1.5s, 40r, on hit: explosion)\nexplosion effect (1d, 18p, explosion type)",
+			"name": "Bomb Shooter",
+			"cost": "600"
+		},
+		"s11": { "desc": "+10p (28)", "name": "Bigger Bombs ", "cost": "400" },
+		"s12": { "desc": "+1d (2)", "name": "Heavy Bombs ", "cost": "800" },
+		"s13": { "desc": "+20p (48)", "name": "Really Big Bombs", "cost": "1200" },
+		"s14": {
+			"desc": "+1d (3), normal type\napplies stun status for 1s, cannot affect blimps",
+			"name": "Bloon Impact ",
+			"cost": "3200"
+		},
+		"s15": {
+			"desc": "+9d (12)\nstun buffed: 2s duration, can affect blimps",
+			"name": "Bloon Crush ",
+			"cost": "55000"
+		},
+		"s21": { "desc": "80%s (1.2)", "name": "Faster Reload ", "cost": "250" },
+		"s22": { "desc": "85%s (1.02), +4r (44)", "name": "Missile Launcher ", "cost": "400" },
+		"s23": { "desc": "+5cd (6), +15md (16)", "name": "MOAB Mauler ", "cost": "900" },
+		"s24": {
+			"desc": "activated ability (30s cooldown): targets the strongest blimp: removes its top layer (up to 750d), and creates a (3d, 100p) explosion",
+			"name": "MOAB Assassin ",
+			"cost": "3200"
+		},
+		"s25": {
+			"desc": "+64md (80), normal type\nactivated ability (10s cooldown): targets the strongest blimp: removes its top layer (up to 4500d), and creates a (3d, 100p) explosion",
+			"name": "MOAB Eliminator ",
+			"cost": "25000"
+		},
+		"s31": { "desc": "+7r (47)", "name": "Extra Range ", "cost": "200" },
+		"s32": { "desc": "+2r (49)\nonhit: frags (1d, 1p, 8j, sharp type)", "name": "Frag Bombs ", "cost": "300" },
+		"s33": {
+			"desc": "frags replaced by clusters (1d, 10p, 8j, explosion type)",
+			"name": "Cluster Bombs ",
+			"cost": "800"
+		},
+		"s34": {
+			"desc": "every other shot replaces clusters with superclusters (same as cluster, but also creates a subcluster)\nsubcluster effect (1d, 60p, explosion type)\nvisually, subcluster shows 8 more explosions, but it is in fact just one large one",
+			"name": "Recursive Cluster ",
+			"cost": "2800"
+		},
+		"s35": {
+			"desc": "normal type\nevery shot has a supercluster\npassive ability (40s cooldown): when something leaks, destroys all bloons (including camo) and MOABs, and deals 2000 damage to all other blimps",
+			"name": "Bomb Blitz ",
+			"cost": "35000"
+		}
+	},
+	"boomer": {
+		"base": {
+			"desc": "boomerang attack (1d, 4p, 43r, 1.42s, sharp type)\nboomerangs follow an anticlockwise arc instead of a straight line",
+			"name": "Boomerang Monkey",
+			"cost": "325"
+		},
+		"s11": { "desc": "+4p (8)", "name": "Improved Rangs ", "cost": "200" },
+		"s12": {
+			"desc": "+5p (13), 85%s (1.207)\nbug: combines additively with crosspaths instead of multiplicatively, ie 210 has 75%-15% = 60%s instead of 75%*85% = 63.75%, and 220 has 75%*75%-15% = 41.25%s",
+			"name": "Glaives  ",
+			"cost": "280"
+		},
+		"s13": {
+			"desc": "boomerang replaced by glaive (1d, 50p, 1.2s, 43r, sharp type)\nglaives jump to a nearby target after hitting",
+			"name": "Glaive Ricochet ",
+			"cost": "1300"
+		},
+		"s14": {
+			"desc": "+50p (100), 50%s (0.6)\nbug: 420 only has 80% the reload time that 410 does",
+			"name": "M.O.A.R Glaives ",
+			"cost": "3000"
+		},
+		"s15": {
+			"desc": "gains orbital-glaive attack (2d, 5cd (7), 5md (7), ∞, 0.1s, 40r zone, normal type, camo, cannot be buffed)",
+			"name": "Glaive Lord ",
+			"cost": "40000"
+		},
+		"s21": { "desc": "75%s (1.065)", "name": "Faster Throwing ", "cost": "175" },
+		"s22": { "desc": "75%s (0.8)", "name": "Faster Rangs ", "cost": "250" },
+		"s23": { "desc": "+1md (2), 0.28s", "name": "Bionic Boomerang ", "cost": "1600" },
+		"s24": {
+			"desc": "activated ability (45s cooldown): +1d and 7× faster (0.04s) for 10s",
+			"name": "Turbo Charge ",
+			"cost": "4000"
+		},
+		"s25": {
+			"desc": "+3d (4, 5md), 0.04s\nspecial crosspath handling: 052 grants +4d (8, 9md)\nactivated ability (40s cooldown): +8d (12) for 15s",
+			"name": "Perma Charge ",
+			"cost": "35000"
+		},
+		"s31": { "desc": "+6.5r (49.5)", "name": "Long Range Rangs", "cost": "100" },
+		"s32": { "desc": "+1d, normal type", "name": "Red Hot Rangs", "cost": "300" },
+		"s33": {
+			"desc": "boomerang replaced by kylie (2d, 18p, 1.42s, 49.5r, normal type, can rehit bloons after 0.3s)\nkylies travel in a straight line before returning",
+			"name": "Kylie Boomerang ",
+			"cost": "1300"
+		},
+		"s34": {
+			"desc": "gains heavy-kylie attack (1d, 4md (5), 300p, 10.0s, normal type, can rehit after 0.1s, first 150 blimps get pushed back)",
+			"name": "MOAB Press ",
+			"cost": "1800"
+		},
+		"s35": {
+			"desc": "kylie buffed: +10d (12), 50%s (0.71)\nheavy-kylie buffed: +15md (20), 50%s (5.0s), 100r",
+			"name": "MOAB Domination ",
+			"cost": "60000"
+		}
+	},
+	"dart": {
+		"base": {
+			"desc": "dart attack (1d, 2p, 0.95s, 32r, sharp type)",
+			"name": "Dart Monkey",
+			"cost": "200"
+		},
+		"s11": { "desc": "+1p (3)", "name": "Sharp Shots ", "cost": "140" },
+		"s12": { "desc": "+2p (5)", "name": "Razor Sharp Shots", "cost": "220" },
+		"s13": {
+			"desc": "dart replaced by spikeball (1d, 1cd (2), 22p, 1.25s, sharp type)\nspikeball can rebound off walls",
+			"name": "Spike-o-pult  ",
+			"cost": "300"
+		},
+		"s14": {
+			"desc": "spikeball replaced by juggernaut (1d, 2cd (3), 100p, 36.5r, 1.0s, normal type)\njuggernaut can rebound off walls",
+			"name": "Juggernaut  ",
+			"cost": "1800"
+		},
+		"s15": {
+			"desc": "juggernaut replaced by ultrajugg (4d, 8cd (12), 200p, 1.0s, normal type)\nultrajugg emits 6 juggernauts when there is 100p remaining and when it expires\nif it expires before reaching 100p, then both sets of juggernauts are emitted together",
+			"name": "Ultra-Juggernaut  ",
+			"cost": "15000"
+		},
+		"s21": { "desc": "85%s (0.8075)", "name": "Quick Shots ", "cost": "100" },
+		"s22": { "desc": "78.43%s (0.6333)", "name": "Very Quick Shots", "cost": "190" },
+		"s23": { "desc": "+2j (3)", "name": "Triple Shot ", "cost": "400" },
+		"s24": {
+			"desc": "75%s (0.475)\nactivated ability (50s cooldown): transforms 10 nearest dart monkeys (upgraded up to 242) into superfans for 15s\nsuperfans have a dart attack (1d, 2p, 0.06s, 40r, sharp type), inheriting buffs to the transformed tower",
+			"name": "Super Monkey Fan Club",
+			"cost": "8000"
+		},
+		"s25": {
+			"desc": "activated ability (50s cooldown): transforms 20 nearest dart monkeys (upgraded up to 252) into plasmafans for 15s\nplasmafans have a plasma attack (2d, 5p, 0.03s, 40r, plasma type), inheriting buffs to the transformed tower",
+			"name": "Plasma Monkey Fan Club",
+			"cost": "50000"
+		},
+		"s31": { "desc": "+8r (40)", "name": "Long Range Darts", "cost": "90" },
+		"s32": { "desc": "+8r (48)\ncamo", "name": "Enhanced Eyesight ", "cost": "200" },
+		"s33": {
+			"desc": "dart replaced by bolt (3d, 3p, 0.95s, 56r, sharp type)",
+			"name": "Crossbow  ",
+			"cost": "625"
+		},
+		"s34": { "desc": "+3d (6)\n50d crit every 8-12 shots", "name": "Sharp Shooter ", "cost": "2000" },
+		"s35": {
+			"desc": "+20p (23), +20r (76), 25%s (0.2375), normal type\ncrit now occurs every 4-8 shots",
+			"name": "Crossbow Master ",
+			"cost": "25000"
+		}
+	},
+	"druid": {
+		"base": { "desc": "thorn attack (1d, 1p, 1.1s, 35r, 5j, sharp type)", "name": "Druid", "cost": "425" },
+		"s11": { "desc": "thorn buffed: +1p (2), shatter type", "name": "Hard Thorns", "cost": "250" },
+		"s12": {
+			"desc": "gains lightning attack (1d, 31p, 2.3s, plasma type)",
+			"name": "Heart of Thunder",
+			"cost": "1000"
+		},
+		"s13": {
+			"desc": "gains tornado attack (0d, 30p, 2.5s, pushes back bloons about 30-300 units)",
+			"name": "Druid of the Storm",
+			"cost": "2000"
+		},
+		"s14": {
+			"desc": "gains lightball attack (6.0s, emits lightning (2d, 30p, 0.35s, plasma type))",
+			"name": "Ball Lightning",
+			"cost": "6000"
+		},
+		"s15": {
+			"desc": "camo\nlightning buffed: +2d (3)\nlightball lightning buffed: +3d (5)\ngains superstorm attack (12d, 200p, 4.0s, MOABs use 20p, BFBs and DDTs use 50p, and ZOMGs use 200p)",
+			"name": "Superstorm",
+			"cost": "90000"
+		},
+		"s21": { "desc": "thorns buffed: +3j (8)", "name": "Thorn Swarm", "cost": "250" },
+		"s22": { "desc": "gains on-hit effect: degrow", "name": "Heart of Oak", "cost": "350" },
+		"s23": {
+			"desc": "gains vine attack (1.4s, targets strongest bloon and spends (√rbe + 2 lead + 1)/4 seconds destroying it)note: in the above formula, rbe is the red bloon equivalent (the total health including children), and lead is simply 1 for lead bloons and 0 otherwise",
+			"name": "Druid of the Jungle",
+			"cost": "950"
+		},
+		"s24": {
+			"desc": "activated ability (40s cooldown): gains $200, plus $150 for every farm within 75 units (note that this range is affected by buffs)",
+			"name": "Jungle's Bounty",
+			"cost": "5000"
+		},
+		"s25": {
+			"desc": "+$1000 end of round income\nvine buffed: 0.3s (but time to destroy bloons is unaffected)\ngains brambles attack (2d, 4cd (6), 4md (6), ∞p, 0.5s, ∞r, sharp type, camo, cannot be buffed)\nability buffed: +25 lives",
+			"name": "Spirit of the Forest",
+			"cost": "50000"
+		},
+		"s31": { "desc": "+10r (45)", "name": "Druidic Reach", "cost": "100" },
+		"s32": {
+			"desc": "+x% speed, capped at +100%, where x is 10 plus the number of lives below the amount when this upgrade was purchased, ignoring any lives above the starting amount for the current mode\nnote that this is a buff to speed, NOT reload time (although it is of course still implemented with cooldowns internally)",
+			"name": "Heart of Vengeance",
+			"cost": "300"
+		},
+		"s33": {
+			"desc": "+y% speed, capped at +100%, where y is half the amount of damage dealt by this druid since it was last idle for more than 2s\nnote again that this is a speed buff, and that it stacks multiplicatively with any buff gained from tier 2",
+			"name": "Druid of Wrath",
+			"cost": "600"
+		},
+		"s34": {
+			"desc": "gains a buff: +15% speed to other druids in range, can stack (additively) up to 5 times total on any given druid\nnote that this is yet another speed buff, which also stacks multiplicatively with tiers 2 and 3",
+			"name": "Poplust",
+			"cost": "2500"
+		},
+		"s35": {
+			"desc": "+3d (4), 50%s (0.55), +5r (50)\n+1d for every 3000 rbe on screen, capped at +30",
+			"name": "Avatar of Wrath",
+			"cost": "45000"
+		}
+	},
+	"engi": {
+		"base": { "desc": "nail attack (1d, 3p, 0.7s, 40r, sharp type)", "name": "Engineer Monkey", "cost": "450" },
+		"s11": {
+			"desc": "gains build-sentry attack (10.0s, places a sentry on land)\nsentry has a 25s lifetime, and a nail attack (1d, 1p, 0.95s, 45r, sharp type)\nnote: buffs to the engineer are inherited by its sentries, except alchemist buffs\nnote: sentries can also be buffed directly, except by alchemists, unless it is already inheriting the same buff",
+			"name": "Sentry Gun",
+			"cost": "500"
+		},
+		"s12": { "desc": "build-sentry buffed: 70%s (7.0)", "name": "Faster Engineering", "cost": "400" },
+		"s13": {
+			"desc": "nail buffed: 60%s (0.42)\nsentry's nail buffed: 60%s (0.57)",
+			"name": "Sprockets",
+			"cost": "525"
+		},
+		"s14": {
+			"desc": "build-sentry buffed: places crushing-sentry, boom-sentry, cold-sentry, energy-sentry on a cycle, but sentries may be skipped depending on the bloons on screen\ncrushing-sentry has a spiked-ball attack (1d, 1cd (2), 22p, 1s, shatter type), skipped if there are leads (unless black and white are also present), but never skipped there are ceramics\nboom-sentry has a bomb attack (2d, 30p, 1.4s, explosion type), skipped if there are blacks (unless white and lead are also present)f\ncold-sentry has a ice-ball attack (1d, 15p, 1.5s, cold type, applies frozen status for 1.5s, applies permafrost status), skipped if there are whites (unless lead and black are also present)\nenergy-sentry has a laser attack (2d, 4p, 0.57s, energy type), skipped if there are leads (unless black and white are also present), and always skipped if there are purples",
+			"name": "Sentry Expert",
+			"cost": "2500"
+		},
+		"s15": {
+			"desc": "build-sentry buffed: places paragon-sentry\nparagon-sentry has a plasma attack (2d, 5p, 0.06s, plasma type) and a selfdestruct attack (85d, 50p, plasma type, activates either when sold or 2s after expiring)",
+			"name": "Sentry Paragon",
+			"cost": "32000"
+		},
+		"s21": { "desc": "+20r (60)", "name": "Larger Service Area", "cost": "550" },
+		"s22": { "desc": "nail buffed: +1md (2), +1fd", "name": "Deconstruction", "cost": "200" },
+		"s23": {
+			"desc": "gains foam attack (2s, places foam (0d, 1 lead damage, 10p, normal type, 8.5s lifetime, decamo, degrow) on the track)\nnote: foam pierce is used even if a bloon does not have camo or regrow properties to remove",
+			"name": "Cleansing Foam",
+			"cost": "800"
+		},
+		"s24": {
+			"desc": "activated ability (45s cooldown): +80% attack speed (farms 2x attack speed) of chosen tower for the next 60s (if it cost less than 15k), or 45s (if it cost less than 40k), or 30s (otherwise)\nthis considers the amount spent on a tower, so is affected by difficulty and any discounts\nfarms can be overclocked: bananas have a reload like any other attack, it just happens to change according to the round length\nvillages can be overclocked even when not upgrade to 5xx: the buff applies to range instead, but half as much (ie 25% more range instead of 50% shorter reload)",
+			"name": "Overclock",
+			"cost": "13500"
+		},
+		"s25": {
+			"desc": "activated ability (45s cooldown): when overclock expires, the affected tower gains a permanent +8% attack speed buff, which stacks additively up to 10 times\nthis means that after the first ultraboost, the tower has a permanent +8% attack speed, after the second it is replaced by +16%, and so on up to 80%\nin the case of villages, this is +2.5% to range, then 5%, etc, up to +50%r",
+			"name": "Ultraboost",
+			"cost": "120000"
+		},
+		"s31": { "desc": "nail buffed: +5p (8), shatter type", "name": "Oversize Nails", "cost": "450" },
+		"s32": {
+			"desc": "nail buffed: applies pinned status on damage (0.95s duration, 100% slow, ceramic and higher are immune)",
+			"name": "Pin",
+			"cost": "220"
+		},
+		"s33": { "desc": "50%s (0.35)", "name": "Double Gun", "cost": "500" },
+		"s34": {
+			"desc": "places a trap (500p) on the closest point of track in range, which pops any bloon (not blimps) up to its pierce limit with a +1 cash modifier, but stores this cash until the pierce is entirely used up\ntrap can capture camos, as long as the engineer had camo detection while placing it\ntrap must be collected (100r) to benefit from the extra cash, otherwise the yield is exactly what went in\nanother trap can be placed 2.9s after the previous one is collected, as long as the engineer has traps remaining (starts with 1, and gains another at the start of each round)",
+			"name": "Bloon Trap",
+			"cost": "3500"
+		},
+		"s35": {
+			"desc": "trap buffed: 10000p, can trap blimps other than BAD, and is no longer limited to one new trap per round\nnote: unlike Obyn's tree, the trap does not need to have more pierce than the RBE of a blimp in order to capture it",
+			"name": "XXXL Trap",
+			"cost": "60000"
+		}
+	},
+	"farm": {
+		"base": {
+			"desc": "banana attack (40r, $80 income, split over 4 projectiles throughout the round, 15s lifetime)",
+			"name": "Banana Farm",
+			"cost": "1250"
+		},
+		"s11": { "desc": "+2j (6), +$40 income ($120)", "name": "Increased Production", "cost": "500" },
+		"s12": { "desc": "+2j (8), +$40 income ($160)", "name": "Greater Production", "cost": "600" },
+		"s13": { "desc": "+8j (16), +$160 income ($320)", "name": "Banana Plantation", "cost": "3000" },
+		"s14": { "desc": "5j, $1500 income", "name": "Banana Research Facility", "cost": "19000" },
+		"s15": {
+			"desc": "+$4500 income ($6000)\ngains a buff: +25% income to all 4xx farms (stacks multiplicatively with x2x valuable bananas)",
+			"name": "Banana Central",
+			"cost": "100000"
+		},
+		"s21": { "desc": "+15s lifetime (30)", "name": "Long Life Bananas", "cost": "300" },
+		"s22": { "desc": "+25% income", "name": "Valuable Bananas", "cost": "800" },
+		"s23": {
+			"desc": "+$150 income ($230), held in the bank instead of being emitted as bananas, to be collected at any time\nbank's balance increases by 15% at the end of a round, up to a capacity of $7000\nspecial crosspath handling: 031 has a flashing dollar sign when full, 032 autocollects if the balance was capped for the whole round\nnormal crosspath handling worth a clarification: top path upgrades each increase the total produced during the round by $40 as usual, and increase the number of installments by 2 as usual, ie it goes from 4*$57.5 to 6*$45 to 8*$38.75",
+			"name": "Monkey Bank",
+			"cost": "3300"
+		},
+		"s24": {
+			"desc": "+$3000 capacity ($10000)\nactivated ability (90s cooldown): loan $10k, to be repaid by taking 50% from any future income\nnote that only one loan will take repayments at a time, even if enough is gained at once to cover several existing loans",
+			"name": "IMF Loan",
+			"cost": "7500"
+		},
+		"s25": { "desc": "activated ability (60s cooldown): gain $10k", "name": "Monkey-Nomics", "cost": "100000" },
+		"s31": {
+			"desc": "bananas can be collected from further (about 50% more)",
+			"name": "EZ Collect",
+			"cost": "250"
+		},
+		"s32": { "desc": "expired bananas give half their usual amount", "name": "Banana Salvage", "cost": "200" },
+		"s33": {
+			"desc": "+8j (12), +$160 income ($240)\nbananas are immediately collected",
+			"name": "Marketplace",
+			"cost": "2900"
+		},
+		"s34": {
+			"desc": "+$900 end of round income\ngains a buff: +10% end of round income to all xx3+ buccaneers, applied after the Trade Empire buff",
+			"name": "Central Market",
+			"cost": "15000"
+		},
+		"s35": { "desc": "+$4000 end of round income ($4900)", "name": "Monkey Wall Street", "cost": "60000" }
+	},
+	"glue": {
+		"base": {
+			"desc": "glue attack (0d, 1p, 1.0s, 46r, acid type, applies glued status, cannot target blimps or anything already glued)\nglued status (11s duration, 50% slow, 3 layers)",
+			"name": "Glue gunner",
+			"cost": "275"
+		},
+		"s11": {
+			"desc": "glued status soaks through all layers (but still never through blimps, when able to target them)",
+			"name": "Glue Soak ",
+			"cost": "200"
+		},
+		"s12": {
+			"desc": "glued status buffed: 1d/2.3s\ndamaging glue can affect blimps, but the glue lasts half as long and doesn't slow\ndamaging glue can also affect targets that are already glued, as long as the existing glue is strictly weaker (meaning “less damage per second”)",
+			"name": "Corrosive Glue ",
+			"cost": "300"
+		},
+		"s13": { "desc": "glued status buffed: 1d/0.575s", "name": "Bloon Dissolver ", "cost": "3300" },
+		"s14": { "desc": "glued status buffed: 1d/0.1s", "name": "Bloon Liquefier ", "cost": "7000" },
+		"s15": {
+			"desc": "12p, 25%s (0.25), impact\nglued status buffed: 3cd/0.1s and 3md/0.1s\nspecial crosspath handling (or maybe a bug): 520 has 16p not 17p",
+			"name": "The Bloon Solver",
+			"cost": "24000"
+		},
+		"s21": { "desc": "+1p (2)", "name": "Bigger Globs ", "cost": "100" },
+		"s22": { "desc": "+4p (6), impact", "name": "Glue Splatter ", "cost": "1800" },
+		"s23": { "desc": "33.33%s (0.3333)", "name": "Glue Hose ", "cost": "3250" },
+		"s24": {
+			"desc": "activated ability (30s cooldown): glues all valid targets (according to the usual rules), including camo\nglue from the ability will not overwrite glues with equal or greater damage, but it will refresh their duration",
+			"name": "Glue Strike ",
+			"cost": "3500"
+		},
+		"s25": {
+			"desc": "activated ability (30s cooldown): every 2s for the next 15s, applies weakening-glue (twice as slow as the usual glue, lasts twice as long, take +1d from attacks) to all valid targets",
+			"name": "Glue Storm ",
+			"cost": "15000"
+		},
+		"s31": { "desc": "glued status buffed: +13s duration (24s)", "name": "Stickier Glue ", "cost": "120" },
+		"s32": { "desc": "glued bloons are now 75% slower", "name": "Stronger Glue ", "cost": "400" },
+		"s33": {
+			"desc": "can now target blimps, but they are only slowed half as much as bloons (37.5%) and for half the duration (12s)",
+			"name": "MOAB Glue ",
+			"cost": "3200"
+		},
+		"s34": {
+			"desc": "glued bloons drop the glue when popped, to be picked up by the next target, lasts 5s",
+			"name": "Relentless Glue ",
+			"cost": "3000"
+		},
+		"s35": {
+			"desc": "+50md (50), +5p (6)\nglued status buffed: 1d/2.3s; 100% slow for bloons, MOABs, and DDTs; 95% for BFBs; and 90% for ZOMGs\nspecial crosspath handling: 205 deals 1d/2.0ssuper glue can override any other glue, but this does not stop other glue overriding super glue according to the usual DPS rule (see 200 glue's desc)",
+			"name": "Super Glue ",
+			"cost": "35000"
+		}
+	},
+	"heli": {
+		"base": {
+			"desc": "dummy attack (22r)\ndart attack (1d, 3p, 40r, 0.56s, 2j, sharp type)",
+			"name": "Heli Pilot",
+			"cost": "1500"
+		},
+		"s11": { "desc": "+2j (4)", "name": "Quad Darts ", "cost": "80" },
+		"s12": {
+			"desc": "gains pursuit targetting (always flies towards a point slightly ahead of the first bloon)",
+			"name": "Pursuit  ",
+			"cost": "500"
+		},
+		"s13": { "desc": "gains rotor attack (1d, 10p, 0.75s, normal type)", "name": "Razor Rotors ", "cost": "1750" },
+		"s14": {
+			"desc": "gains machinegun attack (1d, 5p, 0.05s, sharp type)\ngains rocket attack (2d, 40p, 1.0s, ∞r, 4j, explosion type)",
+			"name": "Apache Dartship ",
+			"cost": "19600"
+		},
+		"s15": {
+			"desc": "dart buffed: +5d (6), +20p (23), normal type\nmachinegun buffed: +4d (5), +6p (11), plasma type\nrocket buffed: +15md (17)",
+			"name": "Apache Prime ",
+			"cost": "45000"
+		},
+		"s21": { "desc": "flies faster", "name": "Bigger Jets ", "cost": "300" },
+		"s22": { "desc": "camo", "name": "IFR  ", "cost": "600" },
+		"s23": {
+			"desc": "gains downdraft attack (0d, 1p, 0.1s, sends bloon 50-300 units back)",
+			"name": "Downdraft  ",
+			"cost": "3000"
+		},
+		"s24": {
+			"desc": "first activated ability (60s cooldown): move a tower, except for: aces, helis, farms, villages, aircraft carriers (4xx or 5xx buccaneers), and temples (4xx or 5xx supers)\nsecond activated ability (60s cooldown): alternates between dropping $1000-$2000 and 50-75 lives",
+			"name": "Support Chinook ",
+			"cost": "12000"
+		},
+		"s25": {
+			"desc": "second activated ability (60s cooldown): alternates between dropping $2000-$4000 and 100-150 lives\nthird activated ability (40s cooldown): deploy a marine (30s lifetime) with a bullet attack (6d, 30p, 0.05s, 50r, normal type)\ncrosspath note: the marine IS affected by xx1",
+			"name": "Special Poperations ",
+			"cost": "30000"
+		},
+		"s31": { "desc": "dart buffed: 80%s", "name": "Faster Firing ", "cost": "350" },
+		"s32": { "desc": "darts travel faster", "name": "Faster Darts ", "cost": "250" },
+		"s33": {
+			"desc": "gains shove attack (0d, 1p, pushes back MOABs, or holds BFBs in place, or slows DDTs or ZOMGs)",
+			"name": "MOAB Shove ",
+			"cost": "5000"
+		},
+		"s34": {
+			"desc": "passive ability (25s cooldown): summons three comanches with a dart attack (2d, 3p, 0.3s, 40r, 3j, sharp type) and a rocket attack (1d, 2cd (3), 2md (3), 100p, 3.0s, ∞r, explosion type) for 10s when 2000rbe is on screen\ncrosspath note: mini comanches DO gain extra projectiles from 1xx, speed from x1x, and camo from x2x",
+			"name": "Comanche Defense ",
+			"cost": "10000"
+		},
+		"s35": {
+			"desc": "+1d (including mini comanche attacks)\ncomanches are permanent",
+			"name": "Comanche Commander ",
+			"cost": "35000"
+		}
+	},
+	"ice": {
+		"base": {
+			"desc": "freeze attack (1d, 40p, 2.4s, 20r, cold type, applies frozen status for 1.5s)",
+			"name": "Ice Monkey",
+			"cost": "500"
+		},
+		"s11": { "desc": "applies permafrost status (50% slow)", "name": "Permafrost  ", "cost": "100" },
+		"s12": { "desc": "can pop lead (but not necessarily frozen)", "name": "Metal Freeze ", "cost": "300" },
+		"s13": {
+			"desc": "frozen bloons emit shards (1d, 3p, 3j, shatter type) when hit",
+			"name": "Ice Shards ",
+			"cost": "1500"
+		},
+		"s14": {
+			"desc": "+1d (2)\napplies brittle status (take +1d, 2s duration)",
+			"name": "Embrittlement  ",
+			"cost": "3000"
+		},
+		"s15": {
+			"desc": "+3d (5), 90%s (2.16), normal type\nbrittle status buffed: take +4d, 3s duration\nblimps can be targeted: they will take damage and receive brittle status, but cannot be frozen by this path",
+			"name": "Super Brittle ",
+			"cost": "30000"
+		},
+		"s21": { "desc": "75%s (1.8s)\nfrozen status now lasts 2.2s", "name": "Enhanced Freeze ", "cost": "225" },
+		"s22": {
+			"desc": "frozen status is now inherited by immediate children",
+			"name": "Deep Freeze ",
+			"cost": "350"
+		},
+		"s23": {
+			"desc": "+60p (100)\ngains slow attack (cold type, 50% slow)\nland towers are placeable on any water in range",
+			"name": "Arctic Wind ",
+			"cost": "3200"
+		},
+		"s24": {
+			"desc": "+10r (30)\nactivated ability (60s cooldown): 1 damage to everything (non-white) on screen, including camo, blimps, and lead; applies frozen status to remaining bloons (this time including white) for 4s and to blimps for 2s (see 005 for how blimps are affected by freezing)",
+			"name": "Snowstorm  ",
+			"cost": "3000"
+		},
+		"s25": {
+			"desc": "+200p (300), +10r (40)\nslowing effect is now 60%\nactivated ability (40s cooldown): 1 damage to everything on screen; applies frozen status to everything, including blimps, for 10s",
+			"name": "Absolute Zero ",
+			"cost": "26000"
+		},
+		"s31": { "desc": "+7r (27)", "name": "Larger Radius ", "cost": "100" },
+		"s32": { "desc": "glacier type", "name": "Re-Freeze  ", "cost": "200" },
+		"s33": {
+			"desc": "replaces freeze with ice-bomb (1.0s, 46r, cold type, on hit: freeze)\nfreeze effect (1d, 30p, cold type, applies frozen status for 1.5s)",
+			"name": "Cryo Cannon ",
+			"cost": "2000"
+		},
+		"s34": { "desc": "frozen bloons have icicles (1d, 3p, sharp type)", "name": "Icicles  ", "cost": "2000" },
+		"s35": {
+			"desc": "75%s (0.75), +49md (50), shatter type\nblimps can be targeted: frozen ZOMGSs are 50% slower, other frozen blimps move at ZOMGs' original speed (5 units per second)",
+			"name": "Icicle Impale ",
+			"cost": "30000"
+		}
+	},
+	"mortar": {
+		"base": {
+			"desc": "dummy attack (30r)\nshell attack (2.2s, ∞r, creates an explosion effect (1d, 40p, explosion type, ~34 blast radius))",
+			"name": "Mortar Monkey",
+			"cost": "750"
+		},
+		"s11": { "desc": "+5p (45)", "name": "Bigger Blast ", "cost": "500" },
+		"s12": { "desc": "+1d (2)", "name": "Bloon Buster ", "cost": "650" },
+		"s13": {
+			"desc": "shell gains a second effect: shockwave (45p, explosion type, stuns bloons within a small radius for 0.5s, then deals 1d to anything in a larger radius that was not stunned)\nnote: since blimps cannot be stunned by this tower, they always take the 1d",
+			"name": "Shell Shock ",
+			"cost": "1100"
+		},
+		"s14": { "desc": "+40p (85), normal type\nexplosion buffed: +3d (5)", "name": "The Big One", "cost": "8000" },
+		"s15": {
+			"desc": "+115p (200)\nexplosion buffed: +15d (20), +20cd (40), +20md (40), ~80 blast radius\nshockwave buffed: +10cd (11) outside of the stun radius, ~120 blast radius",
+			"name": "The Biggest One",
+			"cost": "28000"
+		},
+		"s21": { "desc": "70%s (1.54)", "name": "Faster Reload ", "cost": "300" },
+		"s22": { "desc": "70%s (1.078)", "name": "Rapid Reload ", "cost": "500" },
+		"s23": {
+			"desc": "normal type, +1 lead damage (2), +3cd (4), +1md (2), additional +1d to anything fortified",
+			"name": "Heavy Shells ",
+			"cost": "900"
+		},
+		"s24": { "desc": "25%s (0.2695)", "name": "Artillery Battery ", "cost": "5500" },
+		"s25": {
+			"desc": "activated ability (60s cooldown): every second for the next 8 seconds, attacks everything on screen with 20d and a 1s stun",
+			"name": "Pop and Awe",
+			"cost": "30000"
+		},
+		"s31": { "desc": "less random variance in shell target", "name": "Increased Accuracy ", "cost": "200" },
+		"s32": {
+			"desc": "on-damage effect: apply burn status (1d/1.5s, fire type, 3s duration)",
+			"name": "Burny Stuff ",
+			"cost": "500"
+		},
+		"s33": {
+			"desc": "camo\non-damage effect: decamo (so black, zebra, and DDT are not affected)",
+			"name": "Signal Flare ",
+			"cost": "700"
+		},
+		"s34": {
+			"desc": "on-hit effect: decamo, but still only bloons not DDTs\non-hit effect: degrow\non-hit effect: defortify bloons or MOABs or BFBs (halves health of a fortified target (quarter for lead), rounding down, then removes the fortified property, then applies its usual damage)",
+			"name": "Shattering Shells ",
+			"cost": "11000"
+		},
+		"s35": {
+			"desc": "normal type\nburn status buffed: 5d/1s, 100md/1s\ndecamo and defortify effects can now affect DDTs\nshell gains a firewall effect (1d, 20p, 0.1s, normal type)\ncrosspath note: firewall is affected by 1xx and 2xx",
+			"name": "Blooncineration  ",
+			"cost": "45000"
+		}
+	},
+	"ninja": {
+		"base": {
+			"desc": "shuriken attack (1d, 2p, 40r, 0.7s, sharp type, camo)",
+			"name": "Ninja Monkey",
+			"cost": "500"
+		},
+		"s11": { "desc": "+7r (47), 60%s (0.42)", "name": "Ninja Discipline", "cost": "300" },
+		"s12": { "desc": "shuriken buffed: +2p (4)", "name": "Sharp Shurikens", "cost": "350" },
+		"s13": { "desc": "shuriken buffed: +1j (2)", "name": "Double Shot", "cost": "850" },
+		"s14": { "desc": "shuriken buffed: +3j (5)", "name": "Bloonjitsu", "cost": "2750" },
+		"s15": {
+			"desc": "+10r (57)\nshuriken buffed: +1d (2), 0.217s, +3j (8)\nbug: xx2 caltrops have 5p instead of 6",
+			"name": "Grandmaster Ninja",
+			"cost": "35000"
+		},
+		"s21": {
+			"desc": "gains an on-damage effect: bloons have a 15% chance to be sent back about 10-250 units",
+			"name": "Distraction",
+			"cost": "350"
+		},
+		"s22": { "desc": "gains an on-damage effect: decamo", "name": "Counter-Espionage", "cost": "500" },
+		"s23": {
+			"desc": "92%s and +8%p to all ninjas in range, any one ninja can be affected up to 20 times\nthe buff to reload is multiplicative (two shinobis bring the time down to 84.64%), while the pierce buff is additive (two shinobis grant +16%p)",
+			"name": "Shinobi Tactics",
+			"cost": "900"
+		},
+		"s24": {
+			"desc": "activated ability (60s cooldown): everything moves half speed for 15s; includes new spawns, unless dropped by a blimp",
+			"name": "Bloon Sabotage",
+			"cost": "5000"
+		},
+		"s25": {
+			"desc": "activated ability (60s cooldown): for 30s, everything (again except children of blimps) moves half speed, and blimps entering the map have 25% less health",
+			"name": "Grand Saboteur",
+			"cost": "22000"
+		},
+		"s31": { "desc": "shurikens can seek targets", "name": "Seeking Shuriken", "cost": "250" },
+		"s32": {
+			"desc": "gains caltrop attack (1d, 6p, 4.4s, sharp type, targets path)",
+			"name": "Caltrops",
+			"cost": "400"
+		},
+		"s33": {
+			"desc": "gains flash-bomb attack (1d, 60p, normal type, thrown with every 4th shuriken, 1s stun)",
+			"name": "Flash Bomb",
+			"cost": "2750"
+		},
+		"s34": {
+			"desc": "gains sticky-bomb attack (5.0s, can only target blimps, applies bombed status (removes layer up to 400d after 3s))",
+			"name": "Sticky Bomb",
+			"cost": "4500"
+		},
+		"s35": {
+			"desc": "flash-bomb buffed: +4d (5), stuns moabs for 0.25s\nsticky-bomb buffed: ∞r, 40%s (2.0), bombed status deals up to 1000 damage, applies stun status for 1s",
+			"name": "Master Bomber",
+			"cost": "40000"
+		}
+	},
+	"sniper": {
+		"base": {
+			"desc": "dummy attack (20r), purely to provide a range circle that subs' advanced intel can use\nbullet attack (2d, 1p, 2.0s, ∞r, sharp type, impact)",
+			"name": "Sniper Monkey",
+			"cost": "650"
+		},
+		"s11": { "desc": "+2d (4), normal type", "name": "Full Metal Jacket", "cost": "350" },
+		"s12": { "desc": "+3d (7)", "name": "Large Calibre ", "cost": "1500" },
+		"s13": { "desc": "+13d (20), +15cd (35)", "name": "Deadly Precision ", "cost": "3000" },
+		"s14": {
+			"desc": "+12d (30, 45cd)\nstuns blimps (MOABs 3s, BFBs 1.5s, ZOMGs and DDTs 0.75s)",
+			"name": "Maim MOAB ",
+			"cost": "5000"
+		},
+		"s15": {
+			"desc": "+30d (60, 75cd)\nstun lasts twice as long\napplies crippled status (take +5d) with the same duration as stun, or 0.24s for BADs",
+			"name": "Cripple MOAB ",
+			"cost": "40000"
+		},
+		"s21": { "desc": "camo\nbullet buffed: +2 camo damage", "name": "Night Vision Goggles", "cost": "300" },
+		"s22": {
+			"desc": "emits shrapnel (1d, 2p, 8j, sharp type) if the shot fully pops its target",
+			"name": "Shrapnel Shot ",
+			"cost": "450"
+		},
+		"s23": {
+			"desc": "+3p (4), ricochet behaviour (jumps to targets within about 55 units until the pierce runs out)",
+			"name": "Bouncing Bullet ",
+			"cost": "3200"
+		},
+		"s24": {
+			"desc": "normal type\nactivated ability (60s cooldown): drops a crate worth $500-1000",
+			"name": "Supply Drop ",
+			"cost": "7200"
+		},
+		"s25": {
+			"desc": "40%s (0.8s)\ngains a buff (75%s, target: all other snipers)\nprovides elite targetting to all snipers (prioritises First if bloons are nearing the exit, then Ceramics if there are any, otherwise the strongest target)\nactivated ability (60s cooldown): drops a crate worth $1500-2500",
+			"name": "Elite Sniper ",
+			"cost": "13000"
+		},
+		"s31": { "desc": "65%s (1.3s)", "name": "Fast Firing ", "cost": "400" },
+		"s32": { "desc": "60%s (0.78s)", "name": "Even Faster Firing", "cost": "400" },
+		"s33": { "desc": "33.33%s (0.26s)", "name": "Semi-Automatic  ", "cost": "3500" },
+		"s34": { "desc": "50%s (0.13s), normal type", "name": "Full Auto Rifle", "cost": "4750" },
+		"s35": {
+			"desc": "50%s (0.065s)\nadditionally shoots x% faster, where x% is how far along the track the furthest forward bloon is\npassive ability (10s cooldown): shoots 4× faster for 7s after leaking",
+			"name": "Elite Defender ",
+			"cost": "14000"
+		}
+	},
+	"sub": {
+		"base": {
+			"desc": "dummy attack (22r)\nradial-dart attack (1 damage, 5 pierce, 8 projectiles, 1 attack/2.1s, sharp type)\nflies on a circular path with radius 80, or a figure 8 or figure infinite with radii 40",
+			"name": "Monkey Sub ",
+			"cost": "325"
+		},
+		"s11": { "desc": "+8r (50)", "name": "Longer Range ", "cost": "130" },
+		"s12": {
+			"desc": "can target anything in the primary attack range of any tower, including camo detection\nbe aware that occasionally secondary attacks can see camo while the main one still can't (inferno ring, primary expertise, glaive lord, etc)\nnote also that spike factory does not have camo detection for the purposes of this upgrade",
+			"name": "Advanced Intel ",
+			"cost": "500"
+		},
+		"s13": {
+			"desc": "gains submerge targetting option\nwhile submerged, dart is replaced with sonar (0d, ∞p, 1.75s, decamo)",
+			"name": "Submerge and Support",
+			"cost": "500"
+		},
+		"s14": {
+			"desc": "sonar buffed: 0.3s\nwhile submerged, gains radioactive attack (1d, 70p, 0.3s, normal type)\nabilities of water towers in range have 85% cooldown time",
+			"name": "Bloontonium Reactor ",
+			"cost": "2500"
+		},
+		"s15": {
+			"desc": "radioactive buffed: 3d, 1000p\nabilities of water towers in range have 50% cooldown time, all other abilities have 80% cooldown time\nheroes in range gain +50% XP",
+			"name": "Energizer  ",
+			"cost": "32000"
+		},
+		"s21": { "desc": "+3p (5)", "name": "Barbed Darts ", "cost": "450" },
+		"s22": { "desc": "normal type", "name": "Heat-tipped Darts ", "cost": "300" },
+		"s23": {
+			"desc": "gains missile attack (1d, 4cd (5), 4md (5), 100p, 1.5s, ∞r, explosion type)d",
+			"name": "Ballistic Missile ",
+			"cost": "1500"
+		},
+		"s24": {
+			"desc": "activated ability (60s cooldown): 10000 normal damage to strongest bloon, which can pierce blimp layers; additionally creates a (350d, ∞p, 75r, normal type) explosion",
+			"name": "First Strike Capability",
+			"cost": "13000"
+		},
+		"s25": {
+			"desc": "missile buffed: +6cd (11), +6md (11), 33.33%s (0.5s)\nability cooldown is now 45s\npassive ability: sends an assassin (up to 750d) at any blimp that enters the map",
+			"name": "Pre-emptive Strike ",
+			"cost": "35000"
+		},
+		"s31": { "desc": "50%s (0.375)", "name": "Twin guns", "cost": "450" },
+		"s32": {
+			"desc": "dart is now an impact projectile, emits airbursts on hit (1d, 2p, 3j, sharp type)\nnote that unlike most impact projectiles, the dart still has 1 damage not 0, and is therefore able to gain more from eg alchemist or support temple\nnote also that airbursts are able to hit the same target that the dart did",
+			"name": "Airburst Darts ",
+			"cost": "1000"
+		},
+		"s33": { "desc": "66.66%s (0.25)", "name": "Triple Guns ", "cost": "1100" },
+		"s34": {
+			"desc": "dart buffed: +1d (2), +2md (4)\nairbursts buffed: +1md (2), +3p (5)",
+			"name": "Armor Piercing Darts",
+			"cost": "3000"
+		},
+		"s35": {
+			"desc": "50%s (0.125)\ngains a buff (+1d, +5p, target: subs in range, including self)",
+			"name": "Sub Commander ",
+			"cost": "25000"
+		}
+	},
+	"super": {
+		"base": { "desc": "dart attack (1d, 1p, 0.06s, 50r, sharp type)", "name": "Super Monkey", "cost": "2500" },
+		"s11": { "desc": "+1p (2), energy type", "name": "Laser Blasts ", "cost": "2500" },
+		"s12": { "desc": "+1p (3), 50%s, plasma type", "name": "Plasma Blasts", "cost": "4500" },
+		"s13": { "desc": "+3p (6), +2j (3)", "name": "Sun Avatar ", "cost": "22000" },
+		"s14": {
+			"desc": "when upgraded, absorbs all towers in range for more power, to be detailed in a future command\ndart replaced by sunblast (5d, 20p, 0.06s, 65r, normal type)",
+			"name": "Sun Temple ",
+			"cost": "100000"
+		},
+		"s15": {
+			"desc": "when upgraded, absorbs all towers in range for even more power\n+10d (15)",
+			"name": "True Sun God",
+			"cost": "500000"
+		},
+		"s21": { "desc": "+10r (60)", "name": "Super Range ", "cost": "1000" },
+		"s22": { "desc": "+1p (2), +12r (72), faster projectile speed", "name": "Epic Range ", "cost": "1400" },
+		"s23": {
+			"desc": "+4p (6), +1j\nprojectiles have opposite targeting (first/last or close/strong)",
+			"name": "Robo Monkey ",
+			"cost": "9000"
+		},
+		"s24": {
+			"desc": "dart replaced by plasma (1d, 8p, 0.048s, 72r, 2j, plasma type)\nactivated ability (60s cooldown): 1000d, ∞p, 60r",
+			"name": "Tech Terror ",
+			"cost": "22000"
+		},
+		"s25": {
+			"desc": "+4d (5), +5p (13), +10r (82), normal type\nactivated ability (60s cooldown): 3500d, ∞p, 100r",
+			"name": "The Anti-Bloon ",
+			"cost": "90000"
+		},
+		"s31": {
+			"desc": "applies knockback status (~0.5s duration, 125% slow for regular bloons, 60% for leads and ceramics, and 30% for blimps, DDTs are unaffected)\nnote: 125% slow means move backwards at 25% speed",
+			"name": "Knockback  ",
+			"cost": "3000"
+		},
+		"s32": { "desc": "+3r (53), camo", "name": "Ultravision  ", "cost": "1200" },
+		"s33": {
+			"desc": "dart replaced by monkeyrang (1d, 2md (3), 3p, 0.06s, 53r, sharp type)\nknockback status buffed: 100% slow to leads and ceramics",
+			"name": "Dark Knight ",
+			"cost": "5500"
+		},
+		"s34": {
+			"desc": "+1d (2), +1md (5), +4p (7), 50%s (0.03), normal type",
+			"name": "Dark Champion ",
+			"cost": "60000"
+		},
+		"s35": {
+			"desc": "+3d (5, 8md), +15p (22), +4r (57)\npassive ability (120s cooldown): when something leaks, delete it (no cash gain nor damage on the super monkey's counter), and anything else that leaks in the next 8s",
+			"name": "Legend of the Night",
+			"cost": "240000"
+		}
+	},
+	"tack": {
+		"base": { "desc": "tacks attack (1d, 1p, 1.4s, 23r, 8j, sharp type)", "name": "Tack Shooter", "cost": "280" },
+		"s11": { "desc": "75%s (1.05)", "name": "Faster Shooting", "cost": "150" },
+		"s12": { "desc": "60%s (0.63)", "name": "Even Faster Shooting", "cost": "300" },
+		"s13": { "desc": "+1d (2), normal type", "name": "Hot Shots", "cost": "600" },
+		"s14": {
+			"desc": "tacks replaced by firezone (3d, 60p, 0.535s, 23r zone, fire type)\nspecial crosspath handling: xx1 gives +10p, xx2 gives a further +10p",
+			"name": "Ring of Fire",
+			"cost": "4500"
+		},
+		"s15": {
+			"desc": "+1d (4), +6md (10), 0.1s, +11.5r (34.5)\ngains meteor attack (700d, 1p, 4.0s, ∞r, fire type, camo, always targets strong)",
+			"name": "Inferno Ring ",
+			"cost": "50000"
+		},
+		"s21": { "desc": "+4r (27)", "name": "Long Range Tacks", "cost": "100" },
+		"s22": { "desc": "+4r (31)", "name": "Super Range Tacks", "cost": "225" },
+		"s23": {
+			"desc": "tacks replaced by blades (1d, 6p, 1.19s, 31r, sharp type)",
+			"name": "Blade Shooter ",
+			"cost": "550"
+		},
+		"s24": {
+			"desc": "activated ability (20s cooldown): emits blades (1d, ∞p, 0.0333s, 2j, normal type) for 3s",
+			"name": "Blade Maelstrom ",
+			"cost": "2700"
+		},
+		"s25": {
+			"desc": "+1d (2), normal type\nactivated ability (20s cooldown): emits blades (2d, ∞p, 0.0333s, 4j, normal type) for 9s",
+			"name": "Super Maelstrom ",
+			"cost": "15000"
+		},
+		"s31": { "desc": "+2j (10)", "name": "More Tacks ", "cost": "100" },
+		"s32": { "desc": "+2j (12)", "name": "Even More Tacks", "cost": "100" },
+		"s33": { "desc": "75%s (1.05), +4j (16)", "name": "Tack Sprayer ", "cost": "450" },
+		"s34": { "desc": "+1p (2), 33.33%s (0.35)", "name": "Overdrive  ", "cost": "3200" },
+		"s35": {
+			"desc": "+7p (9), 75%s (0.2625), +23r (46), +16j (32), normal type",
+			"name": "The Tack Zone",
+			"cost": "24000"
+		}
+	},
+	"village": {
+		"base": {
+			"desc": "buff attack (40r, targets anything except self, effect: +10%r)",
+			"name": "Monkey Village",
+			"cost": "1200"
+		},
+		"s11": { "desc": "+8r (48)", "name": "Bigger Radius", "cost": "400" },
+		"s12": { "desc": "buff improved: now also gives 85%s", "name": "Jungle Drums", "cost": "1500" },
+		"s13": {
+			"desc": "gains another primary-buff attack (targets primary towers, effect: +1p, +10%r, increased projectile speed)",
+			"name": "Primary training",
+			"cost": "800"
+		},
+		"s14": { "desc": "primary-buff improved: free tier 1 upgrades", "name": "Primary Mentoring", "cost": "2500" },
+		"s15": {
+			"desc": "primary-buff improved: +2p (so +3 overall), free tier 2 upgrades\ngains catapult attack (10d, 190cd (200), 190md (200), 100p but blimps use 10, ∞r, 3.0s, normal type, camo)\nnote: the main attack is still the first set of buffs, not the catapult, so it does not have camo detection for the purpose of subs",
+			"name": "Primary Expertise",
+			"cost": "25000"
+		},
+		"s21": {
+			"desc": "applies antigrow status to bloons in range (cannot regrow, ? duration)",
+			"name": "grow blocker",
+			"cost": "250"
+		},
+		"s22": { "desc": "camo\nbuff improved: grants camo", "name": "Radar Scanner", "cost": "2000" },
+		"s23": {
+			"desc": "buff improved: grants normal type damage",
+			"name": "Monkey intelligence bureau",
+			"cost": "7500"
+		},
+		"s24": {
+			"desc": "activated ability (60s cooldown): provides another buff for 10s (+50%p, 66.67%s)",
+			"name": "call to Arms",
+			"cost": "20000"
+		},
+		"s25": {
+			"desc": "activated ability (60s cooldown): applies over an infinite range for 20s, and improved to (+100%p, 50%s)",
+			"name": "homeland defense",
+			"cost": "40000"
+		},
+		"s31": {
+			"desc": "buff improved: +10% discount to base towers and upgrades up to tier 3",
+			"name": "Monkey Business",
+			"cost": "500"
+		},
+		"s32": {
+			"desc": "buff improved: +5% discount to base towers and upgrades up to tier 3, stackable up to 3 times total\nnote: this means that the maximum discount from villages is (10+3*5)% = 25%, which stacks additively with support temples",
+			"name": "Monkey commerce",
+			"cost": "500"
+		},
+		"s33": {
+			"desc": "buff improved: +50% cash modifier (additive with other cash modifiers)",
+			"name": "Monkey Town",
+			"cost": "10000"
+		},
+		"s34": {
+			"desc": "+10r (50)\nprovides a free dart monkey at the end of each round",
+			"name": "Monkey city",
+			"cost": "3000"
+		},
+		"s35": {
+			"desc": "*actual cost is $5000 times the number of non-tier-5 farms in range, regardless of difficulty; these farms are sacrificed to the village when upgraded\nincome of $300 * floor(amount spent on sacrifices / 2000), divided throughout the round into at most 10 crates\n**use !mp for monkeyopolis cost and profit calculator**",
+			"name": "Monkeyopolis",
+			"cost": "5000*(below)"
+		}
+	},
+	"wizard": {
+		"base": { "desc": "bolt attack (1d, 2p, 40r, 1.1s, energy type)", "name": "Wizard Monkey", "cost": "450" },
+		"s11": { "desc": "bolt buffed: homing, ignores walls", "name": "Guided Magic", "cost": "125" },
+		"s12": { "desc": "bolt buffed: +1d (2)", "name": "Arcane Blast", "cost": "600" },
+		"s13": {
+			"desc": "+20r (60)\nbolt buffed: +1d (3), +4p (6), 50%s (0.55)",
+			"name": "Arcane Mastery",
+			"cost": "1300"
+		},
+		"s14": { "desc": "+2d (5), +11md (16), 50%s (0.275), plasma type", "name": "Arcane Spike", "cost": "10000" },
+		"s15": {
+			"desc": "bolt buffed: +2d (7), +6md (24), +4p (10), 50%s (0.1375)\ngains flame attack (1d, 4p, 0.1s, fire type, applies burn status (1d/1.5s, fire type, 3s duration) on damage)\ngains shimmer attack (0d, 200p, 90r, 2.5s, camo, decamo)",
+			"name": "Archmage",
+			"cost": "32000"
+		},
+		"s21": {
+			"desc": "gains fireball attack (1d, 3.0s, fire type, creates an explosion (1d, 15p, explosion type) on damage)\nnote: this means the explosion is able to damage purples, as long as the fireball hits something non-purple first to create the explosion",
+			"name": "Fireball",
+			"cost": "300"
+		},
+		"s22": {
+			"desc": "gains firewall attack (5.5s, targets path, passive, creates a firewall)\nfirewall effect (1d, 20p, 20r, 0.1s, fire type, 4.5s duration)\nspecial crosspath handling: firewall can be placed behind walls with 1xx",
+			"name": "Wall of Fire",
+			"cost": "900"
+		},
+		"s23": {
+			"desc": "bolt replaced by flame (1d, 4p, 0.1s, fire type, applies burn status (1d/1.5s, fire type, 3s duration) on damage)\nfirewall buffed: 4.5s",
+			"name": "Dragon's Breath",
+			"cost": "3000"
+		},
+		"s24": {
+			"desc": "activated ability (60s cooldown): summons a phoenix for 20s, who shoots flames (3d, 5p, 0.1s, camo)",
+			"name": "Summon Phoenix",
+			"cost": "4000"
+		},
+		"s25": {
+			"desc": "flame buffed: +46p (50)\nsummons the phoenix whenever the ability is not active\nactivated ability (50s cooldown): transforms into phoenix lord for 20s, who shoots flames (20d, 50p, 0.1s, normal type, camo) and meteors (50d, 500p, 1.0s, 8j, fire type, camo)",
+			"name": "Wizard Lord Phoenix",
+			"cost": "60000"
+		},
+		"s31": { "desc": "bolt buffed: +5p (7)", "name": "Intense Magic", "cost": "275" },
+		"s32": { "desc": "camo", "name": "Monkey Sense", "cost": "300" },
+		"s33": { "desc": "gains shimmer attack (0d, 200p, 2.5s, 70r, decamo)", "name": "Shimmer", "cost": "1800" },
+		"s34": {
+			"desc": "keeps track of up to 2000 pops (layers not damage) that occur within 80 units, and every 1.5s uses these pops to create up to 5 zombloons (1d, 2-11p, normal type, 8s lifetime), such that the total pierce is 10% more than the pops used",
+			"name": "Necromancer: Unpopped Army",
+			"cost": "2800"
+		},
+		"s35": {
+			"desc": "+40r (80)\nbolt buffed: 25%s (0.275)\nshimmer buffed: 50%s (1.25)\nevery second reanimation includes a zmoab (40d, 20p, normal type, 20s lifetime) if there are more than 5 stockpiled pops, or a zbfb (100d, 50p, normal type, 13.3s lifetime) if there are more than about 1450\ngains a buff: +1d and +50% lifetime to all zombies from any wizard (including self)",
+			"name": "Prince of Darkness",
+			"cost": "24000"
+		}
+	},
+	"spac": {
+		"base": {
+			"desc": "spikes attack (1d, 5p, 2.2s, 34r, targets track, 70s or end of round lifespan)\nnote: spikes can hit camo, but the tower itself does not see camo as far as the sub is concerned",
+			"name": "Spike Factory",
+			"cost": "800"
+		},
+		"s11": { "desc": "+5p (10)", "name": "bigger stacks", "cost": "600" },
+		"s12": { "desc": "lead", "name": "White Hot Spikes", "cost": "800" },
+		"s13": { "desc": "+7p (17), +3cd (4), +1 fortified damage", "name": "Spiked Balls", "cost": "2200" },
+		"s14": {
+			"desc": "creates an explosion (10d, 2cd (12), 1fd, 40p, explosion type, applies burn status (1d/2s, 6s duration)) when spikes expire\nnote: explosion damage is doubled if the spikes timed out rather than pierce being used up",
+			"name": "Spiked Mines",
+			"cost": "12000"
+		},
+		"s15": {
+			"desc": "+9d (10, 13cd), 4.4s\nexplosion buffed: +990d (1000), +20p (60), normal type",
+			"name": "Super Mines",
+			"cost": "175000"
+		},
+		"s21": { "desc": "60%s (1.32)", "name": "Faster Production", "cost": "700" },
+		"s22": { "desc": "75%s (0.99)", "name": "Even Faster Production", "cost": "900" },
+		"s23": { "desc": "+4md (5)", "name": "MOAB SHREDR", "cost": "2500" },
+		"s24": {
+			"desc": "activated ability (40s cooldown): covers the track in spikes (1d, 4md (5), 5p)",
+			"name": "Spike Storm",
+			"cost": "5000"
+		},
+		"s25": {
+			"desc": "+1d (2, 6md)\nability buffed: +1d (2, 6md)\npassive ability (20s cooldown): same as activated ability",
+			"name": "Carpet of Spikes",
+			"cost": "42000"
+		},
+		"s31": { "desc": "+8r (42)", "name": "Long Reach", "cost": "150" },
+		"s32": {
+			"desc": "gains extra targetting options: close (closest point(s) in range), far (futhest point(s) in range), and smart (earliest point in range that bloons have not yet reached)\n25%s for the first 2.5s in start of the round",
+			"name": "Smart Spikes",
+			"cost": "400"
+		},
+		"s33": { "desc": "140s or end of 2 rounds lifespan", "name": "Long Life Spikes", "cost": "1400" },
+		"s34": { "desc": "+1d (2)", "name": "Deadly Spikes", "cost": "3500" },
+		"s35": {
+			"desc": "+8d (10), +45p (50), 6.0s, 300s or end of 3 rounds lifespan\nspecial crosspath handling: +20p from 105",
+			"name": "Perma-Spike",
+			"cost": "30000"
+		}
+	}
+}

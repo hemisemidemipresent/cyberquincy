@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { colour } = require("../shh/config.json");
+const { colour } = require("../config.json");
 const fetch = require("node-fetch");
 const url = "http://topper64.co.uk/nk/btd6/dat/towers.json";
 const settings = { method: "Get" };

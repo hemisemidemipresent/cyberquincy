@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { colour } = require("../config.json");
+const { colour } = require("../shh/config.json");
 const t = require("../temple.json");
 module.exports = {
   name: "temple",

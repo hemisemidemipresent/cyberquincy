@@ -16,7 +16,11 @@ module.exports = {
     totalSeconds %= 3600;
     let minutes = Math.floor(totalSeconds / 60);
     let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
-    const infoEmbed = new Discord.RichEmbed()
+    var tcost = parseInt(t[name].base.cost);
+    for (i = tier; i > 0; i--) {
+      tcost = parseInt(t[name][`s${path}${i}`]["cost"]) + tcost;
+    }
+    const infoembed = new Discord.RichEmbed()
       .setColor(colour)
       .setTitle("access help here")
       .setURL("https://discord.gg/8agRm6c")

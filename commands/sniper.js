@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { colour } = require("../config.json");
+const { colour } = require("../shh/config.json");
 const fetch = require("node-fetch");
 const url = "http://topper64.co.uk/nk/btd6/dat/towers.json";
 const settings = { method: "Get" };
@@ -41,7 +41,6 @@ module.exports = {
       .then(res => res.json())
       .then(json => {
         if (path === 0 || tier == 0 || args[0] === "base") {
-          let object = json[`${name}`];
           let embed = new Discord.RichEmbed()
             .setColor(colour)
             .addField("name", object.name)
@@ -49,12 +48,21 @@ module.exports = {
             .addField("notes", object.notes)
             .addField("in game description", object.description)
             .addField(`xp needed:`, `${object.xp}`)
+            .addField("total cost (medium)", tcost)
             .setFooter(
               "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help"
             );
           return message.channel.send(embed);
         }
         let object = json[`${name}`].upgrades[path - 1][tier - 1];
+        let totalCost = 0;
+        let newCost = 0;
+        for (i = tier; i > 0; i--) {
+          newCost = json[`${name}`].upgrades[path - 1][i - 1].cost;
+          totalCost += parseInt(newCost);
+        }
+        var tcost = parseInt(t[name].base.cost);
+
         let embed = new Discord.RichEmbed()
           .setColor(colour)
           .addField("name", object.name)
@@ -62,6 +70,7 @@ module.exports = {
           .addField("notes", object.notes)
           .addField("in game description", object.description)
           .addField(`xp needed:`, `${object.xp}`)
+          .addField("total cost (medium)", tcost)
           .setFooter(
             "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help"
           );

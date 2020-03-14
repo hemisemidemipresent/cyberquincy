@@ -73,9 +73,8 @@ client.once("ready", () => {
   setTimeout(three, 2000);
   //let servers = client.guilds.map(g=>g.name)
   //console.log(servers)
-  
-  client.user.setActivity(`${prefix}help`);
 
+  client.user.setActivity(`${prefix}help`);
 });
 client.on("guildCreate", guild => {
   var channeltosend = guild.channels.find(
@@ -215,38 +214,44 @@ client.on("guildMemberRemove", async member => {
   }
 });
 client.on("message", async message => {
-  if(message.author.id=='188453641466675200'){
-    message.channel.send('SECLATE IS BACK!!!')
+  if (message.author.id == "188453641466675200") {
+    message.channel.send("SECLATE IS BACK!!!");
     message.channel.send(
-          "<a:11:665385432988647435><a:12:665385434574094347><a:13:665385435559755816><a:14:665385434821427240><a:15:665385433873514517><a:16:665385432103649330><a:17:665385432523210772>\n<a:21:665385433974439968><a:22:665385435303772170><a:23:665385434746191876><a:24:665385434855243786><a:25:665385435257634865><a:26:665385432686788609><a:27:665385432510365716>\n<a:31:665385434150469633><a:32:665385435735916544><a:33:665385435740241937><a:34:665385435861876763><a:35:665385436415262741><a:36:665385433013944361><a:37:665385432422547476>"
-        );
-        message.channel.send(
-          "<a:41:665385434045612052><a:42:665385435303903243><a:43:665385435610218497><a:44:665385436491022346><a:45:665385436000026634><a:46:665385432204181526><a:47:665385432510627880>\n<a:51:665385432489656321><a:52:665385434297401356><a:53:665385435798700062><a:54:665385435455029278><a:55:665385435588984860><a:56:665385433621856256><a:57:665385431944134656>\n<a:61:665385431474634773><a:62:665385433294962702><a:63:665385435211759667><a:64:665385436318924800><a:65:665385436025323550><a:66:665385435429732383><a:67:665385432401313802>"
-        );
-        message.channel.send(
-          "<a:71:665385431352868877><a:72:665385431218651174><a:73:665385431680155711><a:74:665385431642144778><a:75:665385432065769477><a:76:665385431688413185><a:77:665385431801528330>"
-        );
+      "<a:11:665385432988647435><a:12:665385434574094347><a:13:665385435559755816><a:14:665385434821427240><a:15:665385433873514517><a:16:665385432103649330><a:17:665385432523210772>\n<a:21:665385433974439968><a:22:665385435303772170><a:23:665385434746191876><a:24:665385434855243786><a:25:665385435257634865><a:26:665385432686788609><a:27:665385432510365716>\n<a:31:665385434150469633><a:32:665385435735916544><a:33:665385435740241937><a:34:665385435861876763><a:35:665385436415262741><a:36:665385433013944361><a:37:665385432422547476>"
+    );
+    message.channel.send(
+      "<a:41:665385434045612052><a:42:665385435303903243><a:43:665385435610218497><a:44:665385436491022346><a:45:665385436000026634><a:46:665385432204181526><a:47:665385432510627880>\n<a:51:665385432489656321><a:52:665385434297401356><a:53:665385435798700062><a:54:665385435455029278><a:55:665385435588984860><a:56:665385433621856256><a:57:665385431944134656>\n<a:61:665385431474634773><a:62:665385433294962702><a:63:665385435211759667><a:64:665385436318924800><a:65:665385436025323550><a:66:665385435429732383><a:67:665385432401313802>"
+    );
+    message.channel.send(
+      "<a:71:665385431352868877><a:72:665385431218651174><a:73:665385431680155711><a:74:665385431642144778><a:75:665385432065769477><a:76:665385431688413185><a:77:665385431801528330>"
+    );
   }
-  let c = message.content.toLowerCase()
+  let c = message.content.toLowerCase();
   if (message.channel.id == "661888246090825749") {
     ook.send(message.content);
   }
   if (message.channel.id == "614358164325924874") {
     nook.send(message.content);
   }
-  if (!c.startsWith(prefix) || message.author.bot)
-    return;
-  if(message.guild.id=='661812833771847700'){
-    if (c.includes('what')&&c.includes('for')&&(c.includes('chat')||c.includes('chan'))){
-          if(!message.channel.topic){
-            return
-          }
-          message.channel.send(message.channel.topic)
-        }
+  if (!c.startsWith(prefix) || message.author.bot) return;
+  if (message.guild.id == "661812833771847700") {
+    if (
+      c.includes("what") &&
+      c.includes("for") &&
+      (c.includes("chat") || c.includes("chan"))
+    ) {
+      if (!message.channel.topic) {
+        return;
+      }
+      message.channel.send(message.channel.topic);
+    }
   }
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
-  if(c.startsWith('q! '))return message.channel.send('there isnt a space between q! and the command name')
+  if (c.startsWith("q! "))
+    return message.channel.send(
+      "there isnt a space between q! and the command name"
+    );
   if (commandName === "level" || commandName === "xp") {
     if (args[0]) {
       const user = getUserFromMention(args[0]);
@@ -358,10 +363,17 @@ client.on("message", async message => {
       { where: { name: args[0] } }
     );
   }
-  if(commandName=='cmdc'||commandName=='cmdcount'||commandName=='commandcount'||commandName=='commandc'){
-     let tagrrr = await Tags.findOne({ where: { name: 1000 } });
-      message.channel.send(`${tagrrr.xp} (non-spaghetti) commands have been used since 12/2/20 10.51.38.339am UTC`)
-    }
+  if (
+    commandName == "cmdc" ||
+    commandName == "cmdcount" ||
+    commandName == "commandcount" ||
+    commandName == "commandc"
+  ) {
+    let tagrrr = await Tags.findOne({ where: { name: 1000 } });
+    message.channel.send(
+      `${tagrrr.xp} (non-spaghetti) commands have been used since 12/2/20 10.51.38.339am UTC`
+    );
+  }
   /*
   if (commandName === "top") {
     const top = await Tags.max({ attributes: ["xp"] });
@@ -369,16 +381,19 @@ client.on("message", async message => {
   }
 
   if(commandName=='edit'&&message.channel.id=='643773699916431361'){
-		const h = require('./heroes.json')
+		const h = require('./jsons/fact.json')
 		h['churchill'][args[0]].cost = args[1]*1.2
 		h['ben'][args[0]].cost = args[1]
-		fs.writeFile('./heroes.json',JSON.stringify(h),(err)=>{
+		fs.writeFile('./jsons/fact.json',JSON.stringify(h),(err)=>{
             if(err)console.log(err)
         })
 		
 	}*/
-  if(commandName=='Gytxvhyotemokbru'&&message.guild.id=='598768024761139240'){
-    return
+  if (
+    commandName == "Gytxvhyotemokbru" &&
+    message.guild.id == "598768024761139240"
+  ) {
+    return;
   }
   const command =
     client.commands.get(commandName) ||
@@ -415,25 +430,22 @@ client.on("message", async message => {
     try {
       command.execute(message, args, client);
       try {
-      // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-      const tag = await Tags.create({
-        name: 1000,
-        xp: 0,
-        level: 0
-      });
-    } catch (e) {
-      if (e.name === "SequelizeUniqueConstraintError") {
-        let tagrrr = await Tags.findOne({ where: { name: 1000 } });
-        await Tags.update(
-            { xp: tagrrr.xp + 1 },
-            { where: { name: 1000 } }
-          );
+        // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
+        const tag = await Tags.create({
+          name: 1000,
+          xp: 0,
+          level: 0
+        });
+      } catch (e) {
+        if (e.name === "SequelizeUniqueConstraintError") {
+          let tagrrr = await Tags.findOne({ where: { name: 1000 } });
+          await Tags.update({ xp: tagrrr.xp + 1 }, { where: { name: 1000 } });
+        }
       }
-    }
       if (message.author.id == "581686781569794048") return;
       if (message.channel.type == "dm") {
         var xpAdd = Math.floor(Math.random() * 4) + 2;
-      }  else {
+      } else {
         var xpAdd = Math.floor(Math.random() * 8) + 5;
       }
       let guildmember = message.member;
@@ -446,9 +458,7 @@ client.on("message", async message => {
         });
       } catch (e) {
         if (e.name === "SequelizeUniqueConstraintError") {
-          function up(){
-              
-            }
+          function up() {}
           const tag = await Tags.findOne({
             where: { name: message.author.id }
           });
@@ -461,50 +471,55 @@ client.on("message", async message => {
               where: { name: message.author.id }
             });
             if (tag1.level > 20) {
-              if (tag1.xp > 5 * ((tag1.level+20) * (tag1.level+20)) + 50 * (tag1.level+20) + 100) {
+              if (
+                tag1.xp >
+                5 * ((tag1.level + 20) * (tag1.level + 20)) +
+                  50 * (tag1.level + 20) +
+                  100
+              ) {
                 const affectedRows1 = await Tags.update(
                   { level: tag1.level + 1 },
                   { where: { name: message.author.id } }
                 );
                 let ran = Math.floor(Math.random() * 8);
-            switch (ran) {
-              case 0:
-                var ltxt = "Haha!";
-                break;
-              case 1:
-                var ltxt = "Ha!";
-                break;
-              case 2:
-                var ltxt = "Oh Yeah!";
-                break;
-              case 3:
-                var ltxt = "Alright!";
-                break;
-              case 4:
-                var ltxt = "Sweet!";
-                break;
-              case 5:
-                var ltxt = "Yes!";
-                break;
-              case 6:
-                var ltxt = "Nice!";
-                break;
-              case 7:
-                var ltxt = "Awesome!";
-            }
-            message.channel.send(
-              `${ltxt} You advanced to level ${tag1.level}`
-            );
-            let guildmember = client.guilds
-              .get("598768024761139240")
-              .members.array()
-              .find(m => m.id === message.author.id);
-            if (tag1.level === 3) {
-              await guildmember.addRole("645126928340353036");
-            }
-            if (tag1.level === 10) {
-              await guildmember.addRole("645629187322806272");
-            }
+                switch (ran) {
+                  case 0:
+                    var ltxt = "Haha!";
+                    break;
+                  case 1:
+                    var ltxt = "Ha!";
+                    break;
+                  case 2:
+                    var ltxt = "Oh Yeah!";
+                    break;
+                  case 3:
+                    var ltxt = "Alright!";
+                    break;
+                  case 4:
+                    var ltxt = "Sweet!";
+                    break;
+                  case 5:
+                    var ltxt = "Yes!";
+                    break;
+                  case 6:
+                    var ltxt = "Nice!";
+                    break;
+                  case 7:
+                    var ltxt = "Awesome!";
+                }
+                message.channel.send(
+                  `${ltxt} You advanced to level ${tag1.level}`
+                );
+                let guildmember = client.guilds
+                  .get("598768024761139240")
+                  .members.array()
+                  .find(m => m.id === message.author.id);
+                if (tag1.level === 3) {
+                  await guildmember.addRole("645126928340353036");
+                }
+                if (tag1.level === 10) {
+                  await guildmember.addRole("645629187322806272");
+                }
               }
             } else if (tag1.xp > tag1.level * 100) {
               const affectedRows1 = await Tags.update(
@@ -512,47 +527,46 @@ client.on("message", async message => {
                 { where: { name: message.author.id } }
               );
               let ran = Math.floor(Math.random() * 8);
-            switch (ran) {
-              case 0:
-                var ltxt = "Haha!";
-                break;
-              case 1:
-                var ltxt = "Ha!";
-                break;
-              case 2:
-                var ltxt = "Oh Yeah!";
-                break;
-              case 3:
-                var ltxt = "Alright!";
-                break;
-              case 4:
-                var ltxt = "Sweet!";
-                break;
-              case 5:
-                var ltxt = "Yes!";
-                break;
-              case 6:
-                var ltxt = "Nice!";
-                break;
-              case 7:
-                var ltxt = "Awesome!";
+              switch (ran) {
+                case 0:
+                  var ltxt = "Haha!";
+                  break;
+                case 1:
+                  var ltxt = "Ha!";
+                  break;
+                case 2:
+                  var ltxt = "Oh Yeah!";
+                  break;
+                case 3:
+                  var ltxt = "Alright!";
+                  break;
+                case 4:
+                  var ltxt = "Sweet!";
+                  break;
+                case 5:
+                  var ltxt = "Yes!";
+                  break;
+                case 6:
+                  var ltxt = "Nice!";
+                  break;
+                case 7:
+                  var ltxt = "Awesome!";
+              }
+              message.channel.send(
+                `${ltxt} You advanced to level ${tag1.level}`
+              );
+              let guildmember = client.guilds
+                .get("598768024761139240")
+                .members.array()
+                .find(m => m.id === message.author.id);
+              if (tag1.level === 3) {
+                await guildmember.addRole("645126928340353036");
+              }
+              if (tag1.level === 10) {
+                await guildmember.addRole("645629187322806272");
+              }
             }
-            message.channel.send(
-              `${ltxt} You advanced to level ${tag1.level}`
-            );
-            let guildmember = client.guilds
-              .get("598768024761139240")
-              .members.array()
-              .find(m => m.id === message.author.id);
-            if (tag1.level === 3) {
-              await guildmember.addRole("645126928340353036");
-            }
-            if (tag1.level === 10) {
-              await guildmember.addRole("645629187322806272");
-            }
-            }
-            
-            
+
             return;
           }
         }

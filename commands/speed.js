@@ -35,7 +35,7 @@ module.exports = {
     } else if (b === "PINK") {
       var bloon = 11;
     } else if (b === "BLUE") {
-      var bloon = 2;
+      var bloon = 4;
     } else {
       return message.channel.send("please specify a bloon, e.g. ``pink``");
     }

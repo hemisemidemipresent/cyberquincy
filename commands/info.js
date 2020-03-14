@@ -16,7 +16,7 @@ module.exports = {
     totalSeconds %= 3600;
     let minutes = Math.floor(totalSeconds / 60);
     let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
-    var tcost = parseInt(t[name].base.cost);
+
     for (i = tier; i > 0; i--) {
       tcost = parseInt(t[name][`s${path}${i}`]["cost"]) + tcost;
     }

@@ -49,7 +49,7 @@ module.exports = {
             .addField("notes", object.notes)
             .addField("in game description", object.description)
             .addField(`xp needed:`, `${object.xp}`)
-            .addField("total cost (medium)", tcost)
+            .addField("total cost (medium)", totalCost)
             .setFooter(
               "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help"
             );
@@ -62,20 +62,14 @@ module.exports = {
           newCost = json[`${name}`].upgrades[path - 1][i - 1].cost;
           totalCost += parseInt(newCost);
         }
-        var tcost = parseInt(t[name].base.cost);
-        tcost = 0;
-        for (i = tier; i > 0; i--) {
-          tcost += json[`${name}`].upgrades[path - 1][i];
-        }
+
         let embed = new Discord.RichEmbed()
           .setColor(colour)
           .addField("name", object.name)
           .addField("cost", object.cost)
           .addField("notes", object.notes)
           .addField("in game description", object.description)
-
-          .addField("total cost (medium)", tcost)
-          .addField("total xp needed?", tcost)
+          .addField("total cost (medium)", totalCost)
           .setFooter(
             "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help"
           );

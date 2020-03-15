@@ -40,7 +40,8 @@ module.exports = {
     fetch(url, settings)
       .then(res => res.json())
       .then(json => {
-        if (path == 0 || tier == 0 || args[0] == "base") {
+        let object = json[`${name}`].upgrades[path - 1][tier - 1];
+        if (!object) {
           hardcost = Math.round((object.cost * 1.08) / 5) * 5;
           hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
           let embed = new Discord.RichEmbed()
@@ -59,7 +60,6 @@ module.exports = {
             );
           return message.channel.send(embed);
         }
-        let object = json[`${name}`].upgrades[path - 1][tier - 1];
         let totalCost = 0;
         let newCost = 0;
         for (i = tier; i > 0; i--) {

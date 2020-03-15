@@ -47,19 +47,13 @@ module.exports = {
       .then(json => {
         let object = json[`${name}`].upgrades[path - 1][tier - 1];
         if (!object) {
-          hardcost = Math.round((object.cost * 1.08) / 5) * 5;
-          hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
+          object = json[`${name}`];
           let embed = new Discord.RichEmbed()
             .setColor(colour)
             .addField("name", object.name)
-            .addField("cost", `${hardcost} (hard)\n${object.cost} (medium)`)
+            .addField("cost", `${object.cost} (medium)`)
             .addField("notes", object.notes)
             .addField("in game description", object.description)
-            .addField(`xp needed:`, `${object.xp}`)
-            .addField(
-              "total cost",
-              `${hardTotalCost} (hard)\n${totalCost} (medium)`
-            )
             .setFooter(
               "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration"
             );

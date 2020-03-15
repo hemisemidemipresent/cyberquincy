@@ -41,17 +41,22 @@ module.exports = {
     fetch(url, settings)
       .then(res => res.json())
       .then(json => {
-        if (path === 0 || tier == 0 || args[0] === "base") {
+        if (path == 0 || tier == 0 || args[0] == "base") {
+          hardcost = Math.round((object.cost * 1.08) / 5) * 5;
+          hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
           let embed = new Discord.RichEmbed()
             .setColor(colour)
             .addField("name", object.name)
-            .addField("cost", object.cost)
+            .addField("cost", `${hardcost} (hard)\n${object.cost} (medium)`)
             .addField("notes", object.notes)
             .addField("in game description", object.description)
             .addField(`xp needed:`, `${object.xp}`)
-            .addField("total cost (medium)", totalCost)
+            .addField(
+              "total cost",
+              `${hardTotalCost} (hard)\n${totalCost} (medium)`
+            )
             .setFooter(
-              "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help"
+              "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration"
             );
           return message.channel.send(embed);
         }
@@ -63,16 +68,21 @@ module.exports = {
           totalCost += parseInt(newCost);
         }
 
+        hardcost = Math.round((object.cost * 1.08) / 5) * 5;
+        hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
         let embed = new Discord.RichEmbed()
           .setColor(colour)
           .addField("name", object.name)
-          .addField("cost", object.cost)
+          .addField("cost", `${hardcost} (hard)\n${object.cost} (medium)`)
           .addField("notes", object.notes)
           .addField("in game description", object.description)
           .addField(`xp needed:`, `${object.xp}`)
-          .addField("total cost (medium)", totalCost)
+          .addField(
+            "total cost",
+            `${hardTotalCost} (hard)\n${totalCost} (medium)`
+          )
           .setFooter(
-            "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help"
+            "d:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration"
           );
         message.channel.send(embed);
       });

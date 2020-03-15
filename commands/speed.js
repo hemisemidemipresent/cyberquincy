@@ -58,6 +58,8 @@ module.exports = {
     }
     var bhealth = Math.floor(bloon * pi);
     if (round > 80) {
+      hardcost = Math.round((object.cost * 1.08) / 5) * 5;
+      hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
       let embed = new Discord.RichEmbed()
         .setTitle(`${btype}`)
         .addField("speed", `${bhealth} RBS`)
@@ -68,6 +70,8 @@ module.exports = {
     } else if (round < 1) {
       return message.channel.send("quincy has no experience in these rounds");
     } else if (round > 0 && round < 81) {
+      hardcost = Math.round((object.cost * 1.08) / 5) * 5;
+      hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
       let embed = new Discord.RichEmbed()
         .setTitle(`${btype}`)
         .addField("speed", `${bloon} RBS`)
@@ -77,6 +81,8 @@ module.exports = {
       return message.channel.send(embed);
     } else {
       if (b === "MOAB" || "BFB" || "ZOMG" || "DDT" || "BAD") {
+        hardcost = Math.round((object.cost * 1.08) / 5) * 5;
+        hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
         let embed = new Discord.RichEmbed()
           .setTitle(`${b}`)
           .addField("speed", `${bloon} RBS`)

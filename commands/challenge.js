@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { prefix } = require("../config.json");
+const { prefix } = require("../shh/config.json");
 module.exports = {
   name: "rc",
   aliases: ["rc", "randomc", "random", "rchallenge", "rch"],

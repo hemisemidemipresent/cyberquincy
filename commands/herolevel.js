@@ -157,7 +157,7 @@ module.exports = {
                     })
                     .then(collect => {
                       let g = collect.first().content;
-                      if (isNaN(g) || f < 1 || f > 100) {
+                      if (isNaN(g) || g < 1 || g > 100) {
                         return message.channel.send(
                           "sorry, please specify a valid round next time. run the commands again"
                         );

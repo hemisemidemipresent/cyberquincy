@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { prefix, colour } = require("../config.json");
+const { prefix, colour } = require("../shh/config.json");
 const picEmbed1 = new Discord.RichEmbed()
   .setColor(colour)
   .setTitle("Suggest an idea")

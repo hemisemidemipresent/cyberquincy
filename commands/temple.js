@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const { colour } = require("../shh/config.json");
-const t = require("../temple.json");
+const t = require("../jsons/temple.json");
 module.exports = {
   name: "temple",
   aliases: ["t", "tsg", "sg", "monkeygod", "god", "totmg", "vtsg"],

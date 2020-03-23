@@ -61,8 +61,6 @@ module.exports = {
             );
           return message.channel.send(embed);
         }
-
-        let object = json[`${name}`].upgrades[path - 1][tier - 1];
         let totalCost = 0;
         let newCost = 0;
         for (i = tier; i > 0; i--) {
@@ -70,7 +68,8 @@ module.exports = {
           totalCost += parseInt(newCost);
         }
         hardcost = Math.round((object.cost * 1.08) / 5) * 5;
-        hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
+        let baseCost = parseInt(json[`${name}`].cost);
+        hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5 + baseCost;
         let embed = new Discord.RichEmbed()
           .setColor(colour)
           .addField("name", object.name)

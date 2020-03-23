@@ -8,18 +8,6 @@ app.get("/", (request, response) => {
 app.listen(process.env.PORT);
 const fs = require("fs");
 const Discord = require("discord.js");
-const Hook = new Discord.WebhookClient(
-  "660867181071826945",
-  "l-a0w6Udy0GDG6D-RD-LDszI9qEWJ-2aU2MAhYZ6kgCb0AYmZtI7UphcaBKhY3S-1Lq8"
-);
-const nook = new Discord.WebhookClient(
-  "667703656233172999",
-  "4uYZkE4vr7caOhyV3GZkQwzSicSsHTeZ3Fm7hH-ERHlWihjjJnp0BPbT9fvS3828TA7C"
-);
-const ook = new Discord.WebhookClient(
-  "663176908501942283",
-  "fB6NX97aTmMK5pVx2UQsz5v8isWabVd0fSUwOaRsJWjhwkurCwc391vBwS_adWUQ3AFw"
-);
 const Sequelize = require("sequelize");
 const { prefix, colour, token } = require("./shh/config.json");
 const client = new Discord.Client();
@@ -207,7 +195,7 @@ client.on("guildMemberRemove", async member => {
       `**${member.displayName}** couldnt resist it and accidentally revealed that he/she is hacking races`
     );
   } else if (member.guild.id === "661812833771847700") {
-    const tchannel = member.guild.channels.find(channel =>
+    let tchannel = member.guild.channels.find(channel =>
       channel.name.includes("general")
     );
     tchannel.send(`**${member.displayName}** got nerfed. hard.`);
@@ -227,25 +215,13 @@ client.on("message", async message => {
     );
   }
   let c = message.content.toLowerCase();
-  if (message.channel.id == "661888246090825749") {
-    ook.send(message.content);
-  }
-  if (message.channel.id == "614358164325924874") {
-    nook.send(message.content);
+  if (message.channel.id == "") {
+    let tchannel = member.guild.channels.find(
+      channel => channel.id == 661888246090825749
+    );
+    tchannel.send(message.content);
   }
   if (!c.startsWith(prefix) || message.author.bot) return;
-  if (message.guild.id == "661812833771847700") {
-    if (
-      c.includes("what") &&
-      c.includes("for") &&
-      (c.includes("chat") || c.includes("chan"))
-    ) {
-      if (!message.channel.topic) {
-        return;
-      }
-      message.channel.send(message.channel.topic);
-    }
-  }
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
   if (c.startsWith("q! "))
@@ -389,12 +365,7 @@ client.on("message", async message => {
         })
 		
 	}*/
-  if (
-    commandName == "Gytxvhyotemokbru" &&
-    message.guild.id == "598768024761139240"
-  ) {
-    return;
-  }
+
   const command =
     client.commands.get(commandName) ||
     client.commands.find(

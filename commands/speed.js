@@ -6,10 +6,16 @@ module.exports = {
   description: "calculates the speed of bloons, even in freeplay",
   usage: "!speed <bloon/blimp> <round>",
   execute(message, args) {
-    //rounds
-    const b = args[0].toUpperCase();
+    if (isNaN(args[0])) {
+      var b = args[0].toUpperCase();
+      var round = args[1];
+    } else if (isNaN(args[1])) {
+      var b = args[1].toUpperCase();
+      var round = args[0];
+    } else {
+      message.channel.send("please specify a proper round/blimp/bloon type");
+    }
     const btype = b.toLowerCase();
-    let round = args[1];
     let round1 = round - 80;
     let round2 = round - 100;
     let round3 = round - 125;
@@ -82,7 +88,8 @@ module.exports = {
     } else {
       if (b === "MOAB" || "BFB" || "ZOMG" || "DDT" || "BAD") {
         hardcost = Math.round((object.cost * 1.08) / 5) * 5;
-        hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
+        let baseCost = parseInt(json[`${name}`].cost);
+        hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5 + baseCost;
         let embed = new Discord.RichEmbed()
           .setTitle(`${b}`)
           .addField("speed", `${bloon} RBS`)

@@ -94,7 +94,7 @@ client.on("guildMemberAdd", async member => {
     .setColor(colour)
     .setTitle("Welcome to **Cyber Quincy Bot Support**! Thank you for joining!")
     .setDescription(
-      `Hi! I am Cyber Quincy, a bot made by hnngggrrrr#8734. for more information, type ${prefix}help`
+      `Hi! I am Cyber Quincy, an unofficial btd6 discord bot. For more information, type ${prefix}help. Please also check the website: https://cq.netlify.com. The point of this server is so that you can report bugs, get updated on new bot updates, as well as check the downtime`
     )
     .addField(
       "if you are experiencing an error:",
@@ -111,12 +111,12 @@ client.on("guildMemberAdd", async member => {
     .addField(
       "Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them.",
       "have a popping day"
-    )
-    .addField(
-      `use ${prefix}info for more information`,
-      "this bot was made by hnngggrrrr#8734"
     );
+
   if (member.guild.id === "598768024761139240") {
+    if (member.id == "668312965664997386") {
+      return;
+    }
     const tchannel = member.guild.channels.find(channel =>
       channel.name.includes("welcome")
     );
@@ -215,11 +215,14 @@ client.on("message", async message => {
     );
   }
   let c = message.content.toLowerCase();
-  if (message.channel.id == "") {
-    let tchannel = member.guild.channels.find(
-      channel => channel.id == 661888246090825749
+  if (
+    message.channel.id == "598768185281609738" ||
+    message.channel.id == "615159685477040135"
+  ) {
+    let channel = client.channels.find(
+      channel => channel.id == "661888246090825749"
     );
-    tchannel.send(message.content);
+    channel.send(message.content);
   }
   if (!c.startsWith(prefix) || message.author.bot) return;
   const args = message.content.slice(prefix.length).split(/ +/);
@@ -229,96 +232,6 @@ client.on("message", async message => {
       "there isnt a space between q! and the command name"
     );
   if (commandName === "level" || commandName === "xp") {
-    if (args[0]) {
-      const user = getUserFromMention(args[0]);
-      if (!user) {
-        if (args[0].includes("h")) {
-          const hembed = new Discord.RichEmbed().setDescription(
-            "proprties of xp system:\n1.you get xp by using commands (cooldowns apply)\n2. you get a anywhere from 5 to 12 xp for each command\n3. xp is gained in dms.\n4.role rewards only for those in the support server.\n5.this xp is universal, it is not confined to 1 server.\n6. hidden multipliers exist, you just need to find them.",
-            { code: "md" }
-          );
-          return message.channel.send(hembed);
-        }
-        if (args[0].includes("rewa")) {
-          const lvlMebed = new Discord.RichEmbed()
-            .setTitle(`xp rewards`)
-            .addField("level 3", `<@&645126928340353036> `)
-            .addField("level 10", `<@&645629187322806272>`)
-            .setColor(colour)
-            .addField(
-              "you only get role rewards in the bot support server",
-              "[support server](https://discord.gg/8agRm6c)"
-            )
-            .setFooter(`you only get role rewards in the bot support server`);
-          return message.channel.send(lvlMebed);
-        }
-        if (message.author.id == "581686781569794048") {
-          if (args[0] == "reset") {
-            const affectedRows = await Tags.update(
-              { xp: 0, level: 1 },
-              { where: { name: message.author.id } }
-            );
-            message.channel.send("resetted your xp");
-          }
-        }
-        const taggg = await Tags.findOne({ where: { name: args[0] } });
-        if (!taggg)
-          return message.reply(
-            "Please use a proper mention if you want to see someone else's level"
-          );
-        let user = client.users.find(u => u.id == taggg.name);
-        const xpembed = new Discord.RichEmbed()
-          .setTitle(`${user.username}'s xp'`)
-          .addField("level", taggg.level - 1)
-          .addField("xp", taggg.xp)
-          .setColor(colour)
-          .addField(
-            "have a suggestion or found a bug?",
-            "Please tell us [here](https://discord.gg/8agRm6c)!"
-          )
-          .setFooter("use q!level rewards to see role rewards");
-        return message.channel.send(xpembed);
-      }
-      try {
-        const tagg = await Tags.findOne({ where: { name: user.id } });
-        if (tagg == null) {
-          const tag = await Tags.create({
-            name: user.id,
-            xp: 0,
-            level: 1
-          });
-        }
-        if (message.author.id == "581686781569794048") {
-          if (args[0] == "reset") {
-            const affectedRows = await Tags.update(
-              { xp: 0, level: 1 },
-              { where: { name: user.id } }
-            );
-            return message.channel.send(`resetted ${user.username}'s xp.`);
-          }
-        }
-        const xpembed = new Discord.RichEmbed()
-          .setTitle(`${user.username}'s xp'`)
-          .addField("level", tagg.level - 1)
-          .addField("xp", tagg.xp)
-          .setColor(colour)
-          .addField(
-            "have a suggestion or found a bug?",
-            "Please tell us [here](https://discord.gg/8agRm6c)!"
-          )
-          .setFooter("use q!level rewards to see role rewards");
-        return message.channel.send(xpembed);
-      } catch (e) {
-        console.log(e);
-        const errorEmbed = new Discord.RichEmbed()
-          .setColor(colour)
-          .addField(
-            "something went wrong",
-            "Please join the [support server](https://discord.gg/8agRm6c)"
-          );
-        message.reply(errorEmbed);
-      }
-    }
     const tagg = await Tags.findOne({ where: { name: message.author.id } });
     const xpembed = new Discord.RichEmbed()
       .setTitle(`${message.author.username}'s xp`)

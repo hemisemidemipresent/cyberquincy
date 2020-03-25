@@ -13,7 +13,9 @@ module.exports = {
       var b = args[1].toUpperCase();
       var round = args[0];
     } else {
-      message.channel.send("please specify a proper round/blimp/bloon type");
+      return message.channel.send(
+        "please specify a proper round/blimp/bloon type"
+      );
     }
     const btype = b.toLowerCase();
     let round1 = round - 80;
@@ -88,8 +90,7 @@ module.exports = {
     } else {
       if (b === "MOAB" || "BFB" || "ZOMG" || "DDT" || "BAD") {
         hardcost = Math.round((object.cost * 1.08) / 5) * 5;
-        let baseCost = parseInt(json[`${name}`].cost);
-        hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5 + baseCost;
+        hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
         let embed = new Discord.RichEmbed()
           .setTitle(`${b}`)
           .addField("speed", `${bloon} RBS`)

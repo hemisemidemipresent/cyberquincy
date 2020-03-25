@@ -11,7 +11,9 @@ module.exports = {
       var b = args[1].toUpperCase();
       var round = args[0];
     } else {
-      message.channel.send("please specify a proper round/blimp/bloon type");
+      return message.channel.send(
+        "please specify a proper round/blimp/bloon type"
+      );
     }
     var round1 = round - 80;
     var round2 = round - 100;

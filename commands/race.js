@@ -1,12 +1,12 @@
-const GoogleSpreadsheet = require("google-spreadsheet");
-const { promisify } = require("util");
-const creds = require("../shh/config.json");
+const GoogleSpreadsheet = require('google-spreadsheet');
+const { promisify } = require('util');
+const creds = require('../shh/config.json');
 module.exports = {
-  name: "race",
-  aliases: ["r", "rac", "ra", "racc", "rae"],
-  cooldown: 5,
-  execute(message, args, client) {
-    if (isNaN(args[0]))
+    name: 'race',
+    aliases: ['rac', 'ra', 'racc', 'rae'],
+    cooldown: 5,
+    execute(message, args, client) {
+        /*if (isNaN(args[0]))
       return message.channel.send("please specify a valid race number");
     async function access(n) {
       message.channel.send(
@@ -49,6 +49,9 @@ module.exports = {
         `name: ${aa[0]}\ndate: ${aa[2]}\ninfo: ${aa[4]}, ${bb[0]}, ${bb[19]}\n1st: ${aa[12]}, ${bb[8]}, ${bb[27]}\n2nd: ${aa[14]}, ${bb[10]}, ${bb[29]}\n3rd: ${aa[16]}, ${bb[12]}, ${bb[31]}\n4th: ${aa[18]}, ${bb[14]}, ${bb[33]}\n5th: ${aa[20]}, ${bb[16]}, ${bb[35]}`
       );
     }
-    access(parseInt(args[0]));
-  }
+    access(parseInt(args[0]));*/
+        return message.channel.send(
+            'sorry, this command is a work in progress'
+        );
+    },
 };

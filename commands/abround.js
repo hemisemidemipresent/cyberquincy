@@ -1,4 +1,4 @@
-const r = require('../rounds.json');
+const r = require('../jsons/rounds.json');
 module.exports = {
     name: 'abround',
     description:'tells you about the abr rounds (below 100 cos freeplay abr is the same as normal)',

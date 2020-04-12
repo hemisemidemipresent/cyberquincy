@@ -59,7 +59,6 @@
     "optns": ["Ice Tower", "Dart Monkey", "Bomb Tower", "Tack Tower"],
     "answers": "c"
   },
-
   {
     "question": "How many Ceramic Bloons does an MOAB contain?",
     "optns": ["8", "4", "2", "6"],
@@ -224,5 +223,265 @@
       "Monkey Beacon"
     ],
     "answers": "c"
+  },
+  {
+    "question": "How many Basic tracks were in BTD4?",
+    "optns": ["16", "11", "6", "9"],
+    "answers": "d"
+  },
+  {
+    "question": "What are Thermal bloons?",
+    "optns": ["Black,White", "Pink", "Moab Class", "Black,White,Zebra,Purple"],
+    "answers": "d"
+  },
+  {
+    "question": "How much did the Cannon Tower cost in the original BTD?",
+    "optns": ["740", "1100", "900", "650"],
+    "answers": "c"
+  },
+  {
+    "question": "How many Rounds were as of easy in BTD4?",
+    "optns": ["50", "55", "75", "40"],
+    "answers": "a"
+  },
+  {
+    "question": "How much did the Boomerang thrower cost in BTD3?",
+    "optns": ["525", "395", "240", "100"],
+    "answers": "a"
+  },
+  {
+    "question": "Towers costs are pricy in Impoppable BTD6, How much does a Sniper tower cost on Impoppable?",
+    "optns": ["210", "360", "420", "415"],
+    "answers": "c"
+  },
+  {
+    "question": "Tier 5s were added in BTD6, Which Tier 5 deals more damage the more bloons there are?",
+    "optns": [
+      "Wizard Lord Phoenix",
+      "Avatar of Wrath",
+      "Support Chinook",
+      "Elite Sniper"
+    ],
+    "answers": "b"
+  },
+  {
+    "question": "The B.A.D was added into BTD6, How many blimps does it contain from inside?",
+    "optns": ["4 ZOMG", "2 ZOMG 3 DDT", "10 ZOMG 1 DDT", "3 ZOMG 2 DDT"],
+    "answers": "b"
+  },
+  {
+    "question": "How much does the Trade Empire upgrade produce per round?",
+    "optns": ["500", "800", "220", "820"],
+    "answers": "b"
+  },
+  {
+    "question": "How many Ceramic Damage does Crossbow Master deal without Crit?",
+    "optns": ["7", "50", "14", "5"],
+    "answers": "d"
+  },
+  {
+    "question": "Adora was added in BTD6 14.0, Who is she?",
+    "optns": [
+      "Supermonkey Copycat",
+      "A Divine Hero",
+      "Monkey Hacker",
+      "Ocean Guardian"
+    ],
+    "answers": "b"
+  },
+  {
+    "question": "Fortified Leads would drain you alot of lives, How many Lives would 45 Fortified Leads drain?",
+    "optns": ["1170", "66", "180", "1800"],
+    "answers": "a"
+  },
+  {
+    "question": "The Engineer got added into BTD6, What version was it added?",
+    "optns": ["14.0", "12.0", "6.0", "16.1"],
+    "answers": "b"
+  },
+  {
+    "question": "There are Hero Skins in BTD6, How many of them are there?",
+    "optns": ["10", "9", "19", "7"],
+    "answers": "a"
+  },
+  {
+    "question": "Monkey Knowledge is an Additive Feature, What was the first game to add it?",
+    "optns": ["BTD5 Mobile", "BMC", "BTD6", "Bloons TD Adventure time"],
+    "answers": "b"
+  },
+  {
+    "question": "BTD6 Was released in 2018 , When was its Initial Release?",
+    "optns": ["June 12", "May 29", "June 18", "May 30"],
+    "answers": "d"
+  },
+  {
+    "question": "Ninja Kiwi accounts have Avatar icons, Which BTD5 Tower wasnt a Ninja Kiwi Icon?",
+    "optns": [
+      "Spike Factory",
+      "Monkey Ace",
+      "Super Monkey Fanclub",
+      "Glue Gunner"
+    ],
+    "answers": "a"
+  },
+  {
+    "question": "Pat's Pond map was added in 9.0 in BTD6, Which monkey does it belong to?",
+    "optns": [
+      "Heli Pilot",
+      "Obyn Greenfoot",
+      "The Monkey Giant",
+      "Dart Monkey"
+    ],
+    "answers": "c"
+  },
+  {
+    "question": "What year was BTD3 Released?",
+    "optns": ["2008", "2011", "2009", "2013"],
+    "answers": "c"
+  },
+  {
+    "question": "How do you get the Achievement \"Thats not how Boats work\" in Bloons TD Adventure time?",
+    "optns": [
+      "Pop 100k Bloons with Cassie",
+      "Open 5 Wish orbs",
+      "Win a Map underwater",
+      "Place Cassie on an Underwater map"
+    ],
+    "answers": "d"
+  },
+  {
+    "question": "How many damage does any monkey deal to a Cripple MOAB Stunned bloon?",
+    "optns": ["5", "12", "2", "7"],
+    "answers": "a"
+  },
+  {
+    "question": "What tier 4 Monkey has no ability?",
+    "optns": ["Tech Terror", "Turbo Charge", "Artillery Battery", "IMF Loan"],
+    "answers": "c"
+  },
+  {
+    "question": "What was the monkey that's only exclusive to BTD Battles?",
+    "optns": ["Alchemist", "Submarine", "Cobra", "Monkey Beacon"],
+    "answers": "c"
+  },
+  {
+    "question": "How many difficulties did BTD3 Have?",
+    "optns": ["4", "3", "7", "0"],
+    "answers": "b"
+  },
+  {
+    "question": "Which bloon is a Mighty Zeppelin?",
+    "optns": ["BFB", "Ceramic", "Fortified Bloons", "ZOMG"],
+    "answers": "d"
+  },
+  {
+    "question": "What's the slowest ever Bloon?",
+    "optns": ["Bloonarius the Inflator", "Dreadbloon", "B.A.D", "Z.O.M.G"],
+    "answers": "a"
+  },
+  {
+    "question": "What's the only tower that can be placed on both Land and Water in BTD5?",
+    "optns": [
+      "Pat Fusty",
+      "Tribal Turtle",
+      "Apprentice Monkey",
+      "Super Monkey"
+    ],
+    "answers": "b"
+  },
+  {
+    "question": "What Game is the Calamari Blimp in?",
+    "optns": [
+      "Bloons monkey City",
+      "BTD4",
+      "Bloons TD Battles Mobile",
+      "Bloons Super Monkey 2"
+    ],
+    "answers": "d"
+  },
+  {
+    "question": "How many Core/Arm Upgrades were in Bloons supermonkey 2?",
+    "optns": ["4", "14", "7", "6"],
+    "answers": "c"
+  },
+  {
+    "question": "When was Peninsula released in BTD6?",
+    "optns": ["1.0", "13.0", "15.1", "7.0"],
+    "answers": "d"
+  },
+  {
+    "question": "What Game is the Calamari Blimp in?",
+    "optns": [
+      "Bloons monkey City",
+      "BTD4",
+      "Bloons TD Battles Mobile",
+      "Bloons Super Monkey 2"
+    ],
+    "answers": "d"
+  },
+  {
+    "question": "How many Core/Arm Upgrades were in Bloons supermonkey 2?",
+    "optns": ["4", "14", "7", "6"],
+    "answers": "c"
+  },
+  {
+    "question": "When was Peninsula released in BTD6?",
+    "optns": ["1.0", "13.0", "15.1", "7.0"],
+    "answers": "d"
+  },
+  {
+    "question": "Which out of those can pop Camo Regrowth Purple?",
+    "optns": ["Dartling Gun", "Ninja Monkey", "Wall of Fire Wizard", ""],
+    "answers": "b"
+  },
+  {
+    "question": "What's Round 63 like?",
+    "optns": [
+      "10 BFBs",
+      "Purple Spam",
+      "Ceramic Cluster",
+      "100 Fortified Lead"
+    ],
+    "answers": "c"
+  },
+  {
+    "question": "What is Round 100 Alternate bloons round?",
+    "optns": [
+      "1 Fortified BAD",
+      "2 BADs",
+      "As Regular...",
+      "1 Bad and 8 ZOMGs with 2 DDTs"
+    ],
+    "answers": "a"
+  },
+  {
+    "question": "How much XP does it cost to unlock Support Chinook in BTD6?",
+    "optns": ["2300", "14000", "9325", "15000"],
+    "answers": "d"
+  },
+  {
+    "question": "What does a 0-0-0 Village Regularly do to towers in range?",
+    "optns": [
+      "Decrease costs by 10%",
+      "Increase 10% Attack Speed",
+      "Give 10% More Range",
+      "Towers get +1 Pop"
+    ],
+    "answers": "c"
+  },
+  {
+    "question": "What's the last game to introduce Dreadbloon?",
+    "optns": [
+      "Bloons TD5 Mobile",
+      "Bloons Supermonkey 2 Mobile",
+      "BTD Battles",
+      "Bloons TD Adventure time"
+    ],
+    "answers": "b"
+  },
+  {
+    "question": "How much did it cost to upgrade from Watermelon Spitter to Watermelon Spitter Pro",
+    "optns": ["5000 MM", "3345", "2500", "500"],
+    "answers": "a"
   }
 ]

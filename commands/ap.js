@@ -13,12 +13,15 @@ module.exports = {
         .setDescription(
           "use **q!ap <question number>**. \ne.g. ``q!ap 1`` will answer question 1"
         )
-        .addField("1", "I dont understand what s,d,p,md,fd,cd,j,etc... means")
         .addField(
-          "2",
+          "q!ap 1",
+          "I dont understand what s,d,p,md,fd,cd,j,etc... means"
+        )
+        .addField(
+          "q!ap 2",
           "i dont understad what is 'normal type','sharp type',etc... is"
         )
-        .addField("3", "i dont understand buffs")
+        .addField("q!ap 3", "i dont understand buffs")
         .setColor(colour);
       return message.channel.send(choosemebed);
     }

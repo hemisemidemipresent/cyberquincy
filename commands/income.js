@@ -1,4 +1,4 @@
-const r = require("../round2.json");
+const r = require("../jsons/round2.json");
 const abr = require("../jsons/abrincome.json");
 module.exports = {
   name: "income",

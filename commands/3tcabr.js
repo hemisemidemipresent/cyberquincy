@@ -1,48 +1,46 @@
-const GoogleSpreadsheet = require("google-spreadsheet");
-const { promisify } = require("util");
-const creds = require("../shh/config.json");
+const Discord = require('discord.js');
 module.exports = {
-  name: "3tcabr",
-  aliases: ["3tabr", "3tcab", "3cabr", "3tcar", "abrc"],
-  cooldown: 5,
-  execute(message, args, client) {
-    async function access(n) {
-      message.channel
-        .send("This may take up to 20 seconds, please give us a moment")
-        .then(msg => {
-          msg.delete(5000);
-        })
-        .catch(/*Your Error handling if the Message isn't returned, sent, etc.*/);
-      const doc = new GoogleSpreadsheet(
-        "1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA"
-      );
-      await promisify(doc.useServiceAccountAuth)(creds);
-      
-      const info = await promisify(doc.getInfo)();
-      console.log(`Loaded doc: ` + info.title + ` by ` + info.author.email);
-      const sheet = info.worksheets[2];
-      console.log(
-        `sheet 1: ` + sheet.title + ` ` + sheet.rowCount + `x` + sheet.colCount
-      );
-      let aa = [];
-      let cells = await promisify(sheet.getCells)({
-        "min-row": n + 11,
-        "max-row": n + 11,
-        "min-col": 3,
-        "max-col": 15,
-        "return-empty": true
-      });
-      for (const cell of cells) {
-        aa.push(`${cell.value}`);
-      }
-      message.channel.send(
-        `First tower: ${aa[0]}\nSecond tower: ${aa[2]}\nThird tower: ${aa[4]}\nUpgrades: ${aa[6]}\nMap: ${aa[8]}\nversion: ${aa[10]}\ndate: ${aa[11]}\nPerson: ${aa[12]}`
-      );
-    }
-    if (isNaN(args[0]))
-      return message.channel.send(
-        "Please specify a proper 3 towers chimps alternate bloon rounds combo **number**"
-      );
-    access(parseInt(args[0]));
-  }
+    name: '3tcabr',
+    execute(message, args, client) {
+        async function access(n) {
+            const { GoogleSpreadsheet } = require('google-spreadsheet');
+
+            // spreadsheet key is the long id in the sheets URL
+            const doc = new GoogleSpreadsheet(
+                '1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA'
+            );
+            // load directly from json file if not in secure environment
+            await doc.useServiceAccountAuth(require('../shh/config.json'));
+
+            await doc.loadInfo(); // loads document properties and worksheets
+            const sheet = doc.sheetsByIndex[2]; //load 3tcrbs spreadsheet
+            await sheet.loadCells(`C${n + 11}:O${n + 11}`); // loads a range of cells
+            const tower1 = sheet.getCellByA1(`C${n + 11}`);
+            const tower2 = sheet.getCellByA1(`E${n + 11}`);
+            const tower3 = sheet.getCellByA1(`G${n + 11}`);
+            const upgrades = sheet.getCellByA1(`I${n + 11}`);
+            const map = sheet.getCellByA1(`K${n + 11}`);
+            const ver = sheet.getCellByA1(`M${n + 11}`);
+            const date = sheet.getCellByA1(`N${n + 11}`);
+            const person = sheet.getCellByA1(`O${n + 11}`);
+
+            const challengeEmbed = new Discord.RichEmbed()
+                .setTitle(`3tcabr combo #${n}`)
+                .addField('tower 1', `${tower1.value}`, true)
+                .addField('tower 2', `${tower2.value}`, true)
+                .addField('tower 3', `${tower3.value}`, true)
+
+                .addField('upgrades', `${upgrades.value}`, true)
+                .addField('map', `${map.value}`, true)
+                .addField('version', `${ver.value}`, true)
+                .addField('date', `${date.value}`, true)
+                .addField('person', `${person.value}`, true);
+            message.channel.send(challengeEmbed);
+            if (isNaN(args[0]))
+                return message.channel.send(
+                    'Please specify a proper 2 towers chimps combo **number**'
+                );
+        }
+        access(parseInt(args[0]));
+    },
 };

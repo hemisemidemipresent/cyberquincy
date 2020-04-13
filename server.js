@@ -1,3 +1,7 @@
+/*
+DISCLAIMER: variable names are horrible here, I apologise. Try and stick to the comments as much as you can.
+there are a few other pieces in the code before the message event collector. only then the code starts getting weird.
+*/
 const express = require('express');
 const app = express();
 app.use(express.static('public'));
@@ -36,7 +40,6 @@ const sequelize = new Sequelize('database', 'user', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
-    // SQLite only
     storage: 'database.sqlite',
 });
 const Tags = sequelize.define('tags', {
@@ -59,19 +62,21 @@ client.once('ready', () => {
         console.log('<INITIATE>');
     }
     setTimeout(three, 2000);
+    //dont mind these:
     //let servers = client.guilds.map(g=>g.name)
     //console.log(servers)
 
     client.user.setActivity(`${prefix}help`);
 });
+
 client.on('guildCreate', (guild) => {
-    var channeltosend = guild.channels.find(
+    let channeltosend = guild.channels.find(
         (channel) => channel.name.includes('general') === true
     );
     if (channeltosend === null) {
         return console.log('wtf');
     } else {
-        const helpembed = new Discord.RichEmbed()
+        let helpEmbed = new Discord.RichEmbed()
             .setColor(colour)
             .setDescription(`Hi! I am Cyber Quincy. I am a btd6 bot.`)
             .addField(
@@ -82,11 +87,11 @@ client.on('guildCreate', (guild) => {
                 "Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them."
             )
             .addField(
-                `The by far most popular command are those that describe towers. use q!<towername> <path> for more info\n(do not type out <towername> and <path> literally. example: q!ice 005 (no crosspaths)`,
+                `The by far most popular command are those that describe towers. use q!<towername> <path> for more info\n(do not type out <towername> and <path> literally. example: q!ice 005 (no more than one path at a time)`,
                 `use ${prefix}info for more information`
             )
             .setFooter('have a popping day');
-        channeltosend.send(helpembed);
+        channeltosend.send(helpEmbed);
     }
 });
 client.on('guildMemberAdd', async (member) => {
@@ -127,7 +132,6 @@ client.on('guildMemberAdd', async (member) => {
         );
         member.send(helpembed);
         try {
-            // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
             const tag = await Tags.create({
                 name: member.id,
                 xp: 0,
@@ -174,6 +178,11 @@ client.on('guildMemberAdd', async (member) => {
             )
             .setColor(colour);
         member.send(wel);
+
+        let tchannel = member.guild.channels.find((channel) =>
+            channel.name.includes('general')
+        );
+        tchannel.send(`hey guy`);
     } else if (member.guild.id === '543957081183617024') {
         const tchannel = member.guild.channels.find((channel) =>
             channel.name.includes('general')
@@ -248,9 +257,12 @@ client.on('message', async (message) => {
         );
     if (commandName === 'level' || commandName === 'xp') {
         if (args[0]) {
-            const user = getUserFromMention(args[0]);
+            // for the case when the user mentions another user
+            const user = getUserFromMention(args[0]); // get user from mention
             if (!user) {
+                // the case when the "user" specified is invalid/there wasnt a mention
                 if (args[0].includes('h')) {
+                    //potential "help" needed?
                     const hembed = new Discord.RichEmbed().setDescription(
                         'proprties of xp system:\n1.you get xp by using commands (cooldowns apply)\n2. you get a anywhere from 5 to 12 xp for each command\n3. xp is gained in dms.\n4.role rewards only for those in the support server.\n5.this xp is universal, it is not confined to 1 server.\n6. hidden multipliers exist, you just need to find them.',
                         { code: 'md' }
@@ -258,6 +270,7 @@ client.on('message', async (message) => {
                     return message.channel.send(hembed);
                 }
                 if (args[0].includes('rewa')) {
+                    //potential "rewards" needed?
                     const lvlMebed = new Discord.RichEmbed()
                         .setTitle(`xp rewards`)
                         .addField('level 3', `<@&645126928340353036> `)
@@ -272,7 +285,7 @@ client.on('message', async (message) => {
                         );
                     return message.channel.send(lvlMebed);
                 }
-                if (message.author.id == '581686781569794048') {
+                /*if (message.author.id == '581686781569794048') {
                     if (args[0] == 'reset') {
                         const affectedRows = await Tags.update(
                             { xp: 0, level: 1 },
@@ -280,13 +293,14 @@ client.on('message', async (message) => {
                         );
                         message.channel.send('resetted your xp');
                     }
-                }
-                const taggg = await Tags.findOne({ where: { name: args[0] } });
+                }*/
+                const taggg = await Tags.findOne({ where: { name: args[0] } }); // in case they are directly using the discord id. taggg represents the "found" data
                 if (!taggg)
+                    // in case
                     return message.reply(
                         "Please use a proper mention if you want to see someone else's level"
                     );
-                let user = client.users.find((u) => u.id == taggg.name);
+                let user = client.users.find((u) => u.id == taggg.name); // finds user class from id
                 const xpembed = new Discord.RichEmbed()
                     .setTitle(`${user.username}'s xp'`)
                     .addField('level', taggg.level - 1)
@@ -300,24 +314,15 @@ client.on('message', async (message) => {
                 return message.channel.send(xpembed);
             }
             try {
+                // if there is a mention
                 const tagg = await Tags.findOne({ where: { name: user.id } });
                 if (tagg == null) {
+                    // i really dont think this is necessary but high chance user pinged is gonna try out a few commands
                     const tag = await Tags.create({
                         name: user.id,
                         xp: 0,
                         level: 1,
                     });
-                }
-                if (message.author.id == '581686781569794048') {
-                    if (args[0] == 'reset') {
-                        const affectedRows = await Tags.update(
-                            { xp: 0, level: 1 },
-                            { where: { name: user.id } }
-                        );
-                        return message.channel.send(
-                            `resetted ${user.username}'s xp.`
-                        );
-                    }
                 }
                 const xpembed = new Discord.RichEmbed()
                     .setTitle(`${user.username}'s xp'`)
@@ -341,6 +346,7 @@ client.on('message', async (message) => {
                 message.reply(errorEmbed);
             }
         }
+        //when there isnt a mention, it shows your own level and xp
         const tagg = await Tags.findOne({ where: { name: message.author.id } });
         const xpembed = new Discord.RichEmbed()
             .setTitle(`${message.author.username}'s xp`)
@@ -354,44 +360,39 @@ client.on('message', async (message) => {
             .setFooter('use q!level rewards to see role rewards');
         return message.channel.send(xpembed);
     }
-    if (commandName === 'yeetda') {
+    // admin command
+    /*if (commandName === 'yeetda') {
         if (message.author.id != '581686781569794048') return;
         await Tags.update(
             { level: parseInt(args[1]) + 1, xp: args[2] },
             { where: { name: args[0] } }
         );
-    }
+    }*/
     if (
         commandName == 'cmdc' ||
         commandName == 'cmdcount' ||
         commandName == 'commandcount' ||
         commandName == 'commandc'
     ) {
+        // a rather cut-throat method of storing the total commands used
         let tagrrr = await Tags.findOne({ where: { name: 1000 } });
         message.channel.send(
             `${tagrrr.xp} (non-spaghetti) commands have been used since 12/2/20 10.51.38.339am UTC`
         );
     }
+    // i dont think this works
     /*
   if (commandName === "top") {
     const top = await Tags.max({ attributes: ["xp"] });
     console.log(top);
   }
+*/
 
-  if(commandName=='edit'&&message.channel.id=='643773699916431361'){
-		const h = require('./jsons/fact.json')
-		h['churchill'][args[0]].cost = args[1]*1.2
-		h['ben'][args[0]].cost = args[1]
-		fs.writeFile('./jsons/fact.json',JSON.stringify(h),(err)=>{
-            if(err)console.log(err)
-        })
-		
-	}*/
     const command =
         client.commands.get(commandName) ||
         client.commands.find(
             (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
-        );
+        ); // find the command needed
     if (!command) return;
     //cooldown
     if (!cooldowns.has(command.name)) {
@@ -403,8 +404,10 @@ client.on('message', async (message) => {
         let channelTopic = message.channel.topic.toLowerCase();
         let channelWords = channelTopic.split(/ +/); //makes array of channel words
         if (channelTopic.includes('cooldown') && channelTopic.includes('=')) {
-            //checls if command description
+            // basic check if the channel has the "keywords"
+
             for (i = 0; i < channelWords.length - 2; i++) {
+                // checks if command description for "cooldown" and "="
                 if (
                     channelWords[i].toLowerCase() == 'cooldown' &&
                     channelWords[i + 1] == '='
@@ -420,11 +423,11 @@ client.on('message', async (message) => {
             var cooldownAmount = channelCooldown * 1000;
         }
     } else {
-        var cooldownAmount = 3 * 1000;
+        var cooldownAmount = 3 * 1000; // default cooldown is 3000ms
     }
     if (
         timestamps.has(message.author.id) &&
-        noocmd.test(message.channel.topic) === false
+        noocmd.test(message.channel.topic) === false // this is in case someone used the command. should have put this more in front
     ) {
         const expirationTime =
             timestamps.get(message.author.id) + cooldownAmount;
@@ -442,43 +445,32 @@ client.on('message', async (message) => {
     }
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-    //command user
+    //command "user"
     if (noocmd.test(message.channel.topic) === false) {
+        // i dont think another check is neccesarry.
         try {
-            command.execute(message, args, client);
-            try {
-                // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-                const tag = await Tags.create({
-                    name: 1000,
-                    xp: 0,
-                    level: 0,
-                });
-            } catch (e) {
-                if (e.name === 'SequelizeUniqueConstraintError') {
-                    let tagrrr = await Tags.findOne({ where: { name: 1000 } });
-                    await Tags.update(
-                        { xp: tagrrr.xp + 1 },
-                        { where: { name: 1000 } }
-                    );
-                }
-            }
-            if (message.author.id == '581686781569794048') return;
+            command.execute(message, args, client); // executes the command.
+            // the command count thingy
+            let tagrrr = await Tags.findOne({ where: { name: 1000 } });
+            await Tags.update({ xp: tagrrr.xp + 1 }, { where: { name: 1000 } });
+            // P.S. whoever is reading this sorry for using taggggg or something stupid or everything
+            if (message.author.id == '581686781569794048') return; // i dont need xp
             if (message.channel.type == 'dm') {
+                // less xp when DMing.
                 var xpAdd = Math.floor(Math.random() * 4) + 2;
             } else {
                 var xpAdd = Math.floor(Math.random() * 8) + 5;
             }
-            let guildmember = message.member;
             try {
-                // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-                const tag = await Tags.create({
+                // this checks for level up. this is super spaghetti
+                //main thing here is first try and make a new entry, but uses errors to see if there is already one present. not elegant but it works.
+                await Tags.create({
                     name: message.author.id,
                     xp: 0,
                     level: 1,
                 });
             } catch (e) {
                 if (e.name === 'SequelizeUniqueConstraintError') {
-                    function up() {}
                     const tag = await Tags.findOne({
                         where: { name: message.author.id },
                     });
@@ -487,10 +479,12 @@ client.on('message', async (message) => {
                         { where: { name: message.author.id } }
                     );
                     if (affectedRows > 0) {
+                        // when the xp updates
                         const tag1 = await Tags.findOne({
                             where: { name: message.author.id },
                         });
                         if (tag1.level > 20) {
+                            // xp is different past level 20
                             if (
                                 tag1.xp >
                                 5 * ((tag1.level + 20) * (tag1.level + 20)) +
@@ -502,7 +496,9 @@ client.on('message', async (message) => {
                                     { where: { name: message.author.id } }
                                 );
                                 let ran = Math.floor(Math.random() * 8);
-                                switch (ran) {
+                                switch (
+                                    ran // i am VERY SORRY FOR THIS SHIT
+                                ) {
                                     case 0:
                                         var ltxt = 'Haha!';
                                         break;
@@ -535,23 +531,27 @@ client.on('message', async (message) => {
                                     .members.array()
                                     .find((m) => m.id === message.author.id);
                                 if (tag1.level === 3) {
+                                    // if member is level 3 add role
                                     await guildmember.addRole(
                                         '645126928340353036'
                                     );
                                 }
                                 if (tag1.level === 10) {
+                                    // if member is level 10 add role
                                     await guildmember.addRole(
                                         '645629187322806272'
                                     );
                                 }
                             }
                         } else if (tag1.xp > tag1.level * 100) {
-                            const affectedRows1 = await Tags.update(
+                            await Tags.update(
                                 { level: tag1.level + 1 },
                                 { where: { name: message.author.id } }
                             );
                             let ran = Math.floor(Math.random() * 8);
-                            switch (ran) {
+                            switch (
+                                ran // i am once again VERY VERY SORRY FOR THIS SHIT
+                            ) {
                                 case 0:
                                     var ltxt = 'Haha!';
                                     break;
@@ -584,9 +584,11 @@ client.on('message', async (message) => {
                                 .members.array()
                                 .find((m) => m.id === message.author.id);
                             if (tag1.level === 3) {
+                                // if member is level 3 add role
                                 await guildmember.addRole('645126928340353036');
                             }
                             if (tag1.level === 10) {
+                                // if member is level 10 add role
                                 await guildmember.addRole('645629187322806272');
                             }
                         }
@@ -594,7 +596,7 @@ client.on('message', async (message) => {
                         return;
                     }
                 }
-                const errorEmbed = new Discord.RichEmbed()
+                let errorEmbed = new Discord.RichEmbed() // in case of db failures
                     .setColor(colour)
                     .addField(
                         'Oops! something went wrong!',
@@ -603,6 +605,7 @@ client.on('message', async (message) => {
                 return message.reply(errorEmbed);
             }
         } catch (error) {
+            // in case of command failures
             console.error(error);
             const errorEmbed = new Discord.RichEmbed()
                 .setColor(colour)
@@ -615,3 +618,4 @@ client.on('message', async (message) => {
     }
 });
 client.login(token);
+//who you made it this far. Yes this is a giant mess that needs urgent fixing. trust me it used to be a lot worse.

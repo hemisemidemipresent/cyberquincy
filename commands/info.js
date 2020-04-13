@@ -15,7 +15,7 @@ module.exports = {
         let minutes = Math.floor(totalSeconds / 60);
         let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 
-        const infoembed = new Discord.RichEmbed()
+        const infoEmbed = new Discord.RichEmbed()
             .setColor(colour)
             .setTitle('access help here')
             .setURL('https://discord.gg/8agRm6c')
@@ -31,7 +31,6 @@ module.exports = {
                 'https://vignette.wikia.nocookie.net/b__/images/d/d3/QuincyCyberPortrait.png/revision/latest?cb=20190612021929&path-prefix=bloons'
             )
             .addField('time since last restart:', `${uptime}`, true)
-            .addField('version running', `${version}`)
             .addField('person who made the bot', 'hnngggrrrr#8734', true)
             .addField(
                 'bot invite link',
@@ -45,5 +44,5 @@ module.exports = {
             )
             .setFooter('thank you for using it! waiting for popularity');
         message.channel.send(infoEmbed);
-    }
+    },
 };

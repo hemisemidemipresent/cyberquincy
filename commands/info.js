@@ -20,7 +20,7 @@ module.exports = {
             .setTitle('access help here')
             .setURL('https://discord.gg/8agRm6c')
             .setDescription(
-                `Cyber Quincy is battling ${client.guilds.size} waves of bloons and training ${client.users.size} monkeys`
+                `Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons and training ${client.users.cache.size} monkeys`
             )
             .addField(
                 'ping:',
@@ -31,7 +31,6 @@ module.exports = {
                 'https://vignette.wikia.nocookie.net/b__/images/d/d3/QuincyCyberPortrait.png/revision/latest?cb=20190612021929&path-prefix=bloons'
             )
             .addField('time since last restart:', `${uptime}`, true)
-            .addField('person who made the bot', 'hnngggrrrr#8734', true)
             .addField(
                 'bot invite link',
                 'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=805432400'

@@ -7,7 +7,7 @@ module.exports = {
     execute(message, args, client) {
         let randex;
         if (!args[0]) {
-            randex = Math.floor(Math.random() * fact.length());
+            randex = Math.floor(Math.random() * fact.length);
         } else {
             randex = parseInt(args[0]);
         }

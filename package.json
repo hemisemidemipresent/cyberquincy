@@ -17,7 +17,7 @@
         "url": "https://github.com/hnngggrrrr/cyberquincy/issues"
     },
     "engines": {
-        "node": "10.x"
+        "node": "12.x"
     },
     "homepage": "https://github.com/hnngggrrrr/cyberquincy#readme",
     "dependencies": {

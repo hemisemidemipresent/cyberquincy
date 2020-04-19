@@ -7,22 +7,22 @@ module.exports = {
 
             // spreadsheet key is the long id in the sheets URL
             const doc = new GoogleSpreadsheet(
-                '1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA'
+                '1-CK-uOK1rdCGjvQCYxaU9Fkwo_EsrX-CQp9vkewY50k'
             );
             // load directly from json file if not in secure environment
             await doc.useServiceAccountAuth(require('../shh/config.json'));
 
             await doc.loadInfo(); // loads document properties and worksheets
-            const sheet = doc.sheetsByIndex[3]; //load 3tcrbs spreadsheet
-            await sheet.loadCells(`C${n + 11}:O${n + 11}`); // loads a range of cells
-            const tower1 = sheet.getCellByA1(`C${n + 11}`);
-            const tower2 = sheet.getCellByA1(`E${n + 11}`);
-            const tower3 = sheet.getCellByA1(`G${n + 11}`);
-            const upgrades = sheet.getCellByA1(`I${n + 11}`);
-            const map = sheet.getCellByA1(`K${n + 11}`);
-            const ver = sheet.getCellByA1(`M${n + 11}`);
-            const date = sheet.getCellByA1(`N${n + 11}`);
-            const person = sheet.getCellByA1(`O${n + 11}`);
+            const sheet = doc.sheetsByIndex[1]; //load 3tcrbs spreadsheet
+            await sheet.loadCells(`C${n + 7}:O${n + 7}`); // loads a range of cells
+            const tower1 = sheet.getCellByA1(`C${n + 7}`);
+            const tower2 = sheet.getCellByA1(`E${n + 7}`);
+            const tower3 = sheet.getCellByA1(`G${n + 7}`);
+            const upgrades = sheet.getCellByA1(`I${n + 7}`);
+            const map = sheet.getCellByA1(`K${n + 7}`);
+            const ver = sheet.getCellByA1(`M${n + 7}`);
+            const date = sheet.getCellByA1(`N${n + 7}`);
+            const person = sheet.getCellByA1(`O${n + 7}`);
 
             const challengeEmbed = new Discord.RichEmbed()
                 .setTitle(`3tcrbs combo #${n}`)

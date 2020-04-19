@@ -33,7 +33,8 @@ function getUserFromMention(mention) {
         if (mention.startsWith('!')) {
             mention = mention.slice(1);
         }
-        return client.users.get(mention);
+        //return client.users.get(mention); discord.js v11
+        return client.users.cache.get(mention);
     }
 }
 const sequelize = new Sequelize('database', 'user', 'password', {
@@ -174,7 +175,7 @@ client.on('guildMemberAdd', async (member) => {
             )
             .addField(
                 'Who am I?',
-                'I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881),[discord server](https://discord.gg/XBhHWh9)\nmade by hnngggrrrr#8734, contact via discord server linked above.'
+                'I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881),[discord server](https://discord.gg/XBhHWh9)'
             )
             .setColor(colour);
         member.send(wel);
@@ -285,7 +286,7 @@ client.on('message', async (message) => {
                         );
                     return message.channel.send(lvlMebed);
                 }
-                /*if (message.author.id == '581686781569794048') {
+                /*if (message.author.id == '699780654740668426') {
                     if (args[0] == 'reset') {
                         const affectedRows = await Tags.update(
                             { xp: 0, level: 1 },
@@ -294,47 +295,49 @@ client.on('message', async (message) => {
                         message.channel.send('resetted your xp');
                     }
                 }*/
-                const taggg = await Tags.findOne({ where: { name: args[0] } }); // in case they are directly using the discord id. taggg represents the "found" data
-                if (!taggg)
+                let userData = await Tags.findOne({ where: { name: args[0] } }); // in case they are directly using the discord id. userData represents the "found" data
+                if (!userData)
                     // in case
                     return message.reply(
                         "Please use a proper mention if you want to see someone else's level"
                     );
-                let user = client.users.find((u) => u.id == taggg.name); // finds user class from id
-                const xpembed = new Discord.RichEmbed()
+                //let user = client.users.find((u) => u.id == userData.name);  old version
+                ////let user = client.users.cache.find((u) => u.id == userData.name);  djs v12 old code
+                let user = client.users.cache.get(`${userData.name}`); // finds user class from id
+                const xpEmbed = new Discord.RichEmbed()
                     .setTitle(`${user.username}'s xp'`)
-                    .addField('level', taggg.level - 1)
-                    .addField('xp', taggg.xp)
+                    .addField('level', userData.level - 1)
+                    .addField('xp', userData.xp)
                     .setColor(colour)
                     .addField(
                         'have a suggestion or found a bug?',
                         'Please tell us [here](https://discord.gg/8agRm6c)!'
                     )
                     .setFooter('use q!level rewards to see role rewards');
-                return message.channel.send(xpembed);
+                return message.channel.send(xpEmbed);
             }
             try {
                 // if there is a mention
-                const tagg = await Tags.findOne({ where: { name: user.id } });
-                if (tagg == null) {
+                let userData = await Tags.findOne({ where: { name: user.id } });
+                if (!userData) {
                     // i really dont think this is necessary but high chance user pinged is gonna try out a few commands
-                    const tag = await Tags.create({
+                    await Tags.create({
                         name: user.id,
                         xp: 0,
                         level: 1,
                     });
                 }
-                const xpembed = new Discord.RichEmbed()
+                const xpEmbed = new Discord.RichEmbed()
                     .setTitle(`${user.username}'s xp'`)
-                    .addField('level', tagg.level - 1)
-                    .addField('xp', tagg.xp)
+                    .addField('level', userData.level - 1)
+                    .addField('xp', userData.xp)
                     .setColor(colour)
                     .addField(
                         'have a suggestion or found a bug?',
                         'Please tell us [here](https://discord.gg/8agRm6c)!'
                     )
                     .setFooter('use q!level rewards to see role rewards');
-                return message.channel.send(xpembed);
+                return message.channel.send(xpEmbed);
             } catch (e) {
                 console.log(e);
                 const errorEmbed = new Discord.RichEmbed()
@@ -347,22 +350,22 @@ client.on('message', async (message) => {
             }
         }
         //when there isnt a mention, it shows your own level and xp
-        const tagg = await Tags.findOne({ where: { name: message.author.id } });
-        const xpembed = new Discord.RichEmbed()
+        let data = await Tags.findOne({ where: { name: message.author.id } });
+        let xpEmbed = new Discord.RichEmbed()
             .setTitle(`${message.author.username}'s xp`)
-            .addField('level', tagg.level - 1)
-            .addField('xp', tagg.xp)
+            .addField('level', data.level - 1)
+            .addField('xp', data.xp)
             .setColor(colour)
             .addField(
                 'have a suggestion or found a bug?',
                 'Please tell us [here](https://discord.gg/8agRm6c)!'
             )
             .setFooter('use q!level rewards to see role rewards');
-        return message.channel.send(xpembed);
+        return message.channel.send(xpEmbed);
     }
     // admin command
     /*if (commandName === 'yeetda') {
-        if (message.author.id != '581686781569794048') return;
+        if (message.author.id != '699780654740668426') return;
         await Tags.update(
             { level: parseInt(args[1]) + 1, xp: args[2] },
             { where: { name: args[0] } }
@@ -375,9 +378,9 @@ client.on('message', async (message) => {
         commandName == 'commandc'
     ) {
         // a rather cut-throat method of storing the total commands used
-        let tagrrr = await Tags.findOne({ where: { name: 1000 } });
+        let commandCount = await Tags.findOne({ where: { name: 1000 } });
         message.channel.send(
-            `${tagrrr.xp} (non-spaghetti) commands have been used since 12/2/20 10.51.38.339am UTC`
+            `${commandCount.xp} (non-spaghetti) commands have been used since 12/2/20 10.51.38.339am UTC`
         );
     }
     // i dont think this works
@@ -454,7 +457,7 @@ client.on('message', async (message) => {
             let tagrrr = await Tags.findOne({ where: { name: 1000 } });
             await Tags.update({ xp: tagrrr.xp + 1 }, { where: { name: 1000 } });
             // P.S. whoever is reading this sorry for using taggggg or something stupid or everything
-            if (message.author.id == '581686781569794048') return; // i dont need xp
+            if (message.author.id == '699780654740668426') return; // i dont need xp
             if (message.channel.type == 'dm') {
                 // less xp when DMing.
                 var xpAdd = Math.floor(Math.random() * 4) + 2;

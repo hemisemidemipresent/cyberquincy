@@ -68,7 +68,7 @@ module.exports = {
                             );
                         };
                         const collector = msg.createReactionCollector(filter, {
-                            time: 5000,
+                            time: 20000,
                         });
 
                         collector.on(
@@ -120,7 +120,7 @@ module.exports = {
                             );
                         };
                         const collector = msg.createReactionCollector(filter, {
-                            time: 5000,
+                            time: 20000,
                         });
 
                         collector.on(

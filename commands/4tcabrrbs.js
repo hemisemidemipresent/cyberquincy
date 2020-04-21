@@ -30,7 +30,7 @@ module.exports = {
             } else {
                 note = '';
             }
-            const challengeEmbed = new Discord.RichEmbed()
+            const challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(`4tcabrrbs combo #${n}`)
                 .addField('tower 1', `${tower1.value}`, true)
                 .addField('tower 2', `${tower2.value}`, true)

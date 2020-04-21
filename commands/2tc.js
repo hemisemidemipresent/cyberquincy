@@ -22,7 +22,7 @@ module.exports = {
             const ver = sheet.getCellByA1(`K${n + 11}`);
             const date = sheet.getCellByA1(`L${n + 11}`);
             const person = sheet.getCellByA1(`M${n + 11}`);
-            const challengeEmbed = new Discord.RichEmbed()
+            const challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(`2tc combo #${n}`)
                 .addField('tower 1', `${tower1.value}`, true)
                 .addField('tower 2', `${tower2.value}`, true)

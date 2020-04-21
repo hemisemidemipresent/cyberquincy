@@ -60,7 +60,7 @@ module.exports = {
         }
         var bhealth = Math.floor(bloon * pi);
         if (round > 80) {
-            let speedEmbed = new Discord.RichEmbed()
+            let speedEmbed = new Discord.MessageEmbed()
                 .setTitle(`${btype}`)
                 .addField('speed', `${bhealth} units`)
                 .addField('at round', round)
@@ -72,7 +72,7 @@ module.exports = {
                 'quincy has no experience in these rounds'
             );
         } else if (round > 0 && round < 81) {
-            let speedEmbed = new Discord.RichEmbed()
+            let speedEmbed = new Discord.MessageEmbed()
                 .setTitle(`${btype}`)
                 .addField('speed', `${bloon} units`)
                 .addField('at round', round)
@@ -81,7 +81,7 @@ module.exports = {
             return message.channel.send(speedEmbed);
         } else {
             if (b === 'MOAB' || 'BFB' || 'ZOMG' || 'DDT' || 'BAD') {
-                let speedEmbed = new Discord.RichEmbed()
+                let speedEmbed = new Discord.MessageEmbed()
                     .setTitle(`${b}`)
                     .addField('speed', `${bloon} units`)
                     .addField('at round', round)

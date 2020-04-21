@@ -179,7 +179,7 @@ module.exports = {
             thum =
                 'https://vignette.wikia.nocookie.net/b__/images/0/0c/QuincyCyberPortraitLvl20.png/revision/latest/scale-to-width-down/179?cb=20190612022025&path-prefix=bloons';
         }
-        const mapEmbed = new Discord.RichEmbed()
+        const mapEmbed = new Discord.MessageEmbed()
             //.setColor(colour)
             .setTitle('Map info')
             .setAuthor('Cyber Quincy')

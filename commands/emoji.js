@@ -18,7 +18,7 @@ module.exports = {
             });
             if (typeof emojisArray === 'string') emojisArray = [emojisArray];
 
-            const emojiEmbed = new Discord.RichEmbed()
+            const emojiEmbed = new Discord.MessageEmbed()
                 .setTitle(
                     'There Are ' +
                         message.guild.emojis.size +
@@ -103,7 +103,7 @@ module.exports = {
                 );
             }
         } else if (args[0] == 'help') {
-            const helpembed = new Discord.RichEmbed()
+            const helpembed = new Discord.MessageEmbed()
                 .setTitle('Emoji help page')
                 .setDescription(
                     'how to use it:\nthere are 2 types of text here'

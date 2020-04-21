@@ -78,7 +78,7 @@ module.exports = {
                     ooo.push(ix - 1);
                 }
             }
-            const embed = new Discord.RichEmbed()
+            const embed = new Discord.MessageEmbed()
                 .setTitle(heroname)
                 .setDescription(
                     'This shows which round the hero will reach which level'

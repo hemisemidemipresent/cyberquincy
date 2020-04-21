@@ -77,7 +77,7 @@ client.on('guildCreate', (guild) => {
     if (channeltosend === null) {
         return console.log('wtf');
     } else {
-        let helpEmbed = new Discord.RichEmbed()
+        let helpEmbed = new Discord.MessageEmbed()
             .setColor(colour)
             .setDescription(`Hi! I am Cyber Quincy. I am a btd6 bot.`)
             .addField(
@@ -96,7 +96,7 @@ client.on('guildCreate', (guild) => {
     }
 });
 client.on('guildMemberAdd', async (member) => {
-    const helpembed = new Discord.RichEmbed()
+    const helpembed = new Discord.MessageEmbed()
         .setColor(colour)
         .setTitle(
             'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!'
@@ -156,7 +156,7 @@ client.on('guildMemberAdd', async (member) => {
             }
         }
     } else if (member.guild.id == 661812833771847700) {
-        const wel = new Discord.RichEmbed()
+        const wel = new Discord.MessageEmbed()
             .setTitle('Welcome to the BTD6 Index Discord Server!')
             .setThumbnail(
                 'https://cdn.discordapp.com/icons/661812833771847700/94e0818cefedd71655d7e4e84a951a37.webp?size=128'
@@ -225,7 +225,7 @@ client.on('message', async (message) => {
         let channel = client.channels.find(
             (channel) => channel.id == '661888246090825749'
         );
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
             .setDescription(message.content)
             .setColor(colour)
             .addField(
@@ -239,7 +239,7 @@ client.on('message', async (message) => {
         let channel = client.channels.find(
             (channel) => channel.id == '616603947481694209'
         );
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
             .setDescription(message.content)
             .setColor(colour)
             .addField(
@@ -264,7 +264,7 @@ client.on('message', async (message) => {
                 // the case when the "user" specified is invalid/there wasnt a mention
                 if (args[0].includes('h')) {
                     //potential "help" needed?
-                    const hembed = new Discord.RichEmbed().setDescription(
+                    const hembed = new Discord.MessageEmbed().setDescription(
                         'proprties of xp system:\n1.you get xp by using commands (cooldowns apply)\n2. you get a anywhere from 5 to 12 xp for each command\n3. xp is gained in dms.\n4.role rewards only for those in the support server.\n5.this xp is universal, it is not confined to 1 server.\n6. hidden multipliers exist, you just need to find them.',
                         { code: 'md' }
                     );
@@ -272,7 +272,7 @@ client.on('message', async (message) => {
                 }
                 if (args[0].includes('rewa')) {
                     //potential "rewards" needed?
-                    const lvlMebed = new Discord.RichEmbed()
+                    const lvlMebed = new Discord.MessageEmbed()
                         .setTitle(`xp rewards`)
                         .addField('level 3', `<@&645126928340353036> `)
                         .addField('level 10', `<@&645629187322806272>`)
@@ -304,7 +304,7 @@ client.on('message', async (message) => {
                 //let user = client.users.find((u) => u.id == userData.name);  old version
                 ////let user = client.users.cache.find((u) => u.id == userData.name);  djs v12 old code
                 let user = client.users.cache.get(`${userData.name}`); // finds user class from id
-                const xpEmbed = new Discord.RichEmbed()
+                const xpEmbed = new Discord.MessageEmbed()
                     .setTitle(`${user.username}'s xp'`)
                     .addField('level', userData.level - 1)
                     .addField('xp', userData.xp)
@@ -327,7 +327,7 @@ client.on('message', async (message) => {
                         level: 1,
                     });
                 }
-                const xpEmbed = new Discord.RichEmbed()
+                const xpEmbed = new Discord.MessageEmbed()
                     .setTitle(`${user.username}'s xp'`)
                     .addField('level', userData.level - 1)
                     .addField('xp', userData.xp)
@@ -340,7 +340,7 @@ client.on('message', async (message) => {
                 return message.channel.send(xpEmbed);
             } catch (e) {
                 console.log(e);
-                const errorEmbed = new Discord.RichEmbed()
+                const errorEmbed = new Discord.MessageEmbed()
                     .setColor(colour)
                     .addField(
                         'something went wrong',
@@ -351,7 +351,7 @@ client.on('message', async (message) => {
         }
         //when there isnt a mention, it shows your own level and xp
         let data = await Tags.findOne({ where: { name: message.author.id } });
-        let xpEmbed = new Discord.RichEmbed()
+        let xpEmbed = new Discord.MessageEmbed()
             .setTitle(`${message.author.username}'s xp`)
             .addField('level', data.level - 1)
             .addField('xp', data.xp)
@@ -599,7 +599,7 @@ client.on('message', async (message) => {
                         return;
                     }
                 }
-                let errorEmbed = new Discord.RichEmbed() // in case of db failures
+                let errorEmbed = new Discord.MessageEmbed() // in case of db failures
                     .setColor(colour)
                     .addField(
                         'Oops! something went wrong!',
@@ -610,7 +610,7 @@ client.on('message', async (message) => {
         } catch (error) {
             // in case of command failures
             console.error(error);
-            const errorEmbed = new Discord.RichEmbed()
+            const errorEmbed = new Discord.MessageEmbed()
                 .setColor(colour)
                 .addField(
                     'something went wrong',

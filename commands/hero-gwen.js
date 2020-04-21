@@ -32,7 +32,7 @@ module.exports = {
                         'Please specify a valid hero level!'
                     );
                 hardcost = Math.round((object.cost * 1.08) / 5) * 5;
-                const embed = new Discord.RichEmbed()
+                const embed = new Discord.MessageEmbed()
                     .setTitle(`${name} level ${level}`)
                     .addField("cost/'xp'", `${object.xp}`)
                     .addField('desc', `${object.notes}`)

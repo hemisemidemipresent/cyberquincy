@@ -59,7 +59,7 @@ module.exports = {
                 let object = json[`${name}`].upgrades[path - 1][tier - 1];
                 if (!object) {
                     object = json[`${name}`];
-                    let embed = new Discord.RichEmbed()
+                    let embed = new Discord.MessageEmbed()
                         .setColor(colour)
                         .addField('name', object.name)
                         .addField('cost', `${object.cost} (medium)`)
@@ -103,7 +103,7 @@ module.exports = {
 
                     hardcost = Math.round((object.cost * 1.08) / 5) * 5;
                     hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
-                    let embed = new Discord.RichEmbed()
+                    let embed = new Discord.MessageEmbed()
                         .setColor(colour)
                         .addField('name', object.name)
                         .addField(

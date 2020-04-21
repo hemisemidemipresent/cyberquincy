@@ -3,15 +3,56 @@ module.exports = {
     name: 'fact',
     description: 'random fact/lore from the NK blog. BIG credit to it',
     aliases: ['random', 'f'],
-    usage: '[command name]',
     execute(message, args, client) {
-        let randex;
+        function searchStringInArray(str, strArray) {
+            let resultArray = [];
+            for (let j = 0; j < strArray.length; j++) {
+                if (strArray[j].toLowerCase().includes(str.toLowerCase())) {
+                    resultArray.push(j);
+                }
+            }
+            return resultArray; // this is an array containing the array of all the facts that contain the key terms
+        }
+        let searchedString = args.join(' ');
+        let randex; // short for random index
         if (!args[0]) {
             randex = Math.floor(Math.random() * fact.length);
+        } else if (isNaN(searchedString)) {
+            let factsArray = searchStringInArray(searchedString, fact);
+            if (factsArray.length == 0) {
+                return message.channel.send(
+                    `Unfortunately I did not find any results from \`\`${searchedString}\`\`. Try searching a phrase which is simpler.`
+                );
+            } else if (factsArray.length > 5) {
+                function addOne(arr) {
+                    let result = [];
+                    for (let j = 0; j < arr.length; j++) {
+                        result.push(arr[j] + 1);
+                    }
+                    return result;
+                }
+                let factIdArray = addOne(factsArray);
+                return message.channel.send(
+                    `There are too many results to send! They are fact number ${factIdArray.join()}`
+                );
+            } else {
+                let factOutput = [];
+                for (i == 0; i < factsArray.length; i++) {
+                    factOutput.push(fact[parseInt(factsArray[i])]);
+                }
+
+                return message.channel.send(
+                    `I found ${
+                        factsArray.length
+                    } fact(s) containing the word/phrase "${searchedString}"!\n${factOutput.join(
+                        '\n'
+                    )}`
+                );
+            }
         } else {
             randex = parseInt(args[0]);
         }
-        let fac = fact[randex];
-        message.channel.send(`${fac}`);
+        let factInfo = fact[randex];
+        message.channel.send(`${factInfo}`);
     },
 };

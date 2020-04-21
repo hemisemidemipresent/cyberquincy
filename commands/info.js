@@ -15,7 +15,7 @@ module.exports = {
         let minutes = Math.floor(totalSeconds / 60);
         let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 
-        const infoEmbed = new Discord.RichEmbed()
+        const infoEmbed = new Discord.MessageEmbed()
             .setColor(colour)
             .setTitle('access help here')
             .setURL('https://discord.gg/8agRm6c')

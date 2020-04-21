@@ -51,7 +51,7 @@ module.exports = {
             }
             k.push(level);
         }
-        const templeEmbed = new Discord.RichEmbed()
+        const templeEmbed = new Discord.MessageEmbed()
             .setDescription(
                 "When a super monkey is upgraded to 4xx or 5xx, all non-hero towers in range — including allies' towers, if in co-op — are sacrificed to the super monkey. It gains different attacks and buffs depending on how much was spent on each tower category (primary, military, magic, or support) that is sacrificed.\nThe stats for each level will be written independently of the others, so there is no need to look at any earlier levels to figure out the overall effect. Attacks will be defined first and simply referred to, instead of copying the same stats multiple times."
             )

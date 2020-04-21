@@ -7,7 +7,7 @@ module.exports = {
     name: 'test',
     aliases: ['te', 'beta', 'hmm', 'mm', 'meadow', 'monkeymeadow'],
     execute(message, args, client) {
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
             .setTitle('test the new delete reaction thingy')
             .setDescription(
                 '🌳🌳🟩🟩🟩🟩🟩🟩🟩🌳🌳🌳\n🌳🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🌳\n🟩🟩🟩🟩🟩🟩🧱🧱🧱🧱🟩🟩\n🟩🟩🟩🟩🟩🟩🧱🟩🟩🧱🟩🟩\n🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🟩🟩\n🟩🟩🟩🟩🟩🟩🧱🟩🟩🟩🟩🟩\n🟩🟩🟩🟩🟩🟩🧱🟩🧱🧱🧱🟩\n🟩🟩🟩🧱🧱🧱🧱🧱🧱🟩🧱🟩\n🟩🟩🟩🧱🟩🟩🧱🟩🟩🟩🧱🟩\n🟩🟩🟩🧱🧱🧱🧱🟩🟩🟩🧱🟩\n🌳🟩🟩🟩🟩🟩🟩🟩🟩🟩🧱🌳\n🌳🌳🟩🟩🟩🟩🟩🟩🟩🟩🧱🌳'

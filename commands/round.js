@@ -40,7 +40,7 @@ module.exports = {
         }
         const index = parseInt(args[0]);
         var data = r1[`r${index}`];
-        const roundembed = new Discord.RichEmbed()
+        const roundembed = new Discord.MessageEmbed()
             .setTitle(`round ${round}`)
             .setDescription(`${data}`)
             .addField('xp earned in that round', `${xp}`)

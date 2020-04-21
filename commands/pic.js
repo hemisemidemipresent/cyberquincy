@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const { prefix, colour } = require('../shh/config.json');
-const picEmbed1 = new Discord.RichEmbed()
+const picEmbed1 = new Discord.MessageEmbed()
     .setColor(colour)
     .setTitle('Suggest an idea')
     .setURL('https://discord.gg/8agRm6c')
@@ -22,7 +22,7 @@ const picEmbed1 = new Discord.RichEmbed()
     .addField('fanart', 'use numbers `1`,`2`,`3`,`...`,`10`')
     .addField('wall of fire', '`wof`,`wof2`')
     .setFooter('page 1 out of 3');
-const picEmbed2 = new Discord.RichEmbed()
+const picEmbed2 = new Discord.MessageEmbed()
     .setColor('#00E6BB')
     .setTitle('Suggest an idea')
     .setURL('https://discord.gg/8agRm6c')
@@ -39,7 +39,7 @@ const picEmbed2 = new Discord.RichEmbed()
     )
     .addField('year 2019 fanart competition', '`winner`,`2,3,...,9`,`GD`')
     .setFooter('page 2 out of 3');
-const picEmbed3 = new Discord.RichEmbed()
+const picEmbed3 = new Discord.MessageEmbed()
     .setColor(colour)
     .setTitle('Suggest an idea')
     .setURL('https://discord.gg/8agRm6c')

@@ -10,9 +10,12 @@ module.exports = {
     usage: '!jones <level>',
     execute(message, args, client) {
         if (!args) {
-            return message.channel.send(
-                `Please specify a level \`\`e.g.: ${message.content} 4\`\``
-            );
+            let errorEmbed = new Discord.MessageEmbed()
+                .setColor('#ff0000')
+                .setDescription(
+                    `Please specify a level for the hero\ne.g. ${message.content} 20`
+                );
+            return message.channel.send(errorEmbed);
         }
         name = 'striker-jones';
         let level = parseInt(args[0]);
@@ -21,10 +24,14 @@ module.exports = {
             .then((json) => {
                 let object = json[`${name}`].upgrades[level - 1];
 
-                if (!object)
-                    return message.channel.send(
-                        'Please specify a valid hero level!'
-                    );
+                if (!object) {
+                    let errorEmbed = new Discord.MessageEmbed()
+                        .setColor('#ff0000')
+                        .setDescription(
+                            `Please specify a level for the hero\ne.g. q!${name} 20`
+                        );
+                    return message.channel.send(errorEmbed);
+                }
                 hardcost = Math.round((object.cost * 1.08) / 5) * 5;
                 const embed = new Discord.MessageEmbed()
                     .setTitle(`${name} level ${level}`)
@@ -48,9 +55,6 @@ module.exports = {
 
                     collector.on('collect', (reaction, reactionCollector) => {
                         msg.delete();
-                    });
-                    collector.on('end', (collected) => {
-                        console.log(`Collected ${collected.size} items`);
                     });
                 });
             });

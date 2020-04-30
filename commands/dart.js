@@ -77,9 +77,6 @@ module.exports = {
                                 msg.delete();
                             }
                         );
-                        collector.on('end', (collected) => {
-                            console.log(`Collected ${collected.size} items`);
-                        });
                     });
                 }
 
@@ -124,9 +121,6 @@ module.exports = {
 
                     collector.on('collect', (reaction, reactionCollector) => {
                         msg.delete();
-                    });
-                    collector.on('end', (collected) => {
-                        console.log(`Collected ${collected.size} items`);
                     });
                 });
             });

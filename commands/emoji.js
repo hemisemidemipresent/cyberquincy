@@ -75,6 +75,16 @@ module.exports = {
         } else if (args[0] == 'wink') {
             message.channel.send('<a:wink:647313341340975108>');
         } else if (args[0] == 'ben') {
+            if (!args[1]) {
+                return message.channel.send(
+                    '<a:BenjaminSpin:701683466181279784>'
+                );
+            }
+            if (args[1] == 'fast') {
+                return message.channel.send(
+                    '<a:BenjaminSpinFAST:701683465958981683>'
+                );
+            }
             message.channel.send('<a:ben:647819957861744718>');
         } else if (args[0] == 'thonk') {
             message.channel.send('<a:dartythonk:647819976102641702>');
@@ -126,6 +136,17 @@ module.exports = {
                 .addField('**pink**', 'come on', true)
                 .setFooter('your message will be deleted');
             message.channel.send(helpembed);
+        } else if (args[0] == 'rohan') {
+            if (args[1]) {
+                return message.channel.send(
+                    '<a:RohanBounceFAST:701679547342520405>'
+                );
+            }
+            return message.channel.send('<a:RohanBounce:701679547405434940>');
+        } else if (args[0].includes('str') || args[0].includes('jon')) {
+            return message.channel.send(
+                '<a:StrikerJonesScream:701658002364563497>'
+            );
         }
     },
 };

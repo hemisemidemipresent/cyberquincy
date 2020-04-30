@@ -82,7 +82,7 @@ client.on('guildCreate', (guild) => {
             .setDescription(`Hi! I am Cyber Quincy. I am a btd6 bot.`)
             .addField(
                 'general information:',
-                '[List of commands](https://cq.netlify.com)\n[support server](https://discord.gg/8agRm6c)'
+                '[List of commands](https://cq.netlify.com)\n[discord server](https://discord.gg/8agRm6c)'
             )
             .addField(
                 "Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them."
@@ -114,7 +114,7 @@ client.on('guildMemberAdd', async (member) => {
         )
         .addField(
             'general information:',
-            '[List of commands](https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing)\n[support server](https://discord.gg/8agRm6c), join for updates and important uptimes and downtimes'
+            '[List of commands](https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing)\n[discord server](https://discord.gg/8agRm6c), join for updates and important uptimes and downtimes'
         )
         .addField(
             "Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them.",
@@ -217,6 +217,7 @@ client.on('message', async (message) => {
     if (message.author.bot) return; // checks for bots
     let c = message.content.toLowerCase(); // c for message Content
     let channelId = message.channel.id; // channel id
+
     if (
         (channelId == '598768185281609738' ||
             channelId == '615159685477040135') &&
@@ -265,7 +266,7 @@ client.on('message', async (message) => {
                 if (args[0].includes('h')) {
                     //potential "help" needed?
                     const hembed = new Discord.MessageEmbed().setDescription(
-                        'proprties of xp system:\n1.you get xp by using commands (cooldowns apply)\n2. you get a anywhere from 5 to 12 xp for each command\n3. xp is gained in dms.\n4.role rewards only for those in the support server.\n5.this xp is universal, it is not confined to 1 server.\n6. hidden multipliers exist, you just need to find them.',
+                        'proprties of xp system:\n1.you get xp by using commands (cooldowns apply)\n2. you get a anywhere from 5 to 12 xp for each command\n3. xp is gained in dms.\n4.role rewards only for those in the discord server.\n5.this xp is universal, it is not confined to 1 server.\n6. hidden multipliers exist, you just need to find them.',
                         { code: 'md' }
                     );
                     return message.channel.send(hembed);
@@ -278,11 +279,11 @@ client.on('message', async (message) => {
                         .addField('level 10', `<@&645629187322806272>`)
                         .setColor(colour)
                         .addField(
-                            'you only get role rewards in the bot support server',
-                            '[support server](https://discord.gg/8agRm6c)'
+                            'you only get role rewards in the bot discord server',
+                            '[discord server](https://discord.gg/8agRm6c)'
                         )
                         .setFooter(
-                            `you only get role rewards in the bot support server`
+                            `you only get role rewards in the bot discord server`
                         );
                     return message.channel.send(lvlMebed);
                 }
@@ -341,16 +342,18 @@ client.on('message', async (message) => {
             } catch (e) {
                 console.log(e);
                 const errorEmbed = new Discord.MessageEmbed()
-                    .setColor(colour)
+                    .setColor('#ff0000')
+                    .setDescription('Oh no! Something went wrong!')
                     .addField(
-                        'something went wrong',
-                        'Please join the [support server](https://discord.gg/8agRm6c)'
+                        '~~I got bonked by a DDT again~~',
+                        'Please [report the bug](https://discord.gg/8agRm6c)'
                     );
                 message.reply(errorEmbed);
             }
         }
         //when there isnt a mention, it shows your own level and xp
         let data = await Tags.findOne({ where: { name: message.author.id } });
+        if (!data) return message.channel.send('You dont have any xp!');
         let xpEmbed = new Discord.MessageEmbed()
             .setTitle(`${message.author.username}'s xp`)
             .addField('level', data.level - 1)
@@ -364,13 +367,13 @@ client.on('message', async (message) => {
         return message.channel.send(xpEmbed);
     }
     // admin command
-    /*if (commandName === 'yeetda') {
+    if (commandName === 'yeetda') {
         if (message.author.id != '699780654740668426') return;
         await Tags.update(
             { level: parseInt(args[1]) + 1, xp: args[2] },
             { where: { name: args[0] } }
         );
-    }*/
+    }
     if (
         commandName == 'cmdc' ||
         commandName == 'cmdcount' ||
@@ -382,6 +385,19 @@ client.on('message', async (message) => {
         message.channel.send(
             `${commandCount.xp} (non-spaghetti) commands have been used since 12/2/20 10.51.38.339am UTC`
         );
+    }
+    if (commandName == 'deletexp') {
+        try {
+            let data = await Tags.destroy({
+                where: { name: message.author.id },
+            });
+            if (!data)
+                return message.reply('I dont have any data stored of you!');
+        } catch {
+            return message.channel.send(
+                'Something went wrong! Report it here: https://discord.gg/8agRm6c'
+            );
+        }
     }
     // i dont think this works
     /*
@@ -529,9 +545,12 @@ client.on('message', async (message) => {
                                 message.channel.send(
                                     `${ltxt} You advanced to level ${tag1.level}`
                                 );
-                                let guildmember = client.guilds
-                                    .get('598768024761139240')
-                                    .members.array()
+                                let guildmember = client.guilds.get(
+                                    '598768024761139240'
+                                );
+
+                                guildmember.members
+                                    .array()
                                     .find((m) => m.id === message.author.id);
                                 if (tag1.level === 3) {
                                     // if member is level 3 add role
@@ -582,7 +601,7 @@ client.on('message', async (message) => {
                             message.channel.send(
                                 `${ltxt} You advanced to level ${tag1.level}`
                             );
-                            let guildmember = client.guilds
+                            let guildmember = client.guilds.cache
                                 .get('598768024761139240')
                                 .members.array()
                                 .find((m) => m.id === message.author.id);
@@ -600,10 +619,11 @@ client.on('message', async (message) => {
                     }
                 }
                 let errorEmbed = new Discord.MessageEmbed() // in case of db failures
-                    .setColor(colour)
+                    .setColor('#ff0000')
+                    .setDescription('Oh no! Something went wrong!')
                     .addField(
-                        'Oops! something went wrong!',
-                        'Please join the [support server](https://discord.gg/8agRm6c)'
+                        '~~I got bonked by a DDT again~~',
+                        'Please [report the bug](https://discord.gg/8agRm6c)'
                     );
                 return message.reply(errorEmbed);
             }
@@ -611,10 +631,11 @@ client.on('message', async (message) => {
             // in case of command failures
             console.error(error);
             const errorEmbed = new Discord.MessageEmbed()
-                .setColor(colour)
+                .setColor('#ff0000')
+                .setDescription('Oh no! Something went wrong!')
                 .addField(
-                    'something went wrong',
-                    'Please join the [support server](https://discord.gg/8agRm6c)'
+                    '~~I got bonked by a DDT again~~',
+                    'Please [report the bug](https://discord.gg/8agRm6c)'
                 );
             message.reply(errorEmbed);
         }

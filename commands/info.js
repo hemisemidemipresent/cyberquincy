@@ -6,7 +6,6 @@ module.exports = {
     aliases: ['i'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
-        const apiPing = Math.round(message.client.ping);
         const responseTime = Math.round(Date.now() - message.createdTimestamp);
         let totalSeconds = client.uptime / 1000;
         let days = Math.floor(totalSeconds / 86400);
@@ -22,11 +21,7 @@ module.exports = {
             .setDescription(
                 `Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons and training ${client.users.cache.size} monkeys`
             )
-            .addField(
-                'ping:',
-                `API ping ${apiPing}\nResponse time: ${responseTime}ms`,
-                true
-            )
+            .addField('ping:', `Response time: ${responseTime}ms`, true)
             .setThumbnail(
                 'https://vignette.wikia.nocookie.net/b__/images/d/d3/QuincyCyberPortrait.png/revision/latest?cb=20190612021929&path-prefix=bloons'
             )
@@ -37,7 +32,7 @@ module.exports = {
             )
             .addField('commands list', 'https://cq.netlify.com', true)
             .addField(
-                'support server, join for updates (happens pretty often)',
+                'discord server, join for updates (happens pretty often)',
                 'https://discord.gg/8agRm6c',
                 true
             )

@@ -86,9 +86,6 @@ module.exports = {
                                 msg.delete();
                             }
                         );
-                        collector.on('end', (collected) => {
-                            console.log(`Collected ${collected.size} items`);
-                        });
                     });
                 } else {
                     let totalCost = 0;
@@ -138,9 +135,6 @@ module.exports = {
                                 msg.delete();
                             }
                         );
-                        collector.on('end', (collected) => {
-                            console.log(`Collected ${collected.size} items`);
-                        });
                     });
                 }
             });

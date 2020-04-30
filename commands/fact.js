@@ -24,23 +24,15 @@ module.exports = {
                     `Unfortunately I did not find any results from \`\`${searchedString}\`\`. Try searching a phrase which is simpler.`
                 );
             } else if (factsArray.length > 5) {
-                function addOne(arr) {
-                    let result = [];
-                    for (let j = 0; j < arr.length; j++) {
-                        result.push(arr[j] + 1);
-                    }
-                    return result;
-                }
-                let factIdArray = addOne(factsArray);
                 return message.channel.send(
-                    `There are too many results to send! They are fact number ${factIdArray.join()}`
+                    `There are too many results to send! They are fact number ${factsArray.join()}`
                 );
             } else {
                 let factOutput = [];
-                for (i == 0; i < factsArray.length; i++) {
+                for (let i = 0; i < factsArray.length; i++) {
                     factOutput.push(fact[parseInt(factsArray[i])]);
                 }
-
+                console.log(factOutput.join('\n'));
                 return message.channel.send(
                     `I found ${
                         factsArray.length

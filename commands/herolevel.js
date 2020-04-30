@@ -115,10 +115,11 @@ module.exports = {
                 .then(() => {
                     message.channel
                         .awaitMessages(filter, {
-                            maxMatches: 1,
+                            max: 1,
                             time: 10000,
                             errors: ['time'],
                         })
+
                         .then((collected) => {
                             let f = collected.first().content;
                             if (isNaN(f) || f < 1 || f > 9) {
@@ -162,7 +163,7 @@ module.exports = {
                                 .then(() => {
                                     message.channel
                                         .awaitMessages(filter, {
-                                            maxMatches: 1,
+                                            max: 1,
                                             time: 10000,
                                             errors: ['time'],
                                         })
@@ -194,7 +195,7 @@ module.exports = {
                                                 .then(() => {
                                                     message.channel
                                                         .awaitMessages(filter, {
-                                                            maxMatches: 1,
+                                                            max: 1,
                                                             time: 10000,
                                                             errors: ['time'],
                                                         })
@@ -258,7 +259,7 @@ module.exports = {
             } else if (args[0].includes('ez')) {
                 var xp_slope = 1.425;
                 var heroname = args[0];
-            } else if (args[0].includs('be')) {
+            } else if (args[0].includes('be')) {
                 var xp_slope = 1.5;
                 var heroname = args[0];
             } else if (args[0].includes('ch')) {

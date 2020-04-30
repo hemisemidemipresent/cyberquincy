@@ -27,10 +27,14 @@ module.exports = {
             .then((json) => {
                 let object = json[`${name}`].upgrades[level - 1];
 
-                if (!object)
-                    return message.channel.send(
-                        'Please specify a valid hero level!'
-                    );
+                if (!object) {
+                    let errorEmbed = new Discord.MessageEmbed()
+                        .setColor('#ff0000')
+                        .setDescription(
+                            `Please specify a level for the hero\ne.g. q!${name} 20`
+                        );
+                    return message.channel.send(errorEmbed);
+                }
                 hardcost = Math.round((object.cost * 1.08) / 5) * 5;
                 const embed = new Discord.MessageEmbed()
                     .setTitle(`${name} level ${level}`)
@@ -54,9 +58,6 @@ module.exports = {
 
                     collector.on('collect', (reaction, reactionCollector) => {
                         msg.delete();
-                    });
-                    collector.on('end', (collected) => {
-                        console.log(`Collected ${collected.size} items`);
                     });
                 });
             });

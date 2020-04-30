@@ -12,7 +12,7 @@ module.exports = {
                 'type the option **letter** in chat, you will be given **10** seconds.'
             )
             .addField(
-                '',
+                'options',
                 `A) ${item.optns[0]}\nB) ${item.optns[1]}\nC) ${item.optns[2]}\nD) ${item.optns[3]}`
             )
             .addField(
@@ -27,7 +27,7 @@ module.exports = {
         message.channel.send(QuestionEmbed).then(() => {
             message.channel
                 .awaitMessages(filter, {
-                    maxMatches: 1,
+                    max: 1,
                     time: 10000,
                     errors: ['time'],
                 })

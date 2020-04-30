@@ -1,17 +1,23 @@
 const r = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json');
+const Discord = require('discord.js');
 module.exports = {
     name: 'income',
     execute(message, args) {
-        if (args[0] == undefined) {
-            return message.channel.send('use ``q!income help``');
+        if (!args[0] || args[0] == 'help') {
+            let errorEmbed = new Discord.MessageEmbed()
+                .addField(
+                    'find the cash from round X to round Y',
+                    'q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)'
+                )
+                .addField(
+                    'other difficulties',
+                    'q!income <difficulty> <endround>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
+                )
+                .setColor('#ff0000');
+            return message.channel.send(errorEmbed);
         }
-        if (args[0] == 'help') {
-            return message.channel.send(
-                '1. q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)\n2. q!income <difficulty> <endround>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)',
-                { code: 'md' }
-            );
-        }
+
         if (!args[1]) {
             let endround = parseInt(args[0]);
             if (endround < 0 || endround > 100) {

@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'seclate',
-    aliases: ['sec', 'time', 'racing'],
+    name: 'countdown',
+    aliases: ['cd', 'time', 'count'],
     execute(message, args, client) {
         let comesBack = new Date('06/22/2020');
         let now = new Date();
@@ -9,7 +9,7 @@ module.exports = {
         let differenceInTime = comesBack.getTime() - now.getTime();
         let differenceInDays = differenceInTime / (1000 * 3600 * 24);
         message.channel.send(
-            `${differenceInDays} days left until seclate comes back`
+            `${differenceInDays} days to 1 year of Cyber Quincy!`
         );
     },
 };

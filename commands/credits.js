@@ -12,7 +12,7 @@ module.exports = {
             'Firstly, all the beta testers who were here from the start. They were there when this bot was nothing more than just a handful of underdeveloped commands.\nSecondly, all the active users and members in the discord server. \nThird, all the updaters for helping in updating the data.\nFourth, the makers of BTD 6 Index and advanced popology. Lastly, you, for using the bot!'
         );
         data.push(
-            'join this server for info about this bot, when the bot is offline, **updates** and people to talk to! https://discord.gg/8agRm6c'
+            'join this server for info about this bot, when the bot is offline, **updates** and people to talk to! https://discord.gg/dUGFcrd'
         );
         return message.author
             .send(data, { split: true })

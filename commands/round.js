@@ -1,7 +1,7 @@
 const r1 = require('../jsons/rounds.json');
 const round2 = require('../jsons/round2.json');
 const Discord = require('discord.js');
-const { color } = require('../shh/config.json');
+const { colour } = require('../shh/config.json');
 module.exports = {
     name: 'round',
     description: 'tells you about the rounds (below 100)',
@@ -41,7 +41,7 @@ module.exports = {
         }
         const index = parseInt(args[0]);
         var data = r1[`r${index}`];
-        const roundembed = new Discord.MessageEmbed()
+        const roundEmbed = new Discord.MessageEmbed()
             .setTitle(`round ${round}`)
             .setDescription(`${data}`)
             .addField('xp earned in that round', `${xp}`)
@@ -51,7 +51,7 @@ module.exports = {
                 'you are not in freeplay (then divide xp by 10 for value) AND\n2) you are playing beginner maps (intermediate +10%, advanced +20%, expert +30%)'
             )
             .setFooter('for more data use q!income')
-            .color(color);
-        message.channel.send(roundembed);
+            .setColor(colour);
+        message.channel.send(roundEmbed);
     },
 };

@@ -17,7 +17,7 @@ module.exports = {
             )
             .addField(
                 'people **HAVE** contributed to this command!',
-                'join [this server](https://discord.gg/8agRm6c) to suggest an idea, as well as get the lastest updates, bug fixes and reports.'
+                'join [this server](https://discord.gg/dUGFcrd) to suggest an idea, as well as get the lastest updates, bug fixes and reports.'
             )
             .setFooter(
                 'This command is unstable and dont expect it to be 100% working'

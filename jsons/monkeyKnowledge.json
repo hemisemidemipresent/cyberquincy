@@ -1,0 +1,74 @@
+[
+    {
+        "name": "Fast Tack Attacks",
+        "desc": "Tack shooter attack speed increases by 8%",
+        "depend": [],
+        "depended": ["Fast Glue", "Hard Tacks"],
+        "money": 0,
+        "category": "primary",
+        "pts": 0
+    },
+    {
+        "name": "Increased Lifespan",
+        "desc": "Longer Projectile lifespan for Dart Monkey, Bomb Shooter, Tack Shooter and Glue Gunner",
+        "depend": [],
+        "depended": ["Fraggy Frags", "Cheap 'Rangs"],
+        "money": 0,
+        "category": "primary",
+        "pts": 0
+    },
+    {
+        "name": "Extra Dart Pops",
+        "desc": "Longer Projectile lifespan for Dart Monkey, Bomb Shooter, Tack Shooter and Glue Gunner",
+        "depend": [],
+        "depended": ["Crossbow Reach"],
+        "money": 0,
+        "category": "primary",
+        "pts": 0
+    },
+    {
+        "name": "Hard Tacks",
+        "desc": "Tack shooter tacks can pop Frozen Bloons",
+        "depend": ["Fast Tack Attacks"],
+        "depended": ["Poppy Blades", "Icy Chill"],
+        "money": 0,
+        "category": "primary",
+        "pts": 0
+    },
+    {
+        "name": "Fast Glue",
+        "desc": "Glue gunner 10% increased attack speed",
+        "depend": ["Fast Tack Attacks"],
+        "depended": ["More Splatty Glue"],
+        "money": 0,
+        "category": "primary",
+        "pts": 0
+    },
+    {
+        "name": "Fraggy Frags",
+        "desc": "Frag bombs get 2 extra frags",
+        "depend": ["Increased Lifespan"],
+        "depended": ["Budget Clusters"],
+        "money": 0,
+        "category": "primary",
+        "pts": 0
+    },
+    {
+        "name": "Cheap 'Rangs",
+        "desc": "Base cost of Boomerang Thrower reduced by 50",
+        "depend": ["Increased Lifespan"],
+        "depended": ["Extra Bounce"],
+        "money": 0,
+        "category": "primary",
+        "pts": 0
+    },
+    {
+        "name": "Crossbow Reach",
+        "desc": "Crossbow range increased",
+        "depend": ["Extra Dart Pops"],
+        "depended": ["Force vs Force", "4 and 4"],
+        "money": 0,
+        "category": "primary",
+        "pts": 0
+    }
+]

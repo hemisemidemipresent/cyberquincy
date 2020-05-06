@@ -71,21 +71,22 @@ client.once('ready', () => {
 });
 
 client.on('guildCreate', (guild) => {
-    let channeltosend = guild.channels.find(
+    let channeltosend = guild.channels.cache.find(
         (channel) => channel.name.includes('general') === true
     );
-    if (channeltosend === null) {
+    if (!channeltosend) {
         return console.log('wtf');
     } else {
         let helpEmbed = new Discord.MessageEmbed()
             .setColor(colour)
-            .setDescription(`Hi! I am Cyber Quincy. I am a btd6 bot.`)
+            .setDescription(`Hi! I am Cyber Quincy. I am a btd6 discord bot.`)
             .addField(
                 'general information:',
-                '[List of commands](https://cq.netlify.com)\n[discord server](https://discord.gg/8agRm6c)'
+                '[List of commands](https://cq.netlify.com)\n[discord server](https://discord.gg/dUGFcrd)'
             )
             .addField(
-                "Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them."
+                'note:',
+                "This bot's name and avatar are (i thinked) owned by ninja Kiwi. This bot has no association with them."
             )
             .addField(
                 `The by far most popular command are those that describe towers. use q!<towername> <path> for more info\n(do not type out <towername> and <path> literally. example: q!ice 005 (no more than one path at a time)`,
@@ -102,7 +103,7 @@ client.on('guildMemberAdd', async (member) => {
             'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!'
         )
         .setDescription(
-            `Hi! I am Cyber Quincy, an unofficial btd6 discord bot. For more information, type ${prefix}help. Please also check the website: https://cq.netlify.com. The point of this server is so that you can report bugs, get updated on new bot updates, as well as check the downtime`
+            `The point of this server is so that you can report bugs, get updated on new bot updates, check the downtime, and talk to others about the bot!`
         )
         .addField(
             'if you are experiencing an error:',
@@ -110,17 +111,12 @@ client.on('guildMemberAdd', async (member) => {
         )
         .addField(
             'if you think that there is a bug:',
-            'go to <#598768319625035776> and please tell us what went wrong. If you have any questions on how to use this bot, go to <#611808489047719937>. if you have a suggestion, please let us know in <#598768278550085633>'
+            'go to <#59876831965035776> and please tell us what went wrong. If you have any questions on how to use this bot, go to <#611808489047719937>. if you have a suggestion, please let us know in <#598768278550085633>'
         )
         .addField(
             'general information:',
-            '[List of commands](https://docs.google.com/document/d/1NJqQ82EUP6yTri1MV63Pbk-l_Lo_WKXCndH7ED8retY/edit?usp=sharing)\n[discord server](https://discord.gg/8agRm6c), join for updates and important uptimes and downtimes'
-        )
-        .addField(
-            "Please note that this bot's name and avatar are owned by ninja Kiwi. This bot has no association with them.",
-            'have a popping day'
+            '[List of commands](https://cq.netlify.com), join for updates and important uptimes and downtimes'
         );
-
     if (member.guild.id === '598768024761139240') {
         if (member.id == '668312965664997386') {
             return;
@@ -179,15 +175,10 @@ client.on('guildMemberAdd', async (member) => {
             )
             .setColor(colour);
         member.send(wel);
-
-        let tchannel = member.guild.channels.find((channel) =>
-            channel.name.includes('general')
-        );
-        tchannel.send(`hey guy`);
     } else if (member.guild.id === '543957081183617024') {
-        const tchannel = member.guild.channels.find((channel) =>
-            channel.name.includes('general')
-        );
+        const tchannel = member
+            .cache()
+            .guild.channels.find((channel) => channel.name.includes('general'));
         tchannel.send(
             `welcome to the only rAcE sErVer. \nIf you cant get a top 1%, you have to read <#667495608155635765> 100 times before enetering`
         );
@@ -231,7 +222,7 @@ client.on('message', async (message) => {
             .setColor(colour)
             .addField(
                 'join the discord server',
-                '[message was from here](https://discord.gg/8agRm6c)'
+                '[message was from here](https://discord.gg/dUGFcrd)'
             );
 
         channel.send(embed);
@@ -280,7 +271,7 @@ client.on('message', async (message) => {
                         .setColor(colour)
                         .addField(
                             'you only get role rewards in the bot discord server',
-                            '[discord server](https://discord.gg/8agRm6c)'
+                            '[discord server](https://discord.gg/dUGFcrd)'
                         )
                         .setFooter(
                             `you only get role rewards in the bot discord server`
@@ -312,7 +303,7 @@ client.on('message', async (message) => {
                     .setColor(colour)
                     .addField(
                         'have a suggestion or found a bug?',
-                        'Please tell us [here](https://discord.gg/8agRm6c)!'
+                        'Please tell us [here](https://discord.gg/dUGFcrd)!'
                     )
                     .setFooter('use q!level rewards to see role rewards');
                 return message.channel.send(xpEmbed);
@@ -335,7 +326,7 @@ client.on('message', async (message) => {
                     .setColor(colour)
                     .addField(
                         'have a suggestion or found a bug?',
-                        'Please tell us [here](https://discord.gg/8agRm6c)!'
+                        'Please tell us [here](https://discord.gg/dUGFcrd)!'
                     )
                     .setFooter('use q!level rewards to see role rewards');
                 return message.channel.send(xpEmbed);
@@ -346,7 +337,7 @@ client.on('message', async (message) => {
                     .setDescription('Oh no! Something went wrong!')
                     .addField(
                         '~~I got bonked by a DDT again~~',
-                        'Please [report the bug](https://discord.gg/8agRm6c)'
+                        'Please [report the bug](https://discord.gg/dUGFcrd)'
                     );
                 message.reply(errorEmbed);
             }
@@ -361,7 +352,7 @@ client.on('message', async (message) => {
             .setColor(colour)
             .addField(
                 'have a suggestion or found a bug?',
-                'Please tell us [here](https://discord.gg/8agRm6c)!'
+                'Please tell us [here](https://discord.gg/dUGFcrd)!'
             )
             .setFooter('use q!level rewards to see role rewards');
         return message.channel.send(xpEmbed);
@@ -395,7 +386,7 @@ client.on('message', async (message) => {
                 return message.reply('I dont have any data stored of you!');
         } catch {
             return message.channel.send(
-                'Something went wrong! Report it here: https://discord.gg/8agRm6c'
+                'Something went wrong! Report it here: https://discord.gg/dUGFcrd'
             );
         }
     }
@@ -603,7 +594,8 @@ client.on('message', async (message) => {
                             );
                             let guildmember = client.guilds.cache
                                 .get('598768024761139240')
-                                .members.array()
+                                .member.cache.array()
+
                                 .find((m) => m.id === message.author.id);
                             if (tag1.level === 3) {
                                 // if member is level 3 add role
@@ -623,7 +615,7 @@ client.on('message', async (message) => {
                     .setDescription('Oh no! Something went wrong!')
                     .addField(
                         '~~I got bonked by a DDT again~~',
-                        'Please [report the bug](https://discord.gg/8agRm6c)'
+                        'Please [report the bug](https://discord.gg/dUGFcrd)'
                     );
                 return message.reply(errorEmbed);
             }
@@ -635,7 +627,7 @@ client.on('message', async (message) => {
                 .setDescription('Oh no! Something went wrong!')
                 .addField(
                     '~~I got bonked by a DDT again~~',
-                    'Please [report the bug](https://discord.gg/8agRm6c)'
+                    'Please [report the bug](https://discord.gg/dUGFcrd)'
                 );
             message.reply(errorEmbed);
         }

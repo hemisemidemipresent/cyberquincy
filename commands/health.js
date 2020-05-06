@@ -99,7 +99,7 @@ module.exports = {
                     .setDescription('Oh no! Something went wrong!')
                     .addField(
                         '~~I got bonked by a DDT again~~',
-                        'Please [report the bug](https://discord.gg/dUGFcrd)'
+                        'Please [report the bug](https://discord.gg/VMX5hZA)'
                     );
                 message.reply(errorEmbed);
             }

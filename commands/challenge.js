@@ -356,7 +356,7 @@ module.exports = {
             )
             .addField(
                 'this command is prone to errors',
-                'pls click [here](https://discord.gg/dUGFcrd) to report bugs and and support'
+                'pls click [here](https://discord.gg/VMX5hZA) to report bugs and and support'
             );
         message.channel.send(ChallengeEmbed);
     },

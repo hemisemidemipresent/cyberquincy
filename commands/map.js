@@ -194,7 +194,7 @@ module.exports = {
             //.addField('Line of sight obstructions', `${m.los}`, true)
             .addField(
                 'Bug reporting',
-                'report [here](https://discord.gg/dUGFcrd)',
+                'report [here](https://discord.gg/VMX5hZA)',
                 true
             )
             .setFooter(

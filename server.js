@@ -82,7 +82,7 @@ client.on('guildCreate', (guild) => {
             .setDescription(`Hi! I am Cyber Quincy. I am a btd6 discord bot.`)
             .addField(
                 'general information:',
-                '[List of commands](https://cq.netlify.com)\n[discord server](https://discord.gg/dUGFcrd)'
+                '[List of commands](https://cq.netlify.com)\n[discord server](https://discord.gg/VMX5hZA)'
             )
             .addField(
                 'note:',
@@ -222,7 +222,7 @@ client.on('message', async (message) => {
             .setColor(colour)
             .addField(
                 'join the discord server',
-                '[message was from here](https://discord.gg/dUGFcrd)'
+                '[message was from here](https://discord.gg/VMX5hZA)'
             );
 
         channel.send(embed);
@@ -271,7 +271,7 @@ client.on('message', async (message) => {
                         .setColor(colour)
                         .addField(
                             'you only get role rewards in the bot discord server',
-                            '[discord server](https://discord.gg/dUGFcrd)'
+                            '[discord server](https://discord.gg/VMX5hZA)'
                         )
                         .setFooter(
                             `you only get role rewards in the bot discord server`
@@ -303,7 +303,7 @@ client.on('message', async (message) => {
                     .setColor(colour)
                     .addField(
                         'have a suggestion or found a bug?',
-                        'Please tell us [here](https://discord.gg/dUGFcrd)!'
+                        'Please tell us [here](https://discord.gg/VMX5hZA)!'
                     )
                     .setFooter('use q!level rewards to see role rewards');
                 return message.channel.send(xpEmbed);
@@ -326,7 +326,7 @@ client.on('message', async (message) => {
                     .setColor(colour)
                     .addField(
                         'have a suggestion or found a bug?',
-                        'Please tell us [here](https://discord.gg/dUGFcrd)!'
+                        'Please tell us [here](https://discord.gg/VMX5hZA)!'
                     )
                     .setFooter('use q!level rewards to see role rewards');
                 return message.channel.send(xpEmbed);
@@ -337,7 +337,7 @@ client.on('message', async (message) => {
                     .setDescription('Oh no! Something went wrong!')
                     .addField(
                         '~~I got bonked by a DDT again~~',
-                        'Please [report the bug](https://discord.gg/dUGFcrd)'
+                        'Please [report the bug](https://discord.gg/VMX5hZA)'
                     );
                 message.reply(errorEmbed);
             }
@@ -352,7 +352,7 @@ client.on('message', async (message) => {
             .setColor(colour)
             .addField(
                 'have a suggestion or found a bug?',
-                'Please tell us [here](https://discord.gg/dUGFcrd)!'
+                'Please tell us [here](https://discord.gg/VMX5hZA)!'
             )
             .setFooter('use q!level rewards to see role rewards');
         return message.channel.send(xpEmbed);
@@ -386,7 +386,7 @@ client.on('message', async (message) => {
                 return message.reply('I dont have any data stored of you!');
         } catch {
             return message.channel.send(
-                'Something went wrong! Report it here: https://discord.gg/dUGFcrd'
+                'Something went wrong! Report it here: https://discord.gg/VMX5hZA'
             );
         }
     }
@@ -615,7 +615,7 @@ client.on('message', async (message) => {
                     .setDescription('Oh no! Something went wrong!')
                     .addField(
                         '~~I got bonked by a DDT again~~',
-                        'Please [report the bug](https://discord.gg/dUGFcrd)'
+                        'Please [report the bug](https://discord.gg/VMX5hZA)'
                     );
                 return message.reply(errorEmbed);
             }
@@ -627,7 +627,7 @@ client.on('message', async (message) => {
                 .setDescription('Oh no! Something went wrong!')
                 .addField(
                     '~~I got bonked by a DDT again~~',
-                    'Please [report the bug](https://discord.gg/dUGFcrd)'
+                    'Please [report the bug](https://discord.gg/VMX5hZA)'
                 );
             message.reply(errorEmbed);
         }

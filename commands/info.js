@@ -17,7 +17,7 @@ module.exports = {
         const infoEmbed = new Discord.MessageEmbed()
             .setColor(colour)
             .setTitle('access help here')
-            .setURL('https://discord.gg/dUGFcrd')
+            .setURL('https://discord.gg/VMX5hZA')
             .setDescription(
                 `Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons and training ${client.users.cache.size} monkeys`
             )
@@ -33,7 +33,7 @@ module.exports = {
             .addField('commands list', 'https://cq.netlify.com', true)
             .addField(
                 'discord server, join for updates (happens pretty often)',
-                'https://discord.gg/dUGFcrd',
+                'https://discord.gg/VMX5hZA',
                 true
             )
             .setFooter('thank you for using it! waiting for popularity');

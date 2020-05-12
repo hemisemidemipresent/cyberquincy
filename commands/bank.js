@@ -50,7 +50,7 @@ module.exports = {
                                             } else if (mk == 0) {
                                                 flatPackBuilding = false;
                                                 BiggerBanks = false;
-                                            } else if ((mk = 1)) {
+                                            } else if (mk == 1) {
                                                 flatPackBuilding = true;
                                                 BiggerBanks = false;
                                             } else {
@@ -156,7 +156,8 @@ module.exports = {
                                                                                                                         maxCapacity += 10000;
                                                                                                                     }
                                                                                                                     if (
-                                                                                                                        BiggerBanks
+                                                                                                                        BiggerBanks ==
+                                                                                                                        true
                                                                                                                     ) {
                                                                                                                         maxCapacity += 2500;
                                                                                                                     }

@@ -121,7 +121,7 @@ client.on('guildMemberAdd', async (member) => {
         if (member.id == '668312965664997386') {
             return;
         }
-        const tchannel = member.guild.channels.find((channel) =>
+        const tchannel = member.guild.channels.cache.find((channel) =>
             channel.name.includes('welcome')
         );
         tchannel.send(
@@ -138,13 +138,13 @@ client.on('guildMemberAdd', async (member) => {
             if (e.name === 'SequelizeUniqueConstraintError') {
                 const tag = await Tags.findOne({ where: { name: member.id } });
                 if (tag.level > 3) {
-                    member.addRole('645126928340353036');
+                    member.roles.add('645126928340353036');
                     member.send(
                         'It seems that you are already level 3! the role has been given!'
                     );
                 }
                 if (tag.level > 10) {
-                    member.addRole('645629187322806272');
+                    member.roles.add('645629187322806272');
                     member.send(
                         'It seems that you are already level 10! the role has been given!'
                     );
@@ -176,9 +176,9 @@ client.on('guildMemberAdd', async (member) => {
             .setColor(colour);
         member.send(wel);
     } else if (member.guild.id === '543957081183617024') {
-        const tchannel = member
-            .cache()
-            .guild.channels.find((channel) => channel.name.includes('general'));
+        const tchannel = member.guild.channels.cache.find((channel) =>
+            channel.name.includes('general')
+        );
         tchannel.send(
             `welcome to the only rAcE sErVer. \nIf you cant get a top 1%, you have to read <#667495608155635765> 100 times before enetering`
         );
@@ -186,19 +186,19 @@ client.on('guildMemberAdd', async (member) => {
 });
 client.on('guildMemberRemove', async (member) => {
     if (member.guild.id == '598768024761139240') {
-        const tchannel = member.guild.channels.find((channel) =>
+        const tchannel = member.guild.channels.cache.find((channel) =>
             channel.name.includes('welcome')
         );
         tchannel.send(`${member.displayName} was lost in battle`);
     } else if (member.guild.id === '543957081183617024') {
-        const tchannel = member.guild.channels.find((channel) =>
+        const tchannel = member.guild.channels.cache.find((channel) =>
             channel.name.includes('general')
         );
         tchannel.send(
             `**${member.displayName}** couldnt resist it and accidentally revealed that he/she is hacking races`
         );
     } else if (member.guild.id === '661812833771847700') {
-        let tchannel = member.guild.channels.find((channel) =>
+        let tchannel = member.guild.channels.cache.find((channel) =>
             channel.name.includes('general')
         );
         tchannel.send(`**${member.displayName}** got nerfed. hard.`);
@@ -214,7 +214,7 @@ client.on('message', async (message) => {
             channelId == '615159685477040135') &&
         c.includes('.')
     ) {
-        let channel = client.channels.find(
+        let channel = client.channels.cache.find(
             (channel) => channel.id == '661888246090825749'
         );
         let embed = new Discord.MessageEmbed()
@@ -545,13 +545,13 @@ client.on('message', async (message) => {
                                     .find((m) => m.id === message.author.id);
                                 if (tag1.level === 3) {
                                     // if member is level 3 add role
-                                    await guildmember.addRole(
+                                    await guildmember.roles.add(
                                         '645126928340353036'
                                     );
                                 }
                                 if (tag1.level === 10) {
                                     // if member is level 10 add role
-                                    await guildmember.addRole(
+                                    await guildmember.roles.add(
                                         '645629187322806272'
                                     );
                                 }
@@ -594,16 +594,20 @@ client.on('message', async (message) => {
                             );
                             let guildmember = client.guilds.cache
                                 .get('598768024761139240')
-                                .member.cache.array()
+                                .members.cache.array()
 
                                 .find((m) => m.id === message.author.id);
                             if (tag1.level === 3) {
                                 // if member is level 3 add role
-                                await guildmember.addRole('645126928340353036');
+                                await guildmember.roles.add(
+                                    '645126928340353036'
+                                );
                             }
                             if (tag1.level === 10) {
                                 // if member is level 10 add role
-                                await guildmember.addRole('645629187322806272');
+                                await guildmember.roles.add(
+                                    '645629187322806272'
+                                );
                             }
                         }
 

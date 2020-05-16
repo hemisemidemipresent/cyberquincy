@@ -75,7 +75,7 @@ module.exports = {
                 );
             }
         } else if (!isNaN(args[0])) {
-            let startround = parseInt(args[0]) - 1;
+            var startround = parseInt(args[0]) - 1;
             if (startround < 0 || startround > 100) {
                 return message.channel.send(
                     'please specify a round from 1 to 100. ``!income`` ``help`` for help'
@@ -87,7 +87,6 @@ module.exports = {
         let start = r[startround];
         let end = r[endround];
         let income = end.cch - start.cch;
-        var startround = startround;
         message.channel.send(
             `earns $${income} from popping bloons in round ${startround} to popping bloons in ${endround} (not including starting cash)`
         );

@@ -83,12 +83,15 @@ module.exports = {
             // make the embed
             temp = new Discord.MessageEmbed()
                 .setDescription(
-                    `**Not counting LTC**\n${name} has ${points} pts`
+                    `**Not counting LTC, alt maps**\n${name} has ${points} pts`
                 )
                 .addField('2tc', points2tc)
                 .addField('3tc', points3tc)
                 .addField('lcc', pointslcc)
-                .addField('2mpc', points2mpc);
+                .addField('2mpc', points2mpc)
+                .setFooter(
+                    'BTD6 Index is less for data scraping and more for viewing experience. Plus I am not using their messy direct API this will slow the response to 30seconds, and by then it will be so slow that most people gave up.'
+                );
             message.channel.send(temp);
         }
         access(args.join(' '));

@@ -421,7 +421,7 @@
     },
     "Workshop": {
         "ver": 12,
-        "len": 13.3,
+        "len": "Bloon Path:6.8\n10.2 with motor\n18.4 with extensions\n27.7 with motor and extensions\nMoab Path:5.7\n8.5 with motor\n11.6 with extensions\n17.3 with motor and extensions",
         "obj": 2,
         "Cos": "$0 - $?",
         "wa%": "-",

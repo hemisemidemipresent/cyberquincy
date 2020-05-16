@@ -168,6 +168,8 @@ module.exports = {
             (map.includes('cy') && map.includes('all'))
         ) {
             name = 'Candy Falls';
+        } else if (map.includes('work') || map.includes('shop')) {
+            name = 'Workshop';
         } else {
             return message.channel.send(
                 'cant seem to find that map. might want to check the spelling.\nThere are 44 maps in the game\n77% of maps include water\n55% of maps include L.O.S obstructions\n48% of maps include objects'

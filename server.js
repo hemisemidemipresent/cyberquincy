@@ -410,12 +410,16 @@ client.on('message', async (message) => {
     }
     const now = Date.now();
     const timestamps = cooldowns.get(command.name);
-    if (message.channel.topic) {
+    const commandCooldownAmount = command.cooldown * 1000;
+    let cooldownAmount = 3000; // default cooldown
+    if (commandCooldownAmount) {
+        // if there is custom cooldown
+        cooldownAmount = commandCooldownAmount;
+    } else if (message.channel.topic) {
         let channelTopic = message.channel.topic.toLowerCase();
         let channelWords = channelTopic.split(/ +/); //makes array of channel words
         if (channelTopic.includes('cooldown') && channelTopic.includes('=')) {
             // basic check if the channel has the "keywords"
-
             for (i = 0; i < channelWords.length - 2; i++) {
                 // checks if command description for "cooldown" and "="
                 if (
@@ -430,10 +434,8 @@ client.on('message', async (message) => {
                     break;
                 }
             }
-            var cooldownAmount = channelCooldown * 1000;
+            cooldownAmount = channelCooldown * 1000;
         }
-    } else {
-        var cooldownAmount = 3 * 1000; // default cooldown is 3000ms
     }
     if (
         timestamps.has(message.author.id) &&

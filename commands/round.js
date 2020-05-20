@@ -45,10 +45,11 @@ module.exports = {
             totalxp = 40 + 50 * (round - 1) + 10 * Math.pow(round - 1, 2);
         } else if (round > 20 && round < 51) {
             xp = 40 * (round - 20) + 420;
-            totalxp = 4600 + 440 * round20 + 20 * Math.pow(round20, 2);
+            totalxp = 4600 + 440 * (round - 20) + 20 * Math.pow(round - 20, 2);
         } else if (round > 50 && round < 101) {
             xp = (round - 50) * 90 + 1620;
-            totalxp = 35800 + 1665 * round50 + 45 * Math.pow(round50, 2);
+            totalxp =
+                35800 + 1665 * (round - 50) + 45 * Math.pow(round - 50, 2);
         } else if (round < 1) {
             return message.channel.send(
                 'Quincy has no experience in these rounds'
@@ -71,15 +72,15 @@ module.exports = {
                 const roundEmbed = new Discord.MessageEmbed()
                     .setTitle(`round ${round}`)
                     .setDescription(`${sumOfData}\n{${data}\n}`)
+
+                    .addField('round length', `${length}`, true)
+                    .addField('RBE', `${rbe}`, true)
                     .addField('xp earned in that round', `${xp}`, true)
                     .addField(
                         'total xp if you started at round 1',
                         `${totalxp}`,
                         true
                     )
-                    .addField('round length', `${length}`, true)
-                    .addField('RBE', `${rbe}`, true)
-
                     .addField(
                         '**if:**',
                         'you are not in freeplay (then divide xp by 10 for value) AND\n2) you are playing beginner maps (intermediate +10%, advanced +20%, expert +30%)'

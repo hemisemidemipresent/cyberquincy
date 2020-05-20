@@ -88,7 +88,9 @@ module.exports = {
         let end = r[endround];
         let income = end.cch - start.cch;
         message.channel.send(
-            `earns $${income} from popping bloons in round ${startround} to popping bloons in ${endround} (not including starting cash)`
+            `earns $${income} from popping bloons in round ${
+                startround + 1
+            } to popping bloons in ${endround} (not including starting cash)`
         );
     },
 };

@@ -21,25 +21,31 @@ module.exports = {
         }
 
         let name = 'mortar-monkey';
-        var path1 = Math.floor(parseInt(args[0]) / 100);
-        var path2 = Math.floor((parseInt(args[0]) - path1 * 100) / 10);
-        var path3 = parseInt(args[0] - path1 * 100 - path2 * 10);
+        i;
+        let path1 = Math.floor(parseInt(args[0]) / 100);
+        let path2 = Math.floor((parseInt(args[0]) - path1 * 100) / 10);
+        let path3 = parseInt(args[0] - path1 * 100 - path2 * 10);
+        let path = 1;
         if (path2 < 1 && path3 < 1) {
-            var path = 1;
+            path = 1;
         } else if (path1 < 1 && path3 < 1) {
-            var path = 2;
+            path = 2;
         } else if (path1 < 1 && path2 < 1) {
-            var path = 3;
+            path = 3;
+        } else {
+            // when more than 2 values are positive, i.e. like not 00x, 0x0, or x00 args[0]
+            return message.channel.send('Please choose one upgrade at a time!');
         }
+        let tier = 0;
         switch (path) {
             case 1:
-                var tier = path1;
+                tier = path1;
                 break;
             case 2:
-                var tier = path2;
+                tier = path2;
                 break;
             case 3:
-                var tier = path3;
+                tier = path3;
                 break;
         }
         fetch(url, settings)

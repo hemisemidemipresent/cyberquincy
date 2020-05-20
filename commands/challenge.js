@@ -1,12 +1,10 @@
 const Discord = require('discord.js');
-const { prefix } = require('../shh/config.json');
 module.exports = {
     name: 'rc',
     aliases: ['rc', 'randomc', 'random', 'rchallenge', 'rch'],
     description:
         'very epic thing inspired from https://unforgivenjake.github.io/btd6rc/',
     usage: '[command name]',
-    cooldown: 5,
     execute(message, args, client) {
         var heroyn = Math.floor(Math.random() * 2);
         var mapdiff = Math.ceil(Math.random() * 4);

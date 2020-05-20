@@ -4,7 +4,6 @@ module.exports = {
     description: 'List all of the people who helped (directly and indirectly)',
     aliases: ['cred', 'creds', 'cr'],
     usage: '[command name]',
-    cooldown: 5,
     execute(message, args, client) {
         const data = [];
         data.push("Here's a list of all the people who helped:");

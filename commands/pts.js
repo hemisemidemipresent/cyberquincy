@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
     name: 'pts',
+    cooldown: 60,
     execute(message, args, client) {
         function findPerson(array, person) {
             let count = 0;

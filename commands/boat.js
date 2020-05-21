@@ -21,7 +21,6 @@ module.exports = {
         }
 
         let name = 'monkey-buccaneer';
-        i;
         let path1 = Math.floor(parseInt(args[0]) / 100);
         let path2 = Math.floor((parseInt(args[0]) - path1 * 100) / 10);
         let path3 = parseInt(args[0] - path1 * 100 - path2 * 10);

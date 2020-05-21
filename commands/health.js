@@ -10,17 +10,18 @@ module.exports = {
 
       THIS CODE IS A MESS
 
-      */
-        if (isNaN(args[0])) {
+      */ if (
+            !isNaN(args[0])
+        ) {
+            return message.channel.send(
+                'please specify a proper round/blimp/bloon type'
+            );
+        } else if (isNaN(args[0])) {
             var b = args[0].toUpperCase();
             var round = args[1];
         } else if (isNaN(args[1])) {
             var b = args[1].toUpperCase();
             var round = args[0];
-        } else {
-            return message.channel.send(
-                'please specify a proper round/blimp/bloon type'
-            );
         }
         var round1 = round - 80;
         var round2 = round - 100;

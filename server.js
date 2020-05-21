@@ -37,6 +37,16 @@ function getUserFromMention(mention) {
         return client.users.cache.get(mention);
     }
 }
+let levelUpMessages = [
+    'Haha!',
+    'Ha!',
+    'Oh Yeah!',
+    'Alright!',
+    'Sweet!',
+    'Yes!',
+    'Nice!',
+    'Awesome!',
+];
 const sequelize = new Sequelize('database', 'user', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
@@ -129,21 +139,23 @@ client.on('guildMemberAdd', async (member) => {
         );
         member.send(helpembed);
         try {
-            const tag = await Tags.create({
+            await Tags.create({
                 name: member.id,
                 xp: 0,
                 level: 1,
             });
         } catch (e) {
             if (e.name === 'SequelizeUniqueConstraintError') {
-                const tag = await Tags.findOne({ where: { name: member.id } });
-                if (tag.level > 3) {
+                let userData = await Tags.findOne({
+                    where: { name: member.id },
+                });
+                if (userData.level > 3) {
                     member.roles.add('645126928340353036');
                     member.send(
                         'It seems that you are already level 3! the role has been given!'
                     );
                 }
-                if (tag.level > 10) {
+                if (userData.level > 10) {
                     member.roles.add('645629187322806272');
                     member.send(
                         'It seems that you are already level 10! the role has been given!'
@@ -458,36 +470,42 @@ client.on('message', async (message) => {
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
     //command "user"
-    if (noocmd.test(message.channel.topic) === false) {
+    if (!noocmd.test(message.channel.topic)) {
         // i dont think another check is neccesarry.
         try {
             command.execute(message, args, client); // executes the command.
             // the command count thingy
-            let tagrrr = await Tags.findOne({ where: { name: 1000 } });
-            await Tags.update({ xp: tagrrr.xp + 1 }, { where: { name: 1000 } });
-            // P.S. whoever is reading this sorry for using taggggg or something stupid or everything
-            if (message.author.id == '699780654740668426') return; // i dont need xp
+            let numberOfCommands = await Tags.findOne({
+                where: { name: 1000 },
+            });
+            await Tags.update(
+                { xp: numberOfCommands.xp + 1 },
+                { where: { name: 1000 } }
+            );
+            let xpAdd = 0;
             if (message.channel.type == 'dm') {
                 // less xp when DMing.
-                var xpAdd = Math.floor(Math.random() * 4) + 2;
+                xpAdd = Math.floor(Math.random() * 4) + 2;
             } else {
-                var xpAdd = Math.floor(Math.random() * 8) + 5;
+                xpAdd = Math.floor(Math.random() * 8) + 5;
             }
             try {
-                // this checks for level up. this is super spaghetti
+                // this checks for level up. this is super spaghetti-ish
                 //main thing here is first try and make a new entry, but uses errors to see if there is already one present. not elegant but it works.
                 await Tags.create({
+                    // attempts to make a new entry, for new people
                     name: message.author.id,
                     xp: 0,
                     level: 1,
                 });
             } catch (e) {
+                // when an "error" occurs that there is already an entry with the user id
                 if (e.name === 'SequelizeUniqueConstraintError') {
-                    const tag = await Tags.findOne({
+                    const beforeUpdateUserData = await Tags.findOne({
                         where: { name: message.author.id },
                     });
                     const affectedRows = await Tags.update(
-                        { xp: tag.xp + xpAdd },
+                        { xp: beforeUpdateUserData.xp + xpAdd },
                         { where: { name: message.author.id } }
                     );
                     if (affectedRows > 0) {
@@ -503,41 +521,24 @@ client.on('message', async (message) => {
                                     50 * (tag1.level + 20) +
                                     100
                             ) {
-                                const affectedRows1 = await Tags.update(
+                                await Tags.update(
                                     { level: tag1.level + 1 },
                                     { where: { name: message.author.id } }
                                 );
                                 let ran = Math.floor(Math.random() * 8);
-                                switch (
-                                    ran // i am VERY SORRY FOR THIS SHIT
-                                ) {
-                                    case 0:
-                                        var ltxt = 'Haha!';
-                                        break;
-                                    case 1:
-                                        var ltxt = 'Ha!';
-                                        break;
-                                    case 2:
-                                        var ltxt = 'Oh Yeah!';
-                                        break;
-                                    case 3:
-                                        var ltxt = 'Alright!';
-                                        break;
-                                    case 4:
-                                        var ltxt = 'Sweet!';
-                                        break;
-                                    case 5:
-                                        var ltxt = 'Yes!';
-                                        break;
-                                    case 6:
-                                        var ltxt = 'Nice!';
-                                        break;
-                                    case 7:
-                                        var ltxt = 'Awesome!';
-                                }
-                                message.channel.send(
-                                    `${ltxt} You advanced to level ${tag1.level}`
-                                );
+
+                                let ltxt = levelUpMessages[ran];
+
+                                let levelUpEmbed = new Discord.MessageEmbed()
+                                    .setTitle(ltxt)
+                                    .setDescription(
+                                        `You levelled up to level ${tag1.level}!\nxp : ${tag1.xp}\nuse q!level to see your level and `
+                                    )
+                                    .setFooter(
+                                        'add us to your server: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
+                                    )
+                                    .setColor('#00ff00');
+                                message.channel.send(levelUpEmbed);
                                 let guildmember = client.guilds.get(
                                     '598768024761139240'
                                 );
@@ -564,36 +565,17 @@ client.on('message', async (message) => {
                                 { where: { name: message.author.id } }
                             );
                             let ran = Math.floor(Math.random() * 8);
-                            switch (
-                                ran // i am once again VERY VERY SORRY FOR THIS SHIT
-                            ) {
-                                case 0:
-                                    var ltxt = 'Haha!';
-                                    break;
-                                case 1:
-                                    var ltxt = 'Ha!';
-                                    break;
-                                case 2:
-                                    var ltxt = 'Oh Yeah!';
-                                    break;
-                                case 3:
-                                    var ltxt = 'Alright!';
-                                    break;
-                                case 4:
-                                    var ltxt = 'Sweet!';
-                                    break;
-                                case 5:
-                                    var ltxt = 'Yes!';
-                                    break;
-                                case 6:
-                                    var ltxt = 'Nice!';
-                                    break;
-                                case 7:
-                                    var ltxt = 'Awesome!';
-                            }
-                            message.channel.send(
-                                `${ltxt} You advanced to level ${tag1.level}`
-                            );
+                            let ltxt = levelUpMessages[ran];
+                            let levelUpEmbed = new Discord.MessageEmbed()
+                                .setTitle(ltxt)
+                                .setDescription(
+                                    `You levelled up to level ${tag1.level}!\nxp : ${tag1.xp}\nuse q!level to see your level and `
+                                )
+                                .setFooter(
+                                    'add us to your server: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
+                                )
+                                .setColor('#00ff00');
+                            message.channel.send(levelUpEmbed);
                             let guildmember = client.guilds.cache
                                 .get('598768024761139240')
                                 .members.cache.array()

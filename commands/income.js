@@ -4,7 +4,8 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'income',
     execute(message, args) {
-        if (!args[0] || args[0] == 'help') {
+        if (!args[0] || isNaN(args[0]) || args[0] < -1 || args[0] > 100) {
+            // error case
             let errorEmbed = new Discord.MessageEmbed()
                 .addField(
                     'find the cash from round X to round Y',
@@ -12,85 +13,67 @@ module.exports = {
                 )
                 .addField(
                     'other difficulties',
-                    'q!income <difficulty> <endround>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
+                    'q!income <startround> <endround> <difficulty>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
+                )
+                .addField('example', 'q!income 7 89 abr')
+                .setColor('#ff0000');
+            return message.channel.send(errorEmbed);
+        } else if (!args[1] || isNaN(args[1]) || args[1] < 0 || args[1] > 100) {
+            // if there is any error with the endround
+            let endround = parseInt(args[0]);
+            // another error case
+            let errorEmbed = new Discord.MessageEmbed()
+                .setTitle('Please specify a round from 1 to 100.')
+                .addField(
+                    'find the cash from round X to round Y',
+                    'q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)'
+                )
+                .addField(
+                    'other difficulties',
+                    'q!income <startround> <endround> <difficulty>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
                 )
                 .setColor('#ff0000');
             return message.channel.send(errorEmbed);
         }
 
-        if (!args[1]) {
-            let endround = parseInt(args[0]);
-            if (endround < 0 || endround > 100) {
-                return message.channel.send(
-                    'please specify a round from 1 to 100'
-                );
-            }
-            let end = r[endround];
-            let income = end.cch;
-            return message.channel.send(
-                `${income} total cash from round 1 to round ${endround} (including starting cash and all the bloons popped on round ${endround})`
-            );
-        }
-        if (isNaN(args[1])) {
-            return message.channel.send(
-                'please specify a number for a round from 1 to 100'
-            );
-        }
         let endround = parseInt(args[1]);
-        if (endround < 0 || endround > 100) {
-            return message.channel.send(
-                'please specify a round from 1 to 100. ``!income`` ``help`` for help'
-            );
+        if (args[2].includes('def')) {
+            let embed = new Discord.MessageEmbed()
+                .setTitle(
+                    'The total amount of cash you have is the same as the start'
+                )
+                .setColor('#5555ff')
+                .setFooter('thats deflation for you');
+            return message.channel.send(embed);
+        } else if (args[2].includes('alt') || args[2].includes('abr')) {
+            let startround = args[0];
+            let startroundObject = abr[startround - 2]; // the data works in a way that basically means that its an array of arrays, ordered by round number
+            let endroundObject = abr[endround - 2];
+            let income = endroundObject[1] - startroundObject[1];
+            let embed = new Discord.MessageEmbed()
+                .setTitle(
+                    `$${income} was made from popping round ${
+                        startround + 1
+                    } to popping round ${endround}`
+                )
+                .setColor('#ffff33')
+                .setFooter(
+                    'in alternate bloon rounds, not including starting cash'
+                );
+            return message.channel.send(embed);
         }
-        if (args[0] == 'easy') {
-            var startround = 0;
-        } else if (args[0] == 'medium') {
-            var startround = 3;
-        } else if (args[0] == 'hard') {
-            var startround = 3;
-        } else if (args[0].includes('imp') || args[0].includes('ch')) {
-            var startround = 6;
-        } else if (args[0].includes('def')) {
-            return message.channel.send('$20000 start cash. You dont earn any');
-        } else if (args[0].includes('alt') || args[0].includes('abr')) {
-            if (!args[2]) {
-                var abr_start = 3;
-                var abr_end = args[1];
-            } else {
-                var abr_start = args[1];
-                var abr_end = args[2];
-            }
-            let s_arr = abr[abr_start - 2];
-            let e_arr = abr[abr_end - 2];
-            let diff = e_arr[1] - s_arr[1];
-            if (!args[2]) {
-                return message.channel.send(
-                    `earns $${e_arr[1]} from popping bloons in round 3 to popping bloons in round ${abr_end} (including starting cash)`
-                );
-            } else {
-                return message.channel.send(
-                    `earns $${diff} from popping bloons in round ${
-                        parseInt(abr_start) + 1
-                    } to popping bloons in round ${abr_end} (not including starting cash)`
-                );
-            }
-        } else if (!isNaN(args[0])) {
-            var startround = parseInt(args[0]) - 1;
-            if (startround < 0 || startround > 100) {
-                return message.channel.send(
-                    'please specify a round from 1 to 100. ``!income`` ``help`` for help'
-                );
-            }
-        } else {
-            return message.channel.send('please use a valid word/number!');
-        }
-        let start = r[startround];
-        let end = r[endround];
-        let income = end.cch - start.cch;
-        message.channel.send(
-            `earns $${income} from popping bloons in round ${
-                startround + 1
-            } to popping bloons in ${endround} (not including starting cash)`
-        );
+        let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
+        let startroundObject = r[normalStartRound];
+        let endroundObject = r[endround];
+        let income = endroundObject.cch - startroundObject.cch;
+        let embed = new Discord.MessageEmbed()
+            .setTitle(
+                `$${income} was made from popping round ${
+                    normalStartRound + 1
+                } to popping round ${endround}`
+            )
+            .setColor('#ffff33')
+            .setFooter('not including starting cash');
+        return message.channel.send(embed);
     },
 };

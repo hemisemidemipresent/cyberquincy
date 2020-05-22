@@ -11,6 +11,12 @@ module.exports = {
     description: 'tells you about the rounds (below 100)',
     aliases: ['r'],
     execute(message, args) {
+        if (args[0] == undefined || args[0] == 'help') {
+            let errorEmbed = new Discord.MessageEmbed()
+                .setDescription('use **q!round <round number>**')
+                .setColor('#ff0000');
+            return message.channel.send(errorEmbed);
+        }
         function getLength(round, arrayOfRounds) {
             let roundArray = arrayOfRounds[round];
             let longest = 0;
@@ -31,12 +37,7 @@ module.exports = {
             }
             return output;
         }
-        if (args[0] == undefined || args[0] == 'help') {
-            let errorEmbed = new Discord.MessageEmbed().setDescription(
-                'q!round <round number>'
-            );
-            return message.channel.send(errorEmbed);
-        }
+
         let round = parseInt(args[0]);
         let xp = 0;
         let totalxp = 0;

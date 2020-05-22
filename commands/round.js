@@ -11,9 +11,12 @@ module.exports = {
     description: 'tells you about the rounds (below 100)',
     aliases: ['r'],
     execute(message, args) {
-        if (args[0] == undefined || args[0] == 'help') {
+        if (!args[0] || isNaN(args[0])) {
             let errorEmbed = new Discord.MessageEmbed()
-                .setDescription('use **q!round <round number>**')
+                .setDescription(
+                    'use **q!round <round number>**\nFor example: q!round 68'
+                )
+                .addField('about ABR rounds', 'use q!abr <round> instead')
                 .setColor('#ff0000');
             return message.channel.send(errorEmbed);
         }
@@ -39,28 +42,37 @@ module.exports = {
         }
 
         let round = parseInt(args[0]);
+        if (round < 1) {
+            let embed = new Discord.MessageEmbed()
+                .setTitle('Please specify a round > 0')
+                .setDescription('Quincy has no experience in these rounds')
+                .setColor('#ff0000');
+            return message.channel.send(embed);
+        } else if (round > 100) {
+            let embed = new Discord.MessageEmbed()
+                .setTitle('Please specify a round <= 100')
+                .setDescription(
+                    "All rounds above 100 (for most people's sake) are random!"
+                )
+                .addField(
+                    'I hear you cry about 163, 263, 200',
+                    '["fixed" sandbox rounds](https://www.reddit.com/r/btd6/comments/9omw65/almost_every_single_special_freeplay_round/?utm_source=amp&utm_medium=&utm_content=post_body)'
+                )
+                .setColor('#ff0000');
+            return message.channel.send(embed);
+        }
         let xp = 0;
         let totalxp = 0;
-        if (round > 0 && round < 21) {
+        if (round < 21) {
             xp = 20 * round + 20;
             totalxp = 40 + 50 * (round - 1) + 10 * Math.pow(round - 1, 2);
         } else if (round > 20 && round < 51) {
             xp = 40 * (round - 20) + 420;
             totalxp = 4600 + 440 * (round - 20) + 20 * Math.pow(round - 20, 2);
-        } else if (round > 50 && round < 101) {
+        } else {
             xp = (round - 50) * 90 + 1620;
             totalxp =
                 35800 + 1665 * (round - 50) + 45 * Math.pow(round - 50, 2);
-        } else if (round < 1) {
-            return message.channel.send(
-                'Quincy has no experience in these rounds'
-            );
-        } else if (round > 100) {
-            return message.channel.send(
-                'All rounds from 100 above are all random! fixed sandbox rounds: https://www.reddit.com/r/btd6/comments/9omw65/almost_every_single_special_freeplay_round/?utm_source=amp&utm_medium=&utm_content=post_body'
-            );
-        } else {
-            return message.channel.send('please specify a **number**');
         }
         fetch(url, settings)
             .then((res) => res.json())

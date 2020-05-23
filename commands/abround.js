@@ -1,4 +1,6 @@
 const url = 'http://topper64.co.uk/nk/btd6/dat/rounds.json';
+const fetch = require('node-fetch');
+const settings = { method: 'Get' };
 
 module.exports = {
     name: 'abround',

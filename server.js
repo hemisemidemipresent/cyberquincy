@@ -273,7 +273,7 @@ client.on('message', async (message) => {
 
         channel.send(embed);
     }
-    if (!c.startsWith(prefix) || !noocmd.test(message.channel.topic)) return;
+    if (!c.startsWith(prefix) || noocmd.test(message.channel.topic)) return;
     const args = c.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
     if (c.startsWith('q! '))

@@ -21,11 +21,17 @@ const dataArray = [
     ],
     ['server', 'https://discord.gg/VMX5hZA'],
     [
+        'add',
+        'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881',
+    ],
+    [
         'hack',
         'https://cdn.discordapp.com/attachments/598768278550085633/713184218598998107/hackedquincy.png',
     ],
     ['what', 'idk google it yourself'],
-    ['rohan', 'I am not allowed to say anything'],
+    ['web', 'https://cq.netlify.app'][
+        ('rohan', 'I am not allowed to say anything')
+    ],
     ['nsfw', 'you are under 180 and hence banned from watching'],
 ];
 const client = new Discord.Client();

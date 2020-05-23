@@ -19,8 +19,6 @@ module.exports = {
                 .setColor('#ff0000');
             return message.channel.send(errorEmbed);
         } else if (!args[1] || isNaN(args[1]) || args[1] < 0 || args[1] > 100) {
-            // if there is any error with the endround
-            let endround = parseInt(args[0]);
             // another error case
             let errorEmbed = new Discord.MessageEmbed()
                 .setTitle('Please specify a round from 1 to 100.')
@@ -52,7 +50,9 @@ module.exports = {
             let income = endroundObject[1] - startroundObject[1];
             let embed = new Discord.MessageEmbed()
                 .setTitle(
-                    `$${income} was made from popping round ${
+                    `$${
+                        Math.trunc(income * 100) / 100
+                    } was made from popping round ${
                         startround + 1
                     } to popping round ${endround}`
                 )
@@ -68,7 +68,9 @@ module.exports = {
         let income = endroundObject.cch - startroundObject.cch;
         let embed = new Discord.MessageEmbed()
             .setTitle(
-                `$${income} was made from popping round ${
+                `$${
+                    Math.trunc(income * 100) / 100
+                } was made from popping round ${
                     normalStartRound + 1
                 } to popping round ${endround}`
             )

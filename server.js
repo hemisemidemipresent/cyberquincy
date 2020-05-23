@@ -14,8 +14,22 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
 const { prefix, colour, token } = require('./shh/config.json');
+const dataArray = [
+    [
+        'invite',
+        'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881',
+    ],
+    ['server', 'https://discord.gg/VMX5hZA'],
+    [
+        'hack',
+        'https://cdn.discordapp.com/attachments/598768278550085633/713184218598998107/hackedquincy.png',
+    ],
+    ['what', 'idk google it yourself'],
+    ['rohan', 'I am not allowed to say anything'],
+    ['nsfw', 'you are under 180 and hence banned from watching'],
+];
 const client = new Discord.Client();
-var noocmd = /no+c/i;
+const noocmd = /no+c/i;
 client.commands = new Discord.Collection();
 const commandFiles = fs
     .readdirSync('./commands')
@@ -253,14 +267,18 @@ client.on('message', async (message) => {
 
         channel.send(embed);
     }
-    if (!c.startsWith(prefix)) return;
+    if (!c.startsWith(prefix) || !noocmd.test(message.channel.topic)) return;
     const args = c.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
     if (c.startsWith('q! '))
         return message.channel.send(
             'there isnt a space between q! and the command name'
         );
-    if (commandName === 'level' || commandName === 'xp') {
+    if (
+        commandName === 'level' ||
+        commandName === 'xp' ||
+        commandName === 'rank'
+    ) {
         if (args[0]) {
             // for the case when the user mentions another user
             const user = getUserFromMention(args[0]); // get user from mention
@@ -415,7 +433,16 @@ client.on('message', async (message) => {
         client.commands.find(
             (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
         ); // find the command needed
-    if (!command) return;
+    if (!command) {
+        // ahh. the pics (and spaghet)
+        let content = c.slice(prefix.length);
+        for (i = 0; i < dataArray.length; i++) {
+            if (content.includes(dataArray[i][0])) {
+                return message.channel.send(dataArray[i][1]);
+            }
+        }
+        return;
+    }
     //cooldown
     if (!cooldowns.has(command.name)) {
         cooldowns.set(command.name, new Discord.Collection());
@@ -450,8 +477,7 @@ client.on('message', async (message) => {
         }
     }
     if (
-        timestamps.has(message.author.id) &&
-        noocmd.test(message.channel.topic) === false // this is in case someone used the command. should have put this more in front
+        timestamps.has(message.author.id) // this is in case someone used the command. should have put this more in front
     ) {
         const expirationTime =
             timestamps.get(message.author.id) + cooldownAmount;
@@ -470,102 +496,64 @@ client.on('message', async (message) => {
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
     //command "user"
-    if (!noocmd.test(message.channel.topic)) {
-        // i dont think another check is neccesarry.
+
+    try {
+        command.execute(message, args, client); // executes the command.
+        // the command count thingy
+        let numberOfCommands = await Tags.findOne({
+            where: { name: 1000 },
+        });
+        await Tags.update(
+            { xp: numberOfCommands.xp + 1 },
+            { where: { name: 1000 } }
+        );
+        let xpAdd = 0;
+        if (message.channel.type == 'dm') {
+            // less xp when DMing.
+            xpAdd = Math.floor(Math.random() * 4) + 2;
+        } else {
+            xpAdd = Math.floor(Math.random() * 8) + 5;
+        }
         try {
-            command.execute(message, args, client); // executes the command.
-            // the command count thingy
-            let numberOfCommands = await Tags.findOne({
-                where: { name: 1000 },
+            // this checks for level up. this is super spaghetti-ish
+            //main thing here is first try and make a new entry, but uses errors to see if there is already one present. not elegant but it works.
+            await Tags.create({
+                // attempts to make a new entry, for new people
+                name: message.author.id,
+                xp: 0,
+                level: 1,
             });
-            await Tags.update(
-                { xp: numberOfCommands.xp + 1 },
-                { where: { name: 1000 } }
-            );
-            let xpAdd = 0;
-            if (message.channel.type == 'dm') {
-                // less xp when DMing.
-                xpAdd = Math.floor(Math.random() * 4) + 2;
-            } else {
-                xpAdd = Math.floor(Math.random() * 8) + 5;
-            }
-            try {
-                // this checks for level up. this is super spaghetti-ish
-                //main thing here is first try and make a new entry, but uses errors to see if there is already one present. not elegant but it works.
-                await Tags.create({
-                    // attempts to make a new entry, for new people
-                    name: message.author.id,
-                    xp: 0,
-                    level: 1,
+        } catch (e) {
+            // when an "error" occurs that there is already an entry with the user id
+            if (e.name === 'SequelizeUniqueConstraintError') {
+                const beforeUpdateUserData = await Tags.findOne({
+                    where: { name: message.author.id },
                 });
-            } catch (e) {
-                // when an "error" occurs that there is already an entry with the user id
-                if (e.name === 'SequelizeUniqueConstraintError') {
-                    const beforeUpdateUserData = await Tags.findOne({
+                const affectedRows = await Tags.update(
+                    { xp: beforeUpdateUserData.xp + xpAdd },
+                    { where: { name: message.author.id } }
+                );
+                if (affectedRows > 0) {
+                    // when the xp updates
+                    const tag1 = await Tags.findOne({
                         where: { name: message.author.id },
                     });
-                    const affectedRows = await Tags.update(
-                        { xp: beforeUpdateUserData.xp + xpAdd },
-                        { where: { name: message.author.id } }
-                    );
-                    if (affectedRows > 0) {
-                        // when the xp updates
-                        const tag1 = await Tags.findOne({
-                            where: { name: message.author.id },
-                        });
-                        if (tag1.level > 20) {
-                            // xp is different past level 20
-                            if (
-                                tag1.xp >
-                                5 * ((tag1.level + 20) * (tag1.level + 20)) +
-                                    50 * (tag1.level + 20) +
-                                    100
-                            ) {
-                                await Tags.update(
-                                    { level: tag1.level + 1 },
-                                    { where: { name: message.author.id } }
-                                );
-                                let ran = Math.floor(Math.random() * 8);
-
-                                let ltxt = levelUpMessages[ran];
-
-                                let levelUpEmbed = new Discord.MessageEmbed()
-                                    .setTitle(ltxt)
-                                    .setDescription(
-                                        `You levelled up to level ${tag1.level}!\nxp : ${tag1.xp}\nuse q!level to see your level and `
-                                    )
-                                    .setFooter(
-                                        'add us to your server: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
-                                    )
-                                    .setColor('#00ff00');
-                                message.channel.send(levelUpEmbed);
-                                let guildmember = client.guilds.get(
-                                    '598768024761139240'
-                                );
-
-                                guildmember.members
-                                    .array()
-                                    .find((m) => m.id === message.author.id);
-                                if (tag1.level === 3) {
-                                    // if member is level 3 add role
-                                    await guildmember.roles.add(
-                                        '645126928340353036'
-                                    );
-                                }
-                                if (tag1.level === 10) {
-                                    // if member is level 10 add role
-                                    await guildmember.roles.add(
-                                        '645629187322806272'
-                                    );
-                                }
-                            }
-                        } else if (tag1.xp > tag1.level * 100) {
+                    if (tag1.level > 20) {
+                        // xp is different past level 20
+                        if (
+                            tag1.xp >
+                            5 * ((tag1.level + 20) * (tag1.level + 20)) +
+                                50 * (tag1.level + 20) +
+                                100
+                        ) {
                             await Tags.update(
                                 { level: tag1.level + 1 },
                                 { where: { name: message.author.id } }
                             );
                             let ran = Math.floor(Math.random() * 8);
+
                             let ltxt = levelUpMessages[ran];
+
                             let levelUpEmbed = new Discord.MessageEmbed()
                                 .setTitle(ltxt)
                                 .setDescription(
@@ -576,10 +564,12 @@ client.on('message', async (message) => {
                                 )
                                 .setColor('#00ff00');
                             message.channel.send(levelUpEmbed);
-                            let guildmember = client.guilds.cache
-                                .get('598768024761139240')
-                                .members.cache.array()
+                            let guildmember = client.guilds.get(
+                                '598768024761139240'
+                            );
 
+                            guildmember.members
+                                .array()
                                 .find((m) => m.id === message.author.id);
                             if (tag1.level === 3) {
                                 // if member is level 3 add role
@@ -594,31 +584,61 @@ client.on('message', async (message) => {
                                 );
                             }
                         }
+                    } else if (tag1.xp > tag1.level * 100) {
+                        await Tags.update(
+                            { level: tag1.level + 1 },
+                            { where: { name: message.author.id } }
+                        );
+                        let ran = Math.floor(Math.random() * 8);
+                        let ltxt = levelUpMessages[ran];
+                        let levelUpEmbed = new Discord.MessageEmbed()
+                            .setTitle(ltxt)
+                            .setDescription(
+                                `You levelled up to level ${tag1.level}!\nxp : ${tag1.xp}\nuse q!level to see your level and `
+                            )
+                            .setFooter(
+                                'add us to your server: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
+                            )
+                            .setColor('#00ff00');
+                        message.channel.send(levelUpEmbed);
+                        let guildmember = client.guilds.cache
+                            .get('598768024761139240')
+                            .members.cache.array()
 
-                        return;
+                            .find((m) => m.id === message.author.id);
+                        if (tag1.level === 3) {
+                            // if member is level 3 add role
+                            await guildmember.roles.add('645126928340353036');
+                        }
+                        if (tag1.level === 10) {
+                            // if member is level 10 add role
+                            await guildmember.roles.add('645629187322806272');
+                        }
                     }
+
+                    return;
                 }
-                let errorEmbed = new Discord.MessageEmbed() // in case of db failures
-                    .setColor('#ff0000')
-                    .setDescription('Oh no! Something went wrong!')
-                    .addField(
-                        '~~I got bonked by a DDT again~~',
-                        'Please [report the bug](https://discord.gg/VMX5hZA)'
-                    );
-                return message.reply(errorEmbed);
             }
-        } catch (error) {
-            // in case of command failures
-            console.error(error);
-            const errorEmbed = new Discord.MessageEmbed()
+            let errorEmbed = new Discord.MessageEmbed() // in case of db failures
                 .setColor('#ff0000')
                 .setDescription('Oh no! Something went wrong!')
                 .addField(
                     '~~I got bonked by a DDT again~~',
                     'Please [report the bug](https://discord.gg/VMX5hZA)'
                 );
-            message.reply(errorEmbed);
+            return message.reply(errorEmbed);
         }
+    } catch (error) {
+        // in case of command failures
+        console.error(error);
+        const errorEmbed = new Discord.MessageEmbed()
+            .setColor('#ff0000')
+            .setDescription('Oh no! Something went wrong!')
+            .addField(
+                '~~I got bonked by a DDT again~~',
+                'Please [report the bug](https://discord.gg/VMX5hZA)'
+            );
+        message.reply(errorEmbed);
     }
 });
 client.login(token);

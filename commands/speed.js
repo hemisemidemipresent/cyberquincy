@@ -3,94 +3,76 @@ const { colour } = require('../shh/config.json');
 module.exports = {
     name: 'speed',
     aliases: ['s', 'rbs'],
-    description: 'calculates the speed of bloons, even in freeplay',
-    usage: '!speed <bloon/blimp> <round>',
+    description: 'calculates the speed of speeds, even in freeplay',
+    usage: '!speed <speed/blimp> <round>',
     execute(message, args) {
         //rounds
-        const b = args[0].toUpperCase();
-        const btype = b.toLowerCase();
-        let round = args[1];
-        let round1 = round - 80;
-        let round2 = round - 100;
-        let round3 = round - 125;
-        let round4 = round - 152;
-        if (b === 'MOAB' || b === 'RED' || b == 'LEAD') {
-            var bloon = 3;
-        } else if (b === 'BFB') {
-            var bloon = 1;
-        } else if (b === 'ZOMG' || b === 'BAD') {
-            var bloon = 0.5;
-        } else if (b === 'DDT' || b === 'PURPLE') {
-            var bloon = 9;
-        } else if (b.includes('CERAM')) {
-            var bloon = 8;
-        } else if (b === 'RAINBOW') {
-            var bloon = 7;
-        } else if (b === 'GREEN' || b === 'ZEBRA' || b === 'BLACK') {
-            var bloon = 5;
-        } else if (b === 'WHITE') {
-            var bloon = 6;
-        } else if (b === 'YELLOW') {
-            var bloon = 10;
-        } else if (b === 'PINK') {
-            var bloon = 11;
-        } else if (b === 'BLUE') {
-            var bloon = 2;
+        const bln = args[0].toLowerCase(); // short for "bloon"
+        const round = args[1];
+        if (round < 1 || !isNaN(bln) || isNaN(round)) {
+            let errorEmbed = new Discord.MessageEmbed()
+                .setTitle(`Please specify a proper bloon/round`)
+                .setDescription('example: q!speed moab 100')
+                .setColor('#ff0000');
+            return message.channel.send(errorEmbed);
+        }
+        let speed = 0;
+        if (bln === 'moab' || bln === 'red' || b == 'lead') {
+            speed = 3;
+        } else if (bln === 'bfb') {
+            speed = 1;
+        } else if (bln === 'zomg' || bln === 'bad') {
+            speed = 0.5;
+        } else if (bln === 'ddt' || bln === 'purple') {
+            speed = 9;
+        } else if (b.includes('ceram')) {
+            speed = 8;
+        } else if (bln === 'rainbow') {
+            speed = 7;
+        } else if (bln === 'green' || bln === 'zebra' || bln === 'black') {
+            speed = 5;
+        } else if (bln === 'white') {
+            speed = 6;
+        } else if (bln === 'yellow') {
+            speed = 10;
+        } else if (bln === 'pink') {
+            speed = 11;
+        } else if (bln === 'blue') {
+            speed = 2;
         } else {
-            return message.channel.send(
-                'please specify a bloon, e.g. ``pink``'
-            );
+            let errorEmbed = new Discord.MessageEmbed()
+                .setTitle(`Please specify a proper bloon`)
+                .setDescription('example: q!speed moab 100')
+                .setColor('#ff0000');
+            return message.channel.send(errorEmbed);
         }
-        //multiplier
-        let m1 = 0.02 * round1;
-        let m2 = 0.05 * round2;
-        let m3 = 0.2 * round3;
-        let m4 = 0.5 * round4;
-        //percentage increase
+        let incPercent = 0;
         if (round > 80 && round < 101) {
-            var pi = 1 + m1; //80 to 100
+            incPercent = 0.02 * (round - 80) + 1;
         } else if (round > 100 && round < 125) {
-            //100 to 125
-            var pi = 1 + m2 + 0.4;
+            incPercent = 0.05 * (round - 100) + 1.4;
         } else if (round > 124 && round < 152) {
-            //125 to 152
-            var pi = 1 + m3 + 0.4 + 1.25;
+            incPercent = 0.2 * (round - 125) + 2.65;
         } else if (round > 151) {
-            var pi = 1 + m4 + 0.4 + 1.25 + 5.4;
+            incPercent = 0.5 * (round - 152) + 7.05;
         }
-        var bhealth = Math.floor(bloon * pi);
+        let actualSpeed = Math.trunc(speed * incPercent * 100) / 100; // 2 d.p.
         if (round > 80) {
             let speedEmbed = new Discord.MessageEmbed()
-                .setTitle(`${btype}`)
-                .addField('speed', `${bhealth} units`)
-                .addField('at round', round)
+                .setTitle(`${bln}`)
+                .addField('speed', `${actualSpeed} units`, true)
+                .addField('at round', round, true)
                 .setColor(colour)
-                .setFooter('3units is the speed of a red bloon at round one');
-            return message.channel.send(speedEmbed);
-        } else if (round < 1) {
-            return message.channel.send(
-                'quincy has no experience in these rounds'
-            );
-        } else if (round > 0 && round < 81) {
-            let speedEmbed = new Discord.MessageEmbed()
-                .setTitle(`${btype}`)
-                .addField('speed', `${bloon} units`)
-                .addField('at round', round)
-                .setColor(colour)
-                .setFooter('3units is the speed of a red bloon at round one');
+                .setFooter('3 units is the speed of a red speed at round one');
             return message.channel.send(speedEmbed);
         } else {
-            if (b === 'MOAB' || 'BFB' || 'ZOMG' || 'DDT' || 'BAD') {
-                let speedEmbed = new Discord.MessageEmbed()
-                    .setTitle(`${b}`)
-                    .addField('speed', `${bloon} units`)
-                    .addField('at round', round)
-                    .setColor(colour)
-                    .setFooter(
-                        '3units is the speed of a red bloon at round one'
-                    );
-                return message.channel.send(speedEmbed);
-            }
+            let speedEmbed = new Discord.MessageEmbed()
+                .setTitle(`${bln}`)
+                .addField('speed', `${speed} units`, true)
+                .addField('at round', round, true)
+                .setColor(colour)
+                .setFooter('3 units is the speed of a red at round one');
+            return message.channel.send(speedEmbed);
         }
     },
 };

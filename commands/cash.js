@@ -18,6 +18,27 @@ module.exports = {
         let startRound = args[1];
         let cashSoFar = 0;
         let addToTotal = 0;
+        if (!args[2]) {
+            while (cashSoFar <= cashNeeded) {
+                addToTotal = parseInt(r[startRound].csh);
+                cashSoFar += addToTotal;
+                addToTotal = 0;
+                startRound++;
+                if (startRound > 100) {
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle(`You cant get $${cashNeeded} before freeplay`)
+                        .setColor('#ff5500');
+                    return message.channel.send(embed);
+                }
+            }
+            let embed = new Discord.MessageEmbed()
+                .setTitle(
+                    `You should get $${cashNeeded} by round ${startRound}`
+                )
+                .setColor(colour)
+                .setFooter(`from round ${args[1]}`);
+            return message.channel.send(embed);
+        }
         if (args[2].includs('alt') || args[2].includes('abr')) {
             while (cashSoFar <= cashNeeded) {
                 addToTotal = parseInt(abr[startRound][0]);
@@ -39,22 +60,5 @@ module.exports = {
                 .setFooter(`in ABR, from round ${args[1]}`);
             return message.channel.send(embed);
         }
-        while (cashSoFar <= cashNeeded) {
-            addToTotal = parseInt(r[startRound].csh);
-            cashSoFar += addToTotal;
-            addToTotal = 0;
-            startRound++;
-            if (startRound > 100) {
-                let embed = new Discord.MessageEmbed()
-                    .setTitle(`You cant get $${cashNeeded} before freeplay`)
-                    .setColor('#ff5500');
-                return message.channel.send(embed);
-            }
-        }
-        let embed = new Discord.MessageEmbed()
-            .setTitle(`You should get $${cashNeeded} by round ${startRound}`)
-            .setColor(colour)
-            .setFooter(`from round ${args[1]}`);
-        return message.channel.send(embed);
     },
 };

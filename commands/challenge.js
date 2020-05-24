@@ -6,246 +6,148 @@ module.exports = {
         'very epic thing inspired from https://unforgivenjake.github.io/btd6rc/',
     usage: '[command name]',
     execute(message, args, client) {
-        var heroyn = Math.floor(Math.random() * 2);
-        var mapdiff = Math.ceil(Math.random() * 4);
-        var startround = Math.ceil(Math.random() * 100);
-        var endround = startround + Math.ceil(Math.random() * 30);
-        var primarycount = Math.floor(Math.random() * 5);
-        var militarycount = Math.floor(Math.random() * 5);
-        var magiccount = Math.floor(Math.random() * 3);
-        var supportcount = Math.floor(Math.random() * 2);
-        var modeid = Math.floor(Math.random() * 10);
-        var lives = Math.ceil(Math.random() * 400);
-        var mkyn = Math.floor(Math.random() * 2);
-        var camoyn = Math.floor(Math.random() * 2);
-        var regrow = Math.floor(Math.random() * 2);
-        var sell = Math.floor(Math.random() * 2);
-        var cont = Math.floor(Math.random() * 2);
-        var bspeed = 100 + Math.floor((Math.random() - 1) * 10);
-        var Bspeed = 100 + Math.floor((Math.random() - 1) * 10);
-        var Bhealth = 100 + Math.floor((Math.random() - 1) * 10);
-        var chealth = 100 + Math.floor((Math.random() - 1) * 10);
-        if (heroyn === 0) {
-            var hero = 'none';
+        // what the fuck is this idk
+        let heroyn = Math.floor(Math.random() * 2);
+        let mapdiff = Math.ceil(Math.random() * 4);
+        let startround = Math.ceil(Math.random() * 100);
+        let endround = startround + Math.ceil(Math.random() * 30);
+        let primarycount = Math.floor(Math.random() * 5);
+        let militarycount = Math.floor(Math.random() * 5);
+        let magiccount = Math.floor(Math.random() * 3);
+        let supportcount = Math.floor(Math.random() * 2);
+        let modeid = Math.floor(Math.random() * 10);
+        let lives = Math.ceil(Math.random() * 400);
+        let mkyn = Math.floor(Math.random() * 2);
+        let camoyn = Math.floor(Math.random() * 2);
+        let regrow = Math.floor(Math.random() * 2);
+        let sell = Math.floor(Math.random() * 2);
+        let cont = Math.floor(Math.random() * 2);
+        let bspeed = 100 + Math.floor((Math.random() - 1) * 10);
+        let Bspeed = 100 + Math.floor((Math.random() - 1) * 10);
+        let Bhealth = 100 + Math.floor((Math.random() - 1) * 10);
+        let chealth = 100 + Math.floor((Math.random() - 1) * 10);
+        let hero = 'none';
+        const heroArray = [
+            'Quincy',
+            'Gwendolyn',
+            'Obyn',
+            'Striker Jones',
+            'Pat Fusty',
+            'Benjamin',
+            'Ezili',
+            'Churchill',
+            'adora',
+        ];
+        const mapArray = [
+            [
+                'monkey meadow',
+                'tree stump',
+                'town center',
+                'alpine run',
+                'frozen over',
+                'in the loop',
+                'cubism',
+                'four circles',
+                'end of the road',
+                'hedge',
+                'logs',
+            ],
+            [
+                'Spring Spring',
+                'KartsNDarts',
+                'Moon Landing',
+                'Haunted',
+                'Firing range',
+                'cracked',
+                'streambed',
+                'Chutes',
+                'Rake',
+                'Spice islands',
+            ],
+            [
+                'spillway',
+                'cargo',
+                "pat's pond",
+                'peninsula',
+                'high finance',
+                'another brick',
+                'off the coast',
+                'underground',
+                'Cornfield',
+                'Geared',
+            ],
+            [
+                'workshop',
+                '#ouch',
+                'muddy puddles',
+                'quad',
+                'Dark castle',
+                'Infernal',
+            ],
+        ];
+        if (!heroyn) {
+            hero = heroArray[Math.ceil(Math.random() * 9)];
         }
-        if (heroyn === 1) {
-            heroid = Math.ceil(Math.random() * 8);
-            switch (heroid) {
-                case 1:
-                    var hero = 'Quincy';
-                    break;
-                case 2:
-                    var hero = 'Gwendolyn';
-                    break;
-                case 3:
-                    var hero = 'Obyn';
-                    break;
-                case 4:
-                    var hero = 'Striker Jones';
-                    break;
-                case 5:
-                    var hero = 'Pat Fusty';
-                    break;
-                case 6:
-                    var hero = 'Benjamin';
-                    break;
-                case 7:
-                    var hero = 'Ezili';
-                    break;
-                case 8:
-                    var hero = 'Churchill';
-                    break;
-            }
-        }
-        if (mapdiff === 1) {
-            easymapid = Math.ceil(Math.random() * 12);
-            switch (easymapid) {
-                case 1:
-                    var map = 'monkey meadow';
-                    break;
-                case 2:
-                    var map = 'tree stump';
-                    break;
-                case 3:
-                    var map = 'town center';
-                    break;
-                case 4:
-                    var map = 'alpine run';
-                    break;
-                case 5:
-                    var map = 'frozen over';
-                    break;
-                case 6:
-                    var map = 'in the loop';
-                    break;
-                case 7:
-                    var map = 'cubism';
-                    break;
-                case 8:
-                    var map = 'four circles';
-                    break;
-                case 9:
-                    var map = 'hedge';
-                    break;
-                case 10:
-                    var map = 'end of the road';
-                    break;
-                case 11:
-                    var map = 'logs';
-                    break;
-                case 12:
-                    var map = 'park path';
-                    break;
-            }
-        }
-        if (mapdiff === 2) {
-            easymapid = Math.ceil(Math.random() * 11);
-            switch (easymapid) {
-                case 1:
-                    var map = 'Spring Spring';
-                    break;
-                case 2:
-                    var map = 'KartsNDarts';
-                    break;
-                case 3:
-                    var map = 'Moon Landing';
-                    break;
-                case 4:
-                    var map = 'Haunted';
-                    break;
-                case 5:
-                    var map = 'Downstream';
-                    break;
-                case 6:
-                    var map = 'Firing range';
-                    break;
-                case 7:
-                    var map = 'cracked';
-                    break;
-                case 8:
-                    var map = 'streambed';
-                    break;
-                case 9:
-                    var map = 'Chutes';
-                    break;
-                case 10:
-                    var map = 'Rake';
-                    break;
-                case 11:
-                    var map = 'Spice islands';
-                    break;
-            }
-        }
-        if (mapdiff === 3) {
-            easymapid = Math.ceil(Math.random() * 9);
-            switch (easymapid) {
-                case 1:
-                    var map = 'spillway';
-                    break;
-                case 2:
-                    var map = 'cargo';
-                    break;
-                case 3:
-                    var map = "pat's pond";
-                    break;
-                case 4:
-                    var map = 'peninsula';
-                    break;
-                case 5:
-                    var map = 'high finance';
-                    break;
-                case 6:
-                    var map = 'another brick';
-                    break;
-                case 7:
-                    var map = 'off the coast';
-                    break;
-                case 8:
-                    var map = 'underground';
-                    break;
-                case 9:
-                    var map = 'Cornfield';
-                    break;
-            }
-        }
-        if (mapdiff === 4) {
-            easymapid = Math.ceil(Math.random() * 5);
-            switch (easymapid) {
-                case 1:
-                    var map = 'workshop';
-                    break;
-                case 2:
-                    var map = '#ouch';
-                    break;
-                case 3:
-                    var map = 'muddy puddles';
-                    break;
-                case 4:
-                    var map = 'quad';
-                    break;
-                case 5:
-                    var map = 'Dark castle';
-                    break;
-            }
-        }
-        var primary = ['dart', 'boomerang', 'bomb', 'tack', 'ice', 'glue'];
-        var primarycopy = [...primary];
-        var primarygenerated = [];
+        const random = Math.floor(Math.random() * mapArray[mapdiff].length);
+        map = mapArray[mapdiff][random];
+        const primary = ['dart', 'boomerang', 'bomb', 'tack', 'ice', 'glue'];
+        const primarycopy = [...primary];
+        let primarygenerated = [];
         for (i = 0; i < primarycount; i++) {
-            var ranprimaryindex = Math.floor(
+            let ranprimaryindex = Math.floor(
                 Math.random() * primarycopy.length
             );
             primarygenerated.push(primarycopy[ranprimaryindex]);
             primarycopy.splice(ranprimaryindex, 1);
         }
-        var primarymonkeys = primarygenerated.toString();
+        let primarymonkeys = primarygenerated.toString();
         if (primarygenerated.length === 0) {
-            var primarymonkeys = ' ';
+            primarymonkeys = ' ';
         }
         //military
-        var military = ['sub', 'boat', 'heli', 'ace', 'sniper', 'mortar'];
-        var militarycopy = [...military];
-        var militarygenerated = [];
+        let military = ['sub', 'boat', 'heli', 'ace', 'sniper', 'mortar'];
+        let militarycopy = [...military];
+        let militarygenerated = [];
         for (i = 0; i < militarycount; i++) {
-            var ranmilitaryindex = Math.floor(
+            let ranmilitaryindex = Math.floor(
                 Math.random() * militarycopy.length
             );
             militarygenerated.push(militarycopy[ranmilitaryindex]);
             militarycopy.splice(ranmilitaryindex, 1);
         }
-        var militarymonkeys = militarygenerated.toString();
+        let militarymonkeys = militarygenerated.toString();
         if (militarygenerated.length === 0) {
-            var militarymonkeys = ' ';
+            militarymonkeys = ' ';
         }
         //magic
-        var magic = ['wizard', 'super', 'druid', 'alchemist', 'ninja'];
-        var magiccopy = [...magic];
-        var magicgenerated = [];
+        let magic = ['wizard', 'super', 'druid', 'alchemist', 'ninja'];
+        let magiccopy = [...magic];
+        let magicgenerated = [];
         for (i = 0; i < magiccount; i++) {
-            var ranmagicindex = Math.floor(Math.random() * magiccopy.length);
+            let ranmagicindex = Math.floor(Math.random() * magiccopy.length);
             magicgenerated.push(magiccopy[ranmagicindex]);
             magiccopy.splice(ranmagicindex, 1);
         }
-        var magicmonkeys = magicgenerated.toString();
+        let magicmonkeys = magicgenerated.toString();
         if (magicgenerated.length === 0) {
-            var magicmonkeys = ' ';
+            magicmonkeys = ' ';
         }
         //support
-        var support = ['farm', ' spactory', 'engineer', 'village'];
-        var supportcopy = [...support];
-        var supportgenerated = [];
+        let support = ['farm', ' spactory', 'engineer', 'village'];
+        let supportcopy = [...support];
+        let supportgenerated = [];
         for (i = 0; i < supportcount; i++) {
-            var ransupportindex = Math.floor(
+            let ransupportindex = Math.floor(
                 Math.random() * supportcopy.length
             );
             supportgenerated.push(supportcopy[ransupportindex]);
             supportcopy.splice(ransupportindex, 1);
         }
-        var supportmonkeys = supportgenerated.toString();
+        let supportmonkeys = supportgenerated.toString();
         if (supportgenerated.length === 0) {
-            var supportmonkeys = ' ';
+            supportmonkeys = ' ';
         }
-        var modes = [
+        let modes = [
             'apopalypse',
             'half cash',
             'deflation',
@@ -257,8 +159,8 @@ module.exports = {
             'Double HP MOABs',
             'Alternate Bloon Rounds',
         ];
-        var mode = modes[modeid];
-        var cash =
+        let mode = modes[modeid];
+        let cash =
             600 +
             100 * startround +
             startround * startround * Math.ceil(Math.random() * 10);
@@ -293,41 +195,17 @@ module.exports = {
                 'engineer',
                 'village',
             ];
-            var primarymonkeys = monkeys[yee];
+            primarymonkeys = monkeys[yee];
         }
         if (mode === 'impoppable' || mode === 'CHIMPS') {
-            var lives = 1;
+            lives = 1;
         }
-        if (mkyn === 1) {
-            var MK = 'disabled';
-        }
-        if (mkyn === 0) {
-            var MK = 'enabled';
-        }
-        if (regrow === 1) {
-            var grow = 'disabled';
-        }
-        if (regrow === 0) {
-            var grow = 'enabled';
-        }
-        if (camoyn === 1) {
-            var camo = 'disabled';
-        }
-        if (camoyn === 0) {
-            var camo = 'enabled';
-        }
-        if (sell === 1) {
-            var selling = 'disabled';
-        }
-        if (sell === 0) {
-            var selling = 'enabled';
-        }
-        if (cont === 1) {
-            var continues = 'disabled';
-        }
-        if (cont === 0) {
-            var continues = 'enabled';
-        }
+        const DEarr = ['enabled', 'disabled']; // honestly and abomination
+        const MK = DEarr[mkyn];
+        const grow = DEarr[regrow];
+        const camo = DEarr[camoyn];
+        const selling = DEarr[sell];
+        const continues = DEarr[cont];
         const ChallengeEmbed = new Discord.MessageEmbed()
             .setTitle(`Random Challenge generated`)
             .setColor('#00E6BB')

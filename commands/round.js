@@ -91,8 +91,7 @@ module.exports = {
                     .addField('xp earned in that round', `${xp}`, true)
                     .addField(
                         'total xp if you started at round 1',
-                        `${totalxp}`,
-                        true
+                        `${totalxp}`
                     )
                     .addField(
                         '**if:**',

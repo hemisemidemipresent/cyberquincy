@@ -1,7 +1,8 @@
 const url = 'http://topper64.co.uk/nk/btd6/dat/rounds.json';
 const fetch = require('node-fetch');
 const settings = { method: 'Get' };
-
+const Discord = require('discord.js');
+const { colour } = require('../shh/config.json');
 module.exports = {
     name: 'abround',
     description:
@@ -65,24 +66,12 @@ module.exports = {
                 let object = json.alt;
                 let length = getLength(args[0], object);
                 let data = getData(args[0], object);
-                let sumOfData = r1[`r${round}`];
-                let rbe = round2[round].rbe;
                 const roundEmbed = new Discord.MessageEmbed()
                     .setTitle(`round ${round}`)
-                    .setDescription(`${sumOfData}\n{${data}\n}`)
+                    .setDescription(`{${data}\n}`)
 
                     .addField('round length', `${length}`, true)
-                    .addField('RBE', `${rbe}`, true)
-                    .addField('xp earned in that round', `${xp}`, true)
-                    .addField(
-                        'total xp if you started at round 1',
-                        `${totalxp}`,
-                        true
-                    )
-                    .addField(
-                        '**if:**',
-                        'you are not in freeplay (then divide xp by 10 for value) AND\n2) you are playing beginner maps (intermediate +10%, advanced +20%, expert +30%)'
-                    )
+
                     .setFooter('for more data on money use q!income or q!cash')
                     .setColor(colour);
                 message.channel.send(roundEmbed);

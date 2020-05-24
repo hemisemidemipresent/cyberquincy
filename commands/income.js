@@ -24,18 +24,34 @@ module.exports = {
                 .setTitle('Please specify a round from 1 to 100.')
                 .addField(
                     'find the cash from round X to round Y',
-                    'q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)'
+                    '**q!income <startround> <endround>**'
                 )
                 .addField(
                     'other difficulties',
-                    'q!income <startround> <endround> <difficulty>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
+                    '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
                 )
                 .setColor('#ff0000');
             return message.channel.send(errorEmbed);
         }
 
         let endround = parseInt(args[1]);
-        if (args[2].includes('def')) {
+        if (!args[2]) {
+            let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
+            let startroundObject = r[normalStartRound];
+            let endroundObject = r[endround];
+            let income = endroundObject.cch - startroundObject.cch;
+            let embed = new Discord.MessageEmbed()
+                .setTitle(
+                    `$${
+                        Math.trunc(income * 100) / 100
+                    } was made from popping round ${
+                        normalStartRound + 1
+                    } to popping round ${endround}`
+                )
+                .setColor('#ffff33')
+                .setFooter('not including starting cash');
+            return message.channel.send(embed);
+        } else if (args[2].includes('def')) {
             let embed = new Discord.MessageEmbed()
                 .setTitle(
                     'The total amount of cash you have is the same as the start'
@@ -62,20 +78,5 @@ module.exports = {
                 );
             return message.channel.send(embed);
         }
-        let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
-        let startroundObject = r[normalStartRound];
-        let endroundObject = r[endround];
-        let income = endroundObject.cch - startroundObject.cch;
-        let embed = new Discord.MessageEmbed()
-            .setTitle(
-                `$${
-                    Math.trunc(income * 100) / 100
-                } was made from popping round ${
-                    normalStartRound + 1
-                } to popping round ${endround}`
-            )
-            .setColor('#ffff33')
-            .setFooter('not including starting cash');
-        return message.channel.send(embed);
     },
 };

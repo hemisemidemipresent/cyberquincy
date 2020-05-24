@@ -11,10 +11,7 @@ module.exports = {
         let mapdiff = Math.ceil(Math.random() * 4);
         let startround = Math.ceil(Math.random() * 100);
         let endround = startround + Math.ceil(Math.random() * 30);
-        let primarycount = Math.floor(Math.random() * 5);
-        let militarycount = Math.floor(Math.random() * 5);
-        let magiccount = Math.floor(Math.random() * 3);
-        let supportcount = Math.floor(Math.random() * 2);
+        let towerCount = Math.ceil(Math.random() * 15);
         let modeid = Math.floor(Math.random() * 10);
         let lives = Math.ceil(Math.random() * 400);
         let mkyn = Math.floor(Math.random() * 2);
@@ -88,118 +85,38 @@ module.exports = {
         if (!heroyn) {
             hero = heroArray[Math.ceil(Math.random() * 9)];
         }
-        const random = Math.floor(Math.random() * mapArray[mapdiff].length);
+        const randomMap = Math.floor(Math.random() * mapArray[mapdiff].length);
         map = mapArray[mapdiff][random];
-        const primary = ['dart', 'boomerang', 'bomb', 'tack', 'ice', 'glue'];
-        const primarycopy = [...primary];
-        let primarygenerated = [];
-        for (i = 0; i < primarycount; i++) {
-            let ranprimaryindex = Math.floor(
-                Math.random() * primarycopy.length
-            );
-            primarygenerated.push(primarycopy[ranprimaryindex]);
-            primarycopy.splice(ranprimaryindex, 1);
-        }
-        let primarymonkeys = primarygenerated.toString();
-        if (primarygenerated.length === 0) {
-            primarymonkeys = ' ';
-        }
-        //military
-        let military = ['sub', 'boat', 'heli', 'ace', 'sniper', 'mortar'];
-        let militarycopy = [...military];
-        let militarygenerated = [];
-        for (i = 0; i < militarycount; i++) {
-            let ranmilitaryindex = Math.floor(
-                Math.random() * militarycopy.length
-            );
-            militarygenerated.push(militarycopy[ranmilitaryindex]);
-            militarycopy.splice(ranmilitaryindex, 1);
-        }
-        let militarymonkeys = militarygenerated.toString();
-        if (militarygenerated.length === 0) {
-            militarymonkeys = ' ';
-        }
-        //magic
-        let magic = ['wizard', 'super', 'druid', 'alchemist', 'ninja'];
-        let magiccopy = [...magic];
-        let magicgenerated = [];
-        for (i = 0; i < magiccount; i++) {
-            let ranmagicindex = Math.floor(Math.random() * magiccopy.length);
-            magicgenerated.push(magiccopy[ranmagicindex]);
-            magiccopy.splice(ranmagicindex, 1);
-        }
-        let magicmonkeys = magicgenerated.toString();
-        if (magicgenerated.length === 0) {
-            magicmonkeys = ' ';
-        }
-        //support
-        let support = ['farm', ' spactory', 'engineer', 'village'];
-        let supportcopy = [...support];
-        let supportgenerated = [];
-        for (i = 0; i < supportcount; i++) {
-            let ransupportindex = Math.floor(
-                Math.random() * supportcopy.length
-            );
-            supportgenerated.push(supportcopy[ransupportindex]);
-            supportcopy.splice(ransupportindex, 1);
-        }
-        let supportmonkeys = supportgenerated.toString();
-        if (supportgenerated.length === 0) {
-            supportmonkeys = ' ';
-        }
-        let modes = [
-            'apopalypse',
-            'half cash',
-            'deflation',
-            'easy',
-            'medium',
-            'hard',
-            'impoppable',
-            'CHIMPS',
-            'Double HP MOABs',
-            'Alternate Bloon Rounds',
-        ];
-        let mode = modes[modeid];
-        let cash =
-            600 +
-            100 * startround +
-            startround * startround * Math.ceil(Math.random() * 10);
 
-        if (
-            primarymonkeys == ' ' &&
-            militarymonkeys == ' ' &&
-            magicmonkeys == ' ' &&
-            supportmonkeys == ' '
-        ) {
-            let yee = Math.floor(Math.random() * 21);
-            let monkeys = [
-                'dart',
-                'boomerang',
-                'bomb',
-                'tack',
-                'ice',
-                'glue',
-                'sub',
-                'boat',
-                'heli',
-                'ace',
-                'sniper',
-                'mortar',
-                'wizard',
-                'super',
-                'druid',
-                'alchemist',
-                'ninja',
-                'farm',
-                ' spactory',
-                'engineer',
-                'village',
-            ];
-            primarymonkeys = monkeys[yee];
+        Math.floor(Math.random() * 21);
+        let towerArray = [
+            'dart',
+            'boomerang',
+            'bomb',
+            'tack',
+            'ice',
+            'glue',
+            'sub',
+            'boat',
+            'heli',
+            'ace',
+            'sniper',
+            'mortar',
+            'wizard',
+            'super',
+            'druid',
+            'alchemist',
+            'ninja',
+            'farm',
+            'spike factory',
+            'engineer',
+            'village',
+        ];
+        let monkeys = [];
+        for (i = 0; i < towerCount; i++) {
+            monkeys.push(towerArray[Math.floor(Math.random() * 21)]);
         }
-        if (mode === 'impoppable' || mode === 'CHIMPS') {
-            lives = 1;
-        }
+
         const DEarr = ['enabled', 'disabled']; // honestly and abomination
         const MK = DEarr[mkyn];
         const grow = DEarr[regrow];
@@ -209,30 +126,28 @@ module.exports = {
         const ChallengeEmbed = new Discord.MessageEmbed()
             .setTitle(`Random Challenge generated`)
             .setColor('#00E6BB')
-            .addField('Map', `${map}`)
-            .addField('Hero', `${hero}`)
-            .addField('mode', `${mode}`)
+            .addField('Map', `${map}`, true)
+            .addField('Hero', `${hero}`, true)
+            .addField('mode', `${mode}`, true)
             .addField('lives', `${lives}`)
-            .addField('starting cash', `${cash}`)
-            .addField('round', `${startround} to ${endround}`)
-            .addField(
-                `monkeys`,
-                `${primarymonkeys},${militarymonkeys},${magicmonkeys},${supportmonkeys}`
-            )
+            .addField('starting cash', `${cash}`, true)
+            .addField('round', `${startround} to ${endround}`, true)
+            .addField(`monkeys`, `${monkeys}`, true)
             .addField(
                 'other settings',
-                ` MK ${MK}, all regrow ${grow}, all camo ${camo}, seling ${selling}, continues ${continues}`
+                ` MK ${MK}, all regrow ${grow}, all camo ${camo}, seling ${selling}, continues ${continues}`,
+                true
             )
             .addField('bloon speed', bspeed)
-            .addField('Blimp speed', Bspeed)
-            .addField('ceramic health', chealth)
-            .addField('Blimp health', Bhealth)
+            .addField('Blimp speed', Bspeed, true)
+            .addField('ceramic health', chealth, true)
+            .addField('Blimp health', Bhealth, true)
             .addField(
                 'it is reccomended to tweak a few of these factors to mkae the challenge more intresting, instead of blindly copying from here.'
             )
             .addField(
                 'this command is prone to errors',
-                'pls click [here](https://discord.gg/VMX5hZA) to report bugs and and support'
+                'pls click [here](https://discord.gg/VMX5hZA) to report bugs and and get help, or just chill out'
             );
         message.channel.send(ChallengeEmbed);
     },

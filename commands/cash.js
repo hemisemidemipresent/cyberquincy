@@ -11,8 +11,6 @@ module.exports = {
                 'q!cash <cash needed> <startround>\n(if startround = 0, starting cash is included)',
                 { code: 'md' }
             );
-        } else if (args[0] < 0 || args[0] > 100) {
-            return message.channel.send('Please input a proper round number');
         }
         let cashNeeded = args[0];
         let startRound = args[1];

@@ -86,7 +86,11 @@ module.exports = {
                     .setTitle(`round ${round}`)
                     .setDescription(`${sumOfData}\n{${data}\n}`)
 
-                    .addField('round length', `${length}`, true)
+                    .addField(
+                        'round length',
+                        `${Math.round(length * 100) / 100}`,
+                        true
+                    )
                     .addField('RBE', `${rbe}`, true)
                     .addField('xp earned in that round', `${xp}`, true)
                     .addField(

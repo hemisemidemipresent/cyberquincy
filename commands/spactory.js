@@ -47,7 +47,12 @@ module.exports = {
             path = 3;
         } else {
             // when more than 2 values are positive, i.e. like not 00x, 0x0, or x00 args[0]
-            return message.channel.send('Please choose one upgrade at a time!');
+            const embed = new Discord.MessageEmbed()
+                .setTitle('Please choose one upgrade at a time!')
+                .setDescription(
+                    `For example:\n❌ q!${name} 130\n✔️ q!${name} 030`
+                );
+            return message.channel.send(embed);
         }
         let tier = 0;
         switch (path) {

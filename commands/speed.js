@@ -17,7 +17,7 @@ module.exports = {
             return message.channel.send(errorEmbed);
         }
         let speed = 0;
-        if (bln === 'moab' || bln === 'red' || b == 'lead') {
+        if (bln === 'moab' || bln === 'red' || bln == 'lead') {
             speed = 3;
         } else if (bln === 'bfb') {
             speed = 1;

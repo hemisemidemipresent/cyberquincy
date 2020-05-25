@@ -6,7 +6,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'submarine',
     description: 'submarine upgrades desc',
-    aliases: ['sub', 'sm', 'st'],
+    aliases: ['sub', 'sm', 'st', 'monkey-sub'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         if (!args[0]) {

@@ -5,7 +5,7 @@ const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
 const settings = { method: 'Get' };
 module.exports = {
     name: 'glue',
-    aliases: ['gs', 'glu', 'stick'],
+    aliases: ['gs', 'glu', 'stick', 'glue-gunner'],
     description:
         'very epic thing inspired from https://unforgivenjake.github.io/btd6rc/',
     usage: '[command name]',

@@ -6,7 +6,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'mortar',
     description: 'mortar upgrades desc',
-    aliases: ['mor'],
+    aliases: ['mor', 'mortar-monkey'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         if (!args[0]) {

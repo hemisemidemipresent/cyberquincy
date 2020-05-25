@@ -6,7 +6,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'ninja',
     description: 'ninja upgrades desc',
-    aliases: ['n', 'ninj', 'shuriken'],
+    aliases: ['n', 'ninj', 'shuriken', 'ninja-monkey'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         if (!args[0]) {

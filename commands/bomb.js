@@ -5,7 +5,7 @@ const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
 const settings = { method: 'Get' };
 module.exports = {
     name: 'bomb',
-    aliases: ['bs', 'cannon'],
+    aliases: ['bs', 'cannon', 'bomb-shooter'],
     description:
         'very epic thing inspired from https://unforgivenjake.github.io/btd6rc/',
     usage: '[command name]',

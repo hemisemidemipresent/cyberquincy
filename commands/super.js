@@ -6,7 +6,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'super',
     description: 'supermonkey upgrades desc',
-    aliases: ['sm', 'supermonkey'],
+    aliases: ['sm', 'supermonkey', 'super-monkey'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         if (!args[0]) {

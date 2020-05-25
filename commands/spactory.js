@@ -20,6 +20,7 @@ module.exports = {
         'spikeshooter',
         'basetrash',
         'spact',
+        'spike-factory',
     ],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {

@@ -6,7 +6,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'ace',
     description: 'ace upgrades desc',
-    aliases: ['pilot', 'plane'],
+    aliases: ['pilot', 'plane', 'monkey-ace'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         if (!args[0]) {

@@ -17,6 +17,7 @@ module.exports = {
         'hut',
         'circle',
         'fort',
+        'monkey-village',
     ],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {

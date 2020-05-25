@@ -6,7 +6,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'wizard',
     description: 'wizard upgrades desc',
-    aliases: ['apprentice', 'wiz'],
+    aliases: ['apprentice', 'wiz', 'wizard-monkey'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         if (!args[0]) {

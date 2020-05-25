@@ -5,7 +5,7 @@ const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
 const settings = { method: 'Get' };
 module.exports = {
     name: 'dart',
-    aliases: ['dm'],
+    aliases: ['dm', 'dart-monkey'],
     description:
         'very epic thing inspired from https://unforgivenjake.github.io/btd6rc/',
     usage: '[command name]',

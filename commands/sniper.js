@@ -7,7 +7,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'sniper',
     description: 'sniper upgrades desc',
-    aliases: ['sn', 'snip', 'snooper', 'gun', 'snipermonkey'],
+    aliases: ['sn', 'snip', 'snooper', 'gun', 'snipermonkey', 'sniper-monkey'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         if (!args[0]) {

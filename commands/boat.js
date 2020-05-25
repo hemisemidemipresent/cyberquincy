@@ -6,7 +6,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'buccaneer',
     description: 'buccaneer upgrades desc',
-    aliases: ['boat', 'buc', 'bucc', 'buccaneer'],
+    aliases: ['boat', 'buc', 'bucc', 'buccaneer', 'monkey-buccaneer'],
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         if (!args[0]) {

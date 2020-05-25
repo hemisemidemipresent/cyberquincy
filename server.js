@@ -563,7 +563,7 @@ client.on('message', async (message) => {
                             let levelUpEmbed = new Discord.MessageEmbed()
                                 .setTitle(ltxt)
                                 .setDescription(
-                                    `You levelled up to level ${tag1.level}!\nxp : ${tag1.xp}\nuse q!level to see your level and `
+                                    `You levelled up to level ${tag1.level}!\nxp : ${tag1.xp}\nuse q!level to see your level and xp`
                                 )
                                 .setFooter(
                                     'add us to your server: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
@@ -600,7 +600,7 @@ client.on('message', async (message) => {
                         let levelUpEmbed = new Discord.MessageEmbed()
                             .setTitle(ltxt)
                             .setDescription(
-                                `You levelled up to level ${tag1.level}!\nxp : ${tag1.xp}\nuse q!level to see your level and `
+                                `You levelled up to level ${tag1.level}!\nxp : ${tag1.xp}\nuse q!level to see your level and xp`
                             )
                             .setFooter(
                                 'add us to your server: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'

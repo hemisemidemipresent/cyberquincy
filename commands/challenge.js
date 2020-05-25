@@ -8,21 +8,21 @@ module.exports = {
     execute(message, args, client) {
         // what the fuck is this idk
         let heroyn = Math.floor(Math.random() * 2);
-        let mapdiff = Math.ceil(Math.random() * 4);
+        let mapdiff = Math.floor(Math.random() * 4);
         let startround = Math.ceil(Math.random() * 100);
         let endround = startround + Math.ceil(Math.random() * 30);
         let towerCount = Math.ceil(Math.random() * 15);
         let modeid = Math.floor(Math.random() * 10);
-        let lives = Math.ceil(Math.random() * 400);
-        let mkyn = Math.floor(Math.random() * 2);
-        let camoyn = Math.floor(Math.random() * 2);
-        let regrow = Math.floor(Math.random() * 2);
-        let sell = Math.floor(Math.random() * 2);
-        let cont = Math.floor(Math.random() * 2);
-        let bspeed = 100 + Math.floor((Math.random() - 1) * 10);
-        let Bspeed = 100 + Math.floor((Math.random() - 1) * 10);
-        let Bhealth = 100 + Math.floor((Math.random() - 1) * 10);
-        let chealth = 100 + Math.floor((Math.random() - 1) * 10);
+        const lives = Math.ceil(Math.random() * 400);
+        const mkyn = Math.floor(Math.random() * 2);
+        const camoyn = Math.floor(Math.random() * 2);
+        const regrow = Math.floor(Math.random() * 2);
+        const sell = Math.floor(Math.random() * 2);
+        const cont = Math.floor(Math.random() * 2);
+        const bspeed = Math.floor(Math.random() * 495) + 5;
+        const Bspeed = Math.floor(Math.random() * 495) + 5;
+        const Bhealth = Math.floor(Math.random() * 1995) + 5;
+        const chealth = Math.floor(Math.random() * 1990) + 10;
         let hero = 'none';
         const heroArray = [
             'Quincy',
@@ -82,11 +82,24 @@ module.exports = {
                 'Infernal',
             ],
         ];
+        const modes = [
+            'apopalypse',
+            'half cash',
+            'deflation',
+            'easy',
+            'medium',
+            'hard',
+            'impoppable',
+            'CHIMPS',
+            'Double HP MOABs',
+            'Alternate Bloon Rounds',
+        ];
+        const mode = modes[modeid];
         if (!heroyn) {
             hero = heroArray[Math.ceil(Math.random() * 9)];
         }
         const randomMap = Math.floor(Math.random() * mapArray[mapdiff].length);
-        map = mapArray[mapdiff][random];
+        map = mapArray[mapdiff][randomMap];
 
         Math.floor(Math.random() * 21);
         let towerArray = [
@@ -116,6 +129,10 @@ module.exports = {
         for (i = 0; i < towerCount; i++) {
             monkeys.push(towerArray[Math.floor(Math.random() * 21)]);
         }
+        const cash =
+            600 +
+            100 * startround +
+            startround * startround * Math.ceil(Math.random() * 10);
 
         const DEarr = ['enabled', 'disabled']; // honestly and abomination
         const MK = DEarr[mkyn];

@@ -60,7 +60,7 @@ module.exports = {
                 .setFooter('thats deflation for you');
             return message.channel.send(embed);
         } else if (args[2].includes('alt') || args[2].includes('abr')) {
-            let startround = args[0];
+            let startround = parseInt(args[0]) - 1;
             let startroundObject = abr[startround - 2]; // the data works in a way that basically means that its an array of arrays, ordered by round number
             let endroundObject = abr[endround - 2];
             let income = endroundObject[1] - startroundObject[1];

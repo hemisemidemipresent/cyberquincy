@@ -37,7 +37,7 @@ module.exports = {
                 .setFooter(`from round ${args[1]}`);
             return message.channel.send(embed);
         }
-        if (args[2].includs('alt') || args[2].includes('abr')) {
+        if (args[2].includes('alt') || args[2].includes('abr')) {
             while (cashSoFar <= cashNeeded) {
                 addToTotal = parseInt(abr[startRound][0]);
                 cashSoFar += addToTotal;

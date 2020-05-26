@@ -7,12 +7,12 @@ module.exports = {
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         const responseTime = Math.round(Date.now() - message.createdTimestamp);
-        let totalSeconds = client.uptime / 1000;
-        let days = Math.floor(totalSeconds / 86400);
-        let hours = Math.floor(totalSeconds / 3600);
+        const totalSeconds = client.uptime / 1000;
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor(totalSeconds / 3600);
         totalSeconds %= 3600;
-        let minutes = Math.floor(totalSeconds / 60);
-        let uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
+        const minutes = Math.floor(totalSeconds / 60);
+        const uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 
         const infoEmbed = new Discord.MessageEmbed()
             .setColor(colour)
@@ -36,7 +36,7 @@ module.exports = {
                 'https://discord.gg/VMX5hZA',
                 true
             )
-            .setFooter('thank you for using it! waiting for popularity');
+            .setFooter('thank you for using it! Please share!');
         message.channel.send(infoEmbed);
     },
 };

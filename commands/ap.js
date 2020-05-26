@@ -5,7 +5,6 @@ module.exports = {
     description:
         'tells you about the abr rounds (below 100 cos freeplay abr is the same as normal)',
     aliases: ['popology'],
-    usage: '!abround <round>',
     execute(message, args) {
         if (!args.length) {
             const choosemebed = new Discord.MessageEmbed()

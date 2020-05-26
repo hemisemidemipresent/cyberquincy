@@ -48,7 +48,7 @@ module.exports = {
                         normalStartRound + 1
                     } to popping round ${endround}`
                 )
-                .setColor('#ffff33')
+                .setColor('#ffff69')
                 .setFooter('not including starting cash');
             return message.channel.send(embed);
         } else if (args[2].includes('def')) {
@@ -56,7 +56,7 @@ module.exports = {
                 .setTitle(
                     'The total amount of cash you have is the same as the start'
                 )
-                .setColor('#5555ff')
+                .setColor('#6969ff')
                 .setFooter('thats deflation for you');
             return message.channel.send(embed);
         } else if (args[2].includes('alt') || args[2].includes('abr')) {
@@ -72,7 +72,7 @@ module.exports = {
                         startround + 1
                     } to popping round ${endround}`
                 )
-                .setColor('#ffff33')
+                .setColor('#ffff69')
                 .setFooter(
                     'in alternate bloon rounds, not including starting cash'
                 );

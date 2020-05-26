@@ -326,7 +326,7 @@ client.on('message', async (message) => {
                 let userData = await Tags.findOne({ where: { name: args[0] } }); // in case they are directly using the discord id. userData represents the "found" data
                 if (!userData)
                     // in case
-                    return message.reply(
+                    return message.channel.send(
                         "Please use a proper mention if you want to see someone else's level"
                     );
                 //let user = client.users.find((u) => u.id == userData.name);  old version
@@ -375,7 +375,7 @@ client.on('message', async (message) => {
                         '~~I got bonked by a DDT again~~',
                         'Please [report the bug](https://discord.gg/VMX5hZA)'
                     );
-                message.reply(errorEmbed);
+                return message.channel.send(errorEmbed);
             }
         }
         //when there isnt a mention, it shows your own level and xp
@@ -419,12 +419,15 @@ client.on('message', async (message) => {
                 where: { name: message.author.id },
             });
             if (!data)
-                return message.reply('I dont have any data stored of you!');
+                return message.channel.send(
+                    'I dont have any data stored of you!'
+                );
         } catch {
             return message.channel.send(
                 'Something went wrong! Report it here: https://discord.gg/VMX5hZA'
             );
         }
+        return message.channel.send('Your data should now be deleted');
     }
     // i dont think this works
     /*
@@ -490,7 +493,7 @@ client.on('message', async (message) => {
 
         if (now < expirationTime) {
             const timeLeft = (expirationTime - now) / 1000;
-            return message.reply(
+            return message.channel.send(
                 `please wait ${timeLeft.toFixed(
                     1
                 )} more second(s) before reusing the \`${
@@ -505,8 +508,9 @@ client.on('message', async (message) => {
 
     try {
         command.execute(message, args, client); // executes the command.
-        // the command count thingy
+
         let numberOfCommands = await Tags.findOne({
+            // the command count thingy, every time someone runs a command the "data" with id of 1000 gets +1
             where: { name: 1000 },
         });
         await Tags.update(
@@ -632,7 +636,7 @@ client.on('message', async (message) => {
                     '~~I got bonked by a DDT again~~',
                     'Please [report the bug](https://discord.gg/VMX5hZA)'
                 );
-            return message.reply(errorEmbed);
+            return message.channel.send(errorEmbed);
         }
     } catch (error) {
         // in case of command failures
@@ -644,7 +648,38 @@ client.on('message', async (message) => {
                 '~~I got bonked by a DDT again~~',
                 'Please [report the bug](https://discord.gg/VMX5hZA)'
             );
-        message.reply(errorEmbed);
+        return message.channel.send(errorEmbed);
+    }
+    const ranWelcomeIndex = Math.floor(Math.random() * 50);
+    if (ranWelcomeIndex === 0) {
+        const serverEmbed = new Discord.MessageEmbed()
+            .setTitle('Are you tired of the bot being offline?')
+            .addField(
+                'join the discord server!',
+                'get notifications for new updates and bot status at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
+            )
+            .setColor('#7289da');
+        return message.channel.send(serverEmbed);
+    } else if (ranWelcomeIndex === 1) {
+        const inviteEmbed = new Discord.MessageEmbed()
+            .setTitle('Want to invite the bot to your own server?')
+            .addField(
+                'Please spread the word around!',
+                'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
+            )
+            .setColor('#00ff69');
+        return message.channel.send(inviteEmbed);
+    } else if (ranWelcomeIndex === 3) {
+        const bugEmbed = new Discord.MessageEmbed()
+            .setTitle(
+                'Want to suggest a new feature? Fix a typo? Report a bug?'
+            )
+            .addField(
+                'join the discord server!',
+                'suggest a new feature and report a bug at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
+            )
+            .setColor('#7289da');
+        return message.channel.send(bugEmbed);
     }
 });
 client.login(token);

@@ -1,55 +1,42 @@
-const fetch = require('node-fetch');
-const url = 'http://topper64.co.uk/nk/btd6/dat/rounds.json';
-const settings = { method: 'Get' };
+const lengths = require('../jsons/roundlengths.json');
 const Discord = require('discord.js');
-
 module.exports = {
     name: 'roundlength',
-    aliases: ['length', 'long', 'time'],
-    execute(message, args) {
-        function getLength(round, arrayOfRounds) {
-            let roundArray = arrayOfRounds[round];
-            let longest = 0;
-            let end = 0;
-            for (i = 0; i < roundArray.length; i++) {
-                end = parseInt(roundArray[i][3]);
-                if (end > longest) {
-                    longest = end;
-                }
-            }
-            return longest / 60; //btd6 is 60fps game
-        }
-        if (!args[0] || isNaN(args[0])) {
+    aliases: ['length', 'rl', 'l'],
+    execute(message, args, client) {
+        if (!args || isNaN(args[0])) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setDescription(
                     'q!roundlength <start round> <end round> (shows the longest round)'
                 )
                 .setColor('#ff0000');
             return message.channel.send(errorEmbed);
+        } else if (!args[1]) {
+            let embed = new Discord.MessageEmbed()
+                .setDescription(
+                    `round ${args[0]} is ${lengths[args[0] + 1]}s long`
+                )
+                .setColor('#969696');
+            return message.channel.send(embed);
+        } else if (args[1]) {
+            let startRound = parseInt(args[0]);
+            let endRound = parseInt(args[1]);
+            let longestRound = 0;
+            let longestLength = 0;
+            for (i = startRound; i <= endRound; i++) {
+                if (longestLength < lengths[i + 1]) {
+                    longestLength = lengths[i + 1];
+                    longestRound = i + 1;
+                }
+            }
+            let embed = new Discord.MessageEmbed()
+                .setDescription(
+                    `From round ${startRound} to ${endRound}, the longest round is round ${longestRound} which is ${
+                        Math.round(longestLength * 100) / 100
+                    }s long`
+                )
+                .setColor('#696969');
+            message.channel.send(embed);
         }
-        let startRound = parseInt(args[0]);
-        let endRound = parseInt(args[1]);
-        fetch(url, settings)
-            .then((res) => res.json())
-            .then((json) => {
-                if (!args[1] || isNaN(args[1])) {
-                    return message.channel.send(
-                        `${args[0]} is ${getLength(args[0], json.reg)}s`
-                    );
-                }
-                let longestRound = 0; // the round number
-                let longestLength = 0; // the round length
-                let temp = 0;
-                for (i = startRound; i <= endRound; i++) {
-                    temp = getLength(i, json.reg);
-                    if (temp > longestLength) {
-                        longestLength = temp;
-                        longestRound = i;
-                    }
-                }
-                message.channel.send(
-                    `The longest round from ${startRound} to ${endRound} is ${longestRound} with a length of ${longestLength}s`
-                );
-            });
     },
 };

@@ -116,14 +116,14 @@ module.exports = {
                         .addField('name', object.name)
                         .addField(
                             'cost',
-                            `${hardcost} (hard),${object.cost} (medium)`
+                            `${hardcost} (hard), ${object.cost} (medium)`
                         )
                         .addField('notes', object.notes)
                         .addField('in game description', object.description)
                         .addField(`xp needed:`, `${object.xp}`)
                         .addField(
                             'total cost',
-                            `${hardTotalCost} (hard)\n${totalCost} (medium)`
+                            `${hardTotalCost} (hard), ${totalCost} (medium)`
                         )
                         .setFooter(
                             'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'

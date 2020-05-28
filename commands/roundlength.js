@@ -1,4 +1,4 @@
-const lengths = require('../jsons/roundlengths.json');
+const lengths = require('../jsons/roundlength.json');
 const Discord = require('discord.js');
 module.exports = {
     name: 'roundlength',

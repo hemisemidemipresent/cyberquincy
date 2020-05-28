@@ -14,7 +14,9 @@ module.exports = {
         } else if (!args[1]) {
             let embed = new Discord.MessageEmbed()
                 .setDescription(
-                    `round ${args[0]} is ${lengths[args[0] + 1]}s long`
+                    `round ${args[0]} is ${
+                        lengths[parseInt(args[0]) + 1]
+                    }s long`
                 )
                 .setColor('#969696');
             return message.channel.send(embed);

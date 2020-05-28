@@ -9,7 +9,7 @@ const r1 = require('../jsons/rounds.json');
 module.exports = {
     name: 'round',
     description: 'tells you about the rounds (below 100)',
-    aliases: ['r'],
+    aliases: ['r', 'rbe'],
     execute(message, args) {
         if (!args[0] || isNaN(args[0])) {
             let errorEmbed = new Discord.MessageEmbed()

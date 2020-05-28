@@ -4,6 +4,19 @@ module.exports = {
     name: 'herolevel',
     aliases: ['hero', 'hl'],
     execute(message, args, client) {
+        const heroes = [
+            'Quincy',
+            'Gwen',
+            'Obyn',
+            'Striker',
+            'Ezili',
+            'Ben',
+            'Churchill',
+            'Pat',
+            'Adora',
+            'Brickwell',
+        ];
+        const hero_xp_curves = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1];
         function level_cal(B16, xp_slope, diff_mult, heroname) {
             let xp_per_level = [
                 0,
@@ -110,7 +123,7 @@ module.exports = {
         if (!args[0] && !args[1] && !args[2]) {
             message.channel
                 .send(
-                    'Please select hero and type the number into chat\n1 - quincy\n2 - gwen\n3 - obyn\n4 - jones\n5 - ezili\n6 - ben\n7 - churchill\n8 - pat\n9 - adora'
+                    'Please select hero and type the number into chat\n1 - quincy\n2 - gwen\n3 - obyn\n4 - jones\n5 - ezili\n6 - ben\n7 - churchill\n8 - pat\n9 - adora\n10 - brickwell'
                 )
                 .then(() => {
                     message.channel
@@ -127,35 +140,8 @@ module.exports = {
                                     'sorry, please specify a valid hero number next time. run the command again'
                                 );
                             }
-                            if (f == 1) {
-                                var xp_slope = 1;
-                                var heroname = 'Quincy';
-                            } else if (f == 2) {
-                                var xp_slope = 1;
-                                var heroname = 'Gwen';
-                            } else if (f == 3) {
-                                var xp_slope = 1;
-                                var heroname = 'Obyn';
-                            } else if (f == 4) {
-                                var xp_slope = 1;
-                                var heroname = 'Striker Jones';
-                            } else if (f == 5) {
-                                var xp_slope = 1.425;
-                                var heroname = 'Ezili';
-                            } else if (f == 6) {
-                                var xp_slope = 1.5;
-                                var heroname = 'Benjamin';
-                            } else if (f == 7) {
-                                var xp_slope = 1.8;
-                                var heroname = 'Churchill';
-                            } else if (f == 8) {
-                                var xp_slope = 1.425;
-                                var heroname = 'Pat';
-                            } else if (f == 9) {
-                                var xp_slope = 1.8;
-                                var heroname = 'Adora';
-                            }
-
+                            let xp_slope = hero_xp_curves[f - 1];
+                            let heroname = heroes[f - 1];
                             message.channel
                                 .send(
                                     'Please type the starting round in the chat'
@@ -169,23 +155,24 @@ module.exports = {
                                         })
                                         .then((collect) => {
                                             let g = collect.first().content;
+
                                             if (isNaN(g) || g < 1 || g > 100) {
                                                 return message.channel.send(
                                                     'sorry, please specify a valid round next time. run the commands again'
                                                 );
-                                            } else if (g <= 21) {
-                                                var B16 =
-                                                    10 * g * g + 10 * g - 20;
+                                            }
+                                            let B16;
+                                            if (g <= 21) {
+                                                B16 = 10 * (g + 2) * (g - 1);
                                             } else if (g <= 51) {
-                                                var B16 =
+                                                B16 =
                                                     20 * g * g - 400 * g + 4180;
                                             } else {
                                                 g -= 51;
-                                                var B16 =
-                                                    5 *
-                                                    (9 * g * g +
-                                                        351 * g +
-                                                        7502);
+                                                B16 =
+                                                    45 * g * g +
+                                                    1053 * g +
+                                                    22506;
                                             }
 
                                             message.channel

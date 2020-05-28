@@ -281,7 +281,7 @@ client.on('message', async (message) => {
             'there isnt a space between q! and the command name'
         );
     if (
-        commandName === 'level' ||
+        commandName.includes('level') ||
         commandName === 'xp' ||
         commandName === 'rank'
     ) {
@@ -314,15 +314,7 @@ client.on('message', async (message) => {
                         );
                     return message.channel.send(lvlMebed);
                 }
-                /*if (message.author.id == '699780654740668426') {
-                    if (args[0] == 'reset') {
-                        const affectedRows = await Tags.update(
-                            { xp: 0, level: 1 },
-                            { where: { name: message.author.id } }
-                        );
-                        message.channel.send('resetted your xp');
-                    }
-                }*/
+
                 let userData = await Tags.findOne({ where: { name: args[0] } }); // in case they are directly using the discord id. userData represents the "found" data
                 if (!userData)
                     // in case
@@ -660,7 +652,7 @@ client.on('message', async (message) => {
             )
             .setColor('#7289da');
         return message.channel.send(serverEmbed);
-    } else if (ranWelcomeIndex === 1) {
+    } else if (ranWelcomeIndex === 1 || ranWelcomeIndex === 4) {
         const inviteEmbed = new Discord.MessageEmbed()
             .setTitle('Want to invite the bot to your own server?')
             .addField(

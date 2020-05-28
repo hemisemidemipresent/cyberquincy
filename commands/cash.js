@@ -6,7 +6,7 @@ module.exports = {
     name: 'cash',
     aliases: ['ca', 'k', 'cost'],
     execute(message, args) {
-        if (isNaN(args[0]) || !args[0]) {
+        if (isNaN(args[0]) || !args[0] || isNaN(args[1]) || !args[1]) {
             return message.channel.send(
                 'q!cash <cash needed> <startround>\n(if startround = 0, starting cash is included)',
                 { code: 'md' }

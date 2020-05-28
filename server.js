@@ -2,6 +2,7 @@
 DISCLAIMER: variable names are horrible here, I apologise. Try and stick to the comments as much as you can.
 there are a few other pieces in the code before the message event collector. only then the code starts getting weird.
 */
+const keepAlive = require('./keepAlive.js');
 const express = require('express');
 const app = express();
 app.use(express.static('public'));
@@ -674,5 +675,6 @@ client.on('message', async (message) => {
         return message.channel.send(bugEmbed);
     }
 });
+keepAlive();
 client.login(token);
 //who you made it this far. Yes this is a giant mess that needs urgent fixing. trust me it used to be a lot worse.

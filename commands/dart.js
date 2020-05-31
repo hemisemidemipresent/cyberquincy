@@ -38,7 +38,7 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setTitle('Please choose one upgrade at a time!')
                 .setDescription(
-                    `For example:\n❌ q!${name} 130\n✔️ q!${name} 030`
+                    `For example:\n❌ q!${name} 130\n✅ q!${name} 030`
                 );
             return message.channel.send(embed);
         }

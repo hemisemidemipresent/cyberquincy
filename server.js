@@ -285,7 +285,7 @@ client.on('message', async (message) => {
             'there isnt a space between q! and the command name'
         );
     if (
-        commandName.includes('level') ||
+        commandName == 'level' ||
         commandName === 'xp' ||
         commandName === 'rank'
     ) {

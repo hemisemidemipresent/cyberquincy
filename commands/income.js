@@ -1,6 +1,7 @@
 const r = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json');
 const Discord = require('discord.js');
+const { red, magenta, purple, yellow } = require('../jsons/colours.json');
 module.exports = {
     name: 'income',
     execute(message, args) {
@@ -16,7 +17,7 @@ module.exports = {
                     'q!income <startround> <endround> <difficulty>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
                 )
                 .addField('example', 'q!income 7 89 abr')
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(errorEmbed);
         } else if (!args[1] || isNaN(args[1]) || args[1] < 0 || args[1] > 100) {
             // another error case
@@ -30,7 +31,7 @@ module.exports = {
                     'other difficulties',
                     '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
                 )
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(errorEmbed);
         }
 
@@ -48,7 +49,7 @@ module.exports = {
                         normalStartRound + 1
                     } to popping round ${endround}`
                 )
-                .setColor('#ffff69')
+                .setColor(magenta)
                 .setFooter('not including starting cash');
             return message.channel.send(embed);
         } else if (args[2].includes('def')) {
@@ -56,7 +57,7 @@ module.exports = {
                 .setTitle(
                     'The total amount of cash you have is the same as the start'
                 )
-                .setColor('#6969ff')
+                .setColor(purple)
                 .setFooter('thats deflation for you');
             return message.channel.send(embed);
         } else if (args[2].includes('alt') || args[2].includes('abr')) {
@@ -72,7 +73,7 @@ module.exports = {
                         startround + 1
                     } to popping round ${endround}`
                 )
-                .setColor('#ffff69')
+                .setColor(yellow)
                 .setFooter(
                     'in alternate bloon rounds, not including starting cash'
                 );

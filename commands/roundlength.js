@@ -1,5 +1,6 @@
 const lengths = require('../jsons/roundlength.json');
 const Discord = require('discord.js');
+const { red, lightgrey, grey } = require('../jsons/colours.json');
 module.exports = {
     name: 'roundlength',
     aliases: ['length', 'rl', 'l'],
@@ -9,7 +10,7 @@ module.exports = {
                 .setDescription(
                     'q!roundlength <start round> <end round> (shows the longest round)'
                 )
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(errorEmbed);
         } else if (!args[1]) {
             let embed = new Discord.MessageEmbed()
@@ -18,7 +19,7 @@ module.exports = {
                         lengths[parseInt(args[0]) + 1]
                     }s long`
                 )
-                .setColor('#969696');
+                .setColor(lightgrey);
             return message.channel.send(embed);
         } else if (args[1]) {
             let startRound = parseInt(args[0]);
@@ -37,7 +38,7 @@ module.exports = {
                         Math.round(longestLength * 100) / 100
                     }s long`
                 )
-                .setColor('#696969');
+                .setColor(grey);
             message.channel.send(embed);
         }
     },

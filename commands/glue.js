@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber } = require('../jsons/colours.json');
 const fetch = require('node-fetch');
 const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
 const settings = { method: 'Get' };
@@ -60,7 +60,7 @@ module.exports = {
                 if (!object) {
                     object = json[`${name}`];
                     let embed = new Discord.MessageEmbed()
-                        .setColor(colour)
+                        .setColor(cyber)
                         .addField('name', object.name)
                         .addField('cost', `${object.cost} (medium)`)
                         .addField('notes', object.notes)
@@ -101,7 +101,7 @@ module.exports = {
                     hardcost = Math.round((object.cost * 1.08) / 5) * 5;
                     hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
                     let embed = new Discord.MessageEmbed()
-                        .setColor(colour)
+                        .setColor(cyber)
                         .addField('name', object.name)
                         .addField(
                             'cost',

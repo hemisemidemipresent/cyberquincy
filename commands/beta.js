@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber } = require('../jsons/colours.json');
 const fetch = require('node-fetch');
 const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
 const settings = { method: 'Get' };
@@ -12,7 +12,7 @@ module.exports = {
             .setDescription(
                 '🌳🌳🟩🟩🟩🟩🟩🟩🟩🌳🌳🌳\n🌳🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🌳\n🟩🟩🟩🟩🟩🟩🧱🧱🧱🧱🟩🟩\n🟩🟩🟩🟩🟩🟩🧱🟩🟩🧱🟩🟩\n🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🟩🟩\n🟩🟩🟩🟩🟩🟩🧱🟩🟩🟩🟩🟩\n🟩🟩🟩🟩🟩🟩🧱🟩🧱🧱🧱🟩\n🟩🟩🟩🧱🧱🧱🧱🧱🧱🟩🧱🟩\n🟩🟩🟩🧱🟩🟩🧱🟩🟩🟩🧱🟩\n🟩🟩🟩🧱🧱🧱🧱🟩🟩🟩🧱🟩\n🌳🟩🟩🟩🟩🟩🟩🟩🟩🟩🧱🌳\n🌳🌳🟩🟩🟩🟩🟩🟩🟩🟩🧱🌳'
             )
-            .setColor(colour)
+            .setColor(cyber)
             .setFooter('beta map - monkey meadow');
         message.channel.send(embed).then((msg) => {
             msg.react('❌');

@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'herolevel',
     aliases: ['hero', 'hl'],
@@ -131,7 +131,7 @@ module.exports = {
                 .addField('level 18', `r${finalArr[17]}`, true)
                 .addField('level 19', `r${finalArr[18]}`, true)
                 .addField('level 20', `r${finalArr[19]}`, true)
-                .setColor(colour);
+                .setColor(cyber);
             return embed;
         }
         const filter = (msg) => msg.author.id === `${message.author.id}`;

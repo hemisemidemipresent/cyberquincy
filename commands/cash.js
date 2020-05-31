@@ -1,7 +1,7 @@
 const r = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json'); // array containing arrays, nth index is nth round, in the returned array 0th value is new cash, 1st value is total cash
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber, orange } = require('../jsons/colours.json');
 module.exports = {
     name: 'cash',
     aliases: ['ca', 'k', 'cost'],
@@ -25,7 +25,7 @@ module.exports = {
                 if (startRound > 100) {
                     let embed = new Discord.MessageEmbed()
                         .setTitle(`You cant get $${cashNeeded} before freeplay`)
-                        .setColor('#ff5500');
+                        .setColor(orange);
                     return message.channel.send(embed);
                 }
             }
@@ -33,7 +33,7 @@ module.exports = {
                 .setTitle(
                     `You should get $${cashNeeded} by round ${startRound}`
                 )
-                .setColor(colour)
+                .setColor(cyber)
                 .setFooter(`from round ${args[1]}`);
             return message.channel.send(embed);
         }
@@ -46,7 +46,7 @@ module.exports = {
                 if (startRound > 100) {
                     let embed = new Discord.MessageEmbed()
                         .setTitle(`You cant get $${cashNeeded} before freeplay`)
-                        .setColor('#ff5500');
+                        .setColor(orange);
                     return message.channel.send(embed);
                 }
             }
@@ -54,7 +54,7 @@ module.exports = {
                 .setTitle(
                     `You should get $${cashNeeded} by round ${startRound}`
                 )
-                .setColor(colour)
+                .setColor(cyber)
                 .setFooter(`in ABR, from round ${args[1]}`);
             return message.channel.send(embed);
         }

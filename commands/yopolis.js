@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'monkeyopolis',
     aliases: ['mp'],
@@ -26,7 +26,7 @@ module.exports = {
         let even = Math.ceil(price / money);
         const mpembed = new Discord.MessageEmbed()
             .setTitle('Monkeyopolis Simulator')
-            .setColor(colour)
+            .setColor(cyber)
             .addField('amount sacrificed', `${args[0]}`)
             .addField('farms sacrificed', `${farmcount}`)
             .addField('Money produced in a round', `${money}`, true)

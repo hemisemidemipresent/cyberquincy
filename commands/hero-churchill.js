@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber, red } = require('../jsons/colours.json');
 const fetch = require('node-fetch');
 const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
 const settings = { method: 'Get' };
@@ -20,7 +20,7 @@ module.exports = {
     execute(message, args, client) {
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()
-                .setColor('#ff0000')
+                .setColor(red)
                 .setDescription(
                     `Please specify a level for the hero\ne.g. ${message.content} 20`
                 );
@@ -35,7 +35,7 @@ module.exports = {
 
                 if (!object) {
                     let errorEmbed = new Discord.MessageEmbed()
-                        .setColor('#ff0000')
+                        .setColor(red)
                         .setDescription(
                             `Please specify a level for the hero\ne.g. q!${name} 20`
                         );
@@ -46,7 +46,7 @@ module.exports = {
                     .setTitle(`${name} level ${level}`)
                     .addField("cost/'xp'", `${object.xp}`)
                     .addField('desc', `${object.notes}`)
-                    .setColor(colour)
+                    .setColor(cyber)
                     .setFooter(
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
                     );

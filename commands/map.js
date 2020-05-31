@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber } = require('../jsons/colours.json');
 const ma = require('../jsons/map.json');
 module.exports = {
     name: 'map',
@@ -182,7 +182,7 @@ module.exports = {
                 'https://vignette.wikia.nocookie.net/b__/images/0/0c/QuincyCyberPortraitLvl20.png/revision/latest/scale-to-width-down/179?cb=20190612022025&path-prefix=bloons';
         }
         const mapEmbed = new Discord.MessageEmbed()
-            //.setColor(colour)
+            //.setColor(cyber)
             .setTitle('Map info')
             .setAuthor('Cyber Quincy')
             .setDescription(`Here is your info for ${name}`)
@@ -203,7 +203,7 @@ module.exports = {
                 'I am Quincy, Evolved from quincy.',
                 'https://vignette.wikia.nocookie.net/b__/images/0/0c/QuincyCyberPortraitLvl20.png/revision/latest/scale-to-width-down/179?cb=20190612022025&path-prefix=bloons'
             )
-            .setColor(colour);
+            .setColor(cyber);
         message.channel.send(mapEmbed);
     },
 };

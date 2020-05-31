@@ -3,7 +3,7 @@ const url = 'http://topper64.co.uk/nk/btd6/dat/rounds.json';
 const settings = { method: 'Get' };
 const round2 = require('../jsons/round2.json');
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber, red } = require('../jsons/colours.json');
 const r1 = require('../jsons/rounds.json');
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
                     'use **q!round <round number>**\nFor example: q!round 68'
                 )
                 .addField('about ABR rounds', 'use q!abr <round> instead')
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(errorEmbed);
         }
         function getLength(round, arrayOfRounds) {
@@ -46,7 +46,7 @@ module.exports = {
             let embed = new Discord.MessageEmbed()
                 .setTitle('Please specify a round > 0')
                 .setDescription('Quincy has no experience in these rounds')
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(embed);
         } else if (round > 100) {
             let embed = new Discord.MessageEmbed()
@@ -58,7 +58,7 @@ module.exports = {
                     'I hear you cry about 163, 263, 200',
                     '["fixed" sandbox rounds](https://www.reddit.com/r/btd6/comments/9omw65/almost_every_single_special_freeplay_round/?utm_source=amp&utm_medium=&utm_content=post_body)'
                 )
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(embed);
         }
         let xp = 0;
@@ -102,7 +102,7 @@ module.exports = {
                         'you are not in freeplay (then divide xp by 10 for value) AND\n2) you are playing beginner maps (intermediate +10%, advanced +20%, expert +30%)'
                     )
                     .setFooter('for more data on money use q!income')
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(roundEmbed);
             });
     },

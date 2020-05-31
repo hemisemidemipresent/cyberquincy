@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const quiz = require('../jsons/quiz.json');
-const { colour } = require('../shh/config.json');
+const { cyber, orange, turq, magenta } = require('../jsons/colours.json');
 module.exports = {
     name: 'quiz',
     execute(message, args, client) {
@@ -22,7 +22,7 @@ module.exports = {
             .setFooter(
                 'This command is unstable and dont expect it to be 100% working'
             )
-            .setColor(colour);
+            .setColor(cyber);
         const filter = (msg) => msg.author.id === `${message.author.id}`;
         message.channel.send(QuestionEmbed).then(() => {
             message.channel
@@ -40,19 +40,19 @@ module.exports = {
                             .setTitle(
                                 'Congratulations! You got the correct answer!'
                             )
-                            .setColor('#00ff69');
+                            .setColor(turq);
                         message.channel.send(correctEmbed);
                     } else {
                         let wrongEmbed = new Discord.MessageEmbed()
                             .setTitle('Game over! You got the wrong answer!')
-                            .setColor('#ff6900');
+                            .setColor(orange);
                         message.channel.send(wrongEmbed);
                     }
                 })
                 .catch((collected) => {
                     let errorEmbed = new Discord.MessageEmbed()
                         .setTitle(`Game over! You took too long.`)
-                        .setColor('#ff0069');
+                        .setColor(magenta);
                     message.channel.send();
                 });
         });

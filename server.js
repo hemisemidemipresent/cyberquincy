@@ -17,7 +17,8 @@ app.listen(process.env.PORT);
 const fs = require('fs');
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
-const { prefix, colour, token } = require('./shh/config.json');
+const { prefix, token } = require('./shh/config.json');
+const { red, cyber, blurple, turq, green } = require('../jsons/colours.json');
 const dataArray = [
     [
         'invite',
@@ -112,7 +113,7 @@ client.on('guildCreate', (guild) => {
         return console.log('wtf');
     } else {
         let helpEmbed = new Discord.MessageEmbed()
-            .setColor(colour)
+            .setColor(cyber)
             .setDescription(`Hi! I am Cyber Quincy. I am a btd6 discord bot.`)
             .addField(
                 'general information:',
@@ -132,7 +133,7 @@ client.on('guildCreate', (guild) => {
 });
 client.on('guildMemberAdd', async (member) => {
     const helpembed = new Discord.MessageEmbed()
-        .setColor(colour)
+        .setColor(cyber)
         .setTitle(
             'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!'
         )
@@ -209,7 +210,7 @@ client.on('guildMemberAdd', async (member) => {
                 'Who am I?',
                 'I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881),[discord server](https://discord.gg/XBhHWh9)'
             )
-            .setColor(colour);
+            .setColor(cyber);
         member.send(wel);
     } else if (member.guild.id === '543957081183617024') {
         const tchannel = member.guild.channels.cache.find((channel) =>
@@ -255,7 +256,7 @@ client.on('message', async (message) => {
         );
         let embed = new Discord.MessageEmbed()
             .setDescription(message.content)
-            .setColor(colour)
+            .setColor(cyber)
             .addField(
                 'join the discord server',
                 '[message was from here](https://discord.gg/VMX5hZA)'
@@ -269,7 +270,7 @@ client.on('message', async (message) => {
         );
         let embed = new Discord.MessageEmbed()
             .setDescription(message.content)
-            .setColor(colour)
+            .setColor(cyber)
             .addField(
                 'join the BTD index server',
                 '[message was from here](https://discord.gg/RAGfmAB)'
@@ -308,7 +309,7 @@ client.on('message', async (message) => {
                         .setTitle(`xp rewards`)
                         .addField('level 3', `<@&645126928340353036> `)
                         .addField('level 10', `<@&645629187322806272>`)
-                        .setColor(colour)
+                        .setColor(cyber)
                         .addField(
                             'you only get role rewards in the bot discord server',
                             '[discord server](https://discord.gg/VMX5hZA)'
@@ -332,7 +333,7 @@ client.on('message', async (message) => {
                     .setTitle(`${user.username}'s xp'`)
                     .addField('level', userData.level - 1)
                     .addField('xp', userData.xp)
-                    .setColor(colour)
+                    .setColor(cyber)
                     .addField(
                         'have a suggestion or found a bug?',
                         'Please tell us [here](https://discord.gg/VMX5hZA)!'
@@ -355,7 +356,7 @@ client.on('message', async (message) => {
                     .setTitle(`${user.username}'s xp'`)
                     .addField('level', userData.level - 1)
                     .addField('xp', userData.xp)
-                    .setColor(colour)
+                    .setColor(cyber)
                     .addField(
                         'have a suggestion or found a bug?',
                         'Please tell us [here](https://discord.gg/VMX5hZA)!'
@@ -365,7 +366,7 @@ client.on('message', async (message) => {
             } catch (e) {
                 console.log(e);
                 const errorEmbed = new Discord.MessageEmbed()
-                    .setColor('#ff0000')
+                    .setColor(red)
                     .setDescription('Oh no! Something went wrong!')
                     .addField(
                         '~~I got bonked by a DDT again~~',
@@ -381,7 +382,7 @@ client.on('message', async (message) => {
             .setTitle(`${message.author.username}'s xp`)
             .addField('level', data.level - 1)
             .addField('xp', data.xp)
-            .setColor(colour)
+            .setColor(cyber)
             .addField(
                 'have a suggestion or found a bug?',
                 'Please tell us [here](https://discord.gg/VMX5hZA)!'
@@ -568,7 +569,7 @@ client.on('message', async (message) => {
                                 .setFooter(
                                     'add us to your server: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
                                 )
-                                .setColor('#00ff00');
+                                .setColor(green);
                             message.channel.send(levelUpEmbed);
                             let guildmember = client.guilds.get(
                                 '598768024761139240'
@@ -605,7 +606,7 @@ client.on('message', async (message) => {
                             .setFooter(
                                 'add us to your server: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
                             )
-                            .setColor('#00ff00');
+                            .setColor(green);
                         message.channel.send(levelUpEmbed);
                         let guildmember = client.guilds.cache
                             .get('598768024761139240')
@@ -626,7 +627,7 @@ client.on('message', async (message) => {
                 }
             }
             let errorEmbed = new Discord.MessageEmbed() // in case of db failures
-                .setColor('#ff0000')
+                .setColor(red)
                 .setDescription('Oh no! Something went wrong!')
                 .addField(
                     '~~I got bonked by a DDT again~~',
@@ -638,7 +639,7 @@ client.on('message', async (message) => {
         // in case of command failures
         console.error(error);
         const errorEmbed = new Discord.MessageEmbed()
-            .setColor('#ff0000')
+            .setColor(red)
             .setDescription('Oh no! Something went wrong!')
             .addField(
                 '~~I got bonked by a DDT again~~',
@@ -654,7 +655,7 @@ client.on('message', async (message) => {
                 'join the discord server!',
                 'get notifications for new updates and bot status at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
             )
-            .setColor('#7289da');
+            .setColor(blurple);
         return message.channel.send(serverEmbed);
     } else if (ranWelcomeIndex === 1 || ranWelcomeIndex === 4) {
         const inviteEmbed = new Discord.MessageEmbed()
@@ -663,7 +664,7 @@ client.on('message', async (message) => {
                 'Please spread the word around!',
                 'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
             )
-            .setColor('#00ff69');
+            .setColor(turq);
         return message.channel.send(inviteEmbed);
     } else if (ranWelcomeIndex === 3) {
         const bugEmbed = new Discord.MessageEmbed()
@@ -674,7 +675,7 @@ client.on('message', async (message) => {
                 'join the discord server!',
                 'suggest a new feature and report a bug at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
             )
-            .setColor('#7289da');
+            .setColor(blurple);
         return message.channel.send(bugEmbed);
     }
 });

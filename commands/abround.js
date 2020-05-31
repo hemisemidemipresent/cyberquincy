@@ -2,7 +2,7 @@ const url = 'http://topper64.co.uk/nk/btd6/dat/rounds.json';
 const fetch = require('node-fetch');
 const settings = { method: 'Get' };
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber, red } = require('../jsons/colours.json');
 module.exports = {
     name: 'abround',
     description:
@@ -16,7 +16,7 @@ module.exports = {
                     'use **q!round <round number>**\nFor example: q!round 68'
                 )
                 .addField('about ABR rounds', 'use q!abr <round> instead')
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(errorEmbed);
         }
         function getLength(round, arrayOfRounds) {
@@ -44,7 +44,7 @@ module.exports = {
             let embed = new Discord.MessageEmbed()
                 .setTitle('Please specify a round > 0')
                 .setDescription('Quincy has no experience in these rounds')
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(embed);
         } else if (round > 100) {
             let embed = new Discord.MessageEmbed()
@@ -56,7 +56,7 @@ module.exports = {
                     'I hear you cry about 163, 263, 200',
                     '["fixed" sandbox rounds](https://www.reddit.com/r/btd6/comments/9omw65/almost_every_single_special_freeplay_round/?utm_source=amp&utm_medium=&utm_content=post_body)'
                 )
-                .setColor('#ff0000')
+                .setColor(red)
                 .setFooter('abr rounds >100 is normal freeplay FYI');
             return message.channel.send(embed);
         }
@@ -73,7 +73,7 @@ module.exports = {
                     .addField('round length', `${length}`, true)
 
                     .setFooter('for more data on money use q!income or q!cash')
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(roundEmbed);
             });
     },

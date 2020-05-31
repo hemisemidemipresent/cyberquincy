@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'emote',
     description: 'emojis',
@@ -25,7 +25,7 @@ module.exports = {
                         ' Emojis on ' +
                         message.guild.name
                 )
-                .setColor(0xffff40)
+                .setColor(cyber)
                 .setDescription('These Are All The Emojis:')
                 .setThumbnail(message.guild.iconURL);
             emojisArray.forEach((emojis, i) => {

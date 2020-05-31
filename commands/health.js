@@ -96,7 +96,7 @@ module.exports = {
                 return message.channel.send(`${bloon}`);
             } else {
                 const errorEmbed = new Discord.MessageEmbed()
-                    .setColor('#ff0000')
+                    .setColor(red)
                     .setDescription('Oh no! Something went wrong!')
                     .addField(
                         '~~I got bonked by a DDT again~~',

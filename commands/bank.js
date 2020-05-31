@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'bank',
     aliases: ['b', 'ba'],
@@ -368,7 +368,7 @@ module.exports = {
                                                                                                                             `${roundsToRepay}`
                                                                                                                         )
                                                                                                                         .setColor(
-                                                                                                                            colour
+                                                                                                                            cyber
                                                                                                                         );
                                                                                                                     return message.channel.send(
                                                                                                                         bankEmbed

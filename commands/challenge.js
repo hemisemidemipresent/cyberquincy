@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'rc',
     aliases: ['rc', 'randomc', 'random', 'rchallenge', 'rch'],
@@ -142,7 +143,7 @@ module.exports = {
         const continues = DEarr[cont];
         const ChallengeEmbed = new Discord.MessageEmbed()
             .setTitle(`Random Challenge generated`)
-            .setColor('#00E6BB')
+            .setColor(cyber)
             .addField('Map', `${map}`, true)
             .addField('Hero', `${hero}`, true)
             .addField('mode', `${mode}`, true)

@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'ap',
     description:
@@ -21,7 +21,7 @@ module.exports = {
                     "i dont understad what is 'normal type','sharp type',etc... is"
                 )
                 .addField('q!ap 3', 'i dont understand buffs')
-                .setColor(colour);
+                .setColor(cyber);
             return message.channel.send(choosemebed);
         }
         if (args[0] == 1) {
@@ -35,7 +35,7 @@ module.exports = {
                         'Layers',
                         '"Layers" is sometimes used in in-game descriptions to mean damage. This is misleading, as most people would consider eg a ceramic to have 1 more layer than a rainbow, but it requires 10 damage to remove this layer.'
                     )
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(damageembed);
             } else if (args[1] == 'md' || args[1] == 'cd' || args[1] == 'fd') {
                 const additionaldamageEmbed = new Discord.MessageEmbed()
@@ -45,7 +45,7 @@ module.exports = {
                     .setDescription(
                         'These will be indicated by cd, md, and fd respectively, and the total damage will be written in parentheses for convenience, eg "2d, 1md (3)". Other bonuses are possible, but will not be abbreviated due to how uncommon they are.'
                     )
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(additionaldamageEmbed);
             } else if (args[1] == 'p') {
                 const pierceembed = new Discord.MessageEmbed()
@@ -75,7 +75,7 @@ module.exports = {
                     .setFooter(
                         '"Popping power" is a vague term and is best avoided entirely. Despite this, in-game descriptions continually use it to mean pierce.'
                     )
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(pierceembed);
             } else if (args[1] == 'r') {
                 const rangeembed = new Discord.MessageEmbed()
@@ -83,7 +83,7 @@ module.exports = {
                     .setDescription(
                         'Range (r) is the radius of the range circle, given in arbitrary "units", because pixel values depend entirely on the resolution of the device running the game. While it is hard to imagine what a "unit" is, providing these numbers does allow for very useful comparisons between towers.'
                     )
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(rangeembed);
             } else if (args[1] == 's') {
                 const sembed = new Discord.MessageEmbed()
@@ -95,7 +95,7 @@ module.exports = {
                         'Reload times greater than 0.1s',
                         'they are only accurate to the nearest frame (1/60th of a second). Times less than 0.1s are accurate on average - towers will release multiple projectiles on the same frame as necessary to maintain this average.'
                     )
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(sembed);
             } else if (args[1] == 'j') {
                 const jembed = new Discord.MessageEmbed()
@@ -103,7 +103,7 @@ module.exports = {
                     .setDescription(
                         'Projectile count is quite simply the number of projectiles emitted at once. If the count is not 1, it will be stated with the abbreviation **j**. No attempt will be made to describe how spread out the projectiles are (compare tack shooter to triple darts).'
                     )
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(jembed);
             } else {
                 const mainpropembed = new Discord.MessageEmbed()
@@ -127,7 +127,7 @@ module.exports = {
                         true
                     )
                     .addField('**j**', 'projectile count', true)
-                    .setColor(colour);
+                    .setColor(cyber);
                 message.channel.send(mainpropembed);
             }
         } else if (args[0] == 2) {
@@ -154,7 +154,7 @@ module.exports = {
                 .setFooter(
                     'This is not enough to fully describe all attacks! There are many special cases that simply need more words.'
                 )
-                .setColor(colour);
+                .setColor(cyber);
             message.channel.send(typembed);
         } else if ((args[0] = 3)) {
             const buffembed = new Discord.MessageEmbed()
@@ -183,7 +183,7 @@ module.exports = {
                 .setFooter(
                     'If an upgrade adds or replaces an attack, the new attack will not be affected by buffs from earlier in the same path.'
                 )
-                .setColor(colour);
+                .setColor(cyber);
             message.channel.send(buffembed);
         } else {
             message.channel.send('I cant understand what you are saying!');

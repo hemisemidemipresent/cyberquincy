@@ -16,7 +16,7 @@ module.exports = {
             let embed = new Discord.MessageEmbed()
                 .setDescription(
                     `round ${args[0]} is ${
-                        lengths[parseInt(args[0]) + 1]
+                        lengths[parseInt(args[0]) - 1]
                     }s long`
                 )
                 .setColor(lightgrey);

@@ -1,4 +1,4 @@
-const { cyber } = require('../jsons/colours.json');
+const { colour } = require('../shh/config.json');
 const Discord = require('discord.js');
 module.exports = {
     name: 'info',
@@ -7,7 +7,7 @@ module.exports = {
     usage: '<path1> <path2> <path3>',
     execute(message, args, client) {
         const responseTime = Math.round(Date.now() - message.createdTimestamp);
-        const totalSeconds = client.uptime / 1000;
+        let totalSeconds = client.uptime / 1000;
         const days = Math.floor(totalSeconds / 86400);
         const hours = Math.floor(totalSeconds / 3600);
         totalSeconds %= 3600;
@@ -15,7 +15,7 @@ module.exports = {
         const uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 
         const infoEmbed = new Discord.MessageEmbed()
-            .setColor(cyber)
+            .setColor(colour)
             .setTitle('access help here')
             .setURL('https://discord.gg/VMX5hZA')
             .setDescription(

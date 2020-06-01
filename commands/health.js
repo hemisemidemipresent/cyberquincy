@@ -11,7 +11,8 @@ module.exports = {
       THIS CODE IS A MESS
 
       */ if (
-            !isNaN(args[0])
+            !isNaN(args[0]) ||
+            !args[0]
         ) {
             return message.channel.send(
                 'please specify a proper round/blimp/bloon type'
@@ -96,7 +97,7 @@ module.exports = {
                 return message.channel.send(`${bloon}`);
             } else {
                 const errorEmbed = new Discord.MessageEmbed()
-                    .setColor(red)
+                    .setColor('#ff0000')
                     .setDescription('Oh no! Something went wrong!')
                     .addField(
                         '~~I got bonked by a DDT again~~',

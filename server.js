@@ -426,6 +426,20 @@ client.on('message', async (message) => {
         }
         return message.channel.send('Your data should now be deleted');
     }
+    if (commandName.includes('alia') || commandName.includes('nick')) {
+        let command =
+            client.commands.get(args[0]) ||
+            client.commands.find(
+                (cmd) => cmd.aliases && cmd.aliases.includes(args[0])
+            ); // find the command needed
+        if (!command) {
+            return message.channel.send('That command/aliases doesnt exist!');
+        } else {
+            return message.channel.send(
+                `"Original": ${command.name}\nAlternatives: ${command.aliases}`
+            );
+        }
+    }
     // i dont think this works
     /*
   if (commandName === "top") {

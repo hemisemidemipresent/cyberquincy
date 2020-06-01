@@ -26,9 +26,9 @@ module.exports = {
             let endRound = parseInt(args[1]);
             let longestRound = 0;
             let longestLength = 0;
-            for (i = startRound; i <= endRound; i++) {
-                if (longestLength < lengths[i + 1]) {
-                    longestLength = lengths[i + 1];
+            for (i = startRound; i < endRound; i++) {
+                if (longestLength < lengths[i]) {
+                    longestLength = lengths[i];
                     longestRound = i + 1;
                 }
             }

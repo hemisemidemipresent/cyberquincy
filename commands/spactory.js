@@ -40,6 +40,9 @@ module.exports = {
         let path2 = Math.floor((parseInt(args[0]) - path1 * 100) / 10);
         let path3 = parseInt(args[0] - path1 * 100 - path2 * 10);
         let path = 1;
+        function hard(cost) {
+            return Math.round((cost * 1.08) / 5) * 5;
+        }
         if (path2 < 1 && path3 < 1) {
             path = 1;
         } else if (path1 < 1 && path3 < 1) {
@@ -103,23 +106,25 @@ module.exports = {
                     });
                 } else {
                     let totalCost = 0;
+                    let hardTotalCost = 0;
                     let newCost = 0;
                     for (i = tier; i > 0; i--) {
                         newCost =
                             json[`${name}`].upgrades[path - 1][i - 1].cost;
+                        hardTotalCost += hard(parseInt(newCost));
                         totalCost += parseInt(newCost);
                     }
                     let baseCost = parseInt(json[`${name}`].cost);
                     totalCost += baseCost;
 
-                    hardcost = Math.round((object.cost * 1.08) / 5) * 5;
-                    hardTotalCost = Math.round((totalCost * 1.08) / 5) * 5;
                     let embed = new Discord.MessageEmbed()
                         .setColor(cyber)
                         .addField('name', object.name)
                         .addField(
                             'cost',
-                            `${hardcost} (hard), ${object.cost} (medium)`
+                            `${hard(parseInt(object.cost))} (hard), ${
+                                object.cost
+                            } (medium)`
                         )
                         .addField('notes', object.notes)
                         .addField('in game description', object.description)

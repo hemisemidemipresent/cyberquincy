@@ -43,7 +43,6 @@ module.exports = {
                         );
                     return message.channel.send(errorEmbed);
                 }
-                hardcost = Math.round((object.cost * 1.08) / 5) * 5;
                 const embed = new Discord.MessageEmbed()
                     .setTitle(`${name} level ${level}`)
                     .addField("cost/'xp'", `${object.xp}`)

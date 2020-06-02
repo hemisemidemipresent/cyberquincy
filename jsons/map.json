@@ -526,5 +526,29 @@
         "e": {
             "e": "1/1"
         }
+    },
+    "Flooded Valley": {
+        "ver": 18,
+        "len": "8.9",
+        "obj": 1,
+        "Cos": "5000",
+        "wa%": "?%",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489104427417600/latest.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "Bazaar": {
+        "ver": 18,
+        "len": "20.4",
+        "obj": 4,
+        "Cos": "2000",
+        "wa%": "?%",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489104427417600/latest.png",
+        "e": {
+            "e": "2/2"
+        }
     }
 }

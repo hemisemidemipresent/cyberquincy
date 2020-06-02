@@ -84,11 +84,6 @@ module.exports = {
             name = 'Streambed';
         } else if (map.includes('chu')) {
             name = 'Chutes';
-        } else if (
-            map.includes('at') ||
-            (map.includes('ado') && map.includes('tem'))
-        ) {
-            name = "Adora's Temple";
         } else if (map.includes('ra')) {
             name = 'Rake';
         } else if (
@@ -170,9 +165,26 @@ module.exports = {
             name = 'Candy Falls';
         } else if (map.includes('work') || map.includes('shop')) {
             name = 'Workshop';
+        } else if (
+            map.includes('at') ||
+            (map.includes('ado') && map.includes('tem'))
+        ) {
+            name = "Adora's Temple";
+        } else if (
+            map.includes('flo') ||
+            map.includes('val') ||
+            map.includes('fv')
+        ) {
+            name = 'Flooded Valley';
+        } else if (
+            map.includes('baz') ||
+            map.includes('zar') ||
+            map.includes('bz')
+        ) {
+            name = 'Bazaar';
         } else {
             return message.channel.send(
-                'cant seem to find that map. might want to check the spelling.\nThere are 44 maps in the game\n77% of maps include water\n55% of maps include L.O.S obstructions\n48% of maps include objects'
+                'cant seem to find that map. might want to check the spelling.\nThere are 46 maps in the game\78% of maps include water\n57% of maps include L.O.S obstructions\n50% of maps include objects'
             );
         }
         let m = ma[`${name}`];

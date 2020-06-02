@@ -518,6 +518,38 @@ client.on('message', async (message) => {
     //command "user"
 
     try {
+        // advertisments
+        const ranWelcomeIndex = Math.floor(Math.random() * 50);
+        if (ranWelcomeIndex === 0) {
+            const serverEmbed = new Discord.MessageEmbed()
+                .setTitle('Are you tired of the bot being offline?')
+                .addField(
+                    'join the discord server!',
+                    'get notifications for new updates and bot status at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
+                )
+                .setColor(blurple);
+            message.channel.send(serverEmbed);
+        } else if (ranWelcomeIndex === 1 || ranWelcomeIndex === 4) {
+            const inviteEmbed = new Discord.MessageEmbed()
+                .setTitle('Want to invite the bot to your own server?')
+                .addField(
+                    'Please spread the word around!',
+                    'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
+                )
+                .setColor(turq);
+            message.channel.send(inviteEmbed);
+        } else if (ranWelcomeIndex === 3) {
+            const bugEmbed = new Discord.MessageEmbed()
+                .setTitle(
+                    'Want to suggest a new feature? Fix a typo? Report a bug?'
+                )
+                .addField(
+                    'join the discord server!',
+                    'suggest a new feature and report a bug at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
+                )
+                .setColor(blurple);
+            message.channel.send(bugEmbed);
+        }
         command.execute(message, args, client); // executes the command.
 
         let numberOfCommands = await Tags.findOne({
@@ -660,37 +692,6 @@ client.on('message', async (message) => {
                 'Please [report the bug](https://discord.gg/VMX5hZA)'
             );
         return message.channel.send(errorEmbed);
-    }
-    const ranWelcomeIndex = Math.floor(Math.random() * 50);
-    if (ranWelcomeIndex === 0) {
-        const serverEmbed = new Discord.MessageEmbed()
-            .setTitle('Are you tired of the bot being offline?')
-            .addField(
-                'join the discord server!',
-                'get notifications for new updates and bot status at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
-            )
-            .setColor(blurple);
-        return message.channel.send(serverEmbed);
-    } else if (ranWelcomeIndex === 1 || ranWelcomeIndex === 4) {
-        const inviteEmbed = new Discord.MessageEmbed()
-            .setTitle('Want to invite the bot to your own server?')
-            .addField(
-                'Please spread the word around!',
-                'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
-            )
-            .setColor(turq);
-        return message.channel.send(inviteEmbed);
-    } else if (ranWelcomeIndex === 3) {
-        const bugEmbed = new Discord.MessageEmbed()
-            .setTitle(
-                'Want to suggest a new feature? Fix a typo? Report a bug?'
-            )
-            .addField(
-                'join the discord server!',
-                'suggest a new feature and report a bug at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
-            )
-            .setColor(blurple);
-        return message.channel.send(bugEmbed);
     }
 });
 client.login(token);

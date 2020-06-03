@@ -18,7 +18,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
 const { prefix, token } = require('./shh/config.json');
-const { red, cyber, blurple, turq, green } = require('../jsons/colours.json');
+const { red, cyber, blurple, turq, green } = require('./jsons/colours.json');
 const dataArray = [
     [
         'invite',

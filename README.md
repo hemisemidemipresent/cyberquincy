@@ -1,6 +1,6 @@
 # Cyber Quincy
 
-![Logo](https://raw.githubusercontent.com/hnngggrrrr/docs-cq/master/favicon_10.png)
+<img src="https://raw.githubusercontent.com/hnngggrrrr/docs-cq/master/favicon_10.png" align="right">
 
 Cyber Quincy is a btd6 discord bot.
 useful links:

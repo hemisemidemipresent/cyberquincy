@@ -1,5 +1,7 @@
 # Cyber Quincy
 
+![Logo](https://raw.githubusercontent.com/hnngggrrrr/docs-cq/master/favicon_10.png)
+
 Cyber Quincy is a btd6 discord bot.
 useful links:
 
@@ -27,5 +29,4 @@ commands are using node.js `module.exports`
 the variable names are a mess and I apologise for them.
 I am also sorry for the meaningless commit names
 
-In order to prevent getting scammed by other people claiming to make it my discord is gggrrrr#0301
-feel free to ask questions.
+by hemidemisemipresent#0301

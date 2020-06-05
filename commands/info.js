@@ -23,7 +23,7 @@ module.exports = {
             )
             .addField('ping:', `Response time: ${responseTime}ms`, true)
             .setThumbnail(
-                'https://vignette.wikia.nocookie.net/b__/images/d/d3/QuincyCyberPortrait.png/revision/latest?cb=20190612021929&path-prefix=bloons'
+                'https://raw.githubusercontent.com/hnngggrrrr/docs-cq/master/favicon_10.png'
             )
             .addField('time since last restart:', `${uptime}`, true)
             .addField(

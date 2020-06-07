@@ -94,6 +94,11 @@ module.exports = {
                     .addField('RBE', `${rbe}`, true)
                     .addField('xp earned in that round', `${xp}`, true)
                     .addField(
+                        'cash earned in this round',
+                        `${round2[round].csh}`,
+                        true
+                    )
+                    .addField(
                         'total xp if you started at round 1',
                         `${totalxp}`
                     )

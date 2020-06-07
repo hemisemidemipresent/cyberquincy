@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
-const { cyber } = require('../jsons/colours.json');
+const { colour } = require('../shh/config.json');
 module.exports = {
-    name: 'herolevel',
-    aliases: ['hero', 'hl'],
+    name: 'heronew',
+    aliases: ['heron', 'hl'],
     execute(message, args, client) {
         let xp_per_level = [
             0,
@@ -39,70 +39,84 @@ module.exports = {
             'Adora',
             'Brickell',
         ];
-        const hero_xp_curves = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1];
-        function level_cal(B16, xp_slope, diff_mult, heroname) {
-            //xp per hero level
-
-            //honestly all of these are sorcery that I dont know what they do but I wrote this spaghetti so i will fix the spaghetti
-            let D14 = Math.floor(B16 * diff_mult); //round8, level 1 price
-            let D15 = D14 - 2 * 20 * diff_mult; //round9, level 1 price
-            let p = [0, 0]; //0s are placeholder numbers to occupy indexing space
-            for (i = 2; i < 21; i++) {
-                p.push(Math.ceil(xp_per_level[i] * xp_slope)); //xp_slope is the xp "slope", i.e. how much xp needed per level multiplier
+        const hero_xp_curves = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1.425];
+        function level_cal(round, xp_slope, diffMultiplier, heroname) {
+            /*
+            these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0
+            I had to expose everything from it using this: https://docs.google.com/spreadsheets/d/1p5OXpBQATUnQNw4MouUjyfE0dxGDWEkWBrxFTAS2uSk/edit#gid=0
+            */
+            let processedRound;
+            if (round <= 21) {
+                processedRound = 10 * round * round + 10 * round - 20;
+            } else if (round <= 51) {
+                processedRound = 20 * round * round - 400 * round + 4180;
+            } else {
+                processedRound = 45 * round * round - 2925 * round + 67930;
             }
-            let y = [0, 0]; //y is the sum of all the previous numbers of p
-            let temp = 0; // temp var.
-            for (i = 2; i < 21; i++) {
-                for (j = 2; j < i + 1; j++) {
-                    temp += p[j];
+            let tempArr = [0, 0];
+            for (i = 2; i <= 20; i++) {
+                tempArr.push(Math.ceil(xp_per_level[i] * xp_slope));
+            }
+            let justPlacedCostArr = [
+                0,
+                Math.floor(processedRound * diffMultiplier),
+            ]; // the total cost of upgrading to a level when placed
+            for (level = 2; level <= 20; level++) {
+                justPlacedCostArr.push(
+                    justPlacedCostArr[level - 1] + tempArr[level]
+                );
+            }
+            let sumOftempArr = [0, 0]; // we need an array where each index is the sum of all prev. coreeesponding indexes of tempArr
+            for (i = 2; i <= 20; i++) {
+                let tempSum = 0;
+                for (j = 0; j <= i; j++) {
+                    tempSum += tempArr[j];
                 }
-                y.push(temp);
-                temp = 0;
+                sumOftempArr.push(tempSum);
             }
-
-            let xp_per_round = [0, D14, D15]; //r is xp per round (for the hero)
+            let roundArr = [
+                0,
+                Math.floor(processedRound * diffMultiplier),
+                Math.floor(processedRound * diffMultiplier) -
+                    40 * diffMultiplier,
+            ];
             for (i = 3; i < 22; i++) {
-                xp_per_round.push(
-                    xp_per_round[i - 1] -
-                        ((xp_per_round[i - 2] - xp_per_round[i - 1]) /
-                            diff_mult +
-                            20) *
-                            diff_mult
+                roundArr.push(
+                    roundArr[i - 1] * 2 - roundArr[i - 2] - 20 * diffMultiplier
                 );
             }
             for (i = 22; i < 52; i++) {
-                xp_per_round.push(
-                    xp_per_round[i - 1] -
-                        ((xp_per_round[i - 2] - xp_per_round[i - 1]) /
-                            diff_mult +
+                roundArr.push(
+                    roundArr[i - 1] -
+                        ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
                             40) *
-                            diff_mult
+                            diffMultiplier
                 );
             }
             for (i = 52; i < 102; i++) {
                 //might be broken
-                xp_per_round.push(
-                    xp_per_round[i - 1] -
-                        ((xp_per_round[i - 2] - xp_per_round[i - 1]) /
-                            diff_mult +
+                roundArr.push(
+                    roundArr[i - 1] -
+                        ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
                             90) *
-                            diff_mult
+                            diffMultiplier
                 );
             }
-            let finalArr = []; //final result array
+            //console.log(xp_slope, processedRound, diffMultiplier);
+            //console.log(roundArr)
+            let finalArr = []; // the round where the hero reaches level 1 is the round it gets placed
             for (level = 1; level < 21; level++) {
-                let levelUpRound = 1; //levelUpRound is the round that the hero gets the level to
-                let heroCost = 1; //this is the temporary variable that stores the cost of upgrading the hero at a certain round
+                let heroCost = 1; //cost of levelling up
+                let levelUpRound = round; //round used for calulcations, -1 because the increment is after while loop
                 while (heroCost > 0) {
-                    // while the hero hasnt reached level "level" yet
-                    heroCost = xp_per_round[levelUpRound] + y[level]; //
+                    heroCost = sumOftempArr[level] + roundArr[levelUpRound];
+                    //console.log(heroCost);
                     levelUpRound++;
                 }
                 if (levelUpRound > 100) {
                     // if the hero wont level up until round 100
                     finalArr.push('>100');
                 } else {
-                    // edge error aaaaaaaaaaaa
                     finalArr.push(levelUpRound - 1);
                 }
             }
@@ -131,119 +145,98 @@ module.exports = {
                 .addField('level 18', `r${finalArr[17]}`, true)
                 .addField('level 19', `r${finalArr[18]}`, true)
                 .addField('level 20', `r${finalArr[19]}`, true)
-                .setColor(cyber);
+                .setColor(colour);
             return embed;
         }
         const filter = (msg) => msg.author.id === `${message.author.id}`;
         if (!args[0] && !args[1] && !args[2]) {
+            message.channel.send(
+                'Please select hero and type the number into chat\n1 - quincy\n2 - gwen\n3 - obyn\n4 - jones\n5 - ezili\n6 - ben\n7 - churchill\n8 - pat\n9 - adora\n10 - brickell'
+            );
             message.channel
-                .send(
-                    'Please select hero and type the number into chat\n1 - quincy\n2 - gwen\n3 - obyn\n4 - jones\n5 - ezili\n6 - ben\n7 - churchill\n8 - pat\n9 - adora\n10 - brickell'
-                )
-                .then(() => {
-                    message.channel
-                        .awaitMessages(filter, {
-                            max: 1,
-                            time: 10000,
-                            errors: ['time'],
-                        })
+                .awaitMessages(filter, {
+                    max: 1,
+                    time: 10000,
+                    errors: ['time'],
+                })
 
-                        .then((collected) => {
-                            let f = collected.first().content;
-                            if (isNaN(f) || f < 1 || f > 10) {
-                                return message.channel.send(
-                                    'sorry, please specify a valid hero number next time. run the command again'
-                                );
-                            }
-                            let xp_slope = hero_xp_curves[f - 1];
-                            let heroname = heroes[f - 1];
+                .then((collected0) => {
+                    const heroID = collected0.first().content;
+                    if (isNaN(heroID) || heroID < 1 || heroID > 10) {
+                        return message.channel.send(
+                            'sorry, please specify a valid hero number next time. run the command again'
+                        );
+                    }
+                    const xp_slope = hero_xp_curves[heroID - 1];
+                    const heroname = heroes[heroID - 1];
+                    message.channel
+                        .send('Please type the starting round in the chat')
+                        .then(() => {
                             message.channel
-                                .send(
-                                    'Please type the starting round in the chat'
-                                )
-                                .then(() => {
+                                .awaitMessages(filter, {
+                                    max: 1,
+                                    time: 10000,
+                                    errors: ['time'],
+                                })
+                                .then((collected1) => {
+                                    let round = collected1.first().content;
+
+                                    if (
+                                        isNaN(round) ||
+                                        round < 1 ||
+                                        round > 100
+                                    ) {
+                                        return message.channel.send(
+                                            'sorry, please specify a valid round next time. run the commands again'
+                                        );
+                                    }
+
+                                    message.channel.send(
+                                        'Please select map difficulty and type the number into the chat\n1 - beginner\n2 - intermediate\n3 - advanced\n4 - expert'
+                                    );
                                     message.channel
                                         .awaitMessages(filter, {
                                             max: 1,
                                             time: 10000,
                                             errors: ['time'],
                                         })
-                                        .then((collect) => {
-                                            let g = collect.first().content;
-
-                                            if (isNaN(g) || g < 1 || g > 100) {
+                                        .then((collected2) => {
+                                            let difficultyID = collected2.first()
+                                                .content;
+                                            if (
+                                                isNaN(difficultyID) ||
+                                                difficultyID < 1 ||
+                                                difficultyID > 4
+                                            ) {
                                                 return message.channel.send(
-                                                    'sorry, please specify a valid round next time. run the commands again'
+                                                    'sorry, please specify a valid difficulty next time. run the command again'
                                                 );
                                             }
-                                            let B16;
-                                            if (g <= 21) {
-                                                B16 = 10 * (g + 2) * (g - 1);
-                                            } else if (g <= 51) {
-                                                B16 =
-                                                    20 * g * g - 400 * g + 4180;
-                                            } else {
-                                                g -= 51;
-                                                B16 =
-                                                    45 * g * g +
-                                                    1053 * g +
-                                                    22506;
-                                            }
-
-                                            message.channel
-                                                .send(
-                                                    'Please select map difficulty and type the number into the chat\n1 - beginner\n2 - intermediate\n3 - advanced\n4 - expert'
-                                                )
-                                                .then(() => {
-                                                    message.channel
-                                                        .awaitMessages(filter, {
-                                                            max: 1,
-                                                            time: 10000,
-                                                            errors: ['time'],
-                                                        })
-                                                        .then((collectt) => {
-                                                            let h = collectt.first()
-                                                                .content;
-                                                            if (
-                                                                isNaN(h) ||
-                                                                h < 1 ||
-                                                                h > 4
-                                                            ) {
-                                                                return message.channel.send(
-                                                                    'sorry, please specify a valid difficulty next time. run the command again'
-                                                                );
-                                                            }
-                                                            let diff_mult =
-                                                                0.1 * h + 0.9;
-                                                            let embed = level_cal(
-                                                                B16,
-                                                                xp_slope,
-                                                                diff_mult,
-                                                                heroname
-                                                            );
-                                                            message.channel.send(
-                                                                embed
-                                                            );
-                                                        });
-                                                });
-                                        })
-                                        .catch((collectt) => {
-                                            message.channel.send(
-                                                `You took too long to answer!`
+                                            let diffMultiplier =
+                                                0.1 * difficultyID + 0.9;
+                                            let embed = level_cal(
+                                                round,
+                                                xp_slope,
+                                                diffMultiplier,
+                                                heroname
                                             );
+                                            message.channel.send(embed);
                                         });
                                 })
-                                .catch((collect) => {
+                                .catch((collectt) => {
                                     message.channel.send(
                                         `You took too long to answer!`
                                     );
                                 });
                         })
-                        .catch((collected) => {
+                        .catch((collect) => {
                             message.channel.send(
                                 `You took too long to answer!`
                             );
                         });
+                })
+                .catch((collected) => {
+                    message.channel.send(`You took too long to answer!`);
                 });
         } else {
             if (args[0].includes('qui')) {
@@ -285,12 +278,12 @@ module.exports = {
             }
             let g = args[1];
             if (g <= 21) {
-                var B16 = 10 * g * g + 10 * g - 20;
+                var B9 = 10 * g * g + 10 * g - 20;
             } else if (g <= 51) {
-                var B16 = 20 * g * g - 400 * g + 4180;
+                var B9 = 20 * g * g - 400 * g + 4180;
             } else {
                 g -= 51;
-                var B16 = 5 * (9 * g * g + 351 * g + 7502);
+                var B9 = 5 * (9 * g * g + 351 * g + 7502);
             }
             if (
                 args[2].includes('eas') ||
@@ -317,8 +310,8 @@ module.exports = {
             ) {
                 var h = 4;
             }
-            let diff_mult = 0.1 * h + 0.9;
-            let embed = level_cal(B16, xp_slope, diff_mult, heroname);
+            let diffMultiplier = 0.1 * h + 0.9;
+            let embed = level_cal(B9, xp_slope, diffMultiplier, heroname);
             message.channel.send(embed).then((msg) => {
                 msg.react('❌');
                 let filter = (reaction, user) => {
@@ -333,9 +326,6 @@ module.exports = {
 
                 collector.on('collect', (reaction, reactionCollector) => {
                     msg.delete();
-                });
-                collector.on('end', (collected) => {
-                    console.log(`Collected ${collected.size} items`);
                 });
             });
         }

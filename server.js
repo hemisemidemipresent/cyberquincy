@@ -24,7 +24,10 @@ const dataArray = [
         'invite',
         'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881',
     ],
-    ['server', 'https://discord.gg/VMX5hZA'],
+    [
+        'server',
+        'Join this discord server to get notifications on bot updates, downtime, report bugs and to suggest features: https://discord.gg/VMX5hZA',
+    ],
     [
         'add',
         'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881',

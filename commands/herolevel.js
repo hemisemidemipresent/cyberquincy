@@ -268,12 +268,12 @@ module.exports = {
                 var heroname = args[0];
             } else {
                 return message.channel.send(
-                    'Please specify a valid hero name!'
+                    'Please specify a valid hero name! If you dont know the shortcut, just run ``q!herolevel``\n(shortcut is q!herolevel <heroname> <startround> <difficultyname>'
                 );
             }
             if (isNaN(args[1]) || args[1] < 1 || args[1] > 100) {
                 return message.channel.send(
-                    'Please provide a valid start round number from 1 to 100'
+                    'Please provide a valid start round number from 1 to 100! If you dont know the shortcut, just run ``q!herolevel``\n(shortcut is q!herolevel <heroname> <startround> <difficultyname>'
                 );
             }
             let g = args[1];

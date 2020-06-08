@@ -41,6 +41,10 @@ const dataArray = [
         ('rohan', 'I am not allowed to say anything')
     ],
     ['nsfw', 'you are under 180 and hence banned from watching'],
+    [
+        'vtsg',
+        'https://cdn.discordapp.com/attachments/454395715834216459/645780538803879936/PicsArt_11-17-10.37.53.jpg',
+    ],
 ];
 const client = new Discord.Client();
 const noocmd = /no+c/i;

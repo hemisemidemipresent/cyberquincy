@@ -11,6 +11,8 @@ module.exports = {
     usage: '[command name]',
     execute(message, args, client) {
         if (!args[0]) {
+            let name = 'tack-shooter';
+
             return message.channel.send(
                 `The syntax of this command is q!${name} <path1><path2><path3>, i.e. q!${name} 003 would represent the third tier tower of the third path. **no crosspaths are accepted**, i.e. no more that one path should be inputted`
             );
@@ -21,7 +23,6 @@ module.exports = {
             );
         }
 
-        let name = 'tack-shooter';
         let path1 = Math.floor(parseInt(args[0]) / 100);
         let path2 = Math.floor((parseInt(args[0]) - path1 * 100) / 10);
         let path3 = parseInt(args[0] - path1 * 100 - path2 * 10);

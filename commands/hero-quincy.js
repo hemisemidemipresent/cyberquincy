@@ -18,6 +18,7 @@ module.exports = {
         'cyber',
         'furry',
         'cq',
+        'infernalchimps',
     ],
     execute(message, args, client) {
         if (!args) {

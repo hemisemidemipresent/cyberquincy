@@ -5,7 +5,19 @@ const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
 const settings = { method: 'Get' };
 module.exports = {
     name: 'boomer',
-    aliases: ['boomerang', 'boomerang-monkey'],
+    aliases: [
+        'boomerang',
+        'boomerang-monkey',
+        'bm',
+        'boom',
+        '💥',
+        'rang',
+        'bomerang',
+        'boo',
+        'bomer',
+        'rangs',
+        'bomerrang',
+    ],
     description:
         'very epic thing inspired from https://unforgivenjake.github.io/btd6rc/',
     usage: '[command name]',

@@ -139,37 +139,19 @@ client.on('guildCreate', (guild) => {
     }
 });
 client.on('guildMemberAdd', async (member) => {
-    const helpembed = new Discord.MessageEmbed()
-        .setColor(cyber)
-        .setTitle(
-            'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!'
-        )
-        .setDescription(
-            `The point of this server is so that you can report bugs, get updated on new bot updates, check the downtime, and talk to others about the bot!`
-        )
-        .addField(
-            'if you are experiencing an error:',
-            'check with <#615159685477040135>, <#616603947481694209> or <#605712758595649566>.'
-        )
-        .addField(
-            'if you think that there is a bug:',
-            'go to <#59876831965035776> and please tell us what went wrong. If you have any questions on how to use this bot, go to <#611808489047719937>. if you have a suggestion, please let us know in <#598768278550085633>'
-        )
-        .addField(
-            'general information:',
-            '[List of commands](https://cq.netlify.com), join for updates and important uptimes and downtimes'
-        );
     if (member.guild.id === '598768024761139240') {
         if (member.id == '668312965664997386') {
             return;
         }
         const tchannel = member.guild.channels.cache.find((channel) =>
-            channel.name.includes('welcome')
+            channel.name.includes('general')
         );
         tchannel.send(
-            `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and you are our **${member.guild.memberCount}**th member!`
+            `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and the server now has **${member.guild.memberCount} members!`
         );
-        member.send(helpembed);
+        member.send(
+            'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!\nThe point of this server is so that you can report bugs, get updated on new bot updates, check the downtime, and talk to others about the bot!\nHave an issue? check with <#615159685477040135>, <#616603947481694209> or <#605712758595649566>.\nWant to report a bug? go to <#59876831965035776> and please tell us what went wrong. \nIf you have any questions on how to use this bot, go to <#611808489047719937>. \nIf you have a suggestion, please let us know in <#598768278550085633>. Do try to be objective and feel free to be critical\nList of commands : https://cq.netlify.com'
+        );
         try {
             await Tags.create({
                 name: member.id,
@@ -184,13 +166,13 @@ client.on('guildMemberAdd', async (member) => {
                 if (userData.level > 3) {
                     member.roles.add('645126928340353036');
                     member.send(
-                        'It seems that you are already level 3! the role has been given!'
+                        'It seems that you are already level 3! The role "rapid shot" has been given!'
                     );
                 }
                 if (userData.level > 10) {
                     member.roles.add('645629187322806272');
                     member.send(
-                        'It seems that you are already level 10! the role has been given!'
+                        'It seems that you are already level 10! The role "storm of arrows" has been given!'
                     );
                 }
             }

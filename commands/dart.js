@@ -11,7 +11,7 @@ module.exports = {
     usage: '[command name]',
     execute(message, args, client) {
         let name = 'dart-monkey';
-        s;
+
         if (!args[0]) {
             return message.channel.send(
                 `The syntax of this command is q!${name} <path1><path2><path3>, i.e. q!${name} 003 would represent the third tier tower of the third path. **no crosspaths are accepted**, i.e. no more that one path should be inputted`
@@ -113,13 +113,13 @@ module.exports = {
                     .addField('name', object.name)
                     .addField(
                         'cost',
-                        `${hardTotalCost} (hard), ${object.cost} (medium)`
+                        `${hard(object.cost)} (hard), ${object.cost} (medium)`
                     )
                     .addField('notes', object.notes)
                     .addField('in game description', object.description)
                     .addField(
                         'total cost',
-                        `${hardTotalCost} (hard), ${totalCost} (medium)`
+                        `${hard(totalCost)} (hard), ${totalCost} (medium)`
                     )
                     .setFooter(
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'

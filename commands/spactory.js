@@ -137,7 +137,7 @@ module.exports = {
                         .addField(`xp needed:`, `${object.xp}`)
                         .addField(
                             'total cost',
-                            `${hardTotalCost} (hard), ${totalCost} (medium)`
+                            `${hard(totalCost)} (hard), ${totalCost} (medium)`
                         )
                         .setFooter(
                             'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'

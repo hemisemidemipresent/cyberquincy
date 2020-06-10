@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
 const { colour } = require('../shh/config.json');
 module.exports = {
-    name: 'heronew',
-    aliases: ['heron', 'hl'],
+    name: 'herolevel',
+    aliases: ['hero', 'hl', 'level', 'herr', 'her'],
     execute(message, args, client) {
         let xp_per_level = [
             0,

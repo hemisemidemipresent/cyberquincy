@@ -22,7 +22,7 @@ module.exports = {
                 'There should not be space in between the paths!'
             );
         }
-        if (isNaN(args[0])) {
+        if (isNaN(args[0]) || args[0].includes('-')) {
             const embed = new Discord.MessageEmbed()
                 .setTitle('Please a valid upgrade input')
                 .setDescription(
@@ -30,6 +30,7 @@ module.exports = {
                 );
             return message.channel.send(embed);
         }
+
         let path1 = Math.floor(parseInt(args[0]) / 100);
         let path2 = Math.floor((parseInt(args[0]) - path1 * 100) / 10);
         let path3 = parseInt(args[0] - path1 * 100 - path2 * 10);

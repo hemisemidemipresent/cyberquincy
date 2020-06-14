@@ -6,7 +6,7 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'ezili',
     description: 'ezili upgrades',
-    aliases: ['e', 'ez', 'voodo', 'vm', 'ezi', 'ezil'],
+    aliases: ['e', 'ez', 'voodo', 'vm', 'ezi', 'ezil', 'voodoo'],
     usage: '!ezili <level>',
     execute(message, args, client) {
         if (!args) {

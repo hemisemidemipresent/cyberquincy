@@ -32,7 +32,7 @@ module.exports = {
             speed = 0.5;
         } else if (bln === 'ddt' || bln === 'purple') {
             speed = 9;
-        } else if (b.includes('ceram')) {
+        } else if (bln.includes('ceram')) {
             speed = 8;
         } else if (bln === 'rainbow') {
             speed = 7;

@@ -234,7 +234,6 @@ client.on('message', async (message) => {
     if (message.author.bot) return; // checks for bots
     let c = message.content.toLowerCase(); // c for message Content
     let channelId = message.channel.id; // channel id
-
     if (
         (channelId == '598768185281609738' ||
             channelId == '615159685477040135') &&
@@ -243,29 +242,14 @@ client.on('message', async (message) => {
         let channel = client.channels.cache.find(
             (channel) => channel.id == '661888246090825749'
         );
-        let embed = new Discord.MessageEmbed()
-            .setDescription(message.content)
-            .setColor(cyber)
-            .addField(
-                'join the discord server',
-                '[message was from here](https://discord.gg/VMX5hZA)'
-            );
 
-        channel.send(embed);
+        channel.send(message.content);
     }
     if (channelId == '661888246090825749') {
         let channel = client.channels.find(
             (channel) => channel.id == '616603947481694209'
         );
-        let embed = new Discord.MessageEmbed()
-            .setDescription(message.content)
-            .setColor(cyber)
-            .addField(
-                'join the BTD index server',
-                '[message was from here](https://discord.gg/RAGfmAB)'
-            );
-
-        channel.send(embed);
+        channel.send(message.content);
     }
     if (!c.startsWith(prefix) || noocmd.test(message.channel.topic)) return;
     const args = c.slice(prefix.length).split(/ +/);

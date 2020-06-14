@@ -39,8 +39,8 @@ module.exports = {
             'Adora',
             'Brickell',
         ];
-        const hero_xp_curves = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1.425];
-        function level_cal(round, xp_slope, diffMultiplier, heroname) {
+        const xpSlopeArr = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1.425];
+        function level_cal(round, xpCurve, diffMultiplier, heroname) {
             /*
             these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0
             I had to expose everything from it using this: https://docs.google.com/spreadsheets/d/1p5OXpBQATUnQNw4MouUjyfE0dxGDWEkWBrxFTAS2uSk/edit#gid=0
@@ -55,7 +55,7 @@ module.exports = {
             }
             let tempArr = [0, 0];
             for (i = 2; i <= 20; i++) {
-                tempArr.push(Math.ceil(xp_per_level[i] * xp_slope));
+                tempArr.push(Math.ceil(xp_per_level[i] * xpCurve));
             }
             let justPlacedCostArr = [
                 0,
@@ -102,7 +102,7 @@ module.exports = {
                             diffMultiplier
                 );
             }
-            //console.log(xp_slope, processedRound, diffMultiplier);
+            //console.log(xpCurve, processedRound, diffMultiplier);
             //console.log(roundArr)
             let finalArr = []; // the round where the hero reaches level 1 is the round it gets placed
             for (level = 1; level < 21; level++) {
@@ -167,7 +167,7 @@ module.exports = {
                             'sorry, please specify a valid hero number next time. run the command again'
                         );
                     }
-                    const xp_slope = hero_xp_curves[heroID - 1];
+                    const xpCurve = xpSlopeArr[heroID - 1];
                     const heroname = heroes[heroID - 1];
                     message.channel
                         .send('Please type the starting round in the chat')
@@ -216,7 +216,7 @@ module.exports = {
                                                 0.1 * difficultyID + 0.9;
                                             let embed = level_cal(
                                                 round,
-                                                xp_slope,
+                                                xpCurve,
                                                 diffMultiplier,
                                                 heroname
                                             );
@@ -239,79 +239,65 @@ module.exports = {
                     message.channel.send(`You took too long to answer!`);
                 });
         } else {
-            if (args[0].includes('qui')) {
-                var xp_slope = 1;
-                var heroname = args[0];
-            } else if (args[0].includes('gw')) {
-                var xp_slope = 1;
-                var heroname = args[0];
-            } else if (args[0].includes('ob')) {
-                var xp_slope = 1;
-                var heroname = args[0];
-            } else if (args[0].includes('str') || args[0].includes('jo')) {
-                var xp_slope = 1;
-                var heroname = args[0];
-            } else if (args[0].includes('ez')) {
-                var xp_slope = 1.425;
-                var heroname = args[0];
-            } else if (args[0].includes('be')) {
-                var xp_slope = 1.5;
-                var heroname = args[0];
-            } else if (args[0].includes('ch')) {
-                var xp_slope = 1.8;
-                var heroname = args[0];
-            } else if (args[0].includes('pa')) {
-                var xp_slope = 1.425;
-                var heroname = args[0];
-            } else if (args[0].includes('ad')) {
-                var xp_slope = 1.8;
-                var heroname = args[0];
+            let heroNum = 0;
+
+            if (isNaN(args[0])) {
+                let testArr = [
+                    'qui',
+                    'gw',
+                    'ob',
+                    'str',
+                    'ez',
+                    'be',
+                    'ch',
+                    'pa',
+                    'ad',
+                    'br',
+                ];
+                for (i = 0; i < testArr.length; i++) {
+                    if (args[0].includes(testArr[i])) {
+                        heroNum = i + 1;
+                        break;
+                    }
+                }
             } else {
+                heroNum = args[0];
+            }
+            if (heroNum < 1 || heroNum > 10) {
                 return message.channel.send(
                     'Please specify a valid hero name! If you dont know the shortcut, just run ``q!herolevel``\n(shortcut is q!herolevel <heroname> <startround> <difficultyname>'
                 );
             }
-            if (isNaN(args[1]) || args[1] < 1 || args[1] > 100) {
+
+            if (isNaN(args[1]) || args[1] < 1 || args[1] > 100 || !args[1]) {
                 return message.channel.send(
                     'Please provide a valid start round number from 1 to 100! If you dont know the shortcut, just run ``q!herolevel``\n(shortcut is q!herolevel <heroname> <startround> <difficultyname>'
                 );
             }
-            let g = args[1];
-            if (g <= 21) {
-                var B9 = 10 * g * g + 10 * g - 20;
-            } else if (g <= 51) {
-                var B9 = 20 * g * g - 400 * g + 4180;
-            } else {
-                g -= 51;
-                var B9 = 5 * (9 * g * g + 351 * g + 7502);
-            }
+            let round = args[1];
+            let difficultyID = 1;
             if (
-                args[2].includes('eas') ||
-                args[2].includes('beg') ||
-                args[2] == 1
-            ) {
-                var h = 1;
-            } else if (
                 args[2].includes('int') ||
                 args[2].includes('med') ||
                 args[2] == 2
             ) {
-                var h = 2;
+                difficultyID = 2;
             } else if (
                 args[2].includes('adv') ||
                 args[2].includes('har') ||
                 args[2] == 3
             ) {
-                var h = 3;
+                difficultyID = 3;
             } else if (
                 args[2].includes('exp') ||
                 args[2].includes('ext') ||
                 args[2] == 4
             ) {
-                var h = 4;
+                difficultyID = 4;
             }
-            let diffMultiplier = 0.1 * h + 0.9;
-            let embed = level_cal(B9, xp_slope, diffMultiplier, heroname);
+            let diffMultiplier = 0.1 * difficultyID + 0.9;
+            let xpCurve = xpSlopeArr[heroID - 1];
+            let embed = level_cal(round, xpCurve, diffMultiplier, heroname);
             message.channel.send(embed).then((msg) => {
                 msg.react('❌');
                 let filter = (reaction, user) => {

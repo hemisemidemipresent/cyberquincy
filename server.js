@@ -150,7 +150,7 @@ client.on('guildMemberAdd', async (member) => {
             `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and the server now has **${member.guild.memberCount} members!`
         );
         member.send(
-            'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!\nThe point of this server is so that you can report bugs, get updated on new bot updates, check the downtime, and talk to others about the bot!\nHave an issue? check with <#615159685477040135>, <#616603947481694209> or <#605712758595649566>.\nWant to report a bug? go to <#59876831965035776> and please tell us what went wrong. \nIf you have any questions on how to use this bot, go to <#611808489047719937>. \nIf you have a suggestion, please let us know in <#598768278550085633>. Do try to be objective and feel free to be critical\nList of commands : https://cq.netlify.com'
+            'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!\n**Get yourself a role in <#605712758595649566>**\n\n:tools: **Found a bug?**\ncheck with <#615159685477040135>, <#616603947481694209>, <#676670780204908555> or in <#598768319625035776>.\n\n:beetle: **Found an UNKNOWN bug?**\nPlease report in <#598768319625035776>\n\n:jigsaw: **Need help or want to ask something?**\nask in<#611808489047719937> (for only the bot).\n\n:mailbox_with_mail: **Have a suggestion?**\nPlease tell us in <#598768278550085633>. Do try to be objective and feel free to be critical\n\n**Invite me to your server**:https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881\n\nThank you for joining!'
         );
         try {
             await Tags.create({
@@ -213,7 +213,7 @@ client.on('guildMemberAdd', async (member) => {
 client.on('guildMemberRemove', async (member) => {
     if (member.guild.id == '598768024761139240') {
         const tchannel = member.guild.channels.cache.find((channel) =>
-            channel.name.includes('welcome')
+            channel.name.includes('general')
         );
         tchannel.send(`${member.displayName} was lost in battle`);
     } else if (member.guild.id === '543957081183617024') {

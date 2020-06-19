@@ -105,11 +105,11 @@ client.once('ready', () => {
         console.log('<INITIATE>');
     }
     setTimeout(three, 2000);
+
+    client.user.setActivity(`${prefix}help`);
     //dont mind these:
     //let servers = client.guilds.map(g=>g.name)
     //console.log(servers)
-
-    client.user.setActivity(`${prefix}help`);
 });
 
 client.on('guildCreate', (guild) => {
@@ -231,26 +231,7 @@ client.on('guildMemberRemove', async (member) => {
     }
 });
 client.on('message', async (message) => {
-    if (message.author.bot) return; // checks for bots
-    let c = message.content.toLowerCase(); // c for message Content
-    let channelId = message.channel.id; // channel id
-    if (
-        (channelId == '598768185281609738' ||
-            channelId == '615159685477040135') &&
-        c.includes('.')
-    ) {
-        let channel = client.channels.cache.find(
-            (channel) => channel.id == '661888246090825749'
-        );
-
-        channel.send(message.content);
-    }
-    if (channelId == '661888246090825749') {
-        let channel = client.channels.find(
-            (channel) => channel.id == '616603947481694209'
-        );
-        channel.send(message.content);
-    }
+    if (message.author.bot) return; //checks for bots
     if (!c.startsWith(prefix) || noocmd.test(message.channel.topic)) return;
     const args = c.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();

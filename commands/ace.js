@@ -11,23 +11,58 @@ module.exports = {
     execute(message, args, client) {
         let name = 'monkey-ace';
 
-        if (!args[0]) {
-            return message.channel.send(
-                `The syntax of this command is q!${name} <path1><path2><path3>, i.e. q!${name} 003 would represent the third tier tower of the third path. **no crosspaths are accepted**, i.e. no more that one path should be inputted`
-            );
+        function provideHelpMsg() {
+            fetch(url, settings)
+                .then((res) => res.json())
+                .then((json) => {
+                    let str = `Please use the number in \`\`codeblocks\`\` to specify the upgrade.\nFor example, **q!${name} 030**`;
+                    let pathsArr = [
+                        '100',
+                        '200',
+                        '300',
+                        '400',
+                        '500',
+                        '010',
+                        '020',
+                        '030',
+                        '040',
+                        '050',
+                        '001',
+                        '002',
+                        '003',
+                        '004',
+                        '005',
+                    ];
+                    for (i = 0; i < 15; i++) {
+                        let path,
+                            tier = 0;
+                        if (parseInt(pathsArr[i]) % 100 == 0) {
+                            path = 1;
+                            tier = parseInt(pathsArr[i]) / 100;
+                        } else if (parseInt(pathsArr[i]) % 10 == 0) {
+                            path = 2;
+                            tier = parseInt(pathsArr[i]) / 10;
+                        } else {
+                            path = 3;
+                            tier = parseInt(pathsArr[i]);
+                        }
+                        let object =
+                            json[`${name}`].upgrades[path - 1][tier - 1];
+                        if (i % 5 == 0) {
+                            str += '\n';
+                        } else {
+                            str += ',   ';
+                        }
+                        str += `__${object.name}__   \`\`${pathsArr[i]}\`\``;
+                    }
+                    const filter = (msg) =>
+                        msg.author.id === `${message.author.id}`;
+
+                    return message.channel.send(str);
+                });
         }
-        if (args[1]) {
-            return message.channel.send(
-                'There should not be space in between the paths!'
-            );
-        }
-        if (isNaN(args[0]) || args[0].includes('-')) {
-            const embed = new Discord.MessageEmbed()
-                .setTitle('Please a valid upgrade input')
-                .setDescription(
-                    `For example:\n❌ q!${name} 130\n❌ q!${name} 0-3-0\n✅ q!${name} 030`
-                );
-            return message.channel.send(embed);
+        if (!args || args[1] || isNaN(args[0]) || args[0].includes('-')) {
+            return provideHelpMsg();
         }
 
         let path1 = Math.floor(parseInt(args[0]) / 100);
@@ -44,13 +79,7 @@ module.exports = {
         } else if (path1 < 1 && path2 < 1) {
             path = 3;
         } else {
-            // when more than 2 values are positive, i.e. like not 00x, 0x0, or x00 args[0]
-            const embed = new Discord.MessageEmbed()
-                .setTitle('Please choose one upgrade at a time!')
-                .setDescription(
-                    `For example:\n❌ q!${name} 130\n❌ q!${name} 0-3-0\n✅ q!${name} 030`
-                );
-            return message.channel.send(embed);
+            return provideHelpMsg();
         }
         let tier = 0;
         switch (path) {

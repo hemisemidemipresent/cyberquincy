@@ -1,10 +1,9 @@
 const Discord = require('discord.js');
 const { cyber } = require('../jsons/colours.json');
 module.exports = {
-    name: 'rc',
+    name: 'challenge',
     aliases: ['rc', 'randomc', 'random', 'rchallenge', 'rch'],
-    description:
-        'very epic thing inspired from https://unforgivenjake.github.io/btd6rc/',
+
     usage: '[command name]',
     execute(message, args, client) {
         // what the fuck is this idk

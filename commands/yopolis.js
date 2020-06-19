@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'monkeyopolis',
-    aliases: ['mp'],
+    aliases: ['mp', 'yopolis'],
     execute(message, args) {
         if (!args.length) {
             return message.channel.send(

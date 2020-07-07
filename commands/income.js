@@ -78,6 +78,38 @@ module.exports = {
                     'in alternate bloon rounds, not including starting cash'
                 );
             return message.channel.send(embed);
+        } else if (args[2].includes('ha') || args[2].includes('ca')) {
+            let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
+            let startroundObject = r[normalStartRound];
+            let endroundObject = r[endround];
+            let income = endroundObject.cch - startroundObject.cch;
+            let embed = new Discord.MessageEmbed()
+                .setTitle(
+                    `$${
+                        Math.trunc(income * 100) / 200
+                    } was made from popping round ${
+                        normalStartRound + 1
+                    } to popping round ${endround}`
+                )
+                .setColor(magenta)
+                .setFooter('in half cash, not including starting cash');
+            return message.channel.send(embed);
+        } else {
+            let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
+            let startroundObject = r[normalStartRound];
+            let endroundObject = r[endround];
+            let income = endroundObject.cch - startroundObject.cch;
+            let embed = new Discord.MessageEmbed()
+                .setTitle(
+                    `$${
+                        Math.trunc(income * 100) / 100
+                    } was made from popping round ${
+                        normalStartRound + 1
+                    } to popping round ${endround}`
+                )
+                .setColor(magenta)
+                .setFooter('not including starting cash');
+            return message.channel.send(embed);
         }
     },
 };

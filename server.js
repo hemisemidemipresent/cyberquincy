@@ -147,7 +147,7 @@ client.on('guildMemberAdd', async (member) => {
             channel.name.includes('general')
         );
         tchannel.send(
-            `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and the server now has **${member.guild.memberCount} members!`
+            `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and the server now has **${member.guild.memberCount}** members!`
         );
         member.send(
             'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!\n**Get yourself a role in <#605712758595649566>**\n\n:tools: **Found a bug?**\ncheck with <#615159685477040135>, <#616603947481694209>, <#676670780204908555> or in <#598768319625035776>.\n\n:beetle: **Found an UNKNOWN bug?**\nPlease report in <#598768319625035776>\n\n:jigsaw: **Need help or want to ask something?**\nask in<#611808489047719937> (for only the bot).\n\n:mailbox_with_mail: **Have a suggestion?**\nPlease tell us in <#598768278550085633>. Do try to be objective and feel free to be critical\n\n**Invite me to your server**:https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881\n\nThank you for joining!'
@@ -215,7 +215,7 @@ client.on('guildMemberRemove', async (member) => {
         const tchannel = member.guild.channels.cache.find((channel) =>
             channel.name.includes('general')
         );
-        tchannel.send(`${member.displayName} was lost in battle`);
+        tchannel.send(`**${member.displayName}** was lost in battle`);
     } else if (member.guild.id === '543957081183617024') {
         const tchannel = member.guild.channels.cache.find((channel) =>
             channel.name.includes('general')
@@ -232,6 +232,7 @@ client.on('guildMemberRemove', async (member) => {
 });
 client.on('message', async (message) => {
     if (message.author.bot) return; //checks for bots
+    let c = message.content.toLowerCase();
     if (!c.startsWith(prefix) || noocmd.test(message.channel.topic)) return;
     const args = c.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();

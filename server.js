@@ -37,9 +37,8 @@ const dataArray = [
         'https://cdn.discordapp.com/attachments/598768278550085633/713184218598998107/hackedquincy.png',
     ],
     ['what', 'idk google it yourself'],
-    ['web', 'https://cq.netlify.app'][
-        ('rohan', 'I am not allowed to say anything')
-    ],
+    ['web', 'https://cq.netlify.app'],
+    ['rohan', 'I am not allowed to say anything'],
     ['nsfw', 'you are under 180 and hence banned from watching'],
     [
         'vtsg',

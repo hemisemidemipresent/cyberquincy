@@ -15,6 +15,12 @@ module.exports = {
         ) {
             name = 'Monkey Meadows';
         } else if (
+            map.includes('lot') ||
+            map.includes('isl') ||
+            map.includes('tus')
+        ) {
+            name = 'Lotus Island';
+        } else if (
             map == 'ts' ||
             (map.includes('tree') && map.includes('stump'))
         ) {

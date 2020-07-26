@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../shh/config.json');
+const { colour } = require('../secret/config.json');
 module.exports = {
     name: 'speed',
     aliases: ['s', 'rbs'],

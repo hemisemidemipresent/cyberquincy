@@ -1,4 +1,4 @@
-const { colour } = require('../shh/config.json');
+const { colour } = require('../secret/config.json');
 const Discord = require('discord.js');
 module.exports = {
     name: 'info',
@@ -22,9 +22,7 @@ module.exports = {
                 `Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons and training ${client.users.cache.size} monkeys`
             )
             .addField('ping:', `Response time: ${responseTime}ms`, true)
-            .setThumbnail(
-                'https://raw.githubusercontent.com/hnngggrrrr/docs-cq/master/favicon_10.png'
-            )
+
             .addField('time since last restart:', `${uptime}`, true)
             .addField(
                 'bot invite link',

@@ -522,7 +522,7 @@
         "Cos": "0",
         "wa%": "13%",
         "los": "no",
-        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489104427417600/latest.png",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/735665121287995422/Screenshot_20200722-210943.png",
         "e": {
             "e": "1/1"
         }
@@ -549,6 +549,18 @@
         "thu": "https://cdn.discordapp.com/attachments/705588555929616484/719533132151259146/310.png",
         "e": {
             "e": "2/2"
+        }
+    },
+    "Lotus Island": {
+        "ver": 19,
+        "len": "32.3",
+        "obj": 0,
+        "Cos": "0",
+        "wa%": "41%",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/735664668408021083/Screenshot_20200722-210755.png",
+        "e": {
+            "e": "1/1"
         }
     }
 }

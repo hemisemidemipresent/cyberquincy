@@ -10,7 +10,7 @@ module.exports = {
                 '1-CK-uOK1rdCGjvQCYxaU9Fkwo_EsrX-CQp9vkewY50k'
             );
             // load directly from json file if not in secure environment
-            await doc.useServiceAccountAuth(require('../shh/config.json'));
+            await doc.useServiceAccountAuth(require('../secret/config.json'));
 
             await doc.loadInfo(); // loads document properties and worksheets
             const sheet = doc.sheetsByIndex[1]; //load 3tcrbs spreadsheet

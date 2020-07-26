@@ -1,8 +1,8 @@
 {
-    "name": "runner",
-    "version": "1.4.2",
+    "name": "cyberquincy",
+    "version": "1.9.5",
     "description": "yeah man i dont need you stealing my stuff thanks",
-    "main": "index.js",
+    "main": "server.js",
     "scripts": {
         "start": "node server.js"
     },
@@ -24,11 +24,7 @@
         "discord.js": "^12.2.0",
         "express": "^4.17.1",
         "google-spreadsheet": "^3.0.9",
-        "node-fetch": "^2.6.0",
-        "sequelize": "^5.21.5",
-        "sqlite3": "^4.1.1"
+        "node-fetch": "^2.6.0"
     },
-    "devDependencies": {
-        "eslint": "^6.8.0"
-    }
+    "devDependencies": {}
 }

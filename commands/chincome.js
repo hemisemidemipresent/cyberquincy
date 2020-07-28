@@ -99,11 +99,11 @@ module.exports = {
                 .setTitle("HELP")
                 .addField(
                     '"q!chincome"',
-                    'A special income command, used to find the cash generated from the start of round 6 to the end of round <round>',
+                    'Find cash generated during round <round> and also from start of round 6 through end of round <round>'
                 )
-                .addField('Usage #1', 'q!chincome <round> | q!chincome 8')
-                .addField('Usage #2', 'q!chincome <mode> <round> | q!chincome abr 8')
-                .addField('Usage #3', 'q!chincome <round> <mode> | q!chincome 8 abr')
+                .addField('Ex. #1', 'q!chincome <round> | q!chincome 8')
+                .addField('Ex. #2', 'q!chincome <mode> <round> | q!chincome abr R8')
+                .addField('Ex. #3', 'q!chincome <round> <mode> | q!chincome r8 hc')
                 .setColor(colors["cyber"]);
 
         return message.channel.send(errorEmbed);

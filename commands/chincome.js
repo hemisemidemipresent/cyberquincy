@@ -6,7 +6,7 @@ const abr = require('../jsons/abrincome.json');
 const Discord = require('discord.js');
 
 // Discord bot sidebar colors
-const { red, ignore1, ignore2, ignore3 } = require('../jsons/colours.json');
+const colors = require('../jsons/colours.json');
 
 // Aliases should eventually end up in a centralized place for all commands to use
 MODE_ALIASES = {
@@ -39,51 +39,72 @@ module.exports = {
 
         // Can be <round> <mode> OR <mode> <round> OR <round> (mode defaults to standard CHIMPS)
 
-        if (args[0]) {
-            if (is_valid_gamemode(args[0])) {
-                mode_str = args[0]
-            } else if(is_valid_chimps_round(args[0])) {
-                round_str = args[0]
+        try {
+            if (args[0]) {
+                if (is_valid_gamemode(args[0])) {
+                    mode_str = args[0];
+                } else if(is_valid_chimps_round(args[0])) {
+                    round_str = args[0];
+                } else if(args[0] === 'help') {
+                    return module.exports.helpMessage(message); 
+                } else {
+                    throw `First argument provided "${args[0]}" is neither a valid round nor game mode`;
+                }
             } else {
                 return module.exports.helpMessage(message);
             }
-        } else {
-            return module.exports.helpMessage(message);
-        }
 
-        if (args[1]) {
-            if (!mode_str && is_valid_gamemode(args[1])) {
-                mode_str = args[1]
-            } else if(!round_str && is_valid_chimps_round(args[1])) {
-                round_str = args[1]
-            } else {
-                return module.exports.helpMessage(message);
+            if (args[1]) {
+                if (!mode_str && is_valid_gamemode(args[1])) {
+                    mode_str = args[1];
+                } else if(!round_str && is_valid_chimps_round(args[1])) {
+                    round_str = args[1];
+                } else {
+                    throw `Second argument provided "${args[1]}" is neither a valid round nor game mode`;
+                }
+            } else if (!round_str) { // If only one arg is provided, it needs to be the round number
+                throw `Round must be specified`
+            } else { // Default game mode if not provided
+                mode_str = "chimps"
             }
-        } else if (!round_str) { // If only one arg is provided, it needs to be the round number
-            return module.exports.helpMessage(message);
-        } else { // Default game mode if not provided
-            mode_str = "chimps"
+
+            if (args[2]) { // If more than 2 args are provided, the user might not be using the command correctly
+                throw `Extra arguments provided: "${args.slice(2).join()}"`
+            }
+
+            mode = mode_str;
+            round = get_valid_chimps_round(round_str);
+
+            console.log("Mode:", mode);
+            console.log("Round:", round);
+            console.log();
+
+
+            return message.channel.send(
+                chincomeMessage(mode_str, round)
+            );
+        } catch (err) {
+            try {
+                if (typeof err == 'string') {
+                    return module.exports.errorMessage(message, err);
+                } else {
+                    return module.exports.bugMessage(message, err);
+                }
+            } catch(err) {
+                // Juuuust in case an error comes up that fails to process and report properly
+                return message.channel.send(
+                    new Discord.MessageEmbed()
+                        .setTitle("Error Message errored")
+                        .addField("Contact the maintainers", ":)")
+                        .setColor(colors["red"])
+                );
+            }
         }
-
-        if (args[2]) { // If more than 2 args are provided, the user might not be using the command correctly
-            return module.exports.helpMessage(message);
-        }
-
-        mode = mode_str;
-        round = get_valid_chimps_round(round_str);
-
-        console.log("Mode:", mode);
-        console.log("Round:", round);
-        console.log()
-
-
-        return message.channel.send(
-            chincomeMessage(mode_str, round)
-        );
     },
 
     helpMessage(message) {
         let errorEmbed = new Discord.MessageEmbed()
+                .setTitle("HELP")
                 .addField(
                     '"q!chincome"',
                     'A special income command, used to find the cash generated from the start of round 6 to the end of round <round>',
@@ -91,16 +112,48 @@ module.exports = {
                 .addField('Usage #1', 'q!chincome <round> | q!chincome 8')
                 .addField('Usage #2', 'q!chincome <mode> <round> | q!chincome abr 8')
                 .addField('Usage #3', 'q!chincome <round> <mode> | q!chincome 8 abr')
-                .setColor(red);
+                .setColor(colors["cyber"]);
 
         return message.channel.send(errorEmbed);
     },
+
+    errorMessage(message, error_message) {
+        let errorEmbed = new Discord.MessageEmbed()
+                .setTitle("ERROR")
+                .addField(
+                    "Cause",
+                    error_message
+                )
+                .addField(
+                    "Type `q!chincome` for help",
+                    ":)"
+                )
+                .setColor(colors["orange"]);
+
+        return message.channel.send(errorEmbed);
+    },
+
+    bugMessage(message, error_obj) {
+        let bugEmbed = new Discord.MessageEmbed()
+                .setTitle("BUG")
+                .addField(
+                    "What's this?",
+                    "This is a programming error, alert the maintainers"
+                )
+                .addField(
+                    "Error",
+                    error_obj
+                )
+                .setColor(colors["red"]);
+        
+        return message.channel.send(bugEmbed);
+    }
 };
 
 chincomeMessage = function(mode_alias, round) {
     mode = get_gamemode(mode_alias);
 
-    incomes = calculateIncomes(mode, round)
+    incomes = calculateIncomes(mode, round);
 
     var mode_str_iden = (function(mode) {
         switch(mode) {
@@ -114,7 +167,7 @@ chincomeMessage = function(mode_alias, round) {
       })(mode);
 
     return new Discord.MessageEmbed()
-        .setTitle(`${mode_str_iden} CHIMPS Income`)
+        .setTitle(`${mode_str_iden} CHIMPS Income (R${round})`)
         .addField(
             `Total cash gained through the end of round ${round}`,
             `$${numberWithCommas(incomes.chincome)}`
@@ -122,7 +175,7 @@ chincomeMessage = function(mode_alias, round) {
         .addField(
             `Income gained from just round ${round} itself`,
             `$${numberWithCommas(incomes.rincome)}`
-        )
+        );
 };
 
 numberWithCommas = function(x) {
@@ -188,15 +241,23 @@ is_valid_chimps_round = function(round) {
 
 get_valid_chimps_round = function(round) {
     if (is_between_6_100(round)) {
-        return round
+        return round;
     } else {
-        return parseInt(round.substr(1))
+        return parseInt(round.substr(1));
     }
 }
 
 
 is_between_6_100 = function(x) {
-    return !isNaN(x) && x >= 6 && x <=100;
+    if (!isNaN(x)) {
+        if (x >= 6 && x <= 100) {
+            return true;
+        } else {
+            throw `The round you entered, ${x}, is not between 6-100 inclusive`;
+        }
+    } else {
+        return false;
+    }
 }
 
 is_str = function(s) {

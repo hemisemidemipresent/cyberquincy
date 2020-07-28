@@ -6,24 +6,44 @@ const abr = require('../jsons/abrincome.json');
 const Discord = require('discord.js');
 
 // Discord bot sidebar colors
-const { red, _, _, _ } = require('../jsons/colours.json');
+const { red, ignore1, ignore2, ignore3 } = require('../jsons/colours.json');
 
+// Aliases should eventually end up in a centralized place for all commands to use
+MODE_ALIASES = {
+    "hc": [
+        "half_cash",
+        "halfcash",
+        "hcc",
+    ],
+    "chimps": [
+        "chmp",
+        "chmps",
+        "chimp",
+    ],
+    "abr": [
+        "alt",
+        "alternate",
+    ]
+}
 
 module.exports = {
     name: 'chincome',
 
     // Main executable function
     execute(message, args) {
-        mode = null;
-        round = null;
+        mode_str = null;
+        round_str = null;
+
+        console.log("\n------------------------------------\n");
+        console.log("`" + message.content + "`\n");
 
         // Can be <round> <mode> OR <mode> <round> OR <round> (mode defaults to standard CHIMPS)
 
         if (args[0]) {
-            if (module.exports.is_valid_gamemode(args[0])) {
-                mode = args[0]
-            } else if(module.exports.is_valid_chimps_round(args[0])) {
-                round = args[0]
+            if (is_valid_gamemode(args[0])) {
+                mode_str = args[0]
+            } else if(is_valid_chimps_round(args[0])) {
+                round_str = args[0]
             } else {
                 return module.exports.helpMessage(message);
             }
@@ -32,25 +52,33 @@ module.exports = {
         }
 
         if (args[1]) {
-            if (!mode && module.exports.is_valid_gamemode(args[1])) {
-                mode = args[1]
-            } else if(!round && module.exports.is_valid_chimps_round(args[1])) {
-                round = args[1]
+            if (!mode_str && is_valid_gamemode(args[1])) {
+                mode_str = args[1]
+            } else if(!round_str && is_valid_chimps_round(args[1])) {
+                round_str = args[1]
             } else {
                 return module.exports.helpMessage(message);
             }
-        } else if (!round) { // If only one arg is provided, it needs to be the round number
+        } else if (!round_str) { // If only one arg is provided, it needs to be the round number
             return module.exports.helpMessage(message);
-        } else {
-            mode = "chimps"
+        } else { // Default game mode if not provided
+            mode_str = "chimps"
         }
 
         if (args[2]) { // If more than 2 args are provided, the user might not be using the command correctly
             return module.exports.helpMessage(message);
         }
 
+        mode = mode_str;
+        round = get_valid_chimps_round(round_str);
+
+        console.log("Mode:", mode);
+        console.log("Round:", round);
+        console.log()
+
+
         return message.channel.send(
-            module.exports.chincomeMessage(mode, round)
+            chincomeMessage(mode_str, round)
         );
     },
 
@@ -67,104 +95,110 @@ module.exports = {
 
         return message.channel.send(errorEmbed);
     },
-
-    chincomeMessage(mode_alias, round) {
-        mode = module.exports.get_gamemode(mode_alias);
-
-        incomes = calculateIncomes(mode, round)
-
-        var mode_str_iden = (function(mode) {
-            switch(mode) {
-              case 'hc':
-                return "Half Cash";
-              case 'chimps':
-                return "Standard";
-              default:
-                return mode.toUpperCase();
-            }
-          })(mode);
-
-        return new Discord.MessageEmbed()
-            .setTitle(`${mode_str_iden} CHIMPS Income`)
-            .addField(
-                `Total income after round ${round}`,
-                `$${incomes.chincome}`
-            )
-            .addField(
-                `Income gained from round ${round}`,
-                `$${incomes.rincome}`
-            )
-    },
-
-    // rincome = round income
-    // chincome = cumulative income (CHIMPS with modifier specified by `mode`)
-    calculateIncomes(mode, round) {
-        chincome = null;
-        rincome = null;
-
-        if (mode == 'abr') {
-            index = round - 2;
-
-            chincome = abr[index][1] - abr[3][1] + 650;
-            rincome = abr[index][0];
-        } else {
-            index = round;
-
-            chincome = chimps[index]["cch"] - chimps[5]["cch"] + 650;
-            rincome = chimps[index]["csh"];
-
-            if (mode == 'hc') {
-                chincome /= 2;
-                rincome /= 2;
-            }
-        }
-
-        return {
-            rincome: rincome,
-            chincome: chincome,
-        }
-    },
-
-    // Aliases should eventually end up in a centralized place for all commands to use
-    MODE_ALIASES: {
-        "hc": [
-            "half_cash",
-            "halfcash",
-            "hcc",
-        ],
-        "chimps": [
-            "chmp",
-            "chmps",
-            "chimp",
-        ],
-        "abr": [
-            "alt",
-            "alternate",
-        ]
-    },
-
-    is_valid_gamemode(mode_alias) {
-        for (var mode_alias_key in MODE_ALIASES) {
-            if (mode_alias == mode_alias_key ||
-                MODE_ALIASES[mode_alias_key].includes(mode_alias)) {
-                    return true;
-            }
-        }
-        return false;
-    },
-
-    // There are multiple ways to specify the gamemode
-    get_gamemode(mode_alias) {
-        for (var mode_alias_key in MODE_ALIASES) {
-            if (mode_alias == mode_alias_key ||
-                MODE_ALIASES[mode_alias_key].includes(mode_alias)) {
-                    return mode_alias_key;
-            }
-        }
-        return null;
-    },
-
-    is_valid_chimps_round(round) {
-        return !isNaN(round) && round >= 6 && round <=100
-    },
 };
+
+chincomeMessage = function(mode_alias, round) {
+    mode = get_gamemode(mode_alias);
+
+    incomes = calculateIncomes(mode, round)
+
+    var mode_str_iden = (function(mode) {
+        switch(mode) {
+          case 'hc':
+            return "Half Cash";
+          case 'chimps':
+            return "Standard";
+          default:
+            return mode.toUpperCase();
+        }
+      })(mode);
+
+    return new Discord.MessageEmbed()
+        .setTitle(`${mode_str_iden} CHIMPS Income`)
+        .addField(
+            `Total cash gained through the end of round ${round}`,
+            `$${numberWithCommas(incomes.chincome)}`
+        )
+        .addField(
+            `Income gained from just round ${round} itself`,
+            `$${numberWithCommas(incomes.rincome)}`
+        )
+};
+
+numberWithCommas = function(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+// rincome = round income
+// chincome = cumulative income (CHIMPS with modifier specified by `mode`)
+calculateIncomes = function(mode, round) {
+    chincome = null;
+    rincome = null;
+
+    if (mode == 'abr') {
+        index = round - 2;
+
+        chincome = abr[index][1] - abr[3][1] + 650;
+        rincome = abr[index][0];
+    } else {
+        index = round;
+
+        chincome = chimps[index]["cch"] - chimps[5]["cch"] + 650;
+        rincome = chimps[index]["csh"];
+
+        if (mode == 'hc') {
+            chincome /= 2;
+            rincome /= 2;
+        }
+    }
+
+    return {
+        rincome: rincome,
+        chincome: chincome,
+    }
+};
+
+is_valid_gamemode = function(mode_alias) {
+    for (var mode_alias_key in MODE_ALIASES) {
+        if (mode_alias == mode_alias_key ||
+            MODE_ALIASES[mode_alias_key].includes(mode_alias)) {
+                return true;
+        }
+    }
+    return false;
+};
+
+// There are multiple ways to specify the gamemode
+get_gamemode = function(mode_alias) {
+    for (var mode_alias_key in MODE_ALIASES) {
+        if (mode_alias == mode_alias_key ||
+            MODE_ALIASES[mode_alias_key].includes(mode_alias)) {
+                return mode_alias_key;
+        }
+    }
+    return null;
+};
+
+is_valid_chimps_round = function(round) {
+    return is_between_6_100(round) ||
+            (is_str(round) &&
+            round[0] == 'r' &&
+            is_between_6_100(parseInt(round.substr(1))));
+};
+
+get_valid_chimps_round = function(round) {
+    if (is_between_6_100(round)) {
+        return round
+    } else {
+        return parseInt(round.substr(1))
+    }
+}
+
+
+is_between_6_100 = function(x) {
+    return !isNaN(x) && x >= 6 && x <=100;
+}
+
+is_str = function(s) {
+    return typeof s === 'string' || s instanceof String;
+}

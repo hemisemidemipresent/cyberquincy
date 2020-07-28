@@ -245,7 +245,7 @@ client.on('message', async (message) => {
                         "Please use a proper mention if you want to see someone else's level"
                     );
                 //let user = client.users.find((u) => u.id == userData.name);  old version
-                ////let user = client.users.cache.find((u) => u.id == userData.name);  djs v12 old code
+                //let user = client.users.cache.find((u) => u.id == userData.name);  djs v12 old code
                 let user = client.users.cache.get(`${userData.name}`); // finds user class from id
                 const xpEmbed = new Discord.MessageEmbed()
                     .setTitle(`${user.username}'s xp'`)

@@ -1,9 +1,15 @@
-const r = require('../jsons/round2.json');
+// Spreadsheets with round income data
+const chimps = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json');
+
+// Discord client
 const Discord = require('discord.js');
-const { red, magenta, purple, yellow } = require('../jsons/colours.json');
+
+// Discord bot sidebar colors
+const colors = require('../jsons/colours.json');
 module.exports = {
     name: 'income',
+    // Main executable function
     execute(message, args) {
         if (!args[0] || isNaN(args[0]) || args[0] < -1 || args[0] > 100) {
             // error case
@@ -112,4 +118,30 @@ module.exports = {
             return message.channel.send(embed);
         }
     },
+};
+calculateIncomes = function (mode, round) {
+    chincome = null;
+    rincome = null;
+
+    if (mode == 'abr') {
+        index = round - 2;
+
+        chincome = abr[index][1] - abr[3][1] + 650;
+        rincome = abr[index][0];
+    } else {
+        index = round;
+
+        chincome = chimps[index]['cch'] - chimps[5]['cch'] + 650;
+        rincome = chimps[index]['csh'];
+
+        if (mode == 'hc') {
+            chincome /= 2;
+            rincome /= 2;
+        }
+    }
+
+    return {
+        rincome: rincome,
+        chincome: chincome,
+    };
 };

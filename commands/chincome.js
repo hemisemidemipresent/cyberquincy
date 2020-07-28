@@ -34,9 +34,6 @@ module.exports = {
         mode_str = null;
         round_str = null;
 
-        console.log("\n------------------------------------\n");
-        console.log("`" + message.content + "`\n");
-
         // Can be <round> <mode> OR <mode> <round> OR <round> (mode defaults to standard CHIMPS)
 
         try {
@@ -74,11 +71,6 @@ module.exports = {
 
             mode = mode_str;
             round = get_valid_chimps_round(round_str);
-
-            console.log("Mode:", mode);
-            console.log("Round:", round);
-            console.log();
-
 
             return message.channel.send(
                 chincomeMessage(mode_str, round)
@@ -178,10 +170,6 @@ chincomeMessage = function(mode_alias, round) {
         );
 };
 
-numberWithCommas = function(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
 // rincome = round income
 // chincome = cumulative income (CHIMPS with modifier specified by `mode`)
 calculateIncomes = function(mode, round) {
@@ -263,3 +251,7 @@ is_between_6_100 = function(x) {
 is_str = function(s) {
     return typeof s === 'string' || s instanceof String;
 }
+
+numberWithCommas = function(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

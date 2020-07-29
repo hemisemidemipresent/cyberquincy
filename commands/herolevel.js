@@ -2,9 +2,9 @@ const Discord = require('discord.js');
 const { colour } = require('../secret/config.json');
 module.exports = {
     name: 'herolevel',
-    aliases: ['hero', 'hl', 'level', 'herr', 'her'],
-    execute(message, args, client) {
-        let xp_per_level = [
+    aliases: ['hl', 'hero', 'her', 'hlvl'],
+    execute(message, client) {
+        const xp_per_level = [
             0,
             0,
             180,
@@ -148,172 +148,198 @@ module.exports = {
                 .setColor(colour);
             return embed;
         }
-        const filter = (msg) => msg.author.id === `${message.author.id}`;
-        if (!args[0] && !args[1] && !args[2]) {
-            message.channel.send(
-                'Please select hero and type the number into chat\n1 - quincy\n2 - gwen\n3 - obyn\n4 - jones\n5 - ezili\n6 - ben\n7 - churchill\n8 - pat\n9 - adora\n10 - brickell'
-            );
-            message.channel
-                .awaitMessages(filter, {
-                    max: 1,
-                    time: 10000,
-                    errors: ['time'],
-                })
-
-                .then((collected0) => {
-                    const heroID = collected0.first().content;
-                    if (isNaN(heroID) || heroID < 1 || heroID > 10) {
-                        return message.channel.send(
-                            'sorry, please specify a valid hero number next time. run the command again'
-                        );
-                    }
-                    const xpCurve = xpSlopeArr[heroID - 1];
-                    const heroname = heroes[heroID - 1];
-                    message.channel
-                        .send('Please type the starting round in the chat')
-                        .then(() => {
-                            message.channel
-                                .awaitMessages(filter, {
-                                    max: 1,
-                                    time: 10000,
-                                    errors: ['time'],
-                                })
-                                .then((collected1) => {
-                                    let round = collected1.first().content;
-
-                                    if (
-                                        isNaN(round) ||
-                                        round < 1 ||
-                                        round > 100
-                                    ) {
-                                        return message.channel.send(
-                                            'sorry, please specify a valid round next time. run the commands again'
-                                        );
-                                    }
-
-                                    message.channel.send(
-                                        'Please select map difficulty and type the number into the chat\n1 - beginner\n2 - intermediate\n3 - advanced\n4 - expert'
-                                    );
-                                    message.channel
-                                        .awaitMessages(filter, {
-                                            max: 1,
-                                            time: 10000,
-                                            errors: ['time'],
-                                        })
-                                        .then((collected2) => {
-                                            let difficultyID = collected2.first()
-                                                .content;
-                                            if (
-                                                isNaN(difficultyID) ||
-                                                difficultyID < 1 ||
-                                                difficultyID > 4
-                                            ) {
-                                                return message.channel.send(
-                                                    'sorry, please specify a valid difficulty next time. run the command again'
-                                                );
-                                            }
-                                            let diffMultiplier =
-                                                0.1 * difficultyID + 0.9;
-                                            let embed = level_cal(
-                                                round,
-                                                xpCurve,
-                                                diffMultiplier,
-                                                heroname
-                                            );
-                                            message.channel.send(embed);
-                                        });
-                                })
-                                .catch((collectt) => {
-                                    message.channel.send(
-                                        `You took too long to answer!`
-                                    );
-                                });
-                        })
-                        .catch((collect) => {
-                            message.channel.send(
-                                `You took too long to answer!`
-                            );
-                        });
-                })
-                .catch((collected) => {
-                    message.channel.send(`You took too long to answer!`);
-                });
-        } else {
-            let heroNum = 0;
-
-            if (isNaN(args[0])) {
-                let testArr = [
-                    'qui',
-                    'gw',
-                    'ob',
-                    'str',
-                    'ez',
-                    'be',
-                    'ch',
-                    'pa',
-                    'ad',
-                    'br',
-                ];
-                for (i = 0; i < testArr.length; i++) {
-                    if (args[0].includes(testArr[i])) {
-                        heroNum = i + 1;
-                        break;
-                    }
-                }
-            } else {
-                heroNum = args[0];
-            }
-            if (heroNum < 1 || heroNum > 10) {
-                return message.channel.send(
-                    'Please specify a valid hero name! If you dont know the shortcut, just run ``q!herolevel``\n(shortcut is q!herolevel <heroname> <startround> <difficultyname>'
-                );
-            }
-
-            if (isNaN(args[1]) || args[1] < 1 || args[1] > 100 || !args[1]) {
-                return message.channel.send(
-                    'Please provide a valid start round number from 1 to 100! If you dont know the shortcut, just run ``q!herolevel``\n(shortcut is q!herolevel <heroname> <startround> <difficultyname>'
-                );
-            }
-            let round = args[1];
-            let difficultyID = 1;
-            if (
-                args[2].includes('int') ||
-                args[2].includes('med') ||
-                args[2] == 2
-            ) {
-                difficultyID = 2;
-            } else if (
-                args[2].includes('adv') ||
-                args[2].includes('har') ||
-                args[2] == 3
-            ) {
-                difficultyID = 3;
-            } else if (
-                args[2].includes('exp') ||
-                args[2].includes('ext') ||
-                args[2] == 4
-            ) {
-                difficultyID = 4;
-            }
-            let diffMultiplier = 0.1 * difficultyID + 0.9;
-            let xpCurve = xpSlopeArr[heroID - 1];
-            let embed = level_cal(round, xpCurve, diffMultiplier, heroname);
-            message.channel.send(embed).then((msg) => {
-                msg.react('❌');
-                let filter = (reaction, user) => {
-                    return (
-                        reaction.emoji.name === '❌' &&
-                        user.id === message.author.id
+        const heroEmojiIDs = [
+            '734951814016794645',
+            '734953281830387882',
+            '734953281205436456',
+            '734953662446567554',
+            '734953631048138851',
+            '734954248105623633',
+            '734953812762034278',
+            '734955619697688587',
+            '734953700551950427',
+            '734953612924420107',
+        ];
+        const difficultyEmojiIDs = [
+            '734966523487322202',
+            '734966523352973362',
+            '734966523575140423',
+            '734966523575140423',
+            '734966521822183475',
+        ];
+        message.channel
+            .send('react with the hero you want to choose!')
+            .then((msg) => {
+                for (i = 0; i < heroEmojiIDs.length; i++) {
+                    msg.react(
+                        client.guilds.cache
+                            .get('614111055890612225') // this is the server with the emojis the bot uses
+                            .emojis.cache.get(heroEmojiIDs[i])
                     );
-                };
-                const collector = msg.createReactionCollector(filter, {
-                    time: 20000,
-                });
+                }
+                let collector = msg
+                    .createReactionCollector(
+                        (reaction, user) =>
+                            user.id === message.author.id &&
+                            (reaction.emoji.name === 'Quincy' ||
+                                reaction.emoji.name === 'Gwen' ||
+                                reaction.emoji.name === 'Obyn' ||
+                                reaction.emoji.name === 'StrikerJones' ||
+                                reaction.emoji.name === 'PatFusty' ||
+                                reaction.emoji.name === 'Adora' ||
+                                reaction.emoji.name === 'Churchill' ||
+                                reaction.emoji.name === 'Brickell' ||
+                                reaction.emoji.name === 'Benjamin' ||
+                                reaction.emoji.name === 'Ezili'),
+                        { time: 20000 } // might turn into function to check later
+                    )
+                    .once('collect', (reaction) => {
+                        const chosen = reaction.emoji.name;
+                        let heroID = 0;
+                        if (chosen === 'Quincy') {
+                            heroID = 0;
+                        } else if (chosen === 'Gwen') {
+                            heroID = 1;
+                        } else if (chosen === 'Obyn') {
+                            heroID = 2;
+                        } else if (chosen === 'StrikerJones') {
+                            heroID = 3;
+                        } else if (chosen === 'PatFusty') {
+                            heroID = 4;
+                        } else if (chosen === 'Adora') {
+                            heroID = 5;
+                        } else if (chosen === 'Churchill') {
+                            heroID = 6;
+                        } else if (chosen === 'Brickell') {
+                            heroID = 7;
+                        } else if (chosen === 'Benjamin') {
+                            heroID = 8;
+                        } else if (chosen === 'Ezili') {
+                            heroID = 9;
+                        }
+                        const heroname = heroes[heroID];
+                        const xpCurve = xpSlopeArr[heroID];
 
-                collector.on('collect', (reaction, reactionCollector) => {
-                    msg.delete();
-                });
+                        collector.stop();
+                        message.channel
+                            .send('Please type the starting round in the chat')
+                            .then(() => {
+                                const filter = (msg) =>
+                                    msg.author.id === `${message.author.id}`;
+
+                                message.channel
+                                    .awaitMessages(filter, {
+                                        max: 1,
+                                        time: 10000,
+                                        errors: ['time'],
+                                    })
+                                    .then((collected) => {
+                                        let round = collected.first().content;
+                                        if (
+                                            isNaN(round) ||
+                                            round < 1 ||
+                                            round > 100
+                                        ) {
+                                            return message.channel.send(
+                                                'Sorry, please specify a valid round next time. Run the commands again'
+                                            );
+                                        }
+
+                                        message.channel
+                                            .send(
+                                                'Please react with the map difficulty'
+                                            )
+                                            .then((msg) => {
+                                                for (
+                                                    i = 0;
+                                                    i <
+                                                    difficultyEmojiIDs.length;
+                                                    i++
+                                                ) {
+                                                    msg.react(
+                                                        client.guilds.cache
+                                                            .get(
+                                                                '614111055890612225'
+                                                            ) // this is the server with the emojis the bot uses
+                                                            .emojis.cache.get(
+                                                                difficultyEmojiIDs[
+                                                                    i
+                                                                ]
+                                                            )
+                                                    );
+                                                }
+                                                let collector = msg
+                                                    .createReactionCollector(
+                                                        (reaction, user) =>
+                                                            user.id ===
+                                                                message.author
+                                                                    .id &&
+                                                            (reaction.emoji
+                                                                .name ===
+                                                                'Beginner' ||
+                                                                reaction.emoji
+                                                                    .name ===
+                                                                    'Intermediate' ||
+                                                                reaction.emoji
+                                                                    .name ===
+                                                                    'Advanced' ||
+                                                                reaction.emoji
+                                                                    .name ===
+                                                                    'Expert'),
+                                                        { time: 20000 }
+                                                    )
+                                                    .once(
+                                                        'collect',
+                                                        (reaction) => {
+                                                            const chosen =
+                                                                reaction.emoji
+                                                                    .name;
+                                                            let difficultyID = 0;
+                                                            if (
+                                                                chosen ===
+                                                                'Beginner'
+                                                            ) {
+                                                                difficultyID = 1;
+                                                            } else if (
+                                                                chosen ===
+                                                                'Intermediate'
+                                                            ) {
+                                                                difficultyID = 2;
+                                                            } else if (
+                                                                chosen ===
+                                                                'Advanced'
+                                                            ) {
+                                                                difficultyID = 3;
+                                                            } else if (
+                                                                chosen ===
+                                                                'Expert'
+                                                            ) {
+                                                                difficultyID = 4;
+                                                            }
+                                                            collector.stop();
+
+                                                            let diffMultiplier =
+                                                                0.1 *
+                                                                    difficultyID +
+                                                                0.9;
+                                                            message.channel.send(
+                                                                `${round},${xpCurve},${diffMultiplier},${heroname}`
+                                                            );
+                                                            let embed = level_cal(
+                                                                round,
+                                                                xpCurve,
+                                                                diffMultiplier,
+                                                                heroname
+                                                            );
+                                                            message.channel.send(
+                                                                embed
+                                                            );
+                                                        }
+                                                    );
+                                            });
+                                    });
+                            });
+                    });
             });
-        }
     },
 };

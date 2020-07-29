@@ -2,11 +2,19 @@
 DISCLAIMER: variable names are horrible here, I apologise. Try and stick to the comments as much as you can.
 there are a few other pieces in the code before the message event collector. only then the code starts getting weird.
 */
+const express = require('express');
 
+// this part is to keep the project going
+const app = express();
+app.use(express.static('public'));
+app.get('/', (request, response) => {
+    console.log(Date.now() + ' Ping Received');
+    response.sendStatus(200);
+});
+app.listen(process.env.PORT);
+//it sends the "200" to <projectname>.herokuapp.com
 const fs = require('fs');
 const Discord = require('discord.js');
-const Sequelize = require('sequelize');
-
 const { prefix, token } = require('./secret/config.json');
 const { red, cyber, blurple, turq, green } = require('./jsons/colours.json');
 const dataArray = [
@@ -58,30 +66,7 @@ function getUserFromMention(mention) {
         return client.users.cache.get(mention);
     }
 }
-const levelUpMessages = [
-    'Haha!',
-    'Ha!',
-    'Oh Yeah!',
-    'Alright!',
-    'Sweet!',
-    'Yes!',
-    'Nice!',
-    'Awesome!',
-];
-const sequelize = new Sequelize('database', 'user', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    logging: false,
-    storage: 'database.sqlite',
-});
-const Tags = sequelize.define('tags', {
-    name: {
-        type: Sequelize.STRING,
-        unique: true,
-    },
-    xp: Sequelize.INTEGER,
-    level: Sequelize.INTEGER,
-});
+
 const cooldowns = new Discord.Collection();
 client.once('ready', () => {
     console.log('<Program Directive>');
@@ -208,141 +193,26 @@ client.on('message', async (message) => {
         commandName === 'xp' ||
         commandName === 'rank'
     ) {
-        if (args[0]) {
-            // for the case when the user mentions another user
-            const user = getUserFromMention(args[0]); // get user from mention
-            if (!user) {
-                // the case when the "user" specified is invalid/there wasnt a mention
-                if (args[0].includes('h')) {
-                    //potential "help" needed?
-                    const hembed = new Discord.MessageEmbed().setDescription(
-                        'proprties of xp system:\n1.you get xp by using commands (cooldowns apply)\n2. you get a anywhere from 5 to 12 xp for each command\n3. xp is gained in dms.\n4.role rewards only for those in the discord server.\n5.this xp is universal, it is not confined to 1 server.\n6. hidden multipliers exist, you just need to find them.',
-                        { code: 'md' }
-                    );
-                    return message.channel.send(hembed);
-                }
-                if (args[0].includes('rewa')) {
-                    //potential "rewards" needed?
-                    const lvlMebed = new Discord.MessageEmbed()
-                        .setTitle(`xp rewards`)
-                        .addField('level 3', `<@&645126928340353036> `)
-                        .addField('level 10', `<@&645629187322806272>`)
-                        .setColor(cyber)
-                        .addField(
-                            'you only get role rewards in the bot discord server',
-                            '[discord server](https://discord.gg/VMX5hZA)'
-                        )
-                        .setFooter(
-                            `you only get role rewards in the bot discord server`
-                        );
-                    return message.channel.send(lvlMebed);
-                }
-
-                let userData = await Tags.findOne({ where: { name: args[0] } }); // in case they are directly using the discord id. userData represents the "found" data
-                if (!userData)
-                    // in case
-                    return message.channel.send(
-                        "Please use a proper mention if you want to see someone else's level"
-                    );
-                //let user = client.users.find((u) => u.id == userData.name);  old version
-                //let user = client.users.cache.find((u) => u.id == userData.name);  djs v12 old code
-                let user = client.users.cache.get(`${userData.name}`); // finds user class from id
-                const xpEmbed = new Discord.MessageEmbed()
-                    .setTitle(`${user.username}'s xp'`)
-                    .addField('level', userData.level - 1)
-                    .addField('xp', userData.xp)
-                    .setColor(cyber)
-                    .addField(
-                        'have a suggestion or found a bug?',
-                        'Please tell us [here](https://discord.gg/VMX5hZA)!'
-                    )
-                    .setFooter('use q!level rewards to see role rewards');
-                return message.channel.send(xpEmbed);
-            }
-            try {
-                // if there is a mention
-                let userData = await Tags.findOne({ where: { name: user.id } });
-                if (!userData) {
-                    // i really dont think this is necessary but high chance user pinged is gonna try out a few commands
-                    await Tags.create({
-                        name: user.id,
-                        xp: 0,
-                        level: 1,
-                    });
-                }
-                const xpEmbed = new Discord.MessageEmbed()
-                    .setTitle(`${user.username}'s xp'`)
-                    .addField('level', userData.level - 1)
-                    .addField('xp', userData.xp)
-                    .setColor(cyber)
-                    .addField(
-                        'have a suggestion or found a bug?',
-                        'Please tell us [here](https://discord.gg/VMX5hZA)!'
-                    )
-                    .setFooter('use q!level rewards to see role rewards');
-                return message.channel.send(xpEmbed);
-            } catch (e) {
-                console.log(e);
-                const errorEmbed = new Discord.MessageEmbed()
-                    .setColor(red)
-                    .setDescription('Oh no! Something went wrong!')
-                    .addField(
-                        '~~I got bonked by a DDT again~~',
-                        'Please [report the bug](https://discord.gg/VMX5hZA)'
-                    );
-                return message.channel.send(errorEmbed);
-            }
-        }
-        //when there isnt a mention, it shows your own level and xp
-        let data = await Tags.findOne({ where: { name: message.author.id } });
-        if (!data) return message.channel.send('You dont have any xp!');
-        let xpEmbed = new Discord.MessageEmbed()
-            .setTitle(`${message.author.username}'s xp`)
-            .addField('level', data.level - 1)
-            .addField('xp', data.xp)
-            .setColor(cyber)
-            .addField(
-                'have a suggestion or found a bug?',
-                'Please tell us [here](https://discord.gg/VMX5hZA)!'
-            )
-            .setFooter('use q!level rewards to see role rewards');
-        return message.channel.send(xpEmbed);
-    }
-    if (commandName === 'yeetda') {
-        // admin cmd
-        if (message.author.id != '699780654740668426') return;
-        await Tags.update(
-            { level: parseInt(args[1]) + 1, xp: args[2] },
-            { where: { name: args[0] } }
+        return message.channel.send(
+            'Sorry! xp has been removed (temporarily) to save processing time and increase uptime.'
         );
     }
+    // admin command
+
     if (
         commandName == 'cmdc' ||
         commandName == 'cmdcount' ||
         commandName == 'commandcount' ||
         commandName == 'commandc'
     ) {
-        // a rather cut-throat method of storing the total commands used
-        let commandCount = await Tags.findOne({ where: { name: 1000 } });
-        message.channel.send(
-            `${commandCount.xp} (non-spaghetti) commands have been used since 12/2/20 10.51.38.339am UTC`
+        return message.channel.send(
+            'Current count: <idk some number here>\nUnfortunately to save processing time and increase uptime, this will no longer be updated (for now'
         );
     }
     if (commandName == 'deletexp') {
-        try {
-            let data = await Tags.destroy({
-                where: { name: message.author.id },
-            });
-            if (!data)
-                return message.channel.send(
-                    'I dont have any data stored of you!'
-                );
-        } catch {
-            return message.channel.send(
-                'Something went wrong! Report it here: https://discord.gg/VMX5hZA'
-            );
-        }
-        return message.channel.send('Your data should now be deleted');
+        return message.channel.send(
+            'xp is has been (temporarily) removed, remove your data when xp system comes back up.'
+        );
     }
     if (commandName.includes('alia') || commandName.includes('nick')) {
         let command =

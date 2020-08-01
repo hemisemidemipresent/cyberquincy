@@ -52,10 +52,21 @@ module.exports = {
                             client.commands.find(
                                 (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
                             );
-            
+
+                            
+            if(!command) {
+                return message.channel.send(`${commandName} is not a valid command. Type \`q!alias\` for a list of all available commands.`);
+            }
+
             // Keeps track of cooldowns for commands/users and determines if cooldown has expired
             if(Cooldowns.handleCooldown(command, message)) {
                 command.execute(message, args);
+
+                // Don't want the user gaining xp from metacommands
+                if (command.name != 'deletexp' && command.name != 'level' && command.name != 'setxp') {
+                    Xp.addCommandXp(message);
+                }
+
                 // May or may not embed an advertisement message in addition to the command output
                 Advertisements.spin(message);
             }

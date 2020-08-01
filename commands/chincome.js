@@ -1,8 +1,9 @@
 // Spreadsheets with round income data
 const chimps = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json');
+const h = require('../helpers/general.js');
 
-// Discord client
+// Discord library
 const Discord = require('discord.js');
 
 // Discord bot sidebar colors
@@ -208,10 +209,9 @@ get_gamemode = function (mode_alias) {
     return null;
 };
 
-is_valid_chimps_round = function (round) {
-    return (
-        is_between_6_100(round) ||
-        (is_str(round) &&
+is_valid_chimps_round = function(round) {
+    return (is_between_6_100(round) ||
+            (h.is_str(round) &&
             round[0] == 'r' &&
             is_between_6_100(parseInt(round.substr(1))))
     );
@@ -237,10 +237,6 @@ is_between_6_100 = function (x) {
     }
 };
 
-is_str = function (s) {
-    return typeof s === 'string' || s instanceof String;
-};
-
-numberWithCommas = function (x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+numberWithCommas = function(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

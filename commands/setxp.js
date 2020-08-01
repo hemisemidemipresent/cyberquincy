@@ -32,6 +32,7 @@ module.exports = {
         
         Tags.update({ xp: args[0] }, { where: { id: user.id } });
 
+        // Pull from db just to make sure..
         tag = await Tags.findOne({ where: 
             { 
                 id: user.id 

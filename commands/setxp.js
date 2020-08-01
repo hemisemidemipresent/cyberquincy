@@ -25,7 +25,7 @@ module.exports = {
             } 
         });
 
-        // Create db user if it doesn't already exist
+        // No db record found
         if (!tag) {
             return message.channel.send("Your xp was already 0");
         }

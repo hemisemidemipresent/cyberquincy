@@ -41,8 +41,8 @@ module.exports = {
         for (level = 1; level < xpCurve.length; level++) {
             if(xpCurve[level] > xp) return level;
         }
-        // If user's leveling calculation made it this far...
-        return 20;
+        // If user's leveling calculation made it this far, assign the highest level
+        return xpCurve.length;
     },
 
     levelUpMessage(message, newLevel) {

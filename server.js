@@ -133,6 +133,11 @@ function globalRequirements() {
     global.prefix = require('./secret/config.json')['prefix'];
 
     global.Cooldowns = require('./helpers/cooldowns.js');
+
+    global.Xp = require('./helpers/xp.js');
+    global.DiscordUsers = require('./helpers/discord-users.js');
+
+    global.xpEnabled = true;
 }
 
 function consoleBootup() {
@@ -161,13 +166,12 @@ function dbSetup() {
     });
 
     global.Tags = sequelize.define('tags', {
-        id: {
+        name: {
             type: Sequelize.INTEGER,
             unique: true,
             primaryKey: true,
         },
         xp: Sequelize.INTEGER,
-        level: Sequelize.INTEGER,
     });
 
     Tags.sync();

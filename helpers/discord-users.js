@@ -1,5 +1,6 @@
 module.exports = {
-    HMMM: 668312965664997386,
+    HMMM: '668312965664997386',
+    RMLGAMING: '497285447270268939',
 
     // <@!190278192> (exclamation optional)
     USER_MENTION_REGEX: /<@!?([0-9]+)>/,
@@ -8,7 +9,7 @@ module.exports = {
         return module.exports.USER_MENTION_REGEX.test(mention);
     },
 
-    getUserFromMention(mention) {
+    getDiscordUserFromMention(mention) {
         // The user id is a capture group and is returned second
         [,user_id] = mention.match(module.exports.USER_MENTION_REGEX)
 
@@ -16,7 +17,7 @@ module.exports = {
     },
 
     getMentionFromDiscordUser(user) {
-        return `<@!${user.id}>`
+        return `<@${user.id}>`
     },
 
     getDiscordUserFromId(user_id) {

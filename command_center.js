@@ -5,6 +5,8 @@ const Advertisements = require('./helpers/advertisements.js');
 module.exports = {
     PREFIX: secrets_config["prefix"],
 
+    XPCOMMANDS: ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'],
+
     configureCommands(client) {
         client.commands = new Discord.Collection();
 
@@ -52,10 +54,21 @@ module.exports = {
                             client.commands.find(
                                 (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
                             );
-            
+
+                            
+            if(!command) {
+                return message.channel.send(`${commandName} is not a valid command. Type \`q!alias\` for a list of all available commands.`);
+            }
+
             // Keeps track of cooldowns for commands/users and determines if cooldown has expired
             if(Cooldowns.handleCooldown(command, message)) {
                 command.execute(message, args);
+
+                // Don't want the user gaining xp from metacommands
+                if (!module.exports.XPCOMMANDS.includes(command.name) && xpEnabled) {
+                    Xp.addCommandXp(message);
+                }
+
                 // May or may not embed an advertisement message in addition to the command output
                 Advertisements.spin(message);
             }

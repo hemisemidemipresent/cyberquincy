@@ -1,17 +1,8 @@
-const DiscordUsers = require('../helpers/discord-users.js')
-
 module.exports = {
     name: 'level',
-    aliases: ['xp', 'rank'],
+    aliases: ['xp', 'rank', 'getxp'],
 
     async execute(message, args) {
-        return message.channel.send(
-            'Sorry! xp has been removed (temporarily) to save processing time and increase uptime.'
-        );
-
-        // Everything from here works if the above is commented out
-        // but there needs to be an xp curve for it to be useful
-
         if (!args[0]) {
             const user = DiscordUsers.getDiscordUserFromId(message.author.id);
             return module.exports.displayStats(user, message);
@@ -34,17 +25,16 @@ module.exports = {
 
     async displayStats(user, message) {
         whose_xp = user.id === message.author.id ? "Your" : `${user.username}'s`
-        let dbUser = await Tags.findOne({ where: 
+        let tag = await Tags.findOne({ where: 
             { 
-                id: user.id 
+                name: user.id
             } 
         });
 
         // Create db user if it doesn't already exist
-        if (!dbUser) {
-            dbUser = await Tags.create({
-                id: user.id,
-                level: 1,
+        if (!tag) {
+            tag = await Tags.create({
+                name: user.id,
                 xp: 0, 
             });
         }
@@ -52,8 +42,8 @@ module.exports = {
         // Display level+xp
         const xpEmbed = new Discord.MessageEmbed()
             .setTitle(`${whose_xp} xp`)
-            .addField('level', dbUser.level)
-            .addField('xp', dbUser.xp)
+            .addField('level', Xp.xpToLevel(tag.xp))
+            .addField('xp', tag.xp)
             .setColor(colours["cyber"])
             .addField(
                 'Have a suggestion or found a bug?',

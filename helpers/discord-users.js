@@ -9,7 +9,7 @@ module.exports = {
         return module.exports.USER_MENTION_REGEX.test(mention);
     },
 
-    getUserFromMention(mention) {
+    getDiscordUserFromMention(mention) {
         // The user id is a capture group and is returned second
         [,user_id] = mention.match(module.exports.USER_MENTION_REGEX)
 

@@ -24,6 +24,7 @@ module.exports = {
             .addField('ping:', `Response time: ${responseTime}ms`, true)
 
             .addField('time since last restart:', `${uptime}`, true)
+            .addField('XP gain enabled?', xpEnabled)
             .addField(
                 'bot invite link',
                 'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=805432400'

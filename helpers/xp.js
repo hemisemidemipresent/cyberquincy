@@ -6,14 +6,14 @@ module.exports = {
 
         let tag = await Tags.findOne({ where: 
             { 
-                id: user.id 
+                name: user.id 
             } 
         });
 
         // Create db user if it doesn't already exist
         if (!tag) {
             tag = await Tags.create({
-                id: user.id,
+                name: user.id,
                 xp: 0, 
             });
         }
@@ -22,11 +22,11 @@ module.exports = {
 
         oldLevel = module.exports.xpToLevel(tag.xp)
         
-        Tags.update({ xp: tag.xp + xpGain }, { where: { id: user.id } });
+        Tags.update({ xp: tag.xp + xpGain }, { where: { name: user.id } });
 
         tag = await Tags.findOne({ where: 
             { 
-                id: user.id 
+                name: user.id 
             } 
         });
 

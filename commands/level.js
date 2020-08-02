@@ -27,14 +27,14 @@ module.exports = {
         whose_xp = user.id === message.author.id ? "Your" : `${user.username}'s`
         let tag = await Tags.findOne({ where: 
             { 
-                id: user.id 
+                name: user.id
             } 
         });
 
         // Create db user if it doesn't already exist
         if (!tag) {
             tag = await Tags.create({
-                id: user.id,
+                name: user.id,
                 xp: 0, 
             });
         }

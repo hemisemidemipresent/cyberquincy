@@ -5,6 +5,8 @@ const Advertisements = require('./helpers/advertisements.js');
 module.exports = {
     PREFIX: secrets_config["prefix"],
 
+    XPCOMMANDS: ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'],
+
     configureCommands(client) {
         client.commands = new Discord.Collection();
 
@@ -63,7 +65,7 @@ module.exports = {
                 command.execute(message, args);
 
                 // Don't want the user gaining xp from metacommands
-                if (command.name != 'deletexp' && command.name != 'level' && command.name != 'setxp') {
+                if (!module.exports.XPCOMMANDS.includes(command.name) && xpEnabled) {
                     Xp.addCommandXp(message);
                 }
 

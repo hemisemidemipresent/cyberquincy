@@ -94,7 +94,7 @@ module.exports = {
             .addField(
                 '"q!chincome" <round> (<gamemode>)',
                 '  • Cash generated during round <round>\n' + 
-                '  • Cash generated from start of R6 through end of round <round>\n' + 
+                '  • Cash generated from start of round 6 through end of round <round>\n' + 
                 '  • Cash generated from start of round <round> through end of round 100'
             )
             .addField('Valid <gamemode> values', 'CHIMPS, HALF_CASH, ABR')

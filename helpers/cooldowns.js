@@ -52,9 +52,8 @@ module.exports = {
         if (!isNaN(command.cooldown)) {
             cooldown = command.cooldown;
         } else if (message.channel.topic) {
-            regex_match = message.channel.topic.match(
-                module.exports.CHANNEL_TOPIC_COOLDOWN_REGEX
-            );
+
+            regex_match = message.channel.topic.match(module.exports.CHANNEL_TOPIC_COOLDOWN_REGEX);
             if (regex_match) {
                 [_, cooldown] = regex_match;
             }

@@ -149,12 +149,12 @@ chincomeMessage = function (mode_alias, round) {
     return new Discord.MessageEmbed()
         .setTitle(`${mode_str_iden} CHIMPS Income (R${round})`)
         .addField(
-            `Total cash gained through the end of round ${round}`,
-            `$${numberWithCommas(incomes.chincome)}`
-        )
-        .addField(
             `Income gained from just round ${round} itself`,
             `$${numberWithCommas(incomes.rincome)}`
+        )
+        .addField(
+            `Total cash gained through the end of round ${round}`,
+            `$${numberWithCommas(incomes.chincome)}`
         )
         .addField(
             `Income gained from start of round ${round} to end of R100`,

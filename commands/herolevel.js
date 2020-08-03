@@ -3,7 +3,7 @@ const { colour } = require('../secret/config.json');
 module.exports = {
     name: 'herolevel',
     aliases: ['hl', 'hero', 'her', 'hlvl'],
-    execute(message, client) {
+    execute(message) {
         const xp_per_level = [
             0,
             0,

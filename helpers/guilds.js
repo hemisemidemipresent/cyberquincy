@@ -1,5 +1,3 @@
-
-
 module.exports = {
     enterGuild(guild) {
         let channeltosend = guild.channels.cache.find(
@@ -8,7 +6,9 @@ module.exports = {
         if (channeltosend) {
             let helpEmbed = new Discord.MessageEmbed()
                 .setColor(colours['cyber'])
-                .setDescription(`Hi! I am Cyber Quincy. I am a btd6 discord bot.`)
+                .setDescription(
+                    `Hi! I am Cyber Quincy. I am a btd6 discord bot.`
+                )
                 .addField(
                     'General Info',
                     '[List of commands](https://cq.netlify.com)\n[Discord server](https://discord.gg/VMX5hZA)'
@@ -18,11 +18,11 @@ module.exports = {
                     "Quincy son of Quincy is property of Ninja Kiwi. Although they didn't develop this bot, Ninja Kiwi approved of its use and development."
                 )
                 .addField(
-                    "You should know...",
+                    'You should know...',
                     `The most popular commands by far are those that describe towers, for example \`q!boomer 005\` (format: \`q!<towername> <path>\`)`
                 )
                 .setFooter(`Use \`${prefix}info\` for more information`);
-            
+
             channeltosend.send(helpEmbed);
         }
     },
@@ -31,7 +31,8 @@ module.exports = {
     BTD6_INDEX: 661812833771847700,
     RACE_SERVER: 543957081183617024,
 
-    CYBER_WELCOME: 'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!\n\
+    CYBER_WELCOME:
+        'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!\n\
     **Get yourself a role in <#605712758595649566>**\n\n\
     :tools: **Found a bug?**\n\
     Check with <#615159685477040135>, <#616603947481694209>, <#676670780204908555> or in <#598768319625035776>.\n\n\
@@ -46,7 +47,7 @@ module.exports = {
 
     async addMember(member) {
         if (member.guild.id === module.exports.CYBER_SUPPORT) {
-            if (member.id === Users.HMMM) {
+            if (member.id === Users.HEMI) {
                 return;
             }
             const tchannel = member.guild.channels.cache.find((channel) =>
@@ -55,9 +56,7 @@ module.exports = {
             tchannel.send(
                 `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and the server now has **${member.guild.memberCount}** members!`
             );
-            member.send(
-                module.exports.CYBER_WELCOME
-            );
+            member.send(module.exports.CYBER_WELCOME);
         } else if (member.guild.id == module.exports.BTD6_INDEX) {
             const wel = new Discord.MessageEmbed()
                 .setTitle('Welcome to the BTD6 Index Discord Server!')
@@ -67,7 +66,7 @@ module.exports = {
                 .setDescription(
                     '**remember to read <#661822473246998548>!**\n**Useful external resources can be found in <#661842199679467541>**'
                 )
-    
+
                 .addField(
                     'What is the BTD6 Index?',
                     'The BTD6 Index is a community-maintained spreadsheet that was created for the purpose of compiling resources, documenting challenges, and archiving additional information for BTD6. The goal is to have a vast array of game knowledge all condensed into one area for easy reference and viewing. This post breaks down what each section strives to accomplish as well as addition resources and information that might help you at the game.'
@@ -111,5 +110,5 @@ module.exports = {
                 `**${member.displayName}** couldn't resist it and accidentally revealed that he/she is hacking races`
             );
         }
-    }
+    },
 };

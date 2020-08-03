@@ -3,13 +3,15 @@ cooldowns = new Discord.Collection();
 module.exports = {
     handleCooldown(command, message) {
         const now = Date.now();
-        secondsSince = 
-            module.exports.calculateSecondsSinceLastCommandUsage(
-                command, 
-                message.author.id, 
-                now
-            );
-        activeCooldownSeconds = module.exports.determineCooldown(command, message);
+        secondsSince = module.exports.calculateSecondsSinceLastCommandUsage(
+            command,
+            message.author.id,
+            now
+        );
+        activeCooldownSeconds = module.exports.determineCooldown(
+            command,
+            message
+        );
 
         // Round to nearest tenth
         secondsLeft = (activeCooldownSeconds - secondsSince).toFixed(1);
@@ -25,7 +27,7 @@ module.exports = {
 
     calculateSecondsSinceLastCommandUsage(command, user_id, now) {
         // Cooldowns are stored as {command.name: {discord_user_id: Date Timestamp}}
-        timestamps = cooldowns.get(command.name)
+        timestamps = cooldowns.get(command.name);
 
         // Command doesn't have an entry so it was never used
         if (!timestamps) return Infinity;
@@ -33,7 +35,7 @@ module.exports = {
         timestamp = timestamps[user_id.toString()];
 
         // Author doesn't have an entry within the command so they never used it
-        if(timestamp) return (now - timestamp)/1000;
+        if (timestamp) return (now - timestamp) / 1000;
         else return Infinity;
     },
 
@@ -50,7 +52,12 @@ module.exports = {
         if (!isNaN(command.cooldown)) {
             cooldown = command.cooldown;
         } else if (message.channel.topic) {
-            [, cooldown] = message.channel.topic.match(module.exports.CHANNEL_TOPIC_COOLDOWN_REGEX);
+            regex_match = message.channel.topic.match(
+                module.exports.CHANNEL_TOPIC_COOLDOWN_REGEX
+            );
+            if (regex_match) {
+                [_, cooldown] = regex_match;
+            }
         }
 
         return cooldown;
@@ -67,9 +74,7 @@ module.exports = {
 
     notifyUser(command, secondsLeft, message) {
         message.channel.send(
-            `Please wait ${secondsLeft} more second(s) before reusing the \`${
-                command.name
-            }\` command.`
+            `Please wait ${secondsLeft} more second(s) before reusing the \`${command.name}\` command.`
         );
     },
-}
+};

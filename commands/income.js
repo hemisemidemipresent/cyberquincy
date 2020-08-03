@@ -1,15 +1,9 @@
-// Spreadsheets with round income data
-const chimps = require('../jsons/round2.json');
+const r = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json');
-
-// Discord client
 const Discord = require('discord.js');
-
-// Discord bot sidebar colors
-const colors = require('../jsons/colours.json');
+const { red, magenta, purple, yellow } = require('../jsons/colours.json');
 module.exports = {
     name: 'income',
-    // Main executable function
     execute(message, args) {
         if (!args[0] || isNaN(args[0]) || args[0] < -1 || args[0] > 100) {
             // error case
@@ -84,64 +78,6 @@ module.exports = {
                     'in alternate bloon rounds, not including starting cash'
                 );
             return message.channel.send(embed);
-        } else if (args[2].includes('ha') || args[2].includes('ca')) {
-            let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
-            let startroundObject = r[normalStartRound];
-            let endroundObject = r[endround];
-            let income = endroundObject.cch - startroundObject.cch;
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `$${
-                        Math.trunc(income * 100) / 200
-                    } was made from popping round ${
-                        normalStartRound + 1
-                    } to popping round ${endround}`
-                )
-                .setColor(magenta)
-                .setFooter('in half cash, not including starting cash');
-            return message.channel.send(embed);
-        } else {
-            let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
-            let startroundObject = r[normalStartRound];
-            let endroundObject = r[endround];
-            let income = endroundObject.cch - startroundObject.cch;
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `$${
-                        Math.trunc(income * 100) / 100
-                    } was made from popping round ${
-                        normalStartRound + 1
-                    } to popping round ${endround}`
-                )
-                .setColor(magenta)
-                .setFooter('not including starting cash');
-            return message.channel.send(embed);
         }
     },
-};
-calculateIncomes = function (mode, round) {
-    chincome = null;
-    rincome = null;
-
-    if (mode == 'abr') {
-        index = round - 2;
-
-        chincome = abr[index][1] - abr[3][1] + 650;
-        rincome = abr[index][0];
-    } else {
-        index = round;
-
-        chincome = chimps[index]['cch'] - chimps[5]['cch'] + 650;
-        rincome = chimps[index]['csh'];
-
-        if (mode == 'hc') {
-            chincome /= 2;
-            rincome /= 2;
-        }
-    }
-
-    return {
-        rincome: rincome,
-        chincome: chincome,
-    };
 };

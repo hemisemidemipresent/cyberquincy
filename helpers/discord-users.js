@@ -1,5 +1,5 @@
 module.exports = {
-    HMMM: '668312965664997386',
+    HEMI: '699780654740668426',
     RMLGAMING: '497285447270268939',
 
     // <@!190278192> (exclamation optional)
@@ -11,16 +11,16 @@ module.exports = {
 
     getDiscordUserFromMention(mention) {
         // The user id is a capture group and is returned second
-        [,user_id] = mention.match(module.exports.USER_MENTION_REGEX)
+        [, user_id] = mention.match(module.exports.USER_MENTION_REGEX);
 
         return module.exports.getDiscordUserFromId(user_id);
     },
 
     getMentionFromDiscordUser(user) {
-        return `<@${user.id}>`
+        return `<@${user.id}>`;
     },
 
     getDiscordUserFromId(user_id) {
         return client.users.cache.get(user_id);
     },
-}
+};

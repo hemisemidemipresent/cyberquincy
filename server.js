@@ -1,5 +1,5 @@
 function main() {
-    listenForPing();
+    pingHeroku();
     globalRequirements();
     consoleBootup();
     dbSetup();
@@ -8,7 +8,7 @@ function main() {
     login();
 }
 
-function listenForPing() {
+function pingHeroku() {
     const express = require('express');
 
     // this part is to keep the project going
@@ -31,6 +31,11 @@ function globalRequirements() {
     global.prefix = require('./secret/config.json')['prefix'];
 
     global.Cooldowns = require('./helpers/cooldowns.js');
+
+    global.Xp = require('./helpers/xp.js');
+    global.DiscordUsers = require('./helpers/discord-users.js');
+
+    global.xpEnabled = true;
 }
 
 function consoleBootup() {
@@ -59,13 +64,12 @@ function dbSetup() {
     });
 
     global.Tags = sequelize.define('tags', {
-        id: {
+        name: {
             type: Sequelize.INTEGER,
             unique: true,
             primaryKey: true,
         },
         xp: Sequelize.INTEGER,
-        level: Sequelize.INTEGER,
     });
 
     Tags.sync();

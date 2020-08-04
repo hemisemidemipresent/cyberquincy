@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { colour } = require('../secret/config.json');
+const Emojis = require('../jsons/emojis.json'); // will implement later
 module.exports = {
     name: 'herolevel',
     aliases: ['hl', 'hero', 'her', 'hlvl'],
@@ -163,7 +164,6 @@ module.exports = {
         const difficultyEmojiIDs = [
             '734966523487322202',
             '734966523352973362',
-            '734966523575140423',
             '734966523575140423',
             '734966521822183475',
         ];

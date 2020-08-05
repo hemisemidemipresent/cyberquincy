@@ -48,6 +48,8 @@ module.exports = {
             Tags.create({
                 name: user.id,
                 xp: 0,
+                showAds: true,
+                showLevelUpMsg: true,
             });
         }
 

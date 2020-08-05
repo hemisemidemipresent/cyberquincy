@@ -1,6 +1,7 @@
+const Discord = require('discord.js');
 module.exports = {
     name: 'setting',
-    aliases: ['set', 'config', 'options', 'o'],
+    aliases: ['set', 'settings', 'options', 'o'],
 
     async execute(message, args) {
         user = message.author;
@@ -10,6 +11,9 @@ module.exports = {
                 name: user.id,
             },
         });
-        message.channel.send(`ads: ${tag.showAds}`);
+        let embed = new Discord.MessageEmbed()
+            .setTitle(`Settings for ${user.username}#${user.discriminator}`)
+            .addField('Advertisments', tag.showAds)
+            .addField('Level Up Messages', tag.showLevelUpMsg);
     },
 };

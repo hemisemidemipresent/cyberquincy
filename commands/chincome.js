@@ -12,7 +12,7 @@ const colors = require('../jsons/colours.json');
 // Aliases should eventually end up in a centralized place for all commands to use
 MODE_ALIASES = {
     hc: ['half_cash', 'halfcash', 'hcc'],
-    chimps: ['chmp', 'chmps', 'chimp'],
+    chimps: ['chmp', 'chmps', 'chimp', 'standard'],
     abr: ['alt', 'alternate'],
 };
 
@@ -90,15 +90,18 @@ module.exports = {
 
     helpMessage(message) {
         let errorEmbed = new Discord.MessageEmbed()
-            .setTitle('HELP')
+            .setTitle('`q!chincome` HELP')
             .addField(
-                '"q!chincome"',
-                'Find cash generated during round <round> and also from start of round 6 through end of round <round>'
+                '"q!chincome" <round> (<gamemode>)',
+                '  • Cash generated during round <round>\n' + 
+                '  • Cash generated from start of round 6 through end of round <round>\n' + 
+                '  • Cash generated from start of round <round> through end of round 100'
             )
+            .addField('Valid <gamemode> values', 'CHIMPS, HALF_CASH, ABR')
+            .addField('Valid <round> values', '6, 7, ..., 100')
             .addField('Ex. #1', 'q!chincome <round> | q!chincome 8')
             .addField('Ex. #2', 'q!chincome <mode> <round> | q!chincome abr R8')
-            .addField('Ex. #3', 'q!chincome <round> <mode> | q!chincome r8 hc')
-            .setColor(colors['cyber']);
+            .addField('Ex. #3', 'q!chincome <round> <mode> | q!chincome r8 hc');
 
         return message.channel.send(errorEmbed);
     },
@@ -146,17 +149,23 @@ chincomeMessage = function (mode_alias, round) {
     return new Discord.MessageEmbed()
         .setTitle(`${mode_str_iden} CHIMPS Income (R${round})`)
         .addField(
+            `Income gained from just round ${round} itself`,
+            `$${numberWithCommas(incomes.rincome)}`
+        )
+        .addField(
             `Total cash gained through the end of round ${round}`,
             `$${numberWithCommas(incomes.chincome)}`
         )
         .addField(
-            `Income gained from just round ${round} itself`,
-            `$${numberWithCommas(incomes.rincome)}`
-        );
+            `Income gained from start of round ${round} to end of R100`,
+            `$${numberWithCommas(incomes.lincome)}`
+        )
+        .setColor(colours['cyber']);
 };
 
 // rincome = round income
 // chincome = cumulative income (CHIMPS with modifier specified by `mode`)
+// lincome = left income (income left over i.e. cash from start of round to end of R100)
 calculateIncomes = function (mode, round) {
     chincome = null;
     rincome = null;
@@ -166,21 +175,25 @@ calculateIncomes = function (mode, round) {
 
         chincome = abr[index][1] - abr[3][1] + 650;
         rincome = abr[index][0];
+        lincome = abr[98][1] - abr[index - 1][1];
     } else {
         index = round;
 
         chincome = chimps[index]['cch'] - chimps[5]['cch'] + 650;
         rincome = chimps[index]['csh'];
+        lincome = chimps[100]['cch'] - chimps[index - 1]['cch'];
 
         if (mode == 'hc') {
             chincome /= 2;
             rincome /= 2;
+            lincome /= 2;
         }
     }
 
     return {
-        rincome: rincome,
-        chincome: chincome,
+        rincome: rincome.toFixed(1),
+        chincome: chincome.toFixed(1),
+        lincome: lincome.toFixed(1),
     };
 };
 

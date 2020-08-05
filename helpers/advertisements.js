@@ -1,18 +1,28 @@
 module.exports = {
     WHEEL_SIZE: 50,
 
-    spin(message) {
+    async spin(message) {
+        user = message.author;
+
+        let tag = await Tags.findOne({
+            where: {
+                name: user.id,
+            },
+        });
+        if (!tag.showAds || tag.showAds == false) {
+            return;
+        }
         advertisingWheel = [
             module.exports.botOffline,
             module.exports.ownServer,
             module.exports.ownServer,
             module.exports.bugReport,
-        ]
+        ];
 
         const wheelSpin = Math.floor(Math.random() * module.exports.WHEEL_SIZE);
 
         advertisement = advertisingWheel[wheelSpin];
-        if(advertisement) advertisement(message);
+        if (advertisement) advertisement(message);
     },
 
     botOffline(message) {
@@ -51,5 +61,5 @@ module.exports = {
             .setColor(colours['turq']);
 
         message.channel.send(bugEmbed);
-    }
-}
+    },
+};

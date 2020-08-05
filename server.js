@@ -28,7 +28,7 @@ function globalRequirements() {
     global.Discord = require('discord.js');
     global.client = new Discord.Client();
 
-    global.prefix = require('./secret/config.json')['prefix'];
+    global.prefix = require('./1/config.json')['prefix'];
 
     global.Cooldowns = require('./helpers/cooldowns.js');
 
@@ -70,8 +70,19 @@ function dbSetup() {
             primaryKey: true,
         },
         xp: Sequelize.INTEGER,
+        showAds: {
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+        },
+        xpFreezed: {
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+        },
+        showLevelUpMsg: {
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+        },
     });
-
     Tags.sync();
 }
 
@@ -99,7 +110,7 @@ function generateListeners(commandCenter) {
 }
 
 function login() {
-    token = require('./secret/config.json')['token'];
+    token = require('./1/config.json')['token'];
     client.login(token);
 }
 

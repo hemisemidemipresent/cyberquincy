@@ -1,4 +1,4 @@
-const { colour } = require('../secret/config.json');
+const { colour } = require('../1/config.json');
 const Discord = require('discord.js');
 module.exports = {
     name: 'info',

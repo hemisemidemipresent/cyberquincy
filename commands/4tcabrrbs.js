@@ -10,7 +10,7 @@ module.exports = {
                 '1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q'
             );
             // load directly from json file if not in secure environment
-            await doc.useServiceAccountAuth(require('../secret/config.json'));
+            await doc.useServiceAccountAuth(require('../1/config.json'));
 
             await doc.loadInfo(); // loads document properties and worksheets
             const sheet = doc.sheetsByIndex[1]; //load 4tcabrrbs spreadsheet

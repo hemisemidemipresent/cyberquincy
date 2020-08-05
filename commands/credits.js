@@ -1,4 +1,4 @@
-const { prefix } = require('../secret/config.json');
+const { prefix } = require('../1/config.json');
 module.exports = {
     name: 'credits',
     description: 'List all of the people who helped (directly and indirectly)',

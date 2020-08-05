@@ -1,5 +1,5 @@
 const fs = require('fs');
-const secrets_config = require('./secret/config.json');
+const secrets_config = require('./1/config.json');
 const Advertisements = require('./helpers/advertisements.js');
 
 module.exports = {
@@ -75,6 +75,7 @@ module.exports = {
                 }
 
                 // May or may not embed an advertisement message in addition to the command output
+
                 Advertisements.spin(message);
             }
         } catch (error) {

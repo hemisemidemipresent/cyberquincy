@@ -9,31 +9,13 @@ useful links:
 
 **for help, simply use `q!help`**
 
--   this bot is made using `discord.js`
--   commands can be found in the `commands` folder.
--   the start script is `server.js`
-
-npm dependencies:
-
--   `express` every node.js project has one of these, even though this isn't used here
--   `discord.js` what makes this bot work
--   `google-spreadsheet` I need this to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) [4tcabrrbs](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799) and [3tcrbs](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
--   `node-fetch` module for assesing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
-
-DB npm dependencies:
-
--   `sqlite3`
--   `sequelize`
-
-commands are using node.js `module.exports`
-
 # Basic local test guide
 
-all credentials will be in `./secret/config.json`, fill in the json accordingly
+all credentials will be in `./1/config.json`, fill in the json accordingly
 
 make a new discord bot in [discord dev page](https://discord.com/developers/applications) and make a new application and hence bot (and token)
 
-you need credentials for google-spreadsheet (I reccomend [Thie video to set up credentials](https://www.youtube.com/watch?v=UGN6EUi4Yio) and paste the credentials in `./secret/config.json`), not necessary if you arent using google spreadsheets in any way.
+you need credentials for google-spreadsheet (I reccomend [Thie video to set up credentials](https://www.youtube.com/watch?v=UGN6EUi4Yio) and paste the credentials in `./1/config.json`), not necessary if you arent using google spreadsheets in any way.
 
 currently the database isn't currently actively bug-tested
 if you have trouble with the database there is a no-database `noDBserver.js`
@@ -44,3 +26,29 @@ the variable names are a mess and I apologise for them.
 I am also sorry for the meaningless commit names
 
 by hemidemisemipresent#0301
+
+# application information
+
+-   this bot is made using `discord.js`
+-   commands can be found in the `commands` folder.
+-   the start script is `server.js`
+-   the sequelise config file is `./config`
+-   the other credentials are in `./1/config.jso`
+
+npm dependencies:
+
+-   `express` every node.js project has one of these, even though this isn't used here
+-   `discord.js` what makes this bot work
+-   `google-spreadsheet` I need this to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) [4tcabrrbs](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799) and [3tcrbs](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
+-   `node-fetch` module for assesing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
+-   `sequelize` (DB)
+-   `sqlite3` (DB dialect)
+
+## how commands are processed
+
+-   first, it starts in `generateListeners()` in `server.js`
+-   then it is processed in `command_center.js`
+-   it is then executed using `command.execute(message, args);`, using `module.exports`
+-   then the DB stuff and ad stuff happens back in `command_center.js`
+
+commands are using node.js `module.exports`

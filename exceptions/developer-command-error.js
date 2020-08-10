@@ -1,0 +1,1 @@
+module.exports = class DeveloperCommandError extends Error {}

@@ -8,7 +8,7 @@ module.exports = {
     aliases: ['dm', 'dart-monkey'],
 
     usage: '[command name]',
-    execute(message, args, client) {
+    execute(message, args) {
         let name = 'dart-monkey';
         function provideHelpMsg() {
             fetch(url, settings)
@@ -54,8 +54,6 @@ module.exports = {
                         }
                         str += `__${object.name}__   \`\`${pathsArr[i]}\`\``;
                     }
-                    const filter = (msg) =>
-                        msg.author.id === `${message.author.id}`;
 
                     return message.channel.send(str);
                 });
@@ -123,12 +121,9 @@ module.exports = {
                             time: 20000,
                         });
 
-                        collector.on(
-                            'collect',
-                            (reaction, reactionCollector) => {
-                                msg.delete();
-                            }
-                        );
+                        collector.on('collect', () => {
+                            msg.delete();
+                        });
                     });
                 }
 

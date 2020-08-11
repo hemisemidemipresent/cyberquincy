@@ -1,9 +1,16 @@
 const Discord = require('discord.js');
 const quiz = require('../jsons/quiz.json');
 const { cyber, orange, turq, magenta } = require('../jsons/colours.json');
+const Quiz = require('../helpers/quizxp.js');
+
 module.exports = {
     name: 'quiz',
-    execute(message, args, client) {
+    execute(message, args) {
+        let user = message.author;
+
+        if (args[0]) {
+            return Quiz.getQuizXp(message);
+        }
         const item = quiz[Math.floor(Math.random() * quiz.length)];
         //for unkeyed {}s, just [index]
         let QuestionEmbed = new Discord.MessageEmbed()
@@ -42,6 +49,7 @@ module.exports = {
                             )
                             .setColor(turq);
                         message.channel.send(correctEmbed);
+                        Quiz.addQuizXp(message);
                     } else {
                         let wrongEmbed = new Discord.MessageEmbed()
                             .setTitle('Game over! You got the wrong answer!')
@@ -53,7 +61,7 @@ module.exports = {
                     let errorEmbed = new Discord.MessageEmbed()
                         .setTitle(`Game over! You took too long.`)
                         .setColor(magenta);
-                    message.channel.send();
+                    message.channel.send(errorEmbed);
                 });
         });
     },

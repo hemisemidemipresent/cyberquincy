@@ -6,7 +6,7 @@ module.exports = {
     description: 'shows tier list',
     aliases: ['tl'],
     usage: 'q!tier <version>',
-    execute(message, args, client) {
+    execute(message, args) {
         if (!args[0]) {
             return message.channel.send(
                 `${t.t[4]}\nyou can use q!tier <version>`

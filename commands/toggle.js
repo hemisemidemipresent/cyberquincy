@@ -22,6 +22,7 @@ module.exports = {
                 xp: 0,
                 showAds: true,
                 showLevelUpMsg: true,
+                quiz: 0,
             });
         }
         if (args[0].includes('ad')) {

@@ -4,7 +4,7 @@ module.exports = {
     aliases: ['h', 'hp'],
     description: 'calculates the health of blimps, even in freeplay',
     usage: '!health <bloon> <round>',
-    execute(message, args, client) {
+    execute(message, args) {
         /*
       <WARNING!!!>
 

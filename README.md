@@ -9,6 +9,8 @@ useful links:
 
 **for help, simply use `q!help`**
 
+###### Note: the 'Advertisments' you see here and in the code aren't for money, they just "advertise" the discord server and invite link. I can't think of a better name
+
 # Basic local test guide
 
 all credentials will be in `./1/config.json`, fill in the json accordingly
@@ -43,6 +45,7 @@ npm dependencies:
 -   `node-fetch` module for assesing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
 -   `sequelize` (DB)
 -   `sqlite3` (DB dialect)
+-   `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be, just suggest something in this discord instead. If you are interested look at `./migrations`, and check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527)
 
 ## how commands are processed
 
@@ -52,3 +55,14 @@ npm dependencies:
 -   then the DB stuff and ad stuff happens back in `command_center.js`
 
 commands are using node.js `module.exports`
+
+# database fields
+
+(I think they are called fields)
+
+-   `xp` - user xp
+-   `level` - isn't really used since you can reverse-engineer the level from xp
+-   `showAds` - setting for turning on/off the ads in `./helpers/advertisments.js`
+-   `showLevelUpMsg` - setting for turning on/off level up messages in `./helpers/xp.js`
+-   `quiz` - how many q!quiz questions they answered correctly
+-   `freezexp` - unused but

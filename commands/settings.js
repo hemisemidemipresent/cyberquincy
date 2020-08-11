@@ -15,5 +15,6 @@ module.exports = {
             .setTitle(`Settings for ${user.username}#${user.discriminator}`)
             .addField('Advertisments', tag.showAds)
             .addField('Level Up Messages', tag.showLevelUpMsg);
+        message.channel.send(embed);
     },
 };

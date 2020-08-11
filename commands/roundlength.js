@@ -4,7 +4,7 @@ const { red, lightgrey, grey } = require('../jsons/colours.json');
 module.exports = {
     name: 'roundlength',
     aliases: ['length', 'rl', 'l'],
-    execute(message, args, client) {
+    execute(message, args) {
         if (!args || isNaN(args[0])) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setDescription(

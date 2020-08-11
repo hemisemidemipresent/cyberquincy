@@ -50,6 +50,7 @@ module.exports = {
                 xp: 0,
                 showAds: true,
                 showLevelUpMsg: true,
+                quiz: 0,
             });
         }
 

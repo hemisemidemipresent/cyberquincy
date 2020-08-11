@@ -6,9 +6,9 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'engineer',
     description: 'engineer upgrades desc',
-    aliases: ['engi', 'eng', 'overclock', 'engineer-monkey'],
+    aliases: ['engi', 'eng', 'overclock', 'engineer-monkey', 'engie'],
     usage: '<path1> <path2> <path3>',
-    execute(message, args, client) {
+    execute(message, args) {
         let name = 'engineer-monkey';
 
         function provideHelpMsg() {
@@ -55,8 +55,6 @@ module.exports = {
                         }
                         str += `__${object.name}__   \`\`${pathsArr[i]}\`\``;
                     }
-                    const filter = (msg) =>
-                        msg.author.id === `${message.author.id}`;
 
                     return message.channel.send(str);
                 });
@@ -125,15 +123,10 @@ module.exports = {
                             time: 20000,
                         });
 
-                        collector.on(
-                            'collect',
-                            (reaction, reactionCollector) => {
-                                msg.delete();
-                            }
-                        );
-                        collector.on('end', (collected) => {
-                            console.log(`Collected ${collected.size} items`);
+                        collector.on('collect', () => {
+                            msg.delete();
                         });
+                        collector.on('end', (collected) => {});
                     });
                 } else {
                     let totalCost = 0;
@@ -179,14 +172,8 @@ module.exports = {
                             time: 20000,
                         });
 
-                        collector.on(
-                            'collect',
-                            (reaction, reactionCollector) => {
-                                msg.delete();
-                            }
-                        );
-                        collector.on('end', (collected) => {
-                            console.log(`Collected ${collected.size} items`);
+                        collector.on('collect', () => {
+                            msg.delete();
                         });
                     });
                 }

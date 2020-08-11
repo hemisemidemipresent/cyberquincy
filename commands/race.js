@@ -3,7 +3,7 @@ module.exports = {
     name: 'race',
     aliases: ['rac', 'ra', 'racc', 'rae'],
     cooldown: 5,
-    execute(message, args, client) {
+    execute(message, args) {
         if (isNaN(args[0]) || args[0] < 1)
             return message.channel.send('please specify a valid race number');
         async function access(n) {

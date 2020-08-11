@@ -204,17 +204,17 @@ module.exports = {
                             heroID = 2;
                         } else if (chosen === 'StrikerJones') {
                             heroID = 3;
-                        } else if (chosen === 'PatFusty') {
+                        } else if (chosen === 'Ezili') {
                             heroID = 4;
-                        } else if (chosen === 'Adora') {
+                        } else if (chosen === 'Benjamin') {
                             heroID = 5;
                         } else if (chosen === 'Churchill') {
                             heroID = 6;
-                        } else if (chosen === 'Brickell') {
+                        } else if (chosen === 'PatFusty') {
                             heroID = 7;
-                        } else if (chosen === 'Benjamin') {
+                        } else if (chosen === 'Adora') {
                             heroID = 8;
-                        } else if (chosen === 'Ezili') {
+                        } else if (chosen === 'Brickell') {
                             heroID = 9;
                         }
                         const heroname = heroes[heroID];
@@ -322,9 +322,7 @@ module.exports = {
                                                                 0.1 *
                                                                     difficultyID +
                                                                 0.9;
-                                                            message.channel.send(
-                                                                `${round},${xpCurve},${diffMultiplier},${heroname}`
-                                                            );
+
                                                             let embed = level_cal(
                                                                 round,
                                                                 xpCurve,

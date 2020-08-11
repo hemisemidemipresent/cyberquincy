@@ -8,7 +8,7 @@ module.exports = {
     description: 'ezili upgrades',
     aliases: ['e', 'ez', 'voodo', 'vm', 'ezi', 'ezil', 'voodoo'],
     usage: '!ezili <level>',
-    execute(message, args, client) {
+    execute(message, args) {
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setColor(red)

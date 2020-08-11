@@ -6,7 +6,7 @@ module.exports = {
     description: 'info about maps',
     aliases: ['m'],
     usage: '!map <map name with perfect spelling>',
-    execute(message, args, client) {
+    execute(message, args) {
         let map = args.join(' ');
         let name;
         if (

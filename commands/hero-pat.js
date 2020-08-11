@@ -18,7 +18,7 @@ module.exports = {
         'thicc',
     ],
     usage: '!pat <level>',
-    execute(message, args, client) {
+    execute(message, args) {
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setColor(red)

@@ -3,7 +3,7 @@ module.exports = {
     name: 'fact',
     description: 'random fact/lore from the NK blog. BIG credit to it',
     aliases: ['random', 'f'],
-    execute(message, args, client) {
+    execute(message, args) {
         function searchStringInArray(str, strArray) {
             let resultArray = [];
             for (let j = 0; j < strArray.length; j++) {
@@ -32,7 +32,6 @@ module.exports = {
                 for (let i = 0; i < factsArray.length; i++) {
                     factOutput.push(fact[parseInt(factsArray[i])]);
                 }
-                console.log(factOutput.join('\n'));
                 return message.channel.send(
                     `I found ${
                         factsArray.length

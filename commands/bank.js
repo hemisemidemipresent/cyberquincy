@@ -3,7 +3,7 @@ const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'bank',
     aliases: ['b', 'ba'],
-    execute(message, args, client) {
+    execute(message, args) {
         const filter = (msg) => msg.author.id === `${message.author.id}`;
         if (!args[0] && !args[1] && !args[2]) {
             message.channel

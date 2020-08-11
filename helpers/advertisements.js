@@ -32,7 +32,8 @@ module.exports = {
                 'Join the discord server!',
                 'Get notifications for new updates and bot status at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
             )
-            .setColor(colours['blurple']);
+            .setColor(colours['blurple'])
+            .setFooter('use ``q!toggle ad`` to turn this off');
 
         message.channel.send(serverEmbed);
     },
@@ -44,7 +45,8 @@ module.exports = {
                 'Please spread the word around!',
                 'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
             )
-            .setColor(colours['turq']);
+            .setColor(colours['turq'])
+            .setFooter('use ``q!toggle ad`` to turn this off');
 
         message.channel.send(inviteEmbed);
     },
@@ -58,7 +60,8 @@ module.exports = {
                 'join the discord server!',
                 'suggest a new feature and report a bug at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
             )
-            .setColor(colours['turq']);
+            .setColor(colours['turq'])
+            .setFooter('use ``q!toggle ad`` to turn this off');
 
         message.channel.send(bugEmbed);
     },

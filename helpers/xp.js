@@ -17,6 +17,7 @@ module.exports = {
                 xp: 0,
                 showAds: true,
                 showLevelUpMsg: true,
+                quiz: 0,
             });
         }
 
@@ -34,11 +35,6 @@ module.exports = {
 
         newLevel = module.exports.xpToLevel(tag.xp);
 
-        let tag = await Tags.findOne({
-            where: {
-                name: user.id,
-            },
-        });
         let showlvlmsg = Tags.showLevelUpMsg;
 
         if (showlvlmsg == false) return;
@@ -57,6 +53,7 @@ module.exports = {
     },
 
     levelUpMessage(message, newLevel) {
+        module.exports.levelUpRole(user, newLevel);
         user = message.author;
 
         levelUpEmbed = new Discord.MessageEmbed()
@@ -69,5 +66,17 @@ module.exports = {
             .setColor(colours['green']);
 
         message.channel.send(levelUpEmbed);
+    },
+    async levelUpRole(user, newLevel) {
+        let guildmember = client.guilds.cache
+            .get('598768024761139240')
+            .members.cache.array()
+            .find((m) => m.id === user.id);
+        if (newLevel === 3) {
+            await guildmember.roles.add('645126928340353036');
+        } else if (newLevel === 10) {
+            // if member is level 10 add role
+            await guildmember.roles.add('645629187322806272');
+        }
     },
 };

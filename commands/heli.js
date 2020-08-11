@@ -8,7 +8,7 @@ module.exports = {
     description: 'heli upgrades desc',
     aliases: ['helicopter', 'helipilot', 'heli-pilot'],
     usage: '<path1> <path2> <path3>',
-    execute(message, args, client) {
+    execute(message, args) {
         let name = 'heli-pilot';
 
         function provideHelpMsg() {
@@ -55,8 +55,6 @@ module.exports = {
                         }
                         str += `__${object.name}__   \`\`${pathsArr[i]}\`\``;
                     }
-                    const filter = (msg) =>
-                        msg.author.id === `${message.author.id}`;
 
                     return message.channel.send(str);
                 });
@@ -125,12 +123,9 @@ module.exports = {
                             time: 20000,
                         });
 
-                        collector.on(
-                            'collect',
-                            (reaction, reactionCollector) => {
-                                msg.delete();
-                            }
-                        );
+                        collector.on('collect', () => {
+                            msg.delete();
+                        });
                     });
                 } else {
                     let totalCost = 0;
@@ -176,12 +171,9 @@ module.exports = {
                             time: 20000,
                         });
 
-                        collector.on(
-                            'collect',
-                            (reaction, reactionCollector) => {
-                                msg.delete();
-                            }
-                        );
+                        collector.on('collect', () => {
+                            msg.delete();
+                        });
                     });
                 }
             });

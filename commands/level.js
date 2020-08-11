@@ -39,6 +39,7 @@ module.exports = {
                 xp: 0,
                 showAds: true,
                 showLevelUpMsg: true,
+                quiz: 0,
             });
         }
 
@@ -74,16 +75,45 @@ module.exports = {
     STORM_OF_ARROWS_ROLE: `<@&645629187322806272>`,
 
     rewardsMessage(message) {
-        const lvlMebed = new Discord.MessageEmbed()
-            .setTitle(`XP Rewards`)
-            .addField('Level 3', module.exports.RAPID_SHOT_ROLE)
-            .addField('Level 10', module.exports.STORM_OF_ARROWS_ROLE)
-            .setColor(colours['cyber'])
-            .addField(
-                'You only get role rewards in the bot discord server',
-                '[Discord Server](https://discord.gg/VMX5hZA)'
-            )
-            .setFooter(`You only get role rewards in the bot discord server`);
-        return message.channel.send(lvlMebed);
+        let user = message.author;
+        let guildmember = client.guilds.cache
+            .get('598768024761139240')
+            .members.cache.array()
+            .find((m) => m.id === user.id);
+        if (!guildmember) {
+            let lvlMebed = new Discord.MessageEmbed()
+                .addField(
+                    'You only get role rewards in the bot discord server',
+                    '[Discord Server](https://discord.gg/VMX5hZA)'
+                )
+                .setColor(colours['cyber'])
+                .setFooter(`Join the discord server!(pls)`);
+            return message.channel.send(lvlMebed);
+        } else {
+            if (
+                message.channel.type !== 'text' ||
+                message.guild !== 598768024761139240
+            ) {
+                let lvlMebed = new Discord.MessageEmbed()
+                    .addField(
+                        'Please run this in the bot discord server!',
+                        '[Discord Server](https://discord.gg/VMX5hZA)'
+                    )
+                    .setColor(colours['cyber']);
+
+                return message.channel.send(lvlMebed);
+            }
+            let lvlMebed = new Discord.MessageEmbed()
+                .setTitle(`XP Rewards`)
+                .addField('Level 3', module.exports.RAPID_SHOT_ROLE)
+                .addField('Level 10', module.exports.STORM_OF_ARROWS_ROLE)
+                .setColor(colours['cyber'])
+                .addField(
+                    'You only get role rewards in the bot discord server',
+                    '[Discord Server](https://discord.gg/VMX5hZA)'
+                )
+                .setFooter(`Join the discord server!(pls)`);
+            return message.channel.send(lvlMebed);
+        }
     },
 };

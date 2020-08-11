@@ -3,7 +3,7 @@ const { colour } = require('../1/config.json')
 module.exports = {
     name: 'herolevel',
     aliases: ['hl', 'hero', 'her', 'hlvl'],
-    execute (message) {
+    execute(message) {
         const xp_per_level = [
             0,
             0,
@@ -40,7 +40,7 @@ module.exports = {
             'Brickell'
         ]
         const xpSlopeArr = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1.425]
-        function level_cal (round, xpCurve, diffMultiplier, heroname) {
+        function level_cal(round, xpCurve, diffMultiplier, heroname) {
             /*
             these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0
             I had to expose everything from it using this: https://docs.google.com/spreadsheets/d/1p5OXpBQATUnQNw4MouUjyfE0dxGDWEkWBrxFTAS2uSk/edit#gid=0
@@ -78,7 +78,7 @@ module.exports = {
                 0,
                 Math.floor(processedRound * diffMultiplier),
                 Math.floor(processedRound * diffMultiplier) -
-                    40 * diffMultiplier
+                40 * diffMultiplier
             ]
             for (i = 3; i < 22; i++) {
                 roundArr.push(
@@ -88,18 +88,18 @@ module.exports = {
             for (i = 22; i < 52; i++) {
                 roundArr.push(
                     roundArr[i - 1] -
-                        ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
-                            40) *
-                            diffMultiplier
+                    ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
+                        40) *
+                    diffMultiplier
                 )
             }
             for (i = 52; i < 102; i++) {
                 // might be broken
                 roundArr.push(
                     roundArr[i - 1] -
-                        ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
-                            90) *
-                            diffMultiplier
+                    ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
+                        90) *
+                    diffMultiplier
                 )
             }
             // console.log(xpCurve, processedRound, diffMultiplier);
@@ -263,7 +263,7 @@ module.exports = {
                                                             ) // this is the server with the emojis the bot uses
                                                             .emojis.cache.get(
                                                                 difficultyEmojiIDs[
-                                                                    i
+                                                                i
                                                                 ]
                                                             )
                                                     )
@@ -272,20 +272,20 @@ module.exports = {
                                                     .createReactionCollector(
                                                         (reaction, user) =>
                                                             user.id ===
-                                                                message.author
-                                                                	.id &&
+                                                            message.author
+                                                                .id &&
                                                             (reaction.emoji
-                                                            	.name ===
+                                                                .name ===
                                                                 'Beginner' ||
                                                                 reaction.emoji
-                                                                	.name ===
-                                                                    'Intermediate' ||
+                                                                    .name ===
+                                                                'Intermediate' ||
                                                                 reaction.emoji
-                                                                	.name ===
-                                                                    'Advanced' ||
+                                                                    .name ===
+                                                                'Advanced' ||
                                                                 reaction.emoji
-                                                                	.name ===
-                                                                    'Expert'),
+                                                                    .name ===
+                                                                'Expert'),
                                                         { time: 20000 }
                                                     )
                                                     .once(
@@ -293,7 +293,7 @@ module.exports = {
                                                         (reaction) => {
                                                             const chosen =
                                                                 reaction.emoji
-                                                                	.name
+                                                                    .name
                                                             let difficultyID = 0
                                                             if (
                                                                 chosen ===
@@ -320,7 +320,7 @@ module.exports = {
 
                                                             const diffMultiplier =
                                                                 0.1 *
-                                                                    difficultyID +
+                                                                difficultyID +
                                                                 0.9
 
                                                             const embed = level_cal(

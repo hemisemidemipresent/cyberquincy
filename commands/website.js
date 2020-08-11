@@ -3,9 +3,9 @@ module.exports = {
 
     aliases: ['web', 'site'],
 
-    execute(message) {
+    execute (message) {
         return message.channel.send(
             'https://cq.netlify.app'
         )
-    },
+    }
 }

@@ -1,24 +1,22 @@
-const Discord = require('discord.js');
-const { cyber } = require('../jsons/colours.json');
+const Discord = require('discord.js')
+const { cyber } = require('../jsons/colours.json')
 module.exports = {
     name: 'bank',
     aliases: ['b', 'ba'],
     execute(message, args) {
-        const filter = (msg) => msg.author.id === `${message.author.id}`;
+        const filter = (msg) => msg.author.id === `${message.author.id}`
         if (!args[0] && !args[1] && !args[2]) {
             message.channel
-                .send(
-                    'Please select which bank you are using\n3 - x3x bank\n4 - x4x bank\n5 - x5x bank'
-                )
+                .send('Please select which bank you are using\n3 - x3x bank\n4 - x4x bank\n5 - x5x bank')
                 .then(() => {
                     message.channel
                         .awaitMessages(filter, {
                             max: 1,
                             time: 10000,
-                            errors: ['time'],
+                            errors: ['time']
                         })
                         .then((collected) => {
-                            let bankTier = collected.first().content;
+                            const bankTier = collected.first().content
                             if (
                                 isNaN(bankTier) ||
                                 bankTier < 3 ||
@@ -26,7 +24,7 @@ module.exports = {
                             ) {
                                 return message.channel.send(
                                     'Sorry, please specify a bank type number from 3 to 5 next time. Run the command again'
-                                );
+                                )
                             }
 
                             message.channel
@@ -38,24 +36,24 @@ module.exports = {
                                         .awaitMessages(filter, {
                                             max: 1,
                                             time: 10000,
-                                            errors: ['time'],
+                                            errors: ['time']
                                         })
                                         .then((collect) => {
-                                            let mk = collect.first().content;
-                                            let flatPackBuilding, BiggerBanks;
+                                            const mk = collect.first().content
+                                            let flatPackBuilding, BiggerBanks
                                             if (isNaN(mk) || mk > 2 || mk < 0) {
                                                 return message.channel.send(
                                                     'Sorry, please specify a valid option next time (0-2). Run the commands again'
-                                                );
+                                                )
                                             } else if (mk == 0) {
-                                                flatPackBuilding = false;
-                                                BiggerBanks = false;
+                                                flatPackBuilding = false
+                                                BiggerBanks = false
                                             } else if (mk == 1) {
-                                                flatPackBuilding = true;
-                                                BiggerBanks = false;
+                                                flatPackBuilding = true
+                                                BiggerBanks = false
                                             } else {
-                                                flatPackBuilding = true;
-                                                BiggerBanks = true;
+                                                flatPackBuilding = true
+                                                BiggerBanks = true
                                             }
 
                                             message.channel
@@ -67,27 +65,27 @@ module.exports = {
                                                         .awaitMessages(filter, {
                                                             max: 1,
                                                             time: 10000,
-                                                            errors: ['time'],
+                                                            errors: ['time']
                                                         })
                                                         .then((collectt) => {
-                                                            let hackPercent = collectt.first()
-                                                                .content;
+                                                            const hackPercent = collectt.first()
+                                                                .content
                                                             if (
                                                                 isNaN(
                                                                     hackPercent
                                                                 ) ||
                                                                 !(
                                                                     hackPercent ==
-                                                                        0 ||
+                                                                    0 ||
                                                                     hackPercent ==
-                                                                        5 ||
+                                                                    5 ||
                                                                     hackPercent ==
-                                                                        12
+                                                                    12
                                                                 )
                                                             ) {
                                                                 return message.channel.send(
                                                                     'sorry, please specify a valid value (0, 5, or 12)'
-                                                                );
+                                                                )
                                                             } else {
                                                                 message.channel
                                                                     .send(
@@ -102,28 +100,28 @@ module.exports = {
                                                                                         max: 1,
                                                                                         time: 10000,
                                                                                         errors: [
-                                                                                            'time',
-                                                                                        ],
+                                                                                            'time'
+                                                                                        ]
                                                                                     }
                                                                                 )
                                                                                 .then(
                                                                                     (
                                                                                         collectt2
                                                                                     ) => {
-                                                                                        let crosspathNum = collectt2.first()
-                                                                                            .content;
+                                                                                        const crosspathNum = collectt2.first()
+                                                                                            .content
                                                                                         if (
                                                                                             isNaN(
                                                                                                 crosspathNum
                                                                                             ) ||
                                                                                             crosspathNum <
-                                                                                                0 ||
+                                                                                            0 ||
                                                                                             crosspathNum >
-                                                                                                2
+                                                                                            2
                                                                                         ) {
                                                                                             return message.channel.send(
                                                                                                 'Please specify a valid crosspath option (0 - 2)'
-                                                                                            );
+                                                                                            )
                                                                                         } else {
                                                                                             message.channel
                                                                                                 .send(
@@ -138,95 +136,95 @@ module.exports = {
                                                                                                                     max: 1,
                                                                                                                     time: 10000,
                                                                                                                     errors: [
-                                                                                                                        'time',
-                                                                                                                    ],
+                                                                                                                        'time'
+                                                                                                                    ]
                                                                                                                 }
                                                                                                             )
                                                                                                             .then(
                                                                                                                 (
                                                                                                                     collectt3
                                                                                                                 ) => {
-                                                                                                                    let maxCapacity = 0;
+                                                                                                                    let maxCapacity = 0
                                                                                                                     if (
                                                                                                                         bankTier ==
                                                                                                                         3
                                                                                                                     ) {
-                                                                                                                        maxCapacity += 7000;
+                                                                                                                        maxCapacity += 7000
                                                                                                                     } else {
-                                                                                                                        maxCapacity += 10000;
+                                                                                                                        maxCapacity += 10000
                                                                                                                     }
                                                                                                                     if (
                                                                                                                         BiggerBanks ==
                                                                                                                         true
                                                                                                                     ) {
-                                                                                                                        maxCapacity += 2500;
+                                                                                                                        maxCapacity += 2500
                                                                                                                     }
-                                                                                                                    let difficultyId = collectt3.first()
-                                                                                                                        .content;
-                                                                                                                    let buildingCost = 0;
-                                                                                                                    let fpb = [
+                                                                                                                    const difficultyId = collectt3.first()
+                                                                                                                        .content
+                                                                                                                    let buildingCost = 0
+                                                                                                                    const fpb = [
                                                                                                                         20,
                                                                                                                         25,
                                                                                                                         25,
                                                                                                                         30,
-                                                                                                                        25,
-                                                                                                                    ];
-                                                                                                                    let costs = [
+                                                                                                                        25
+                                                                                                                    ]
+                                                                                                                    const costs = [
                                                                                                                         [
                                                                                                                             4800,
                                                                                                                             5650,
                                                                                                                             6105,
                                                                                                                             6780,
-                                                                                                                            6105,
+                                                                                                                            6105
                                                                                                                         ],
                                                                                                                         [
                                                                                                                             11175,
                                                                                                                             12650,
                                                                                                                             14205,
                                                                                                                             15780,
-                                                                                                                            14205,
+                                                                                                                            14205
                                                                                                                         ],
                                                                                                                         [
                                                                                                                             96175,
                                                                                                                             112650,
                                                                                                                             122205,
                                                                                                                             135780,
-                                                                                                                            122205,
-                                                                                                                        ],
-                                                                                                                    ];
+                                                                                                                            122205
+                                                                                                                        ]
+                                                                                                                    ]
 
-                                                                                                                    let onexx = [
+                                                                                                                    const onexx = [
                                                                                                                         425,
                                                                                                                         500,
                                                                                                                         540,
                                                                                                                         625,
-                                                                                                                        540,
-                                                                                                                    ];
-                                                                                                                    let twoxx = [
+                                                                                                                        540
+                                                                                                                    ]
+                                                                                                                    const twoxx = [
                                                                                                                         510,
                                                                                                                         1100,
                                                                                                                         1190,
                                                                                                                         1345,
-                                                                                                                        1190,
-                                                                                                                    ];
+                                                                                                                        1190
+                                                                                                                    ]
                                                                                                                     if (
                                                                                                                         flatPackBuilding
                                                                                                                     ) {
                                                                                                                         buildingCost -=
                                                                                                                             fpb[
                                                                                                                                 difficultyId -
-                                                                                                                                    1
-                                                                                                                            ];
+                                                                                                                            1
+                                                                                                                            ]
                                                                                                                     }
 
                                                                                                                     buildingCost +=
                                                                                                                         costs[
                                                                                                                             bankTier -
-                                                                                                                                3
+                                                                                                                        3
                                                                                                                         ][
                                                                                                                             difficultyId -
-                                                                                                                                1
-                                                                                                                        ];
+                                                                                                                        1
+                                                                                                                        ]
                                                                                                                     if (
                                                                                                                         crosspathNum ==
                                                                                                                         1
@@ -234,8 +232,8 @@ module.exports = {
                                                                                                                         buildingCost +=
                                                                                                                             onexx[
                                                                                                                                 difficultyId -
-                                                                                                                                    1
-                                                                                                                            ];
+                                                                                                                            1
+                                                                                                                            ]
                                                                                                                     } else if (
                                                                                                                         crosspathNum ==
                                                                                                                         2
@@ -243,25 +241,25 @@ module.exports = {
                                                                                                                         buildingCost +=
                                                                                                                             twoxx[
                                                                                                                                 difficultyId -
-                                                                                                                                    1
-                                                                                                                            ];
+                                                                                                                            1
+                                                                                                                            ]
                                                                                                                     }
-                                                                                                                    //time to actually calculate this shit fuckery lol
-                                                                                                                    let incomePerRound =
+                                                                                                                    // time to actually calculate this shit fuckery lol
+                                                                                                                    const incomePerRound =
                                                                                                                         (230 +
                                                                                                                             40 *
-                                                                                                                                parseInt(
-                                                                                                                                    crosspathNum
-                                                                                                                                )) *
+                                                                                                                            parseInt(
+                                                                                                                                crosspathNum
+                                                                                                                            )) *
                                                                                                                         (1 +
                                                                                                                             parseInt(
                                                                                                                                 hackPercent
-                                                                                                                            ));
-                                                                                                                    let arr = [
+                                                                                                                            ))
+                                                                                                                    const arr = [
                                                                                                                         incomePerRound *
-                                                                                                                            (1.15 +
-                                                                                                                                hackPercent),
-                                                                                                                    ];
+                                                                                                                        (1.15 +
+                                                                                                                            hackPercent)
+                                                                                                                    ]
                                                                                                                     for (
                                                                                                                         i = 0;
                                                                                                                         i <
@@ -274,12 +272,12 @@ module.exports = {
                                                                                                                                     i
                                                                                                                                 ] +
                                                                                                                                     incomePerRound) *
-                                                                                                                                    1.15,
+                                                                                                                                1.15,
                                                                                                                                 maxCapacity
                                                                                                                             )
-                                                                                                                        );
+                                                                                                                        )
                                                                                                                     }
-                                                                                                                    let round = 1;
+                                                                                                                    let round = 1
                                                                                                                     for (
                                                                                                                         let i = 0;
                                                                                                                         i <
@@ -292,40 +290,40 @@ module.exports = {
                                                                                                                             ] ==
                                                                                                                             maxCapacity
                                                                                                                         ) {
-                                                                                                                            break;
+                                                                                                                            break
                                                                                                                         } else {
-                                                                                                                            round++;
+                                                                                                                            round++
                                                                                                                         }
                                                                                                                     }
-                                                                                                                    let perRoundFull =
+                                                                                                                    const perRoundFull =
                                                                                                                         maxCapacity /
-                                                                                                                        round;
-                                                                                                                    let perRoundFullBefore =
+                                                                                                                        round
+                                                                                                                    const perRoundFullBefore =
                                                                                                                         arr[
                                                                                                                             round -
-                                                                                                                                1
+                                                                                                                        1
                                                                                                                         ] /
-                                                                                                                            round -
-                                                                                                                        1;
-                                                                                                                    let optimalIncome = Math.max(
+                                                                                                                        round -
+                                                                                                                        1
+                                                                                                                    const optimalIncome = Math.max(
                                                                                                                         perRoundFull,
                                                                                                                         perRoundFullBefore
-                                                                                                                    );
-                                                                                                                    let bestCollect;
+                                                                                                                    )
+                                                                                                                    let bestCollect
                                                                                                                     if (
                                                                                                                         optimalIncome ==
                                                                                                                         perRoundFull
                                                                                                                     ) {
                                                                                                                         bestCollect =
-                                                                                                                            'collect when full';
+                                                                                                                            'collect when full'
                                                                                                                     } else {
                                                                                                                         bestCollect =
-                                                                                                                            'collect one round before full';
+                                                                                                                            'collect one round before full'
                                                                                                                     }
-                                                                                                                    let roundsToRepay =
+                                                                                                                    const roundsToRepay =
                                                                                                                         buildingCost /
-                                                                                                                        optimalIncome;
-                                                                                                                    let resultArray = [];
+                                                                                                                        optimalIncome
+                                                                                                                    const resultArray = []
                                                                                                                     for (
                                                                                                                         let i = 0;
                                                                                                                         i <
@@ -338,9 +336,9 @@ module.exports = {
                                                                                                                                     i
                                                                                                                                 ]
                                                                                                                             )
-                                                                                                                        );
+                                                                                                                        )
                                                                                                                     }
-                                                                                                                    let bankEmbed = new Discord.MessageEmbed()
+                                                                                                                    const bankEmbed = new Discord.MessageEmbed()
                                                                                                                         .setTitle(
                                                                                                                             `x${bankTier}x bank`
                                                                                                                         )
@@ -369,17 +367,17 @@ module.exports = {
                                                                                                                         )
                                                                                                                         .setColor(
                                                                                                                             cyber
-                                                                                                                        );
+                                                                                                                        )
                                                                                                                     return message.channel.send(
                                                                                                                         bankEmbed
-                                                                                                                    );
+                                                                                                                    )
                                                                                                                 }
-                                                                                                            );
+                                                                                                            )
                                                                                                     }
-                                                                                                );
+                                                                                                )
                                                                                         }
                                                                                     }
-                                                                                );
+                                                                                )
                                                                         }
                                                                     )
                                                                     .catch(
@@ -387,37 +385,37 @@ module.exports = {
                                                                             collectt2
                                                                         ) => {
                                                                             message.channel.send(
-                                                                                `You took too long to answer!`
-                                                                            );
+                                                                                'You took too long to answer!'
+                                                                            )
                                                                         }
-                                                                    );
+                                                                    )
                                                             }
-                                                        });
+                                                        })
                                                 })
                                                 .catch((collectt) => {
                                                     message.channel.send(
-                                                        `You took too long to answer!`
-                                                    );
-                                                });
+                                                        'You took too long to answer!'
+                                                    )
+                                                })
                                         })
                                         .catch((collectt) => {
                                             message.channel.send(
-                                                `You took too long to answer!`
-                                            );
-                                        });
+                                                'You took too long to answer!'
+                                            )
+                                        })
                                 })
                                 .catch((collect) => {
                                     message.channel.send(
-                                        `You took too long to answer!`
-                                    );
-                                });
+                                        'You took too long to answer!'
+                                    )
+                                })
                         })
                         .catch((collected) => {
                             message.channel.send(
-                                `You took too long to answer!`
-                            );
-                        });
-                });
+                                'You took too long to answer!'
+                            )
+                        })
+                })
         }
-    },
-};
+    }
+}

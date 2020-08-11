@@ -4,33 +4,33 @@ module.exports = {
 
     async execute(message, args) {
         if (!args[0]) {
-            const user = DiscordUsers.getDiscordUserFromId(message.author.id);
-            return module.exports.displayStats(user, message);
+            const user = DiscordUsers.getDiscordUserFromId(message.author.id)
+            return module.exports.displayStats(user, message)
         }
 
         if (args[0] && DiscordUsers.isMention(args[0])) {
-            const user = DiscordUsers.getDiscordUserFromMention(args[0]);
-            return module.exports.displayStats(user, message);
+            const user = DiscordUsers.getDiscordUserFromMention(args[0])
+            return module.exports.displayStats(user, message)
         }
 
         // h, he, hel, help
         if ('help'.startsWith(args[0])) {
-            return module.exports.helpMessage(message);
+            return module.exports.helpMessage(message)
         }
 
         if ('rewards'.startsWith(args[0])) {
-            return module.exports.rewardsMessage(message);
+            return module.exports.rewardsMessage(message)
         }
     },
 
     async displayStats(user, message) {
         whose_xp =
-            user.id === message.author.id ? 'Your' : `${user.username}'s`;
+			user.id === message.author.id ? 'Your' : `${user.username}'s`
         let tag = await Tags.findOne({
             where: {
-                name: user.id,
-            },
-        });
+                name: user.id
+            }
+        })
 
         // Create db user if it doesn't already exist
         if (!tag) {
@@ -39,8 +39,8 @@ module.exports = {
                 xp: 0,
                 showAds: true,
                 showLevelUpMsg: true,
-                quiz: 0,
-            });
+                quiz: 0
+            })
         }
 
         // Display level+xp
@@ -48,13 +48,13 @@ module.exports = {
             .setTitle(`${whose_xp} xp`)
             .addField('level', Xp.xpToLevel(tag.xp))
             .addField('xp', tag.xp)
-            .setColor(colours['cyber'])
+            .setColor(colours.cyber)
             .addField(
                 'Have a suggestion or found a bug?',
                 'Please tell us [here](https://discord.gg/VMX5hZA)!'
             )
-            .setFooter('use `q!level rewards` to see role rewards');
-        return message.channel.send(xpEmbed);
+            .setFooter('use `q!level rewards` to see role rewards')
+        return message.channel.send(xpEmbed)
     },
 
     helpMessage(message) {
@@ -62,58 +62,58 @@ module.exports = {
             .setTitle('Proprties of xp system')
             .setDescription(
                 '1. You get xp by using commands (cooldowns apply).\n\
-                    2. You get a anywhere from 5 to 12 XP for each command.\n\
-                    3. XP is gained in dms.\n\
-                    4. Role rewards only for those in the discord server.\n\
-                    5. XP is universal, it is not confined to 1 server.\n\
-                    6. Hidden multipliers exist, you just need to find them.'
-            );
-        return message.channel.send(hembed);
+               2. You get a anywhere from 5 to 12 XP for each command.\n\
+               3. XP is gained in dms.\n\
+               4. Role rewards only for those in the discord server.\n\
+               5. XP is universal, it is not confined to 1 server.\n\
+               6. Hidden multipliers exist, you just need to find them.'
+            )
+        return message.channel.send(hembed)
     },
 
-    RAPID_SHOT_ROLE: `<@&645126928340353036>`,
-    STORM_OF_ARROWS_ROLE: `<@&645629187322806272>`,
+    RAPID_SHOT_ROLE: '<@&645126928340353036>',
+    STORM_OF_ARROWS_ROLE: '<@&645629187322806272>',
 
     rewardsMessage(message) {
-        let user = message.author;
-        let guildmember = client.guilds.cache
+        const user = message.author
+        const guildmember = client.guilds.cache
             .get('598768024761139240')
             .members.cache.array()
-            .find((m) => m.id === user.id);
+            .find((m) => m.id === user.id)
         if (!guildmember) {
-            let lvlMebed = new Discord.MessageEmbed()
+            const lvlMebed = new Discord.MessageEmbed()
                 .addField(
                     'You only get role rewards in the bot discord server',
                     '[Discord Server](https://discord.gg/VMX5hZA)'
                 )
-                .setColor(colours['cyber'])
-                .setFooter(`Join the discord server!(pls)`);
-            return message.channel.send(lvlMebed);
+                .setColor(colours.cyber)
+                .setFooter('Join the discord server!(pls)')
+            return message.channel.send(lvlMebed)
         } else {
             if (
                 message.channel.type !== 'text' ||
-                message.guild !== 598768024761139240
+				message.guild !== 598768024761139240
             ) {
-                let lvlMebed = new Discord.MessageEmbed()
+                const lvlMebed = new Discord.MessageEmbed()
                     .addField(
                         'Please run this in the bot discord server!',
                         '[Discord Server](https://discord.gg/VMX5hZA)'
                     )
-                    .setColor(colours['cyber']);
+                    .setColor(colours.cyber)
 
-                return message.channel.send(lvlMebed);
+                return message.channel.send(lvlMebed)
             }
-            let lvlMebed = new Discord.MessageEmbed()
-                .setTitle(`XP Rewards`)
+            const lvlMebed = new Discord.MessageEmbed()
+                .setTitle('XP Rewards')
                 .addField('Level 3', module.exports.RAPID_SHOT_ROLE)
                 .addField('Level 10', module.exports.STORM_OF_ARROWS_ROLE)
-                .setColor(colours['cyber'])
+                .setColor(colours.cyber)
                 .addField(
                     'You only get role rewards in the bot discord server',
                     '[Discord Server](https://discord.gg/VMX5hZA)'
                 )
-                .setFooter(`Join the discord server!(pls)`);
-            return message.channel.send(lvlMebed);
+                .setFooter('Join the discord server!(pls)')
+            return message.channel.send(lvlMebed)
         }
-    },
-};
+    }
+}

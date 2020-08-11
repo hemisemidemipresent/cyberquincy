@@ -1,0 +1,24 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2020": true
+    },
+    "extends": [
+        "standard"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 11
+    },
+    "rules": {
+        "indent": "off",
+        "no-undef": "off",
+        "space-before-function-paren": "off",
+        "eqeqeq": "off",
+        "camelcase": "off",
+        "no-throw-literal": "off",
+        "no-tabs": "off",
+        "no-multi-str": "off",
+        "no-path-concat": "off"
+    }
+}

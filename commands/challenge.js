@@ -1,5 +1,5 @@
-const Discord = require('discord.js');
-const { cyber } = require('../jsons/colours.json');
+const Discord = require('discord.js')
+const { cyber } = require('../jsons/colours.json')
 module.exports = {
     name: 'challenge',
     aliases: ['rc', 'randomc', 'random', 'rchallenge', 'rch'],
@@ -7,23 +7,23 @@ module.exports = {
     usage: '[command name]',
     execute(message, args) {
         // what the fuck is this idk
-        let heroyn = Math.floor(Math.random() * 2);
-        let mapdiff = Math.floor(Math.random() * 4);
-        let startround = Math.ceil(Math.random() * 100);
-        let endround = startround + Math.ceil(Math.random() * 30);
-        let towerCount = Math.ceil(Math.random() * 15);
-        let modeid = Math.floor(Math.random() * 10);
-        const lives = Math.ceil(Math.random() * 400);
-        const mkyn = Math.floor(Math.random() * 2);
-        const camoyn = Math.floor(Math.random() * 2);
-        const regrow = Math.floor(Math.random() * 2);
-        const sell = Math.floor(Math.random() * 2);
-        const cont = Math.floor(Math.random() * 2);
-        const bspeed = Math.floor(Math.random() * 495) + 5;
-        const Bspeed = Math.floor(Math.random() * 495) + 5;
-        const Bhealth = Math.floor(Math.random() * 1995) + 5;
-        const chealth = Math.floor(Math.random() * 1990) + 10;
-        let hero = 'none';
+        const heroyn = Math.floor(Math.random() * 2)
+        const mapdiff = Math.floor(Math.random() * 4)
+        const startround = Math.ceil(Math.random() * 100)
+        const endround = startround + Math.ceil(Math.random() * 30)
+        const towerCount = Math.ceil(Math.random() * 15)
+        const modeid = Math.floor(Math.random() * 10)
+        const lives = Math.ceil(Math.random() * 400)
+        const mkyn = Math.floor(Math.random() * 2)
+        const camoyn = Math.floor(Math.random() * 2)
+        const regrow = Math.floor(Math.random() * 2)
+        const sell = Math.floor(Math.random() * 2)
+        const cont = Math.floor(Math.random() * 2)
+        const bspeed = Math.floor(Math.random() * 495) + 5
+        const Bspeed = Math.floor(Math.random() * 495) + 5
+        const Bhealth = Math.floor(Math.random() * 1995) + 5
+        const chealth = Math.floor(Math.random() * 1990) + 10
+        let hero = 'none'
         const heroArray = [
             'Quincy',
             'Gwendolyn',
@@ -33,8 +33,8 @@ module.exports = {
             'Benjamin',
             'Ezili',
             'Churchill',
-            'adora',
-        ];
+            'adora'
+        ]
         const mapArray = [
             [
                 'monkey meadow',
@@ -47,7 +47,7 @@ module.exports = {
                 'four circles',
                 'end of the road',
                 'hedge',
-                'logs',
+                'logs'
             ],
             [
                 'Spring Spring',
@@ -59,7 +59,7 @@ module.exports = {
                 'streambed',
                 'Chutes',
                 'Rake',
-                'Spice islands',
+                'Spice islands'
             ],
             [
                 'spillway',
@@ -71,7 +71,7 @@ module.exports = {
                 'off the coast',
                 'underground',
                 'Cornfield',
-                'Geared',
+                'Geared'
             ],
             [
                 'workshop',
@@ -79,9 +79,9 @@ module.exports = {
                 'muddy puddles',
                 'quad',
                 'Dark castle',
-                'Infernal',
-            ],
-        ];
+                'Infernal'
+            ]
+        ]
         const modes = [
             'apopalypse',
             'half cash',
@@ -92,17 +92,17 @@ module.exports = {
             'impoppable',
             'CHIMPS',
             'Double HP MOABs',
-            'Alternate Bloon Rounds',
-        ];
-        const mode = modes[modeid];
+            'Alternate Bloon Rounds'
+        ]
+        const mode = modes[modeid]
         if (!heroyn) {
-            hero = heroArray[Math.ceil(Math.random() * 9)];
+            hero = heroArray[Math.ceil(Math.random() * 9)]
         }
-        const randomMap = Math.floor(Math.random() * mapArray[mapdiff].length);
-        map = mapArray[mapdiff][randomMap];
+        const randomMap = Math.floor(Math.random() * mapArray[mapdiff].length)
+        map = mapArray[mapdiff][randomMap]
 
-        Math.floor(Math.random() * 21);
-        let towerArray = [
+        Math.floor(Math.random() * 21)
+        const towerArray = [
             'dart',
             'boomerang',
             'bomb',
@@ -123,25 +123,25 @@ module.exports = {
             'farm',
             'spike factory',
             'engineer',
-            'village',
-        ];
-        let monkeys = [];
+            'village'
+        ]
+        const monkeys = []
         for (i = 0; i < towerCount; i++) {
-            monkeys.push(towerArray[Math.floor(Math.random() * 21)]);
+            monkeys.push(towerArray[Math.floor(Math.random() * 21)])
         }
         const cash =
-            600 +
-            100 * startround +
-            startround * startround * Math.ceil(Math.random() * 10);
+			600 +
+			100 * startround +
+			startround * startround * Math.ceil(Math.random() * 10)
 
-        const DEarr = ['enabled', 'disabled']; // honestly and abomination
-        const MK = DEarr[mkyn];
-        const grow = DEarr[regrow];
-        const camo = DEarr[camoyn];
-        const selling = DEarr[sell];
-        const continues = DEarr[cont];
+        const DEarr = ['enabled', 'disabled'] // honestly and abomination
+        const MK = DEarr[mkyn]
+        const grow = DEarr[regrow]
+        const camo = DEarr[camoyn]
+        const selling = DEarr[sell]
+        const continues = DEarr[cont]
         const ChallengeEmbed = new Discord.MessageEmbed()
-            .setTitle(`Random Challenge generated`)
+            .setTitle('Random Challenge generated')
             .setColor(cyber)
             .addField('Map', `${map}`, true)
             .addField('Hero', `${hero}`, true)
@@ -149,7 +149,7 @@ module.exports = {
             .addField('lives', `${lives}`)
             .addField('starting cash', `${cash}`, true)
             .addField('round', `${startround} to ${endround}`, true)
-            .addField(`monkeys`, `${monkeys}`, true)
+            .addField('monkeys', `${monkeys}`, true)
             .addField(
                 'other settings',
                 ` MK ${MK}, all regrow ${grow}, all camo ${camo}, seling ${selling}, continues ${continues}`,
@@ -165,7 +165,7 @@ module.exports = {
             .addField(
                 'this command is prone to errors',
                 'pls click [here](https://discord.gg/VMX5hZA) to report bugs and and get help, or just chill out'
-            );
-        message.channel.send(ChallengeEmbed);
-    },
-};
+            )
+        message.channel.send(ChallengeEmbed)
+    }
+}

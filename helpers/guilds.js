@@ -1,13 +1,13 @@
 module.exports = {
     enterGuild(guild) {
-        let channeltosend = guild.channels.cache.find(
+        const channeltosend = guild.channels.cache.find(
             (channel) => channel.name.includes('general') === true
-        );
+        )
         if (channeltosend) {
-            let helpEmbed = new Discord.MessageEmbed()
-                .setColor(colours['cyber'])
+            const helpEmbed = new Discord.MessageEmbed()
+                .setColor(colours.cyber)
                 .setDescription(
-                    `Hi! I am Cyber Quincy. I am a btd6 discord bot.`
+                    'Hi! I am Cyber Quincy. I am a btd6 discord bot.'
                 )
                 .addField(
                     'General Info',
@@ -19,11 +19,11 @@ module.exports = {
                 )
                 .addField(
                     'You should know...',
-                    `The most popular commands by far are those that describe towers, for example \`q!boomer 005\` (format: \`q!<towername> <path>\`)`
+                    'The most popular commands by far are those that describe towers, for example `q!boomer 005` (format: `q!<towername> <path>`)'
                 )
-                .setFooter(`Use \`${prefix}info\` for more information`);
+                .setFooter(`Use \`${prefix}info\` for more information`)
 
-            channeltosend.send(helpEmbed);
+            channeltosend.send(helpEmbed)
         }
     },
 
@@ -33,27 +33,27 @@ module.exports = {
 
     CYBER_WELCOME:
         'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!\n\
-    **Get yourself a role in <#605712758595649566>**\n\n\
-    :tools: **Found a bug?**\n\
-    Check with <#615159685477040135>, <#616603947481694209>, <#676670780204908555> or in <#598768319625035776>.\n\n\
-    :beetle: **Found an UNKNOWN bug?**\n\
-    Please report in <#598768319625035776>\n\n\
-    :jigsaw: **Need help or want to ask something?**\n\
-    Ask in<#611808489047719937> (for only the bot).\n\n\
-    :mailbox_with_mail: **Have a suggestion?**\n\
-    Please tell us in <#598768278550085633>. Do try to be objective and feel free to be critical\n\n\
-    **Invite me to your server**:https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881\n\n\
-    Thank you for joining!',
+   **Get yourself a role in <#605712758595649566>**\n\n\
+   :tools: **Found a bug?**\n\
+   Check with <#615159685477040135>, <#616603947481694209>, <#676670780204908555> or in <#598768319625035776>.\n\n\
+   :beetle: **Found an UNKNOWN bug?**\n\
+   Please report in <#598768319625035776>\n\n\
+   :jigsaw: **Need help or want to ask something?**\n\
+   Ask in<#611808489047719937> (for only the bot).\n\n\
+   :mailbox_with_mail: **Have a suggestion?**\n\
+   Please tell us in <#598768278550085633>. Do try to be objective and feel free to be critical\n\n\
+   **Invite me to your server**:https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881\n\n\
+   Thank you for joining!',
 
     async addMember(member) {
         if (member.guild.id == module.exports.CYBER_SUPPORT) {
             const tchannel = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('general')
-            );
+            )
             tchannel.send(
                 `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and the server now has **${member.guild.memberCount}** members!`
-            );
-            member.send(module.exports.CYBER_WELCOME);
+            )
+            member.send(module.exports.CYBER_WELCOME)
         } else if (member.guild.id == module.exports.BTD6_INDEX) {
             const wel = new Discord.MessageEmbed()
                 .setTitle('Welcome to the BTD6 Index Discord Server!')
@@ -76,15 +76,15 @@ module.exports = {
                     'Who am I?',
                     'I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881),[discord server](https://discord.gg/XBhHWh9)'
                 )
-                .setColor(colours['cyber']);
-            member.send(wel);
+                .setColor(colours.cyber)
+            member.send(wel)
         } else if (member.guild.id == module.exports.RACE_SERVER) {
             const general = member.guild.cache.channels.cache.find((channel) =>
                 channel.name.includes('general')
-            );
+            )
             general.send(
-                `welcome to the only rAcE sErVer. \nIf you cant get a top 50, you have to read <#667495608155635765> 100 times before entering`
-            );
+                'welcome to the only rAcE sErVer. \nIf you cant get a top 50, you have to read <#667495608155635765> 100 times before entering'
+            )
         }
     },
 
@@ -92,20 +92,20 @@ module.exports = {
         if (member.guild.id == module.exports.CYBER_SUPPORT) {
             const general = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('general')
-            );
-            general.send(`**${member.displayName}** was lost in battle`);
+            )
+            general.send(`**${member.displayName}** was lost in battle`)
         } else if (member.guild.id === module.exports.BTD6_INDEX) {
-            let welcome = member.guild.channels.cache.find((channel) =>
+            const welcome = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('welcome')
-            );
-            welcome.send(`**${member.displayName}** got nerfed. hard.`);
+            )
+            welcome.send(`**${member.displayName}** got nerfed. hard.`)
         } else if (member.guild.id === module.exports.RACE_SERVER) {
             const general = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('general')
-            );
+            )
             general.send(
                 `**${member.displayName}** couldn't resist it and accidentally revealed that he/she is hacking races`
-            );
+            )
         }
-    },
-};
+    }
+}

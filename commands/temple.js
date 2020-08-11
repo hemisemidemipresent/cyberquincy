@@ -1,19 +1,19 @@
-const Discord = require('discord.js');
-const { cyber, vtsg, temple } = require('../jsons/colours.json');
-const t = require('../jsons/temple.json');
+const Discord = require('discord.js')
+const { cyber, vtsg, temple } = require('../jsons/colours.json')
+const t = require('../jsons/temple.json')
 module.exports = {
     name: 'temple',
     aliases: ['t', 'tsg', 'sg', 'monkeygod', 'god', 'totmg', 'vtsg'],
-    execute(message, args) {
-        const newArgs = message.content.slice(1).split(/ +/);
+    execute (message, args) {
+        const newArgs = message.content.slice(1).split(/ +/)
 
-        const commandName = newArgs.shift().toLowerCase();
+        const commandName = newArgs.shift().toLowerCase()
 
-        /*if (!args[0] || !args[1] || !args[2] || !args[3]) {
+        /* if (!args[0] || !args[1] || !args[2] || !args[3]) {
       return message.channel.send(
         "the format is q!temple <amount sacrificed in primary> <amount sacrificed in military> <amount sacrificed in magic> <amount sacrificed in support>"
       );
-    }*/ if (
+    } */ if (
             commandName.includes('v')
         ) {
             const VTSGembed = new Discord.MessageEmbed()
@@ -27,8 +27,8 @@ module.exports = {
                 .setThumbnail(
                     'https://vignette.wikia.nocookie.net/b__/images/0/00/555-SuperMonkey.png/revision/latest/scale-to-width-down/310?cb=20190522011421&path-prefix=bloons'
                 )
-                .setColor(vtsg);
-            return message.channel.send(VTSGembed);
+                .setColor(vtsg)
+            return message.channel.send(VTSGembed)
         }
         if (commandName == 'tsg') {
             const TSGembed = new Discord.MessageEmbed()
@@ -54,10 +54,10 @@ module.exports = {
                 .setThumbnail(
                     'https://vignette.wikia.nocookie.net/b__/images/6/67/500-SuperMonkey.png/revision/latest/scale-to-width-down/310?cb=20190522023538&path-prefix=bloons'
                 )
-                .setColor(temple);
-            return message.channel.send(TSGembed);
+                .setColor(temple)
+            return message.channel.send(TSGembed)
         }
-        const filter = (msg) => msg.author.id === `${message.author.id}`;
+        const filter = (msg) => msg.author.id === `${message.author.id}`
 
         message.channel
             .send(
@@ -68,10 +68,10 @@ module.exports = {
                     .awaitMessages(filter, {
                         max: 1,
                         time: 10000,
-                        errors: ['time'],
+                        errors: ['time']
                     })
                     .then((collect1) => {
-                        let sacrificeNum = collect1.first().content;
+                        const sacrificeNum = collect1.first().content
                         if (
                             isNaN(sacrificeNum) ||
                             sacrificeNum < 1 ||
@@ -79,7 +79,7 @@ module.exports = {
                         ) {
                             return message.channel.send(
                                 'Please use a valid number next time! Run the command again'
-                            );
+                            )
                         }
                         message.channel
                             .send(
@@ -90,48 +90,48 @@ module.exports = {
                                     .awaitMessages(filter, {
                                         max: 1,
                                         time: 10000,
-                                        errors: ['time'],
+                                        errors: ['time']
                                     })
                                     .then((collect2) => {
-                                        let cash = collect2.first().content;
+                                        const cash = collect2.first().content
                                         if (cash < 0 || isNaN(cash)) {
                                             return message.channel.send(
                                                 'Please specify a valid amount of cash to spend on towers to sacrifice! Run the command again'
-                                            );
+                                            )
                                         }
-                                        let difficultyArr = [
+                                        const difficultyArr = [
                                             'primary',
                                             'military',
                                             'magic',
-                                            'support',
-                                        ];
-                                        let level;
+                                            'support'
+                                        ]
+                                        let level
                                         if (cash < 0) {
-                                            level = -1;
+                                            level = -1
                                         } else if (cash < 300) {
-                                            level = 0;
+                                            level = 0
                                         } else if (cash < 1000) {
-                                            level = 1;
+                                            level = 1
                                         } else if (cash < 2000) {
-                                            level = 2;
+                                            level = 2
                                         } else if (cash < 4000) {
-                                            level = 3;
+                                            level = 3
                                         } else if (cash < 7500) {
-                                            level = 4;
+                                            level = 4
                                         } else if (cash < 10000) {
-                                            level = 5;
+                                            level = 5
                                         } else if (cash < 15000) {
-                                            level = 6;
+                                            level = 6
                                         } else if (cash < 25000) {
-                                            level = 7;
+                                            level = 7
                                         } else if (cash < 50000) {
-                                            level = 8;
+                                            level = 8
                                         } else {
-                                            level = 9;
+                                            level = 9
                                         }
-                                        let data =
-                                            t[`${sacrificeNum}`][`${level}`];
-                                        let embed = new Discord.MessageEmbed()
+                                        const data =
+                                            t[`${sacrificeNum}`][`${level}`]
+                                        const embed = new Discord.MessageEmbed()
                                             .setTitle(
                                                 `$${cash} of ${
                                                     difficultyArr[
@@ -146,11 +146,11 @@ module.exports = {
                                                     ]
                                                 } buffs`,
                                                 `\`\`\`fix\n${data}\`\`\``
-                                            );
-                                        message.channel.send(embed);
-                                    });
-                            });
-                    });
-            });
-    },
-};
+                                            )
+                                        message.channel.send(embed)
+                                    })
+                            })
+                    })
+            })
+    }
+}

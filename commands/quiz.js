@@ -5,9 +5,7 @@ const Quiz = require('../helpers/quizxp.js')
 
 module.exports = {
     name: 'quiz',
-    execute (message, args) {
-        const user = message.author
-
+    execute(message, args) {
         if (args[0]) {
             return Quiz.getQuizXp(message)
         }

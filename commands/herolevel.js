@@ -54,22 +54,22 @@ module.exports = {
                 processedRound = 45 * round * round - 2925 * round + 67930
             }
             const tempArr = [0, 0]
-            for (i = 2; i <= 20; i++) {
+            for (let i = 2; i <= 20; i++) {
                 tempArr.push(Math.ceil(xp_per_level[i] * xpCurve))
             }
             const justPlacedCostArr = [
                 0,
                 Math.floor(processedRound * diffMultiplier)
             ] // the total cost of upgrading to a level when placed
-            for (level = 2; level <= 20; level++) {
+            for (let level = 2; level <= 20; level++) {
                 justPlacedCostArr.push(
                     justPlacedCostArr[level - 1] + tempArr[level]
                 )
             }
             const sumOftempArr = [0, 0] // we need an array where each index is the sum of all prev. coreeesponding indexes of tempArr
-            for (i = 2; i <= 20; i++) {
+            for (let i = 2; i <= 20; i++) {
                 let tempSum = 0
-                for (j = 0; j <= i; j++) {
+                for (let j = 0; j <= i; j++) {
                     tempSum += tempArr[j]
                 }
                 sumOftempArr.push(tempSum)
@@ -80,12 +80,12 @@ module.exports = {
                 Math.floor(processedRound * diffMultiplier) -
                 40 * diffMultiplier
             ]
-            for (i = 3; i < 22; i++) {
+            for (let i = 3; i < 22; i++) {
                 roundArr.push(
                     roundArr[i - 1] * 2 - roundArr[i - 2] - 20 * diffMultiplier
                 )
             }
-            for (i = 22; i < 52; i++) {
+            for (let i = 22; i < 52; i++) {
                 roundArr.push(
                     roundArr[i - 1] -
                     ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
@@ -93,7 +93,7 @@ module.exports = {
                     diffMultiplier
                 )
             }
-            for (i = 52; i < 102; i++) {
+            for (let i = 52; i < 102; i++) {
                 // might be broken
                 roundArr.push(
                     roundArr[i - 1] -
@@ -105,7 +105,7 @@ module.exports = {
             // console.log(xpCurve, processedRound, diffMultiplier);
             // console.log(roundArr)
             const finalArr = [] // the round where the hero reaches level 1 is the round it gets placed
-            for (level = 1; level < 21; level++) {
+            for (let level = 1; level < 21; level++) {
                 let heroCost = 1 // cost of levelling up
                 let levelUpRound = round // round used for calulcations, -1 because the increment is after while loop
                 while (heroCost > 0) {
@@ -170,7 +170,7 @@ module.exports = {
         message.channel
             .send('react with the hero you want to choose!')
             .then((msg) => {
-                for (i = 0; i < heroEmojiIDs.length; i++) {
+                for (let i = 0; i < heroEmojiIDs.length; i++) {
                     msg.react(
                         client.guilds.cache
                             .get('614111055890612225') // this is the server with the emojis the bot uses
@@ -251,7 +251,7 @@ module.exports = {
                                             )
                                             .then((msg) => {
                                                 for (
-                                                    i = 0;
+                                                    let i = 0;
                                                     i <
                                                     difficultyEmojiIDs.length;
                                                     i++

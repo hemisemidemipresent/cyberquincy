@@ -4,7 +4,7 @@ const { red, lightgrey, grey } = require('../jsons/colours.json')
 module.exports = {
     name: 'roundlength',
     aliases: ['length', 'rl', 'l'],
-    execute (message, args) {
+    execute(message, args) {
         if (!args || isNaN(args[0])) {
             const errorEmbed = new Discord.MessageEmbed()
                 .setDescription(
@@ -16,7 +16,7 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setDescription(
                     `round ${args[0]} is ${
-                        lengths[parseInt(args[0]) - 1]
+                    lengths[parseInt(args[0]) - 1]
                     }s long`
                 )
                 .setColor(lightgrey)
@@ -26,7 +26,7 @@ module.exports = {
             const endRound = parseInt(args[1])
             let longestRound = 0
             let longestLength = 0
-            for (i = startRound; i < endRound; i++) {
+            for (let i = startRound; i < endRound; i++) {
                 if (longestLength < lengths[i]) {
                     longestLength = lengths[i]
                     longestRound = i + 1
@@ -35,7 +35,7 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setDescription(
                     `From round ${startRound} to ${endRound}, the longest round is round ${longestRound} which is ${
-                        Math.round(longestLength * 100) / 100
+                    Math.round(longestLength * 100) / 100
                     }s long`
                 )
                 .setColor(grey)

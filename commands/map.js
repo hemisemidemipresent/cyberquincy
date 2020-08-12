@@ -189,9 +189,7 @@ module.exports = {
         ) {
             name = 'Bazaar';
         } else {
-            return message.channel.send(
-                'cant seem to find that map. might want to check the spelling.\nThere are 46 maps in the game\78% of maps include water\n57% of maps include L.O.S obstructions\n50% of maps include objects'
-            );
+            return message.channel.send('cant seem to find that map. might want to check the spelling.\nThere are 46 maps in the game\78% of maps include water\n57% of maps include L.O.S obstructions\n50% of maps include objects');
         }
         let m = ma[`${name}`];
         let thum = m.thu;

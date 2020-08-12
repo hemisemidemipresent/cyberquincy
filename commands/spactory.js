@@ -48,7 +48,7 @@ module.exports = {
                         '004',
                         '005'
                     ]
-                    for (i = 0; i < 15; i++) {
+                    for (let i = 0; i < 15; i++) {
                         let path
                         let tier = 0
                         if (parseInt(pathsArr[i]) % 100 == 0) {
@@ -96,15 +96,15 @@ module.exports = {
         }
         let tier = 0
         switch (path) {
-        case 1:
-            tier = path1
-            break
-        case 2:
-            tier = path2
-            break
-        case 3:
-            tier = path3
-            break
+            case 1:
+                tier = path1
+                break
+            case 2:
+                tier = path2
+                break
+            case 3:
+                tier = path3
+                break
         }
         fetch(url, settings)
             .then((res) => res.json())
@@ -145,7 +145,7 @@ module.exports = {
                 } else {
                     let totalCost = 0
                     let newCost = 0
-                    for (i = tier; i > 0; i--) {
+                    for (let i = tier; i > 0; i--) {
                         newCost =
                             json[`${name}`].upgrades[path - 1][i - 1].cost
                         totalCost += parseInt(newCost)

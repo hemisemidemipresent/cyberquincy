@@ -212,17 +212,17 @@ module.exports = {
                                                                                                                     ) {
                                                                                                                         buildingCost -=
                                                                                                                             fpb[
-                                                                                                                                difficultyId -
+                                                                                                                            difficultyId -
                                                                                                                             1
                                                                                                                             ]
                                                                                                                     }
 
                                                                                                                     buildingCost +=
                                                                                                                         costs[
-                                                                                                                            bankTier -
+                                                                                                                        bankTier -
                                                                                                                         3
                                                                                                                         ][
-                                                                                                                            difficultyId -
+                                                                                                                        difficultyId -
                                                                                                                         1
                                                                                                                         ]
                                                                                                                     if (
@@ -231,7 +231,7 @@ module.exports = {
                                                                                                                     ) {
                                                                                                                         buildingCost +=
                                                                                                                             onexx[
-                                                                                                                                difficultyId -
+                                                                                                                            difficultyId -
                                                                                                                             1
                                                                                                                             ]
                                                                                                                     } else if (
@@ -240,7 +240,7 @@ module.exports = {
                                                                                                                     ) {
                                                                                                                         buildingCost +=
                                                                                                                             twoxx[
-                                                                                                                                difficultyId -
+                                                                                                                            difficultyId -
                                                                                                                             1
                                                                                                                             ]
                                                                                                                     }
@@ -261,7 +261,7 @@ module.exports = {
                                                                                                                             hackPercent)
                                                                                                                     ]
                                                                                                                     for (
-                                                                                                                        i = 0;
+                                                                                                                        let i = 0;
                                                                                                                         i <
                                                                                                                         19;
                                                                                                                         i++
@@ -286,7 +286,7 @@ module.exports = {
                                                                                                                     ) {
                                                                                                                         if (
                                                                                                                             arr[
-                                                                                                                                i
+                                                                                                                            i
                                                                                                                             ] ==
                                                                                                                             maxCapacity
                                                                                                                         ) {
@@ -300,7 +300,7 @@ module.exports = {
                                                                                                                         round
                                                                                                                     const perRoundFullBefore =
                                                                                                                         arr[
-                                                                                                                            round -
+                                                                                                                        round -
                                                                                                                         1
                                                                                                                         ] /
                                                                                                                         round -
@@ -333,7 +333,7 @@ module.exports = {
                                                                                                                         resultArray.push(
                                                                                                                             Math.round(
                                                                                                                                 arr[
-                                                                                                                                    i
+                                                                                                                                i
                                                                                                                                 ]
                                                                                                                             )
                                                                                                                         )

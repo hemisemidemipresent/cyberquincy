@@ -22,7 +22,7 @@ module.exports = {
             const roundArray = arrayOfRounds[round]
             let longest = 0
             let end = 0
-            for (i = 0; i < roundArray.length; i++) {
+            for (let i = 0; i < roundArray.length; i++) {
                 end = parseInt(roundArray[i][3])
                 if (end > longest) {
                     longest = end
@@ -33,7 +33,7 @@ module.exports = {
         function getData(round, arrayOfRounds) {
             const roundArray = arrayOfRounds[round]
             let output = ''
-            for (i = 0; i < roundArray.length; i++) {
+            for (let i = 0; i < roundArray.length; i++) {
                 output += `\n${roundArray[i][1]} ${roundArray[i][0]}`
             }
             return output

@@ -126,13 +126,13 @@ module.exports = {
             'village'
         ]
         const monkeys = []
-        for (i = 0; i < towerCount; i++) {
+        for (let i = 0; i < towerCount; i++) {
             monkeys.push(towerArray[Math.floor(Math.random() * 21)])
         }
         const cash =
-			600 +
-			100 * startround +
-			startround * startround * Math.ceil(Math.random() * 10)
+            600 +
+            100 * startround +
+            startround * startround * Math.ceil(Math.random() * 10)
 
         const DEarr = ['enabled', 'disabled'] // honestly and abomination
         const MK = DEarr[mkyn]

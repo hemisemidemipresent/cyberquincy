@@ -8,9 +8,9 @@ module.exports = {
     aliases: ['dm', 'dart-monkey'],
 
     usage: '[command name]',
-    execute (message, args) {
+    execute(message, args) {
         const name = 'dart-monkey'
-        function provideHelpMsg () {
+        function provideHelpMsg() {
             fetch(url, settings)
                 .then((res) => res.json())
                 .then((json) => {
@@ -32,7 +32,7 @@ module.exports = {
                         '004',
                         '005'
                     ]
-                    for (i = 0; i < 15; i++) {
+                    for (let i = 0; i < 15; i++) {
                         let path
                         let tier = 0
                         if (parseInt(pathsArr[i]) % 100 == 0) {
@@ -65,7 +65,7 @@ module.exports = {
         const path2 = Math.floor((parseInt(args[0]) - path1 * 100) / 10)
         const path3 = parseInt(args[0] - path1 * 100 - path2 * 10)
         let path = 1
-        function hard (cost) {
+        function hard(cost) {
             return Math.round((cost * 1.08) / 5) * 5
         }
         if (path2 < 1 && path3 < 1) {
@@ -79,15 +79,15 @@ module.exports = {
         }
         let tier = 0
         switch (path) {
-        case 1:
-            tier = path1
-            break
-        case 2:
-            tier = path2
-            break
-        case 3:
-            tier = path3
-            break
+            case 1:
+                tier = path1
+                break
+            case 2:
+                tier = path2
+                break
+            case 3:
+                tier = path3
+                break
         }
         fetch(url, settings)
             .then((res) => res.json())
@@ -129,7 +129,7 @@ module.exports = {
 
                 let totalCost = 0
                 let newCost = 0
-                for (i = tier; i > 0; i--) {
+                for (let i = tier; i > 0; i--) {
                     newCost = json[`${name}`].upgrades[path - 1][i - 1].cost
                     totalCost += parseInt(newCost)
                 }

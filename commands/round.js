@@ -10,7 +10,7 @@ module.exports = {
     name: 'round',
     description: 'tells you about the rounds (below 100)',
     aliases: ['r', 'rbe'],
-    execute (message, args) {
+    execute(message, args) {
         if (!args[0] || isNaN(args[0])) {
             const errorEmbed = new Discord.MessageEmbed()
                 .setDescription(
@@ -20,11 +20,11 @@ module.exports = {
                 .setColor(red)
             return message.channel.send(errorEmbed)
         }
-        function getLength (round, arrayOfRounds) {
+        function getLength(round, arrayOfRounds) {
             const roundArray = arrayOfRounds[round]
             let longest = 0
             let end = 0
-            for (i = 0; i < roundArray.length; i++) {
+            for (let i = 0; i < roundArray.length; i++) {
                 end = parseInt(roundArray[i][3])
                 if (end > longest) {
                     longest = end
@@ -32,10 +32,10 @@ module.exports = {
             }
             return longest / 60 // btd6 is 60fps game
         }
-        function getData (round, arrayOfRounds) {
+        function getData(round, arrayOfRounds) {
             const roundArray = arrayOfRounds[round]
             let output = ''
-            for (i = 0; i < roundArray.length; i++) {
+            for (let i = 0; i < roundArray.length; i++) {
                 output += `\n${roundArray[i][1]} ${roundArray[i][0]}`
             }
             return output

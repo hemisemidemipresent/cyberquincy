@@ -33,7 +33,7 @@ module.exports = {
                         '004',
                         '005'
                     ]
-                    for (i = 0; i < 15; i++) {
+                    for (let i = 0; i < 15; i++) {
                         let path
                         let tier = 0
                         if (parseInt(pathsArr[i]) % 100 == 0) {
@@ -81,15 +81,15 @@ module.exports = {
         }
         let tier = 0
         switch (path) {
-        case 1:
-            tier = path1
-            break
-        case 2:
-            tier = path2
-            break
-        case 3:
-            tier = path3
-            break
+            case 1:
+                tier = path1
+                break
+            case 2:
+                tier = path2
+                break
+            case 3:
+                tier = path3
+                break
         }
         fetch(url, settings)
             .then((res) => res.json())
@@ -130,48 +130,47 @@ module.exports = {
                 } else {
                     let totalCost = 0
                     let newCost = 0
-                    for (i = tier; i > 0; i--) {
-                        newCost =
-                            json[`${name}`].upgrades[path - 1][i - 1].cost
-                        totalCost += parseInt(newCost)
-                    }
-                    const baseCost = parseInt(json[`${name}`].cost)
-                    totalCost += baseCost
-
-                    const embed = new Discord.MessageEmbed()
-                        .setColor(cyber)
-                        .addField('name', object.name)
-                        .addField(
-                            'cost',
-                            `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`
-                        )
-                        .addField('notes', object.notes)
-                        .addField('in game description', object.description)
-                        .addField('xp needed:', `${object.xp}`)
-                        .addField(
-                            'total cost',
-                            `${hard(totalCost)} (hard), ${totalCost} (medium)`
-                        )
-                        .setFooter(
-                            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
-                        )
-                    message.channel.send(embed).then((msg) => {
-                        msg.react('❌')
-                        const filter = (reaction, user) => {
-                            return (
-                                reaction.emoji.name === '❌' &&
-                                user.id === message.author.id
-                            )
-                        }
-                        const collector = msg.createReactionCollector(filter, {
-                            time: 20000
-                        })
-
-                        collector.on('collect', () => {
-                            msg.delete()
-                        })
-                    })
+                    newCost =
+                        json[`${name}`].upgrades[path - 1][i - 1].cost
+                    totalCost += parseInt(newCost)
                 }
+                const baseCost = parseInt(json[`${name}`].cost)
+                totalCost += baseCost
+
+                const embed = new Discord.MessageEmbed()
+                    .setColor(cyber)
+                    .addField('name', object.name)
+                    .addField(
+                        'cost',
+                        `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`
+                    )
+                    .addField('notes', object.notes)
+                    .addField('in game description', object.description)
+                    .addField('xp needed:', `${object.xp}`)
+                    .addField(
+                        'total cost',
+                        `${hard(totalCost)} (hard), ${totalCost} (medium)`
+                    )
+                    .setFooter(
+                        'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
+                    )
+                message.channel.send(embed).then((msg) => {
+                    msg.react('❌')
+                    const filter = (reaction, user) => {
+                        return (
+                            reaction.emoji.name === '❌' &&
+                            user.id === message.author.id
+                        )
+                    }
+                    const collector = msg.createReactionCollector(filter, {
+                        time: 20000
+                    })
+
+                    collector.on('collect', () => {
+                        msg.delete()
+                    })
+                })
+            }
             })
-    }
+}
 }

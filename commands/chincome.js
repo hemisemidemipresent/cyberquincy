@@ -46,16 +46,17 @@ module.exports = {
         const errorEmbed = new Discord.MessageEmbed()
             .setTitle('`q!chincome` HELP')
             .addField(
-                '"q!chincome" <round> (<gamemode>)',
+                '`q!chincome <round> (<gamemode>)` (Order agnostic)',
                 '  • Cash generated during round <round>\n' +
 				'  • Cash generated from start of round 6 through end of round <round>\n' +
 				'  • Cash generated from start of round <round> through end of round 100'
             )
-            .addField('Valid <gamemode> values', 'CHIMPS, HALF_CASH, ABR')
-            .addField('Valid <round> values', '6, 7, ..., 100')
+            .addField('Valid `(<gamemode>)` values', 'CHIMPS, HALFCASH, ABR')
+            .addField('Valid `<round>` values', '6, 7, ..., 100')
             .addField('Ex. #1', 'q!chincome <round> | q!chincome 8')
             .addField('Ex. #2', 'q!chincome <mode> <round> | q!chincome abr R8')
-            .addField('Ex. #3', 'q!chincome <round> <mode> | q!chincome r8 hc')
+            .addField('Ex. #3', 'q!chincome <round> <mode> | q!chincome r8 halfcash')
+            .setFooter('Sorry no aliases for gamemodes')
 
         return message.channel.send(errorEmbed)
     },

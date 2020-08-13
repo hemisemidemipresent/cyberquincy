@@ -12,7 +12,7 @@ module.exports = class OptionalParser {
     }
 
     type() {
-        return this.parser.type();
+        return '(' + this.parser.type() + ')';
     }
 
     parse(arg) {

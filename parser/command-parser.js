@@ -29,64 +29,65 @@ module.exports = {
             // 0 must be true because of the base case
             optionalParserFlags = i.toString().padStart(numOptionalArguments, '0').split("").map(c => c == '0');
 
+            // Parsers to be included in the concrete parsing (with optional parsers either solidified or excluded)
             concreteParsers = []
-            optionalParserIndex = 0;
+
+            optionalParserFlagsIndex = 0;
+
+            // Will hold the default values of the excluded parsers
+            // (Remember if an optional parser doesn't find a match,
+            // it stubs in the default value specified by the command developer)
             parsedDefaultValues = new Parsed();
 
+            // Loop through all parsers in order and include all parsers but
+            // the optional ones that are to be turned off
             for (var j = 0; j < parsers.length; j++) {
                 if (parsers[j] instanceof OptionalParser) {
                     // If the optional parser has been assigned a 0, meaning it should be included..
-                    if (optionalParserFlags[optionalParserIndex]) {
+                    if (optionalParserFlags[optionalParserFlagsIndex]) {
                         // Add the parser wrapped by the OptionalParser to the list of concrete parsers
                         concreteParsers.push(parsers[j].parser);
                     } else {
+                        // Otherwise, add the concrete parser's type and default value to the parsed default values
                         type = parsers[j].parser.type();
                         value = parsers[j].defaultValue
                         parsedDefaultValues.addField(type, value);
                     }
-                    optionalParserIndex++;
+                    optionalParserFlagsIndex++;
                 } else {
                     // Add non-optional parsers to the array unconditionally
                     concreteParsers.push(parsers[j]);
                 }
             }
             try {
+                // Take the included parsers and parse 1:1 with the args 
                 result = module.exports.parseConcrete(args, concreteParsers);
                 // Return the first successful parsing attempt
                 return result.merge(parsedDefaultValues);
             } catch(e) {
-                if (e instanceof OptionalParserError) {
-                    // Do nothing
-                } else if(e instanceof ParsingError) {
+                if(e instanceof ParsingError) {
                     // Keep track of the concrete parsing attempt with the fewest errors.
                     // These error messages are likely to best reflect what the user was trying to do
                     if (parsingErrorWithMinErrors) {
+                        // Keep track of the parser with the minimum errors
                         if (e.parsingErrors.length < parsingErrorWithMinErrors.parsingErrors.length) {
                             parsingErrorWithMinErrors = e;
                         }
                     } else {
+                        // If there is no minimum, this is the minimum
                         parsingErrorWithMinErrors = e;
                     }
+                } else {
+                    // Bubble up
+                    throw e;
                 }
             }
         }
 
-        if (parsingErrorWithMinErrors) {
-            throw parsingErrorWithMinErrors;
-        } else {
-            parsingError = new ParsingError();
-            // Kind of a hack for now
-            if (args.length < parsers.length) {
-                parsingError.addError('Too few arguments provided');
-            } else {
-                parsingError.addError('Too many arguments provided');
-            }
-            throw parsingError;
-        }
+        throw parsingErrorWithMinErrors;
     },
 
     /**
-     * Expects a list of N arguments and N parsers
      * Attempts to parse and returns the result if fully successful
      * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
      * 
@@ -94,10 +95,6 @@ module.exports = {
      * @param {[{Type}Parser]} parsers An expanded list of parsers
      */
     parseConcrete(args, parsers) {
-        if (args.length !== parsers.length) {
-            throw new OptionalParserError(`Expected ${parsers.length} arguments but received ${args.length}`);
-        }
-
         // The returned result that the command can read
         parsed = new Parsed();
 
@@ -105,7 +102,7 @@ module.exports = {
         parsingError = new ParsingError()
 
         // Iterate over parsers + arguments
-        for (var i = 0; i < parsers.length; i++) {
+        for (var i = 0; i < Math.min(parsers.length, args.length); i++) {
             parser = parsers[i];
             arg = args[i];
 
@@ -124,6 +121,20 @@ module.exports = {
                     throw e;
                 }
             }
+        }
+
+        // Include an error for every missing argument
+        for (var i = args.length; i < parsers.length; i++) {
+            parsingError.addError(
+                new UserCommandError(`Command is missing ${h.toOrdinalSuffix(i + 1)} argument of type \`${parsers[i].type()}\``)
+            );
+        }
+
+        // Include an error for every extra argument
+        for (var i = parsers.length; i < args.length; i++) {
+            parsingError.addError(
+                new UserCommandError(`Extra argument ${args[i]} at position ${i + 1}`)
+            );
         }
 
         if (parsingError.hasErrors()) {

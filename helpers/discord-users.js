@@ -6,21 +6,21 @@ module.exports = {
     USER_MENTION_REGEX: /<@!?([0-9]+)>/,
 
     isMention(mention) {
-        return module.exports.USER_MENTION_REGEX.test(mention)
+        return module.exports.USER_MENTION_REGEX.test(mention);
     },
 
     getDiscordUserFromMention(mention) {
         // The user id is a capture group and is returned second
-        [, user_id] = mention.match(module.exports.USER_MENTION_REGEX)
+        [, user_id] = mention.match(module.exports.USER_MENTION_REGEX);
 
-        return module.exports.getDiscordUserFromId(user_id)
+        return module.exports.getDiscordUserFromId(user_id);
     },
 
     getMentionFromDiscordUser(user) {
-        return `<@${user.id}>`
+        return `<@${user.id}>`;
     },
 
     getDiscordUserFromId(user_id) {
-        return client.users.cache.get(user_id)
-    }
-}
+        return client.users.cache.get(user_id);
+    },
+};

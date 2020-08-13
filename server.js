@@ -35,6 +35,7 @@ function globalRequirements() {
 
     global.UserCommandError = require('./exceptions/user-command-error.js');
     global.DeveloperCommandError = require('./exceptions/developer-command-error.js');
+    global.ParsingError = require('./exceptions/parsing-error.js');
 
     global.Xp = require('./helpers/xp.js');
     global.DiscordUsers = require('./helpers/discord-users.js');

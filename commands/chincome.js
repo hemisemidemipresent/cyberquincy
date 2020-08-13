@@ -13,20 +13,15 @@ const OptionalParser = require('../parser/optional-parser.js');
 const RoundParser = require('../parser/round-parser.js');
 const ModeParser = require('../parser/mode-parser.js');
 
-const
-
-// Aliases should eventually end up in a centralized place for all commands to use
-MODE_ALIASES = {
-    hc: ['half_cash', 'halfcash', 'hcc'],
-    chimps: ['chmp', 'chmps', 'chimp', 'standard'],
-    abr: ['alt', 'alternate'],
-};
-
 module.exports = {
     name: 'chincome',
 
     // Main executable function
     execute(message, args) {
+        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+            return module.exports.helpMessage(message);
+        }
+
         try {
             parsed = CommandParser.parseAnyOrder(
                 args,
@@ -39,8 +34,8 @@ module.exports = {
     
             return message.channel.send(chincomeMessage(parsed.mode, parsed.round));
         } catch(e) {
-            if (e instanceof UserCommandError) {
-                console.log(e);
+            if (e instanceof ParsingError) {
+                module.exports.errorMessage(message, e)
             } else {
                 throw e;
             }
@@ -65,10 +60,11 @@ module.exports = {
         return message.channel.send(errorEmbed);
     },
 
-    errorMessage(message, error_message) {
+    errorMessage(message, parsingError) {
+        console.log(parsingError.parsingErrors);
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
-            .addField('Cause', error_message)
+            .addField('Likely Causes', parsingError.parsingErrors.join('\n'))
             .addField('Type `q!chincome` for help', ':)')
             .setColor(colors['orange']);
 

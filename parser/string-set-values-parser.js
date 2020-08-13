@@ -16,6 +16,7 @@ module.exports = class StringSetValuesParser {
             }
         }
 
+        this.values = values;
         var regex = new RegExp('(' + values.join('|') + ')', 'i');
         this.delegateParser = new RegexParser(regex);
     }

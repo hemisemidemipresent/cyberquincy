@@ -19,4 +19,18 @@ module.exports = class Parsed extends Object {
             this[type] = value;
         }
     }
+
+    // Returns combined Parsed object
+    merge(otherParsed) {
+        parsed = new Parsed();
+        for (const type in this) {
+            parsed.addField(type, this[type]);
+        }
+
+        for (const type in otherParsed) {
+            parsed.addField(type, otherParsed[type]);
+        }
+
+        return parsed;
+    }
 }

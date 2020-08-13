@@ -1,4 +1,4 @@
-StringSetValuesParser = require('./string-set-values-parser.js');
+const StringSetValuesParser = require('./string-set-values-parser.js');
 
 module.exports = class ModeParser {
     VALID_MODES = [

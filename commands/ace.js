@@ -154,6 +154,7 @@ module.exports = {
                     .setFooter(
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
                     )
+                
                 message.channel.send(embed).then((msg) => {
                     msg.react('❌')
                     const filter = (reaction, user) => {
@@ -170,7 +171,6 @@ module.exports = {
                         msg.delete()
                     })
                 })
-            }
             })
-}
+    }
 }

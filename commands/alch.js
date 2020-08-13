@@ -186,7 +186,6 @@ module.exports = {
                         msg.delete()
                     })
                 })
-            }
             })
-}
+    }
 }

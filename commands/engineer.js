@@ -172,7 +172,6 @@ module.exports = {
                         msg.delete()
                     })
                 })
-            }
             })
-}
+    }
 }

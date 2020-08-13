@@ -61,10 +61,9 @@ module.exports = {
     },
 
     errorMessage(message, parsingError) {
-        console.log(parsingError.parsingErrors);
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
-            .addField('Likely Causes', parsingError.parsingErrors.join('\n'))
+            .addField('Likely Cause(s)', parsingError.parsingErrors.join('\n'))
             .addField('Type `q!chincome` for help', ':)')
             .setColor(colors.orange)
 

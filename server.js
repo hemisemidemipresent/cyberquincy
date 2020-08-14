@@ -32,6 +32,11 @@ function globalRequirements() {
     global.prefix = require('./1/config.json')['prefix'];
 
     global.Cooldowns = require('./helpers/cooldowns.js');
+    global.CommandParser = require('./parser/command-parser.js');
+
+    global.UserCommandError = require('./exceptions/user-command-error.js');
+    global.DeveloperCommandError = require('./exceptions/developer-command-error.js');
+    global.ParsingError = require('./exceptions/parsing-error.js');
 
     global.Xp = require('./helpers/xp.js');
     global.DiscordUsers = require('./helpers/discord-users.js');

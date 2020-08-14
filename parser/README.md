@@ -201,7 +201,7 @@ try {
     </tbody>
     <tfoot>
         <tr>
-            <tf>**(Check `/parser` for a full list of parsers)**<>
+            <td>**(Check `/parser` for a full list of parsers)**</td>
         </tr>
     </tfoot>
 </table>

@@ -1,6 +1,6 @@
 module.exports = {
     is_str(s) {
-        return typeof s === 'string' || s instanceof String
+        return typeof s === 'string' || s instanceof String;
     },
 
     numberWithCommas(x) {
@@ -8,7 +8,7 @@ module.exports = {
     },
   
     randomIntegerFromInclusiveRange(low, high) {
-        rangeInclusive = high - low + 1
+        rangeInclusive = high - low + 1;
 
         return Math.floor(Math.random() * rangeInclusive) + low;
     },

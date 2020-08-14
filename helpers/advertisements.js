@@ -2,27 +2,27 @@ module.exports = {
     WHEEL_SIZE: 50,
 
     async spin(message) {
-        user = message.author
+        user = message.author;
 
-        const tag = await Tags.findOne({
+        let tag = await Tags.findOne({
             where: {
-                name: user.id
-            }
-        })
+                name: user.id,
+            },
+        });
         if (!tag.showAds || tag.showAds == false) {
-            return
+            return;
         }
         advertisingWheel = [
             module.exports.botOffline,
             module.exports.ownServer,
             module.exports.ownServer,
-            module.exports.bugReport
-        ]
+            module.exports.bugReport,
+        ];
 
-        const wheelSpin = Math.floor(Math.random() * module.exports.WHEEL_SIZE)
+        const wheelSpin = Math.floor(Math.random() * module.exports.WHEEL_SIZE);
 
-        advertisement = advertisingWheel[wheelSpin]
-        if (advertisement) advertisement(message)
+        advertisement = advertisingWheel[wheelSpin];
+        if (advertisement) advertisement(message);
     },
 
     botOffline(message) {
@@ -32,10 +32,10 @@ module.exports = {
                 'Join the discord server!',
                 'Get notifications for new updates and bot status at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
             )
-            .setColor(colours.blurple)
-            .setFooter('By turning this on you are helping others find help more easily and hence helping the bot. use q!toggle ad to turn this off')
+            .setColor(colours['blurple'])
+            .setFooter('use ``q!toggle ad`` to turn this off');
 
-        message.channel.send(serverEmbed)
+        message.channel.send(serverEmbed);
     },
 
     ownServer(message) {
@@ -45,10 +45,10 @@ module.exports = {
                 'Please spread the word around!',
                 'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
             )
-            .setColor(colours.turq)
-            .setFooter('By turning this on you are helping others find help more easily and hence helping the bot. use q!toggle ad to turn this off')
+            .setColor(colours['turq'])
+            .setFooter('use ``q!toggle ad`` to turn this off');
 
-        message.channel.send(inviteEmbed)
+        message.channel.send(inviteEmbed);
     },
 
     bugReport(message) {
@@ -60,9 +60,9 @@ module.exports = {
                 'join the discord server!',
                 'suggest a new feature and report a bug at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
             )
-            .setColor(colours.turq)
-            .setFooter('By turning this on you are helping others find help more easily and hence helping the bot. use q!toggle ad to turn this off')
+            .setColor(colours['turq'])
+            .setFooter('use ``q!toggle ad`` to turn this off');
 
-        message.channel.send(bugEmbed)
-    }
-}
+        message.channel.send(bugEmbed);
+    },
+};

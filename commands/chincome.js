@@ -1,13 +1,13 @@
 // Spreadsheets with round income data
-const chimps = require('../jsons/round2.json')
-const abr = require('../jsons/abrincome.json')
-const h = require('../helpers/general.js')
+const chimps = require('../jsons/round2.json');
+const abr = require('../jsons/abrincome.json');
+const h = require('../helpers/general.js');
 
 // Discord library
-const Discord = require('discord.js')
+const Discord = require('discord.js');
 
 // Discord bot sidebar colors
-const colors = require('../jsons/colours.json')
+const colors = require('../jsons/colours.json');
 
 const OptionalParser = require('../parser/optional-parser.js');
 const RoundParser = require('../parser/round-parser.js');
@@ -43,7 +43,7 @@ module.exports = {
     },
 
     helpMessage(message) {
-        const errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.MessageEmbed()
             .setTitle('`q!chincome` HELP')
             .addField(
                 '`q!chincome <round> (<gamemode>)` (Order agnostic)',
@@ -58,7 +58,7 @@ module.exports = {
             .addField('Ex. #3', 'q!chincome <round> <mode> | q!chincome r8 halfcash')
             .setFooter('Sorry no aliases for gamemodes')
 
-        return message.channel.send(errorEmbed)
+        return message.channel.send(errorEmbed);
     },
 
     errorMessage(message, parsingError) {
@@ -66,24 +66,24 @@ module.exports = {
             .setTitle('ERROR')
             .addField('Likely Cause(s)', parsingError.parsingErrors.join('\n'))
             .addField('Type `q!chincome` for help', ':)')
-            .setColor(colors.orange)
+            .setColor(colors['orange']);
 
-        return message.channel.send(errorEmbed)
+        return message.channel.send(errorEmbed);
     },
 
     bugMessage(message, error_obj) {
-        const bugEmbed = new Discord.MessageEmbed()
+        let bugEmbed = new Discord.MessageEmbed()
             .setTitle('BUG')
             .addField(
                 "What's this?",
                 'This is a programming error, alert the maintainers'
             )
             .addField('Error', error_obj)
-            .setColor(colors.red)
+            .setColor(colors['red']);
 
-        return message.channel.send(bugEmbed)
-    }
-}
+        return message.channel.send(bugEmbed);
+    },
+};
 
 chincomeMessage = function (mode, round) {
     incomes = calculateIncomes(mode, round);
@@ -97,7 +97,7 @@ chincomeMessage = function (mode, round) {
             default:
                 return mode.toUpperCase();
         }
-    })(mode)
+    })(mode);
 
     return new Discord.MessageEmbed()
         .setTitle(`${mode_str_iden} CHIMPS Income (R${round})`)
@@ -113,33 +113,33 @@ chincomeMessage = function (mode, round) {
             `Income gained from start of round ${round} to end of R100`,
             `$${h.numberWithCommas(incomes.lincome)}`
         )
-        .setColor(colours.cyber)
-}
+        .setColor(colours['cyber']);
+};
 
 // rincome = round income
 // chincome = cumulative income (CHIMPS with modifier specified by `mode`)
 // lincome = left income (income left over i.e. cash from start of round to end of R100)
 calculateIncomes = function (mode, round) {
-    chincome = null
-    rincome = null
+    chincome = null;
+    rincome = null;
 
     if (mode == 'abr') {
-        index = round - 2
+        index = round - 2;
 
-        chincome = abr[index][1] - abr[3][1] + 650
-        rincome = abr[index][0]
-        lincome = abr[98][1] - abr[index - 1][1]
+        chincome = abr[index][1] - abr[3][1] + 650;
+        rincome = abr[index][0];
+        lincome = abr[98][1] - abr[index - 1][1];
     } else {
-        index = round
+        index = round;
 
-        chincome = chimps[index].cch - chimps[5].cch + 650
-        rincome = chimps[index].csh
-        lincome = chimps[100].cch - chimps[index - 1].cch
+        chincome = chimps[index]['cch'] - chimps[5]['cch'] + 650;
+        rincome = chimps[index]['csh'];
+        lincome = chimps[100]['cch'] - chimps[index - 1]['cch'];
 
         if (mode == 'hc') {
-            chincome /= 2
-            rincome /= 2
-            lincome /= 2
+            chincome /= 2;
+            rincome /= 2;
+            lincome /= 2;
         }
     }
 

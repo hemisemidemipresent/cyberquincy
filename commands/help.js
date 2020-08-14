@@ -11,13 +11,13 @@ module.exports = {
         'h',
         'ch',
         'qh',
-        'quincyh'
+        'quincyh',
     ],
     usage: '[command name]',
     cooldown: 5,
-    execute (message, args) {
+    execute(message, args, client) {
         message.channel.send(
             'website: https://cq.netlify.com\ninvite link: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881\ndiscord server: https://discord.gg/VMX5hZA'
-        )
-    }
-}
+        );
+    },
+};

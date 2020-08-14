@@ -1,34 +1,35 @@
 function main() {
-    pingHeroku()
-    globalRequirements()
-    consoleBootup()
-    dbSetup()
-    commandCenter = configureCommands()
-    generateListeners(commandCenter)
-    login()
+    pingHeroku();
+    globalRequirements();
+    consoleBootup();
+    dbSetup();
+    commandCenter = configureCommands();
+    generateListeners(commandCenter);
+    login();
 }
 
 function pingHeroku() {
-    const express = require('express')
+    const express = require('express');
 
     // this part is to keep the project going
-    const app = express()
-    app.use(express.static('public'))
+    const app = express();
+    app.use(express.static('public'));
     app.get('/', (request, response) => {
-        console.log(Date.now() + ' Ping Received')
-        response.sendStatus(200)
-    })
-    app.listen(process.env.PORT)
+        console.log(Date.now() + ' Ping Received');
+        response.sendStatus(200);
+    });
+    app.listen(process.env.PORT);
 }
 
+
 function globalRequirements() {
-    global.colours = require('./jsons/colours.json')
-    global.h = require('./helpers/general.js')
+    global.colours = require('./jsons/colours.json');
+    global.h = require('./helpers/general.js');
 
-    global.Discord = require('discord.js')
-    global.client = new Discord.Client()
+    global.Discord = require('discord.js');
+    global.client = new Discord.Client();
 
-    global.prefix = require('./1/config.json').prefix
+    global.prefix = require('./1/config.json')['prefix'];
 
     global.Cooldowns = require('./helpers/cooldowns.js');
     global.CommandParser = require('./parser/command-parser.js');
@@ -37,86 +38,86 @@ function globalRequirements() {
     global.DeveloperCommandError = require('./exceptions/developer-command-error.js');
     global.ParsingError = require('./exceptions/parsing-error.js');
 
-    global.Xp = require('./helpers/xp.js')
-    global.DiscordUsers = require('./helpers/discord-users.js')
+    global.Xp = require('./helpers/xp.js');
+    global.DiscordUsers = require('./helpers/discord-users.js');
 
-    global.xpEnabled = true
+    global.xpEnabled = true;
 }
 
 function consoleBootup() {
     client.once('ready', () => {
-        console.log('<Program Directive>')
+        console.log('<Program Directive>');
         function too() {
-            console.log('<Eradicate Bloons>')
+            console.log('<Eradicate Bloons>');
         }
-        setTimeout(too, 1000)
+        setTimeout(too, 1000);
         function three() {
-            console.log('<INITIATE>')
+            console.log('<INITIATE>');
         }
-        setTimeout(three, 2000)
+        setTimeout(three, 2000);
 
-        client.user.setActivity(`${prefix}help`)
-    })
+        client.user.setActivity(`${prefix}help`);
+    });
 }
 
 function dbSetup() {
-    const { Sequelize, Model, DataTypes } = require('sequelize')
+    const { Sequelize, Model, DataTypes } = require('sequelize');
     global.sequelize = new Sequelize('database', 'user', 'password', {
         host: 'localhost',
         dialect: 'sqlite',
         logging: false,
-        storage: 'database.sqlite'
-    })
+        storage: 'database.sqlite',
+    });
 
     global.Tags = sequelize.define('tags', {
         name: {
             type: Sequelize.INTEGER,
             unique: true,
-            primaryKey: true
+            primaryKey: true,
         },
         xp: Sequelize.INTEGER,
         showAds: {
             type: Sequelize.BOOLEAN,
-            allowNull: true
+            allowNull: true,
         },
         xpFreezed: {
             type: Sequelize.BOOLEAN,
-            allowNull: true
+            allowNull: true,
         },
         showLevelUpMsg: {
             type: Sequelize.BOOLEAN,
-            allowNull: true
-        }
-    })
-    Tags.sync()
+            allowNull: true,
+        },
+    });
+    Tags.sync();
 }
 
 function configureCommands() {
-    commandCenter = require('./command_center')
-    commandCenter.configureCommands(client)
-    return commandCenter
+    commandCenter = require('./command_center');
+    commandCenter.configureCommands(client);
+    return commandCenter;
 }
 
 function generateListeners(commandCenter) {
-    Guilds = require('./helpers/guilds.js')
+    Guilds = require('./helpers/guilds.js');
 
     client.on('guildCreate', (guild) => {
-        return Guilds.enterGuild(guild)
-    })
+        return Guilds.enterGuild(guild);
+    });
     client.on('guildMemberAdd', async (member) => {
-        return Guilds.addMember(member)
-    })
+        return Guilds.addMember(member);
+    });
     client.on('guildMemberRemove', async (member) => {
-        return Guilds.removeMember(member)
-    })
+        return Guilds.removeMember(member);
+    });
     client.on('message', async (message) => {
-        commandCenter.handleCommand(message)
-    })
+        commandCenter.handleCommand(message);
+    });
 }
 
 function login() {
-    token = require('./1/config.json').token
-    client.login(token)
+    token = require('./1/config.json')['token'];
+    client.login(token);
 }
 
-main()
+main();

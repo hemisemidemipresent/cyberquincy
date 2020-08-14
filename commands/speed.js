@@ -1,85 +1,85 @@
-const Discord = require('discord.js')
-const { colour } = require('../1/config.json')
+const Discord = require('discord.js');
+const { colour } = require('../1/config.json');
 module.exports = {
     name: 'speed',
     aliases: ['s', 'rbs'],
     description: 'calculates the speed of speeds, even in freeplay',
     usage: '!speed <speed/blimp> <round>',
-    execute (message, args) {
+    execute(message, args) {
         if (!args[0]) {
-            const errorEmbed = new Discord.MessageEmbed()
-                .setTitle('Please specify a bloon/round')
+            let errorEmbed = new Discord.MessageEmbed()
+                .setTitle(`Please specify a bloon/round`)
                 .setDescription('example: q!speed moab 100')
-                .setColor('#ff0000')
-            return message.channel.send(errorEmbed)
+                .setColor('#ff0000');
+            return message.channel.send(errorEmbed);
         }
-        // rounds
-        const bln = args[0].toLowerCase() // short for "bloon"
-        const round = args[1]
+        //rounds
+        const bln = args[0].toLowerCase(); // short for "bloon"
+        const round = args[1];
         if (round < 1 || !isNaN(bln) || isNaN(round)) {
-            const errorEmbed = new Discord.MessageEmbed()
-                .setTitle('Please specify a proper bloon/round')
+            let errorEmbed = new Discord.MessageEmbed()
+                .setTitle(`Please specify a proper bloon/round`)
                 .setDescription('example: q!speed moab 100')
-                .setColor('#ff0000')
-            return message.channel.send(errorEmbed)
+                .setColor('#ff0000');
+            return message.channel.send(errorEmbed);
         }
-        let speed = 0
+        let speed = 0;
         if (bln === 'moab' || bln === 'red' || bln == 'lead') {
-            speed = 3
+            speed = 3;
         } else if (bln === 'bfb') {
-            speed = 1
+            speed = 1;
         } else if (bln === 'zomg' || bln === 'bad') {
-            speed = 0.5
+            speed = 0.5;
         } else if (bln === 'ddt' || bln === 'purple') {
-            speed = 9
+            speed = 9;
         } else if (bln.includes('ceram')) {
-            speed = 8
+            speed = 8;
         } else if (bln === 'rainbow') {
-            speed = 7
+            speed = 7;
         } else if (bln === 'green' || bln === 'zebra' || bln === 'black') {
-            speed = 5
+            speed = 5;
         } else if (bln === 'white') {
-            speed = 6
+            speed = 6;
         } else if (bln === 'yellow') {
-            speed = 10
+            speed = 10;
         } else if (bln === 'pink') {
-            speed = 11
+            speed = 11;
         } else if (bln === 'blue') {
-            speed = 2
+            speed = 2;
         } else {
-            const errorEmbed = new Discord.MessageEmbed()
-                .setTitle('Please specify a proper bloon')
+            let errorEmbed = new Discord.MessageEmbed()
+                .setTitle(`Please specify a proper bloon`)
                 .setDescription('example: q!speed moab 100')
-                .setColor('#ff0000')
-            return message.channel.send(errorEmbed)
+                .setColor('#ff0000');
+            return message.channel.send(errorEmbed);
         }
-        let incPercent = 0
+        let incPercent = 0;
         if (round > 80 && round < 101) {
-            incPercent = 0.02 * (round - 80) + 1
+            incPercent = 0.02 * (round - 80) + 1;
         } else if (round > 100 && round < 125) {
-            incPercent = 0.05 * (round - 100) + 1.4
+            incPercent = 0.05 * (round - 100) + 1.4;
         } else if (round > 124 && round < 152) {
-            incPercent = 0.2 * (round - 125) + 2.65
+            incPercent = 0.2 * (round - 125) + 2.65;
         } else if (round > 151) {
-            incPercent = 0.5 * (round - 152) + 7.05
+            incPercent = 0.5 * (round - 152) + 7.05;
         }
-        const actualSpeed = Math.trunc(speed * incPercent * 100) / 100 // 2 d.p.
+        let actualSpeed = Math.trunc(speed * incPercent * 100) / 100; // 2 d.p.
         if (round > 80) {
-            const speedEmbed = new Discord.MessageEmbed()
+            let speedEmbed = new Discord.MessageEmbed()
                 .setTitle(`${bln}`)
                 .addField('speed', `${actualSpeed} units`, true)
                 .addField('at round', round, true)
                 .setColor(colour)
-                .setFooter('3 units is the speed of a red speed at round one')
-            return message.channel.send(speedEmbed)
+                .setFooter('3 units is the speed of a red speed at round one');
+            return message.channel.send(speedEmbed);
         } else {
-            const speedEmbed = new Discord.MessageEmbed()
+            let speedEmbed = new Discord.MessageEmbed()
                 .setTitle(`${bln}`)
                 .addField('speed', `${speed} units`, true)
                 .addField('at round', round, true)
                 .setColor(colour)
-                .setFooter('3 units is the speed of a red at round one')
-            return message.channel.send(speedEmbed)
+                .setFooter('3 units is the speed of a red at round one');
+            return message.channel.send(speedEmbed);
         }
-    }
-}
+    },
+};

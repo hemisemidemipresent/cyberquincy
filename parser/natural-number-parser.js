@@ -1,10 +1,13 @@
 const NumberParser = require('./number-parser.js');
 
+// NumberParser with the added restriction that also must be a positive integer
+// Great for round number and combo number for a particular spreadsheet
 module.exports = class NaturalNumberParser {
     type() { 
         return "natural_number";
     }
 
+    // Takes in an upper and a lower bound
     constructor(low, high) {
         this.delegateParser = new NumberParser(low, high);
         this.validateValues(low, high);

@@ -1,8 +1,13 @@
 const OptionalParserError = require('../exceptions/optional-parser-error.js');
 
+// A wrapper around another parser to signify that the corresponding argument is optional
 module.exports = class OptionalParser {
+    // Takes in the concrete parser and a default value is the parser fails to parse
     constructor(parser, defaultValue) {
         this.parser = parser;
+        // Default value must validate with the concrete parser itself
+        // i.e. if `this.parser` is a DifficultyParser, 
+        // then defaultValue must be a valid difficulty 
         try {
             this.parser.parse(defaultValue)
         } catch(e) {
@@ -11,6 +16,8 @@ module.exports = class OptionalParser {
         this.defaultValue = defaultValue
     }
 
+    // The optional parser type is the type of the concrete parser wrapped in parentheses
+    // This notation indicates that the corresponding argument is optional
     type() {
         return '(' + this.parser.type() + ')';
     }

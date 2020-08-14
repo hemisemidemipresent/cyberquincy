@@ -84,6 +84,7 @@ module.exports = {
             }
         }
 
+        // A value was never returned
         throw parsingErrorWithMinErrors;
     },
 

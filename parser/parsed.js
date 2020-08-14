@@ -1,12 +1,11 @@
 pluralize = require('pluralize');
 
 // Simply an extension of an object with the added property
-// where if a property is supplied, a plural form of the key is kept.
-// This allows for the case if there are multiple rounds to be parsed
-// then parsed.rounds will give a list of the rounds.
-// The command developer can then decide how to handle them.
-// Note that there's no guarantee on ordering for the values
-// corresponding to the pluralized keys
+// where if a property is supplied, a plural form of the key is consequently updated.
+// This allows for the case if the command-parser parses multiple rounds
+// then parsed.rounds will give a list of all the parsed rounds,
+// at which point the command developer can then decide how to read and handle them.
+// Note that there's no guarantee on ordering for the values of the pluralized keys
 module.exports = class Parsed extends Object {
     addField(type, value) {
         var types = pluralize(type)

@@ -171,35 +171,37 @@ try {
 ##### Parser Library
 
 <table>
-    <tr>
-        <th>Parser</th>
-        <th>Description</th>
-        <th>Developer Inputs</th>
-        <th>User Inputs</th>
-    </tr>
-    <tr>
-        <td><code>RoundParser</code></td>
-        <td>Utilizes <code>NaturalNumberParser</code> to parse a round number, limited by the difficulty (<code>IMPOPPABLE</code> --> <code>6-100</code>).</td>
-        <td>"IMPOPPABLE", "HARD", "MEDIUM", "EASY"</td>
-        <td>Formats: <code>15</code>, <code>R15</code>, <code>round15</code></td>
-    </tr>
-    <tr>
-        <td><code>NaturalNumberParser</code></td>
-        <td>Parses a positive integer between <code>low</code> and <code>high</code></td>
-        <td><code>(6, 100)</code>, <code>(-Infinity, 0)</code>, ...</td>
-        <td>1, 2, 3, ..., 1000, ..., <code>Infinity</code></td>
-    </tr>
-    <tr>
-        <td><code>ModeParser</code></td>
-        <td>Parses a Btd6 Gamemode</td>
-        <td>"STANDARD","PRIMARYONLY","DEFLATION","MILITARYONLY","APOPALYPSE","REVERSE","MAGICONLY","DOUBLEHP","HALFCASH","ABR","IMPOPPABLE","CHIMPS"</td>
-        <td><-- Same</td>
-    </tr>
-    
-    <tr>**(Check `/parser` for a full list of parsers)**</tr>
-    
+    <thead>
+        <tr>
+            <th>Parser</th>
+            <th>Description</th>
+            <th>Developer Inputs</th>
+            <th>User Inputs</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>RoundParser</code></td>
+            <td>Utilizes <code>NaturalNumberParser</code> to parse a round number, limited by the difficulty (<code>IMPOPPABLE</code> --> <code>6-100</code>).</td>
+            <td>"IMPOPPABLE", "HARD", "MEDIUM", "EASY"</td>
+            <td>Formats: <code>15</code>, <code>R15</code>, <code>round15</code></td>
+        </tr>
+        <tr>
+            <td><code>NaturalNumberParser</code></td>
+            <td>Parses a positive integer between <code>low</code> and <code>high</code></td>
+            <td><code>(6, 100)</code>, <code>(-Infinity, 0)</code>, ...</td>
+            <td>1, 2, 3, ..., 1000, ..., <code>Infinity</code></td>
+        </tr>
+        <tr>
+            <td><code>ModeParser</code></td>
+            <td>Parses a Btd6 Gamemode</td>
+            <td>"STANDARD","PRIMARYONLY","DEFLATION","MILITARYONLY","APOPALYPSE","REVERSE","MAGICONLY","DOUBLEHP","HALFCASH","ABR","IMPOPPABLE","CHIMPS"</td>
+            <td><-- Same</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <tf>**(Check `/parser` for a full list of parsers)**<>
+        </tr>
+    </tfoot>
 </table>
-
--   `NaturalNumberParser`: Parses a positive integer between the min and max values provided.
--   `RoundParser`: Utilizes `NaturalNumberParser` to parse a round number, limited by the difficulty (`IMPOPPABLE` --> `6-100`). Handles the following formats: `15`, `R15`, and `round15`.
--   `ModeParser`: accepts `CHIMPS`, `HALFCASH`, `MILITARYONLY`, etc..

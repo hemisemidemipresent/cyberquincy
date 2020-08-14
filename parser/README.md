@@ -70,15 +70,15 @@ The following parser usage guidelines will reference the above example.
 3. Use `try-catch` as done so in the above example:
 
    i. Catch a `ParsingError` and provide the user with the list of errors encountered by the `CommandParser`: `parsingError.parsingErrors.join('\n')`
-   
+
    ii. Bubble up any other type of error
 
 <a name="simplified"></a>
 #### The Above in Simpler Terms
 
-So you know how you have a long list of arguments? its in the array `args`. The parser basically helps to parse all that raw user input.
+So you know how commands can take a long list of arguments? It's in the array `args`. The parser basically helps to parse all that raw user input.
 
-first you define a variable. In the example above its called `parsed`. You let that either be a `CommandParser.parse()` or `CommandParser.parseAnyOrder()`.
+First you define a variable. In the example above its called `parsed`. You let that either be a `CommandParser.parse()` or `CommandParser.parseAnyOrder()`.
 
 You first put `args` inside the function. Then you put in your parsers. How? Lets say you want an optional parser for a mode, e.g. like in `q!income`, you don't need a mode, but the mode matters. you then put in `new OptionalParser()` into the function.
 
@@ -88,7 +88,7 @@ The function should look something like this:
 let parsed = CommandParser.parseAnyOrder(args, new OptionalParser());
 ```
 
-in the new `OptionalParser()` it accepts 2 things, a parser and a "fallback option". So for example
+In the new `OptionalParser()` it accepts 2 things, a parser and a "fallback option". So for example
 
 ```js
 new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS');
@@ -124,7 +124,7 @@ try {
 } catch (e) {}
 ```
 
-2. add a form of error message
+2. add a form of error message for `ParsingError`s specifically
 
 ```js
 try {
@@ -170,7 +170,9 @@ try {
 }
 ```
 
-##### Parser Library
+and that's it! You've not only ensured that the commands you run are "safe", but you've also given the user opportunities to learn from entering incorrectly-formatted commands!
+
+##### Parser Library Sneak Peak
 
 <table>
     <thead>

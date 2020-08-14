@@ -12,15 +12,14 @@
 <a name="introduction"></a>
 #### Introduction
 
-The cyberquincy parsing library is robust and thorough. It's highly recommended that newly written commands take good advantage of it.
+The cyberquincy parsing library is robust and thorough. It's highly recommended that all new commands use it.
 
 The command parser serves a number of advantages
-
 -   It makes you think carefully about what values each argument in the command expects
 -   It makes it quite easy to accept arguments in any order
--   It allows you to make certain command arguments optional wherein you can provide a default value
--   It provides strict validations based on the permitted values you supply to each argument's parser
--   Commands whose arguments are formatted incorrectly will be provided the smallest and most helpful set of error messages possible in order for the user to understand their mistakes.
+-   It allows you to make certain command arguments optional and provide a default value if the user doesn't provide a matching argument
+-   It provides validations based on the permitted values that get passed into the parser's constructor
+-   A user who structures a command + arguments incorrectly will be provided the smallest and most helpful set of error messages in order to understand what went wrong.
 
 <a name="utilization"></a>
 #### Utilization techniques
@@ -47,6 +46,8 @@ try {
     }
 }
 ```
+
+The following guidelines will reference the above example.
 
 **Requirements**
 

@@ -41,7 +41,7 @@ npm dependencies:
 
 -   `express` every node.js project has one of these, even though this isn't used here
 -   `discord.js` what makes this bot work
--   `google-spreadsheet` I need this to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) [4tcabrrbs](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799) and [3tcrbs](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
+-   `google-spreadsheet` I need this to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
 -   `node-fetch` module for assesing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
 -   `sequelize` (DB)
 -   `sqlite3` (DB dialect)
@@ -55,6 +55,8 @@ npm dependencies:
 -   then the DB stuff and ad stuff happens back in `command_center.js`
 
 commands are using node.js `module.exports`
+
+there is a command parser, [check it out](https://github.com/hemisemidemipresent/cyberquincy/tree/master/parser)
 
 # database fields
 

@@ -5,7 +5,7 @@
   * [Introduction](#introduction)
   * [Utilization Techniques](#utilization)
   * [The Above in Simple Terms](#simplified)
-  * [Parser Library Sneak Peak](#parser-library)
+  * [Parser Library Glimpse](#parser-library)
 
 <a name="command-devs"></a>
 ## For Command Developers
@@ -174,7 +174,7 @@ try {
 and that's it! You've not only ensured that the commands you run are "safe", but you've also given the user opportunities to learn from entering incorrectly-formatted commands!
 
 <a name="parser-library"></a>
-### Parser Library Sneak Peak
+### Parser Library Glimpse
 
 <table>
     <thead>

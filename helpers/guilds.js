@@ -46,10 +46,7 @@ module.exports = {
     Thank you for joining!',
 
     async addMember(member) {
-        if (member.guild.id === module.exports.CYBER_SUPPORT) {
-            if (member.id === Users.HEMI) {
-                return;
-            }
+        if (member.guild.id == module.exports.CYBER_SUPPORT) {
             const tchannel = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('general')
             );
@@ -81,7 +78,7 @@ module.exports = {
                 )
                 .setColor(colours['cyber']);
             member.send(wel);
-        } else if (member.guild.id === module.exports.RACE_SERVER) {
+        } else if (member.guild.id == module.exports.RACE_SERVER) {
             const general = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('general')
             );
@@ -97,12 +94,12 @@ module.exports = {
                 channel.name.includes('general')
             );
             general.send(`**${member.displayName}** was lost in battle`);
-        } else if (member.guild.id === module.exports.BTD6_INDEX) {
+        } else if (member.guild.id == module.exports.BTD6_INDEX) {
             let welcome = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('welcome')
             );
             welcome.send(`**${member.displayName}** got nerfed. hard.`);
-        } else if (member.guild.id === module.exports.RACE_SERVER) {
+        } else if (member.guild.id == module.exports.RACE_SERVER) {
             const general = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('general')
             );

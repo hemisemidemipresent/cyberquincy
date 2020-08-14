@@ -202,8 +202,8 @@ try {
         </tr>
     </tbody>
     <tfoot>
-        <tr colspan="4">
-            <td>**(Check `/parser` for a full list of parsers)**</td>
+        <tr>
+            <th colspan="4">Check the `/parser` folder for a full list of parsers</th>
         </tr>
     </tfoot>
 </table>

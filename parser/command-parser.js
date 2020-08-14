@@ -5,7 +5,7 @@ const ParsingError = require('../exceptions/parsing-error.js');
 
 module.exports = {
     /**
-     * Parses arguments minding the `parsers` array ordering
+     * Parses arguments minding the ordering `parsers` array
      * Takes into account optional arguments and finds the permutation
      * of applying optional parsers to find the best parsing match.
      *  - If there is a perfect match then return it.
@@ -61,7 +61,7 @@ module.exports = {
             }
             try {
                 // Take the included parsers and parse 1:1 with the args 
-                result = module.exports.parseConcrete(args, concreteParsers);
+                result = parseConcrete(args, concreteParsers);
                 // Return the first successful parsing attempt
                 return result.merge(parsedDefaultValues);
             } catch(e) {
@@ -86,63 +86,6 @@ module.exports = {
 
         // A value was never returned
         throw parsingErrorWithMinErrors;
-    },
-
-    /**
-     * Attempts to parse and returns the result if fully successful
-     * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
-     * 
-     * @param {[String]} args Command arguments
-     * @param {[{Type}Parser]} parsers An expanded list of parsers
-     */
-    parseConcrete(args, parsers) {
-        // The returned result that the command can read
-        parsed = new Parsed();
-
-        // Keeps track of all errors generating during parsing attempt
-        parsingError = new ParsingError()
-
-        // Iterate over parsers + arguments
-        for (var i = 0; i < Math.min(parsers.length, args.length); i++) {
-            parser = parsers[i];
-            arg = args[i];
-
-            if (parser instanceof OptionalParser) {
-                throw 'Optional parser found in concrete parsing. Something went wrong here.';
-            }
-
-            try {
-                value = parser.parse(arg);
-                parsed.addField(parser.type(), value);
-            } catch(e) {
-                if (e instanceof UserCommandError) {
-                    parsingError.addError(e);
-                } else {
-                    // DeveloperCommandError for example
-                    throw e;
-                }
-            }
-        }
-
-        // Include an error for every missing argument
-        for (var i = args.length; i < parsers.length; i++) {
-            parsingError.addError(
-                new UserCommandError(`Command is missing ${h.toOrdinalSuffix(i + 1)} argument of type \`${parsers[i].type()}\``)
-            );
-        }
-
-        // Include an error for every extra argument
-        for (var i = parsers.length; i < args.length; i++) {
-            parsingError.addError(
-                new UserCommandError(`Extra argument ${args[i]} at position ${i + 1}`)
-            );
-        }
-
-        if (parsingError.hasErrors()) {
-            throw parsingError;
-        }
-        
-        return parsed;
     },
 
     /**
@@ -182,4 +125,61 @@ module.exports = {
         // The one with the least number of errors is likely to tell the best story
         throw parsingErrors[0];
     },
+}
+
+/**
+ * Attempts to parse and returns the result if fully successful
+ * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
+ * 
+ * @param {[String]} args Command arguments
+ * @param {[{Type}Parser]} parsers An expanded list of parsers
+ */
+function parseConcrete(args, parsers) {
+    // The returned result that the command can read
+    parsed = new Parsed();
+
+    // Keeps track of all errors generating during parsing attempt
+    parsingError = new ParsingError()
+
+    // Iterate over parsers + arguments
+    for (var i = 0; i < Math.min(parsers.length, args.length); i++) {
+        parser = parsers[i];
+        arg = args[i];
+
+        if (parser instanceof OptionalParser) {
+            throw 'Optional parser found in concrete parsing. Something went wrong here.';
+        }
+
+        try {
+            value = parser.parse(arg);
+            parsed.addField(parser.type(), value);
+        } catch(e) {
+            if (e instanceof UserCommandError) {
+                parsingError.addError(e);
+            } else {
+                // DeveloperCommandError for example
+                throw e;
+            }
+        }
+    }
+
+    // Include an error for every missing argument
+    for (var i = args.length; i < parsers.length; i++) {
+        parsingError.addError(
+            new UserCommandError(`Command is missing ${h.toOrdinalSuffix(i + 1)} argument of type \`${parsers[i].type()}\``)
+        );
+    }
+
+    // Include an error for every extra argument
+    for (var i = parsers.length; i < args.length; i++) {
+        parsingError.addError(
+            new UserCommandError(`Extra argument ${args[i]} at position ${i + 1}`)
+        );
+    }
+
+    if (parsingError.hasErrors()) {
+        throw parsingError;
+    }
+    
+    return parsed;
 }

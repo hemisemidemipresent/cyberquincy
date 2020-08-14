@@ -202,7 +202,7 @@ try {
         </tr>
     </tbody>
     <tfoot>
-        <tr colspan=4>
+        <tr colspan="4">
             <td>**(Check `/parser` for a full list of parsers)**</td>
         </tr>
     </tfoot>

@@ -203,7 +203,7 @@ try {
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="4">Check the [/parser folder](https://github.com/rmlgaming/cyberquincy/tree/master/parser) folder for a full list of parsers</th>
+            <th colspan="4">Check the /parser folder (you're in it) for a full list of parsers</th>
         </tr>
     </tfoot>
 </table>

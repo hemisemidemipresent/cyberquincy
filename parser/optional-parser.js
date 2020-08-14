@@ -1,5 +1,3 @@
-const OptionalParserError = require('../exceptions/optional-parser-error.js');
-
 // A wrapper around another parser to signify that the corresponding argument is optional
 module.exports = class OptionalParser {
     // Takes in the concrete parser and a default value is the parser fails to parse

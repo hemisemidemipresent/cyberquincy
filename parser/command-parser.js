@@ -1,6 +1,5 @@
 const Parsed = require('./parsed.js');
 const OptionalParser = require('./optional-parser.js');
-const OptionalParserError = require('../exceptions/optional-parser-error.js');
 const ParsingError = require('../exceptions/parsing-error.js');
 
 module.exports = {

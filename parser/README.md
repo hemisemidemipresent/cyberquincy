@@ -47,14 +47,13 @@ try {
 }
 ```
 
-The following guidelines will reference the above example.
+The following parser usage guidelines will reference the above example.
 
 **Requirements**
 
 1. Must either call `.parse()` or `.parseAnyOrder()` on the global `CommandParser` module.
 2. Arguments must be `args, Parser1, Parser2, ... ParserN`
-3. `args.length` does not need to equal the number of parsers supplied because of optional arguments
-4. The default value for `OptionalParser` must be a valid option that the parser accepts from the user
+3. The default value for `OptionalParser` must be a value that the wrapped parser would accept as an argument.
 
 **Options**
 
@@ -69,7 +68,9 @@ The following guidelines will reference the above example.
 1. Catch HELP arguments before parsing. Parsing will likely fail if you try to do so after.
 2. If `parseAnyOrder()` is used with `OptionalParser`s, play around with the ordering of the parsers to consistently get the best error messages for incorrect inputs. It's likely that putting the optional parsers at the end will produce the best error messages, but not much testing on that has been done.
 3. Use `try-catch` as done so in the above example:
+
    i. Catch a `ParsingError` and provide the user with the list of errors encountered by the `CommandParser`: `parsingError.parsingErrors.join('\n')`
+   
    ii. Bubble up any other type of error
 
 <a name="simplified"></a>

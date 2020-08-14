@@ -1,10 +1,15 @@
 # Parsing
 
-* [Command Devs](#command-devs)
+### Table of Contents
+* [For Command Developers](#command-devs)
+  * [Introduction](#introduction)
+  * [Utilization Techniques](#utilization)
+  * [The Above in Simple Terms](#simplified)
 
 <a name="command-devs"></a>
 ### For Command Developers
 
+<a name="introduction"></a>
 ##### Introduction
 
 The cyberquincy parsing library is robust and thorough. It's highly recommended that newly written commands take good advantage of it.
@@ -17,6 +22,7 @@ The command parser serves a number of advantages
 -   It provides strict validations based on the permitted values you supply to each argument's parser
 -   Commands whose arguments are formatted incorrectly will be provided the smallest and most helpful set of error messages possible in order for the user to understand their mistakes.
 
+<a name="utilization"></a>
 ##### Utilization techniques
 
 **Example Usage**
@@ -65,7 +71,8 @@ try {
    i. Catch a `ParsingError` and provide the user with the list of errors encountered by the `CommandParser`: `parsingError.parsingErrors.join('\n')`
    ii. Bubble up any other type of error
 
-##### In simpler terms
+<a name="simplified"></a>
+##### The Above in Simpler Terms
 
 So you know how you have a long list of arguments? its in the array `args`. The parser basically helps to parse all that raw user input.
 

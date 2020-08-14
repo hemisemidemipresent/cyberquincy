@@ -165,12 +165,15 @@ try {
 <th>Parser</th><th>Description</th><th>inputs</th>
 </tr>
 <tr>
-<td>`RoundParser`</td><td>Utilizes `NaturalNumberParser` to parse a round number, limited by the difficulty (`IMPOPPABLE` --> `6-100`). Handles the following formats: `15`, `R15`, and `round15`.</td><td> "IMPOPPABLE",
+<td><code>RoundParser</code></td><td>Utilizes <code>NaturalNumberParser</code> to parse a round number, limited by the difficulty (<code>IMPOPPABLE</code> --> <code>6-100</code>). Handles the following formats: <code>15</code>, <code>R15</code>, and <code>round15</code>.</td><td> "IMPOPPABLE",
         "HARD",
         "MEDIUM",
         "EASY",</td>
 </tr>
 </table>
+
+rml do you mind continuing this table thanks
+
 ###### (Check `/parser` for a full list of parsers)
 
 -   `NaturalNumberParser`: Parses a positive integer between the min and max values provided.

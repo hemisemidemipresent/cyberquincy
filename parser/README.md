@@ -195,7 +195,9 @@ try {
         <tr>
             <td><code>ModeParser</code></td>
             <td>Parses a Btd6 Gamemode</td>
-            <td>"STANDARD","PRIMARYONLY","DEFLATION","MILITARYONLY","APOPALYPSE","REVERSE","MAGICONLY","DOUBLEHP","HALFCASH","ABR","IMPOPPABLE","CHIMPS"</td>
+            <td>"STANDARD","PRIMARYONLY","DEFLATION","MILITARYONLY",
+            "APOPALYPSE","REVERSE","MAGICONLY","DOUBLEHP","HALFCASH"
+            ,"ABR","IMPOPPABLE","CHIMPS"</td>
             <td><-- Same</td>
         </tr>
     </tbody>

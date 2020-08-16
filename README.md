@@ -1,7 +1,10 @@
 # Cyber Quincy
 
+[![CodeFactor](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy/badge)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy)
+
 Cyber Quincy is a btd6 discord bot.
-useful links:
+
+### links
 
 -   [discord server](https://discord.gg/VMX5hZA) (join for bot updates and online/offline status)
 -   [invite link](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881)
@@ -13,31 +16,15 @@ useful links:
 
 # Basic local test guide
 
-all credentials will be in `./1/config.json`, fill in the json accordingly
+> note: all credentials will be in `./1/config.json`, fill in the json accordingly
 
-make a new discord bot in [discord dev page](https://discord.com/developers/applications) and make a new application and hence bot (and token)
+1. make a new discord bot in [discord dev page](https://discord.com/developers/applications) and make a new application and hence bot (and token)
 
-you need credentials for google-spreadsheet (I reccomend [Thie video to set up credentials](https://www.youtube.com/watch?v=UGN6EUi4Yio) and paste the credentials in `./1/config.json`), not necessary if you arent using google spreadsheets in any way.
+2. you need credentials for google-spreadsheet (I reccomend [Thie video to set up credentials](https://www.youtube.com/watch?v=UGN6EUi4Yio) and paste the credentials in `./1/config.json`), not necessary if you arent using google spreadsheets in any way.
 
-currently the database isn't currently actively bug-tested
-if you have trouble with the database there is a no-database `noDBserver.js`
+3. to run type `node server` (this sets up a `database.sqlite` file)
 
-to run type `node server` (this sets up a `database.sqlite` file) or `node noDBserver.js` (no DB)
-
-the variable names are a mess and I apologise for them.
-I am also sorry for the meaningless commit names
-
-by hemidemisemipresent#0301
-
-# application information
-
--   this bot is made using `discord.js`
--   commands can be found in the `commands` folder.
--   the start script is `server.js`
--   the sequelise config file is `./config`
--   the other credentials are in `./1/config.jso`
-
-npm dependencies:
+# npm dependencies
 
 -   `express` every node.js project has one of these, even though this isn't used here
 -   `discord.js` what makes this bot work
@@ -46,6 +33,7 @@ npm dependencies:
 -   `sequelize` (DB)
 -   `sqlite3` (DB dialect)
 -   `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be, just suggest something in this discord instead. If you are interested look at `./migrations`, and check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527)
+-   `pluralize` used in parser
 
 ## how commands are processed
 
@@ -56,7 +44,7 @@ npm dependencies:
 
 commands are using node.js `module.exports`
 
-there is a command parser, [check it out](https://github.com/hemisemidemipresent/cyberquincy/tree/master/parser)
+there is a command arguments parser, [check it out](https://github.com/hemisemidemipresent/cyberquincy/tree/master/parser)
 
 # database fields
 
@@ -68,3 +56,11 @@ there is a command parser, [check it out](https://github.com/hemisemidemipresent
 -   `showLevelUpMsg` - setting for turning on/off level up messages in `./helpers/xp.js`
 -   `quiz` - how many q!quiz questions they answered correctly
 -   `freezexp` - unused but
+
+# application information
+
+-   this bot is made using `discord.js`
+-   commands can be found in the `commands` folder.
+-   the start script is `server.js`
+-   the sequelize config file is `./config`
+-   the other credentials are in `./1/config.json`

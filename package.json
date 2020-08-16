@@ -1,6 +1,6 @@
 {
     "name": "cyberquincy",
-    "version": "1.10.4",
+    "version": "1.10.5",
     "description": "A discord bot for btd6",
     "main": "server.js",
     "scripts": {

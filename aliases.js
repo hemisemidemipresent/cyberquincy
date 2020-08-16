@@ -1,7 +1,12 @@
 const filepath = require('filepath');
 const AliasError = require('./exceptions/alias-error.js');
 
-module.exports = class AsliasRepository extends Object {
+module.exports = class AliasRepository extends Object {
+
+    ////////////////////////////////////////////////////
+    // Configuration/Initialization
+    ////////////////////////////////////////////////////
+
     constructor() {
         super();
 
@@ -38,13 +43,16 @@ module.exports = class AsliasRepository extends Object {
                     throw e;
                 }
             }
-            this[canonical] = aliases;
+            this[canonical] = {
+                aliases: aliases,
+                sourcefile: f,
+            };
         }
     }
 
     preventSharedAliases(canonical, aliases) {
         for (const otherCanonical in this) {
-            var otherAliases = this[otherCanonical];
+            var otherAliases = this[otherCanonical].aliases;
 
             var aliasGroup = aliases.concat(canonical);
             var otherAliasGroup = otherAliases.concat(otherCanonical);
@@ -61,5 +69,64 @@ module.exports = class AsliasRepository extends Object {
 
     formatAliasGroup(canonical, aliases) {
         return `{"${canonical}": [${aliases.map(a => `"${a}"`)}]}`;
+    }
+
+    ////////////////////////////////////////////////////
+    // Access
+    ////////////////////////////////////////////////////
+
+    getCanonicalForm(aliasMember) {
+        if (this.hasOwnProperty(aliasMember)) {
+            return aliasMember;
+        }
+
+        for (const canonical in this) {
+            if (this[canonical].aliases.includes(aliasMember)) {
+                return canonical; 
+            }
+        }
+
+        return null;
+    }
+
+    // Returns a single key-values pair alias group, `{canonical: [aliases]}`,
+    // in which aliasMember is found 
+    getAliasGroup(aliasMember) {
+        if (this.hasOwnProperty(aliasMember)) {
+            return {[aliasMember]: this[aliasMember]}
+        }
+
+        for (const canonical in this) {
+            if (this[canonical].includes(aliasMember)) {
+                return {[canonical]: this[canonical]}; 
+            }
+        }
+
+        return null;
+    }
+
+    // Returns a flat list of aliases semantically equivalent to `aliasMember`
+    getAliases(aliasMember) {
+        var aliasGroup = this.getAliasGroup(aliasMember)
+        var canonical = Object.keys(aliasGroup)[0];
+        return aliasGroup[canonical].aliases.concat(canonical);
+    }
+
+    getAliasesFromSourceFile(sourcefile) {
+        var aliasGroups = {}
+        for (const canonical in this) {
+            if (this[canonical].sourcefile === sourcefile) {
+                aliasGroups = {
+                    ...aliasGroups,
+                    ...this.getAliasGroup(canonical) 
+                }
+            }
+        }
+        return aliasGroups;
+    }
+
+    getAliasesFromSameFileAs(aliasMember) {
+        var canonical = this.getCanonicalForm(aliasMember);
+        return this.getAliasesFromSourceFile(this[canonical].sourcefile)
     }
 }

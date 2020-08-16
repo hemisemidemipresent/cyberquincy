@@ -6,8 +6,7 @@ module.exports = class ModeParser {
     }
 
     validModes() {
-        var modes = Object.keys(Aliases.getAliasesFromSameFileAs('STANDARD'));
-        return modes;
+        return Object.keys(Aliases.getAliasesFromSameFileAs('STANDARD'));
     }
 
     // permitted modes must be a subset of valid modes

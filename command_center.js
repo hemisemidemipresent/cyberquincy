@@ -45,6 +45,7 @@ module.exports = {
 
             // Command tokens are space-separated tokens starting immediately after the `!`
             const args = c.slice(module.exports.PREFIX.length).split(/ +/);
+            
 
             // The command name is the first token; args are the rest
             const commandName = args.shift().toLowerCase();
@@ -62,9 +63,11 @@ module.exports = {
                 );
             }
 
+            const canonicalArgs = args.map(arg => Aliases.getCanonicalForm(arg) || arg);
+
             // Keeps track of cooldowns for commands/users and determines if cooldown has expired
             if (Cooldowns.handleCooldown(command, message)) {
-                command.execute(message, args);
+                command.execute(message, canonicalArgs);
 
                 // Don't want the user gaining xp from metacommands
                 if (

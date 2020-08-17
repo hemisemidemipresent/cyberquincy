@@ -76,7 +76,7 @@ module.exports = class AliasRepository extends Object {
     ////////////////////////////////////////////////////
 
     getCanonicalForm(aliasMember) {
-        aliasMember = aliasMember.toUpperCase();
+        aliasMember = aliasMember.toLowerCase();
         if (this.hasOwnProperty(aliasMember)) {
             return aliasMember;
         }
@@ -93,7 +93,7 @@ module.exports = class AliasRepository extends Object {
     // Returns a single key-values pair alias group, `{canonical: [aliases]}`,
     // in which aliasMember is found 
     getAliasGroup(aliasMember) {
-        aliasMember = aliasMember.toUpperCase();
+        aliasMember = aliasMember.toLowerCase();
         if (this.hasOwnProperty(aliasMember)) {
             return {[aliasMember]: this[aliasMember]}
         }
@@ -109,7 +109,7 @@ module.exports = class AliasRepository extends Object {
 
     // Returns a flat list of aliases semantically equivalent to `aliasMember`
     getAliases(aliasMember) {
-        aliasMember = aliasMember.toUpperCase();
+        aliasMember = aliasMember.toLowerCase();
         var aliasGroup = this.getAliasGroup(aliasMember)
         var canonical = Object.keys(aliasGroup)[0];
         return aliasGroup[canonical].aliases.concat(canonical);
@@ -129,7 +129,7 @@ module.exports = class AliasRepository extends Object {
     }
 
     getAliasesFromSameFileAs(aliasMember) {
-        aliasMember = aliasMember.toUpperCase();
+        aliasMember = aliasMember.toLowerCase();
         var canonical = this.getCanonicalForm(aliasMember);
         return this.getAliasesFromSourceFile(this[canonical].sourcefile)
     }

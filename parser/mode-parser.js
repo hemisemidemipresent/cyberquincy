@@ -13,7 +13,7 @@ module.exports = class ModeParser {
     // i.e. if command developer tried to put "cheese" it would error for obvious reasons
     constructor(...permitted_modes) {
         for (var i = 0; i < permitted_modes.length; i++) {
-            if (!this.validModes().includes(permitted_modes[i])) {
+            if (!this.validModes().includes(permitted_modes[i].toLowerCase())) {
                 throw new DeveloperCommandError(`${permitted_modes[i]} is not a valid gamemode`);
             }
         }

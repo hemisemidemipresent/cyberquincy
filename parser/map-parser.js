@@ -56,7 +56,7 @@ module.exports = class MapParser {
     }
 
     constructor(...permitted_maps) {
-        // permitted difficulties must be a subset of valid difficulties
+        // permitted maps must be a subset of valid maps
         // i.e. if command developer tried to put "cheese" it would error for obvious reasons
         for (var i = 0; i < permitted_maps.length; i++) {
             if (!this.VALID_MAPS.includes(permitted_maps[i])) {
@@ -64,7 +64,7 @@ module.exports = class MapParser {
             }
         }
 
-        // If no permitted difficulties are provided, the permitted difficulties defaults to ALL difficulties
+        // If no permitted maps are provided, the permitted maps defaults to ALL maps
         if (permitted_maps.length === 0) {
             permitted_maps = this.VALID_MAPS;
         }

@@ -3,8 +3,7 @@ module.exports = {
     name: 'credits',
     description: 'List all of the people who helped (directly and indirectly)',
     aliases: ['cred', 'creds', 'cr'],
-    usage: '[command name]',
-    execute(message, args, client) {
+    execute(message, args) {
         const data = [];
         data.push("Here's a list of all the people who helped:");
         data.push(

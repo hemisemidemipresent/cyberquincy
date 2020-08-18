@@ -4,8 +4,7 @@ module.exports = {
     name: 'emote',
     description: 'emojis',
     aliases: ['emoji'],
-    usage: '<path1> <path2> <path3>',
-    execute(message, args, client) {
+    execute(message, args) {
         message.delete();
         if (!args) {
             return message.channel.send('q!emoji help');

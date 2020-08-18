@@ -7,8 +7,7 @@ module.exports = {
     name: 'obyn',
     description: 'obyn upgrades/cost',
     aliases: ['o', 'O', 'ocyn'],
-    usage: '!obyn <level>',
-    execute(message, args, client) {
+    execute(message, args) {
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setColor(red)

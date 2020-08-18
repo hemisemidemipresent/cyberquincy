@@ -8,6 +8,7 @@ const aliases = [
     [
         'boomerang-monkey',
         'boomerang',
+        'boomer',
         'bm',
         'boom',
         '💥',
@@ -105,6 +106,7 @@ module.exports = {
         'rang',
         'bomerang',
         'boo',
+        'boomer',
         'bomer',
         'rangs',
         'bomerrang',
@@ -217,9 +219,8 @@ module.exports = {
         'overclock',
         'engie',
     ],
-    usage: '<path1> <path2> <path3>',
     execute(message, args) {
-        if (!args || args[1] || isNaN(args[0]) || args[0].includes('-')) {
+        if (isValidArg(args)) {
             return provideHelpMsg();
         }
         const pathStr = args[0].toString();
@@ -404,4 +405,17 @@ function findName(commandName) {
         }
     }
     return;
+}
+function isValidArg(args) {
+    if (
+        !args ||
+        args[1] ||
+        isNaN(args[0]) ||
+        args[0].includes('-') ||
+        args[0].length !== 3
+    ) {
+        return false;
+    } else {
+        return true;
+    }
 }

@@ -1,6 +1,6 @@
 module.exports = {
     name: 'find3tcabr',
-    execute(message, args, client) {
+    execute(message, args) {
         function isEqual(a, b) {
             // if length is not equal
             if (a.length != b.length) return false;

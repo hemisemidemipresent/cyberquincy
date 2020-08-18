@@ -8,7 +8,6 @@ module.exports = {
     description:
         'tells you about the abr rounds (below 100 cos freeplay abr is the same as normal)',
     aliases: ['abr'],
-    usage: '!abround <round>',
     execute(message, args) {
         if (!args[0] || isNaN(args[0])) {
             let errorEmbed = new Discord.MessageEmbed()

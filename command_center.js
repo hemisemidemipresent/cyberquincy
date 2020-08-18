@@ -58,7 +58,7 @@ module.exports = {
 
             if (!command) {
                 return message.channel.send(
-                    `${commandName} is not a valid command. Type \`q!alias\` for a list of all available commands.`
+                    `${commandName} is message, args. Type \`q!alias\` for a list of all available commands.`
                 );
             }
 

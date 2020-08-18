@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
     name: '4tcabrrbs',
-    execute(message, args, client) {
+    execute(message, args) {
         async function access(n) {
             const { GoogleSpreadsheet } = require('google-spreadsheet');
 

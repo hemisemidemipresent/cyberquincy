@@ -14,13 +14,19 @@ COLS = {
     CURRENT: 'J',
 }
 
+HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
+WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 module.exports = {
     name: 'lcc',
 
     aliases: ['leastcash', 'lcash'],
 
+    // Results should maybe be cached somehow?
+    // The longest delay is loading the spreadsheet itself
+    // so maybe keep that loaded for some period of time while it's being used
     execute(message, args) {
+        // `q!lcc {map}`
         try{
             var btd6_map = CommandParser.parse(
                 args,
@@ -35,40 +41,55 @@ module.exports = {
         }
 
         async function displayLCC(btd6_map) {
+            // Load the BTD6 Index
             doc = await GoogleSheetsHelper.load(GoogleSheetsHelper.BTD6_INDEX_KEY);
             
+            // Load the LCC spreadsheet
             const sheet = GoogleSheetsHelper.sheetByName(doc, 'lcc');
 
+            // Load the column containing the different maps
             await sheet.loadCells(`${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`); // loads all possible cells with map
     
+            // The row where the queried map is found
             var entryRow = null;
     
+            // Search for the row in all "possible" rows
             for (var row = 1; row <= MAX_ROW; row++) {
                 var mapCandidate = sheet.getCellByA1(`${COLS.MAP}${row}`).value;
+                // input is "in_the_loop" but needs to be compared to "In The Loop"
                 if (mapCandidate && mapCandidate.toLowerCase().replace(" ", "_") === btd6_map) {
                     entryRow = row;
                     break;
                 }
             }
     
+            // Load the row where the map was found
             await sheet.loadCells(`${COLS.MAP}${entryRow}:${COLS.CURRENT}${entryRow}`);
 
+            // Assign each value to be discord-embedded in a simple default way
             values = {}
             for (key in COLS) {
                 values[key] = sheet.getCellByA1(`${COLS[key]}${entryRow}`).value
             }
     
-            // Special formatting for date
+            // Special formatting for date (get formattedValue instead)
             dateCell = sheet.getCellByA1(`${COLS.DATE}${entryRow}`);
             values.DATE = dateCell.formattedValue;
     
-            // Special formattin for cost
-            values.COST = '$' + h.numberWithCommas(values.COST)
+            // Special formatting for cost (format like cost)
+            values.COST = h.numberAsCost(values.COST)
     
-            // Special handling for link
+            // Special handling for link (use hyperlink to cleverly embed in discord)
             linkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
             values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`
+
+            // Special handling for current 
+            // (heavy checkmark doesn't format, use white heavy checkmark instead)
+            if (values.CURRENT === HEAVY_CHECK_MARK) {
+                values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+            }
     
+            // Embed and send the message
             var challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(`${values.MAP} LCC Combo`)
                 .setColor(colours['cyber']);

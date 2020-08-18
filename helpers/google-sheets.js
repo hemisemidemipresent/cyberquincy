@@ -16,9 +16,11 @@ module.exports = {
     },
 
     sheetByName(doc, title) {
+        // Filter sheets by the one that matches the given `title`
         const sheet = doc.sheetsByIndex.find(
             s => s.title.toLowerCase() === title.toLowerCase()
         );
+        
         if (sheet) {
             return sheet
         } else {

@@ -6,6 +6,10 @@ module.exports = {
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+
+    numberAsCost(x) {
+      return '$' + module.exports.numberWithCommas(x)
+    },
   
     randomIntegerFromInclusiveRange(low, high) {
         rangeInclusive = high - low + 1;

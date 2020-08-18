@@ -1,15 +1,15 @@
 {
     "prefix": "q!",
-    "token": "mo",
+    "token": "NzM3MDk0MDI3NDAwMTgzODY4.Xx4WTg.7c_pkYwoyMyPTlQ1hl2D4EHeWb0",
     "colour": "#00E6BB",
-    "type": "no",
-    "project_id": "no",
-    "private_key_id": "no",
-    "private_key": "no",
-    "client_email": "no",
-    "client_id": "no",
-    "auth_uri": "no",
-    "token_uri": "no",
-    "auth_provider_x509_cert_url": "no",
-    "client_x509_cert_url": "no"
+    "type": "service_account",
+    "project_id": "cyber-quincy-285110",
+    "private_key_id": "c8d6f653ee74fc6391a825400092ff8e1c620021",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCTHf1dimtfPcKq\nXliqJDHeLX99xbmA/tewdNwZtgsUtVbhhOtOt3Thp5gheFbesG9IBa+ORYSxa3eq\nWLm/S8RQQ0Nz4j+dNIQMimgdq7qBzd3VV1JmQGZjoHTR71FTt0P24Wc1sOj4/mGJ\nEXYuA0I+zAp4v0iyF9DU3FqmPTDTJ/YnPv2MlwaIvWo6U5ZjJt9dKaAqhW3rp7/K\nvCmqvYZW+Asw2VBIMPaXmvPv37cNQ9UvXw0neW5Sx6Wu4TObhzQVN5/e2Q+GyESn\na/fz0vGfR+0AKLcI8FGZoK9S4tMZ1RKqvgeFoTGoov0XCcwlZdx8xbyWxoHNqQlS\nREfcs20LAgMBAAECggEABcUu21zjAjzPZlRGAQJjbFX3gqzfLkaQmiyzN1TzEVBd\nhIHsos1CSdmDd4ibS6e67aW/cYKbhkPzURyiyHSF0ioZOrHckeNt7Hn/RG6oZY/4\nC/adVkJfYbf47QUIeRKemU/U9v+l26JKnBAxxPM+xWzGWl8SUF3rxHWSHqQWxqli\n1d2CHiKCKDDfXhM+1PQg2tNiJZ2Qd5V1FIR1voQnBW8bhBpdCNGk/QPRR6FaAnRO\nHW9tq+9th7zqwDLpXY7QC0/TtPOvF7apfAGQFqIbpFa5dpyNckkJsB/Pyqw8WOAZ\ndsj8CQMNHJmG4FnMkx0dvOgSmyj9wPgSBVDZ+QW+BQKBgQDPaO1kcdwFsZbv0EPf\nO1MVlHfmVIQp1j5Sd/JH++R+NLF/bymnpt0jsCTvqZTerLResU51SjyaSIEDv/yy\nRAnPWAs3MdsTLBI2JCUArD1D+sKLAa1GUAUD7Tm95mDMVe/WIUzC0iVSic2TbDv/\nr7fkEdXH64gSml44cKJdqU6y5wKBgQC1lRp50YSlpQDG5+JPnED1qJogHdbU7Lx4\nVK1F0xwA2ufKITTZQzIU3h5lh+j7jWUhKxnLd1h35sbblcq0Yq0WcpeeB26ejKGF\naIg9H6EBGwxZWI+m0RJYkATBEt9w9+/1Y+bN44c2cnoKOI4RST4k1VHnGe4fVPjA\n6IRbculUPQKBgHbRfW2VbJ42ZmlrvfYcXjR2oVlqAWyWN422+S0TuIo0VZrTa+GH\nThgryH0jgQ0vkwTMPk4jASTBdGdZjMHzCEun/ITaIs6Q6L3rZudDxLU06k4H3+Pv\n42+kbvfDCqEEeikJWpghGxB1sTdLQfPwDkCxlu64l3NQy7k5jUpqu5LxAoGBAKEC\nlXdvUS+QICA/fW0aIH+0APZ5fwVO5c/NRdekWjBn6yBQUYxVCRN34XwmB3EG76V5\nkmXYbZnkCHCtYhCRbul4svhtnqj4CkFBb4zDfwB7+3c+ECLbQGlHSu/ozDhfoWb2\nLrJiDoM4/v4RJ+gsCe6fOQCy/XLK5cgoZTSxsDQBAoGAH7jvws6QNE8J1WUY4RhK\nMRKUSSU4xHHK9qbCoHrPFnW4stxcJQvlHcEYcxlJ7GUxoyYWsQJBZeeTwksoobWv\niu3sWhIm/dHLYuctx8jli48BhxPaBhfypMO7VnyAatLeDop+Mot+1IFnkFvKYxqZ\nFldoxT/Q6Un6wu6pf9n+A1Q=\n-----END PRIVATE KEY-----\n",
+    "client_email": "cyber-quincy@cyber-quincy-285110.iam.gserviceaccount.com",
+    "client_id": "112319881424441949103",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cyber-quincy%40cyber-quincy-285110.iam.gserviceaccount.com"
 }

@@ -48,6 +48,10 @@ module.exports = {
         : int + ordinals[3];
     },
 
+    toTitleCase(str) {
+      return str.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1) )
+    },
+
     IMPOPPABLE_ROUNDS: [6, 100],
     HARD_ROUNDS: [3, 80],
     MEDIUM_ROUNDS: [1, 60],

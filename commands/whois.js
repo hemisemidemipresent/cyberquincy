@@ -1,7 +1,7 @@
 module.exports = {
     name: 'whois',
     aliases: ['who'],
-    execute(message, args, client) {
+    execute(message, args) {
         let random = Math.floor(Math.random() * 3);
         if (random === 0) {
             message.channel.send(

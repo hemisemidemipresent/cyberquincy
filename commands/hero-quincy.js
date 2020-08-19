@@ -6,7 +6,6 @@ const settings = { method: 'Get' };
 module.exports = {
     name: 'quincy',
     description: 'quincy upgrades',
-    usage: '!quincy <level>',
     aliases: [
         'q',
         'cyberquincy',
@@ -20,7 +19,7 @@ module.exports = {
         'cq',
         'infernalchimps',
     ],
-    execute(message, args, client) {
+    execute(message, args) {
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setColor(red)

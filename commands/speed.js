@@ -4,7 +4,6 @@ module.exports = {
     name: 'speed',
     aliases: ['s', 'rbs'],
     description: 'calculates the speed of speeds, even in freeplay',
-    usage: '!speed <speed/blimp> <round>',
     execute(message, args) {
         if (!args[0]) {
             let errorEmbed = new Discord.MessageEmbed()

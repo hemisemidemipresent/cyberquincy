@@ -4,7 +4,7 @@ const t = require('../jsons/temple.json');
 module.exports = {
     name: 'temple',
     aliases: ['t', 'tsg', 'sg', 'monkeygod', 'god', 'totmg', 'vtsg'],
-    execute(message, args, client) {
+    execute(message, args) {
         const newArgs = message.content.slice(1).split(/ +/);
 
         const commandName = newArgs.shift().toLowerCase();

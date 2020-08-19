@@ -7,8 +7,7 @@ module.exports = {
     name: 'jones',
     description: 'jones upgrades',
     aliases: ['SJ', 'sj', 'striker', 'bones', 'biker', 'who'],
-    usage: '!jones <level>',
-    execute(message, args, client) {
+    execute(message, args) {
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setColor(red)

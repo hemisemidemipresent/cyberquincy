@@ -18,8 +18,7 @@ module.exports = {
         'isabgirl',
         'crush',
     ],
-    usage: '!gwen <level>',
-    execute(message, args, client) {
+    execute(message, args) {
         let name = 'gwendolin';
         let level = parseInt(args[0]);
         fetch(url, settings)

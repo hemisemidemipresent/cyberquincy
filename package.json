@@ -1,6 +1,6 @@
 {
     "name": "cyberquincy",
-    "version": "1.9.5",
+    "version": "1.10.5",
     "description": "A discord bot for btd6",
     "main": "server.js",
     "scripts": {
@@ -21,6 +21,7 @@
     },
     "homepage": "https://github.com/hemisemidemipresent/cyberquincy#readme",
     "dependencies": {
+        "all": "0.0.0",
         "discord.js": "^12.2.0",
         "express": "^4.17.1",
         "filepath": "^1.1.0",

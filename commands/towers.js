@@ -220,8 +220,11 @@ module.exports = {
         'engie',
     ],
     execute(message, args) {
-        if (isValidArg(args)) {
-            return provideHelpMsg();
+        const newArgs = message.content.slice(2).split(/ +/);
+        const commandName = newArgs.shift().toLowerCase();
+        let name = findName(commandName);
+        if (!args || args[1] || args[0].includes('-')) {
+            return provideHelpMsg(message, name);
         }
         const pathStr = args[0].toString();
         const path1 = parseInt(pathStr.charAt(0));
@@ -235,7 +238,7 @@ module.exports = {
         } else if (path1 < 1 && path2 < 1) {
             path = 3;
         } else {
-            return provideHelpMsg();
+            return provideHelpMsg(message, name);
         }
         let tier = 0;
         switch (path) {
@@ -249,9 +252,7 @@ module.exports = {
                 tier = path3;
                 break;
         }
-        const newArgs = message.content.slice(2).split(/ +/);
-        const commandName = newArgs.shift().toLowerCase();
-        let name = findName(commandName);
+
         fetch(url, settings)
             .then((res) => res.json())
             .then((json) => {
@@ -297,7 +298,7 @@ module.exports = {
             });
     },
 };
-function provideHelpMsg(message) {
+function provideHelpMsg(message, name) {
     fetch(url, settings)
         .then((res) => res.json())
         .then((json) => {
@@ -407,13 +408,7 @@ function findName(commandName) {
     return;
 }
 function isValidArg(args) {
-    if (
-        !args ||
-        args[1] ||
-        isNaN(args[0]) ||
-        args[0].includes('-') ||
-        args[0].length !== 3
-    ) {
+    if (!args || args[1] || args[0].includes('-')) {
         return false;
     } else {
         return true;

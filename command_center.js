@@ -57,9 +57,7 @@ module.exports = {
                 );
 
             if (!command) {
-                return message.channel.send(
-                    `${commandName} is message, args. Type \`q!alias\` for a list of all available commands.`
-                );
+                return;
             }
 
             // Keeps track of cooldowns for commands/users and determines if cooldown has expired

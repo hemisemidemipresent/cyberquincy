@@ -3,10 +3,9 @@ const { green } = require('../jsons/colours.json');
 module.exports = {
     name: 'timer',
     aliases: ['time', 'events', 'when', '⌛'],
-    cooldown: 5,
     execute(message) {
         let now = Date.now() / 1000;
-        let arr = [now - 444600, now - 312431, now - 226031];
+        let arr = [now - 444600, now - 116200, now - 29800];
         let resultArr = [];
         arr.forEach((item) => {
             resultArr.push(parseTime(604800 - (item % 604800)));
@@ -27,7 +26,7 @@ function parseTime(time) {
     time -= hours * 3600;
     const minutes = Math.floor(time / 60);
     time -= minutes * 60;
-    return (uptime = `${days} days, ${hours} hours, ${minutes} minutes, and ${parseInt(
+    return `${days} days, ${hours} hours, ${minutes} minutes, and ${parseInt(
         time
-    )} seconds`);
+    )} seconds`;
 }

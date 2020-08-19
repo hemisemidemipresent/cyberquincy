@@ -21,6 +21,7 @@
     },
     "homepage": "https://github.com/hemisemidemipresent/cyberquincy#readme",
     "dependencies": {
+        "all": "0.0.0",
         "discord.js": "^12.2.0",
         "express": "^4.17.1",
         "google-spreadsheet": "^3.0.11",

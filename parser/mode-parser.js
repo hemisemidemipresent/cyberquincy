@@ -1,5 +1,5 @@
 const StringSetValuesParser = require('./string-set-values-parser.js');
-const AliasRepository = require('../alias-repository.js');
+
 module.exports = class ModeParser {
     type() {
         return "mode";

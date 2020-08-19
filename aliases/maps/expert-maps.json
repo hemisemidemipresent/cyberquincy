@@ -1,0 +1,10 @@
+{
+    "infernal": ["if", "inf", "fireymap"],
+    "workshop": ["w", "ws", "wk"],
+    "quad": ["q", "qd"],
+    "muddy_puddles": ["mp", "muddles", "mpuddles", "muddypuddles"],
+    "#ouch": ["ou", "#o", "couch"],
+    "bloody_puddles": ["bp", "bloodles", "bloodypuddles"],
+    "flooded_valley": ["fv", "flooded", "valley", "floodedvalley"],
+    "dark_castle": ["dca", "dank_castle", "dankcastle", "dank", "darkcastle"]
+}

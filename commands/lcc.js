@@ -26,6 +26,10 @@ module.exports = {
     // The longest delay is loading the spreadsheet itself
     // so maybe keep that loaded for some period of time while it's being used
     execute(message, args) {
+        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+            return module.exports.helpMessage(message);
+        }
+
         // `q!lcc {map}`
         try{
             var btd6_map = CommandParser.parse(
@@ -104,10 +108,24 @@ module.exports = {
         displayLCC(btd6_map);
     },
 
+    helpMessage(message) {
+        let helpEmbed = new Discord.MessageEmbed()
+            .setTitle('`q!lcc` HELP')
+            .addField(
+                '`q!lcc <map>`',
+				'The BTD6 Index entry for Least Cash CHIMPS for the queried map'
+            )
+            .addField('Valid `<map>` values', '`logs`, `cubism`, `pen`, `#ouch`, ...')
+            .addField('Example', '`q!lcc bloodles`')
+            .addField('⚠️ Disclaimer', 'Currently takes a hot second to process `q!lcc` commands.\nFix coming soon?')
+
+        return message.channel.send(helpEmbed);
+    },
+
     errorMessage(message, parsingError) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
-            .addField('Likely Cause(s)', parsingError.parsingErrors.join('\n'))
+            .addField('Likely Cause(s)', parsingError.parsingErrors.map(msg => ` • ${msg}`).join('\n'))
             .addField('Type `q!lcc` for help', ':)')
             .setColor(colours['orange']);
 

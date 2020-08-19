@@ -1,0 +1,15 @@
+{
+    "moon_landing": ["ml", "moon", "landing", "moonlanding"],
+    "cracked": ["cr", "ck", "crkd"],
+    "kartsndarts": ["kd", "kar", "kart", "karts"],
+    "firing_range": ["fr", "fir", "firing", "firingrange"],
+    "adora's_temple": ["at", "adoras_temple", "adora_temple", "atemple", "adora'stemple"],
+    "downstream": ["ds", "down"],
+    "streambed": ["sb"],
+    "spring_spring": ["ss", "spring"],
+    "spice_islands": ["sp", "si", "spice"],
+    "bazaar": ["bz", "baz"],
+    "haunted": ["ha", "haunt"],
+    "chutes": ["ch", "chut"],
+    "rake": ["r", "rk", "rke"]
+}

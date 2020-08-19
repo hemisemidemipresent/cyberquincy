@@ -56,7 +56,6 @@ module.exports = {
             .addField('Ex. #1', 'q!chincome <round> | q!chincome 8')
             .addField('Ex. #2', 'q!chincome <mode> <round> | q!chincome abr R8')
             .addField('Ex. #3', 'q!chincome <round> <mode> | q!chincome r8 halfcash')
-            .setFooter('Sorry no aliases for gamemodes')
 
         return message.channel.send(errorEmbed);
     },

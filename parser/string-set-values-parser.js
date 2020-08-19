@@ -36,7 +36,15 @@ module.exports = class StringSetValuesParser {
         } catch(e) {
             // Catch the regex error and print out a more helpful error
             if (e instanceof UserCommandError) {
-                throw new UserCommandError(`"${arg}" is not one of available values: "${this.values.join(', ')}"`);
+                var errorValues = null;
+                if (this.values.length > 10) {
+                    errorValues = this.values.slice(0, 5).map(v => `\`${v}\``).join(', ') + 
+                                    ', **...**,' +
+                                    this.values.slice(-5).map(v => `\`${v}\``).join(', ')
+                } else {
+                    erorrValues = this.values.join(', ')
+                }
+                throw new UserCommandError(`"${arg}" is not one of available values: ${errorValues}`);
             } else {
                 throw e;
             }

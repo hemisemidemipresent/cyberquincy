@@ -1,0 +1,5 @@
+{
+    "easy": ["ez", "eaz", "ezgame", "eazy", "eas"],
+    "medium": ["moderate", "med", "medi", "mid"],
+    "hard": ["difficult", "hrd"]
+}

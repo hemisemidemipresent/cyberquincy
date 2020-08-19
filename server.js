@@ -3,6 +3,7 @@ function main() {
     globalRequirements();
     consoleBootup();
     dbSetup();
+    configureAliases();
     commandCenter = configureCommands();
     generateListeners(commandCenter);
     login();
@@ -25,6 +26,8 @@ function pingHeroku() {
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.h = require('./helpers/general.js');
+    global.Files = require('./helpers/files.js');
+    global.Aliases = require('./aliases.js');
 
     global.Discord = require('discord.js');
     global.client = new Discord.Client();
@@ -90,6 +93,11 @@ function dbSetup() {
         },
     });
     Tags.sync();
+}
+
+function configureAliases() {
+    const AliasRepository = require('./aliases.js');
+    global.Aliases = new AliasRepository();    
 }
 
 function configureCommands() {

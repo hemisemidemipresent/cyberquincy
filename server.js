@@ -3,6 +3,7 @@ function main() {
     globalRequirements();
     consoleBootup();
     dbSetup();
+    googleSheetsInitialization();
     configureAliases();
     commandCenter = configureCommands();
     generateListeners(commandCenter);
@@ -93,6 +94,12 @@ function dbSetup() {
         },
     });
     Tags.sync();
+}
+
+async function googleSheetsInitialization() {
+    const GoogleSheetsHelper = require('./helpers/google-sheets.js');
+    // Load the BTD6 Index
+    global.Btd6Index = await GoogleSheetsHelper.load(GoogleSheetsHelper.BTD6_INDEX_KEY);
 }
 
 function configureAliases() {

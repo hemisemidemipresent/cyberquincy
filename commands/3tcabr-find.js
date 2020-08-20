@@ -7,7 +7,7 @@ module.exports = {
             else {
                 // comapring each element of array
                 for (let i = 0; i < a.length; i++)
-                    if (a[i].toLowerCase() != b[i].toLowerCase()) {
+                    if (a[i] != b[i]) {
                         return false;
                     }
                 return true;

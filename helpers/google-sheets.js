@@ -1,3 +1,5 @@
+const GoogleSheetsHelper = require('../helpers/google-sheets.js');
+
 module.exports = {
     BTD6_INDEX_KEY: '1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA',
 
@@ -11,6 +13,8 @@ module.exports = {
         await doc.useServiceAccountAuth(require('../1/config.json'));
 
         await doc.loadInfo(); // loads document properties and worksheets
+
+        console.log("{BTD6 Index loaded}");
 
         return doc;
     },

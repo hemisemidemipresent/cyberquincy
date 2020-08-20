@@ -30,13 +30,13 @@ module.exports = {
             const linkCell = sheet.getCellByA1(`O${n + 11}`);
             const link = `[${linkCell.value}](${linkCell.hyperlink})`;
 
-            const current = sheet.getCellByA1(`P${n + 11}`).value;
+            var current = sheet.getCellByA1(`P${n + 11}`).value;
             if (current === HEAVY_CHECK_MARK) {
                 current = WHITE_HEAVY_CHECK_MARK;
             }
 
             const challengeEmbed = new Discord.MessageEmbed()
-                .setTitle(`2tc combo #${n}`)
+                .setTitle(`2TC Combo #${n}`)
                 .addField('Tower 1', `**${tower1}** (${upgrades[0]})`, true)
                 .addField('Tower 2', `**${tower2}** (${upgrades[1]})`, true)
                 .addField('Map', `**${map}**`, true)

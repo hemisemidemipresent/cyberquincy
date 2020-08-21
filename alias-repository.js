@@ -102,9 +102,17 @@ module.exports = class AliasRepository extends Array {
     }
 
     getAliasGroupsFromSameFileAs(aliasMember) {
+        console.log('========================================');
+        console.log(`getAliasGroupsFromSameFileAs(${aliasMember})`)
         aliasMember = aliasMember.toLowerCase();
+        console.log(`  aliasMember = ${aliasMember}`);
         var ag = this.getAliasGroup(aliasMember);
-        return this.filter(otherAliasGroup => otherAliasGroup.sourcefile === ag.sourcefile);
+        console.log(ag);
+        var result = this.filter(otherAliasGroup => otherAliasGroup.sourcefile === ag.sourcefile);
+        console.log(this[0]);
+        console.log(result);
+        console.log();
+        return result;
     }
 
     

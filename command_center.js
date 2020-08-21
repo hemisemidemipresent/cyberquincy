@@ -1,6 +1,7 @@
 const fs = require('fs');
 const secrets_config = require('./1/config.json');
 const Advertisements = require('./helpers/advertisements.js');
+const AliasRepository = require('./alias-repository');
 
 module.exports = {
     PREFIX: secrets_config['prefix'],

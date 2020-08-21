@@ -5,22 +5,18 @@ module.exports = class ModeParser {
         return "mode";
     }
 
-    validModes() {
-        return Object.keys(Aliases.getAliasesFromSameFileAs('STANDARD'));
-    }
-
     // permitted modes must be a subset of valid modes
     // i.e. if command developer tried to put "cheese" it would error for obvious reasons
     constructor(...permitted_modes) {
         for (var i = 0; i < permitted_modes.length; i++) {
-            if (!this.validModes().includes(permitted_modes[i].toLowerCase())) {
+            if (!Aliases.allModes().includes(permitted_modes[i].toLowerCase())) {
                 throw new DeveloperCommandError(`${permitted_modes[i]} is not a valid gamemode`);
             }
         }
 
         // If no permitted modes are provided, the permitted modes defaults to ALL modes
         if (permitted_modes.length === 0) {
-            permitted_modes = this.validModes();
+            permitted_modes = Aliases.allModes();
         }
 
         // ModeParser is just a specific instance of StringSetValuesParser with some additional validation

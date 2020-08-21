@@ -27,7 +27,7 @@ function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.h = require('./helpers/general.js');
     global.Files = require('./helpers/files.js');
-    global.Aliases = require('./aliases.js');
+    global.AliasRepository = require('./alias-repository.js');
 
     global.Discord = require('discord.js');
     global.client = new Discord.Client();
@@ -96,8 +96,9 @@ function dbSetup() {
 }
 
 function configureAliases() {
-    const AliasRepository = require('./aliases.js');
-    global.Aliases = new AliasRepository();    
+    const AliasRepository = require('./alias-repository.js');
+    global.Aliases = new AliasRepository();
+    Aliases.asyncAliasFiles();
 }
 
 function configureCommands() {

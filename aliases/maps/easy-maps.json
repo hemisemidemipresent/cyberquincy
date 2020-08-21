@@ -1,0 +1,18 @@
+{
+    "logs": ["l", "log"],
+    "cubism": ["c", "cub", "cubi"],
+    "candy_falls": ["cy", "candy", "cfalls", "candyfalls"],
+    "carved": ["cv", "cvd"],
+    "in_the_loop": ["il", "itl", "intheloop"],
+    "tree_stump": ["ts", "tree", "stump", "treestump"],
+    "hedge": ["h", "hdg"],
+    "four_circles": ["fc", "circ", "fourcircles"],
+    "winter_park": ["wp", "winter", "winterpark"],
+    "frozen_over": ["fo", "frozen", "frozenover"],
+    "park_path": ["pk", "park", "ppath", "parkpath"],
+    "lotus_island": ["li", "lotus", "lot", "lotusisland"],
+    "alpine_run": ["ar", "alpine", "alp", "alpinerun"],
+    "town_center": ["tc", "town", "towncenter"],
+    "monkey_meadow": ["mm", "mmeadow", "monkeymeadow", "monkeymeadows"],
+    "end_of_the_road": ["er", "road", "endoftheroad", "endroad", "end_road"]
+}

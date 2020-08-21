@@ -6,6 +6,10 @@ module.exports = {
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+
+    numberAsCost(x) {
+      return '$' + module.exports.numberWithCommas(x)
+    },
   
     randomIntegerFromInclusiveRange(low, high) {
         rangeInclusive = high - low + 1;
@@ -46,6 +50,10 @@ module.exports = {
       return oPattern.includes(digits[0]) && !tPattern.includes(digits[1])
         ? int + ordinals[digits[0] - 1]
         : int + ordinals[3];
+    },
+
+    toTitleCase(str) {
+      return str.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1) )
     },
 
     IMPOPPABLE_ROUNDS: [6, 100],

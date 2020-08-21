@@ -156,7 +156,7 @@ module.exports = {
                 )
                 .setColor(cyber);
             message.channel.send(typembed);
-        } else if ((args[0] = 3)) {
+        } else if (args[0] == 3) {
             const buffembed = new Discord.MessageEmbed()
                 .setTitle(
                     'Buffs, Unless explicitly stated, buffs from the same source (ie another tower with the same upgrade), do not stack.'

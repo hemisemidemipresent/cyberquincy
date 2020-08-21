@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);

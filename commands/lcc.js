@@ -29,10 +29,12 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        // `q!lcc {map}`
-        try {
-            var btd6_map = CommandParser.parse(args, new MapParser()).map;
-        } catch (e) {
+        try{
+            var btd6_map = CommandParser.parse(
+                args,
+                new MapParser()
+            ).map;
+        } catch(e) {
             if (e instanceof ParsingError) {
                 return module.exports.errorMessage(message, e);
             } else {
@@ -41,9 +43,8 @@ module.exports = {
         }
 
         async function displayLCC(btd6_map) {
-            // Load the LCC spreadsheet
             const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
-
+            
             // Load the column containing the different maps
             await sheet.loadCells(
                 `${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`
@@ -125,11 +126,7 @@ module.exports = {
                 'Valid `<map>` values',
                 '`logs`, `cubism`, `pen`, `#ouch`, ...'
             )
-            .addField('Example', '`q!lcc bloodles`')
-            .addField(
-                '⚠️ Disclaimer',
-                'Currently takes a hot second to process `q!lcc` commands.\nFix coming soon?'
-            );
+            .addField('Example', '`q!lcc bloodles`');
 
         return message.channel.send(helpEmbed);
     },

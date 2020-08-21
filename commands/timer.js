@@ -5,7 +5,7 @@ module.exports = {
     aliases: ['time', 'events', 'when', '⌛'],
     execute(message) {
         let now = Date.now() / 1000;
-        let arr = [now - 444600, now - 116200, now - 29800];
+        let arr = [now - 444600, now - 115200, now - 28800];
         let resultArr = [];
         arr.forEach((item) => {
             resultArr.push(parseTime(604800 - (item % 604800)));

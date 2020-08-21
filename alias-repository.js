@@ -13,7 +13,7 @@ module.exports = class AliasRepository extends Array {
                 var tokens = fpath.split();
 
                 var relPath = './' + tokens.slice(
-                    tokens.findIndex(i => i === 'cyberquincy') + 1
+                    tokens.findIndex(i => i === 'aliases')
                 ).join('/');
 
                 this.loadAliasFile(relPath);

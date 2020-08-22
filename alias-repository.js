@@ -6,6 +6,11 @@ module.exports = class AliasRepository extends Array {
     // Configuration/Initialization
     ////////////////////////////////////////////////////
 
+    // {[path_tokens]: handling function}
+    SPECIAL_HANDLING_CASES = {
+        "./aliases/towers": this.loadTowerAliasFile
+    }
+
     asyncAliasFiles() {
         (async () => {
             for await (const absolutePath of Files.getFiles('./aliases', [
@@ -20,8 +25,22 @@ module.exports = class AliasRepository extends Array {
                         .slice(tokens.findIndex((i) => i === 'aliases'))
                         .join('/');
 
-                this.loadAliasFile(relPath);
+                // Determine the handling function
+                
+                // Default
+                var handlingFunction = this.loadAliasFile;
+
+                // See if the file is a special case
+                for (const specialRelPath in this.SPECIAL_HANDLING_CASES) {
+                    if (relPath.startsWith(specialRelPath)) {
+                        handlingFunction = this.SPECIAL_HANDLING_CASES[specialRelPath];
+                        break;
+                    }
+                }
+
+                handlingFunction.call(this, relPath);
             }
+            console.log(this);
         })();
     }
 
@@ -33,37 +52,47 @@ module.exports = class AliasRepository extends Array {
                 canonical: canonical,
                 aliases: nextAliases[canonical],
                 sourcefile: f,
-            };
-            try {
-                this.preventSharedAliases(nextAliasGroup);
-            } catch (e) {
-                if (e instanceof AliasError) {
-                    console.log(e.message);
-                    console.log(
-                        `  |-> Refusing to add new group ${this.formatAliasGroup(
-                            nextAliasGroup
-                        )} to collection`
-                    );
-                } else {
-                    throw e;
-                }
             }
-            this.push(nextAliasGroup);
+            this.addAliasGroup(nextAliasGroup);
         }
     }
 
-    preventSharedAliases(nextAliasGroup) {
-        this.forEach(function (existingAliasGroup) {
-            if (!existingAliasGroup.aliases) {
-                // console.log(existingAliasGroup)
-                // console.log(nextAliasGroup);
+    loadTowerAliasFile(f) {
+        const towerUpgrades = require(f);
+
+        const fpath = filepath.create(f);
+        const canonical = fpath.split().slice(-1)[0].split('.')[0];
+
+        for (const upgrade in towerUpgrades) {
+            const nextAliasGroup = {
+                canonical: `${canonical}#${upgrade}`, // spike_factory#004
+                aliases: towerUpgrades[upgrade],
+                sourcefile: f,
             }
-            var nextAliasSet = nextAliasGroup.aliases.concat(
-                nextAliasGroup.canonical
-            );
-            var existingAliasSet = existingAliasGroup.aliases.concat(
-                existingAliasGroup.canonical
-            );
+            this.addAliasGroup(nextAliasGroup);
+        }
+    }
+
+    addAliasGroup(ag) {
+        try {
+            this.preventSharedAliases(ag);
+        } catch(e) {
+            if(e instanceof AliasError) {
+                console.log(e.message);
+                console.log(`  |-> Refusing to add new group ${this.formatAliasGroup(ag)} to collection`);
+            } else {
+                throw e;
+            }
+        }
+        this.push(ag);
+    }
+
+    preventSharedAliases(nextAliasGroup) {
+        for (var i = 0; i < this.length; i++) {
+            const existingAliasGroup = this[i];
+
+            var nextAliasSet = nextAliasGroup.aliases.concat(nextAliasGroup.canonical);
+            var existingAliasSet = existingAliasGroup.aliases.concat(existingAliasGroup.canonical);
 
             var sharedAliasMembers = nextAliasSet.filter((aliasMember) =>
                 existingAliasSet.includes(aliasMember)
@@ -80,7 +109,7 @@ module.exports = class AliasRepository extends Array {
                         `${this.formatAliasGroup(nextAliasGroup)}`
                 );
             }
-        });
+        };
     }
 
     formatAliasGroup(ag) {

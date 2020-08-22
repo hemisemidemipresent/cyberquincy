@@ -6,7 +6,7 @@ module.exports = class AliasRepository extends Array {
     // Configuration/Initialization
     ////////////////////////////////////////////////////
 
-    // {[path_tokens]: handling function}
+    // {source_directory: handling function}
     SPECIAL_HANDLING_CASES = {
         "./aliases/towers": this.loadTowerAliasFile
     }
@@ -25,12 +25,12 @@ module.exports = class AliasRepository extends Array {
                         .slice(tokens.findIndex((i) => i === 'aliases'))
                         .join('/');
 
-                // Determine the handling function
+                // Determine the function that will handle the alias file
                 
                 // Default
                 var handlingFunction = this.loadAliasFile;
 
-                // See if the file is a special case
+                // See if the file has a special handler
                 for (const specialRelPath in this.SPECIAL_HANDLING_CASES) {
                     if (relPath.startsWith(specialRelPath)) {
                         handlingFunction = this.SPECIAL_HANDLING_CASES[specialRelPath];
@@ -43,6 +43,7 @@ module.exports = class AliasRepository extends Array {
         })();
     }
 
+    // Default way to load in an alias file
     loadAliasFile(f) {
         const nextAliases = require(f);
 
@@ -56,6 +57,8 @@ module.exports = class AliasRepository extends Array {
         }
     }
 
+    // This handling is a bit more complex because there is implicit
+    // meaning to the tower alias keys
     loadTowerAliasFile(f) {
         const towerUpgrades = require(f);
 
@@ -63,9 +66,13 @@ module.exports = class AliasRepository extends Array {
         var baseName = fpath.split().slice(-1)[0].split('.')[0];
 
         for (const upgrade in towerUpgrades) {
+            // xyz upgrade is meant to represent the tower as a whole ignoring upgrades
+            // which is not exactly synonymous with the 000 tower.
+            // The canonical form of the xyz tower is tower_name
+            // whereas the canonical form of a specific upgrade is tower_name#ddd where d=digit
             const canonical = upgrade == 'xyz' ? `${baseName}` : `${baseName}#${upgrade}`
             const nextAliasGroup = {
-                canonical: canonical, // spike_factory#004 or spike_factory
+                canonical: canonical,
                 aliases: towerUpgrades[upgrade],
                 sourcefile: f,
             }
@@ -73,6 +80,7 @@ module.exports = class AliasRepository extends Array {
         }
     }
 
+    // Ensure that none of the aliases clash before adding it in
     addAliasGroup(ag) {
         try {
             this.preventSharedAliases(ag);
@@ -87,6 +95,8 @@ module.exports = class AliasRepository extends Array {
         this.push(ag);
     }
 
+    // Checks canonical + aliases against all other alias groups' canonical + aliases
+    // and expects to find 0 matches between each set of aliases (alias set)
     preventSharedAliases(nextAliasGroup) {
         for (var i = 0; i < this.length; i++) {
             const existingAliasGroup = this[i];
@@ -94,9 +104,14 @@ module.exports = class AliasRepository extends Array {
             var nextAliasSet = nextAliasGroup.aliases.concat(nextAliasGroup.canonical);
             var existingAliasSet = existingAliasGroup.aliases.concat(existingAliasGroup.canonical);
 
+<<<<<<< HEAD
             var sharedAliasMembers = nextAliasSet.filter((aliasMember) =>
                 existingAliasSet.includes(aliasMember)
             );
+=======
+            // Find intersection between existing and to-be-added alias sets
+            var sharedAliasMembers = nextAliasSet.filter(aliasMember => existingAliasSet.includes(aliasMember));
+>>>>>>> Comments and fi
 
             if (sharedAliasMembers.length > 0) {
                 throw new AliasError(
@@ -120,6 +135,7 @@ module.exports = class AliasRepository extends Array {
     // Access
     ////////////////////////////////////////////////////
 
+    // Converts a member of an alias group to its canonical form
     getCanonicalForm(aliasMember) {
         var ag = this.getAliasGroup(aliasMember);
         if (ag) return ag.canonical;
@@ -134,7 +150,11 @@ module.exports = class AliasRepository extends Array {
                 ag.canonical == aliasMember || ag.aliases.includes(aliasMember)
         );
         if (!ags || ags.length == 0) {
+<<<<<<< HEAD
             null;
+=======
+            return null
+>>>>>>> Comments and fi
         } else if (ags.length == 1) {
             return ags[0];
         } else {

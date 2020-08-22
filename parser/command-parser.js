@@ -5,17 +5,9 @@ const EmptyParser = require('./empty-parser.js');
 const ParsingError = require('../exceptions/parsing-error.js');
 
 module.exports = {
-    // Handlers must take a parser list and return a list of parser lists
-    ABSTRACT_PARSERS: [
-        {parser: OptionalParser, handler: module.exports.permutateOptionalParser},
-        {parser: OrParser, handler: module.exports.expandOrParser},
-        {parser: EmptyParser, handler: module.exports.removeEmptyParser},
-    ],
-
     /**
      * Parses arguments minding the ordering `parsers` array
-     * Takes into account optional arguments and finds the permutation
-     * of applying optional parsers to find the best parsing match.
+     * Takes into account abstract parsers and resolves them to be concrete
      *  - If there is a perfect match then return it.
      *  - If not, return the attempt with the fewest errors.
      *
@@ -23,157 +15,7 @@ module.exports = {
      * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional
      */
     parse(args, ...parsers) {
-        concretizeParsers(parsers, 0);
-    },
-
-    concretizeAndParse(args, parsers, abstractParserIndex) {
-        // Base case: all abstract parsers have been concretized
-        if (module.exports.isConcrete(parsers)) {
-            return this.parseConcrete(args, parsers);
-        }
-
-        // Keep track of the result with the fewest errors
-        parsingErrorWithMinErrors = null;
-
-        // Get abstact parser function using the cycling index 
-        concretizeParserFunction = this.ABSTRACT_PARSERS[abstractParserIndex].handler;
-        // and call the function on the parsers
-        moreConcreteParsingAttempts = concretizeParserFunction.call(this, parsers);
-
-        // Loop through the results and recurse, then taking the most successful result
-        // i.e. either the successful parsing attempt or the attempt with the fewest errors
-        for (var i = 0; i < moreConcreteParsingAttempts.length; i++) {
-            // Unpack results
-            moreConcreteParsers = moreConcreteParsingAttempts[i].parsers;
-            alreadyParsed = moreConcreteParsingAttempts[i].parsed;
-
-            // Cycle to the next abstract parser
-            newAbstractParserIndex = (abstractParserIndex + 1) % this.ABSTRACT_PARSERS.length
-            try {
-                // Recurse
-                result = this.concretizeAndParse(args, moreConcreteParsers, newAbstractParserIndex)
-            } catch (e) {
-                if (e instanceof ParsingError) {
-                    // Did the parsing attempt fail with less errors than the best attempt so far?
-                    if (e.parsingErrors.length < parsingErrorWithMinErrors.parsingErrors.length) {
-                        // Then this is now the best attempt
-                        parsingErrorWithMinErrors = e;
-                    }
-                } else {
-                    // Bubble up error
-                    throw e;
-                }
-            }
-        }
-
-        // A value was never returned
-        throw parsingErrorWithMinErrors;
-    },
-
-    isConcrete(parsers) {
-        return parsers.filter( function(p) {
-            ABSTRACT_PARSERS.map(ap => ap.parser).includes(p)
-        }).length == 0;
-    },
-
-    permutateOptionalParser(parsers) {
-        numOptionalArguments = parsers.filter(p => p instanceof OptionalParser).length;
-
-        // A list of concrete-parser-lists
-        concreteParsersLists = [];
-
-        // Count up in binary to account for all permutations 
-        // of including/not including optional arguments in parsing attempt 
-        for (var i = 0; i < Math.pow(2, numOptionalArguments); i++) {
-            // 0 digit means optional parser should be on, 1 off
-            // So if there are 4 optional parsers,
-            // 0110 means that the second and third optional parsers should be ommitted in the parsing attempt
-            // And the flags below will be [true, false, false, true]
-            // 0 must be true because of the base case
-            optionalParserFlags = i
-                .toString()
-                .padStart(numOptionalArguments, '0')
-                .split('')
-                .map((c) => c == '0');
-
-            // Will hold the default values of the excluded parsers
-            // (Remember if an optional parser doesn't find a match,
-            // it stubs in the default value specified by the command developer)
-            parsedDefaultValues = new Parsed();
-            
-            // Parsers to be included in the concrete parsing (with optional parsers either solidified or excluded)
-            moreConcreteParsers = []
-
-            // Compared to the optionalParserFlags array above
-            optionalParserFlagsIndex = 0;
-
-            // Loop through all parsers in order and include all parsers but
-            // the optional ones that are to be turned off
-            for (let j = 0; j < parsers.length; j++) {
-                if (parsers[j] instanceof OptionalParser) {
-                    // If the optional parser has been assigned a 0, meaning it should be included..
-                    if (optionalParserFlags[optionalParserFlagsIndex]) {
-                        // Add the parser wrapped by the OptionalParser to the list of concrete parsers
-                        moreConcreteParsers.push(parsers[j].parser);
-                    } else {
-                        // Otherwise, add the concrete parser's type and default value to the parsed default values
-                        type = parsers[j].parser.type();
-                        value = parsers[j].defaultValue;
-                        parsedDefaultValues.addField(type, value);
-                    }
-                    optionalParserFlagsIndex++;
-                } else {
-                    // Add non-optional parsers to the array unconditionally
-                    moreConcreteParsers.push(parsers[j]);
-                }
-            }
-
-            moreConcreteParsersLists.push({
-                parsers: moreConcreteParsers, 
-                parsed: parsedDefaultValues
-            });
-        }
-
-        return concreteParsersLists;
-    },
-
-    // Just deals with one OrParser at a time for simplicity
-    // Recursion/iteration will catch the rest
-    expandOrParser(parsers) {
-        orParserIndex = parsers.findIndex(p => p instanceof OrParser)
-
-        if (orParserIndex == -1) {
-            return {parsers: parsers, parsed: new Parsed()};
-        }
-
-        parserLists = []
-        orParser = parsers[orParserIndex];
-
-        for (var i = 0; i < orParser.parserLists.length; i++) {
-            parserLists.push(
-                parsers.slice(0, orParserIndex)
-                        .concat(orParser.parserLists[i])
-                        .concat(parsers.slice(orParserIndex + 1))
-            );
-        }
-        
-        // No values were parsed in the OrParser concretization process
-        return parserLists.map(function(l) {
-            return {parsers: l, parsed: new Parsed()}
-        });
-    },
-
-    removeEmptyParser(parsers) {
-        emptyParserIndex = parsers.findIndex(p => p instanceof EmptyParser);
-
-        if (emptyParserIndex == -1) {
-            return {parsers: parsers, parsed: new Parsed()}
-        }
-
-        moreConcreteParsers = parsers.slice(0, emptyParserIndex)
-                                    .concat(parsers.slice(emptyParserIndex + 1));
-
-        return {parsers: moreConcreteParsers, parsed: new Parsed()}
+        return concretizeAndParse(args, parsers, 0);
     },
 
     /**
@@ -216,6 +58,129 @@ module.exports = {
         throw parsingErrors[0];
     },
 };
+
+// Handlers must take a parser list and return a list of parser lists
+ABSTRACT_PARSERS = [
+    {parser: OptionalParser, handler: permutateOptionalParser},
+    {parser: OrParser, handler: expandOrParser},
+    {parser: EmptyParser, handler: removeEmptyParser},
+],
+
+function concretizeAndParse(args, parsers, abstractParserIndex) {
+    // Base case: all abstract parsers have been concretized
+    if (parsers.filter(p => isAbstract(p)).length == 0) {
+        return parseConcrete(args, parsers);
+    }
+
+    // Keep track of the result with the fewest errors
+    parsingErrorWithMinErrors = null;
+
+    // Get abstact parser function using the cycling index 
+    concretizeParserFunction = ABSTRACT_PARSERS[abstractParserIndex].handler;
+    // and call the function on the parsers
+    moreConcreteParsingAttempts = concretizeParserFunction.call(parsers);
+
+    // Loop through the results and recurse, then taking the most successful result
+    // i.e. either the successful parsing attempt or the attempt with the fewest errors
+    for (var i = 0; i < moreConcreteParsingAttempts.length; i++) {
+        // Unpack results
+        moreConcreteParsers = moreConcreteParsingAttempts[i].parsers;
+        alreadyParsed = moreConcreteParsingAttempts[i].parsed;
+
+        // Cycle to the next abstract parser
+        newAbstractParserIndex = (abstractParserIndex + 1) % this.ABSTRACT_PARSERS.length
+        try {
+            // Recurse and return result if successful
+            return concretizeAndParse(args, moreConcreteParsers, newAbstractParserIndex)
+        } catch (e) {
+            if (e instanceof ParsingError) {
+                // Did the parsing attempt fail with less errors than the best attempt so far?
+                if (e.parsingErrors.length < parsingErrorWithMinErrors.parsingErrors.length) {
+                    // Then this is now the best attempt
+                    parsingErrorWithMinErrors = e;
+                }
+            } else {
+                // Bubble up error
+                throw e;
+            }
+        }
+    }
+
+    // A value was never returned
+    throw parsingErrorWithMinErrors;
+}
+
+function isAbstract(parser) {
+    return ABSTRACT_PARSERS.map(ap => ap.parser).includes(parser)
+}
+
+function permutateOptionalParser(parsers) {
+    optionalParserIndex = parsers.findIndex(p => p instanceof OptionalParser);
+
+    if (optionalParserIndex == -1) {
+        return {parsers: parsers, parsed: new Parsed()};
+    }
+
+    opt = parsers[optionalParserIndex]
+
+    // Include the optional parser's wrapped parser
+    useIt =
+        parsers.slice(0, optionalParserIndex)
+                .concat([opt.parser])
+                .concat(parsers.slice(optionalParserIndex + 1));
+    
+    // Exclude the optional parser's wrapped parser
+    loseIt =
+        parsers.slice(0, optionalParserIndex)
+                .concat(parsers.slice(optionalParserIndex + 1))
+    
+    loseItParsed = new Parsed();
+    loseItParsed.addField(p.type(), opt.defaultValue);
+
+    return [
+        {parsers: useIt, parsed: new Parsed()},
+        {parsers: loseIt, parsed: loseItParsed}
+    ]
+}
+
+// Just deals with one OrParser at a time for simplicity
+// Recursion/iteration will catch the rest
+function expandOrParser(parsers) {
+    orParserIndex = parsers.findIndex(p => p instanceof OrParser)
+
+    if (orParserIndex == -1) {
+        return {parsers: parsers, parsed: new Parsed()};
+    }
+
+    parserLists = []
+    orParser = parsers[orParserIndex];
+
+    for (var i = 0; i < orParser.parserLists.length; i++) {
+        parserLists.push(
+            parsers.slice(0, orParserIndex)
+                    .concat(orParser.parserLists[i])
+                    .concat(parsers.slice(orParserIndex + 1))
+        );
+    }
+    
+    // No values were parsed in the OrParser concretization process
+    return parserLists.map(function(l) {
+        return {parsers: l, parsed: new Parsed()}
+    });
+}
+
+function removeEmptyParser(parsers) {
+    emptyParserIndex = parsers.findIndex(p => p instanceof EmptyParser);
+
+    if (emptyParserIndex == -1) {
+        return {parsers: parsers, parsed: new Parsed()}
+    }
+
+    moreConcreteParsers = parsers.slice(0, emptyParserIndex)
+                                .concat(parsers.slice(emptyParserIndex + 1));
+
+    return {parsers: moreConcreteParsers, parsed: new Parsed()}
+}
 
 /**
  * Attempts to parse and returns the result if fully successful

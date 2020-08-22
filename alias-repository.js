@@ -40,7 +40,6 @@ module.exports = class AliasRepository extends Array {
 
                 handlingFunction.call(this, relPath);
             }
-            console.log(this);
         })();
     }
 
@@ -61,11 +60,12 @@ module.exports = class AliasRepository extends Array {
         const towerUpgrades = require(f);
 
         const fpath = filepath.create(f);
-        const canonical = fpath.split().slice(-1)[0].split('.')[0];
+        var baseName = fpath.split().slice(-1)[0].split('.')[0];
 
         for (const upgrade in towerUpgrades) {
+            const canonical = upgrade == 'xyz' ? `${baseName}` : `${baseName}#${upgrade}`
             const nextAliasGroup = {
-                canonical: `${canonical}#${upgrade}`, // spike_factory#004
+                canonical: canonical, // spike_factory#004 or spike_factory
                 aliases: towerUpgrades[upgrade],
                 sourcefile: f,
             }

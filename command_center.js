@@ -8,6 +8,8 @@ module.exports = {
 
     XPCOMMANDS: ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'],
 
+    ARG_SPLITTER: '#',
+
     configureCommands(client) {
         client.commands = new Discord.Collection();
 
@@ -62,7 +64,11 @@ module.exports = {
                 return;
             }
 
-            const canonicalArgs = args.map(arg => Aliases.getCanonicalForm(arg) || arg);
+            const canonicalArgs = args.map( function(arg) {
+                return arg.split(module.exports.ARG_SPLITTER).map( function(t) {
+                    return Aliases.getCanonicalForm(t) || t
+                }).join(module.exports.ARG_SPLITTER);
+            });
 
             // Keeps track of cooldowns for commands/users and determines if cooldown has expired
             if (Cooldowns.handleCooldown(command, message)) {

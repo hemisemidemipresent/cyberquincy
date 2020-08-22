@@ -49,7 +49,7 @@ module.exports = class StringSetValuesParser {
                             .map((v) => `\`${v}\``)
                             .join(', ');
                 } else {
-                    erorrValues = this.values.join(', ');
+                    errorValues = this.values.join(', ')
                 }
                 throw new UserCommandError(
                     `"${arg}" is not one of available values: ${errorValues}`

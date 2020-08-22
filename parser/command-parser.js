@@ -1,8 +1,17 @@
 const Parsed = require('./parsed.js');
 const OptionalParser = require('./optional-parser.js');
+const OrParser = require('./or-parser.js');
+const EmptyParser = require('./empty-parser.js');
 const ParsingError = require('../exceptions/parsing-error.js');
 
 module.exports = {
+    // Handlers must take a parser list and return a list of parser lists
+    ABSTRACT_PARSERS: [
+        {parser: OptionalParser, handler: module.exports.permutateOptionalParsers},
+        {parser: OrParser, handler: module.exports.expandOrParsers},
+        {parser: EmptyParser, handler: module.exports.clearEmptyParsers},
+    ],
+
     /**
      * Parses arguments minding the ordering `parsers` array
      * Takes into account optional arguments and finds the permutation
@@ -14,15 +23,37 @@ module.exports = {
      * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional
      */
     parse(args, ...parsers) {
-        parsingErrorWithMinErrors = null;
+        concretizeParsers(parsers, 0);
+    },
 
-        numOptionalArguments = parsers.filter(
-            (p) => p instanceof OptionalParser
-        ).length;
+    concretizeParsers(parsers, abstractParserIndex) {
+        if (module.exports.isConcrete(parsers)) {
+            return {parsers: parsers, parsed: new Parsed()}
+        }
+        concretizeParserFunction = this.ABSTRACT_PARSERS[abstractParserIndex];
+        concretize = concretizeParserFunction.call(this, args, parsers);
+        for (var i = 0; i < argParserCombinations.length; i++) {
+            nextParsers = concretize[i].parsers;
+            parsed = concretize[i].parsed;
+            this.concretizeParserFunction.call(nextParsers)
+        }
+    },
 
-        // Count up in binary to account for all permutations
-        // of including/not including optional arguments in parsing attempt
-        for (let i = 0; i < Math.pow(2, numOptionalArguments); i++) {
+    isConcrete(parsers) {
+        return parsers.filter( function(p) {
+            ABSTRACT_PARSERS.map(ap => ap.parser).includes(p)
+        }).length == 0;
+    },
+
+    permutateOptionalParsers(args, parsers) {
+        numOptionalArguments = parsers.filter(p => p instanceof OptionalParser).length;
+
+        // A list of concrete-parser-lists
+        concreteParsersLists = [];
+
+        // Count up in binary to account for all permutations 
+        // of including/not including optional arguments in parsing attempt 
+        for (var i = 0; i < Math.pow(2, numOptionalArguments); i++) {
             // 0 digit means optional parser should be on, 1 off
             // So if there are 4 optional parsers,
             // 0110 means that the second and third optional parsers should be ommitted in the parsing attempt
@@ -39,11 +70,6 @@ module.exports = {
 
             optionalParserFlagsIndex = 0;
 
-            // Will hold the default values of the excluded parsers
-            // (Remember if an optional parser doesn't find a match,
-            // it stubs in the default value specified by the command developer)
-            parsedDefaultValues = new Parsed();
-
             // Loop through all parsers in order and include all parsers but
             // the optional ones that are to be turned off
             for (let j = 0; j < parsers.length; j++) {
@@ -53,10 +79,6 @@ module.exports = {
                         // Add the parser wrapped by the OptionalParser to the list of concrete parsers
                         concreteParsers.push(parsers[j].parser);
                     } else {
-                        // Otherwise, add the concrete parser's type and default value to the parsed default values
-                        type = parsers[j].parser.type();
-                        value = parsers[j].defaultValue;
-                        parsedDefaultValues.addField(type, value);
                     }
                     optionalParserFlagsIndex++;
                 } else {
@@ -64,36 +86,11 @@ module.exports = {
                     concreteParsers.push(parsers[j]);
                 }
             }
-            try {
-                // Take the included parsers and parse 1:1 with the args
-                result = parseConcrete(args, concreteParsers);
-                // Return the first successful parsing attempt
-                return result.merge(parsedDefaultValues);
-            } catch (e) {
-                if (e instanceof ParsingError) {
-                    // Keep track of the concrete parsing attempt with the fewest errors.
-                    // These error messages are likely to best reflect what the user was trying to do
-                    if (parsingErrorWithMinErrors) {
-                        // Keep track of the parser with the minimum errors
-                        if (
-                            e.parsingErrors.length <
-                            parsingErrorWithMinErrors.parsingErrors.length
-                        ) {
-                            parsingErrorWithMinErrors = e;
-                        }
-                    } else {
-                        // If there is no minimum, this is the minimum
-                        parsingErrorWithMinErrors = e;
-                    }
-                } else {
-                    // Bubble up
-                    throw e;
-                }
-            }
+
+            concreteParsersLists.push(concreteParsers);
         }
 
-        // A value was never returned
-        throw parsingErrorWithMinErrors;
+        return concreteParsersLists;
     },
 
     /**

@@ -143,8 +143,6 @@ function permutateOptionalParser(parsers) {
     ]
 }
 
-// Just deals with one OrParser at a time for simplicity
-// Recursion/iteration will catch the rest
 function expandOrParser(parsers) {
     orParserIndex = parsers.findIndex(p => p instanceof OrParser)
 
@@ -179,6 +177,7 @@ function removeEmptyParser(parsers) {
     moreConcreteParsers = parsers.slice(0, emptyParserIndex)
                                 .concat(parsers.slice(emptyParserIndex + 1));
 
+    // No values were parsed in the OrParser concretization process
     return {parsers: moreConcreteParsers, parsed: new Parsed()}
 }
 
@@ -201,8 +200,8 @@ function parseConcrete(args, parsers) {
         parser = parsers[i];
         arg = args[i];
 
-        if (parser instanceof OptionalParser) {
-            throw 'Optional parser found in concrete parsing. Something went wrong here.';
+        if (isAbstract(parser)) {
+            throw `Abstract parser of type ${typeof Parser} found in concrete parsing. Something went wrong here.`;
         }
 
         try {

@@ -1,6 +1,4 @@
 {
-    "engineer_monkey": {
-        "000": ["engineer-monkey","engineer","engie","engi","eng","engie"],
-        "500": ["sentry_paragon", "para", "paragon"]
-    }
+    "000": ["engineer_monkey","engineer","engie","engi","eng","engie"],
+    "500": ["sentry_paragon", "para", "paragon"]
 }

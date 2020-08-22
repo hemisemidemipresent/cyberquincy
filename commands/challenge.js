@@ -4,7 +4,7 @@ module.exports = {
     name: 'challenge',
     aliases: ['rc', 'randomc', 'random', 'rchallenge', 'rch'],
 
-    execute(message) {
+    execute(message, args) {
         // what the fuck is this idk
         let heroyn = Math.floor(Math.random() * 2);
         let mapdiff = Math.floor(Math.random() * 4);

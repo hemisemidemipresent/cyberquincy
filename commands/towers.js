@@ -407,3 +407,10 @@ function findName(commandName) {
     }
     return;
 }
+function isValidArg(args) {
+    if (!args || args[1] || args[0].includes('-')) {
+        return false;
+    } else {
+        return true;
+    }
+}

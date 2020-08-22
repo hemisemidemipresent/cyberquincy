@@ -4,76 +4,48 @@ module.exports = {
     aliases: ['h', 'hp'],
     description: 'calculates the health of blimps, even in freeplay',
     execute(message, args) {
-        /*
-      <WARNING!!!>
+        //<WARNING!!!>
+        //THIS CODE IS A MESS
 
-      THIS CODE IS A MESS
-
-      */ if (
-            !isNaN(args[0]) ||
-            !args[0]
-        ) {
+        if (!args[1] || !isNaN(args[1])) {
             return message.channel.send(
-                'please specify a proper round/blimp/bloon type'
+                'the command is q!health <blimp> <round>'
             );
-        } else if (isNaN(args[0])) {
-            var b = args[0].toUpperCase();
-            var round = args[1];
-        } else if (isNaN(args[1])) {
-            var b = args[1].toUpperCase();
-            var round = args[0];
         }
-        var round1 = round - 80;
-        var round2 = round - 100;
-        var round3 = round - 125;
-        var round4 = round - 152;
-        if (b === 'MOAB') {
-            var bloon = 200;
-        } else if (b === 'BFB') {
-            var bloon = 700;
-        } else if (b === 'ZOMG') {
-            var bloon = 4000;
-        } else if (b === 'DDT') {
-            var bloon = 400;
-        } else if (b === 'BAD') {
-            var bloon = 20000;
+        let bloonName = args[0];
+        let round = args[1];
+        let bloonName = args[0];
+
+        let baseHealth;
+        if (bloonName === 'moab') {
+            baseHealth = 200;
+        } else if (bloonName === 'bfb') {
+            baseHealth = 700;
+        } else if (bloonName === 'zomg') {
+            baseHealth = 4000;
+        } else if (bloonName === 'ddt') {
+            baseHealth = 400;
+        } else if (bloonName === 'bad') {
+            baseHealth = 20000;
         } else {
             return message.channel.send('please specify a blimp, e.g. ZOMG');
         }
-        //multiplier
-        var m1 = 0.02 * round1;
-        var m2 = 0.05 * round2;
-        var m3 = 0.2 * round3;
-        var m4 = 0.5 * round4;
         //percentage increase
+        let percentageIncrease;
         if (round > 80 && round < 101) {
-            var pi = 1 + m1; //80 to 100
+            percentageIncrease = 1 + 0.02 * (round - 80); //80 to 100
         } else if (round > 100 && round < 125) {
             //100 to 125
-            var pi = 1 + m2 + 0.4;
+            percentageIncrease = 1.4 + 0.05 * (round - 100);
         } else if (round > 124 && round < 152) {
             //125 to 152
-            var pi = 1 + m3 + 0.4 + 1.25;
+            percentageIncrease = 2.65 + 0.2 * (round - 125);
         } else if (round > 151) {
-            var pi = 1 + m4 + 0.4 + 1.25 + 5.4;
+            percentageIncrease = 8.05 + 0.5 * (round - 152);
         }
-        var bhealth = Math.floor(bloon * pi);
+        let bhealth = Math.floor(baseHealth * percentageIncrease);
 
-        if (args[0] === 'moab' || args[0] === 'MOAB') {
-            var recognisable = 1;
-        } else if (args[0] === 'bfb' || args[0] === 'BFB') {
-            var recognisable = 1;
-        } else if (args[0] === 'zomg' || args[0] === 'ZOMG') {
-            var recognisable = 1;
-        } else if (args[0] === 'ddt' || args[0] === 'DDT') {
-            var recognisable = 1;
-        } else if (args[0] === 'bad' || args[0] === 'BAD') {
-            var recognisable = 1;
-        } else {
-            var recognisable = 0;
-        }
-
-        if (round > 80 && recognisable === 1) {
+        if (round > 80) {
             return message.channel.send(
                 `${bhealth} pops are needed to pop this blimp (not including children)`
             );
@@ -82,28 +54,7 @@ module.exports = {
                 'quincy has no experience in these rounds'
             );
         } else if (round > 0 && round < 81) {
-            return message.channel.send(`${bloon}`);
-        } else {
-            if (args[0] === 'moab' || args[0] === 'MOAB') {
-                return message.channel.send(`${bloon}.`);
-            } else if (args[0] === 'bfb' || args[0] === 'BFB') {
-                return message.channel.send(`${bloon}`);
-            } else if (args[0] === 'zomg' || args[0] === 'ZOMG') {
-                return message.channel.send(`${bloon}`);
-            } else if (args[0] === 'ddt' || args[0] === 'DDT') {
-                return message.channel.send(`${bloon}`);
-            } else if (args[0] === 'bad' || args[0] === 'BAD') {
-                return message.channel.send(`${bloon}`);
-            } else {
-                const errorEmbed = new Discord.MessageEmbed()
-                    .setColor('#ff0000')
-                    .setDescription('Oh no! Something went wrong!')
-                    .addField(
-                        '~~I got bonked by a DDT again~~',
-                        'Please [report the bug](https://discord.gg/VMX5hZA)'
-                    );
-                message.reply(errorEmbed);
-            }
+            return message.channel.send(`${baseHealth}`);
         }
     },
 };

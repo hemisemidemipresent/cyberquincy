@@ -8,7 +8,8 @@ module.exports = {
         message.delete();
         if (!args) {
             return message.channel.send('q!emoji help');
-        } else if (args[0] == 'all') {
+        }
+        if (args[0] == 'all') {
             let emojisGuild = message.guild.emojis.array().join(' ');
             let emojisArray = Discord.splitMessage(emojisGuild, {
                 maxLength: 1024,
@@ -30,7 +31,8 @@ module.exports = {
                 embed.addField(`Page ${i + 1}:`, emojis);
             });
             message.channel.send(emojiEmbed);
-        } else if (args[0].includes('bloonr')) {
+        }
+        if (args[0].includes('bloonr')) {
             message.channel.send(
                 '<:Red:654115974856835094> <:Blue:654116225655373834> <:Green:654118914015625266> <:Yellow:654116404567474188> <:Pink:654116034264956948> <:Black:654115811912450060> <:White:654116467087769600> <:Lead:654115684472848416>  <:Zebra:654115748305698816> <:Rainbow:654119071847022624> <:Ceram:654116160517963788> <:MOAB:653463228755738624> <:BFB:653463095699832846> <:ZOMG:653463343339798538><:BAD:653463574458662912> <:3DT:644656713009594407>'
             );

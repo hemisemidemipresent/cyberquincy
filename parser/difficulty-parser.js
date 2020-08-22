@@ -1,12 +1,7 @@
 StringSetValuesParser = require('./string-set-values-parser.js');
 
 module.exports = class DifficultyParser {
-    VALID_DIFFICULTIES = [
-        "IMPOPPABLE",
-        "HARD",
-        "MEDIUM",
-        "EASY",
-    ]
+    VALID_DIFFICULTIES = ['IMPOPPABLE', 'HARD', 'MEDIUM', 'EASY'];
 
     type() {
         return 'difficulty';
@@ -15,9 +10,11 @@ module.exports = class DifficultyParser {
     constructor(...permitted_difficulties) {
         // permitted difficulties must be a subset of valid difficulties
         // i.e. if command developer tried to put "cheese" it would error for obvious reasons
-        for (var i = 0; i < permitted_difficulties.length; i++) {
+        for (let i = 0; i < permitted_difficulties.length; i++) {
             if (!this.VALID_DIFFICULTIES.includes(permitted_difficulties[i])) {
-                throw new DeveloperCommandError(`${permitted_difficulties[i]} is not a valid difficulty`);
+                throw new DeveloperCommandError(
+                    `${permitted_difficulties[i]} is not a valid difficulty`
+                );
             }
         }
 
@@ -28,11 +25,13 @@ module.exports = class DifficultyParser {
 
         // DifficultyParser is just a specific instance of StringSetValuesParser with some additional validation
         // Decided to run with composition over inheritance because inheritance constructor rules are disgusting.
-        this.delegateParser = new StringSetValuesParser(...permitted_difficulties.map(d => d.toLowerCase()));
+        this.delegateParser = new StringSetValuesParser(
+            ...permitted_difficulties.map((d) => d.toLowerCase())
+        );
     }
 
     parse(arg) {
         // Delegate the parsing work to the StringSetValuesParser
         return this.delegateParser.parse(arg);
     }
-}
+};

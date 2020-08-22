@@ -6,7 +6,7 @@ module.exports = {
     name: 'cash',
     aliases: ['ca', 'k', 'cost'],
     execute(message, args) {
-        if (isNaN(args[0]) || isNaN(args[1]) || !args[1]) {
+        if (isNaN(args[0]) || !args[0] || isNaN(args[1]) || !args[1]) {
             return message.channel.send(
                 '**q!cash <cashNeeded> <startRound>**\nShows which round you will afford ``cashNeeded`` from popping bloons starting from round ``startRound``\nfor example q!cash 66000 63'
             );
@@ -19,7 +19,8 @@ module.exports = {
             return message.channel.send(
                 'Please enter a proper round number from 1 - 100.'
             );
-        } else if (!args[2]) {
+        }
+        if (!args[2]) {
             while (cashSoFar <= cashNeeded) {
                 addToTotal = parseInt(r[startRound].csh);
                 cashSoFar += addToTotal;

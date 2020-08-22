@@ -8,9 +8,11 @@ module.exports = class MapParser {
     constructor(...permitted_maps) {
         // permitted maps must be a subset of valid maps
         // i.e. if command developer tried to put "cheese" it would error for obvious reasons
-        for (var i = 0; i < permitted_maps.length; i++) {
+        for (let i = 0; i < permitted_maps.length; i++) {
             if (!Aliases.allMaps().includes(permitted_maps[i])) {
-                throw new DeveloperCommandError(`${permitted_maps[i]} is not a valid map`);
+                throw new DeveloperCommandError(
+                    `${permitted_maps[i]} is not a valid map`
+                );
             }
         }
 
@@ -21,11 +23,13 @@ module.exports = class MapParser {
 
         // DifficultyParser is just a specific instance of StringSetValuesParser with some additional validation
         // Decided to run with composition over inheritance because inheritance constructor rules are disgusting.
-        this.delegateParser = new StringSetValuesParser(...permitted_maps.map(d => d.toLowerCase()));
+        this.delegateParser = new StringSetValuesParser(
+            ...permitted_maps.map((d) => d.toLowerCase())
+        );
     }
 
     parse(arg) {
         // Delegate the parsing work to the StringSetValuesParser
         return this.delegateParser.parse(arg);
     }
-}
+};

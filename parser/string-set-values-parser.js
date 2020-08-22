@@ -5,19 +5,19 @@ const RegexParser = require('./regex-parser.js');
 // then the parsing succeeds.
 module.exports = class StringSetValuesParser {
     type() {
-        return "string_set_value";
+        return 'string_set_value';
     }
 
     constructor(...values) {
         // Disallow the case of no values
         if (values.length === 0) {
-            throw new DeveloperCommandError("Must provide at least one value");
+            throw new DeveloperCommandError('Must provide at least one value');
         }
 
         // values must be strings because they're matched against string args
-        for (var i = 0; i < values.length; i++) {
+        for (let i = 0; i < values.length; i++) {
             if (!h.is_str(values[i])) {
-                throw new DeveloperCommandError(`${values[i]} is not a string`)
+                throw new DeveloperCommandError(`${values[i]} is not a string`);
             }
         }
 
@@ -29,25 +29,34 @@ module.exports = class StringSetValuesParser {
         var regex = new RegExp('(' + values.join('|') + ')', 'i');
         this.delegateParser = new RegexParser(regex);
     }
-    
+
     parse(arg) {
         try {
             return this.delegateParser.parse(arg);
-        } catch(e) {
+        } catch (e) {
             // Catch the regex error and print out a more helpful error
             if (e instanceof UserCommandError) {
                 var errorValues = null;
                 if (this.values.length > 10) {
-                    errorValues = this.values.slice(0, 5).map(v => `\`${v}\``).join(', ') + 
-                                    ', **...**,' +
-                                    this.values.slice(-5).map(v => `\`${v}\``).join(', ')
+                    errorValues =
+                        this.values
+                            .slice(0, 5)
+                            .map((v) => `\`${v}\``)
+                            .join(', ') +
+                        ', **...**,' +
+                        this.values
+                            .slice(-5)
+                            .map((v) => `\`${v}\``)
+                            .join(', ');
                 } else {
-                    erorrValues = this.values.join(', ')
+                    erorrValues = this.values.join(', ');
                 }
-                throw new UserCommandError(`"${arg}" is not one of available values: ${errorValues}`);
+                throw new UserCommandError(
+                    `"${arg}" is not one of available values: ${errorValues}`
+                );
             } else {
                 throw e;
             }
         }
     }
-}
+};

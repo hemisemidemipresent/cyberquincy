@@ -8,28 +8,34 @@ module.exports = {
      * Takes into account optional arguments and finds the permutation
      * of applying optional parsers to find the best parsing match.
      *  - If there is a perfect match then return it.
-     *  - If not, return the attempt with the fewest errors. 
-     * 
+     *  - If not, return the attempt with the fewest errors.
+     *
      * @param {[String]} args Command arguments
-     * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional 
+     * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional
      */
     parse(args, ...parsers) {
         parsingErrorWithMinErrors = null;
 
-        numOptionalArguments = parsers.filter(p => p instanceof OptionalParser).length;
+        numOptionalArguments = parsers.filter(
+            (p) => p instanceof OptionalParser
+        ).length;
 
-        // Count up in binary to account for all permutations 
-        // of including/not including optional arguments in parsing attempt 
-        for (var i = 0; i < Math.pow(2, numOptionalArguments); i++) {
+        // Count up in binary to account for all permutations
+        // of including/not including optional arguments in parsing attempt
+        for (let i = 0; i < Math.pow(2, numOptionalArguments); i++) {
             // 0 digit means optional parser should be on, 1 off
             // So if there are 4 optional parsers,
             // 0110 means that the second and third optional parsers should be ommitted in the parsing attempt
             // And the flags below will be [true, false, false, true]
             // 0 must be true because of the base case
-            optionalParserFlags = i.toString().padStart(numOptionalArguments, '0').split("").map(c => c == '0');
+            optionalParserFlags = i
+                .toString()
+                .padStart(numOptionalArguments, '0')
+                .split('')
+                .map((c) => c == '0');
 
             // Parsers to be included in the concrete parsing (with optional parsers either solidified or excluded)
-            concreteParsers = []
+            concreteParsers = [];
 
             optionalParserFlagsIndex = 0;
 
@@ -40,7 +46,7 @@ module.exports = {
 
             // Loop through all parsers in order and include all parsers but
             // the optional ones that are to be turned off
-            for (var j = 0; j < parsers.length; j++) {
+            for (let j = 0; j < parsers.length; j++) {
                 if (parsers[j] instanceof OptionalParser) {
                     // If the optional parser has been assigned a 0, meaning it should be included..
                     if (optionalParserFlags[optionalParserFlagsIndex]) {
@@ -49,7 +55,7 @@ module.exports = {
                     } else {
                         // Otherwise, add the concrete parser's type and default value to the parsed default values
                         type = parsers[j].parser.type();
-                        value = parsers[j].defaultValue
+                        value = parsers[j].defaultValue;
                         parsedDefaultValues.addField(type, value);
                     }
                     optionalParserFlagsIndex++;
@@ -59,17 +65,20 @@ module.exports = {
                 }
             }
             try {
-                // Take the included parsers and parse 1:1 with the args 
+                // Take the included parsers and parse 1:1 with the args
                 result = parseConcrete(args, concreteParsers);
                 // Return the first successful parsing attempt
                 return result.merge(parsedDefaultValues);
-            } catch(e) {
-                if(e instanceof ParsingError) {
+            } catch (e) {
+                if (e instanceof ParsingError) {
                     // Keep track of the concrete parsing attempt with the fewest errors.
                     // These error messages are likely to best reflect what the user was trying to do
                     if (parsingErrorWithMinErrors) {
                         // Keep track of the parser with the minimum errors
-                        if (e.parsingErrors.length < parsingErrorWithMinErrors.parsingErrors.length) {
+                        if (
+                            e.parsingErrors.length <
+                            parsingErrorWithMinErrors.parsingErrors.length
+                        ) {
                             parsingErrorWithMinErrors = e;
                         }
                     } else {
@@ -91,7 +100,7 @@ module.exports = {
      * Runs this file's `.parse` for every ordering permutation of the supplied parsers
      * Returns the exact match or throws the error from the "most successul" attempt
      * (The parsing attempt with the least number of errros)
-     * 
+     *
      * @param {[String]} args Command arguments
      * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional
      */
@@ -109,7 +118,7 @@ module.exports = {
             try {
                 // Return first match
                 return module.exports.parse(args, ...parserOrdering);
-            } catch(e) {
+            } catch (e) {
                 if (e instanceof ParsingError) {
                     parsingErrors[i] = e;
                 } else {
@@ -120,16 +129,18 @@ module.exports = {
         }
 
         // Sort parsing errors from least to most caught errors
-        parsingErrors.sort((a, b) => a.parsingErrors.length - b.parsingErrors.length)
+        parsingErrors.sort(
+            (a, b) => a.parsingErrors.length - b.parsingErrors.length
+        );
         // The one with the least number of errors is likely to tell the best story
         throw parsingErrors[0];
     },
-}
+};
 
 /**
  * Attempts to parse and returns the result if fully successful
  * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
- * 
+ *
  * @param {[String]} args Command arguments
  * @param {[{Type}Parser]} parsers An expanded list of parsers
  */
@@ -138,10 +149,10 @@ function parseConcrete(args, parsers) {
     parsed = new Parsed();
 
     // Keeps track of all errors generating during parsing attempt
-    parsingError = new ParsingError()
+    parsingError = new ParsingError();
 
     // Iterate over parsers + arguments
-    for (var i = 0; i < Math.min(parsers.length, args.length); i++) {
+    for (let i = 0; i < Math.min(parsers.length, args.length); i++) {
         parser = parsers[i];
         arg = args[i];
 
@@ -152,7 +163,7 @@ function parseConcrete(args, parsers) {
         try {
             value = parser.parse(arg);
             parsed.addField(parser.type(), value);
-        } catch(e) {
+        } catch (e) {
             if (e instanceof UserCommandError) {
                 parsingError.addError(e);
             } else {
@@ -163,22 +174,28 @@ function parseConcrete(args, parsers) {
     }
 
     // Include an error for every missing argument
-    for (var i = args.length; i < parsers.length; i++) {
+    for (let i = args.length; i < parsers.length; i++) {
         parsingError.addError(
-            new UserCommandError(`Command is missing ${h.toOrdinalSuffix(i + 1)} argument of type \`${parsers[i].type()}\``)
+            new UserCommandError(
+                `Command is missing ${h.toOrdinalSuffix(
+                    i + 1
+                )} argument of type \`${parsers[i].type()}\``
+            )
         );
     }
 
     // Include an error for every extra argument
-    for (var i = parsers.length; i < args.length; i++) {
+    for (let i = parsers.length; i < args.length; i++) {
         parsingError.addError(
-            new UserCommandError(`Extra argument ${args[i]} at position ${i + 1}`)
+            new UserCommandError(
+                `Extra argument ${args[i]} at position ${i + 1}`
+            )
         );
     }
 
     if (parsingError.hasErrors()) {
         throw parsingError;
     }
-    
+
     return parsed;
 }

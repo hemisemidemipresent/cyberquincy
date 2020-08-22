@@ -7,9 +7,9 @@ const ParsingError = require('../exceptions/parsing-error.js');
 module.exports = {
     // Handlers must take a parser list and return a list of parser lists
     ABSTRACT_PARSERS: [
-        {parser: OptionalParser, handler: module.exports.permutateOptionalParsers},
-        {parser: OrParser, handler: module.exports.expandOrParsers},
-        {parser: EmptyParser, handler: module.exports.clearEmptyParsers},
+        {parser: OptionalParser, handler: module.exports.permutateOptionalParser},
+        {parser: OrParser, handler: module.exports.expandOrParser},
+        {parser: EmptyParser, handler: module.exports.removeEmptyParser},
     ],
 
     /**
@@ -26,17 +26,48 @@ module.exports = {
         concretizeParsers(parsers, 0);
     },
 
-    concretizeParsers(parsers, abstractParserIndex) {
+    concretizeAndParse(args, parsers, abstractParserIndex) {
+        // Base case: all abstract parsers have been concretized
         if (module.exports.isConcrete(parsers)) {
-            return {parsers: parsers, parsed: new Parsed()}
+            return this.parseConcrete(args, parsers);
         }
-        concretizeParserFunction = this.ABSTRACT_PARSERS[abstractParserIndex];
-        concretize = concretizeParserFunction.call(this, args, parsers);
-        for (var i = 0; i < argParserCombinations.length; i++) {
-            nextParsers = concretize[i].parsers;
-            parsed = concretize[i].parsed;
-            this.concretizeParserFunction.call(nextParsers)
+
+        // Keep track of the result with the fewest errors
+        parsingErrorWithMinErrors = null;
+
+        // Get abstact parser function using the cycling index 
+        concretizeParserFunction = this.ABSTRACT_PARSERS[abstractParserIndex].handler;
+        // and call the function on the parsers
+        moreConcreteParsingAttempts = concretizeParserFunction.call(this, parsers);
+
+        // Loop through the results and recurse, then taking the most successful result
+        // i.e. either the successful parsing attempt or the attempt with the fewest errors
+        for (var i = 0; i < moreConcreteParsingAttempts.length; i++) {
+            // Unpack results
+            moreConcreteParsers = moreConcreteParsingAttempts[i].parsers;
+            alreadyParsed = moreConcreteParsingAttempts[i].parsed;
+
+            // Cycle to the next abstract parser
+            newAbstractParserIndex = (abstractParserIndex + 1) % this.ABSTRACT_PARSERS.length
+            try {
+                // Recurse
+                result = this.concretizeAndParse(args, moreConcreteParsers, newAbstractParserIndex)
+            } catch (e) {
+                if (e instanceof ParsingError) {
+                    // Did the parsing attempt fail with less errors than the best attempt so far?
+                    if (e.parsingErrors.length < parsingErrorWithMinErrors.parsingErrors.length) {
+                        // Then this is now the best attempt
+                        parsingErrorWithMinErrors = e;
+                    }
+                } else {
+                    // Bubble up error
+                    throw e;
+                }
+            }
         }
+
+        // A value was never returned
+        throw parsingErrorWithMinErrors;
     },
 
     isConcrete(parsers) {
@@ -45,7 +76,7 @@ module.exports = {
         }).length == 0;
     },
 
-    permutateOptionalParsers(args, parsers) {
+    permutateOptionalParser(parsers) {
         numOptionalArguments = parsers.filter(p => p instanceof OptionalParser).length;
 
         // A list of concrete-parser-lists
@@ -65,9 +96,15 @@ module.exports = {
                 .split('')
                 .map((c) => c == '0');
 
+            // Will hold the default values of the excluded parsers
+            // (Remember if an optional parser doesn't find a match,
+            // it stubs in the default value specified by the command developer)
+            parsedDefaultValues = new Parsed();
+            
             // Parsers to be included in the concrete parsing (with optional parsers either solidified or excluded)
-            concreteParsers = [];
+            moreConcreteParsers = []
 
+            // Compared to the optionalParserFlags array above
             optionalParserFlagsIndex = 0;
 
             // Loop through all parsers in order and include all parsers but
@@ -77,20 +114,66 @@ module.exports = {
                     // If the optional parser has been assigned a 0, meaning it should be included..
                     if (optionalParserFlags[optionalParserFlagsIndex]) {
                         // Add the parser wrapped by the OptionalParser to the list of concrete parsers
-                        concreteParsers.push(parsers[j].parser);
+                        moreConcreteParsers.push(parsers[j].parser);
                     } else {
+                        // Otherwise, add the concrete parser's type and default value to the parsed default values
+                        type = parsers[j].parser.type();
+                        value = parsers[j].defaultValue;
+                        parsedDefaultValues.addField(type, value);
                     }
                     optionalParserFlagsIndex++;
                 } else {
                     // Add non-optional parsers to the array unconditionally
-                    concreteParsers.push(parsers[j]);
+                    moreConcreteParsers.push(parsers[j]);
                 }
             }
 
-            concreteParsersLists.push(concreteParsers);
+            moreConcreteParsersLists.push({
+                parsers: moreConcreteParsers, 
+                parsed: parsedDefaultValues
+            });
         }
 
         return concreteParsersLists;
+    },
+
+    // Just deals with one OrParser at a time for simplicity
+    // Recursion/iteration will catch the rest
+    expandOrParser(parsers) {
+        orParserIndex = parsers.findIndex(p => p instanceof OrParser)
+
+        if (orParserIndex == -1) {
+            return {parsers: parsers, parsed: new Parsed()};
+        }
+
+        parserLists = []
+        orParser = parsers[orParserIndex];
+
+        for (var i = 0; i < orParser.parserLists.length; i++) {
+            parserLists.push(
+                parsers.slice(0, orParserIndex)
+                        .concat(orParser.parserLists[i])
+                        .concat(parsers.slice(orParserIndex + 1))
+            );
+        }
+        
+        // No values were parsed in the OrParser concretization process
+        return parserLists.map(function(l) {
+            return {parsers: l, parsed: new Parsed()}
+        });
+    },
+
+    removeEmptyParser(parsers) {
+        emptyParserIndex = parsers.findIndex(p => p instanceof EmptyParser);
+
+        if (emptyParserIndex == -1) {
+            return {parsers: parsers, parsed: new Parsed()}
+        }
+
+        moreConcreteParsers = parsers.slice(0, emptyParserIndex)
+                                    .concat(parsers.slice(emptyParserIndex + 1));
+
+        return {parsers: moreConcreteParsers, parsed: new Parsed()}
     },
 
     /**

@@ -14,7 +14,6 @@ module.exports = {
         }
         let bloonName = args[0];
         let round = args[1];
-        let bloonName = args[0];
 
         let baseHealth;
         if (bloonName === 'moab') {

@@ -64,6 +64,9 @@ module.exports = {
                 return;
             }
 
+            // Each item in [args] either looks like `arg` or `argp1#argp2`
+            // This converts each arg part to its canonical form.
+            // `spact#025` gets converted to `spike_factory#025` for example. 
             const canonicalArgs = args.map( function(arg) {
                 return arg.split(module.exports.ARG_SPLITTER).map( function(t) {
                     return Aliases.getCanonicalForm(t) || t

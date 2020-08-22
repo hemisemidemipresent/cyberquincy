@@ -1,0 +1,6 @@
+{
+    "monkey_village": {
+        "000": ["village", "vil", "vill", "mvil"],
+        "500": ["primary_expertise", "pe", "primex"]
+    }
+}

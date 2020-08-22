@@ -17,7 +17,7 @@ module.exports = class OptionalParser {
     // The optional parser type is the type of the concrete parser wrapped in parentheses
     // This notation indicates that the corresponding argument is optional
     type() {
-        return '(' + this.parser.type() + ')';
+        return 'optional';
     }
 
     parse(arg) {

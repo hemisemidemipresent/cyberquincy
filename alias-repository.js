@@ -104,14 +104,9 @@ module.exports = class AliasRepository extends Array {
             var nextAliasSet = nextAliasGroup.aliases.concat(nextAliasGroup.canonical);
             var existingAliasSet = existingAliasGroup.aliases.concat(existingAliasGroup.canonical);
 
-<<<<<<< HEAD
             var sharedAliasMembers = nextAliasSet.filter((aliasMember) =>
                 existingAliasSet.includes(aliasMember)
             );
-=======
-            // Find intersection between existing and to-be-added alias sets
-            var sharedAliasMembers = nextAliasSet.filter(aliasMember => existingAliasSet.includes(aliasMember));
->>>>>>> Comments and fi
 
             if (sharedAliasMembers.length > 0) {
                 throw new AliasError(
@@ -150,11 +145,7 @@ module.exports = class AliasRepository extends Array {
                 ag.canonical == aliasMember || ag.aliases.includes(aliasMember)
         );
         if (!ags || ags.length == 0) {
-<<<<<<< HEAD
-            null;
-=======
             return null
->>>>>>> Comments and fi
         } else if (ags.length == 1) {
             return ags[0];
         } else {

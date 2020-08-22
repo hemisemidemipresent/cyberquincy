@@ -30,10 +30,7 @@ module.exports = {
         }
 
         try{
-            var btd6_map = CommandParser.parse(
-                args,
-                new MapParser()
-            ).map;
+            var btd6_map = CommandParser.parse(args,new MapParser()).map;
         } catch(e) {
             if (e instanceof ParsingError) {
                 return module.exports.errorMessage(message, e);

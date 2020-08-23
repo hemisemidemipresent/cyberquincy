@@ -30,6 +30,3 @@ function parseTime(time) {
         time
     )} seconds`;
 }
-function checkProgress(){
-    
-}

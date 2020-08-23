@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 module.exports = {
     name: 'help',
     description: 'List all of my commands or info about a specific command.',
@@ -14,9 +15,20 @@ module.exports = {
         'quincyh',
     ],
     cooldown: 5,
-    execute(message, args) {
-        message.channel.send(
-            'website: https://cq.netlify.com\ninvite link: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881\ndiscord server: https://discord.gg/VMX5hZA'
-        );
+    execute(message) {
+        let embed = new Discord.MessageEmbed()
+            .setTitle('Need help?')
+            .setDescription(
+                'if you want to report a bug, suggest a feature, complain to the dev personally, or flex that you added the bot to some popular discord, feel free to do so in the discord server: https://discord.gg/VMX5hZA'
+            )
+            .addField(
+                'List of commands',
+                '[commands page](https://cq.netlify.app/docs/#/)'
+            )
+            .addField(
+                'Invite the bot',
+                '[invite link](https://discord.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881%5Cndiscord)'
+            );
+        message.channel.send(embed);
     },
 };

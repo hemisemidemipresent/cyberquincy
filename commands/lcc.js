@@ -21,9 +21,6 @@ module.exports = {
 
     aliases: ['leastcash', 'lcash'],
 
-    // Results should maybe be cached somehow?
-    // The longest delay is loading the spreadsheet itself
-    // so maybe keep that loaded for some period of time while it's being used
     execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);

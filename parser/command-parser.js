@@ -64,7 +64,7 @@ concretizeAndParse = function(args, parsers, abstractParserIndex) {
     if (parsers.filter(p => isAbstractParser(p)).length == 0) {
         return parseConcrete(args, parsers);
     }
-
+    
     // Keep track of the result with the fewest errors
     parsingErrorWithMinErrors = null;
 
@@ -88,6 +88,7 @@ concretizeAndParse = function(args, parsers, abstractParserIndex) {
             return parsed.merge(alreadyParsed);
         } catch (e) {
             if (e instanceof ParsingError) {
+                console.log(e);
                 // Did the parsing attempt fail with less errors than the best attempt so far?
                 if (!parsingErrorWithMinErrors) {
                     parsingErrorWithMinErrors = e;
@@ -122,8 +123,7 @@ permutateOptionalParser = function(parsers) {
     optionalParserIndex = parsers.findIndex(p => p instanceof OptionalParser);
 
     // Return the whole list if there's no OptionalParser found
-    if (optionalParserIndex == -1) {
-        return {parsers: parsers, parsed: new Parsed()};
+    if (optionalParserIndex == -1) {        return [{parsers: parsers, parsed: new Parsed()}];
     }
 
     opt = parsers[optionalParserIndex]
@@ -131,7 +131,7 @@ permutateOptionalParser = function(parsers) {
     // Include the optional parser's wrapped parser
     useIt =
         parsers.slice(0, optionalParserIndex)
-                .concat([opt.parser])
+                .concat(opt.parser)
                 .concat(parsers.slice(optionalParserIndex + 1));
     
     // Exclude the optional parser's wrapped parser
@@ -162,7 +162,7 @@ expandOrParser = function(parsers) {
 
     // Return the whole list if there's no OrParser found 
     if (orParserIndex == -1) {
-        return {parsers: parsers, parsed: new Parsed()};
+        return [{parsers: parsers, parsed: new Parsed()}];
     }
 
     parserLists = []
@@ -176,7 +176,7 @@ expandOrParser = function(parsers) {
                     .concat(parsers.slice(orParserIndex + 1))
         );
     }
-    
+
     // No values were parsed in the OrParser concretization process
     return parserLists.map(function(l) {
         return {parsers: l, parsed: new Parsed()}
@@ -190,11 +190,12 @@ expandOrParser = function(parsers) {
  * If there is no EmptyParser, the function just returns the original list
 */
 removeEmptyParser = function(parsers) {
+    console.log('EMPTY');
     emptyParserIndex = parsers.findIndex(p => p instanceof EmptyParser);
 
     // Return the whole list if there's no OrParser found 
     if (emptyParserIndex == -1) {
-        return {parsers: parsers, parsed: new Parsed()}
+        return [{parsers: parsers, parsed: new Parsed()}]
     }
 
     // Just remove the EmptyParser if it exists
@@ -202,7 +203,7 @@ removeEmptyParser = function(parsers) {
                                 .concat(parsers.slice(emptyParserIndex + 1));
 
     // No values were parsed in the OrParser concretization process
-    return {parsers: moreConcreteParsers, parsed: new Parsed()}
+    return [{parsers: moreConcreteParsers, parsed: new Parsed()}]
 }
 
 /**

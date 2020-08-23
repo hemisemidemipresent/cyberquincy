@@ -1,17 +1,17 @@
 const MapParser = require('../parser/map-parser.js');
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
-(MIN_ROW = 1),
-    (MAX_ROW = 100),
-    (COLS = {
-        MAP: 'B',
-        COST: 'D',
-        VERSION: 'E',
-        DATE: 'F',
-        PERSON: 'G',
-        LINK: 'I',
-        CURRENT: 'J',
-    });
+const MIN_ROW = 1;
+const MAX_ROW = 100;
+const COLS = {
+    MAP: 'B',
+    COST: 'D',
+    VERSION: 'E',
+    DATE: 'F',
+    PERSON: 'G',
+    LINK: 'I',
+    CURRENT: 'J',
+};
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);

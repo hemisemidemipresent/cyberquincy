@@ -14,7 +14,7 @@ module.exports = {
      * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional
      */
     parse(args, ...parsers) {
-        parseds = concretizeAndParse(args, parsers, 0);
+        let parseds = concretizeAndParse(args, parsers, 0);
         
         // Sort parsing errors from least to most caught errors
         parseds.sort(
@@ -38,7 +38,7 @@ module.exports = {
         parserPermutations = h.allLengthNPermutations(parsers);
 
         // Keep a spot for a parsed response for every parser ordering
-        parseds = new Array(parserPermutations.length);
+        let parseds = [];
 
         for (i = 0; i < parserPermutations.length; i++) {
             parseds.push(

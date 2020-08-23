@@ -7,18 +7,16 @@ const ExactStringParser = require('../parser/exact-string-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 
-(MIN_ROW = 1),
-    (MAX_ROW = 100),
-    (COLS = {
-        NUMBER: 'B',
-        TOWER: 'C',
-        UPGRADES: 'E',
-        OG_MAP: 'F',
-        VERSION: 'H',
-        DATE: 'I',
-        PERSON: 'J',
-        LINK: 'L',
-    });
+const COLS = {
+    NUMBER: 'B',
+    TOWER: 'C',
+    UPGRADES: 'E',
+    OG_MAP: 'F',
+    VERSION: 'H',
+    DATE: 'I',
+    PERSON: 'J',
+    LINK: 'L',
+};
 
 module.exports = {
     name: '2mp',
@@ -45,33 +43,37 @@ module.exports = {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
-        async function display2MPOG(btd6_map) {
-            const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
+        async function display2MPOG(tower) {
+            const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
             
             // Load the column containing the different maps
             await sheet.loadCells(
-                `${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`
-            ); // loads all possible cells with map
+                `${COLS.TOWER}1:${COLS.TOWER}${sheet.rowCount}`
+            ); // loads all possible cells with tower
 
             // The row where the queried map is found
             var entryRow = null;
 
             // Search for the row in all "possible" rows
-            for (let row = 1; row <= MAX_ROW; row++) {
-                var mapCandidate = sheet.getCellByA1(`${COLS.MAP}${row}`).value;
+            for (let row = 1; row <= sheet.rowCount; row++) {
+                var towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
                 // input is "in_the_loop" but needs to be compared to "In The Loop"
                 if (
-                    mapCandidate &&
-                    mapCandidate.toLowerCase().replace(' ', '_') === btd6_map
+                    towerCandidate &&
+                    towerCandidate.toLowerCase().split(' ').join('_') === tower
                 ) {
                     entryRow = row;
                     break;
                 }
             }
 
+            if (!entryRow) {
+                return message.channel.send(`Tower \`${h.toTitleCase(tower.split('_').join(' '))}\` doesn't yet have a 2MP completion`);
+            }
+
             // Load the row where the map was found
             await sheet.loadCells(
-                `${COLS.MAP}${entryRow}:${COLS.CURRENT}${entryRow}`
+                `${COLS.NUMBER}${entryRow}:${COLS.LINK}${entryRow}`
             );
 
             // Assign each value to be discord-embedded in a simple default way
@@ -86,21 +88,18 @@ module.exports = {
             dateCell = sheet.getCellByA1(`${COLS.DATE}${entryRow}`);
             values.DATE = dateCell.formattedValue;
 
-            // Special formatting for cost (format like cost)
-            values.COST = h.numberAsCost(values.COST);
-
             // Special handling for link (use hyperlink to cleverly embed in discord)
             linkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
             values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
 
             // Embed and send the message
             var challengeEmbed = new Discord.MessageEmbed()
-                .setTitle(`${values.MAP} LCC Combo`)
+                .setTitle(`${values.TOWER} 2MPC Combo`)
                 .setColor(colours['cyber']);
 
             for (field in values) {
                 challengeEmbed = challengeEmbed.addField(
-                    h.toTitleCase(field),
+                    h.toTitleCase(field.replace('_', ' ')),
                     values[field],
                     true
                 );
@@ -109,23 +108,37 @@ module.exports = {
             message.channel.send(challengeEmbed);
         }
 
-        console.log(parsed);
-
-        // display2MPOG(btd6_map);
+        if (parsed.map) { // TODO
+            message.channel.send('Feature in progress');
+        } else if (parsed.exact_string) { // TODO
+            message.channel.send('Feature in progress');
+        } else if (parsed.map_difficulty) { // TODO
+            message.channel.send('Feature in progress');
+        } else {
+            indexTowerUpgradeName = Aliases.getAliasSet(parsed.tower_upgrade)[1];
+            display2MPOG(indexTowerUpgradeName);
+        }
     },
 
     helpMessage(message) {
         let helpEmbed = new Discord.MessageEmbed()
-            .setTitle('`q!lcc` HELP')
+            .setTitle('`q!2mp` HELP')
             .addField(
-                '`q!lcc <map>`',
-                'The BTD6 Index entry for Least Cash CHIMPS for the queried map'
+                '`q!2mp <tower_upgrade>`',
+                'The OG 2MP completion for the specified tower.\n' +
+                'Can either be `base_tower#\\d\\d\\d` (where \\d represents a digit).\n' +
+                'or an upgrade name like \`sentry_paragon\`. Cannot combine both.\n' +
+                'Upgrades must not include crosspathing'
             )
             .addField(
-                'Valid `<map>` values',
-                '`logs`, `cubism`, `pen`, `#ouch`, ...'
+                'Valid `<tower_upgrade>` values',
+                '`pspike`, `spact#005`, `spike_factory#005`, `permaspike`, `perma-spike`, etc.'
             )
-            .addField('Example', '`q!lcc bloodles`');
+            .addField(
+                'Invalid `<tower_upgrade>` values',
+                'spact#025, permaspike#005'
+            )
+            .addField('Example', '`q!2mp gmn`');
 
         return message.channel.send(helpEmbed);
     },

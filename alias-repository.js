@@ -196,4 +196,17 @@ module.exports = class AliasRepository extends Array {
 
         return modes.map((ag) => ag.canonical);
     }
+
+    TOWER_CANONICAL_REGEX = /[a-z]#\d\d\d/i;
+
+    allTowerUpgrades() {
+        var upgrades = []
+        for (var i = 0; i < this.length; i++) {
+            const canonical = this[i].canonical;
+            if (this.TOWER_CANONICAL_REGEX.test(canonical)) {
+                upgrades.push(canonical);
+            }
+        }
+        return upgrades;
+    }
 };

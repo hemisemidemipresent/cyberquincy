@@ -17,16 +17,6 @@ module.exports = class OrParser {
                 `OrParser must take at least 2 arguments but got just ${this.parserLists.length} instead`
             );
         }
-
-        for (var i = 0; i < parserLists.length; i++) {
-            parsers = parserLists[i];
-            if (!(parsers instanceof Array)) {
-                throw new DeveloperCommandError(
-                    `OrParser arguments must be Arrays of Parsers but ` +
-                     `${toOrdinalSuffix(i)} argument was type ${typeof parsers}.`
-                );
-            }
-        }
     }
 
     type() {

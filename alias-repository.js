@@ -162,7 +162,8 @@ module.exports = class AliasRepository extends Array {
     getAliasSet(aliasMember) {
         aliasMember = aliasMember.toLowerCase();
         var ag = this.getAliasGroup(aliasMember);
-        return [ag.canonical].concat(ag.aliases);
+        if (ag) return [ag.canonical].concat(ag.aliases);
+        else return null;
     }
 
     getAliasGroupsFromSameFileAs(aliasMember) {

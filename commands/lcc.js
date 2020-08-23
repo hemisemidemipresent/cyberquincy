@@ -28,7 +28,7 @@ module.exports = {
 
         const parsed = CommandParser.parse(args, new MapParser());
         
-        if (parsed.hasErrors) {
+        if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
         
@@ -128,7 +128,7 @@ module.exports = {
             .setTitle('ERROR')
             .addField(
                 'Likely Cause(s)',
-                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+                parsingErrors.map(msg => ` • ${msg}`).join('\n')
             )
             .addField('Type `q!lcc` for help', ':)')
             .setColor(colours['orange']);

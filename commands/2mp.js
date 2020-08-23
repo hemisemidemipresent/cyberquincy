@@ -30,23 +30,19 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        try{
-            const parsed = CommandParser.parse(
-                args,
-                new TowerUpgradeParser(),
-                new OrParser(
-                    new EmptyParser(), // OG completion for tower
-                    new MapParser(), // Completion of tower on specified map
-                    new MapDifficultyParser(), // Completions of tower on maps under specified difficulty
-                    new ExactStringParser('ALL') // All completions for tower
-                )
-            );
-        } catch(e) {
-            if (e instanceof ParsingError) {
-                return module.exports.errorMessage(message, e);
-            } else {
-                throw e;
-            }
+        const parsed = CommandParser.parse(
+            args,
+            new TowerUpgradeParser(),
+            new OrParser(
+                new EmptyParser(), // OG completion for tower
+                new MapParser(), // Completion of tower on specified map
+                new MapDifficultyParser(), // Completions of tower on maps under specified difficulty
+                new ExactStringParser('ALL') // All completions for tower
+            )
+        );
+
+        if (parsed.hasErrors()) {
+            return module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
         async function display2MPOG(btd6_map) {
@@ -134,12 +130,12 @@ module.exports = {
         return message.channel.send(helpEmbed);
     },
 
-    errorMessage(message, parsingError) {
+    errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
             .addField(
                 'Likely Cause(s)',
-                parsingError.parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
             .addField('Type `q!lcc` for help', ':)')
             .setColor(colours['orange']);

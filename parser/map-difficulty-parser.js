@@ -1,6 +1,6 @@
 StringSetValuesParser = require('./string-set-values-parser.js');
 
-module.exports = class DifficultyParser {
+module.exports = class MapDifficultyParser {
     VALID_DIFFICULTIES = ["BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"];
 
     type() {

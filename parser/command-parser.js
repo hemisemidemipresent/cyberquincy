@@ -2,7 +2,6 @@ const Parsed = require('./parsed.js');
 const OptionalParser = require('./optional-parser.js');
 const OrParser = require('./or-parser.js');
 const EmptyParser = require('./empty-parser.js');
-const ParsingError = require('../exceptions/parsing-error.js');
 
 module.exports = {
     /**
@@ -15,7 +14,15 @@ module.exports = {
      * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional
      */
     parse(args, ...parsers) {
-        return concretizeAndParse(args, parsers, 0);
+        parseds = concretizeAndParse(args, parsers, 0);
+        
+        // Sort parsing errors from least to most caught errors
+        parseds.sort(
+            (a, b) => a.parsingErrors.length - b.parsingErrors.length
+        );
+
+        // The one with the least number of errors is likely to tell the best story
+        return parseds[0];
     },
 
     /**
@@ -30,81 +37,57 @@ module.exports = {
         // Get all permutations of parser ordering
         parserPermutations = h.allLengthNPermutations(parsers);
 
-        // Keep a spot for a parsing error for every parser ordering
-        parsingErrors = new Array(parserPermutations.length);
+        // Keep a spot for a parsed response for every parser ordering
+        parseds = new Array(parserPermutations.length);
 
-        // Try-catch parsing the args with every parser ordering
         for (i = 0; i < parserPermutations.length; i++) {
-            parserOrdering = parserPermutations[i];
-
-            try {
-                // Return first match
-                return module.exports.parse(args, ...parserOrdering);
-            } catch (e) {
-                if (e instanceof ParsingError) {
-                    parsingErrors[i] = e;
-                } else {
-                    // Bubble up error
-                    throw e;
-                }
-            }
+            parseds.push(
+                module.exports.parse(args, ...parserPermutations[i])
+            );
         }
 
         // Sort parsing errors from least to most caught errors
-        parsingErrors.sort(
+        parseds.sort(
             (a, b) => a.parsingErrors.length - b.parsingErrors.length
         );
         // The one with the least number of errors is likely to tell the best story
-        throw parsingErrors[0];
+        return parseds[0];
     },
 };
 
 concretizeAndParse = function(args, parsers, abstractParserIndex) {
     // Base case: all abstract parsers have been concretized
     if (parsers.filter(p => isAbstractParser(p)).length == 0) {
-        return parseConcrete(args, parsers);
+        return [parseConcrete(args, parsers)];
     }
-    
-    // Keep track of the result with the fewest errors
-    parsingErrorWithMinErrors = null;
 
     // Get abstact parser function using the cycling index 
-    concretizeParserFunction = ABSTRACT_PARSERS[abstractParserIndex].handler;
+    const concretizeParserFunction = ABSTRACT_PARSERS[abstractParserIndex].handler;
     // and call the function on the parsers
-    moreConcreteParsingAttempts = concretizeParserFunction.call(this, parsers);
+    const moreConcreteParsingAttempts = concretizeParserFunction.call(this, parsers);
+
+    let parseds = [];
 
     // Loop through the results and recurse, then taking the most successful result
     // i.e. either the successful parsing attempt or the attempt with the fewest errors
     for (var i = 0; i < moreConcreteParsingAttempts.length; i++) {
         // Unpack results
-        moreConcreteParsers = moreConcreteParsingAttempts[i].parsers;
-        alreadyParsed = moreConcreteParsingAttempts[i].parsed;
+        const moreConcreteParsers = moreConcreteParsingAttempts[i].parsers;
+        const alreadyParsed = moreConcreteParsingAttempts[i].parsed;
 
         // Cycle to the next abstract parser
-        newAbstractParserIndex = (abstractParserIndex + 1) % this.ABSTRACT_PARSERS.length
-        try {
-            // Recurse and return result if successful
-            parsed = concretizeAndParse(args, moreConcreteParsers, newAbstractParserIndex)
-            return parsed.merge(alreadyParsed);
-        } catch (e) {
-            if (e instanceof ParsingError) {
-                console.log(e);
-                // Did the parsing attempt fail with less errors than the best attempt so far?
-                if (!parsingErrorWithMinErrors) {
-                    parsingErrorWithMinErrors = e;
-                } else if (e.parsingErrors.length < parsingErrorWithMinErrors.parsingErrors.length) {
-                    // Then this is now the best attempt
-                    parsingErrorWithMinErrors = e;
-                }
-            } else {
-                // Bubble up error
-                throw e;
-            }
-        }
+        const newAbstractParserIndex = (abstractParserIndex + 1) % this.ABSTRACT_PARSERS.length;
+        
+        // Recurse and save result
+        const newParseds = concretizeAndParse(args, moreConcreteParsers, newAbstractParserIndex);
+
+        parseds.push(
+            ...newParseds.map(pd => pd.merge(alreadyParsed))
+        );
     }
 
-    // A value was never returned
-    throw parsingErrorWithMinErrors;
+    // The one with the least number of errors is likely to tell the best story
+    return parseds;
 }
 
 isAbstractParser = function(parser) {
@@ -190,7 +173,6 @@ expandOrParser = function(parsers) {
  * If there is no EmptyParser, the function just returns the original list
 */
 removeEmptyParser = function(parsers) {
-    console.log('EMPTY');
     emptyParserIndex = parsers.findIndex(p => p instanceof EmptyParser);
 
     // Return the whole list if there's no OrParser found 
@@ -234,9 +216,6 @@ parseConcrete = function(args, parsers) {
     // The returned result that the command can read
     parsed = new Parsed();
 
-    // Keeps track of all errors generating during parsing attempt
-    parsingError = new ParsingError();
-
     // Iterate over parsers + arguments
     for (let i = 0; i < Math.min(parsers.length, args.length); i++) {
         parser = parsers[i];
@@ -251,7 +230,7 @@ parseConcrete = function(args, parsers) {
             parsed.addField(parser.type(), value);
         } catch (e) {
             if (e instanceof UserCommandError) {
-                parsingError.addError(e);
+                parsed.addError(e);
             } else {
                 // DeveloperCommandError for example
                 throw e;
@@ -261,7 +240,7 @@ parseConcrete = function(args, parsers) {
 
     // Include an error for every missing argument
     for (let i = args.length; i < parsers.length; i++) {
-        parsingError.addError(
+        parsed.addError(
             new UserCommandError(
                 `Command is missing ${h.toOrdinalSuffix(
                     i + 1
@@ -272,15 +251,11 @@ parseConcrete = function(args, parsers) {
 
     // Include an error for every extra argument
     for (let i = parsers.length; i < args.length; i++) {
-        parsingError.addError(
+        parsed.addError(
             new UserCommandError(
                 `Extra argument ${args[i]} at position ${i + 1}`
             )
         );
-    }
-
-    if (parsingError.hasErrors()) {
-        throw parsingError;
     }
 
     return parsed;

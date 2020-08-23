@@ -27,7 +27,7 @@ module.exports = class ExactStringParser {
             // Catch the regex error and print out a more helpful error
             if (e instanceof UserCommandError) {
                 throw new UserCommandError(
-                    `"${arg}" is equal to exact string \`${this.str}\``
+                    `"${arg}" is not equal to exact string \`${this.str}\``
                 );
             } else {
                 throw e;

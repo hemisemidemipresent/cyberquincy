@@ -28,7 +28,7 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        const parsed = CommandParser.parse(
+        const parsed = CommandParser.parseAnyOrder(
             args,
             new TowerUpgradeParser(),
             new OrParser(

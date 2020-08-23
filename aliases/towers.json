@@ -1,0 +1,12 @@
+{
+  "spike-factory":{
+    "base":["spac","spike"],
+    "005":["permspike"],
+    "050":["carpet"]
+  },
+  "bomb-shooter":{
+   "base":["bomb","cannon"],
+    "005":["blitz"],
+    "050":["elim"]
+  }
+}

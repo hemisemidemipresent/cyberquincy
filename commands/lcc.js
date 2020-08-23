@@ -26,15 +26,13 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        try{
-            var btd6_map = CommandParser.parse(args,new MapParser()).map;
-        } catch(e) {
-            if (e instanceof ParsingError) {
-                return module.exports.errorMessage(message, e);
-            } else {
-                throw e;
-            }
+        const parsed = CommandParser.parse(args, new MapParser());
+        
+        if (parsed.hasErrors) {
+            return module.exports.errorMessage(message, parsed.parsingErrors);
         }
+        
+        var btd6_map = parsed.map;
 
         async function displayLCC(btd6_map) {
             const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
@@ -125,12 +123,12 @@ module.exports = {
         return message.channel.send(helpEmbed);
     },
 
-    errorMessage(message, parsingError) {
+    errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
             .addField(
                 'Likely Cause(s)',
-                parsingError.parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
             .addField('Type `q!lcc` for help', ':)')
             .setColor(colours['orange']);

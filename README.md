@@ -64,3 +64,9 @@ there is a command arguments parser, [check it out](https://github.com/hemisemid
 -   the start script is `server.js`
 -   the sequelize config file is `./config`
 -   the other credentials are in `./1/config.json`
+
+# Contributing Guidelines
+
+-   try to use camelCase
+-   dont use `var` to define variables. JS is weird enough
+-   try not to do too much at once

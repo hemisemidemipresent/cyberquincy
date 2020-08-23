@@ -87,7 +87,7 @@ module.exports = class AliasRepository extends Array {
         } catch(e) {
             if(e instanceof AliasError) {
                 console.log(e.message);
-                console.log(`  |-> Refusing to add new group ${this.formatAliasGroup(ag)} to collection`);
+                console.log();
             } else {
                 throw e;
             }
@@ -208,5 +208,11 @@ module.exports = class AliasRepository extends Array {
             }
         }
         return upgrades;
+    }
+
+    allHeroes() {
+        const heroes = this.getAliasGroupsFromSameFileAs('EZILI');
+
+        return heroes.map(ag => ag.canonical);
     }
 };

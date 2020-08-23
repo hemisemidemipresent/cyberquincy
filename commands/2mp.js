@@ -1,11 +1,14 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
-const EmptyParser = require('../parser/empty-parser.js');
 const OrParser = require('../parser/or-parser.js');
+
+const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
+const HeroParser = require('../parser/hero-parser.js');
+
+const EmptyParser = require('../parser/empty-parser.js');
 const MapParser = require('../parser/map-parser.js');
 const ExactStringParser = require('../parser/exact-string-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
-const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 
 const COLS = {
     NUMBER: 'B',
@@ -30,7 +33,10 @@ module.exports = {
 
         const parsed = CommandParser.parseAnyOrder(
             args,
-            new TowerUpgradeParser(),
+            new OrParser(
+                new TowerUpgradeParser(),
+                new HeroParser()
+            ),
             new OrParser(
                 new EmptyParser(), // OG completion for tower
                 new MapParser(), // Completion of tower on specified map
@@ -115,8 +121,16 @@ module.exports = {
         } else if (parsed.map_difficulty) { // TODO
             message.channel.send('Feature in progress');
         } else {
-            indexTowerUpgradeName = Aliases.getAliasSet(parsed.tower_upgrade)[1];
-            display2MPOG(indexTowerUpgradeName);
+            let tower = null;
+            if (parsed.tower_upgrade) {
+                tower = Aliases.getAliasSet(parsed.tower_upgrade)[1];
+            } else if(parsed.hero) {
+                tower = parsed.hero
+            } else {
+                throw `Somehow the \`q!2mp\` command parsed successfully without grabbing a hero or tower upgrade`
+            }
+            
+            display2MPOG(tower);
         }
     },
 
@@ -126,9 +140,9 @@ module.exports = {
             .addField(
                 '`q!2mp <tower_upgrade>`',
                 'The OG 2MP completion for the specified tower.\n' +
-                'Can either be `base_tower#\\d\\d\\d` (where \\d represents a digit).\n' +
+                ' • Can either be `base_tower#\\d\\d\\d` (where \\d represents a digit).\n' +
                 'or an upgrade name like \`sentry_paragon\`. Cannot combine both.\n' +
-                'Upgrades must not include crosspathing'
+                ' • Upgrades must not include crosspathing.'
             )
             .addField(
                 'Valid `<tower_upgrade>` values',
@@ -150,7 +164,7 @@ module.exports = {
                 'Likely Cause(s)',
                 parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
-            .addField('Type `q!2mp` for help', ':)')
+        .addField('Type `q!2mp` for help', ':)')
             .setColor(colours['orange']);
 
         return message.channel.send(errorEmbed);

@@ -1,0 +1,8 @@
+{
+    "xyz": ["monkey-buccaneer", "boat", "buc", "bucc", "buccaneer"],
+    "300": ["destroyer", "dest", "dd"],
+    "400": ["aircraft_carrier", "aircraft", "air"],
+    "500": ["carrier_flagship", "carrier", "flagship", "flag"],
+    "040": ["monkey_pirates", "mpir"],
+    "050": ["pirate_lord", "plord", "pl"]
+}

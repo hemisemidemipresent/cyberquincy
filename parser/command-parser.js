@@ -253,7 +253,7 @@ parseConcrete = function(args, parsers) {
     for (let i = parsers.length; i < args.length; i++) {
         parsed.addError(
             new UserCommandError(
-                `Extra argument ${args[i]} at position ${i + 1}`
+                `Extra argument \`${args[i]}\` at position ${i + 1}`
             )
         );
     }

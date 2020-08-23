@@ -23,7 +23,7 @@ module.exports = class OrParser {
         return 'or';
     }
 
-    parse(_) {
+    parse() {
         throw `Must not parse directly from the OrParser. Must parse argument list parsers instead`
     }
 }

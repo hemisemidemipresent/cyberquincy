@@ -6,7 +6,7 @@ module.exports = class EmptyParser {
         return 'empty';
     }
 
-    parse(_) {
+    parse() {
         throw new DeveloperCommandError(`EmptyParser is a placeholder not meant to be parsed`);
     }
 }

@@ -7,7 +7,7 @@ module.exports = {
         //<WARNING!!!>
         //THIS CODE IS A MESS
 
-        if (!args[1] || !isNaN(args[1])) {
+        if (!args[1] || isNaN(args[1])) {
             return message.channel.send(
                 'the command is q!health <blimp> <round>'
             );
@@ -32,12 +32,10 @@ module.exports = {
         //percentage increase
         let percentageIncrease;
         if (round > 80 && round < 101) {
-            percentageIncrease = 1 + 0.02 * (round - 80); //80 to 100
+            percentageIncrease = 1 + 0.02 * (round - 80);
         } else if (round > 100 && round < 125) {
-            //100 to 125
             percentageIncrease = 1.4 + 0.05 * (round - 100);
         } else if (round > 124 && round < 152) {
-            //125 to 152
             percentageIncrease = 2.65 + 0.2 * (round - 125);
         } else if (round > 151) {
             percentageIncrease = 8.05 + 0.5 * (round - 152);

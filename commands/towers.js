@@ -225,8 +225,8 @@ module.exports = {
         const newArgs = message.content.slice(2).split(/ +/);
         const commandName = newArgs.shift().toLowerCase();
         let name = findName(commandName);
-        if (!args || args[1] || args[0].includes('-')) {
-            return provideHelpMsg(message, name);
+        if (!args || args[1]) {
+            return baseTower(message, name);
         }
         const pathStr = args[0].toString();
         const path1 = parseInt(pathStr.charAt(0));
@@ -408,11 +408,4 @@ function findName(commandName) {
         }
     }
     return;
-}
-function isValidArg(args) {
-    if (!args || args[1] || args[0].includes('-')) {
-        return false;
-    } else {
-        return true;
-    }
 }

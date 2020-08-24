@@ -22,24 +22,20 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        try {
-            parsed = CommandParser.parseAnyOrder(
-                args,
-                new OptionalParser(
-                    new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
-                    "CHIMPS" // default if not provided
-                ),
-                new RoundParser("IMPOPPABLE")
-            );
-    
-            return message.channel.send(chincomeMessage(parsed.mode, parsed.round));
-        } catch(e) {
-            if (e instanceof ParsingError) {
-                module.exports.errorMessage(message, e)
-            } else {
-                throw e;
-            }
+        parsed = CommandParser.parseAnyOrder(
+            args,
+            new OptionalParser(
+                new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
+                "CHIMPS" // default if not provided
+            ),
+            new RoundParser("IMPOPPABLE")
+        );
+
+        if (parsed.hasErrors()) {
+            return module.exports.errorMessage(message, parsed.parsingErrors)
         }
+
+        return message.channel.send(chincomeMessage(parsed.mode, parsed.round));
     },
 
     helpMessage(message) {
@@ -60,10 +56,10 @@ module.exports = {
         return message.channel.send(errorEmbed);
     },
 
-    errorMessage(message, parsingError) {
+    errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
-            .addField('Likely Cause(s)', parsingError.parsingErrors.join('\n'))
+            .addField('Likely Cause(s)', parsingErrors.join('\n'))
             .addField('Type `q!chincome` for help', ':)')
             .setColor(colors['orange']);
 

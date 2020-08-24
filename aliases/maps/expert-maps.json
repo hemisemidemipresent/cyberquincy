@@ -1,7 +1,7 @@
 {
     "infernal": ["if", "inf", "fireymap"],
     "workshop": ["w", "ws", "wk"],
-    "quad": ["q", "qd"],
+    "quad": ["qu", "qd"],
     "muddy_puddles": ["mp", "muddles", "mpuddles", "muddypuddles"],
     "#ouch": ["ou", "#o", "couch"],
     "bloody_puddles": ["bp", "bloodles", "bloodypuddles"],

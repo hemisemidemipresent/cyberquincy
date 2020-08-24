@@ -3,6 +3,7 @@ function main() {
     globalRequirements();
     consoleBootup();
     dbSetup();
+    googleSheetsInitialization();
     configureAliases();
     commandCenter = configureCommands();
     generateListeners(commandCenter);
@@ -39,7 +40,6 @@ function globalRequirements() {
 
     global.UserCommandError = require('./exceptions/user-command-error.js');
     global.DeveloperCommandError = require('./exceptions/developer-command-error.js');
-    global.ParsingError = require('./exceptions/parsing-error.js');
 
     global.Xp = require('./helpers/xp.js');
     global.DiscordUsers = require('./helpers/discord-users.js');
@@ -93,6 +93,12 @@ function dbSetup() {
         },
     });
     Tags.sync();
+}
+
+async function googleSheetsInitialization() {
+    const GoogleSheetsHelper = require('./helpers/google-sheets.js');
+    // Load the BTD6 Index
+    global.Btd6Index = await GoogleSheetsHelper.load(GoogleSheetsHelper.BTD6_INDEX_KEY);
 }
 
 function configureAliases() {

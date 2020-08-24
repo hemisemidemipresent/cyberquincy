@@ -1,0 +1,12 @@
+{
+    "xyz": ["sniper-monkey", "sniper", "sn", "snip", "snooper", "snipermonkey"],
+    "300": ["deadly_precision", "deadly", "precision", "deadlyprecision", "deadly-precision"],
+    "400": ["maim_moab", "maim", "maimoab", "maimmoab", "mainmoan"],
+    "500": ["cripple_moab", "cripple", "cripplemoab", "cripple-moab"],
+    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb", "bouncing-bullet"],
+    "040": ["supply_drop", "supplydrop", "supply", "sd"],
+    "050": ["elite_sniper", "es", "esniper", "elitesniper", "elite-sniper"],
+    "003": ["semi_automatic", "semi", "semiauto", "semi-automatic"],
+    "004": ["fully_automatic", "fullauto", "fullyauto", "fully-automatic"],
+    "005": ["elite_defender", "ed"]
+}

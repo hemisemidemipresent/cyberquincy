@@ -7,6 +7,11 @@ pluralize = require('pluralize');
 // at which point the command developer can then decide how to read and handle them.
 // Note that there's no guarantee on ordering for the values of the pluralized keys
 module.exports = class Parsed extends Object {
+    constructor() {
+        super();
+        this.parsingErrors = [];
+    }
+
     addField(type, value) {
         var types = pluralize(type)
 
@@ -37,6 +42,27 @@ module.exports = class Parsed extends Object {
             parsed.addField(type, otherParsed[type]);
         }
 
+        parsed.parsingErrors = this.parsingErrors.concat(otherParsed.parsingErrors);
+
         return parsed;
+    }
+
+    addError(e) {
+        // If `e` is a String, then wrap it into an error
+        if (h.is_str(e)) {
+            e = new Error(e);
+        }
+
+        // At this point, `e` has to be of type Error
+        if (!(e instanceof Error)) {
+            throw `\`e\` must be error or string in \`Parsed.addError(e)\`. Got ${typeof e}`;
+        }
+
+        // Add the error to the running list
+        this.parsingErrors.push(e);
+    }
+
+    hasErrors() {
+        return this.parsingErrors.length > 0;
     }
 }

@@ -53,7 +53,7 @@ module.exports = {
     },
 
     toTitleCase(str) {
-      return str.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1) )
+      return str.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1) ).join(' ')
     },
 
     IMPOPPABLE_ROUNDS: [6, 100],

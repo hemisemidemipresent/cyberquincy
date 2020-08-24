@@ -21,8 +21,6 @@ module.exports = class MapParser {
             permitted_maps = Aliases.allMaps();
         }
 
-        // DifficultyParser is just a specific instance of StringSetValuesParser with some additional validation
-        // Decided to run with composition over inheritance because inheritance constructor rules are disgusting.
         this.delegateParser = new StringSetValuesParser(
             ...permitted_maps.map((d) => d.toLowerCase())
         );

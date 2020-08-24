@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
@@ -7,17 +8,8 @@ module.exports = {
     name: '2tc',
     execute(message, args) {
         async function access(n) {
-            const { GoogleSpreadsheet } = require('google-spreadsheet');
-
-            // spreadsheet key is the long id in the sheets URL
-            const doc = new GoogleSpreadsheet(
-                '1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA'
-            );
-            // load directly from json file if not in secure environment
-            await doc.useServiceAccountAuth(require('../1/config.json'));
-
-            await doc.loadInfo(); // loads document properties and worksheets
-            const sheet = doc.sheetsByIndex[1]; //load 2tc spreadsheet
+            const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+            
             await sheet.loadCells(`C${n + 11}:P${n + 11}`); // loads a range of cells
             const tower1 = sheet.getCellByA1(`C${n + 11}`).value;
             const tower2 = sheet.getCellByA1(`E${n + 11}`).value;

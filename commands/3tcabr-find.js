@@ -14,14 +14,7 @@ module.exports = {
             }
         }
         async function access(testArr) {
-            const { GoogleSpreadsheet } = require('google-spreadsheet');
-            const doc = new GoogleSpreadsheet(
-                '1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA'
-            );
-            // load directly from json file
-            await doc.useServiceAccountAuth(require('../1/config.json'));
-            await doc.loadInfo(); // loads document properties and worksheets
-            const sheet = doc.sheetsByIndex[2]; //load 3tcrbs spreadsheet
+            const sheet = Btd6Index.sheetsByIndex[2]; //load 3tcrbs spreadsheet
             await sheet.loadCells(`L6:L7`);
             let numberOfCombos = sheet.getCellByA1('L6').value;
             let n = 1;

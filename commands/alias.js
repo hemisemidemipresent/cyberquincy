@@ -1,52 +1,41 @@
+const RegexParser = require("../parser/regex-parser");
+
 module.exports = {
     name: "alias",
 
     aliases: ["al", "aliases"],
 
     execute(message, args) {
-        if (!args[0]) {
+        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);
         }
 
-        if (args[1]) {
-            return module.exports.errorMessage(
-                message,
-                'More than one argument was provided'
-            );
+        alias = CommandParser.parse(
+            args,
+            new RegexParser(/^(.*?)$/) // Match anything
+        ).regex;
+
+        if (parsed.hasErorrs) {
+            return module.exports.errorMessage(message, parsed.parsingErrors)
         }
 
-        // The command being queried can either be a command name
-        // or a command alias
-        let command =
-            client.commands.get(args[0]) ||
-            client.commands.find(
-                (cmd) => cmd.aliases && cmd.aliases.includes(args[0])
-            );
-
-        if (command) {
-            return this.aliasMessage(message, command);
-        } else {
-            return module.exports.errorMessage(
-                message,
-                `There are no aliases for ${args[0]} because it is not a command.`
-            )
+        aliasSet = Aliases.getAliasSet(alias)
+        if (aliasSet) {
+            return module.exports.aliasMessageArg(message, alias, aliasSet);
         }
+        return module.exports.errorMessage(
+            message,
+            [`There are no aliases for ${alias} because it is not in the alias database.`]
+        )
     },
 
-    aliasMessage(message, command) {
+    aliasMessageArg(message, aliasMember, aliasSet) {
         let aliasEmbed = null;
 
-        if(command.aliases && Array.isArray(command.aliases) && command.aliases.length > 0) {
-            aliasEmbed = new Discord.MessageEmbed()
-                    .setTitle(`Aliases for \`q!${command.name}\`:`)
-                    .setDescription(`${command.aliases.join(', ')}`)
-                    .setColor(colours["cyber"]);
-        } else {
-            aliasEmbed = new Discord.MessageEmbed()
-                    .setTitle(`There are no alises for \`q!${command.name}\``)
-                    .setDescription("Type `q!alias` to discover other commands")
-                    .setColor(colours["cyber"]);
-        }
+        aliasEmbed = new Discord.MessageEmbed()
+                .setTitle(`Aliases for \`${aliasMember}\`:`)
+                .setDescription(`${aliasSet.join(', ')}`)
+                .setColor(colours["cyber"]);
         
         return message.channel.send(aliasEmbed)
     },
@@ -56,28 +45,26 @@ module.exports = {
                 .setTitle(`q!alias <command>`)
                 .addField(
                     'Use',
-                    'Learn all of the different ways to invoke a given command'
+                    'Learn all of the different ways to provide arguments to commands'
                 )
-                .addField(
-                    'Available Commands',
-                    `${[ ...client.commands.keys() ].sort().join(', ')}`
-                )
+                .setFooter("Maybe you're looking for `q!command-alias` for command aliases")
                 .setColor(colours["cyber"]);
 
         return message.channel.send(messageEmbed);
     },
 
-    errorMessage(message, errorMessage) {
+    errorMessage(message, errorMessages) {
         let errorEmbed = new Discord.MessageEmbed()
                 .setTitle("ERROR")
                 .addField(
-                    "Cause",
-                    errorMessage
+                    "Cause(s)",
+                    errorMessages.join('\n'),
                 )
                 .addField(
                     "Type `q!alias` for help",
                     ":)"
                 )
+                .setFooter("Maybe you're looking for `q!command-alias` for command aliases")
                 .setColor(colours["orange"]);
 
         return message.channel.send(errorEmbed);    

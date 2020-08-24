@@ -1,17 +1,17 @@
 const MapParser = require('../parser/map-parser.js');
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
-(MIN_ROW = 1),
-    (MAX_ROW = 100),
-    (COLS = {
-        MAP: 'B',
-        COST: 'D',
-        VERSION: 'E',
-        DATE: 'F',
-        PERSON: 'G',
-        LINK: 'I',
-        CURRENT: 'J',
-    });
+const MIN_ROW = 1;
+const MAX_ROW = 100;
+const COLS = {
+    MAP: 'B',
+    COST: 'D',
+    VERSION: 'E',
+    DATE: 'F',
+    PERSON: 'G',
+    LINK: 'I',
+    CURRENT: 'J',
+};
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
@@ -21,34 +21,22 @@ module.exports = {
 
     aliases: ['leastcash', 'lcash'],
 
-    // Results should maybe be cached somehow?
-    // The longest delay is loading the spreadsheet itself
-    // so maybe keep that loaded for some period of time while it's being used
     execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);
         }
 
-        // `q!lcc {map}`
-        try {
-            var btd6_map = CommandParser.parse(args, new MapParser()).map;
-        } catch (e) {
-            if (e instanceof ParsingError) {
-                return module.exports.errorMessage(message, e);
-            } else {
-                throw e;
-            }
+        const parsed = CommandParser.parse(args, new MapParser());
+        
+        if (parsed.hasErrors()) {
+            return module.exports.errorMessage(message, parsed.parsingErrors);
         }
+        
+        var btd6_map = parsed.map;
 
         async function displayLCC(btd6_map) {
-            // Load the BTD6 Index
-            doc = await GoogleSheetsHelper.load(
-                GoogleSheetsHelper.BTD6_INDEX_KEY
-            );
-
-            // Load the LCC spreadsheet
-            const sheet = GoogleSheetsHelper.sheetByName(doc, 'lcc');
-
+            const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
+            
             // Load the column containing the different maps
             await sheet.loadCells(
                 `${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`
@@ -130,21 +118,17 @@ module.exports = {
                 'Valid `<map>` values',
                 '`logs`, `cubism`, `pen`, `#ouch`, ...'
             )
-            .addField('Example', '`q!lcc bloodles`')
-            .addField(
-                '⚠️ Disclaimer',
-                'Currently takes a hot second to process `q!lcc` commands.\nFix coming soon?'
-            );
+            .addField('Example', '`q!lcc bloodles`');
 
         return message.channel.send(helpEmbed);
     },
 
-    errorMessage(message, parsingError) {
+    errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
             .addField(
                 'Likely Cause(s)',
-                parsingError.parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+                parsingErrors.map(msg => ` • ${msg}`).join('\n')
             )
             .addField('Type `q!lcc` for help', ':)')
             .setColor(colours['orange']);

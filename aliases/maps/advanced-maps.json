@@ -1,12 +1,28 @@
 {
     "cornfield": ["cf", "corn", "field"],
-    "spillway": ["sw", "spill"],
-    "high_finance": ["hf", "hifi", "hi-fi", "finance", "fin", "highfinance"],
-    "another_brick": ["ab", "abrick", "anotherbrick"],
-    "off_the_coast": ["of", "off", "otc", "offthecoast"],
-    "peninsula": ["pn", "peni", "penis", "pen"],
-    "pat's_pond": ["pp", "pond", "ppond", "pats_pond", "pat'spond", "patspond"],
-    "geared": ["gd", "gear", "grd"],
-    "underground": ["ug", "under"],
-    "cargo": ["cg", "cgo"]
+    "spillway": ["sw", "spill", "way"],
+    "high_finance": [
+        "hf",
+        "hifi",
+        "hi-fi",
+        "finance",
+        "fin",
+        "highfinance",
+        "high"
+    ],
+    "another_brick": ["ab", "abrick", "anotherbrick", "another"],
+    "off_the_coast": ["of", "off", "otc", "offthecoast", "coast"],
+    "peninsula": ["pn", "peni", "penis", "pen", "penin"],
+    "pat's_pond": [
+        "pp",
+        "pond",
+        "ppond",
+        "pats_pond",
+        "pat'spond",
+        "patspond",
+        "pats"
+    ],
+    "geared": ["gd", "gear", "grd", "geard"],
+    "underground": ["ug", "under", "ground"],
+    "cargo": ["cg", "cgo", "car", "go"]
 }

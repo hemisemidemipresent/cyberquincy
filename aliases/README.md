@@ -24,23 +24,17 @@ Args -> converted to standardized args -> sent to `./commands`
 
     example:
 
-    > note: this isn't that full code
+    > note: this isn't the full code
 
 ```js
-loadAliasFile(filePath) {
-  const nextAliases = require(filePath);
-
-  for (const canonical in nextAliases) {
-     const aliasGroup = {
-        canonical: canonical,
-        aliases: nextAliases[canonical],
-        sourcefile: filePath,
-    };
- }
-}
+const aliasGroup = {
+    canonical: canonical,
+    aliases: nextAliases[canonical],
+    sourcefile: filePath,
+};
 ```
 
-the `nextAliases` is a **json file** for example, here is the difficulty alias json:
+the `nextAliases` above is a **json file** for example, here is the difficulty alias json:
 
 ```json
 {

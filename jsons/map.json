@@ -1,5 +1,5 @@
 {
-    "Logs": {
+    "logs": {
         "ver": 1,
         "len": 53.1,
         "obj": 0,
@@ -11,7 +11,7 @@
             "e": "1/1"
         }
     },
-    "Cubism": {
+    "cubism": {
         "ver": 1,
         "len": 43.3,
         "obj": 0,
@@ -23,499 +23,7 @@
             "e": "1/1"
         }
     },
-    "Carved": {
-        "ver": 13,
-        "len": 39.3,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.03",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/629933199241510922/642749385532243982/Screenshot_20191109_233620.jpg",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "In The Loop": {
-        "ver": 1,
-        "len": 39.1,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.02",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920748082331648/InTheLoopBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Tree Stump": {
-        "ver": 1,
-        "len": 38.9,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "-",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920780839583770/TreeStump.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Hedge": {
-        "ver": 1,
-        "len": 38.5,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "-",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920746106683412/HedgeBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Four Circles": {
-        "ver": 1,
-        "len": 36.4,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.03",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920746920247306/FourCirclesBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Winter Park": {
-        "ver": 14,
-        "len": 36.1,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.02",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489345432125482/1000.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Frozen Over": {
-        "ver": 5,
-        "len": 35.5,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.07",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920781821313024/Frozen_Over.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Park Path": {
-        "ver": 11,
-        "len": 35.4,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.05",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920352802734090/IMG_20190830_115856_636.JPG",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Alpine Run": {
-        "ver": 7,
-        "len": 32.2,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "-",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920780839583769/Alpine_Run.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Town Center": {
-        "ver": 1,
-        "len": 30.5,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.07",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634032881475256378/Screenshot_20191016_222001.jpg",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Monkey Meadows": {
-        "ver": 1,
-        "len": 29.2,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "-",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920817988665344/MonkeyMeadow.jpg",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "End Of The Road": {
-        "ver": 1,
-        "len": 26.5,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.03",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920689085120563/EndofRoadNew.jpg",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Moon Landing": {
-        "ver": 6,
-        "len": 35.5,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "-",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920688183476234/Moon_Landing.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Cracked": {
-        "ver": 1,
-        "len": 33.2,
-        "obj": 1,
-        "Cos": "1000",
-        "wa%": "0% / 2%",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920603449884672/CrackedBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "KartsNDarts": {
-        "ver": 8,
-        "len": 32.7,
-        "obj": 2,
-        "Cos": "1000",
-        "wa%": "-",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920353947516928/IMG_20190830_115844_727.JPG",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Firing Range": {
-        "ver": 2,
-        "len": 29.8,
-        "obj": 1,
-        "Cos": "1000",
-        "wa%": "0.02",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920643006496768/F0D3485E-093D-46A4-AC11-005A93A918DF.jpg",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Adora's Temple": {
-        "ver": 14,
-        "len": 29,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.04",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489266017173534/latest.png",
-        "e": {
-            "e": "4/4"
-        }
-    },
-    "Downstream": {
-        "ver": 4,
-        "len": 26.4,
-        "obj": 2,
-        "Cos": "700",
-        "wa%": "0.12",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920353947516929/IMG_20190830_115830_843.JPG",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Streambed": {
-        "ver": 1,
-        "len": 27.1,
-        "obj": 1,
-        "Cos": "1000",
-        "wa%": "0.06",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920605211623435/StreambedBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Spring Spring": {
-        "ver": 10,
-        "len": 24.8,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.45",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920688183476235/Spring_Spring.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Spice Islands": {
-        "ver": 1,
-        "len": 23.8,
-        "obj": 1,
-        "Cos": "1000",
-        "wa%": "0.77",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920495870181376/SpiceIslandBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Haunted": {
-        "ver": 5,
-        "len": 19.7,
-        "obj": 2,
-        "Cos": "1000",
-        "wa%": "0.04",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920643903946752/Haunted.png",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Chutes": {
-        "ver": 1,
-        "len": 16.2,
-        "obj": 2,
-        "Cos": "700",
-        "wa%": "0.04",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920604343533581/ChutesBTD6.png",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Rake": {
-        "ver": 1,
-        "len": 16,
-        "obj": 1,
-        "Cos": "1000",
-        "wa%": "0.04",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920494976925696/RakeBTD6.png",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Cornfield": {
-        "ver": 1,
-        "len": 24.2,
-        "obj": 13,
-        "Cos": "9300",
-        "wa%": "-",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920467915276309/CornfieldBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Spillway": {
-        "ver": 12,
-        "len": 23,
-        "obj": 4,
-        "Cos": "8000",
-        "wa%": "0.06",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488837233475644/latest.png",
-        "e": {
-            "e": "4/4"
-        }
-    },
-    "High Finance": {
-        "ver": 3,
-        "len": 21.6,
-        "obj": 15,
-        "Cos": "12550",
-        "wa%": "0.02",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920354648227841/IMG_20190830_115757_493.JPG",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Another Brick": {
-        "ver": 1,
-        "len": 19.6,
-        "obj": 2,
-        "Cos": "2000",
-        "wa%": "0.05",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920496562503690/AnotherbrickBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Off The Coast": {
-        "ver": 1,
-        "len": 19.3,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.37",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920466275172384/OffTheCoastBTD6.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Peninsula": {
-        "ver": 7,
-        "len": 14.2,
-        "obj": 3,
-        "Cos": "1500",
-        "wa%": "0.52",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920353515634698/IMG_20190830_115809_002.JPG",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Pat's Pond": {
-        "ver": 9,
-        "len": 14.1,
-        "obj": 4,
-        "Cos": "2000",
-        "wa%": "32% / 38%",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920643006496769/Pats_Pond.png",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Underground": {
-        "ver": 1,
-        "len": 13,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "-",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920467101712384/UndergroundBTD6.png",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Cargo": {
-        "ver": 11,
-        "len": 12.9,
-        "obj": 2,
-        "Cos": "1000",
-        "wa%": "0.36",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488720099147796/latest.png",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Workshop": {
-        "ver": 12,
-        "len": "Bloon Path:6.8\n10.2 with motor\n18.4 with extensions\n27.7 with motor and extensions\nMoab Path:5.7\n8.5 with motor\n11.6 with extensions\n17.3 with motor and extensions",
-        "obj": 2,
-        "Cos": "$0 - $?",
-        "wa%": "-",
-        "los": "",
-        "thu": "",
-        "e": {
-            "e": "2/1"
-        }
-    },
-    "Quad": {
-        "ver": 6,
-        "len": 11.8,
-        "obj": 4,
-        "Cos": "6000",
-        "wa%": "0.05",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920434809765908/Quad.png",
-        "e": {
-            "e": "4/4"
-        }
-    },
-    "Muddy Puddles": {
-        "ver": 1,
-        "len": 9.7,
-        "obj": 0,
-        "Cos": "N/A",
-        "wa%": "0.07",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920354648227840/MudPud.jpg",
-        "e": {
-            "e": "4/4"
-        }
-    },
-    "#Ouch": {
-        "ver": 1,
-        "len": 9.1,
-        "obj": 1,
-        "Cos": "1000",
-        "wa%": "4% / 0%\n",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634030385113595914/Screenshot_20191016_221002.jpg",
-        "e": {
-            "e": "4/4"
-        }
-    },
-    "Bloody Puddles": {
-        "ver": 13,
-        "len": 9.1,
-        "obj": 2,
-        "Cos": "1500",
-        "wa%": "0.08",
-        "los": "",
-        "thu": "https://cdn.discordapp.com/attachments/629933199241510922/642749622804021258/Screenshot_20191109_233724.jpg",
-        "e": {
-            "e": "6/6"
-        }
-    },
-    "Dark Castle": {
-        "ver": 5,
-        "len": 8.3,
-        "obj": 4,
-        "Cos": "4000",
-        "wa%": "0.11",
-        "los": "yes",
-        "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634031789324763175/Screenshot_20191016_221549.jpg",
-        "e": {
-            "e": "4/1"
-        }
-    },
-    "Infernal": {
-        "ver": 15,
-        "len": "19.6 Top, 19.1 Bottom",
-        "obj": 0,
-        "Cos": "0",
-        "wa%": "0.02",
-        "los": "no",
-        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488423268515850/latest.png",
-        "e": {
-            "e": "2/2"
-        }
-    },
-    "Geared": {
-        "ver": 16,
-        "len": "13.9",
-        "obj": 0,
-        "Cos": "0",
-        "wa%": "N/A",
-        "los": "no",
-        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489104427417600/latest.png",
-        "e": {
-            "e": "1/1"
-        }
-    },
-    "Candy Falls": {
+    "candy_falls": {
         "ver": 17,
         "len": "42.4",
         "obj": 0,
@@ -527,19 +35,271 @@
             "e": "1/1"
         }
     },
-    "Flooded Valley": {
-        "ver": 18,
-        "len": "8.9",
-        "obj": 1,
-        "Cos": "5000",
-        "wa%": "39%",
+    "carved": {
+        "ver": 13,
+        "len": 39.3,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.03",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/629933199241510922/642749385532243982/Screenshot_20191109_233620.jpg",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "in_the_loop": {
+        "ver": 1,
+        "len": 39.1,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.02",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920748082331648/InTheLoopBTD6.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "tree_stump": {
+        "ver": 1,
+        "len": 38.9,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "-",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920780839583770/TreeStump.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "hedge": {
+        "ver": 1,
+        "len": 38.5,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "-",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920746106683412/HedgeBTD6.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "four_circles": {
+        "ver": 1,
+        "len": 36.4,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.03",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920746920247306/FourCirclesBTD6.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "winter_park": {
+        "ver": 14,
+        "len": 36.1,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.02",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489345432125482/1000.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "frozen_over": {
+        "ver": 5,
+        "len": 35.5,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.07",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920781821313024/Frozen_Over.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "park_path": {
+        "ver": 11,
+        "len": 35.4,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.05",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920352802734090/IMG_20190830_115856_636.JPG",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "lotus_island": {
+        "ver": 19,
+        "len": "32.3",
+        "obj": 0,
+        "Cos": "0",
+        "wa%": "41%",
         "los": "yes",
-        "thu": "https://cdn.discordapp.com/attachments/705588555929616484/719546639194259476/310.png",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/735664668408021083/Screenshot_20200722-210755.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "alpine_run": {
+        "ver": 7,
+        "len": 32.2,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "-",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920780839583769/Alpine_Run.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "town_center": {
+        "ver": 1,
+        "len": 30.5,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.07",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634032881475256378/Screenshot_20191016_222001.jpg",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "monkey_meadow": {
+        "ver": 1,
+        "len": 29.2,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "-",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920817988665344/MonkeyMeadow.jpg",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "end_of_the_road": {
+        "ver": 1,
+        "len": 26.5,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.03",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920689085120563/EndofRoadNew.jpg",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "moon_landing": {
+        "ver": 6,
+        "len": 35.5,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "-",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920688183476234/Moon_Landing.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "cracked": {
+        "ver": 1,
+        "len": 33.2,
+        "obj": 1,
+        "Cos": "1000",
+        "wa%": "0% / 2%",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920603449884672/CrackedBTD6.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "kartsndarts": {
+        "ver": 8,
+        "len": 32.7,
+        "obj": 2,
+        "Cos": "1000",
+        "wa%": "-",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920353947516928/IMG_20190830_115844_727.JPG",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "firing_range": {
+        "ver": 2,
+        "len": 29.8,
+        "obj": 1,
+        "Cos": "1000",
+        "wa%": "0.02",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920643006496768/F0D3485E-093D-46A4-AC11-005A93A918DF.jpg",
         "e": {
             "e": "2/2"
         }
     },
-    "Bazaar": {
+    "adora's_temple": {
+        "ver": 14,
+        "len": 29,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.04",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489266017173534/latest.png",
+        "e": {
+            "e": "4/4"
+        }
+    },
+    "downstream": {
+        "ver": 4,
+        "len": 26.4,
+        "obj": 2,
+        "Cos": "700",
+        "wa%": "0.12",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920353947516929/IMG_20190830_115830_843.JPG",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "streambed": {
+        "ver": 1,
+        "len": 27.1,
+        "obj": 1,
+        "Cos": "1000",
+        "wa%": "0.06",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920605211623435/StreambedBTD6.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "spring_spring": {
+        "ver": 10,
+        "len": 24.8,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.45",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920688183476235/Spring_Spring.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "spice_islands": {
+        "ver": 1,
+        "len": 23.8,
+        "obj": 1,
+        "Cos": "1000",
+        "wa%": "0.77",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920495870181376/SpiceIslandBTD6.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "bazaar": {
         "ver": 18,
         "len": "20.4",
         "obj": 4,
@@ -551,16 +311,257 @@
             "e": "2/2"
         }
     },
-    "Lotus Island": {
-        "ver": 19,
-        "len": "32.3",
-        "obj": 0,
-        "Cos": "0",
-        "wa%": "41%",
-        "los": "yes",
-        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/735664668408021083/Screenshot_20200722-210755.png",
+    "haunted": {
+        "ver": 5,
+        "len": 19.7,
+        "obj": 2,
+        "Cos": "1000",
+        "wa%": "0.04",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920643903946752/Haunted.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "chutes": {
+        "ver": 1,
+        "len": 16.2,
+        "obj": 2,
+        "Cos": "700",
+        "wa%": "0.04",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920604343533581/ChutesBTD6.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "rake": {
+        "ver": 1,
+        "len": 16,
+        "obj": 1,
+        "Cos": "1000",
+        "wa%": "0.04",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920494976925696/RakeBTD6.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "cornfield": {
+        "ver": 1,
+        "len": 24.2,
+        "obj": 13,
+        "Cos": "9300",
+        "wa%": "-",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920467915276309/CornfieldBTD6.png",
         "e": {
             "e": "1/1"
+        }
+    },
+    "spillway": {
+        "ver": 12,
+        "len": 23,
+        "obj": 4,
+        "Cos": "8000",
+        "wa%": "0.06",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488837233475644/latest.png",
+        "e": {
+            "e": "4/4"
+        }
+    },
+    "high_finance": {
+        "ver": 3,
+        "len": 21.6,
+        "obj": 15,
+        "Cos": "12550",
+        "wa%": "0.02",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920354648227841/IMG_20190830_115757_493.JPG",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "another_brick": {
+        "ver": 1,
+        "len": 19.6,
+        "obj": 2,
+        "Cos": "2000",
+        "wa%": "0.05",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920496562503690/AnotherbrickBTD6.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "off_the_coast": {
+        "ver": 1,
+        "len": 19.3,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.37",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920466275172384/OffTheCoastBTD6.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "peninsula": {
+        "ver": 7,
+        "len": 14.2,
+        "obj": 3,
+        "Cos": "1500",
+        "wa%": "0.52",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920353515634698/IMG_20190830_115809_002.JPG",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "pat's_pond": {
+        "ver": 9,
+        "len": 14.1,
+        "obj": 4,
+        "Cos": "2000",
+        "wa%": "32% / 38%",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920643006496769/Pats_Pond.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "geared": {
+        "ver": 16,
+        "len": "13.9",
+        "obj": 0,
+        "Cos": "0",
+        "wa%": "N/A",
+        "los": "no",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489104427417600/latest.png",
+        "e": {
+            "e": "1/1"
+        }
+    },
+    "underground": {
+        "ver": 1,
+        "len": 13,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "-",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920467101712384/UndergroundBTD6.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "cargo": {
+        "ver": 11,
+        "len": 12.9,
+        "obj": 2,
+        "Cos": "1000",
+        "wa%": "0.36",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488720099147796/latest.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "infernal": {
+        "ver": 15,
+        "len": "19.6 Top, 19.1 Bottom",
+        "obj": 0,
+        "Cos": "0",
+        "wa%": "0.02",
+        "los": "no",
+        "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488423268515850/latest.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "workshop": {
+        "ver": 12,
+        "len": "Bloon Path:6.8\n10.2 with motor\n18.4 with extensions\n27.7 with motor and extensions\nMoab Path:5.7\n8.5 with motor\n11.6 with extensions\n17.3 with motor and extensions",
+        "obj": 2,
+        "Cos": "$0 - $?",
+        "wa%": "-",
+        "los": "",
+        "thu": "",
+        "e": {
+            "e": "2/1"
+        }
+    },
+    "quad": {
+        "ver": 6,
+        "len": 11.8,
+        "obj": 4,
+        "Cos": "6000",
+        "wa%": "0.05",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920434809765908/Quad.png",
+        "e": {
+            "e": "4/4"
+        }
+    },
+    "muddy_puddles": {
+        "ver": 1,
+        "len": 9.7,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "0.07",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920354648227840/MudPud.jpg",
+        "e": {
+            "e": "4/4"
+        }
+    },
+    "#ouch": {
+        "ver": 1,
+        "len": 9.1,
+        "obj": 1,
+        "Cos": "1000",
+        "wa%": "4% / 0%\n",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634030385113595914/Screenshot_20191016_221002.jpg",
+        "e": {
+            "e": "4/4"
+        }
+    },
+    "bloody_puddles": {
+        "ver": 13,
+        "len": 9.1,
+        "obj": 2,
+        "Cos": "1500",
+        "wa%": "0.08",
+        "los": "",
+        "thu": "https://cdn.discordapp.com/attachments/629933199241510922/642749622804021258/Screenshot_20191109_233724.jpg",
+        "e": {
+            "e": "6/6"
+        }
+    },
+    "dark_castle": {
+        "ver": 5,
+        "len": 8.3,
+        "obj": 4,
+        "Cos": "4000",
+        "wa%": "0.11",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634031789324763175/Screenshot_20191016_221549.jpg",
+        "e": {
+            "e": "4/1"
+        }
+    },
+
+    "flooded_valley": {
+        "ver": 18,
+        "len": "8.9",
+        "obj": 1,
+        "Cos": "5000",
+        "wa%": "39%",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/705588555929616484/719546639194259476/310.png",
+        "e": {
+            "e": "2/2"
         }
     }
 }

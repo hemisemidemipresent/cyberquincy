@@ -46,15 +46,7 @@ module.exports = {
     Thank you for joining!',
 
     async addMember(member) {
-        if (member.guild.id == module.exports.CYBER_SUPPORT) {
-            const tchannel = member.guild.channels.cache.find((channel) =>
-                channel.name.includes('general')
-            );
-            tchannel.send(
-                `Welcome to the server, **${member.displayName}**. Please check the DM for more information, and read <#605712758595649566>. Thanks for joining, and the server now has **${member.guild.memberCount}** members!`
-            );
-            member.send(module.exports.CYBER_WELCOME);
-        } else if (member.guild.id == module.exports.BTD6_INDEX) {
+        if (member.guild.id == module.exports.BTD6_INDEX) {
             const wel = new Discord.MessageEmbed()
                 .setTitle('Welcome to the BTD6 Index Discord Server!')
                 .setThumbnail(

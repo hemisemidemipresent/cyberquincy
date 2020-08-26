@@ -19,6 +19,9 @@ module.exports = {
         }
 
         if ('rewards'.startsWith(args[0])) {
+            if (message.guild.id == 598768024761139240) {
+                return module.exports.showsDiscordServer(message);
+            }
             return module.exports.rewardsMessage(message);
         }
     },
@@ -85,6 +88,15 @@ module.exports = {
                 '[Discord Server](https://discord.gg/VMX5hZA)'
             )
             .setFooter(`You only get role rewards in the bot discord server`);
+        return message.channel.send(lvlMebed);
+    },
+    showsDiscordServer(message) {
+        const lvlMebed = new Discord.MessageEmbed()
+            .setTitle(`XP Rewards`)
+            .setColor(colours['cyber'])
+            .setDescription(
+                'You only get role rewards in the bot discord server\n[Discord Server](https://discord.gg/VMX5hZA)'
+            );
         return message.channel.send(lvlMebed);
     },
 };

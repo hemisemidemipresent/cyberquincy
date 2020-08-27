@@ -33,7 +33,9 @@ module.exports = {
                 'Get notifications for new updates and bot status at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
             )
             .setColor(colours['blurple'])
-            .setFooter('use ``q!toggle ad`` to turn this off');
+            .setFooter(
+                'use `q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+            );
 
         message.channel.send(serverEmbed);
     },
@@ -46,7 +48,9 @@ module.exports = {
                 'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
             )
             .setColor(colours['turq'])
-            .setFooter('use ``q!toggle ad`` to turn this off');
+            .setFooter(
+                'use `q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+            );
 
         message.channel.send(inviteEmbed);
     },
@@ -61,7 +65,9 @@ module.exports = {
                 'suggest a new feature and report a bug at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
             )
             .setColor(colours['turq'])
-            .setFooter('use ``q!toggle ad`` to turn this off');
+            .setFooter(
+                'use `q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+            );
 
         message.channel.send(bugEmbed);
     },

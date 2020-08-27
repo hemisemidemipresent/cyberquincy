@@ -1,4 +1,7 @@
 node_modules
+migrations
+config
+models
 2
 3
 4

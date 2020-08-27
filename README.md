@@ -12,7 +12,7 @@ Cyber Quincy is a btd6 discord bot.
 
 **for help, simply use `q!help`**
 
-###### Note: the 'Advertisments' you see here and in the code aren't for money, they just "advertise" the discord server and invite link. I can't think of a better name
+> Note: the 'Advertisments' you see here and in the code aren't for money, they just "advertise" the discord server and invite link. I can't think of a better name
 
 # Basic local test guide
 
@@ -35,17 +35,6 @@ Cyber Quincy is a btd6 discord bot.
 -   `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be, just suggest something in this discord instead. If you are interested look at `./migrations`, and check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527)
 -   `pluralize` used in parser
 
-## how commands are processed
-
--   first, it starts in `generateListeners()` in `server.js`
--   then it is processed in `command_center.js`
--   it is then executed using `command.execute(message, args);`, using `module.exports`
--   then the DB stuff and ad stuff happens back in `command_center.js`
-
-commands are using node.js `module.exports`
-
-there is a command arguments parser, [check it out](https://github.com/hemisemidemipresent/cyberquincy/tree/master/parser)
-
 # database fields
 
 (I think they are called fields)
@@ -55,15 +44,7 @@ there is a command arguments parser, [check it out](https://github.com/hemisemid
 -   `showAds` - setting for turning on/off the ads in `./helpers/advertisments.js`
 -   `showLevelUpMsg` - setting for turning on/off level up messages in `./helpers/xp.js`
 -   `quiz` - how many q!quiz questions they answered correctly
--   `freezexp` - unused but
-
-# application information
-
--   this bot is made using `discord.js`
--   commands can be found in the `commands` folder.
--   the start script is `server.js`
--   the sequelize config file is `./config`
--   the other credentials are in `./1/config.json`
+-   `freezexp` - unused
 
 # Contributing Guidelines
 

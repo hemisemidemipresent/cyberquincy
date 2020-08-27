@@ -7,7 +7,7 @@ const NaturalNumberParser = require('./natural-number-parser.js');
 // Check the DifficultyParser for all possible difficulties that can be provided
 module.exports = class RoundParser {
     type() {
-        return "round";
+        return 'round';
     }
 
     constructor(difficulty) {
@@ -15,17 +15,20 @@ module.exports = class RoundParser {
         var startRound = 1;
         var endRound = Infinity;
         if (difficulty) {
-            // Translate difficulty into round numbers
-            this.translationParser = new DifficultyParser();
-            try {
-                // Ensure that the difficulty is valid
-                this.translationParser.parse(difficulty);
-            } catch(e) {
-                // The "user" here is really the developer, which is why the error type is converted
-                if (e instanceof UserCommandError) {
-                    throw new DeveloperCommandError(e.message);
-                } else {
-                    throw e;
+            if (difficulty !== 'ALL') {
+                // "ALL" represents "ALL_ROUNDS"
+                // Translate difficulty into round numbers
+                this.translationParser = new DifficultyParser();
+                try {
+                    // Ensure that the difficulty is valid
+                    this.translationParser.parse(difficulty);
+                } catch (e) {
+                    // The "user" here is really the developer, which is why the error type is converted
+                    if (e instanceof UserCommandError) {
+                        throw new DeveloperCommandError(e.message);
+                    } else {
+                        throw e;
+                    }
                 }
             }
 
@@ -33,11 +36,11 @@ module.exports = class RoundParser {
 
             // Translate difficulty into rounds
             // The general helper module has the conversion between difficulty and valid rounds
-            [startRound, endRound] = h[difficulty + "_ROUNDS"];
+            [startRound, endRound] = h[difficulty + '_ROUNDS'];
         }
-        
+
         // Ultimately at play is just a natural number parser with bounds
-        this.delegateParser = new NaturalNumberParser(startRound, endRound)
+        this.delegateParser = new NaturalNumberParser(startRound, endRound);
     }
 
     parse(arg) {
@@ -51,9 +54,12 @@ module.exports = class RoundParser {
         if (isNaN(arg)) {
             var result = arg.match(/(?:round|r)(\d+)/);
             if (result) return result[1];
-            else throw new UserCommandError(`Round must be of form \`15\`, \`R15\` or \`round15\` (Got \`${arg}\` instead)`);
+            else
+                throw new UserCommandError(
+                    `Round must be of form \`15\`, \`R15\` or \`round15\` (Got \`${arg}\` instead)`
+                );
         } else {
             return arg;
         }
     }
-}
+};

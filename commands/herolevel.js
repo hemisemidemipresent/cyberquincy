@@ -322,9 +322,7 @@ module.exports = {
                                                                 0.1 *
                                                                     difficultyID +
                                                                 0.9;
-                                                            message.channel.send(
-                                                                `${round},${xpCurve},${diffMultiplier},${heroname}`
-                                                            );
+
                                                             let embed = level_cal(
                                                                 round,
                                                                 xpCurve,

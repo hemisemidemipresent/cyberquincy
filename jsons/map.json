@@ -4,7 +4,7 @@
         "len": 53.1,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.02",
+        "wa%": "2%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920818412158982/LogsBTD6.png",
         "e": {
@@ -16,7 +16,7 @@
         "len": 43.3,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.09",
+        "wa%": "9%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/594624229958352906/616238947311288320/CubismBTD6.png",
         "e": {
@@ -40,8 +40,8 @@
         "len": 39.3,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.03",
-        "los": "",
+        "wa%": "3%",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/629933199241510922/642749385532243982/Screenshot_20191109_233620.jpg",
         "e": {
             "e": "1/1"
@@ -52,8 +52,8 @@
         "len": 39.1,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.02",
-        "los": "",
+        "wa%": "2%",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920748082331648/InTheLoopBTD6.png",
         "e": {
             "e": "1/1"
@@ -65,7 +65,7 @@
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
-        "los": "",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920780839583770/TreeStump.png",
         "e": {
             "e": "1/1"
@@ -77,7 +77,7 @@
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
-        "los": "",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920746106683412/HedgeBTD6.png",
         "e": {
             "e": "1/1"
@@ -88,8 +88,8 @@
         "len": 36.4,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.03",
-        "los": "",
+        "wa%": "3%",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920746920247306/FourCirclesBTD6.png",
         "e": {
             "e": "1/1"
@@ -100,8 +100,8 @@
         "len": 36.1,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.02",
-        "los": "",
+        "wa%": "2%",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489345432125482/1000.png",
         "e": {
             "e": "1/1"
@@ -112,8 +112,8 @@
         "len": 35.5,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.07",
-        "los": "",
+        "wa%": "7%",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920781821313024/Frozen_Over.png",
         "e": {
             "e": "1/1"
@@ -124,7 +124,7 @@
         "len": 35.4,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.05",
+        "wa%": "5%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920352802734090/IMG_20190830_115856_636.JPG",
         "e": {
@@ -160,7 +160,7 @@
         "len": 30.5,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.07",
+        "wa%": "7%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634032881475256378/Screenshot_20191016_222001.jpg",
         "e": {
@@ -184,7 +184,7 @@
         "len": 26.5,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.03",
+        "wa%": "3%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920689085120563/EndofRoadNew.jpg",
         "e": {
@@ -208,7 +208,7 @@
         "len": 33.2,
         "obj": 1,
         "Cos": "1000",
-        "wa%": "0% / 2%",
+        "wa%": "0/2%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920603449884672/CrackedBTD6.png",
         "e": {
@@ -232,7 +232,7 @@
         "len": "29.9 Left\n29.7 Right",
         "obj": 1,
         "Cos": "1000",
-        "wa%": "0.02",
+        "wa%": "2%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920643006496768/F0D3485E-093D-46A4-AC11-005A93A918DF.jpg",
         "e": {
@@ -244,7 +244,7 @@
         "len": "30.2 Horizontal\n27.8 Vertical",
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.04",
+        "wa%": "4%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489266017173534/latest.png",
         "e": {
@@ -256,7 +256,7 @@
         "len": 26.4,
         "obj": 2,
         "Cos": "700",
-        "wa%": "0.12",
+        "wa%": "12%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920353947516929/IMG_20190830_115830_843.JPG",
         "e": {
@@ -268,7 +268,7 @@
         "len": 27.1,
         "obj": 1,
         "Cos": "1000",
-        "wa%": "0.06",
+        "wa%": "6%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920605211623435/StreambedBTD6.png",
         "e": {
@@ -280,7 +280,7 @@
         "len": "24.8 Top\n24.7 Bottom",
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.45",
+        "wa%": "45%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920688183476235/Spring_Spring.png",
         "e": {
@@ -292,7 +292,7 @@
         "len": 23.8,
         "obj": 1,
         "Cos": "1000",
-        "wa%": "0.77",
+        "wa%": "77%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920495870181376/SpiceIslandBTD6.png",
         "e": {
@@ -316,7 +316,7 @@
         "len": 19.7,
         "obj": 2,
         "Cos": "1000",
-        "wa%": "0.04",
+        "wa%": "4%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920643903946752/Haunted.png",
         "e": {
@@ -328,7 +328,7 @@
         "len": "16.2 Left\n16.1 Right",
         "obj": 2,
         "Cos": "700",
-        "wa%": "0.04",
+        "wa%": "4%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920604343533581/ChutesBTD6.png",
         "e": {
@@ -340,7 +340,7 @@
         "len": "15.7 Left\n16.2 Top",
         "obj": 1,
         "Cos": "1000",
-        "wa%": "0.04",
+        "wa%": "4%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920494976925696/RakeBTD6.png",
         "e": {
@@ -364,7 +364,7 @@
         "len": "22.3 Top Left\n23.6 Top Right\n23.6 Bottom Left\n22.5 Bottom Right",
         "obj": 4,
         "Cos": "8000",
-        "wa%": "0.06",
+        "wa%": "6%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488837233475644/latest.png",
         "e": {
@@ -376,7 +376,7 @@
         "len": "27.6 S-Shape\n15.6 U-Shape",
         "obj": 15,
         "Cos": "12550",
-        "wa%": "0.02",
+        "wa%": "2%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920354648227841/IMG_20190830_115757_493.JPG",
         "e": {
@@ -388,7 +388,7 @@
         "len": 19.6,
         "obj": 2,
         "Cos": "2000",
-        "wa%": "0.05",
+        "wa%": "5%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920496562503690/AnotherbrickBTD6.png",
         "e": {
@@ -400,7 +400,7 @@
         "len": 19.3,
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.37",
+        "wa%": "37%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920466275172384/OffTheCoastBTD6.png",
         "e": {
@@ -412,7 +412,7 @@
         "len": 14.2,
         "obj": 3,
         "Cos": "1500",
-        "wa%": "0.52",
+        "wa%": "52%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920353515634698/IMG_20190830_115809_002.JPG",
         "e": {
@@ -460,9 +460,21 @@
         "len": "13.9 Bloon Path\n11.7 Blimp Path",
         "obj": 2,
         "Cos": "1000",
-        "wa%": "0.36",
-        "los": "",
+        "wa%": "36%",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488720099147796/latest.png",
+        "e": {
+            "e": "2/2"
+        }
+    },
+    "mesa": {
+        "ver": 20,
+        "len": "14.5 Left\n11.1 Right",
+        "obj": 3,
+        "Cos": "1500",
+        "wa%": "N/A",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/663729150799904768/751606482000281670/Screenshot_1105.png",
         "e": {
             "e": "2/2"
         }
@@ -472,7 +484,7 @@
         "len": "19.6 Top\n19.1 Bottom",
         "obj": 0,
         "Cos": "0",
-        "wa%": "0.02",
+        "wa%": "2%",
         "los": "no",
         "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693488423268515850/latest.png",
         "e": {
@@ -496,7 +508,7 @@
         "len": "Top:\n9.2 with both overhangs\n10.1 with first overhang\n10.4 with second overhang\n11.3 without overhangs\n\nBottom:\n9.2 with both overhangs\n10.3 with first overhang\n10.1 with second overhang\n11.3 without overhangs\n\nLeft:\n9.3 with both overhangs\n10.8 with first overhang\n10.7 with second overhang\n12.1 without overhangs\n\nRight:\n9.7 with both overhangs\n10.9 with first overhang\n11.1 with second overhang\n12.3 without overhangs",
         "obj": 4,
         "Cos": "6000",
-        "wa%": "0.05",
+        "wa%": "5%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920434809765908/Quad.png",
         "e": {
@@ -508,7 +520,7 @@
         "len": "9.7 Left, Left Middle, Right Middle\n9.8 Right",
         "obj": 0,
         "Cos": "N/A",
-        "wa%": "0.07",
+        "wa%": "7%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920354648227840/MudPud.jpg",
         "e": {
@@ -532,7 +544,7 @@
         "len": 9.1,
         "obj": 2,
         "Cos": "1500",
-        "wa%": "0.08",
+        "wa%": "8%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/629933199241510922/642749622804021258/Screenshot_20191109_233724.jpg",
         "e": {
@@ -544,7 +556,7 @@
         "len": "Top:\n7.5 with trees\n10 without trees\n\nMiddle (x2):\n7.1 with trees\n9.1 without trees\n\nBottom:\n7.2 with trees",
         "obj": 4,
         "Cos": "4000",
-        "wa%": "0.11",
+        "wa%": "11%",
         "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634031789324763175/Screenshot_20191016_221549.jpg",
         "e": {

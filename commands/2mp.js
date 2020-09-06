@@ -33,10 +33,7 @@ module.exports = {
 
         const parsed = CommandParser.parseAnyOrder(
             args,
-            new OrParser(
-                new TowerUpgradeParser(),
-                new HeroParser()
-            ),
+            new OrParser(new TowerUpgradeParser(), new HeroParser()),
             new OrParser(
                 new EmptyParser(), // OG completion for tower
                 new MapParser(), // Completion of tower on specified map
@@ -51,7 +48,7 @@ module.exports = {
 
         async function display2MPOG(tower) {
             const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-            
+
             // Load the column containing the different maps
             await sheet.loadCells(
                 `${COLS.TOWER}1:${COLS.TOWER}${sheet.rowCount}`
@@ -62,7 +59,8 @@ module.exports = {
 
             // Search for the row in all "possible" rows
             for (let row = 1; row <= sheet.rowCount; row++) {
-                var towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
+                var towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`)
+                    .value;
                 // input is "in_the_loop" but needs to be compared to "In The Loop"
                 if (
                     towerCandidate &&
@@ -74,7 +72,11 @@ module.exports = {
             }
 
             if (!entryRow) {
-                return message.channel.send(`Tower \`${h.toTitleCase(tower.split('_').join(' '))}\` doesn't yet have a 2MP completion`);
+                return message.channel.send(
+                    `Tower \`${h.toTitleCase(
+                        tower.split('_').join(' ')
+                    )}\` doesn't yet have a 2MP completion`
+                );
             }
 
             // Load the row where the map was found
@@ -114,22 +116,25 @@ module.exports = {
             message.channel.send(challengeEmbed);
         }
 
-        if (parsed.map) { // TODO
+        if (parsed.map) {
+            // TODO
             message.channel.send('Feature in progress');
-        } else if (parsed.exact_string) { // TODO
+        } else if (parsed.exact_string) {
+            // TODO
             message.channel.send('Feature in progress');
-        } else if (parsed.map_difficulty) { // TODO
+        } else if (parsed.map_difficulty) {
+            // TODO
             message.channel.send('Feature in progress');
         } else {
             let tower = null;
             if (parsed.tower_upgrade) {
                 tower = Aliases.getAliasSet(parsed.tower_upgrade)[1];
-            } else if(parsed.hero) {
-                tower = parsed.hero
+            } else if (parsed.hero) {
+                tower = parsed.hero;
             } else {
-                throw `Somehow the \`q!2mp\` command parsed successfully without grabbing a hero or tower upgrade`
+                throw `Somehow the \`q!2mp\` command parsed successfully without grabbing a hero or tower upgrade`;
             }
-            
+
             display2MPOG(tower);
         }
     },
@@ -140,9 +145,9 @@ module.exports = {
             .addField(
                 '`q!2mp <tower_upgrade>`',
                 'The OG 2MP completion for the specified tower.\n' +
-                ' • Can either be `base_tower#\\d\\d\\d` (where \\d represents a digit).\n' +
-                'or an upgrade name like \`sentry_paragon\`. Cannot combine both.\n' +
-                ' • Upgrades must not include crosspathing.'
+                    ' • Can either be `base_tower#\\d\\d\\d` (where \\d represents a digit).\n' +
+                    'or an upgrade name like `sentry_paragon`. Cannot combine both.\n' +
+                    ' • Upgrades must not include crosspathing.'
             )
             .addField(
                 'Valid `<tower_upgrade>` values',
@@ -164,7 +169,7 @@ module.exports = {
                 'Likely Cause(s)',
                 parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
-        .addField('Type `q!2mp` for help', ':)')
+            .addField('Type `q!2mp` for help', ':)')
             .setColor(colours['orange']);
 
         return message.channel.send(errorEmbed);

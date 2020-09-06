@@ -19,7 +19,7 @@ module.exports = {
         }
 
         if ('rewards'.startsWith(args[0])) {
-            if (message.guild.id == 598768024761139240) {
+            if (message.guild.id !== 598768024761139240) {
                 return module.exports.showsDiscordServer(message);
             }
             return module.exports.rewardsMessage(message);
@@ -83,10 +83,7 @@ module.exports = {
             .addField('Level 3', module.exports.RAPID_SHOT_ROLE)
             .addField('Level 10', module.exports.STORM_OF_ARROWS_ROLE)
             .setColor(colours['cyber'])
-            .addField(
-                'You only get role rewards in the bot discord server',
-                '[Discord Server](https://discord.gg/VMX5hZA)'
-            )
+
             .setFooter(`You only get role rewards in the bot discord server`);
         return message.channel.send(lvlMebed);
     },

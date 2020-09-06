@@ -1,11 +1,18 @@
 {
     "moon_landing": ["ml", "moon", "landing", "moonlanding"],
     "cracked": ["cr", "ck", "crkd"],
-    "kartsndarts": ["kd", "kar", "kart", "karts"],
+    "kartsndarts": ["kd", "kar", "kart", "karts", "kartsanddarts", "kartsn"],
     "firing_range": ["fr", "fir", "firing", "firingrange"],
-    "adora's_temple": ["at", "adoras_temple", "adora_temple", "atemple", "adora'stemple"],
+    "adora's_temple": [
+        "at",
+        "adoras_temple",
+        "adora_temple",
+        "atemple",
+        "adora'stemple",
+        "adora's"
+    ],
     "downstream": ["ds", "down"],
-    "streambed": ["sb"],
+    "streambed": ["sb", "stream"],
     "spring_spring": ["ss", "spring"],
     "spice_islands": ["sp", "si", "spice"],
     "bazaar": ["bz", "baz"],

@@ -31,20 +31,6 @@ module.exports = {
     BTD6_INDEX: 661812833771847700,
     RACE_SERVER: 543957081183617024,
 
-    CYBER_WELCOME:
-        'Welcome to **Cyber Quincy Bot Support**! Thank you for joining!\n\
-    **Get yourself a role in <#605712758595649566>**\n\n\
-    :tools: **Found a bug?**\n\
-    Check with <#615159685477040135>, <#616603947481694209>, <#676670780204908555> or in <#598768319625035776>.\n\n\
-    :beetle: **Found an UNKNOWN bug?**\n\
-    Please report in <#598768319625035776>\n\n\
-    :jigsaw: **Need help or want to ask something?**\n\
-    Ask in<#611808489047719937> (for only the bot).\n\n\
-    :mailbox_with_mail: **Have a suggestion?**\n\
-    Please tell us in <#598768278550085633>. Do try to be objective and feel free to be critical\n\n\
-    **Invite me to your server**:https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881\n\n\
-    Thank you for joining!',
-
     async addMember(member) {
         if (member.guild.id == module.exports.BTD6_INDEX) {
             const wel = new Discord.MessageEmbed()
@@ -81,12 +67,7 @@ module.exports = {
     },
 
     async removeMember(member) {
-        if (member.guild.id == module.exports.CYBER_SUPPORT) {
-            const general = member.guild.channels.cache.find((channel) =>
-                channel.name.includes('general')
-            );
-            general.send(`**${member.displayName}** was lost in battle`);
-        } else if (member.guild.id == module.exports.BTD6_INDEX) {
+        if (member.guild.id == module.exports.BTD6_INDEX) {
             let welcome = member.guild.channels.cache.find((channel) =>
                 channel.name.includes('welcome')
             );

@@ -8,13 +8,11 @@ module.exports = {
     description: 'info about maps',
     aliases: ['m'],
     execute(message, args) {
-        const parsed = CommandParser.parseAnyOrder(args, new MapParser());
+        let arr = [args[0]];
+        const parsed = CommandParser.parseAnyOrder(arr, new MapParser());
         let name = parsed.map;
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
-        }
-        if (!name) {
-            return message.channel.send('why are you seeing this?');
         }
         let m = map[`${name}`];
         let thum = m.thu;

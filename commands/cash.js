@@ -27,28 +27,7 @@ module.exports = {
         let startRound = parsed.round;
         let cashSoFar = 0;
         let addToTotal = 0;
-        if (parsed.mode == 'chimps') {
-            while (cashSoFar <= cashNeeded) {
-                addToTotal = parseInt(r[startRound].csh);
-                cashSoFar += addToTotal;
-                addToTotal = 0;
-                startRound++;
-                if (startRound > 100) {
-                    return module.exports.freePlayMsg(
-                        message,
-                        cashNeeded,
-                        parsed.round
-                    );
-                }
-            }
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `You should get $${cashNeeded} by round ${startRound}`
-                )
-                .setColor(cyber)
-                .setFooter(`from round ${args[1]}`);
-            return message.channel.send(embed);
-        } else if (parsed.mode == 'abr') {
+        if (parsed.mode == 'abr') {
             while (cashSoFar <= cashNeeded) {
                 addToTotal = parseInt(abr[startRound][0]);
                 cashSoFar += addToTotal;
@@ -89,6 +68,27 @@ module.exports = {
                 )
                 .setColor(cyber)
                 .setFooter(`in half cash, from round ${args[1]}`);
+            return message.channel.send(embed);
+        } else {
+            while (cashSoFar <= cashNeeded) {
+                addToTotal = parseInt(r[startRound].csh);
+                cashSoFar += addToTotal;
+                addToTotal = 0;
+                startRound++;
+                if (startRound > 100) {
+                    return module.exports.freePlayMsg(
+                        message,
+                        cashNeeded,
+                        parsed.round
+                    );
+                }
+            }
+            let embed = new Discord.MessageEmbed()
+                .setTitle(
+                    `You should get $${cashNeeded} by round ${startRound}`
+                )
+                .setColor(cyber)
+                .setFooter(`from round ${args[1]}`);
             return message.channel.send(embed);
         }
     },

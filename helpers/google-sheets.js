@@ -5,7 +5,7 @@ module.exports = {
 
     async load(key) {
         const { GoogleSpreadsheet } = require('google-spreadsheet');
-    
+
         // spreadsheet key is the long id in the sheets URL
         const doc = new GoogleSpreadsheet(key);
 
@@ -14,7 +14,7 @@ module.exports = {
 
         await doc.loadInfo(); // loads document properties and worksheets
 
-        console.log("{BTD6 Index loaded}");
+        console.log('<INITIATE>');
 
         return doc;
     },
@@ -22,13 +22,13 @@ module.exports = {
     sheetByName(doc, title) {
         // Filter sheets by the one that matches the given `title`
         const sheet = doc.sheetsByIndex.find(
-            s => s.title.toLowerCase() === title.toLowerCase()
+            (s) => s.title.toLowerCase() === title.toLowerCase()
         );
-        
+
         if (sheet) {
-            return sheet
+            return sheet;
         } else {
             throw `Spreadsheet ${doc.title} doesn't have a tab titled "${title}"`;
         }
-    }
-}
+    },
+};

@@ -23,7 +23,6 @@ function pingHeroku() {
     app.listen(process.env.PORT);
 }
 
-
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.h = require('./helpers/general.js');
@@ -54,10 +53,6 @@ function consoleBootup() {
             console.log('<Eradicate Bloons>');
         }
         setTimeout(too, 1000);
-        function three() {
-            console.log('<INITIATE>');
-        }
-        setTimeout(three, 2000);
 
         client.user.setActivity(`${prefix}help`);
     });
@@ -98,7 +93,9 @@ function dbSetup() {
 async function googleSheetsInitialization() {
     const GoogleSheetsHelper = require('./helpers/google-sheets.js');
     // Load the BTD6 Index
-    global.Btd6Index = await GoogleSheetsHelper.load(GoogleSheetsHelper.BTD6_INDEX_KEY);
+    global.Btd6Index = await GoogleSheetsHelper.load(
+        GoogleSheetsHelper.BTD6_INDEX_KEY
+    );
 }
 
 function configureAliases() {

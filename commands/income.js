@@ -2,6 +2,7 @@ const r = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json');
 const Discord = require('discord.js');
 const { red, magenta, purple, yellow } = require('../jsons/colours.json');
+
 module.exports = {
     name: 'income',
     execute(message, args) {
@@ -41,6 +42,22 @@ module.exports = {
             let startroundObject = r[normalStartRound];
             let endroundObject = r[endround];
             let income = endroundObject.cch - startroundObject.cch;
+            let embed = new Discord.MessageEmbed()
+                .setTitle(
+                    `$${
+                        Math.trunc(income * 100) / 100
+                    } was made from popping round ${
+                        normalStartRound + 1
+                    } to popping round ${endround}`
+                )
+                .setColor(magenta)
+                .setFooter('not including starting cash');
+            return message.channel.send(embed);
+        } else if (args[2].includes('half')) {
+            let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
+            let startroundObject = r[normalStartRound];
+            let endroundObject = r[endround];
+            let income = (endroundObject.cch - startroundObject.cch) / 2;
             let embed = new Discord.MessageEmbed()
                 .setTitle(
                     `$${

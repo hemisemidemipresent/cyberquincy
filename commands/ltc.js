@@ -88,7 +88,7 @@ module.exports = {
 
             // Search for the row in all "possible" rows
             for (let row = 1; row <= MAX_ROW; row++) {
-                var mapCandidate = sheet.getCellByA1(`${COLS.MAP}${row}`).value;
+                var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`).value;
                 // input is "in_the_loop" but needs to be compared to "In The Loop"
                 if (
                     mapCandidate &&
@@ -99,7 +99,7 @@ module.exports = {
                 }
             }
 
-            colset = getColumnSet(entryRow);
+            colset = getColumnSet(entryRow, sheet);
 
             // Load the row where the map was found
             await sheet.loadCells(
@@ -123,8 +123,8 @@ module.exports = {
                 for (var i = 0; i < colset['TOWERS'].length; i++) {
                     values[`Tower ${i + 1}`] = 
                         sheet.getCellByA1(
-                            `${colset['TOWERS'][i]}${entryRow}`
-                        ).value + " " + upgrades[i];
+                            `**${colset['TOWERS'][i]}${entryRow}**`
+                        ).value + " (" + upgrades[i] + ")";
                 }
             }
 
@@ -191,18 +191,18 @@ module.exports = {
     },
 };
 
-function getColumnSet(mapRow) {
-    headerRegex = new RegExp(`(${Object.keys(COLS).join('|')}) Towers`, i);
+function getColumnSet(mapRow, sheet) {
+    headerRegex = new RegExp(`(${Object.keys(COLS).join('|')}) Towers`, 'i');
 
     candidateHeaderRow = mapRow - 1;
     while(true) {
         let candidateHeaderCell = sheet.getCellByA1(`${COLS['TWO'].MAP}${candidateHeaderRow}`);
-        console.log(candidateHeaderCell.value);
-        const match = candidateHeaderCell.value.match(headerRegex);
-
-        if (match) {
-            console.log(match[1].toUpperCase())
-            return COLS[match[1].toUpperCase()];
+        if (candidateHeaderCell.value) {
+            const match = candidateHeaderCell.value.match(headerRegex);
+            if (match) {
+                console.log(match[1].toUpperCase())
+                return COLS[match[1].toUpperCase()];
+            }
         }
         candidateHeaderRow -= 1;
     }

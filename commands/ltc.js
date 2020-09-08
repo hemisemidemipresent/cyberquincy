@@ -99,6 +99,8 @@ module.exports = {
                 }
             }
 
+            // Determines correspondence between column letter and data type depending on
+            // how many towers it took to complete the LTC run
             colset = getColumnSet(entryRow, sheet);
 
             // Load the row where the map was found
@@ -106,15 +108,10 @@ module.exports = {
                 `${colset.MAP}${entryRow}:${colset.CURRENT}${entryRow}`
             );
 
-            // Assign each value to be discord-embedded in a simple default way
+            // Values to be included in the LTC embedded message
             values = {};
-            for (key in colset) {
-                if (key == 'TOWERS' || key == 'UPGRADES') continue; // Handle next
-                values[key] = sheet.getCellByA1(
-                    `${colset[key]}${entryRow}`
-                ).value;
-            }
 
+            // Towers + Upgrades need some special handling since #towers varies
             if (colset['TOWERS']) {
                 const upgrades = sheet.getCellByA1(
                     `${colset['UPGRADES']}${entryRow}`
@@ -126,6 +123,14 @@ module.exports = {
                             `**${colset['TOWERS'][i]}${entryRow}**`
                         ).value + " (" + upgrades[i] + ")";
                 }
+            }
+
+            // Assign each value to be discord-embedded in a simple default way
+            for (key in colset) {
+                if (key == 'TOWERS' || key == 'UPGRADES') continue; // Handle next
+                values[key] = sheet.getCellByA1(
+                    `${colset[key]}${entryRow}`
+                ).value;
             }
 
             // Special formatting for date (get formattedValue instead)
@@ -192,18 +197,24 @@ module.exports = {
 };
 
 function getColumnSet(mapRow, sheet) {
-    headerRegex = new RegExp(`(${Object.keys(COLS).join('|')}) Towers`, 'i');
+    // Looks for "Two|Three|...|Six+ Towers" in the closest above header cell
+    headerRegex = new RegExp(`(${Object.keys(COLS).join('|').replace('+', '\\+')}) Towers`, 'i');
 
     candidateHeaderRow = mapRow - 1;
     while(true) {
+        // Check cell to see if it's a header indicating the number of towers
         let candidateHeaderCell = sheet.getCellByA1(`${COLS['TWO'].MAP}${candidateHeaderRow}`);
+
+        // Header rows take up 2 rows. If you check the bottom row, the data value is null.
         if (candidateHeaderCell.value) {
             const match = candidateHeaderCell.value.match(headerRegex);
+
+            // Get the column set from the number of towers string in the header cell
             if (match) {
-                console.log(match[1].toUpperCase())
                 return COLS[match[1].toUpperCase()];
             }
         }
+        // If the header cell wasn't found, go up a row and try again.
         candidateHeaderRow -= 1;
     }
 }

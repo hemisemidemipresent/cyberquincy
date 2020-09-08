@@ -115,7 +115,14 @@ module.exports = {
                 ).value;
             }
 
-            for (var i = 0; i < )
+            if (colset['TOWERS']) {
+                for (var i = 0; i < colset['TOWERS'].length; i++) {
+                    values[`Tower ${i + 1}`] = 
+                        sheet.getCellByA1(
+                            `${colset['TOWERS'][i]}${entryRow}`
+                        )
+                }
+            }
 
             // Special formatting for date (get formattedValue instead)
             dateCell = sheet.getCellByA1(`${colset.DATE}${entryRow}`);

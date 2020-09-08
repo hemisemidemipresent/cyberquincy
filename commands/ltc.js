@@ -80,7 +80,7 @@ module.exports = {
             
             // Load the column containing the different maps
             await sheet.loadCells(
-                `${TWO_COLS.MAP}${MIN_ROW}:${TWO_COLS.MAP}${MAX_ROW}`
+                `${COLS['TWO'].MAP}${MIN_ROW}:${COLS['TWO'].MAP}${MAX_ROW}`
             ); // loads all possible cells with map
 
             // The row where the queried map is found
@@ -116,11 +116,15 @@ module.exports = {
             }
 
             if (colset['TOWERS']) {
+                const upgrades = sheet.getCellByA1(
+                    `${colset['UPGRADES']}${entryRow}`
+                ).value.split('|').map(u => u.replace(/^\s+|\s+$/g, ''))
+
                 for (var i = 0; i < colset['TOWERS'].length; i++) {
                     values[`Tower ${i + 1}`] = 
                         sheet.getCellByA1(
                             `${colset['TOWERS'][i]}${entryRow}`
-                        )
+                        ).value + " " + upgrades[i];
                 }
             }
 
@@ -140,7 +144,7 @@ module.exports = {
 
             // Embed and send the message
             var challengeEmbed = new Discord.MessageEmbed()
-                .setTitle(`${values.MAP} LCC Combo`)
+                .setTitle(`${values.MAP} LTC Combo`)
                 .setColor(colours['cyber']);
 
             for (field in values) {
@@ -192,7 +196,7 @@ function getColumnSet(mapRow) {
 
     candidateHeaderRow = mapRow - 1;
     while(true) {
-        let candidateHeaderCell = sheet.getCellByA1(`${TWO_COLS.MAP}${candidateHeaderRow}`);
+        let candidateHeaderCell = sheet.getCellByA1(`${COLS['TWO'].MAP}${candidateHeaderRow}`);
         console.log(candidateHeaderCell.value);
         const match = candidateHeaderCell.value.match(headerRegex);
 

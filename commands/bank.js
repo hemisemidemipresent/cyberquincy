@@ -124,13 +124,10 @@ function tookTooLong(message) {
     return message.channel.send(`You took too long to answer!`);
 }
 function isValidHack(hackPercent) {
-    if (
-        isNaN(hackPercent) ||
-        !(hackPercent == 0 || hackPercent == 5 || hackPercent == 12)
-    ) {
-        return false;
+    if (hackPercent == 0 || hackPercent == 5 || hackPercent == 12) {
+        return true;
     }
-    return true;
+    return false;
 }
 function calculate(
     bankTier,

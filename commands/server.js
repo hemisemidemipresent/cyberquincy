@@ -2,7 +2,10 @@ module.exports = {
     name: 'server',
 
     execute(message) {
-        if (message.author.id == '668312965664997386') {
+        if (
+            message.author.username.toLowerCase().includes('robert') ||
+            message.author.username.toLowerCase().includes('cruz')
+        ) {
             return message.channel.send(
                 "You have been banned from using this command because\n1. you ruin the reputation of the server by spam pinging people\n2. the bot doesn't like people spamming commands\n3. You may have alts to circumvent this, but honestly you should just learn your mistakes. You had your chance."
             );

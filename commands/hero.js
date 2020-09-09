@@ -81,6 +81,17 @@ const aliases = [
         'furry',
         'cq',
     ],
+    [
+        'etienne',
+        'etiene',
+        'french',
+        'etine',
+        'etinne',
+        'etenne',
+        'et',
+        'eti',
+        'drone',
+    ],
 ];
 module.exports = {
     name: '<hero>',
@@ -168,6 +179,16 @@ module.exports = {
         'cyber',
         'furry',
         'cq',
+
+        'etienne',
+        'etiene',
+        'french',
+        'etine',
+        'etinne',
+        'etenne',
+        'et',
+        'eti',
+        'drone',
     ],
     execute(message, args) {
         const newArgs = message.content.slice(2).split(/ +/);

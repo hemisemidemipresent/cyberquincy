@@ -387,7 +387,6 @@ function anyOtherTower(json, name, path, tier) {
             `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`
         )
         .addField('notes', object.notes)
-        .addField('in game description', object.description)
         .addField('xp needed:', `${object.xp}`)
         .addField(
             'total cost',

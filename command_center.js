@@ -48,7 +48,6 @@ module.exports = {
 
             // Command tokens are space-separated tokens starting immediately after the `!`
             const args = c.slice(module.exports.PREFIX.length).split(/ +/);
-            
 
             // The command name is the first token; args are the rest
             const commandName = args.shift().toLowerCase();
@@ -66,11 +65,14 @@ module.exports = {
 
             // Each item in [args] either looks like `arg` or `argp1#argp2`
             // This converts each arg part to its canonical form.
-            // `spact#025` gets converted to `spike_factory#025` for example. 
-            const canonicalArgs = args.map( function(arg) {
-                return arg.split(module.exports.ARG_SPLITTER).map( function(t) {
-                    return Aliases.getCanonicalForm(t) || t
-                }).join(module.exports.ARG_SPLITTER);
+            // `spact#025` gets converted to `spike_factory#025` for example.
+            const canonicalArgs = args.map(function (arg) {
+                return arg
+                    .split(module.exports.ARG_SPLITTER)
+                    .map(function (t) {
+                        return Aliases.getCanonicalForm(t) || t;
+                    })
+                    .join(module.exports.ARG_SPLITTER);
             });
 
             // Keeps track of cooldowns for commands/users and determines if cooldown has expired
@@ -89,6 +91,11 @@ module.exports = {
 
                 Advertisements.spin(message);
             }
+            /* let GLOBAL_COOLDOWN_REGEX = /gcd ?= ?(\d+)/;
+            regex_match = message.channel.topic.match(GLOBAL_COOLDOWN_REGEX);
+            if (regex_match) {
+                [_, cooldown] = regex_match;
+            }*/
         } catch (error) {
             // in case of command failures
             console.error(error);

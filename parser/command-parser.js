@@ -87,7 +87,6 @@ concretizeAndParse = function (args, parsers, abstractParserIndex) {
         parseds.push(...newParseds.map((pd) => pd.merge(alreadyParsed)));
     }
 
-    // The one with the least number of errors is likely to tell the best story
     return parseds;
 };
 
@@ -203,63 +202,64 @@ removeEmptyParser = function (parsers) {
  *     and `parsed` is whatever might've been parsed in the concretization
  *     (such as a default value that sticks in for an unused OptionalParser)
  */
-(ABSTRACT_PARSERS = [
+ABSTRACT_PARSERS = [
     { parser: OptionalParser, handler: permutateOptionalParser },
     { parser: OrParser, handler: expandOrParser },
     { parser: EmptyParser, handler: removeEmptyParser },
-]),
-    /**
-     * Attempts to parse and returns the result if fully successful
-     * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
-     *
-     * @param {[String]} args Command arguments
-     * @param {[{Type}Parser]} parsers An expanded list of parsers
-     */
-    (parseConcrete = function (args, parsers) {
-        // The returned result that the command can read
-        parsed = new Parsed();
+];
+    
+/**
+ * Attempts to parse and returns the result if fully successful
+ * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
+ *
+ * @param {[String]} args Command arguments
+ * @param {[{Type}Parser]} parsers An expanded list of parsers
+ */
+parseConcrete = function (args, parsers) {
+    // The returned result that the command can read
+    parsed = new Parsed();
 
-        // Iterate over parsers + arguments
-        for (let i = 0; i < Math.min(parsers.length, args.length); i++) {
-            parser = parsers[i];
-            arg = args[i];
+    // Iterate over parsers + arguments
+    for (let i = 0; i < Math.min(parsers.length, args.length); i++) {
+        parser = parsers[i];
+        arg = args[i];
 
-            if (isAbstractParser(parser)) {
-                throw `Abstract parser of type ${typeof Parser} found in concrete parsing. Something went wrong here.`;
+        if (isAbstractParser(parser)) {
+            throw `Abstract parser of type ${typeof Parser} found in concrete parsing. Something went wrong here.`;
+        }
+
+        try {
+            value = parser.parse(arg);
+            parsed.addField(parser.type(), value);
+        } catch (e) {
+            if (e instanceof UserCommandError) {
+                parsed.addError(e);
+            } else {
+                // DeveloperCommandError for example
+                throw e;
             }
-
-            try {
-                value = parser.parse(arg);
-                parsed.addField(parser.type(), value);
-            } catch (e) {
-                if (e instanceof UserCommandError) {
-                    parsed.addError(e);
-                } else {
-                    // DeveloperCommandError for example
-                    throw e;
-                }
-            }
         }
+    }
 
-        // Include an error for every missing argument
-        for (let i = args.length; i < parsers.length; i++) {
-            parsed.addError(
-                new UserCommandError(
-                    `Command is missing ${h.toOrdinalSuffix(
-                        i + 1
-                    )} argument of type \`${parsers[i].type()}\``
-                )
-            );
-        }
+    // Include an error for every missing argument
+    for (let i = args.length; i < parsers.length; i++) {
+        parsed.addError(
+            new UserCommandError(
+                `Command is missing ${h.toOrdinalSuffix(
+                    i + 1
+                )} argument of type \`${parsers[i].type()}\``
+            )
+        );
+    }
 
-        // Include an error for every extra argument
-        for (let i = parsers.length; i < args.length; i++) {
-            parsed.addError(
-                new UserCommandError(
-                    `Extra argument \`${args[i]}\` at position ${i + 1}`
-                )
-            );
-        }
+    // Include an error for every extra argument
+    for (let i = parsers.length; i < args.length; i++) {
+        parsed.addError(
+            new UserCommandError(
+                `Extra argument \`${args[i]}\` at position ${i + 1}`
+            )
+        );
+    }
 
-        return parsed;
-    });
+    return parsed;
+};

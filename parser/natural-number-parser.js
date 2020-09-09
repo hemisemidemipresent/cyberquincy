@@ -8,7 +8,7 @@ module.exports = class NaturalNumberParser {
     }
 
     // Takes in an upper and a lower bound
-    constructor(low, high) {
+    constructor(low=1, high=Infinity) {
         this.delegateParser = new NumberParser(low, high);
         this.validateValues(low, high);
     }

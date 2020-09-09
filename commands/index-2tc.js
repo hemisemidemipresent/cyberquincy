@@ -1,13 +1,62 @@
 const Discord = require('discord.js');
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
+const OrParser = require('../parser/or-parser.js');
+const OptionalParser = require('../parser/optional-parser.js');
+
+const MapParser = require('../parser/map-parser.js');
+const NaturalNumberParser = require('../parser/natural-number-parser.js');
+const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
+const HeroParser = require('../parser/hero-parser.js');
+
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 module.exports = {
     name: '2tc',
     execute(message, args) {
-        async function access(n) {
+        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+            return module.exports.helpMessage(message);
+        }
+
+        towerOrHeroParser = new OrParser(
+            new TowerUpgradeParser(),
+            new HeroParser(),
+        ),
+
+        parsers = [
+            [ // Which 2TC's have been done on this map?
+                new MapParser()
+            ], 
+            [ // Get 2TC by combo number, optionally on the specified map
+                new NaturalNumberParser(), 
+                new OptionalParser(new MapParser())
+            ],
+            [ // Get 2TCs containing tower (optionally both towers), optionally on the specified map
+                towerOrHeroParser,
+                new OptionalParser(towerOrHeroParser),
+                new OptionalParser(new MapParser())
+            ],
+        ];
+
+        parsers = [ // Get 2TCs containing tower (optionally both towers), optionally on the specified map
+            towerOrHeroParser,
+            new OptionalParser(towerOrHeroParser),
+            new OptionalParser(new MapParser())
+        ]
+
+        // const parsed = CommandParser.parse(args, new OrParser(...parsers));
+        const parsed = CommandParser.parse(args, ...parsers);
+
+        console.log(parsed);
+
+        if (parsed.hasErrors()) {
+            return module.exports.errorMessage(message, parsed.parsingErrors);
+        }
+
+        return;
+
+        async function display2TC(n) {
             const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
             
             await sheet.loadCells(`C${n + 11}:P${n + 11}`); // loads a range of cells
@@ -44,6 +93,19 @@ module.exports = {
                     'Please specify a proper 2 towers chimps combo **number**'
                 );
         }
-        access(parseInt(args[0]));
+        display2TC(parseInt(args[0]));
+    },
+
+    errorMessage(message, parsingErrors) {
+        let errorEmbed = new Discord.MessageEmbed()
+            .setTitle('ERROR')
+            .addField(
+                'Likely Cause(s)',
+                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+            )
+            .addField('Type `q!2tc` for help', ':)')
+            .setColor(colours['orange']);
+
+        return message.channel.send(errorEmbed);
     },
 };

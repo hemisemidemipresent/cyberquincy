@@ -11,7 +11,9 @@
         "boy"
     ],
     "brickell": ["brick", "bri"],
-    "captain-churchill": [
+    "churchill": [
+        "captain-churchill",
+        "captain_churchill",
         "chirch",
         "church",
         "captain",
@@ -20,8 +22,10 @@
         "hill",
         "cap"
     ],
+    "etienne": ["et", "eti"],
     "ezili": ["voodo", "vm", "ezi", "ezil", "voodoo"],
-    "gwendolin": [
+    "gwen": [
+        "gwendolin",
         "gwendolyn",
         "scientist",
         "gwendolin",
@@ -29,9 +33,9 @@
         "gwendo",
         "fire"
     ],
-    "striker-jones": ["SJ", "sj", "striker", "bones", "biker"],
-    "obyn-greenfoot": ["obiwan", "obi", "oby"],
-    "pat-fusty": ["pf", "fu", "patfu", "pat_fu", "fro", "snowman"],
+    "jones": ["striker_jones", "striker-jones", "SJ", "sj", "striker", "bones", "biker"],
+    "obyn": ["obyn-greenfoot", "obiwan", "obi", "oby"],
+    "pat": ["pat-fusty", "pf", "fu", "patfu", "pat_fu", "fro", "snowman"],
     "quincy": [
         "q",
         "cyberquincy",

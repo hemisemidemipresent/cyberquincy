@@ -8,6 +8,7 @@ const MapParser = require('../parser/map-parser.js');
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const HeroParser = require('../parser/hero-parser.js');
+const AnyOrderParser = require('../parser/any-order-parser.js');
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
@@ -25,28 +26,22 @@ module.exports = {
         ),
 
         parsers = [
-            [ // Which 2TC's have been done on this map?
-                new MapParser()
-            ], 
-            [ // Get 2TC by combo number, optionally on the specified map
+            // Which 2TC's have been done on this map?
+            new MapParser(), 
+            // Get 2TC by combo number, optionally on the specified map
+            new AnyOrderParser(
                 new NaturalNumberParser(), 
                 new OptionalParser(new MapParser())
-            ],
-            [ // Get 2TCs containing tower (optionally both towers), optionally on the specified map
+            ),
+            // Get 2TCs containing tower (optionally both towers), optionally on the specified map
+            new AnyOrderParser(
                 towerOrHeroParser,
                 new OptionalParser(towerOrHeroParser),
                 new OptionalParser(new MapParser())
-            ],
+            ),
         ];
 
-        parsers = [ // Get 2TCs containing tower (optionally both towers), optionally on the specified map
-            towerOrHeroParser,
-            new OptionalParser(towerOrHeroParser),
-            new OptionalParser(new MapParser())
-        ]
-
-        // const parsed = CommandParser.parse(args, new OrParser(...parsers));
-        const parsed = CommandParser.parse(args, ...parsers);
+        const parsed = CommandParser.parse(args, new OrParser(...parsers));
 
         console.log(parsed);
 

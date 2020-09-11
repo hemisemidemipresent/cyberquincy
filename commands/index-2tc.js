@@ -9,9 +9,23 @@ const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const HeroParser = require('../parser/hero-parser.js');
 const AnyOrderParser = require('../parser/any-order-parser.js');
+const { values } = require('../parser/parsed.js');
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
+
+const OG_COLS = {
+    NUMBER: 'B',
+    TOWER_1: 'C',
+    TOWER_2: 'E',
+    UPGRADES: 'G',
+    MAP: 'I',
+    VERSION: 'K',
+    DATE: 'L',
+    PERSON: 'M',
+    LINK: 'O',
+    CURRENT: 'P'
+};
 
 module.exports = {
     name: '2tc',
@@ -49,46 +63,14 @@ module.exports = {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
-        return;
+        if (parsed.natural_number) { // Combo # provided
+            if (parsed.map) { // and map specified
 
-        async function display2TC(n) {
-            const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
-            
-            await sheet.loadCells(`C${n + 11}:P${n + 11}`); // loads a range of cells
-            const tower1 = sheet.getCellByA1(`C${n + 11}`).value;
-            const tower2 = sheet.getCellByA1(`E${n + 11}`).value;
-            const upgrades = sheet.getCellByA1(`G${n + 11}`).value.split('|').map(u => u.replace(/^\s+|\s+$/g, ''));
-            const map = sheet.getCellByA1(`I${n + 11}`).value;
-            const ver = sheet.getCellByA1(`K${n + 11}`).value;
-            const date = sheet.getCellByA1(`L${n + 11}`).formattedValue;
-            const person = sheet.getCellByA1(`M${n + 11}`).value;
-
-            const linkCell = sheet.getCellByA1(`O${n + 11}`);
-            const link = `[${linkCell.value}](${linkCell.hyperlink})`;
-
-            var current = sheet.getCellByA1(`P${n + 11}`).value;
-            if (current === HEAVY_CHECK_MARK) {
-                current = WHITE_HEAVY_CHECK_MARK;
+            } else { // and map NOT specified
+                // OG completion
+                displayOG2TC(message, parsed.natural_number);
             }
-
-            const challengeEmbed = new Discord.MessageEmbed()
-                .setTitle(`2TC Combo #${n}`)
-                .addField('Tower 1', `**${tower1}** (${upgrades[0]})`, true)
-                .addField('Tower 2', `**${tower2}** (${upgrades[1]})`, true)
-                .addField('Map', `**${map}**`, true)
-                .addField('Version', `${ver}`, true)
-                .addField('Date', `${date}`, true)
-                .addField('Person', `**${person}**`, true)
-                .addField('Link', `${link}`)
-                .addField('Current?', `${current}`)
-                .setColor(colours['cyber']);
-            message.channel.send(challengeEmbed);
-            if (isNaN(args[0]))
-                return message.channel.send(
-                    'Please specify a proper 2 towers chimps combo **number**'
-                );
         }
-        display2TC(parseInt(args[0]));
     },
 
     errorMessage(message, parsingErrors) {
@@ -104,3 +86,82 @@ module.exports = {
         return message.channel.send(errorEmbed);
     },
 };
+
+async function displayOG2TC(message, n) {
+    data = await getOG2TC(n);
+    delete data.NUMBER;
+    embed2TC(message, data, `2TC Combo #${n}`);
+}
+
+async function getOG2TC(n) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+
+    row = n + await findOGRowOffset(sheet);
+
+    await sheet.loadCells(`C${row}:P${row}`);
+
+    // Assign each value to be discord-embedded in a simple default way
+    let values = {};
+    for (key in OG_COLS) {
+        values[key] = sheet.getCellByA1(
+            `${OG_COLS[key]}${row}`
+        ).value;
+    }
+    
+    const upgrades = values.UPGRADES.split('|').map(u => u.replace(/^\s+|\s+$/g, ''));
+    console.log(upgrades);
+    for (var i = 0; i < upgrades.length; i++) {
+        // Display upgrade next to tower
+        values[`TOWER_${i + 1}`] += " (" + upgrades[i] + ")";
+    }
+    delete values.UPGRADES; // Don't display upgrades on their own, display with towers
+
+    // Recapture date to format properly
+    values.DATE = sheet.getCellByA1(`${OG_COLS.DATE}${row}`).formattedValue;
+
+    // Recapture link to format properly
+    const linkCell = sheet.getCellByA1(`${OG_COLS.LINK}${row}`);
+    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+
+    // Replace checkmark that doesn't display in embedded with one that does
+    if (values.CURRENT === HEAVY_CHECK_MARK) {
+        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+    }
+
+    return values;
+}
+
+async function findOGRowOffset(sheet) {
+    const MIN_OFFSET = 1;
+    const MAX_OFFSET = 20;
+
+    await sheet.loadCells(`B${MIN_OFFSET}:B${MAX_OFFSET}`);
+
+    for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
+        cellValue = sheet.getCellByA1(`B${row}`).value
+        if(cellValue) {
+            if (cellValue.toLowerCase().includes("number")) {
+                return row;
+            }
+        }
+    }
+
+    throw `Cannot find 2TC header "Number" to orient combo searching`;
+}
+
+function embed2TC(message, values, title) {
+    // Embed and send the message
+    var challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(title)
+        .setColor(colours['cyber']);
+
+    for (field in values) {
+        challengeEmbed = challengeEmbed.addField(
+            h.toTitleCase(field.replace('_', ' ')),
+            values[field],
+            true
+        );
+    }
+
+    message.channel.send(challengeEmbed);
+}

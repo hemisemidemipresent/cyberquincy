@@ -38,8 +38,9 @@ module.exports = {
             'Pat',
             'Adora',
             'Brickell',
+            'Etienne',
         ];
-        const xpSlopeArr = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1.425];
+        const xpSlopeArr = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1.425, 1];
         function level_cal(round, xpCurve, diffMultiplier, heroname) {
             /*
             these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0
@@ -159,6 +160,7 @@ module.exports = {
             '734955619697688587',
             '734953700551950427',
             '734953612924420107',
+            '753231376618356789',
         ];
         const difficultyEmojiIDs = [
             '734966523487322202',

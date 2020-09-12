@@ -7,6 +7,26 @@ function main() {
     configureAliases();
     commandCenter = configureCommands();
     generateListeners(commandCenter);
+    const Statcord = require('statcord.js');
+
+    global.statcord = new Statcord.Client({
+        client,
+        key: 'statcord.com-8968cIIIddJMtncfOmqo',
+        postCpuStatistics: false /* Whether to post memory statistics or not, defaults to true */,
+        postMemStatistics: false /* Whether to post memory statistics or not, defaults to true */,
+        postNetworkStatistics: false /* Whether to post memory statistics or not, defaults to true */,
+    });
+    statcord.on('autopost-start', () => {
+        // Emitted when statcord autopost starts
+        console.log('Started autopost');
+    });
+
+    statcord.on('post', (status) => {
+        // status = false if the post was successful
+        // status = "Error message" or status = Error if there was an error
+        if (!status) console.log('Successful post');
+        else console.error(status);
+    });
     login();
 }
 
@@ -55,6 +75,8 @@ function consoleBootup() {
         setTimeout(too, 1000);
 
         client.user.setActivity(`${prefix}help`);
+        // Start auto posting
+        statcord.autopost();
     });
 }
 
@@ -96,6 +118,7 @@ async function googleSheetsInitialization() {
     global.Btd6Index = await GoogleSheetsHelper.load(
         GoogleSheetsHelper.BTD6_INDEX_KEY
     );
+    console.log('<INITIATE>');
 }
 
 function configureAliases() {

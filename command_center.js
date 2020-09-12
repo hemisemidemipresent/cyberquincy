@@ -86,6 +86,8 @@ module.exports = {
                 ) {
                     Xp.addCommandXp(message);
                 }
+                //post information to statcord
+                statcord.postCommand(command.name, message.author.id);
 
                 // May or may not embed an advertisement message in addition to the command output
 

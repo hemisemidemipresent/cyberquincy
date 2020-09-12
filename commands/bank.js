@@ -167,7 +167,7 @@ function calculate(
     } else if (crosspathNum == 2) {
         buildingCost += twoxx[difficultyId - 1];
     }
-    //time to actually calculate this shit fuckery lol
+    //time to actually calculate this crap lol
     let incomePerRound =
         (230 + 40 * parseInt(crosspathNum)) * (1 + parseInt(hackPercent));
     let arr = [incomePerRound * (1.15 + hackPercent)];

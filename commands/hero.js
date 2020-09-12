@@ -206,20 +206,23 @@ module.exports = {
         fetch(url, settings)
             .then((res) => res.json())
             .then((json) => {
-                let object = json[`${name}`].upgrades[level - 1];
+                let base = json[`${name}`];
+                let object = base.upgrades[level - 1];
 
                 if (!object) {
                     let errorEmbed = new Discord.MessageEmbed()
                         .setColor(red)
                         .setDescription(
-                            `Please specify a level for the hero\ne.g. q!${name} 20`
+                            `Please specify a level for the hero\ne.g. **q!${name} 20**`
                         );
                     return message.channel.send(errorEmbed);
                 }
                 const embed = new Discord.MessageEmbed()
                     .setTitle(`${name} level ${level}`)
-                    .addField("cost/'xp'", `${object.xp}`)
-                    .addField('desc', `${object.notes}`)
+                    .addField('cost (xp)', `${object.xp}`, true)
+                    .addField('desc', `${object.notes}`, true)
+                    .addField('xp modifier', `${base['xp-mod']}`, true)
+                    .addField('skins', `${base.skins.toString()}`)
                     .setColor(cyber)
                     .setFooter(
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'

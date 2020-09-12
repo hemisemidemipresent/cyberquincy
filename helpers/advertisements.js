@@ -15,7 +15,7 @@ module.exports = {
         advertisingWheel = [
             module.exports.botOffline,
             module.exports.ownServer,
-            module.exports.ownServer,
+            module.exports.upvoteBot,
             module.exports.bugReport,
         ];
 
@@ -70,5 +70,13 @@ module.exports = {
             );
 
         message.channel.send(bugEmbed);
+    },
+    upvoteBot(message) {
+        const upvoteEmbed = new Discord.MessageEmbed()
+            .setTitle('Help support the bot!')
+            .addField(
+                'upvote the bot!',
+                '[discordbotlist link](https://discordbotlist.com/bots/cyber-quincy)'
+            );
     },
 };

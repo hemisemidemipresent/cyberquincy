@@ -1,6 +1,6 @@
 const round2 = require('../jsons/round2.json');
 const Discord = require('discord.js');
-const { cyber, red } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colours.json');
 const r1 = require('../jsons/rounds.json');
 const RoundParser = require('../parser/round-parser');
 const OptionalParser = require('../parser/optional-parser');

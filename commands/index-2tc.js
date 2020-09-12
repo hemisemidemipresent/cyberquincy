@@ -76,8 +76,16 @@ module.exports = {
                     }
                 );
             }
-        } else if (parsed.hero || parsed.tower_upgrade) {
-            return message.channel.send('Searching by towers coming soon')
+        } else if (parsed.hero || parsed.tower_upgrade) { // Tower(s) specified
+            if (parsed.map) { // and map specified
+                return message.channel.send('Alt maps coming soon');
+            } else {
+                if (parsed.heroes && parsed.heroes.length == 2) {
+                    return message.channel.send(`Can't have a 2TC with 2 heroes`);
+                }
+                defenders = [].concat(parsed.heroes).concat(parsed.tower_upgrades).filter(d => d);
+                
+            }
         } else {
             return message.channel.send('Alt maps coming soon');
         }

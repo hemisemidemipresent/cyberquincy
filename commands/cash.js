@@ -6,19 +6,23 @@ const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
 const RoundParser = require('../parser/round-parser');
 const NaturalNumberParser = require('../parser/natural-number-parser');
+const AnyOrderParser = require('../parser/any-order-parser');
 module.exports = {
     name: 'cash',
     aliases: ['ca', 'k', 'cost'],
     execute(message, args) {
-        let parsed = CommandParser.parseAnyOrder(
+        let parsed = CommandParser.parse(
             args,
-            new NaturalNumberParser(1, Infinity),
-            new OptionalParser(
-                new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
-                'CHIMPS' // default if not provided
-            ),
-            new RoundParser('ALL')
+            new AnyOrderParser(
+                new NaturalNumberParser(1, Infinity),
+                new OptionalParser(
+                    new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
+                    'CHIMPS' // default if not provided
+                ),
+                new RoundParser('ALL')
+            )
         );
+
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }

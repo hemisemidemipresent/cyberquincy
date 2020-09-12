@@ -23,31 +23,6 @@ module.exports = {
         // The one with the least number of errors is likely to tell the best story
         return parseds[0];
     },
-
-    /**
-     * Runs this file's `.parse` for every ordering permutation of the supplied parsers
-     * Returns the exact match or throws the error from the "most successul" attempt
-     * (The parsing attempt with the least number of errros)
-     *
-     * @param {[String]} args Command arguments
-     * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional
-     */
-    parseAnyOrder(args, ...parsers) {
-        // Get all permutations of parser ordering
-        parserPermutations = h.allLengthNPermutations(parsers);
-
-        // Keep a spot for a parsed response for every parser ordering
-        let parseds = [];
-
-        for (i = 0; i < parserPermutations.length; i++) {
-            parseds.push(module.exports.parse(args, ...parserPermutations[i]));
-        }
-
-        // Sort parsing errors from least to most caught errors
-        parseds.sort((a, b) => a.parsingErrors.length - b.parsingErrors.length);
-        // The one with the least number of errors is likely to tell the best story
-        return parseds[0];
-    },
 };
 
 concretizeAndParse = function (args, parsers, abstractParserIndex) {

@@ -5,32 +5,26 @@ const r1 = require('../jsons/rounds.json');
 const RoundParser = require('../parser/round-parser');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
+const AnyOrderParser = require('../parser/any-order-parser');
 module.exports = {
     name: 'round',
     description: 'tells you about the rounds (below 100)',
     aliases: ['r', 'rbe'],
     execute(message, args) {
-        let parsed = CommandParser.parseAnyOrder(
+        let parsed = CommandParser.parse(
             args,
-            new RoundParser('ALL'),
-            new OptionalParser(
-                new ModeParser('CHIMPS', 'ABR'),
-                'CHIMPS' // default if not provided
+            new AnyOrderParser(
+                new RoundParser('ALL'),
+                new OptionalParser(
+                    new ModeParser('CHIMPS', 'ABR'),
+                    'CHIMPS' // default if not provided
+                )
             )
         );
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
-
-        if (!args[0] || isNaN(args[0])) {
-            let errorEmbed = new Discord.MessageEmbed()
-                .setDescription(
-                    'use **q!round <round number>**\nFor example: q!round 68'
-                )
-                .addField('about ABR rounds', 'use q!abr <round> instead')
-                .setColor(red);
-            return message.channel.send(errorEmbed);
-        }
+        
         function getLength(round, arrayOfRounds) {
             let roundArray = arrayOfRounds[round];
             let longest = 0;
@@ -52,52 +46,33 @@ module.exports = {
             return output;
         }
 
-        let round = parseInt(args[0]);
-        if (round < 1) {
-            let embed = new Discord.MessageEmbed()
-                .setTitle('Please specify a round > 0')
-                .setDescription('Quincy has no experience in these rounds')
-                .setColor(red);
-            return message.channel.send(embed);
-        } else if (round > 100) {
-            let embed = new Discord.MessageEmbed()
-                .setTitle('Please specify a round <= 100')
-                .setDescription(
-                    "All rounds above 100 (for most people's sake) are random!"
-                )
-                .addField(
-                    'I hear you cry about 163, 263, 200',
-                    '["fixed" sandbox rounds](https://www.reddit.com/r/btd6/comments/9omw65/almost_every_single_special_freeplay_round/?utm_source=amp&utm_medium=&utm_content=post_body)'
-                )
-                .setColor(red);
-            return message.channel.send(embed);
-        }
+        
         let xp = 0;
         let totalxp = 0;
-        if (round < 21) {
-            xp = 20 * round + 20;
-            totalxp = 40 + 50 * (round - 1) + 10 * Math.pow(round - 1, 2);
-        } else if (round > 20 && round < 51) {
-            xp = 40 * (round - 20) + 420;
-            totalxp = 4600 + 440 * (round - 20) + 20 * Math.pow(round - 20, 2);
+        if (parsed.round < 21) {
+            xp = 20 * parsed.round + 20;
+            totalxp = 40 + 50 * (parsed.round - 1) + 10 * Math.pow(parsed.round - 1, 2);
+        } else if (parsed.round > 20 && parsed.round < 51) {
+            xp = 40 * (parsed.round - 20) + 420;
+            totalxp = 4600 + 440 * (parsed.round - 20) + 20 * Math.pow(parsed.round - 20, 2);
         } else {
-            xp = (round - 50) * 90 + 1620;
+            xp = (parsed.round - 50) * 90 + 1620;
             totalxp =
-                35800 + 1665 * (round - 50) + 45 * Math.pow(round - 50, 2);
+                35800 + 1665 * (parsed.round - 50) + 45 * Math.pow(parsed.round - 50, 2);
         }
         const json = require('../jsons/rounds_topper.json');
         let object = json.reg;
-        let length = getLength(args[0], object);
-        let data = getData(args[0], object);
-        let sumOfData = r1[`r${round}`];
-        let rbe = round2[round].rbe;
+        let length = getLength(parsed.round, object);
+        let data = getData(parsed.round, object);
+        let sumOfData = r1[`r${parsed.round}`];
+        let rbe = round2[parsed.round].rbe;
         const roundEmbed = new Discord.MessageEmbed()
-            .setTitle(`round ${round}`)
+            .setTitle(`round ${parsed.round}`)
             .setDescription(`${sumOfData}\n{${data}\n}`)
             .addField('round length', `${Math.round(length * 100) / 100}`, true)
             .addField('RBE', `${rbe}`, true)
             .addField('xp earned in that round', `${xp}`, true)
-            .addField('cash earned in this round', `${round2[round].csh}`, true)
+            .addField('cash earned in this round', `${round2[parsed.round].csh}`, true)
             .addField('total xp if you started at round 1', `${totalxp}`)
             .addField(
                 '**if:**',

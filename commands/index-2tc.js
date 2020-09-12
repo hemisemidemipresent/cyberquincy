@@ -9,7 +9,8 @@ const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const HeroParser = require('../parser/hero-parser.js');
 const AnyOrderParser = require('../parser/any-order-parser.js');
-const { values } = require('../parser/parsed.js');
+
+const UserCommandError = require('../exceptions/user-command-error.js');
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
@@ -68,7 +69,9 @@ module.exports = {
 
             } else { // and map NOT specified
                 // OG completion
-                displayOG2TC(message, parsed.natural_number);
+                displayOG2TC(message, parsed.natural_number).catch(
+                    e => module.exports.errorMessage(message, [e.message])
+                );
             }
         }
     },
@@ -97,6 +100,15 @@ async function getOG2TC(n) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 
     row = n + await findOGRowOffset(sheet);
+
+    await sheet.loadCells(`J6`);
+
+    numCombos = sheet.getCellByA1('J6').value
+    if (n > numCombos) {
+        throw new UserCommandError(
+            `You asked for the ${h.toOrdinalSuffix(n)} combo but there are only ${numCombos} listed.`
+        );
+    }
 
     await sheet.loadCells(`C${row}:P${row}`);
 

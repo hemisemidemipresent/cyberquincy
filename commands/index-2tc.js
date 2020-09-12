@@ -33,7 +33,7 @@ module.exports = {
     execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);
-        }
+        }''
 
         towerOrHeroParser = new OrParser(
             new TowerUpgradeParser(),
@@ -58,22 +58,37 @@ module.exports = {
 
         const parsed = CommandParser.parse(args, new OrParser(...parsers));
 
-        console.log(parsed);
-
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
         if (parsed.natural_number) { // Combo # provided
             if (parsed.map) { // and map specified
-
+                return message.channel.send('Alt maps coming soon');
             } else { // and map NOT specified
                 // OG completion
                 displayOG2TC(message, parsed.natural_number).catch(
-                    e => module.exports.errorMessage(message, [e.message])
+                    e => {
+                        if(e instanceof UserCommandError)
+                            return module.exports.errorMessage(message, [e.message])
+                        else
+                            throw e;
+                    }
                 );
             }
+        } else if (parsed.hero || parsed.tower_upgrade) {
+            return message.channel.send('Searching by towers coming soon')
+        } else {
+            return message.channel.send('Alt maps coming soon');
         }
+    },
+
+    helpMessage(message) {
+        let helpEmbed = new Discord.MessageEmbed()
+            .setTitle('`q!2tc` HELP')
+            .addField('Example', '`q!2tc 44`');
+
+        return message.channel.send(helpEmbed);
     },
 
     errorMessage(message, parsingErrors) {
@@ -110,7 +125,7 @@ async function getOG2TC(n) {
         );
     }
 
-    await sheet.loadCells(`C${row}:P${row}`);
+    await sheet.loadCells(`B${row}:P${row}`);
 
     // Assign each value to be discord-embedded in a simple default way
     let values = {};
@@ -121,7 +136,6 @@ async function getOG2TC(n) {
     }
     
     const upgrades = values.UPGRADES.split('|').map(u => u.replace(/^\s+|\s+$/g, ''));
-    console.log(upgrades);
     for (var i = 0; i < upgrades.length; i++) {
         // Display upgrade next to tower
         values[`TOWER_${i + 1}`] += " (" + upgrades[i] + ")";

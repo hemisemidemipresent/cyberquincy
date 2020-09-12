@@ -67,7 +67,7 @@ module.exports = {
                 return message.channel.send('Alt maps coming soon');
             } else { // and map NOT specified
                 // OG completion
-                displayOG2TC(message, parsed.natural_number).catch(
+                displayOG2TCFromN(message, parsed.natural_number).catch(
                     e => {
                         if(e instanceof UserCommandError)
                             return module.exports.errorMessage(message, [e.message])
@@ -79,12 +79,30 @@ module.exports = {
         } else if (parsed.hero || parsed.tower_upgrade) { // Tower(s) specified
             if (parsed.map) { // and map specified
                 return message.channel.send('Alt maps coming soon');
-            } else {
+            } else { // and map NOT specified
                 if (parsed.heroes && parsed.heroes.length == 2) {
                     return message.channel.send(`Can't have a 2TC with 2 heroes`);
                 }
-                defenders = [].concat(parsed.heroes).concat(parsed.tower_upgrades).filter(d => d);
-                
+
+                tower_upgrades = parsed.tower_upgrades ? 
+                                    parsed.tower_upgrades.map(
+                                        tu => Aliases.towerUpgradeToIndexNormalForm(tu)
+                                    ) : []
+                heroes = parsed.heroes ? parsed.heroes.map(hr => h.toTitleCase(hr)) : [];
+                towers = heroes.concat(tower_upgrades);
+
+                if (towers.length == 1) { // 1 tower provided
+                    return message.channel.send(`Multiple-combo searching coming soon`);
+                } else { // 2 towers provided
+                    displayOG2TCFromTowers(message, towers).catch(
+                        e => {
+                            if(e instanceof UserCommandError)
+                                return module.exports.errorMessage(message, [e.message])
+                            else
+                                throw e;
+                        }
+                    );
+                }
             }
         } else {
             return message.channel.send('Alt maps coming soon');
@@ -113,27 +131,75 @@ module.exports = {
     },
 };
 
-async function displayOG2TC(message, n) {
-    data = await getOG2TC(n);
+async function displayOG2TCFromN(message, n) {
+    row = await getRowFromN(n);
+    data = await getOG2TCFromRow(row);
     delete data.NUMBER;
     embed2TC(message, data, `2TC Combo #${n}`);
 }
 
-async function getOG2TC(n) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+async function displayOG2TCFromTowers(message, towers) {
+    row = await getRowFromTowers(towers);
+    data = await getOG2TCFromRow(row);
 
-    row = n + await findOGRowOffset(sheet);
+    // Recollect towers in tower# order
+    towers = [data.TOWER_1, data.TOWER_2]
 
-    await sheet.loadCells(`J6`);
+    // Don't include tower info in embedded, only in title
+    delete data.TOWER_1;
+    delete data.TOWER_2;
 
-    numCombos = sheet.getCellByA1('J6').value
-    if (n > numCombos) {
+    embed2TC(message, data, `2TC Combo: ${towers.join(' + ')}`);
+}
+
+async function getRowFromN(n) {
+    nCombos = await numCombos()
+    if (n > nCombos) {
         throw new UserCommandError(
-            `You asked for the ${h.toOrdinalSuffix(n)} combo but there are only ${numCombos} listed.`
+            `You asked for the ${h.toOrdinalSuffix(n)} combo but there are only ${nCombos} listed.`
         );
     }
 
-    await sheet.loadCells(`B${row}:P${row}`);
+    return n + await findOGRowOffset();
+}
+
+async function getRowFromTowers(towers) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+
+    startRow = await findOGRowOffset(sheet) + 1;
+    endRow = startRow + await numCombos() - 1;
+
+    await sheet.loadCells(`${OG_COLS.TOWER_1}${startRow}:${OG_COLS.TOWER_2}${endRow}`);
+
+    for (var row = startRow; row <= endRow; row++) {
+        candidateTowers = []
+        candidateTowers.push(
+            sheet.getCellByA1(`${OG_COLS.TOWER_1}${row}`).value
+        )
+        candidateTowers.push(
+            sheet.getCellByA1(`${OG_COLS.TOWER_2}${row}`).value
+        )
+
+        if (h.arraysEqual(
+                towers.map(t => t.toLowerCase()), 
+                candidateTowers.map(t => t.toLowerCase()))
+            ) {
+            return row;
+        }
+    }
+    throw new UserCommandError(`${towers.join(' + ')} isn't a 2TC yet.`);
+}
+
+async function numCombos() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+    await sheet.loadCells(`J6`);
+    return sheet.getCellByA1('J6').value
+}
+
+async function getOG2TCFromRow(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+
+    await sheet.loadCells(`${OG_COLS.NUMBER}${row}:${OG_COLS.CURRENT}${row}`);
 
     // Assign each value to be discord-embedded in a simple default way
     let values = {};
@@ -165,11 +231,13 @@ async function getOG2TC(n) {
     return values;
 }
 
-async function findOGRowOffset(sheet) {
+async function findOGRowOffset() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+
     const MIN_OFFSET = 1;
     const MAX_OFFSET = 20;
 
-    await sheet.loadCells(`B${MIN_OFFSET}:B${MAX_OFFSET}`);
+    await sheet.loadCells(`${OG_COLS.NUMBER}${MIN_OFFSET}:${OG_COLS.NUMBER}${MAX_OFFSET}`);
 
     for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
         cellValue = sheet.getCellByA1(`B${row}`).value

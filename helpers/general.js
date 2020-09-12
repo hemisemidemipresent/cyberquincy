@@ -55,11 +55,30 @@ module.exports = {
     },
 
     toTitleCase(str) {
-        return str
-            .toLowerCase()
-            .split(' ')
-            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(' ');
+        str = str.toLowerCase();
+
+        separator_tokens = [' ', '-']
+        for (var i = 0; i < separator_tokens.length; i++) {
+            str = str.split(separator_tokens[i])
+                     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                     .join(separator_tokens[i])
+        }
+        return str;
+    },
+
+    arraysEqual(_arr1, _arr2) {
+        if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
+            return false;
+
+        var arr1 = _arr1.concat().sort();
+        var arr2 = _arr2.concat().sort();
+
+        for (var i = 0; i < arr1.length; i++) {
+            if (arr1[i] !== arr2[i])
+                return false;
+        }
+
+        return true;
     },
 
     IMPOPPABLE_ROUNDS: [6, 100],

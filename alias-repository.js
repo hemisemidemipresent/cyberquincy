@@ -216,4 +216,9 @@ module.exports = class AliasRepository extends Array {
 
         return heroes.map(ag => ag.canonical);
     }
+
+    towerUpgradeToIndexNormalForm(upgrade) {
+        const index_normal = this.getAliasSet(upgrade)[1];
+        return index_normal.split('_').map(tk => h.toTitleCase(tk)).join(' ');
+    }
 };

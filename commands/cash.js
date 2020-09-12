@@ -14,7 +14,7 @@ module.exports = {
         let parsed = CommandParser.parse(
             args,
             new AnyOrderParser(
-                new NaturalNumberParser(1, Infinity),
+                new NaturalNumberParser(),
                 new OptionalParser(
                     new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
                     'CHIMPS' // default if not provided

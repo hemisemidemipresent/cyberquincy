@@ -142,7 +142,7 @@ async function displayOG2TCFromTowers(message, towers) {
     row = await getOGRowFromTowers(towers);
     data = await getOG2TCFromRow(row);
 
-    // Recollect towers in tower# order
+    // Recollect towers in tower# order and with upgrades
     towers = [data.TOWER_1, data.TOWER_2]
 
     // Don't include tower info in embedded, only in title

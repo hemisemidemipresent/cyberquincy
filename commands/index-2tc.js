@@ -67,41 +67,20 @@ module.exports = {
                 return message.channel.send('Alt maps coming soon');
             } else { // and map NOT specified
                 // OG completion
-                displayOG2TCFromN(message, parsed.natural_number).catch(
-                    e => {
-                        if(e instanceof UserCommandError)
-                            return module.exports.errorMessage(message, [e.message])
-                        else
-                            throw e;
-                    }
-                );
+                displayOG2TCFromN(message, parsed.natural_number).catch(e => err(e, message));
             }
         } else if (parsed.hero || parsed.tower_upgrade) { // Tower(s) specified
             if (parsed.map) { // and map specified
                 return message.channel.send('Alt maps coming soon');
             } else { // and map NOT specified
-                if (parsed.heroes && parsed.heroes.length == 2) {
-                    return message.channel.send(`Can't have a 2TC with 2 heroes`);
-                }
-
-                tower_upgrades = parsed.tower_upgrades ? 
-                                    parsed.tower_upgrades.map(
-                                        tu => Aliases.towerUpgradeToIndexNormalForm(tu)
-                                    ) : []
-                heroes = parsed.heroes ? parsed.heroes.map(hr => h.toTitleCase(hr)) : [];
-                towers = heroes.concat(tower_upgrades);
+                towers = null;
+                try { towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes); }
+                catch(e) { err(e, message); }
 
                 if (towers.length == 1) { // 1 tower provided
                     return message.channel.send(`Multiple-combo searching coming soon`);
                 } else { // 2 towers provided
-                    displayOG2TCFromTowers(message, towers).catch(
-                        e => {
-                            if(e instanceof UserCommandError)
-                                return module.exports.errorMessage(message, [e.message])
-                            else
-                                throw e;
-                        }
-                    );
+                    return displayOG2TCFromTowers(message, towers).catch(e => err(e, message));
                 }
             }
         } else {
@@ -130,6 +109,27 @@ module.exports = {
         return message.channel.send(errorEmbed);
     },
 };
+
+function err(e, message) {
+    if (e instanceof UserCommandError) {
+        return module.exports.errorMessage(message, [e.message]);
+    } else {
+        throw e;
+    }
+}
+
+function normalizeTowers(tower_upgrades, heroes) {
+    if (heroes && heroes.length == 2) {
+        throw new UserCommandError(`Can't have a 2TC with 2 heroes`);
+    }
+
+    tower_upgrades = tower_upgrades ? 
+                        tower_upgrades.map(
+                            tu => Aliases.towerUpgradeToIndexNormalForm(tu)
+                        ) : []
+    heroes = heroes ? heroes.map(hr => h.toTitleCase(hr)) : [];
+    return heroes.concat(tower_upgrades);
+}
 
 async function displayOG2TCFromN(message, n) {
     row = await getRowFromN(n);

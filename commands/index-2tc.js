@@ -132,14 +132,14 @@ function normalizeTowers(tower_upgrades, heroes) {
 }
 
 async function displayOG2TCFromN(message, n) {
-    row = await getRowFromN(n);
+    row = await getOGRowFromN(n);
     data = await getOG2TCFromRow(row);
     delete data.NUMBER;
     embed2TC(message, data, `2TC Combo #${n}`);
 }
 
 async function displayOG2TCFromTowers(message, towers) {
-    row = await getRowFromTowers(towers);
+    row = await getOGRowFromTowers(towers);
     data = await getOG2TCFromRow(row);
 
     // Recollect towers in tower# order
@@ -152,7 +152,7 @@ async function displayOG2TCFromTowers(message, towers) {
     embed2TC(message, data, `2TC Combo: ${towers.join(' + ')}`);
 }
 
-async function getRowFromN(n) {
+async function getOGRowFromN(n) {
     nCombos = await numCombos()
     if (n > nCombos) {
         throw new UserCommandError(
@@ -163,7 +163,7 @@ async function getRowFromN(n) {
     return n + await findOGRowOffset();
 }
 
-async function getRowFromTowers(towers) {
+async function getOGRowFromTowers(towers) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 
     startRow = await findOGRowOffset(sheet) + 1;

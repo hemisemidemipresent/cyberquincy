@@ -3,6 +3,10 @@ module.exports = {
         return typeof s === 'string' || s instanceof String;
     },
 
+    is_fn(f) {
+        return f && {}.toString.call(f) === '[object Function]';
+    },
+
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },

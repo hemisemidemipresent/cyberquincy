@@ -14,8 +14,8 @@ module.exports = class MapParser {
 
     constructor(...permitted_maps) {
         this.delegateParser = new LimitedStringSetValuesParser(
-            Aliases.allMaps(),
             this.type(),
+            Aliases.allMaps(),
             permitted_maps.map((d) => d.toLowerCase()),
             this.errorMessage
         );

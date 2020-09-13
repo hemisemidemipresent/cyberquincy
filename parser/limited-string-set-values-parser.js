@@ -8,42 +8,40 @@ module.exports = class LimitedStringSetValuesParser {
         return 'limited_string_set_value';
     }
 
-    constructor(possible_values, type, permitted_values=null, errorMessage=null) {
-        if (!(possible_values instanceof Array)) {
-            throw new DeveloperCommandError(`Possible values "${possible_values}" (first arg) must be an array`);
+    constructor(type, possibleValues, permittedValues=null) {
+        this.supertype = type;
+        this.possibleValues = possibleValues;
+        this.permittedValues = permittedValues;
+
+        if (!(this.possibleValues instanceof Array)) {
+            throw new DeveloperCommandError(`Possible values "${this.possibleValues}" (first arg) must be an array`);
         }
 
-        if (!(h.is_str(type))) {
-            throw new DeveloperCommandError(`Type "${type}" (second arg) must be an string`);
+        if (!(h.is_str(this.supertype))) {
+            throw new DeveloperCommandError(`Type "${this.supertype}" (second arg) must be an string`);
         }
 
-        if (permitted_values && !(permitted_values instanceof Array)) {
-            throw new DeveloperCommandError(`Permitted values "${permitted_values}" (third arg) must be null or an array`);
-        }
-
-        if (!(h.is_fn(errorMessage))) {
-            throw new DeveloperCommandError(`Error Message "${errorMessage}" (fourth arg) must be null or a function expecting one argument: a string that didn't match the ${type} parser`);
+        if (this.permittedValues && !(this.permittedValues instanceof Array)) {
+            throw new DeveloperCommandError(`Permitted values "${this.permittedValues}" (third arg) must be null or an array`);
         }
 
         // Ensure that the permitted values provided by the developer are a subset of all possible values
-        if (permitted_values && permitted_values.length > 0) {
-            for (let i = 0; i < permitted_values.length; i++) {
-                if (possible_values && !possible_values.includes(permitted_values[i])) {
+        if (this.permittedValues && this.permittedValues.length > 0) {
+            for (let i = 0; i < this.permittedValues.length; i++) {
+                if (this.possibleValues && !this.possibleValues.includes(this.permittedValues[i])) {
                     throw new DeveloperCommandError(
-                        `${permitted_values[i]} is not a valid ${type}`
+                        `${this.permittedValues[i]} is not a valid ${this.supertype}`
                     );
                 }
             }
         } else {
             // Permitted values are set to all possible values if not provided
-            permitted_values = [...possible_values];
+            this.permittedValues = [...this.possibleValues];
         }
 
         this.delegateParser = new StringSetValuesParser(
-            ...permitted_values
+            ...this.permittedValues
         );
-
-        this.errorMessage = errorMessage;
     }
 
     parse(arg) {
@@ -55,5 +53,21 @@ module.exports = class LimitedStringSetValuesParser {
                 throw new UserCommandError(this.errorMessage(arg))
             } else throw e;
         }
+    }
+
+    errorMessage(badValue) {
+        const acceptedValues = h.shuffle(this.permittedValues);
+
+        const exampleValues = acceptedValues.slice(0, Math.min(acceptedValues.length, 3))
+                                      .map(v => {
+                                          let aliases = Aliases.getAliasSet(v) || [v];
+                                          return aliases[Math.floor(Math.random() * aliases.length)];
+                                      });
+
+        let msg = ''
+        msg += `${badValue} is neither an accepted ${this.supertype} nor a ${this.supertype} alias for this command. `
+        msg += `Valid examples include ${exampleValues.map(v => `\`${v}\``).join(', ')}, etc. `;
+        msg += `Use \`q!alias <proper_${this.supertype}_name>\` to learn ${this.supertype}-name shorthands.`
+        return msg;
     }
 };

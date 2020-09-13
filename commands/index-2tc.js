@@ -33,7 +33,7 @@ module.exports = {
     execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);
-        }''
+        }
 
         towerOrHeroParser = new OrParser(
             new TowerUpgradeParser(),

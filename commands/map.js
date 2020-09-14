@@ -9,7 +9,7 @@ module.exports = {
     aliases: ['m'],
     execute(message, args) {
         let arr = [args[0]];
-        const parsed = CommandParser.parseAnyOrder(arr, new MapParser());
+        const parsed = CommandParser.parse(arr, new MapParser());
         let name = parsed.map;
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);

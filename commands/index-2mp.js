@@ -9,6 +9,7 @@ const EmptyParser = require('../parser/empty-parser.js');
 const MapParser = require('../parser/map-parser.js');
 const ExactStringParser = require('../parser/exact-string-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
+const AnyOrderParser = require('../parser/any-order-parser.js');
 
 const COLS = {
     NUMBER: 'B',
@@ -31,14 +32,16 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        const parsed = CommandParser.parseAnyOrder(
+        const parsed = CommandParser.parse(
             args,
-            new OrParser(new TowerUpgradeParser(), new HeroParser()),
-            new OrParser(
-                new EmptyParser(), // OG completion for tower
-                new MapParser(), // Completion of tower on specified map
-                new MapDifficultyParser(), // Completions of tower on maps under specified difficulty
-                new ExactStringParser('ALL') // All completions for tower
+            new AnyOrderParser(
+                new OrParser(new TowerUpgradeParser(), new HeroParser()),
+                new OrParser(
+                    new EmptyParser(), // OG completion for tower
+                    new MapParser(), // Completion of tower on specified map
+                    new MapDifficultyParser(), // Completions of tower on maps under specified difficulty
+                    new ExactStringParser('ALL') // All completions for tower
+                )
             )
         );
 

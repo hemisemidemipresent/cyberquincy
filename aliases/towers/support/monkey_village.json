@@ -1,4 +1,5 @@
 {
     "xyz": ["monkey_village", "village", "vil", "vill", "mvil"],
-    "500": ["primary_expertise", "pe", "primex"]
+    "500": ["primary_expertise", "pe", "primex"],
+    "050": ["homeland_defense", "homeland_defence", "homeland", "hd"]
 }

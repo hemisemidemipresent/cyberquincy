@@ -12,6 +12,7 @@ const colors = require('../jsons/colours.json');
 const OptionalParser = require('../parser/optional-parser.js');
 const RoundParser = require('../parser/round-parser.js');
 const ModeParser = require('../parser/mode-parser.js');
+const AnyOrderParser = require('../parser/any-order-parser');
 
 module.exports = {
     name: 'chincome',
@@ -22,13 +23,15 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        parsed = CommandParser.parseAnyOrder(
+        parsed = CommandParser.parse(
             args,
-            new OptionalParser(
-                new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
-                "CHIMPS" // default if not provided
-            ),
-            new RoundParser("IMPOPPABLE")
+            new AnyOrderParser(
+                new OptionalParser(
+                    new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
+                    "CHIMPS" // default if not provided
+                ),
+                new RoundParser("IMPOPPABLE")
+            )
         );
 
         if (parsed.hasErrors()) {
@@ -64,19 +67,6 @@ module.exports = {
             .setColor(colors['orange']);
 
         return message.channel.send(errorEmbed);
-    },
-
-    bugMessage(message, error_obj) {
-        let bugEmbed = new Discord.MessageEmbed()
-            .setTitle('BUG')
-            .addField(
-                "What's this?",
-                'This is a programming error, alert the maintainers'
-            )
-            .addField('Error', error_obj)
-            .setColor(colors['red']);
-
-        return message.channel.send(bugEmbed);
     },
 };
 

@@ -2,6 +2,7 @@ const Parsed = require('./parsed.js');
 const OptionalParser = require('./optional-parser.js');
 const OrParser = require('./or-parser.js');
 const EmptyParser = require('./empty-parser.js');
+const AnyOrderParser = require('./any-order-parser.js');
 
 module.exports = {
     /**
@@ -19,31 +20,6 @@ module.exports = {
         // Sort parsing errors from least to most caught errors
         parseds.sort((a, b) => a.parsingErrors.length - b.parsingErrors.length);
 
-        // The one with the least number of errors is likely to tell the best story
-        return parseds[0];
-    },
-
-    /**
-     * Runs this file's `.parse` for every ordering permutation of the supplied parsers
-     * Returns the exact match or throws the error from the "most successul" attempt
-     * (The parsing attempt with the least number of errros)
-     *
-     * @param {[String]} args Command arguments
-     * @param  {...{Type}Parser} parsers An expanded list of parsers; some may be optional
-     */
-    parseAnyOrder(args, ...parsers) {
-        // Get all permutations of parser ordering
-        parserPermutations = h.allLengthNPermutations(parsers);
-
-        // Keep a spot for a parsed response for every parser ordering
-        let parseds = [];
-
-        for (i = 0; i < parserPermutations.length; i++) {
-            parseds.push(module.exports.parse(args, ...parserPermutations[i]));
-        }
-
-        // Sort parsing errors from least to most caught errors
-        parseds.sort((a, b) => a.parsingErrors.length - b.parsingErrors.length);
         // The one with the least number of errors is likely to tell the best story
         return parseds[0];
     },
@@ -87,7 +63,6 @@ concretizeAndParse = function (args, parsers, abstractParserIndex) {
         parseds.push(...newParseds.map((pd) => pd.merge(alreadyParsed)));
     }
 
-    // The one with the least number of errors is likely to tell the best story
     return parseds;
 };
 
@@ -103,7 +78,7 @@ isAbstractParser = function (parser) {
  *     in its place and for the other list NO parser in its place.
  * If there is no OptionalParser, the function just returns the whole parser list
  */
-permutateOptionalParser = function (parsers) {
+useItOrLoseIt = function (parsers) {
     optionalParserIndex = parsers.findIndex((p) => p instanceof OptionalParser);
 
     // Return the whole list if there's no OptionalParser found
@@ -192,6 +167,33 @@ removeEmptyParser = function (parsers) {
     return [{ parsers: moreConcreteParsers, parsed: new Parsed() }];
 };
 
+permutateParsers = function (parsers) {
+    anyOrderParserIndex = parsers.findIndex((p) => p instanceof AnyOrderParser);
+
+    // Return the whole list if there's no OrParser found
+    if (anyOrderParserIndex == -1) {
+        return [{ parsers: parsers, parsed: new Parsed() }];
+    }
+    
+    subParsers = parsers[anyOrderParserIndex].parsers
+    // Get all permutations of parser ordering
+    parserPermutations = h.allLengthNPermutations(subParsers);
+
+    parserLists = [];
+    for (var i = 0; i < parserPermutations.length; i++) {
+        parserLists.push(
+            parsers
+                .slice(0, anyOrderParserIndex)
+                .concat(parserPermutations[i])
+                .concat(parsers.slice(anyOrderParserIndex + 1))
+        );
+    }
+
+    return parserPermutations.map(function (l) {
+        return { parsers: l, parsed: new Parsed() };
+    });
+}
+
 /**
  * A list of different types of abstract parsers
  * and the handler that concretizes it.
@@ -203,63 +205,65 @@ removeEmptyParser = function (parsers) {
  *     and `parsed` is whatever might've been parsed in the concretization
  *     (such as a default value that sticks in for an unused OptionalParser)
  */
-(ABSTRACT_PARSERS = [
-    { parser: OptionalParser, handler: permutateOptionalParser },
+ABSTRACT_PARSERS = [
+    { parser: OptionalParser, handler: useItOrLoseIt },
     { parser: OrParser, handler: expandOrParser },
     { parser: EmptyParser, handler: removeEmptyParser },
-]),
-    /**
-     * Attempts to parse and returns the result if fully successful
-     * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
-     *
-     * @param {[String]} args Command arguments
-     * @param {[{Type}Parser]} parsers An expanded list of parsers
-     */
-    (parseConcrete = function (args, parsers) {
-        // The returned result that the command can read
-        parsed = new Parsed();
+    { parser: AnyOrderParser, handler: permutateParsers},
+];
+    
+/**
+ * Attempts to parse and returns the result if fully successful
+ * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
+ *
+ * @param {[String]} args Command arguments
+ * @param {[{Type}Parser]} parsers An expanded list of parsers
+ */
+parseConcrete = function (args, parsers) {
+    // The returned result that the command can read
+    parsed = new Parsed();
 
-        // Iterate over parsers + arguments
-        for (let i = 0; i < Math.min(parsers.length, args.length); i++) {
-            parser = parsers[i];
-            arg = args[i];
+    // Iterate over parsers + arguments
+    for (let i = 0; i < Math.min(parsers.length, args.length); i++) {
+        parser = parsers[i];
+        arg = args[i];
 
-            if (isAbstractParser(parser)) {
-                throw `Abstract parser of type ${typeof Parser} found in concrete parsing. Something went wrong here.`;
+        if (isAbstractParser(parser)) {
+            throw `Abstract parser of type ${typeof Parser} found in concrete parsing. Something went wrong here.`;
+        }
+
+        try {
+            value = parser.parse(arg);
+            parsed.addField(parser.type(), value);
+        } catch (e) {
+            if (e instanceof UserCommandError) {
+                parsed.addError(e);
+            } else {
+                // DeveloperCommandError for example
+                throw e;
             }
-
-            try {
-                value = parser.parse(arg);
-                parsed.addField(parser.type(), value);
-            } catch (e) {
-                if (e instanceof UserCommandError) {
-                    parsed.addError(e);
-                } else {
-                    // DeveloperCommandError for example
-                    throw e;
-                }
-            }
         }
+    }
 
-        // Include an error for every missing argument
-        for (let i = args.length; i < parsers.length; i++) {
-            parsed.addError(
-                new UserCommandError(
-                    `Command is missing ${h.toOrdinalSuffix(
-                        i + 1
-                    )} argument of type \`${parsers[i].type()}\``
-                )
-            );
-        }
+    // Include an error for every missing argument
+    for (let i = args.length; i < parsers.length; i++) {
+        parsed.addError(
+            new UserCommandError(
+                `Command is missing ${h.toOrdinalSuffix(
+                    i + 1
+                )} argument of type \`${parsers[i].type()}\``
+            )
+        );
+    }
 
-        // Include an error for every extra argument
-        for (let i = parsers.length; i < args.length; i++) {
-            parsed.addError(
-                new UserCommandError(
-                    `Extra argument \`${args[i]}\` at position ${i + 1}`
-                )
-            );
-        }
+    // Include an error for every extra argument
+    for (let i = parsers.length; i < args.length; i++) {
+        parsed.addError(
+            new UserCommandError(
+                `Extra argument \`${args[i]}\` at position ${i + 1}`
+            )
+        );
+    }
 
-        return parsed;
-    });
+    return parsed;
+};

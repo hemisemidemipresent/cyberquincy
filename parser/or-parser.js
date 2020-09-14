@@ -2,7 +2,7 @@ const DeveloperCommandError = require("../exceptions/developer-command-error");
 
 // to allow various ways to use parse arguments and ultimately use a command
 module.exports = class OrParser {
-    // Takes in the concrete parser and a default value is the parser fails to parse
+    // Takes in a list of parser lists
     constructor(...parserLists) {
         this.parserLists = parserLists;
 

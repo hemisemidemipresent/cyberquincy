@@ -1,3 +1,5 @@
+pluralize = require('pluralize');
+
 const DeveloperCommandError = require('../exceptions/developer-command-error.js');
 const UserCommandError = require('../exceptions/user-command-error.js');
 
@@ -56,18 +58,23 @@ module.exports = class LimitedStringSetValuesParser {
     }
 
     errorMessage(badValue) {
+        const NUM_EXAMPLE_VALUES = 5;
+
         const acceptedValues = h.shuffle(this.permittedValues);
 
-        const exampleValues = acceptedValues.slice(0, Math.min(acceptedValues.length, 3))
+        const exampleValues = acceptedValues.slice(0, Math.min(acceptedValues.length, NUM_EXAMPLE_VALUES))
                                       .map(v => {
                                           let aliases = Aliases.getAliasSet(v) || [v];
                                           return aliases[Math.floor(Math.random() * aliases.length)];
                                       });
 
+        const etc = acceptedValues.length > NUM_EXAMPLE_VALUES ? ', etc. ' : '';
+
         let msg = ''
-        msg += `${badValue} is neither an accepted ${this.supertype} nor a ${this.supertype} alias for this command. `
-        msg += `Valid examples include ${exampleValues.map(v => `\`${v}\``).join(', ')}, etc. `;
-        msg += `Use \`q!alias <proper_${this.supertype}_name>\` to learn ${this.supertype}-name shorthands.`
+        msg += `\`${badValue}\` is neither an accepted ${this.supertype} nor a ${this.supertype} alias for this command. `
+        msg += `Valid examples include ${exampleValues.map(v => `\`${v}\``).join(', ')}${etc}. `;
+        msg += `Use \`q!alias <proper_${this.supertype}_name>\` (i.e. \`q!alias ${exampleValues[0]}\`) `
+        msg += `to learn shorthands for various ${pluralize(this.supertype)}.`
         return msg;
     }
 };

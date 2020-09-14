@@ -9,7 +9,7 @@ const AnyOrderParser = require('../parser/any-order-parser');
 module.exports = {
     name: 'round',
     description: 'tells you about the rounds (below 100)',
-    aliases: ['r', 'rbe'],
+    aliases: ['r'],
     execute(message, args) {
         let parsed = CommandParser.parse(
             args,
@@ -24,7 +24,7 @@ module.exports = {
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
-        
+
         function getLength(round, arrayOfRounds) {
             let roundArray = arrayOfRounds[round];
             let longest = 0;
@@ -46,19 +46,26 @@ module.exports = {
             return output;
         }
 
-        
         let xp = 0;
         let totalxp = 0;
         if (parsed.round < 21) {
             xp = 20 * parsed.round + 20;
-            totalxp = 40 + 50 * (parsed.round - 1) + 10 * Math.pow(parsed.round - 1, 2);
+            totalxp =
+                40 +
+                50 * (parsed.round - 1) +
+                10 * Math.pow(parsed.round - 1, 2);
         } else if (parsed.round > 20 && parsed.round < 51) {
             xp = 40 * (parsed.round - 20) + 420;
-            totalxp = 4600 + 440 * (parsed.round - 20) + 20 * Math.pow(parsed.round - 20, 2);
+            totalxp =
+                4600 +
+                440 * (parsed.round - 20) +
+                20 * Math.pow(parsed.round - 20, 2);
         } else {
             xp = (parsed.round - 50) * 90 + 1620;
             totalxp =
-                35800 + 1665 * (parsed.round - 50) + 45 * Math.pow(parsed.round - 50, 2);
+                35800 +
+                1665 * (parsed.round - 50) +
+                45 * Math.pow(parsed.round - 50, 2);
         }
         const json = require('../jsons/rounds_topper.json');
         let object = json.reg;
@@ -72,7 +79,11 @@ module.exports = {
             .addField('round length', `${Math.round(length * 100) / 100}`, true)
             .addField('RBE', `${rbe}`, true)
             .addField('xp earned in that round', `${xp}`, true)
-            .addField('cash earned in this round', `${round2[parsed.round].csh}`, true)
+            .addField(
+                'cash earned in this round',
+                `${round2[parsed.round].csh}`,
+                true
+            )
             .addField('total xp if you started at round 1', `${totalxp}`)
             .addField(
                 '**if:**',

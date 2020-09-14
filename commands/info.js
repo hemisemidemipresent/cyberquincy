@@ -4,7 +4,7 @@ module.exports = {
     name: 'info',
     description: 'shows info',
     aliases: ['i'],
-    execute(message, args) {
+    execute(message) {
         const responseTime = Math.round(Date.now() - message.createdTimestamp);
         let totalSeconds = client.uptime / 1000;
         const days = Math.floor(totalSeconds / 86400);

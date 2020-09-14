@@ -28,14 +28,14 @@ module.exports = {
             new AnyOrderParser(
                 new OptionalParser(
                     new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
-                    "CHIMPS" // default if not provided
+                    'CHIMPS' // default if not provided
                 ),
-                new RoundParser("IMPOPPABLE")
+                new RoundParser('IMPOPPABLE')
             )
         );
 
         if (parsed.hasErrors()) {
-            return module.exports.errorMessage(message, parsed.parsingErrors)
+            return module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
         return message.channel.send(chincomeMessage(parsed.mode, parsed.round));
@@ -47,14 +47,17 @@ module.exports = {
             .addField(
                 '`q!chincome <round> (<gamemode>)` (Order agnostic)',
                 '  • Cash generated during round <round>\n' +
-				'  • Cash generated from start of round 6 through end of round <round>\n' +
-				'  • Cash generated from start of round <round> through end of round 100'
+                    '  • Cash generated from start of round 6 through end of round <round>\n' +
+                    '  • Cash generated from start of round <round> through end of round 100'
             )
             .addField('Valid `(<gamemode>)` values', 'CHIMPS, HALFCASH, ABR')
             .addField('Valid `<round>` values', '6, 7, ..., 100')
             .addField('Ex. #1', 'q!chincome <round> | q!chincome 8')
             .addField('Ex. #2', 'q!chincome <mode> <round> | q!chincome abr R8')
-            .addField('Ex. #3', 'q!chincome <round> <mode> | q!chincome r8 halfcash')
+            .addField(
+                'Ex. #3',
+                'q!chincome <round> <mode> | q!chincome r8 halfcash'
+            );
 
         return message.channel.send(errorEmbed);
     },
@@ -117,9 +120,11 @@ calculateIncomes = function (mode, round) {
     } else {
         index = round;
 
-        chincome = chimps[index]['cch'] - chimps[5]['cch'] + 650;
-        rincome = chimps[index]['csh'];
-        lincome = chimps[100]['cch'] - chimps[index - 1]['cch'];
+        chincome =
+            chimps[index]['cumulativeCash'] - chimps[5]['cumulativeCash'] + 650;
+        rincome = chimps[index]['cashThisRound'];
+        lincome =
+            chimps[100]['cumulativeCash'] - chimps[index - 1]['cumulativeCash'];
 
         if (mode == 'hc') {
             chincome /= 2;
@@ -131,6 +136,6 @@ calculateIncomes = function (mode, round) {
     return {
         rincome: rincome.toFixed(1),
         chincome: chincome.toFixed(1),
-        lincome: lincome.toFixed(1)
-    }
-}
+        lincome: lincome.toFixed(1),
+    };
+};

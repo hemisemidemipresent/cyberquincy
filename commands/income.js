@@ -2,10 +2,25 @@ const r = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json');
 const Discord = require('discord.js');
 const { red, magenta, purple, yellow } = require('../jsons/colours.json');
-
+const OptionalParser = require('../parser/optional-parser');
+const ModeParser = require('../parser/mode-parser');
+const RoundParser = require('../parser/round-parser');
 module.exports = {
     name: 'income',
     execute(message, args) {
+        let parsed = CommandParser.parse(
+            args,
+            new RoundParser('ALL'),
+            new RoundParser('ALL'),
+            new OptionalParser(
+                new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
+                'CHIMPS' // default if not provided
+            )
+        );
+        console.log(parsed.toString());
+        if (parsed.hasErrors()) {
+            return module.exports.errorMessage(message, parsed.parsingErrors);
+        }
         if (!args[0] || isNaN(args[0]) || args[0] < -1 || args[0] > 100) {
             // error case
             let errorEmbed = new Discord.MessageEmbed()
@@ -22,18 +37,6 @@ module.exports = {
             return message.channel.send(errorEmbed);
         } else if (!args[1] || isNaN(args[1]) || args[1] < 0 || args[1] > 100) {
             // another error case
-            let errorEmbed = new Discord.MessageEmbed()
-                .setTitle('Please specify a round from 1 to 100.')
-                .addField(
-                    'find the cash from round X to round Y',
-                    '**q!income <startround> <endround>**'
-                )
-                .addField(
-                    'other difficulties',
-                    '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
-                )
-                .setColor(red);
-            return message.channel.send(errorEmbed);
         }
 
         let endround = parseInt(args[1]);
@@ -41,7 +44,8 @@ module.exports = {
             let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
             let startroundObject = r[normalStartRound];
             let endroundObject = r[endround];
-            let income = endroundObject.cch - startroundObject.cch;
+            let income =
+                endroundObject.cumulativeCash - startroundObject.cumulativeCash;
             let embed = new Discord.MessageEmbed()
                 .setTitle(
                     `$${
@@ -57,7 +61,10 @@ module.exports = {
             let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
             let startroundObject = r[normalStartRound];
             let endroundObject = r[endround];
-            let income = (endroundObject.cch - startroundObject.cch) / 2;
+            let income =
+                (endroundObject.cumulativeCash -
+                    startroundObject.cumulativeCash) /
+                2;
             let embed = new Discord.MessageEmbed()
                 .setTitle(
                     `$${
@@ -96,5 +103,19 @@ module.exports = {
                 );
             return message.channel.send(embed);
         }
+    },
+    errorMessage(message, errors) {
+        let errorEmbed = new Discord.MessageEmbed()
+            .setTitle(`${errors.join('\n')}`)
+            .addField(
+                'find the cash from round X to round Y',
+                '**q!income <startround> <endround>**'
+            )
+            .addField(
+                'other difficulties',
+                '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes deflation, half cash, abr, apop is random)'
+            )
+            .setColor(red);
+        return message.channel.send(errorEmbed);
     },
 };

@@ -54,7 +54,7 @@ module.exports = {
             return message.channel.send(embed);
         } else if (parsed.mode == 'halfcash') {
             while (cashSoFar <= cashNeeded) {
-                addToTotal = parseInt(r[startRound].csh);
+                addToTotal = parseInt(r[startRound].cashThisRound);
                 cashSoFar += addToTotal / 2; // only difference
                 addToTotal = 0;
                 startRound++;
@@ -75,7 +75,7 @@ module.exports = {
             return message.channel.send(embed);
         } else {
             while (cashSoFar <= cashNeeded) {
-                addToTotal = parseInt(r[startRound].csh);
+                addToTotal = parseInt(r[startRound].cashThisRound);
                 cashSoFar += addToTotal;
                 addToTotal = 0;
                 startRound++;

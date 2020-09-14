@@ -10,7 +10,7 @@
 
 ## In Simple Terms
 
-rml has some respectable name-coining skills, the problem is that I have no idea what any of them mean just from reading above
+rml has some respectable name-coining skills
 
 The "stack" of a command is:
 Args -> converted to standardized args -> sent to `./commands`

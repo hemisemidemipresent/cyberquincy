@@ -19,10 +19,12 @@ module.exports = {
         }
 
         if ('rewards'.startsWith(args[0])) {
-            if (message.guild.id !== 598768024761139240) {
+            if (message.guild.id == 598768024761139240) {
+                console.log('l');
+                return module.exports.rewardsMessage(message);
+            } else {
                 return module.exports.showsDiscordServer(message);
             }
-            return module.exports.rewardsMessage(message);
         }
     },
 
@@ -78,14 +80,14 @@ module.exports = {
     STORM_OF_ARROWS_ROLE: `<@&645629187322806272>`,
 
     rewardsMessage(message) {
-        const lvlMebed = new Discord.MessageEmbed()
+        const rewardsEmbed = new Discord.MessageEmbed()
             .setTitle(`XP Rewards`)
             .addField('Level 3', module.exports.RAPID_SHOT_ROLE)
             .addField('Level 10', module.exports.STORM_OF_ARROWS_ROLE)
             .setColor(colours['cyber'])
 
             .setFooter(`You only get role rewards in the bot discord server`);
-        return message.channel.send(lvlMebed);
+        return message.channel.send(rewardsEmbed);
     },
     showsDiscordServer(message) {
         const lvlMebed = new Discord.MessageEmbed()

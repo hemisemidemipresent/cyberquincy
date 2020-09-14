@@ -44,6 +44,7 @@ const aliases = [
     [
         'gwendolin',
         'g',
+        'gwen',
         'gwendolyn',
         'gwendolyn',
         'scientist',
@@ -207,8 +208,8 @@ module.exports = {
             .then((res) => res.json())
             .then((json) => {
                 let base = json[`${name}`];
+                console.log(name);
                 let object = base.upgrades[level - 1];
-
                 if (!object) {
                     let errorEmbed = new Discord.MessageEmbed()
                         .setColor(red)
@@ -217,12 +218,14 @@ module.exports = {
                         );
                     return message.channel.send(errorEmbed);
                 }
+                let skins = base.skins.toString();
+                if (!skins) skins = 'none';
                 const embed = new Discord.MessageEmbed()
                     .setTitle(`${name} level ${level}`)
                     .addField('cost (xp)', `${object.xp}`, true)
                     .addField('desc', `${object.notes}`, true)
                     .addField('xp modifier', `${base['xp-mod']}`, true)
-                    .addField('skins', `${base.skins.toString()}`)
+                    .addField('skins', `${skins}`)
                     .setColor(cyber)
                     .setFooter(
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
@@ -249,6 +252,7 @@ module.exports = {
 function findName(commandName) {
     for (let i = 0; i < aliases.length; i++) {
         let heroAliasSet = aliases[i];
+
         for (let j = 0; j < heroAliasSet.length; j++) {
             if (commandName == heroAliasSet[j]) {
                 return heroAliasSet[0];

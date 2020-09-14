@@ -201,7 +201,7 @@ module.exports = class AliasRepository extends Array {
     allDifficulties() {
         const difficulties = this.getAliasGroupsFromSameFileAs('MEDIUM');
 
-        return difficulties.map(ag => ag.canonical).concat("IMPOPPABLE");
+        return difficulties.map(ag => ag.canonical).concat("impoppable");
     }
 
     allModes() {

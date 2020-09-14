@@ -22,7 +22,7 @@ module.exports = class AliasRepository extends Array {
                 var relPath =
                     './' +
                     tokens
-                        .slice(tokens.findIndex((i) => i === 'aliases'))
+                        .slice(tokens.findIndex(i => i === 'aliases'))
                         .join('/');
 
                 // Determine the function that will handle the alias file
@@ -104,14 +104,14 @@ module.exports = class AliasRepository extends Array {
             var nextAliasSet = nextAliasGroup.aliases.concat(nextAliasGroup.canonical);
             var existingAliasSet = existingAliasGroup.aliases.concat(existingAliasGroup.canonical);
 
-            var sharedAliasMembers = nextAliasSet.filter((aliasMember) =>
+            var sharedAliasMembers = nextAliasSet.filter(aliasMember =>
                 existingAliasSet.includes(aliasMember)
             );
 
             if (sharedAliasMembers.length > 0) {
                 throw new AliasError(
                     `Aliases members [${sharedAliasMembers.map(
-                        (a) => `"${a}"`
+                        a => `"${a}"`
                     )}] clash among existing group ` +
                         `${this.formatAliasGroup(
                             existingAliasGroup
@@ -141,7 +141,7 @@ module.exports = class AliasRepository extends Array {
     // in which aliasMember is found
     getAliasGroup(aliasMember) {
         var ags = this.filter(
-            (ag) =>
+            ag =>
                 ag.canonical == aliasMember || ag.aliases.includes(aliasMember)
         );
         if (!ags || ags.length == 0) {
@@ -152,7 +152,7 @@ module.exports = class AliasRepository extends Array {
             throw (
                 `Multiple alises groups found sharing a given alias member` +
                 `(something went horribly wrong): ${ags.map(
-                    (ag) => ag.canonical
+                    ag => ag.canonical
                 )}`
             );
         }
@@ -170,7 +170,7 @@ module.exports = class AliasRepository extends Array {
         aliasMember = aliasMember.toLowerCase();
         var ag = this.getAliasGroup(aliasMember);
         var result = this.filter(
-            (otherAliasGroup) => otherAliasGroup.sourcefile === ag.sourcefile
+            otherAliasGroup => otherAliasGroup.sourcefile === ag.sourcefile
         );
         return result;
     }
@@ -189,13 +189,25 @@ module.exports = class AliasRepository extends Array {
             .concat(hardMaps)
             .concat(expertMaps);
 
-        return allMaps.map((ag) => ag.canonical);
+        return allMaps.map(ag => ag.canonical);
+    }
+
+    allMapDifficulties() {
+        const map_difficulties = this.getAliasGroupsFromSameFileAs('INTERMEDIATE');
+
+        return map_difficulties.map(ag => ag.canonical);
+    }
+
+    allDifficulties() {
+        const difficulties = this.getAliasGroupsFromSameFileAs('MEDIUM');
+
+        return difficulties.map(ag => ag.canonical).concat("IMPOPPABLE");
     }
 
     allModes() {
         const modes = this.getAliasGroupsFromSameFileAs('STANDARD');
 
-        return modes.map((ag) => ag.canonical);
+        return modes.map(ag => ag.canonical);
     }
 
     TOWER_CANONICAL_REGEX = /[a-z]#\d\d\d/i;

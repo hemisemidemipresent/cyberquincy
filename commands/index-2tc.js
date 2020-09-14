@@ -75,7 +75,7 @@ module.exports = {
             } else { // and map NOT specified
                 towers = null;
                 try { towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes); }
-                catch(e) { err(e, message); }
+                catch(e) { return err(e, message); }
 
                 if (towers.length == 1) { // 1 tower provided
                     return message.channel.send(`Multiple-combo searching coming soon`);

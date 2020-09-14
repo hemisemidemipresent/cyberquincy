@@ -34,6 +34,7 @@ Cyber Quincy is a btd6 discord bot.
 -   `sqlite3` (DB dialect)
 -   `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be, just suggest something in this discord instead. If you are interested look at `./migrations`, and check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527)
 -   `pluralize` used in parser
+-   `statcord` used for [bot statistics](https://statcord.com/bot/591922988832653313)
 
 # database fields
 

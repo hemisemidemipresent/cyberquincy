@@ -8,10 +8,11 @@ function main() {
     commandCenter = configureCommands();
     generateListeners(commandCenter);
     const Statcord = require('statcord.js');
+    key = require('./1/config.json')['statcord'];
 
     global.statcord = new Statcord.Client({
         client,
-        key: 'statcord.com-8968cIIIddJMtncfOmqo',
+        key: key,
         postCpuStatistics: false /* Whether to post memory statistics or not, defaults to true */,
         postMemStatistics: false /* Whether to post memory statistics or not, defaults to true */,
         postNetworkStatistics: false /* Whether to post memory statistics or not, defaults to true */,

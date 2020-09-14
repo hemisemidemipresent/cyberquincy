@@ -1,4 +1,4 @@
-const { colour } = require('../1/config.json');
+const { cyber } = require('../jsons/colours.json');
 const Discord = require('discord.js');
 module.exports = {
     name: 'info',
@@ -14,7 +14,7 @@ module.exports = {
         const uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 
         const infoEmbed = new Discord.MessageEmbed()
-            .setColor(colour)
+            .setColor(cyber)
             .setTitle('access help here')
             .setURL('https://discord.gg/VMX5hZA')
             .setDescription(
@@ -25,10 +25,10 @@ module.exports = {
             .addField('time since last restart:', `${uptime}`, true)
             .addField('XP gain enabled?', xpEnabled)
             .addField(
-                'bot invite link',
-                'https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=805432400'
+                'more data',
+                '[full bot statistics](https://statcord.com/bot/591922988832653313)',
+                true
             )
-            .addField('commands list', 'https://cq.netlify.com', true)
             .addField(
                 'discord server, join for updates (happens pretty often)',
                 'https://discord.gg/VMX5hZA',

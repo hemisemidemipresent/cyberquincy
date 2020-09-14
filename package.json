@@ -25,7 +25,7 @@
         "express": "^4.17.1",
         "filepath": "^1.1.0",
         "google-spreadsheet": "^3.0.11",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^2.6.0",
         "pluralize": "^8.0.0",
         "sequelize": "^6.3.4",
         "sequelize-cli": "^6.2.0",

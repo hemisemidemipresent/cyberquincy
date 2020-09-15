@@ -121,10 +121,9 @@ calculateIncomes = function (mode, round) {
         index = round;
 
         chincome =
-            chimps[index]['cumulativeCash'] - chimps[5]['cumulativeCash'] + 650;
-        rincome = chimps[index]['cashThisRound'];
-        lincome =
-            chimps[100]['cumulativeCash'] - chimps[index - 1]['cumulativeCash'];
+            chimps[index].cumulativeCash - chimps[5].cumulativeCash + 650;
+        rincome = chimps[index].cashThisRound;
+        lincome = chimps[100].cumulativeCash - chimps[index - 1].cumulativeCash;
 
         if (mode == 'hc') {
             chincome /= 2;

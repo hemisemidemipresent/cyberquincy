@@ -32,17 +32,17 @@ module.exports = class NumberParser {
     }
 
     parse(arg) {
-        arg = Number(arg);
+        const n = Number(arg);
         // Validate arg
-        if (isNaN(arg)) {
+        if (isNaN(n)) {
             throw new UserCommandError(`Expected number but got \`${arg}\``);
         }
 
         // Ensure arg is within bounds
-        if (arg < this.low || arg > this.high) {
-            throw new UserCommandError(`\`${arg}\` must be between ${this.low} and ${this.high} inclusive`);
+        if (n < this.low || n > this.high) {
+            throw new UserCommandError(`\`${n}\` must be between ${this.low} and ${this.high} inclusive`);
         }
 
-        return arg;
+        return n;
     }
 }

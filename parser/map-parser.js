@@ -1,4 +1,4 @@
-StringSetValuesParser = require('./string-set-values-parser.js');
+LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
 module.exports = class MapParser {
     type() {
@@ -6,23 +6,10 @@ module.exports = class MapParser {
     }
 
     constructor(...permitted_maps) {
-        // permitted maps must be a subset of valid maps
-        // i.e. if command developer tried to put "cheese" it would error for obvious reasons
-        for (let i = 0; i < permitted_maps.length; i++) {
-            if (!Aliases.allMaps().includes(permitted_maps[i])) {
-                throw new DeveloperCommandError(
-                    `${permitted_maps[i]} is not a valid map`
-                );
-            }
-        }
-
-        // If no permitted maps are provided, the permitted maps defaults to ALL maps
-        if (permitted_maps.length === 0) {
-            permitted_maps = Aliases.allMaps();
-        }
-
-        this.delegateParser = new StringSetValuesParser(
-            ...permitted_maps.map((d) => d.toLowerCase())
+        this.delegateParser = new LimitedStringSetValuesParser(
+            this.type(),
+            Aliases.allMaps(),
+            permitted_maps.map(d => d.toLowerCase()),
         );
     }
 

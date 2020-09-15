@@ -1,32 +1,15 @@
-const StringSetValuesParser = require('./string-set-values-parser.js');
+LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
 module.exports = class ModeParser {
     type() {
         return 'mode';
     }
 
-    // permitted modes must be a subset of valid modes
-    // i.e. if command developer tried to put "cheese" it would error for obvious reasons
     constructor(...permitted_modes) {
-        for (let i = 0; i < permitted_modes.length; i++) {
-            if (
-                !Aliases.allModes().includes(permitted_modes[i].toLowerCase())
-            ) {
-                throw new DeveloperCommandError(
-                    `${permitted_modes[i]} is not a valid gamemode`
-                );
-            }
-        }
-
-        // If no permitted modes are provided, the permitted modes defaults to ALL modes
-        if (permitted_modes.length === 0) {
-            permitted_modes = Aliases.allModes();
-        }
-
-        // ModeParser is just a specific instance of StringSetValuesParser with some additional validation
-        // Decided to run with composition over inheritance because inheritance constructor rules are disgusting.
-        this.delegateParser = new StringSetValuesParser(
-            ...permitted_modes.map((m) => m.toLowerCase())
+        this.delegateParser = new LimitedStringSetValuesParser(
+            this.type(),
+            Aliases.allModes(),
+            permitted_modes.map(d => d.toLowerCase()),
         );
     }
 

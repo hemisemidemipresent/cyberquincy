@@ -1,15 +1,15 @@
-StringSetValuesParser = require('./string-set-values-parser.js');
+LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
 module.exports = class TowerUpgradeParser {
     type() {
         return 'tower_upgrade';
     }
 
-    constructor() {
-        // TowerUpgradeParser is just a specific instance of StringSetValuesParser with some additional validation
-        // Decided to run with composition over inheritance because inheritance constructor rules are disgusting.
-        this.delegateParser = new StringSetValuesParser(
-            ...Aliases.allTowerUpgrades().map(tu => tu.toLowerCase())
+    constructor(...permitted_tower_upgrades) {
+        this.delegateParser = new LimitedStringSetValuesParser(
+            this.type(),
+            Aliases.allTowerUpgrades(),
+            permitted_tower_upgrades.map(d => d.toLowerCase()),
         );
     }
 

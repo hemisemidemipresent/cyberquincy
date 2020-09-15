@@ -92,7 +92,7 @@ module.exports = {
                 // input is "in_the_loop" but needs to be compared to "In The Loop"
                 if (
                     mapCandidate &&
-                    mapCandidate.toLowerCase().replace(' ', '_') === btd6_map
+                    mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map
                 ) {
                     entryRow = row;
                     break;

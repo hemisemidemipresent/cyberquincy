@@ -13,95 +13,29 @@ module.exports = {
             new RoundParser('ALL'),
             new RoundParser('ALL'),
             new OptionalParser(
-                new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
+                new ModeParser(),
                 'CHIMPS' // default if not provided
             )
         );
-        console.log(parsed.toString());
+        console.log(parsed.mode);
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
-        if (!args[0] || isNaN(args[0]) || args[0] < -1 || args[0] > 100) {
-            // error case
-            let errorEmbed = new Discord.MessageEmbed()
-                .addField(
-                    'find the cash from round X to round Y',
-                    'q!income <startround> <endround>\n(if startround = 0, that means starting cash is included)'
-                )
-                .addField(
-                    'other difficulties',
-                    'q!income <startround> <endround> <difficulty>\n(<difficulty> includes starting cash; deflation, half cash, abr, apop is random)'
-                )
-                .addField('example', 'q!income 7 89 abr')
-                .setColor(red);
-            return message.channel.send(errorEmbed);
-        } else if (!args[1] || isNaN(args[1]) || args[1] < 0 || args[1] > 100) {
-            // another error case
-        }
+        let rounds = parsed.rounds.sort((a, b) => a - b);
+        let startround = rounds[0];
+        let endround = rounds[1];
+        let mode = parsed.mode;
 
-        let endround = parseInt(args[1]);
-        if (!args[2]) {
-            let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
-            let startroundObject = r[normalStartRound];
-            let endroundObject = r[endround];
-            let income =
-                endroundObject.cumulativeCash - startroundObject.cumulativeCash;
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `$${
-                        Math.trunc(income * 100) / 100
-                    } was made from popping round ${
-                        normalStartRound + 1
-                    } to popping round ${endround}`
-                )
-                .setColor(magenta)
-                .setFooter('not including starting cash');
-            return message.channel.send(embed);
-        } else if (args[2].includes('half')) {
-            let normalStartRound = parseInt(args[0]) - 1; // thats just how it works
-            let startroundObject = r[normalStartRound];
-            let endroundObject = r[endround];
-            let income =
-                (endroundObject.cumulativeCash -
-                    startroundObject.cumulativeCash) /
-                2;
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `$${
-                        Math.trunc(income * 100) / 100
-                    } was made from popping round ${
-                        normalStartRound + 1
-                    } to popping round ${endround}`
-                )
-                .setColor(magenta)
-                .setFooter('not including starting cash');
-            return message.channel.send(embed);
+        if (mode == 'halfcash') {
+            return module.exports.halfIncome(startround, endround);
         } else if (args[2].includes('def')) {
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    'The total amount of cash you have is the same as the start'
-                )
-                .setColor(purple)
-                .setFooter('thats deflation for you');
-            return message.channel.send(embed);
-        } else if (args[2].includes('alt') || args[2].includes('abr')) {
-            let startround = parseInt(args[0]) - 1;
-            let startroundObject = abr[startround - 2]; // the data works in a way that basically means that its an array of arrays, ordered by round number
-            let endroundObject = abr[endround - 2];
-            let income = endroundObject[1] - startroundObject[1];
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `$${
-                        Math.trunc(income * 100) / 100
-                    } was made from popping round ${
-                        startround + 1
-                    } to popping round ${endround}`
-                )
-                .setColor(yellow)
-                .setFooter(
-                    'in alternate bloon rounds, not including starting cash'
-                );
-            return message.channel.send(embed);
+            return module.exports.deflation(message.channel);
+        } else if (mode == 'abr') {
+            return module.exports.ABRincome(startround, endround);
+        } else if (mode == 'apopalypse') {
+            return module.exports.apop(message.channel);
+        } else {
+            return module.exports.normalIncome(startround, endround);
         }
     },
     errorMessage(message, errors) {
@@ -117,5 +51,68 @@ module.exports = {
             )
             .setColor(red);
         return message.channel.send(errorEmbed);
+    },
+    normalIncome(startround, endround) {
+        let startroundObject = r[startround - 1]; // thats just how it works
+        let endroundObject = r[endround];
+        let income =
+            endroundObject.cumulativeCash - startroundObject.cumulativeCash;
+        let embed = new Discord.MessageEmbed()
+            .setTitle(
+                `$${
+                    Math.trunc(income * 100) / 100
+                } was made from popping round ${startround} to popping round ${endround}`
+            )
+            .setColor(magenta)
+            .setFooter('not including starting cash');
+        return message.channel.send(embed);
+    },
+    halfIncome(startround, endround) {
+        let startroundObject = r[startround - 1]; // thats just how it works
+        let endroundObject = r[endround];
+        let income =
+            endroundObject.cumulativeCash - startroundObject.cumulativeCash;
+        let embed = new Discord.MessageEmbed()
+            .setTitle(
+                `$${
+                    Math.trunc(income * 100) / 100
+                } was made from popping round ${startround} to popping round ${endround}`
+            )
+            .setColor(magenta)
+            .setFooter('not including starting cash');
+        return message.channel.send(embed);
+    },
+    ABRincome(startround, endround) {
+        // the data works in a way that basically means that its an array of arrays, ordered by round number
+        let income = abr[endround - 2][1] - abr[startround - 3][1];
+        let embed = new Discord.MessageEmbed()
+            .setTitle(
+                `$${
+                    Math.trunc(income * 100) / 100
+                } was made from popping round ${startround} to popping round ${endround}`
+            )
+            .setColor(yellow)
+            .setFooter(
+                'in alternate bloon rounds, not including starting cash'
+            );
+        return message.channel.send(embed);
+    },
+    deflation(channel) {
+        let embed = new Discord.MessageEmbed()
+            .setTitle(
+                'The total amount of cash you have is the same as the start'
+            )
+            .setColor(purple)
+            .setFooter('thats deflation for you');
+        return channel.send(embed);
+    },
+    apop(channel) {
+        let embed = new Discord.MessageEmbed()
+            .setTitle(
+                'In apopalypse, the bloons are random, hence the income is random'
+            )
+            .setColor(purple)
+            .setFooter('thats apop for you');
+        return channel.send(embed);
     },
 };

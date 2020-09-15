@@ -11,5 +11,6 @@
     "auth_uri": "no",
     "token_uri": "no",
     "auth_provider_x509_cert_url": "no",
-    "client_x509_cert_url": "no"
+    "client_x509_cert_url": "no",
+    "statcord": "no"
 }

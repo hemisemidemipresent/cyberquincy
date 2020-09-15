@@ -1,6 +1,21 @@
 {
-    "xyz": ["alchemist","alch","al","alk","alcc","alc","potion","beer","wine","liquor","intoxicant"],
+    "xyz": [
+        "alchemist",
+        "alch",
+        "al",
+        "alk",
+        "alcc",
+        "alc",
+        "potion",
+        "beer",
+        "wine",
+        "liquor",
+        "intoxicant"
+    ],
     "300": ["berserker_brew", "bbrew"],
     "400": ["stronger_stimulant", "stim"],
-    "500": ["permanent_brew", "permabrew", "pbrew", "pb"]
+    "500": ["permanent_brew", "permabrew", "pbrew", "pb"],
+    "030": ["conc", "unstable"],
+    "040": [""],
+    "050": ["totaltrans", "tt5", "total_transformation", "total-transformation"]
 }

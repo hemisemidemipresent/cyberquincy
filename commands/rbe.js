@@ -12,11 +12,10 @@ module.exports = {
             new RoundParser('ALL'),
             new OrParser(new RoundParser('ALL'), new EmptyParser())
         );
-        console.log(JSON.stringify(parsed));
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
-        let rounds = parsed.rounds.sort();
+        let rounds = parsed.rounds.sort((a, b) => a - b);
         const startround = rounds[0];
         if (rounds.length == 1) {
             return module.exports.oneRound(startround, message.channel);

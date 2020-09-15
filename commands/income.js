@@ -20,7 +20,6 @@ module.exports = {
                 )
             )
         );
-        console.log(parsed.mode);
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }

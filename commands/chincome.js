@@ -125,8 +125,6 @@ calculateIncomes = function (mode, round) {
         rincome = chimps[index].cashThisRound;
         lincome = chimps[100].cumulativeCash - chimps[index - 1].cumulativeCash;
 
-        console.log(mode);
-
         if (mode == 'halfcash') {
             chincome /= 2;
             rincome /= 2;

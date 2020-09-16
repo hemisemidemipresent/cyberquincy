@@ -91,14 +91,29 @@ module.exports = {
                 }
             }
         } else {
-            return message.channel.send('Alt maps coming soon');
+            return message.channel.send('Multiple-combo searching coming soon');
         }
     },
 
     helpMessage(message) {
         let helpEmbed = new Discord.MessageEmbed()
             .setTitle('`q!2tc` HELP')
-            .addField('Example', '`q!2tc 44`');
+            .addField(
+                '`q!2tc <n>`', 
+                'Get the nth combo on the OG map\n`q!2tc 44`')
+            .addField(
+                '`q!2tc <n> <map>`', 
+                'Get the nth combo on the specified map\n`q!2tc 44 frozen_over`'
+            )
+            .addField(
+                '`q!2tc <tower_upgrade/hero> <tower_upgrade/hero>`',
+                'Get a combo by the towers involved on the OG map\n`q!2tc obyn dch`'
+            )
+            .addField(
+                '`q!2tc <tower_upgrade/hero> <tower_upgrade/hero> <map>`',
+                'Get a combo by the towers involved on the specified map\n`q!2tc obyn dch cube`'
+            )
+            
 
         return message.channel.send(helpEmbed);
     },
@@ -144,7 +159,7 @@ async function numCombos() {
     return sheet.getCellByA1('J6').value
 }
 
-function embed2TC(message, values, title) {
+function embed2TC(message, values, title, footer) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(title)
@@ -156,6 +171,10 @@ function embed2TC(message, values, title) {
             values[field],
             true
         );
+    }
+
+    if (footer) {
+        challengeEmbed.setFooter(footer)
     }
 
     message.channel.send(challengeEmbed);
@@ -347,9 +366,11 @@ async function displayAlt2TCFromN(message, n, map) {
     const og2TCData = await getOG2TCFromRow(ogRow);
 
     data = null;
+    embedFooter = null;
 
     if (og2TCData.MAP == Aliases.toIndexNormalForm(map)) {
         data = og2TCData;
+        embedFooter = 'This is the OG map completion. Enter the same query without the map to see more info.'
     } else {
         const alt2TCData = await getAlt2TCFromNAndMap(
             parseInt(n), 
@@ -370,7 +391,11 @@ async function displayAlt2TCFromN(message, n, map) {
     delete data.DATE;
     delete data.CURRENT;
 
-    embed2TC(message, data, `2TC Combo #${n} on ${Aliases.toIndexNormalForm(map)}`);
+    embed2TC(
+        message, 
+        data, 
+        `2TC Combo #${n} on ${Aliases.toIndexNormalForm(map)}`,
+        embedFooter);
 }
 
 ////////////////
@@ -382,10 +407,12 @@ async function displayAlt2TCFromTowers(message, towers, map) {
     const og2TCData = await getOG2TCFromRow(ogRow);
 
     data = null;
+    embedFooter = null;
 
     // Stick with OG data if the map being queried is the OG map
     if (og2TCData.MAP == Aliases.toIndexNormalForm(map)) {
         data = og2TCData;
+        embedFooter = 'This is the OG map completion. Enter the same query without the map to see more info.'
     } else { // Otherwise, stick to the plan of parsing the alt maps table
         const alt2TCData = await getAlt2TCFromNAndMap(
             parseInt(og2TCData.NUMBER), 
@@ -411,5 +438,10 @@ async function displayAlt2TCFromTowers(message, towers, map) {
     delete data.CURRENT;
     data.NUMBER = data.NUMBER.replace('*', '')
 
-    embed2TC(message, data, `2TC Combo on ${Aliases.toIndexNormalForm(map)}: ${towers.join(' + ')}`);
+    embed2TC(
+        message, 
+        data, 
+        `2TC Combo on ${Aliases.toIndexNormalForm(map)}: ${towers.join(' + ')}`,
+        embedFooter
+    );
 }

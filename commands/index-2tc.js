@@ -354,8 +354,6 @@ async function getAlt2TCFromNAndMap(n, map) {
             }
         }
 
-        // console.log(n, Aliases.toIndexNormalForm(map), nActive, mapCandidate);
-
         // If combo number and map match up 
         if (nActive == n && mapCandidate == Aliases.toIndexNormalForm(map)) {
             // Load the three unique data cells in the current alt combo row

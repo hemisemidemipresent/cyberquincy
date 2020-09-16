@@ -71,10 +71,10 @@ module.exports = {
 
         if (parsed.natural_number) { // Combo # provided
             if (parsed.map) { // and map specified
-                return message.channel.send('Alt maps coming soon');
+                return displayAlt2TCFromN(message, parsed.natural_number, parsed.map).catch(e => err(e, message));
             } else { // and map NOT specified
                 // OG completion
-                displayOG2TCFromN(message, parsed.natural_number).catch(e => err(e, message));
+                return displayOG2TCFromN(message, parsed.natural_number).catch(e => err(e, message));
             }
         } else if (parsed.hero || parsed.tower_upgrade) { // Tower(s) specified
             towers = null;
@@ -291,39 +291,6 @@ async function getOGRowFromTowers(towers) {
 // Alt Combos
 ////////////////////////////////////////////////////////////
 
-////////////////
-// Towers
-////////////////
-
-async function displayAlt2TCFromTowers(message, towers, map) {
-    const ogRow = await getOGRowFromTowers(towers);
-    const og2TCData = await getOG2TCFromRow(ogRow);
-
-    const alt2TCData = await getAlt2TCFromNAndMap(
-        parseInt(og2TCData.NUMBER.match(/\d+.*?/)[0]), 
-        map
-    );
-
-    // Gather all the data from the OG entry and override the available fields from the alt entry
-    data = {
-        ...og2TCData,
-        ...alt2TCData,
-    }
-
-    // Recollect towers in tower# order and with upgrades
-    towers = [data.TOWER_1, data.TOWER_2]
-
-    // Exclude irrelevant information from OG towers lookup and embed title
-    delete data.TOWER_1;
-    delete data.TOWER_2;
-    delete data.MAP;
-    delete data.VERSION;
-    delete data.DATE;
-    delete data.CURRENT;
-
-    embed2TC(message, data, `2TC Combo on ${Aliases.toIndexNormalForm(map)}: ${towers.join(' + ')}`);
-}
-
 async function getAlt2TCFromNAndMap(n, map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 
@@ -339,7 +306,7 @@ async function getAlt2TCFromNAndMap(n, map) {
         let mapCandidate = sheet.getCellByA1(`${ALT_COLS.MAP}${row}`).value
         // End condition
         if (!mapCandidate) {
-            throw new UserCommandError('Combo not found');
+            throw new UserCommandError(`Combo #${n} exists but doesn't have an alt map on ${map}`);
         }
 
         let numberCandidate = sheet.getCellByA1(`${ALT_COLS.NUMBER}${row}`).value
@@ -349,8 +316,7 @@ async function getAlt2TCFromNAndMap(n, map) {
             // If previous alt map rows were based off the correct combo number,
             // reaching a new combo number means that there wasn't a match with the queried map
             if (nActive > n) {
-                console.log(nActive, n);
-                throw new UserCommandError('Combo not found'); 
+                throw new UserCommandError(`Combo #${n} exists but doesn't have an alt map on ${map}`); 
             }
         }
 
@@ -370,4 +336,80 @@ async function getAlt2TCFromNAndMap(n, map) {
             return values;
         }
     }
+}
+
+////////////////
+// N
+////////////////
+
+async function displayAlt2TCFromN(message, n, map) {
+    const ogRow = await getOGRowFromN(n);
+    const og2TCData = await getOG2TCFromRow(ogRow);
+
+    data = null;
+
+    if (og2TCData.MAP == Aliases.toIndexNormalForm(map)) {
+        data = og2TCData;
+    } else {
+        const alt2TCData = await getAlt2TCFromNAndMap(
+            parseInt(n), 
+            map
+        );
+    
+        // Combine the data between OG and ALT, override shared data with the alt entry
+        data = {
+            ...og2TCData,
+            ...alt2TCData,
+        }
+    }
+
+    // Exclude irrelevant information from OG towers lookup and embed title
+    delete data.NUMBER
+    delete data.MAP;
+    delete data.VERSION;
+    delete data.DATE;
+    delete data.CURRENT;
+
+    embed2TC(message, data, `2TC Combo #${n} on ${Aliases.toIndexNormalForm(map)}`);
+}
+
+////////////////
+// Towers
+////////////////
+
+async function displayAlt2TCFromTowers(message, towers, map) {
+    const ogRow = await getOGRowFromTowers(towers);
+    const og2TCData = await getOG2TCFromRow(ogRow);
+
+    data = null;
+
+    // Stick with OG data if the map being queried is the OG map
+    if (og2TCData.MAP == Aliases.toIndexNormalForm(map)) {
+        data = og2TCData;
+    } else { // Otherwise, stick to the plan of parsing the alt maps table
+        const alt2TCData = await getAlt2TCFromNAndMap(
+            parseInt(og2TCData.NUMBER), 
+            map
+        );
+    
+        // Combine the data between OG and ALT, override shared data with the alt entry
+        data = {
+            ...og2TCData,
+            ...alt2TCData,
+        }
+    }
+
+    // Recollect towers in tower# order and with upgrades
+    towers = [data.TOWER_1, data.TOWER_2]
+
+    // Exclude irrelevant information from OG towers lookup and embed title
+    delete data.TOWER_1;
+    delete data.TOWER_2;
+    delete data.MAP;
+    delete data.VERSION;
+    delete data.DATE;
+    delete data.CURRENT;
+    data.NUMBER = data.NUMBER.replace('*', '')
+
+    embed2TC(message, data, `2TC Combo on ${Aliases.toIndexNormalForm(map)}: ${towers.join(' + ')}`);
 }

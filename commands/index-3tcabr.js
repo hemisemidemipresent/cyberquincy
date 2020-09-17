@@ -81,7 +81,20 @@ module.exports = {
             )
         
         return message.channel.send(helpEmbed);
-    },         
+    },
+    
+    errorMessage(message, parsingErrors) {
+        let errorEmbed = new Discord.MessageEmbed()
+            .setTitle('ERROR')
+            .addField(
+                'Likely Cause(s)',
+                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+            )
+            .addField('Type `q!2tc` for help', ':)')
+            .setColor(colours['orange']);
+
+        return message.channel.send(errorEmbed);
+    },
 };
 
 function embed(message, values, title, footer) {

@@ -344,7 +344,7 @@ async function getAlt2TCFromNAndMap(n, map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 
     START_ROW = 12;
-    END_ROW = 88;
+    END_ROW = sheet.rowCount;
 
     await sheet.loadCells(
         `${ALT_COLS.NUMBER}${START_ROW}:${ALT_COLS.MAP}${END_ROW}`

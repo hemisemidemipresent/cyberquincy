@@ -103,15 +103,12 @@ module.exports = {
                             diffMultiplier
                 );
             }
-            //console.log(xpCurve, processedRound, diffMultiplier);
-            //console.log(roundArr)
             let finalArr = []; // the round where the hero reaches level 1 is the round it gets placed
             for (level = 1; level < 21; level++) {
                 let heroCost = 1; //cost of levelling up
                 let levelUpRound = round; //round used for calulcations, -1 because the increment is after while loop
                 while (heroCost > 0) {
                     heroCost = sumOftempArr[level] + roundArr[levelUpRound];
-                    //console.log(heroCost);
                     levelUpRound++;
                 }
                 if (levelUpRound > 100) {

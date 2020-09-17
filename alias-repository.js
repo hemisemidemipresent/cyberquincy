@@ -243,6 +243,9 @@ module.exports = class AliasRepository extends Array {
     }
 
     toIndexNormalForm(canonical) {
-        return canonical.split('_').map(tk => h.toTitleCase(tk)).join(' ');
+        return canonical
+            .split('_')
+            .map((tk) => h.toTitleCase(tk))
+            .join(' ');
     }
 };

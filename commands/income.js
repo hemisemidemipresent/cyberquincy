@@ -24,12 +24,12 @@ module.exports = {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
         const [startround, endround] = parsed.rounds.sort((a, b) => a - b);
-        
+
         let mode = parsed.mode;
 
         embed = null;
-        
-        switch(mode) {
+
+        switch (mode) {
             case 'halfcash':
                 embed = module.exports.halfIncome(startround, endround);
                 break;
@@ -47,7 +47,7 @@ module.exports = {
                 break;
         }
 
-        message.channel.send(embed)
+        message.channel.send(embed);
     },
     errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()
@@ -61,7 +61,7 @@ module.exports = {
                 '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes deflation, half cash, abr, apop is random)'
             )
             .setColor(red);
-        
+
         message.channel.send(errorEmbed);
     },
     normalIncome(startround, endround) {
@@ -82,7 +82,8 @@ module.exports = {
         let startroundObject = r[startround - 1]; // thats just how it works
         let endroundObject = r[endround];
         let income =
-            (endroundObject.cumulativeCash - startroundObject.cumulativeCash)/2;
+            (endroundObject.cumulativeCash - startroundObject.cumulativeCash) /
+            2;
         return new Discord.MessageEmbed()
             .setTitle(
                 `$${

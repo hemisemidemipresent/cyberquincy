@@ -8,8 +8,8 @@ module.exports = class AliasRepository extends Array {
 
     // {source_directory: handling function}
     SPECIAL_HANDLING_CASES = {
-        "./aliases/towers": this.loadTowerAliasFile
-    }
+        './aliases/towers': this.loadTowerAliasFile,
+    };
 
     asyncAliasFiles() {
         (async () => {
@@ -22,18 +22,20 @@ module.exports = class AliasRepository extends Array {
                 var relPath =
                     './' +
                     tokens
-                        .slice(tokens.findIndex(i => i === 'aliases'))
+                        .slice(tokens.findIndex((i) => i === 'aliases'))
                         .join('/');
 
                 // Determine the function that will handle the alias file
-                
+
                 // Default
                 var handlingFunction = this.loadAliasFile;
 
                 // See if the file has a special handler
                 for (const specialRelPath in this.SPECIAL_HANDLING_CASES) {
                     if (relPath.startsWith(specialRelPath)) {
-                        handlingFunction = this.SPECIAL_HANDLING_CASES[specialRelPath];
+                        handlingFunction = this.SPECIAL_HANDLING_CASES[
+                            specialRelPath
+                        ];
                         break;
                     }
                 }
@@ -52,7 +54,7 @@ module.exports = class AliasRepository extends Array {
                 canonical: canonical,
                 aliases: nextAliases[canonical],
                 sourcefile: f,
-            }
+            };
             this.addAliasGroup(nextAliasGroup);
         }
     }
@@ -70,12 +72,13 @@ module.exports = class AliasRepository extends Array {
             // which is not exactly synonymous with the 000 tower.
             // The canonical form of the xyz tower is tower_name
             // whereas the canonical form of a specific upgrade is tower_name#ddd where d=digit
-            const canonical = upgrade == 'xyz' ? `${baseName}` : `${baseName}#${upgrade}`
+            const canonical =
+                upgrade == 'xyz' ? `${baseName}` : `${baseName}#${upgrade}`;
             const nextAliasGroup = {
                 canonical: canonical,
                 aliases: towerUpgrades[upgrade],
                 sourcefile: f,
-            }
+            };
             this.addAliasGroup(nextAliasGroup);
         }
     }
@@ -84,10 +87,9 @@ module.exports = class AliasRepository extends Array {
     addAliasGroup(ag) {
         try {
             this.preventSharedAliases(ag);
-        } catch(e) {
-            if(e instanceof AliasError) {
+        } catch (e) {
+            if (e instanceof AliasError) {
                 console.log(e.message);
-                console.log();
             } else {
                 throw e;
             }
@@ -101,17 +103,21 @@ module.exports = class AliasRepository extends Array {
         for (var i = 0; i < this.length; i++) {
             const existingAliasGroup = this[i];
 
-            var nextAliasSet = nextAliasGroup.aliases.concat(nextAliasGroup.canonical);
-            var existingAliasSet = existingAliasGroup.aliases.concat(existingAliasGroup.canonical);
+            var nextAliasSet = nextAliasGroup.aliases.concat(
+                nextAliasGroup.canonical
+            );
+            var existingAliasSet = existingAliasGroup.aliases.concat(
+                existingAliasGroup.canonical
+            );
 
-            var sharedAliasMembers = nextAliasSet.filter(aliasMember =>
+            var sharedAliasMembers = nextAliasSet.filter((aliasMember) =>
                 existingAliasSet.includes(aliasMember)
             );
 
             if (sharedAliasMembers.length > 0) {
                 throw new AliasError(
                     `Aliases members [${sharedAliasMembers.map(
-                        a => `"${a}"`
+                        (a) => `"${a}"`
                     )}] clash among existing group ` +
                         `${this.formatAliasGroup(
                             existingAliasGroup
@@ -119,7 +125,7 @@ module.exports = class AliasRepository extends Array {
                         `${this.formatAliasGroup(nextAliasGroup)}`
                 );
             }
-        };
+        }
     }
 
     formatAliasGroup(ag) {
@@ -141,18 +147,18 @@ module.exports = class AliasRepository extends Array {
     // in which aliasMember is found
     getAliasGroup(aliasMember) {
         var ags = this.filter(
-            ag =>
+            (ag) =>
                 ag.canonical == aliasMember || ag.aliases.includes(aliasMember)
         );
         if (!ags || ags.length == 0) {
-            return null
+            return null;
         } else if (ags.length == 1) {
             return ags[0];
         } else {
             throw (
                 `Multiple alises groups found sharing a given alias member` +
                 `(something went horribly wrong): ${ags.map(
-                    ag => ag.canonical
+                    (ag) => ag.canonical
                 )}`
             );
         }
@@ -170,7 +176,7 @@ module.exports = class AliasRepository extends Array {
         aliasMember = aliasMember.toLowerCase();
         var ag = this.getAliasGroup(aliasMember);
         var result = this.filter(
-            otherAliasGroup => otherAliasGroup.sourcefile === ag.sourcefile
+            (otherAliasGroup) => otherAliasGroup.sourcefile === ag.sourcefile
         );
         return result;
     }
@@ -189,31 +195,33 @@ module.exports = class AliasRepository extends Array {
             .concat(hardMaps)
             .concat(expertMaps);
 
-        return allMaps.map(ag => ag.canonical);
+        return allMaps.map((ag) => ag.canonical);
     }
 
     allMapDifficulties() {
-        const map_difficulties = this.getAliasGroupsFromSameFileAs('INTERMEDIATE');
+        const map_difficulties = this.getAliasGroupsFromSameFileAs(
+            'INTERMEDIATE'
+        );
 
-        return map_difficulties.map(ag => ag.canonical);
+        return map_difficulties.map((ag) => ag.canonical);
     }
 
     allDifficulties() {
         const difficulties = this.getAliasGroupsFromSameFileAs('MEDIUM');
 
-        return difficulties.map(ag => ag.canonical).concat("impoppable");
+        return difficulties.map((ag) => ag.canonical).concat('impoppable');
     }
 
     allModes() {
         const modes = this.getAliasGroupsFromSameFileAs('STANDARD');
 
-        return modes.map(ag => ag.canonical);
+        return modes.map((ag) => ag.canonical);
     }
 
     TOWER_CANONICAL_REGEX = /[a-z]#\d\d\d/i;
 
     allTowerUpgrades() {
-        var upgrades = []
+        var upgrades = [];
         for (var i = 0; i < this.length; i++) {
             const canonical = this[i].canonical;
             if (this.TOWER_CANONICAL_REGEX.test(canonical)) {
@@ -226,11 +234,14 @@ module.exports = class AliasRepository extends Array {
     allHeroes() {
         const heroes = this.getAliasGroupsFromSameFileAs('EZILI');
 
-        return heroes.map(ag => ag.canonical);
+        return heroes.map((ag) => ag.canonical);
     }
 
     towerUpgradeToIndexNormalForm(upgrade) {
         const index_normal = this.getAliasSet(upgrade)[1];
-        return index_normal.split('_').map(tk => h.toTitleCase(tk)).join(' ');
+        return index_normal
+            .split('_')
+            .map((tk) => h.toTitleCase(tk))
+            .join(' ');
     }
 };

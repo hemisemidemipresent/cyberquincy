@@ -14,8 +14,6 @@ module.exports = {
 
         await doc.loadInfo(); // loads document properties and worksheets
 
-        console.log('<INITIATE>');
-
         return doc;
     },
 

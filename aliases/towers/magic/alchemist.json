@@ -16,6 +16,19 @@
     "400": ["stronger_stimulant", "stim"],
     "500": ["permanent_brew", "permabrew", "pbrew", "pb"],
     "030": ["conc", "unstable"],
-    "040": [""],
-    "050": ["totaltrans", "tt5", "total_transformation", "total-transformation"]
+    "040": ["tonic", "transforming_tonic", "tt4", "trans_tonic"],
+    "050": [
+        "totaltrans",
+        "tt5",
+        "total_transformation",
+        "total-transformation"
+    ],
+    "003": ["leadtogold", "lead_to_gold", "lead-to-gold"],
+    "004": ["rubbertogold", "rubber_to_gold", "rubber-to-gold"],
+    "005": [
+        "bma",
+        "bloonmaster",
+        "bloon-master-alchemist",
+        "bloon_master_alchemist"
+    ]
 }

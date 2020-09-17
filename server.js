@@ -1,3 +1,5 @@
+const botInfoHelper = require('./helpers/botinfo');
+
 function main() {
     pingHeroku();
     globalRequirements();
@@ -7,27 +9,7 @@ function main() {
     configureAliases();
     commandCenter = configureCommands();
     generateListeners(commandCenter);
-    const Statcord = require('statcord.js');
-    key = require('./1/config.json')['statcord'];
-
-    global.statcord = new Statcord.Client({
-        client,
-        key: key,
-        postCpuStatistics: false /* Whether to post memory statistics or not, defaults to true */,
-        postMemStatistics: false /* Whether to post memory statistics or not, defaults to true */,
-        postNetworkStatistics: false /* Whether to post memory statistics or not, defaults to true */,
-    });
-    statcord.on('autopost-start', () => {
-        // Emitted when statcord autopost starts
-        console.log('Started autopost');
-    });
-
-    statcord.on('post', (status) => {
-        // status = false if the post was successful
-        // status = "Error message" or status = Error if there was an error
-        if (!status) console.log('Successful post');
-        else console.error(status);
-    });
+    botStats();
     login();
 }
 
@@ -77,7 +59,7 @@ function consoleBootup() {
 
         client.user.setActivity(`${prefix}help`);
         // Start auto posting
-        statcord.autopost();
+        botInfoHelper.auto();
     });
 }
 
@@ -150,7 +132,10 @@ function generateListeners(commandCenter) {
         commandCenter.handleCommand(message);
     });
 }
-
+function botStats() {
+    botInfoHelper.statcord();
+    botInfoHelper.post();
+}
 function login() {
     token = require('./1/config.json')['token'];
     client.login(token);

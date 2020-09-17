@@ -137,7 +137,7 @@ async function displayOG3TCABRFromN(message, n) {
     const upgrades = values.UPGRADES.split('|').map(u => u.replace(/^\s+|\s+$/g, ''));
     for (var i = 0; i < upgrades.length; i++) {
         // Display upgrade next to tower
-        values[`TOWER_${i + 1}`] += " (" + upgrades[i] + ")";
+        values[`TOWER_${i + 1}`] += "\n(" + upgrades[i] + ")";
     }
     delete values.UPGRADES; // Don't display upgrades on their own, display with towers
 

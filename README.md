@@ -22,7 +22,8 @@ Cyber Quincy is a btd6 discord bot.
 
 2. you need credentials for google-spreadsheet (I reccomend [Thie video to set up credentials](https://www.youtube.com/watch?v=UGN6EUi4Yio) and paste the credentials in `./1/config.json`), not necessary if you arent using google spreadsheets in any way.
 
-3. Optional: [add bot to statcord](https://statcord.com/add), and copy the key into `./1/config.json`
+3. Optional: [add bot to statcord](https://statcord.com/add), and copy the key into `./1/config.json`. then add the bot to [discordbotlist.com](https://discordbotlist.com) and copy the auth token and paste into `./1/config.json`
+   **to skip this option, remove `botStats()` from `main()` in `server.js`**
 
 4. to run type `node server` (this sets up a `database.sqlite` file)
 

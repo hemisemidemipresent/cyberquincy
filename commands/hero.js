@@ -208,7 +208,6 @@ module.exports = {
             .then((res) => res.json())
             .then((json) => {
                 let base = json[`${name}`];
-                console.log(name);
                 let object = base.upgrades[level - 1];
                 if (!object) {
                     let errorEmbed = new Discord.MessageEmbed()

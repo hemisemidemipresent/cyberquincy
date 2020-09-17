@@ -238,8 +238,12 @@ module.exports = class AliasRepository extends Array {
     }
 
     towerUpgradeToIndexNormalForm(upgrade) {
-        const index_normal = this.getAliasSet(upgrade)[1];
-        return index_normal
+        const index_normal_unformatted = this.getAliasSet(upgrade)[1];
+        return this.toIndexNormalForm(index_normal_unformatted)
+    }
+
+    toIndexNormalForm(canonical) {
+        return canonical
             .split('_')
             .map((tk) => h.toTitleCase(tk))
             .join(' ');

@@ -1,7 +1,7 @@
 module.exports = {
     statcord() {
         const Statcord = require('statcord.js');
-        key = require('../1/config.json')['statcordkey'];
+        let key = require('../1/config.json')['statcord'];
 
         global.statcord = new Statcord.Client({
             client,

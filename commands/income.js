@@ -35,6 +35,10 @@ module.exports = {
 
         let embed = null;
 
+        if (startround < 3 && mode == 'abr') {
+            return module.exports.errorMessage(message, ['There is no support for rounds 1 and 2 abr income calculation']);
+        }
+
         switch(mode) {
             case 'deflation':
                 embed = module.exports.deflation();
@@ -43,10 +47,16 @@ module.exports = {
                 embed = module.exports.apop();
                 break;
             default:
-                if (endround)
+                if (endround) {
                     embed = module.exports.income(startround, endround, mode);
-                else
-                    embed = message.channel.send(chincomeMessage(mode, startround));
+                }
+                else {
+                    if (startround >= 6) {
+                        embed = message.channel.send(chincomeMessage(mode, startround));
+                    } else {
+                        return module.exports.errorMessage(message, ['<round> must be at least 6 if only one round is specified']);
+                    }
+                }
         }
 
         message.channel.send(embed);
@@ -55,23 +65,21 @@ module.exports = {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('`q!income` HELP')
             .addField(
+                '`q!income <startround> <endround> {gamemode}` (Order agnostic)',
+                'Cash generated from round <startround> to <endround> in specified gamemode or standard mode'
+            )
+            .addField(
                 '`q!income <round> {gamemode}` (Order agnostic)',
+                'In specified gamemode or standard as default:' +
                 '  • Cash generated during round <round>\n' +
                 '  • Cash generated from start of round 6 through end of round <round>\n' +
-                '  • Cash generated from start of round <round> through end of round 100')
-            .addField(
-                '`q!income <startround> <endround> {gamemode}` (Order agnostic)',
-                '  • Cash generated from round <startround> to <endround>'
+                '  • Cash generated from start of round <round> through end of round 100'
             )
-            .addField('Valid `(<gamemode>)` values', 'CHIMPS, HALFCASH, ABR')
-            .addField('Valid `<round>` values', '6, 7, ..., 100')
-            .addField('Ex. #1', 'q!chincome <round> | q!chincome 8')
-            .addField('Ex. #2', 'q!chincome <mode> <round> | q!chincome abr R8')
-            .addField(
-                'Ex. #3',
-                'q!chincome <round> <mode> | q!chincome r8 halfcash'
-            )
-            .setFooter('Currently only supports hard difficulty');
+            .addField('Ex. #1', '`q!income 8 64`')
+            .addField('Ex. #2', '`q!income 69 94 halfcash`')
+            .addField('Ex. #3', '`q!income 8`')
+            .addField('Ex. #4', '`q!income 94 abr`')
+            .setFooter('Currently only supports hard difficulty.\nAlso, q!chincome has been combined into q!income.');
 
         return message.channel.send(errorEmbed);
     },
@@ -80,11 +88,11 @@ module.exports = {
             .setTitle(`${errors.join('\n')}`)
             .addField(
                 '**q!income <startround> <endround> {mode}**',
-                'Find the cash from round X to round Y {in specified gamemode or standard as default}'
+                'Find the cash from round X to round Y in specified gamemode or standard mode'
             )
             .addField(
                 '**q!income <round> {mode}**',
-                'Calculate key incomes in various gamemodes with CHIMPS rules, accounting for starting cash'
+                'Calculate key incomes in with CHIMPS rules, accounting for starting cash. Takes in specified gamemode or standard mode as default'
             )
             .setColor(red);
 

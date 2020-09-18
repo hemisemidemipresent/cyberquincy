@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { colour } = require('../1/config.json');
+const { cyber, red } = require('../jsons/colours.json');
 module.exports = {
     name: 'speed',
     aliases: ['s', 'rbs'],
@@ -9,7 +9,7 @@ module.exports = {
             let errorEmbed = new Discord.MessageEmbed()
                 .setTitle(`Please specify a bloon/round`)
                 .setDescription('example: q!speed moab 100')
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(errorEmbed);
         }
         //rounds
@@ -19,7 +19,7 @@ module.exports = {
             let errorEmbed = new Discord.MessageEmbed()
                 .setTitle(`Please specify a proper bloon/round`)
                 .setDescription('example: q!speed moab 100')
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(errorEmbed);
         }
         let speed = 0;
@@ -49,7 +49,7 @@ module.exports = {
             let errorEmbed = new Discord.MessageEmbed()
                 .setTitle(`Please specify a proper bloon`)
                 .setDescription('example: q!speed moab 100')
-                .setColor('#ff0000');
+                .setColor(red);
             return message.channel.send(errorEmbed);
         }
         let incPercent = 0;
@@ -68,7 +68,7 @@ module.exports = {
                 .setTitle(`${bln}`)
                 .addField('speed', `${actualSpeed} units`, true)
                 .addField('at round', round, true)
-                .setColor(colour)
+                .setColor(cyber)
                 .setFooter('3 units is the speed of a red speed at round one');
             return message.channel.send(speedEmbed);
         } else {
@@ -76,7 +76,7 @@ module.exports = {
                 .setTitle(`${bln}`)
                 .addField('speed', `${speed} units`, true)
                 .addField('at round', round, true)
-                .setColor(colour)
+                .setColor(cyber)
                 .setFooter('3 units is the speed of a red at round one');
             return message.channel.send(speedEmbed);
         }

@@ -1,27 +1,26 @@
-const Discord = require('discord.js');
-const { cyber } = require('../jsons/colours.json');
+const OptionalParser = require('../parser/optional-parser');
+const { cyber, red } = require('../jsons/colours.json');
+const CashParser = require('../parser/cash-parser');
+const NaturalNumberParser = require('../parser/natural-number-parser');
+
 module.exports = {
     name: 'monkeyopolis',
-    aliases: ['mp', 'yopolis'],
+    aliases: ['mp', 'yopolis', '005'],
     execute(message, args) {
-        if (!args) {
-            return message.channel.send(
-                '# The usage is:\nq!mp <total farm cost> <total farm amount>',
-                { code: 'md' }
+        let parsed = CommandParser.parse(
+            new CashParser(),
+            new OptionalParser(new NaturalNumberParser(1, Infinity), 1)
+        );
+        if (parsed.hasErrors()) {
+            return module.exports.errorMessage(
+                message.channel,
+                parsed.parsingErrors
             );
         }
-        if (isNaN(args[0])) {
-            return message.channel.send(
-                'Please Specify a **number** for the cost of the farm'
-            );
-        }
-        let farmcount = 1;
-        if (args[1] && !isNaN(args[1])) {
-            farmcount = args[1];
-        }
-        let money = 300 * Math.floor(args[0] / 2000);
-        let price = farmcount * 5000;
-        let even = Math.ceil(price / money);
+        let farmcount = parsed.natural_number;
+        const money = 300 * Math.floor(args[0] / 2000);
+        const price = farmcount * 5000;
+        const even = Math.ceil(price / money);
         const mpembed = new Discord.MessageEmbed()
             .setTitle('Monkeyopolis Simulator')
             .setColor(cyber)
@@ -31,5 +30,22 @@ module.exports = {
             .addField('cost of upgrade', `${price}`, true)
             .addField('rounds until breaking even', `${even}`, true);
         message.channel.send(mpembed);
+    },
+    errorMessage(channel, parsingErrors) {
+        const errorEmbed = new Discord.MessageEmbed()
+            .setTitle('ERROR')
+            .addField(
+                'Likely Cause(s)',
+                parsingErrors.map((msg) => ` • ${msg}`).join('\n'),
+                true
+            )
+            .addField(
+                'usage',
+                'q!yopolis <farm count> <total amount sacrified>',
+                true
+            )
+            .addField('example', 'q!yopolis 50000 2', true)
+            .setColor(red);
+        channel.send(errorEmbed);
     },
 };

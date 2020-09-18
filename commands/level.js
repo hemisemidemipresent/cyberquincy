@@ -20,7 +20,6 @@ module.exports = {
 
         if ('rewards'.startsWith(args[0])) {
             if (message.guild.id == 598768024761139240) {
-                console.log('l');
                 return module.exports.rewardsMessage(message);
             } else {
                 return module.exports.showsDiscordServer(message);

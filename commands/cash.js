@@ -5,7 +5,7 @@ const { cyber, orange } = require('../jsons/colours.json');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
 const RoundParser = require('../parser/round-parser');
-const NaturalNumberParser = require('../parser/natural-number-parser');
+const CashParser = require('../parser/cash-parser');
 const AnyOrderParser = require('../parser/any-order-parser');
 module.exports = {
     name: 'cash',
@@ -14,7 +14,7 @@ module.exports = {
         let parsed = CommandParser.parse(
             args,
             new AnyOrderParser(
-                new NaturalNumberParser(),
+                new CashParser(),
                 new OptionalParser(
                     new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
                     'CHIMPS' // default if not provided
@@ -27,7 +27,7 @@ module.exports = {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
-        let cashNeeded = parsed.natural_number;
+        let cashNeeded = parsed.cash;
         let startRound = parsed.round;
         let cashSoFar = 0;
         let addToTotal = 0;

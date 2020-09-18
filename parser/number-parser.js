@@ -14,11 +14,11 @@ module.exports = class NumberParser {
     validateValues() {
         // Lower bound of infinity ensures that there IS no lower bound
         if (!this.low) {
-            low = -Infinity;
+            this.low = -Infinity;
         }
 
         if (!this.high) {
-            high = Infinity;
+            this.high = Infinity;
         }
 
         // Validate bounds
@@ -32,7 +32,8 @@ module.exports = class NumberParser {
     }
 
     parse(arg) {
-        const n = Number(arg);
+        // Ignore thousands-place commas (assuming numbers are entered like 1,260.33 as in the United States)
+        const n = Number(arg.replace(/,/g, ''));
         // Validate arg
         if (isNaN(n)) {
             throw new UserCommandError(`Expected number but got \`${arg}\``);

@@ -66,7 +66,15 @@ module.exports = {
         if (parsed.natural_number) { // Combo # provided
             return displayOG3TCABRFromN(message, parsed.natural_number);
         } else if (parsed.hero || parsed.tower_upgrade) { // Tower(s) specified
-            return message.channel.send('Searching combos by towers coming soon');
+            towers = null;
+            try { towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes) }
+            catch(e) { return err(e, message) }
+
+            if (towers.length == 3) {
+
+            } else {
+                return displayOG3TCABRFromSubsetTowers(message, towers).catch(e => err(e, message));
+            }
         } else {
             return message.channel.send('Searching combos by person coming soon');
         }
@@ -97,6 +105,14 @@ module.exports = {
     },
 };
 
+function err(e, message) {
+    if (e instanceof UserCommandError) {
+        return module.exports.errorMessage(message, [e.message]);
+    } else {
+        throw e;
+    }
+}
+
 function embed(message, values, title, footer) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
@@ -118,22 +134,51 @@ function embed(message, values, title, footer) {
     message.channel.send(challengeEmbed);
 }
 
-COMBOS_ROW_OFFSET = 11;
+async function displayOG3TCABRFromSubsetTowers(message, towers) {
+    combos = await succCombos();
+    const matchingCombos = combos.filter(c => {
+        const comboTowers = [c.TOWER_1, c.TOWER_2, c.TOWER_3];
+        return towers.every(t => comboTowers.includes(t));
+    });
+    console.log(matchingCombos);
+    // return embedMultiple(message, matchingCombos);
+}
+
+function normalizeTowers(tower_upgrades, heroes) {
+    if (heroes && heroes.length >= 2) {
+        throw new UserCommandError(`Can't have a completion with more than 1 hero`);
+    }
+
+    tower_upgrades = tower_upgrades ? 
+                        tower_upgrades.map(
+                            tu => Aliases.towerUpgradeToIndexNormalForm(tu)
+                        ) : []
+    heroes = heroes ? heroes.map(hr => h.toTitleCase(hr)) : [];
+    return heroes.concat(tower_upgrades);
+}
+
 NUM_COMBOS_COUNTER = 'L6'
 
-async function displayOG3TCABRFromN(message, n) {
+async function numCombos() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
 
     await sheet.loadCells(`${NUM_COMBOS_COUNTER}:${NUM_COMBOS_COUNTER}`);
 
-    NUM_COMBOS = parseInt(sheet.getCellByA1(NUM_COMBOS_COUNTER).value);
+    return parseInt(sheet.getCellByA1(NUM_COMBOS_COUNTER).value);
+}
+
+async function displayOG3TCABRFromN(message, n) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
+
+    NUM_COMBOS = await numCombos();
+    
     if (n > NUM_COMBOS) {
         throw new UserCommandError(
             `You asked for the ${h.toOrdinalSuffix(n)} combo but there are only ${NUM_COMBOS} listed.`
         );
     }
 
-    const row = n + COMBOS_ROW_OFFSET;
+    const row = n + await findOGRowOffset();
 
     await sheet.loadCells(`${OG_COLS.NUMBER}${row}:${OG_COLS.LINK}${row}`);
 
@@ -162,4 +207,47 @@ async function displayOG3TCABRFromN(message, n) {
     values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
 
     return embed(message, values, `3-Tower ABR CHIMPS Combo #${n}`)
+}
+
+async function findOGRowOffset() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
+
+    const MIN_OFFSET = 1;
+    const MAX_OFFSET = 20;
+
+    await sheet.loadCells(`${OG_COLS.NUMBER}${MIN_OFFSET}:${OG_COLS.NUMBER}${MAX_OFFSET}`);
+
+    for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
+        cellValue = sheet.getCellByA1(`B${row}`).value
+        if(cellValue) {
+            if (cellValue.toLowerCase().includes("number")) {
+                return row;
+            }
+        }
+    }
+
+    throw `Cannot find 2TC header "Number" to orient combo searching`;
+}
+
+async function succCombos() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
+
+    const NUM_COMBOS = await numCombos();
+    
+    const START_ROW = await findOGRowOffset();
+    const END_ROW = START_ROW + NUM_COMBOS - 1;
+
+    await sheet.loadCells(`${OG_COLS.NUMBER}${START_ROW}:${OG_COLS.LINK}${END_ROW}`);
+
+    let valuesList = []
+    for (var row = START_ROW; row <= END_ROW; row++) {
+        let values = {}
+        for (key in OG_COLS) {
+            values[key] = sheet.getCellByA1(
+                `${OG_COLS[key]}${row}`
+            ).value;
+        }
+        valuesList.push(values);
+    }
+    return valuesList;
 }

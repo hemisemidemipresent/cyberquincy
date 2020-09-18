@@ -9,13 +9,7 @@ module.exports = {
 
         const commandName = newArgs.shift().toLowerCase();
 
-        /*if (!args[0] || !args[1] || !args[2] || !args[3]) {
-      return message.channel.send(
-        "the format is q!temple <amount sacrificed in primary> <amount sacrificed in military> <amount sacrificed in magic> <amount sacrificed in support>"
-      );
-    }*/ if (
-            commandName.includes('v')
-        ) {
+        if (commandName.includes('v')) {
             const VTSGembed = new Discord.MessageEmbed()
                 .setDescription(
                     '**There Can Only Be One**\nThe monkey knowledge is triggered by upgrading a Super Monkey to 5xx, with maximum sacrifices at both tier 4 and tier 5, while the other two tier 5 Super Monkeys are also on screen (don\'t sacrifice them!). They combine into a 555 Super Monkey, commonly (but unofficially) called the "Vengeful True Sun God" or VTSG.'

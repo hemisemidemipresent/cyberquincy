@@ -1,5 +1,4 @@
-const Discord = require('discord.js');
-const { colour } = require('../1/config.json');
+const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'herolevel',
     aliases: ['hl', 'hero', 'her', 'hlvl'],
@@ -146,7 +145,7 @@ module.exports = {
                 .addField('level 18', `r${finalArr[17]}`, true)
                 .addField('level 19', `r${finalArr[18]}`, true)
                 .addField('level 20', `r${finalArr[19]}`, true)
-                .setColor(colour);
+                .setColor(cyber);
             return embed;
         }
         const heroEmojiIDs = [

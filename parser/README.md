@@ -1,21 +1,26 @@
 # Parsing
 
 ## Table of Contents
-* [For Command Developers](#command-devs)
-  * [Introduction](#introduction)
-  * [Utilization Techniques](#utilization)
-  * [The Above in Simple Terms](#simplified)
-  * [Parser Library Glimpse](#parser-library)
+
+-   [For Command Developers](#command-devs)
+    -   [Introduction](#introduction)
+    -   [Utilization Techniques](#utilization)
+    -   [The Above in Simple Terms](#simplified)
+    -   [Parser Library Glimpse](#parser-library)
+    -   [Parser Structure](#parser-class)
 
 <a name="command-devs"></a>
+
 ## For Command Developers
 
 <a name="introduction"></a>
+
 #### Introduction
 
 The cyberquincy parsing library is robust and thorough. It's highly recommended that all new commands use it.
 
 The command parser serves a number of advantages
+
 -   It makes you think carefully about what values each argument in the command expects
 -   It makes it quite easy to accept arguments in any order
 -   It allows you to make certain command arguments optional and provide a default value if the user doesn't provide a matching argument
@@ -23,6 +28,7 @@ The command parser serves a number of advantages
 -   A user who structures a command + arguments incorrectly will be provided the smallest and most helpful set of error messages in order to understand what went wrong.
 
 <a name="utilization"></a>
+
 #### Utilization techniques
 
 **Example Usage**
@@ -70,11 +76,12 @@ The following parser usage guidelines will reference the above example.
 2. If `parseAnyOrder()` is used with `OptionalParser`s, play around with the ordering of the parsers to consistently get the best error messages for incorrect inputs. It's likely that putting the optional parsers at the end will produce the best error messages, but not much testing on that has been done.
 3. Use `try-catch` as done so in the above example:
 
-   i. Catch a `ParsingError` and provide the user with the list of errors encountered by the `CommandParser`: `parsingError.parsingErrors.join('\n')`
+    i. Catch a `ParsingError` and provide the user with the list of errors encountered by the `CommandParser`: `parsingError.parsingErrors.join('\n')`
 
-   ii. Bubble up any other type of error
+    ii. Bubble up any other type of error
 
 <a name="simplified"></a>
+
 #### The Above in Simpler Terms
 
 So you know how commands can take a long list of arguments? It's in the array `args`. The parser basically helps to parse all that raw user input.
@@ -174,6 +181,7 @@ try {
 and that's it! You've not only ensured that the commands you run are "safe", but you've also given the user opportunities to learn from entering incorrectly-formatted commands!
 
 <a name="parser-library"></a>
+
 ### Parser Library Glimpse
 
 <table>
@@ -213,3 +221,83 @@ and that's it! You've not only ensured that the commands you run are "safe", but
         </tr>
     </tfoot>
 </table>
+
+<a name="parser-class"></a>
+
+## Parser Structure
+
+There are 2 types of parsers, logic parsers (OrParser, OptionalParser, AnyOrderParser, etc) and arg parsers (map, mode, hero, difficulty, number, round, cash, etc...) This will be talking about arg parsers because logic parsers are deep
+
+-   example: cashParser
+
+```js
+const NumberParser = require('./number-parser.js');
+
+// Looks for a round number, permitting natural numbers based on the difficulty provided to the constructor.
+// Discord command users can provide the round in any of the following forms:
+//    - 15, r15, round15
+// Check the DifficultyParser for all possible difficulties that can be provided
+module.exports = class CashParser {
+    type() {
+        return 'cash';
+    }
+
+    constructor(low = 0, high = Infinity) {
+        this.delegateParser = new NumberParser(low, high);
+    }
+
+    parse(arg) {
+        // Convert `$5` to just `5`
+        arg = this.transformArgument(arg);
+        return this.delegateParser.parse(arg);
+    }
+
+    // Parses all ways the command user could enter a round
+    transformArgument(arg) {
+        if (arg[0] == '$') {
+            return arg.slice(1);
+        } else if (/\d|\./.test(arg[0])) {
+            return arg;
+        } else {
+            throw new UserCommandError(
+                `Cash must be of form \`15\` or \`$15\` (Got \`${arg}\` instead)`
+            );
+        }
+    }
+};
+```
+
+### type()
+
+```js
+type() {
+        return 'cash';
+    }
+
+```
+
+`type()` defines the key the value is stored. In this case since you get the cash using `parsed.cash`, it returns `'cash'`
+
+### constructor()
+
+```js
+constructor(low=0, high=Infinity) {
+        this.delegateParser = new NumberParser(low, high);
+    }
+```
+
+`constructor()` only defines the `this` object, common examples include `this.delegateParser`, which is the "base" parser (for example round parser is basically a number parser for examoke)
+
+### parse()
+
+```js
+parse(arg) {
+        // Convert `$5` to just `5`
+        arg = this.transformArgument(arg);
+        return this.delegateParser.parse(arg);
+    }
+```
+
+`parse()` does the actual parsing, though it usually calls upon the `this.delegateParser`
+
+#### Any other functions are probably just to help the parsing go smoother

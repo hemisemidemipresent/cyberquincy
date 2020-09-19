@@ -82,6 +82,10 @@ module.exports = {
         return str;
     },
 
+    zip(rows) {
+        return rows[0].map((_,col) => rows.map(row => row[col]))
+    },
+
     arraysEqual(_arr1, _arr2) {
         if (
             !Array.isArray(_arr1) ||

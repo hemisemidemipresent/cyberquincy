@@ -16,10 +16,10 @@ module.exports = class AliasRepository extends Array {
             for await (const absolutePath of Files.getFiles('./aliases', [
                 '.json',
             ])) {
-                var fpath = filepath.create(absolutePath);
-                var tokens = fpath.split();
+                let fpath = filepath.create(absolutePath);
+                let tokens = fpath.split();
 
-                var relPath =
+                let relPath =
                     './' +
                     tokens
                         .slice(tokens.findIndex((i) => i === 'aliases'))
@@ -28,7 +28,7 @@ module.exports = class AliasRepository extends Array {
                 // Determine the function that will handle the alias file
 
                 // Default
-                var handlingFunction = this.loadAliasFile;
+                let handlingFunction = this.loadAliasFile;
 
                 // See if the file has a special handler
                 for (const specialRelPath in this.SPECIAL_HANDLING_CASES) {
@@ -65,7 +65,7 @@ module.exports = class AliasRepository extends Array {
         const towerUpgrades = require(f);
 
         const fpath = filepath.create(f);
-        var baseName = fpath.split().slice(-1)[0].split('.')[0];
+        let baseName = fpath.split().slice(-1)[0].split('.')[0];
 
         for (const upgrade in towerUpgrades) {
             // xyz upgrade is meant to represent the tower as a whole ignoring upgrades
@@ -100,17 +100,17 @@ module.exports = class AliasRepository extends Array {
     // Checks canonical + aliases against all other alias groups' canonical + aliases
     // and expects to find 0 matches between each set of aliases (alias set)
     preventSharedAliases(nextAliasGroup) {
-        for (var i = 0; i < this.length; i++) {
+        for (let i = 0; i < this.length; i++) {
             const existingAliasGroup = this[i];
 
-            var nextAliasSet = nextAliasGroup.aliases.concat(
+            let nextAliasSet = nextAliasGroup.aliases.concat(
                 nextAliasGroup.canonical
             );
-            var existingAliasSet = existingAliasGroup.aliases.concat(
+            let existingAliasSet = existingAliasGroup.aliases.concat(
                 existingAliasGroup.canonical
             );
 
-            var sharedAliasMembers = nextAliasSet.filter((aliasMember) =>
+            let sharedAliasMembers = nextAliasSet.filter((aliasMember) =>
                 existingAliasSet.includes(aliasMember)
             );
 
@@ -138,7 +138,7 @@ module.exports = class AliasRepository extends Array {
 
     // Converts a member of an alias group to its canonical form
     getCanonicalForm(aliasMember) {
-        var ag = this.getAliasGroup(aliasMember);
+        let ag = this.getAliasGroup(aliasMember);
         if (ag) return ag.canonical;
         else return null;
     }
@@ -146,7 +146,7 @@ module.exports = class AliasRepository extends Array {
     // Returns a single key-values pair alias group, `{canonical: [aliases]}`,
     // in which aliasMember is found
     getAliasGroup(aliasMember) {
-        var ags = this.filter(
+        let ags = this.filter(
             (ag) =>
                 ag.canonical == aliasMember || ag.aliases.includes(aliasMember)
         );
@@ -167,15 +167,15 @@ module.exports = class AliasRepository extends Array {
     // Returns a flat list of aliases semantically equivalent to `aliasMember`
     getAliasSet(aliasMember) {
         aliasMember = aliasMember.toLowerCase();
-        var ag = this.getAliasGroup(aliasMember);
+        let ag = this.getAliasGroup(aliasMember);
         if (ag) return [ag.canonical].concat(ag.aliases);
         else return null;
     }
 
     getAliasGroupsFromSameFileAs(aliasMember) {
         aliasMember = aliasMember.toLowerCase();
-        var ag = this.getAliasGroup(aliasMember);
-        var result = this.filter(
+        let ag = this.getAliasGroup(aliasMember);
+        let result = this.filter(
             (otherAliasGroup) => otherAliasGroup.sourcefile === ag.sourcefile
         );
         return result;
@@ -221,8 +221,8 @@ module.exports = class AliasRepository extends Array {
     TOWER_CANONICAL_REGEX = /[a-z]#\d\d\d/i;
 
     allTowerUpgrades() {
-        var upgrades = [];
-        for (var i = 0; i < this.length; i++) {
+        let upgrades = [];
+        for (let i = 0; i < this.length; i++) {
             const canonical = this[i].canonical;
             if (this.TOWER_CANONICAL_REGEX.test(canonical)) {
                 upgrades.push(canonical);
@@ -236,10 +236,13 @@ module.exports = class AliasRepository extends Array {
 
         return heroes.map((ag) => ag.canonical);
     }
-
+    allBloons() {
+        const bloons = this.getAliasGroupsFromSameFileAs('RED');
+        return bloons.map((ag) => ag.canonical);
+    }
     towerUpgradeToIndexNormalForm(upgrade) {
         const index_normal_unformatted = this.getAliasSet(upgrade)[1];
-        return this.toIndexNormalForm(index_normal_unformatted)
+        return this.toIndexNormalForm(index_normal_unformatted);
     }
 
     toIndexNormalForm(canonical) {

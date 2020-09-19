@@ -87,10 +87,13 @@ module.exports = {
                     Xp.addCommandXp(message);
                 }
                 //post information to statcord
-                statcord.postCommand(command.name, message.author.id);
-                console.log(
-                    `Command ${command.name} by ${message.author.id} posted to statcord,`
-                );
+                const botposting = require('./1/config.json')['botposting'];
+                if (botposting == true) {
+                    statcord.postCommand(command.name, message.author.id);
+                    console.log(
+                        `Command ${command.name} by ${message.author.id} posted to statcord,`
+                    );
+                }
 
                 // May or may not embed an advertisement message in addition to the command output
 

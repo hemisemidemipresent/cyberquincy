@@ -58,11 +58,11 @@ module.exports = {
             ); // loads all possible cells with tower
 
             // The row where the queried map is found
-            var entryRow = null;
+            let entryRow = null;
 
             // Search for the row in all "possible" rows
             for (let row = 1; row <= sheet.rowCount; row++) {
-                var towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`)
+                let towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`)
                     .value;
                 // input is "in_the_loop" but needs to be compared to "In The Loop"
                 if (
@@ -104,7 +104,7 @@ module.exports = {
             values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
 
             // Embed and send the message
-            var challengeEmbed = new Discord.MessageEmbed()
+            let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(`${values.TOWER} 2MPC Combo`)
                 .setColor(colours['cyber']);
 

@@ -43,11 +43,11 @@ module.exports = {
 
     shuffle(inputArr) {
         arr = [...inputArr];
-        for(let i = arr.length - 1; i > 0; i--){
-            const j = Math.floor(Math.random() * i)
-            const temp = arr[i]
-            arr[i] = arr[j]
-            arr[j] = temp
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * i);
+            const temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
         }
         return arr;
     },
@@ -72,25 +72,29 @@ module.exports = {
     toTitleCase(str) {
         str = str.toLowerCase();
 
-        separator_tokens = [' ', '-']
-        for (var i = 0; i < separator_tokens.length; i++) {
-            str = str.split(separator_tokens[i])
-                     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                     .join(separator_tokens[i])
+        separator_tokens = [' ', '-'];
+        for (let i = 0; i < separator_tokens.length; i++) {
+            str = str
+                .split(separator_tokens[i])
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(separator_tokens[i]);
         }
         return str;
     },
 
     arraysEqual(_arr1, _arr2) {
-        if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
+        if (
+            !Array.isArray(_arr1) ||
+            !Array.isArray(_arr2) ||
+            _arr1.length !== _arr2.length
+        )
             return false;
 
         var arr1 = _arr1.concat().sort();
         var arr2 = _arr2.concat().sort();
 
         for (var i = 0; i < arr1.length; i++) {
-            if (arr1[i] !== arr2[i])
-                return false;
+            if (arr1[i] !== arr2[i]) return false;
         }
 
         return true;

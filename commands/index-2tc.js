@@ -25,7 +25,7 @@ const OG_COLS = {
     DATE: 'L',
     PERSON: 'M',
     LINK: 'O',
-    CURRENT: 'P'
+    CURRENT: 'P',
 };
 
 const ALT_COLS = {
@@ -33,7 +33,7 @@ const ALT_COLS = {
     MAP: 'S',
     PERSON: 'U',
     LINK: 'W',
-}
+};
 
 module.exports = {
     name: '2tc',
@@ -42,26 +42,25 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        towerOrHeroParser = new OrParser(
+        (towerOrHeroParser = new OrParser(
             new TowerUpgradeParser(),
-            new HeroParser(),
-        ),
-
-        parsers = [
-            // Which 2TC's have been done on this map?
-            new MapParser(), 
-            // Get 2TC by combo number, optionally on the specified map
-            new AnyOrderParser(
-                new NaturalNumberParser(), 
-                new OptionalParser(new MapParser())
-            ),
-            // Get 2TCs containing tower (optionally both towers), optionally on the specified map
-            new AnyOrderParser(
-                towerOrHeroParser,
-                new OptionalParser(towerOrHeroParser),
-                new OptionalParser(new MapParser())
-            ),
-        ];
+            new HeroParser()
+        )),
+            (parsers = [
+                // Which 2TC's have been done on this map?
+                new MapParser(),
+                // Get 2TC by combo number, optionally on the specified map
+                new AnyOrderParser(
+                    new NaturalNumberParser(),
+                    new OptionalParser(new MapParser())
+                ),
+                // Get 2TCs containing tower (optionally both towers), optionally on the specified map
+                new AnyOrderParser(
+                    towerOrHeroParser,
+                    new OptionalParser(towerOrHeroParser),
+                    new OptionalParser(new MapParser())
+                ),
+            ]);
 
         const parsed = CommandParser.parse(args, new OrParser(...parsers));
 
@@ -69,25 +68,49 @@ module.exports = {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
-        if (parsed.natural_number) { // Combo # provided
-            if (parsed.map) { // and map specified
-                return displayAlt2TCFromN(message, parsed.natural_number, parsed.map).catch(e => err(e, message));
-            } else { // and map NOT specified
+        if (parsed.natural_number) {
+            // Combo # provided
+            if (parsed.map) {
+                // and map specified
+                return displayAlt2TCFromN(
+                    message,
+                    parsed.natural_number,
+                    parsed.map
+                ).catch((e) => err(e, message));
+            } else {
+                // and map NOT specified
                 // OG completion
-                return displayOG2TCFromN(message, parsed.natural_number).catch(e => err(e, message));
+                return displayOG2TCFromN(
+                    message,
+                    parsed.natural_number
+                ).catch((e) => err(e, message));
             }
-        } else if (parsed.hero || parsed.tower_upgrade) { // Tower(s) specified
+        } else if (parsed.hero || parsed.tower_upgrade) {
+            // Tower(s) specified
             towers = null;
-            try { towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes); }
-            catch(e) { return err(e, message); }
+            try {
+                towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes);
+            } catch (e) {
+                return err(e, message);
+            }
 
-            if (towers.length == 1) { // 1 tower provided
-                return message.channel.send(`Multiple-combo searching coming soon`);
-            } else { // 2 towers provided
+            if (towers.length == 1) {
+                // 1 tower provided
+                return message.channel.send(
+                    `Multiple-combo searching coming soon`
+                );
+            } else {
+                // 2 towers provided
                 if (parsed.map) {
-                    return displayAlt2TCFromTowers(message, towers, parsed.map).catch(e => err(e, message))
+                    return displayAlt2TCFromTowers(
+                        message,
+                        towers,
+                        parsed.map
+                    ).catch((e) => err(e, message));
                 } else {
-                    return displayOG2TCFromTowers(message, towers).catch(e => err(e, message));
+                    return displayOG2TCFromTowers(message, towers).catch((e) =>
+                        err(e, message)
+                    );
                 }
             }
         } else {
@@ -99,10 +122,11 @@ module.exports = {
         let helpEmbed = new Discord.MessageEmbed()
             .setTitle('`q!2tc` HELP')
             .addField(
-                '`q!2tc <n>`', 
-                'Get the nth combo on the OG map\n`q!2tc 44`')
+                '`q!2tc <n>`',
+                'Get the nth combo on the OG map\n`q!2tc 44`'
+            )
             .addField(
-                '`q!2tc <n> <map>`', 
+                '`q!2tc <n> <map>`',
                 'Get the nth combo on the specified map\n`q!2tc 44 frozen_over`'
             )
             .addField(
@@ -112,8 +136,7 @@ module.exports = {
             .addField(
                 '`q!2tc <tower_upgrade/hero> <tower_upgrade/hero> <map>`',
                 'Get a combo by the towers involved on the specified map\n`q!2tc obyn dch cube`'
-            )
-            
+            );
 
         return message.channel.send(helpEmbed);
     },
@@ -145,18 +168,17 @@ function normalizeTowers(tower_upgrades, heroes) {
         throw new UserCommandError(`Can't have a 2TC with 2 heroes`);
     }
 
-    tower_upgrades = tower_upgrades ? 
-                        tower_upgrades.map(
-                            tu => Aliases.towerUpgradeToIndexNormalForm(tu)
-                        ) : []
-    heroes = heroes ? heroes.map(hr => h.toTitleCase(hr)) : [];
+    tower_upgrades = tower_upgrades
+        ? tower_upgrades.map((tu) => Aliases.towerUpgradeToIndexNormalForm(tu))
+        : [];
+    heroes = heroes ? heroes.map((hr) => h.toTitleCase(hr)) : [];
     return heroes.concat(tower_upgrades);
 }
 
 async function numCombos() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
     await sheet.loadCells(`J6`);
-    return sheet.getCellByA1('J6').value
+    return sheet.getCellByA1('J6').value;
 }
 
 function embed2TC(message, values, title, footer) {
@@ -174,7 +196,7 @@ function embed2TC(message, values, title, footer) {
     }
 
     if (footer) {
-        challengeEmbed.setFooter(footer)
+        challengeEmbed.setFooter(footer);
     }
 
     message.channel.send(challengeEmbed);
@@ -192,15 +214,15 @@ async function getOG2TCFromRow(row) {
     // Assign each value to be discord-embedded in a simple default way
     let values = {};
     for (key in OG_COLS) {
-        values[key] = sheet.getCellByA1(
-            `${OG_COLS[key]}${row}`
-        ).value;
+        values[key] = sheet.getCellByA1(`${OG_COLS[key]}${row}`).value;
     }
-    
-    const upgrades = values.UPGRADES.split('|').map(u => u.replace(/^\s+|\s+$/g, ''));
+
+    const upgrades = values.UPGRADES.split('|').map((u) =>
+        u.replace(/^\s+|\s+$/g, '')
+    );
     for (var i = 0; i < upgrades.length; i++) {
         // Display upgrade next to tower
-        values[`TOWER_${i + 1}`] += " (" + upgrades[i] + ")";
+        values[`TOWER_${i + 1}`] += ' (' + upgrades[i] + ')';
     }
     delete values.UPGRADES; // Don't display upgrades on their own, display with towers
 
@@ -231,14 +253,16 @@ async function displayOG2TCFromN(message, n) {
 }
 
 async function getOGRowFromN(n) {
-    nCombos = await numCombos()
+    nCombos = await numCombos();
     if (n > nCombos) {
         throw new UserCommandError(
-            `You asked for the ${h.toOrdinalSuffix(n)} combo but there are only ${nCombos} listed.`
+            `You asked for the ${h.toOrdinalSuffix(
+                n
+            )} combo but there are only ${nCombos} listed.`
         );
     }
 
-    return n + await findOGRowOffset();
+    return n + (await findOGRowOffset());
 }
 
 async function findOGRowOffset() {
@@ -247,12 +271,14 @@ async function findOGRowOffset() {
     const MIN_OFFSET = 1;
     const MAX_OFFSET = 20;
 
-    await sheet.loadCells(`${OG_COLS.NUMBER}${MIN_OFFSET}:${OG_COLS.NUMBER}${MAX_OFFSET}`);
+    await sheet.loadCells(
+        `${OG_COLS.NUMBER}${MIN_OFFSET}:${OG_COLS.NUMBER}${MAX_OFFSET}`
+    );
 
     for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
-        cellValue = sheet.getCellByA1(`B${row}`).value
-        if(cellValue) {
-            if (cellValue.toLowerCase().includes("number")) {
+        cellValue = sheet.getCellByA1(`B${row}`).value;
+        if (cellValue) {
+            if (cellValue.toLowerCase().includes('number')) {
                 return row;
             }
         }
@@ -270,7 +296,7 @@ async function displayOG2TCFromTowers(message, towers) {
     data = await getOG2TCFromRow(row);
 
     // Recollect towers in tower# order and with upgrades
-    towers = [data.TOWER_1, data.TOWER_2]
+    towers = [data.TOWER_1, data.TOWER_2];
 
     // Don't include tower info in embedded, only in title
     delete data.TOWER_1;
@@ -282,24 +308,28 @@ async function displayOG2TCFromTowers(message, towers) {
 async function getOGRowFromTowers(towers) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 
-    startRow = await findOGRowOffset(sheet) + 1;
-    endRow = startRow + await numCombos() - 1;
+    startRow = (await findOGRowOffset(sheet)) + 1;
+    endRow = startRow + (await numCombos()) - 1;
 
-    await sheet.loadCells(`${OG_COLS.TOWER_1}${startRow}:${OG_COLS.TOWER_2}${endRow}`);
+    await sheet.loadCells(
+        `${OG_COLS.TOWER_1}${startRow}:${OG_COLS.TOWER_2}${endRow}`
+    );
 
     for (var row = startRow; row <= endRow; row++) {
-        candidateTowers = []
+        candidateTowers = [];
         candidateTowers.push(
             sheet.getCellByA1(`${OG_COLS.TOWER_1}${row}`).value
-        )
+        );
         candidateTowers.push(
             sheet.getCellByA1(`${OG_COLS.TOWER_2}${row}`).value
-        )
+        );
 
-        if (h.arraysEqual(
-                towers.map(t => t.toLowerCase()), 
-                candidateTowers.map(t => t.toLowerCase()))
-            ) {
+        if (
+            h.arraysEqual(
+                towers.map((t) => t.toLowerCase()),
+                candidateTowers.map((t) => t.toLowerCase())
+            )
+        ) {
             return row;
         }
     }
@@ -316,35 +346,44 @@ async function getAlt2TCFromNAndMap(n, map) {
     START_ROW = 12;
     END_ROW = 88;
 
-    await sheet.loadCells(`${ALT_COLS.NUMBER}${START_ROW}:${ALT_COLS.MAP}${END_ROW}`);
+    await sheet.loadCells(
+        `${ALT_COLS.NUMBER}${START_ROW}:${ALT_COLS.MAP}${END_ROW}`
+    );
 
     // Will be true towards the end of a below iteration if the alt row
     // being examined corresponds to the queried combo (whether by combo # or towers).
     let nActive = -1;
     for (var row = START_ROW; row <= END_ROW; row++) {
-        let mapCandidate = sheet.getCellByA1(`${ALT_COLS.MAP}${row}`).value
+        let mapCandidate = sheet.getCellByA1(`${ALT_COLS.MAP}${row}`).value;
         // End condition
         if (!mapCandidate) {
-            throw new UserCommandError(`Combo #${n} exists but doesn't have an alt map on ${map}`);
+            throw new UserCommandError(
+                `Combo #${n} exists but doesn't have an alt map on ${map}`
+            );
         }
 
-        let numberCandidate = sheet.getCellByA1(`${ALT_COLS.NUMBER}${row}`).value
+        let numberCandidate = sheet.getCellByA1(`${ALT_COLS.NUMBER}${row}`)
+            .value;
         if (numberCandidate) {
             nActive = parseInt(numberCandidate.match(/\d+.*?/)[0]);
 
             // If previous alt map rows were based off the correct combo number,
             // reaching a new combo number means that there wasn't a match with the queried map
             if (nActive > n) {
-                throw new UserCommandError(`Combo #${n} exists but doesn't have an alt map on ${map}`); 
+                throw new UserCommandError(
+                    `Combo #${n} exists but doesn't have an alt map on ${map}`
+                );
             }
         }
 
-        // If combo number and map match up 
+        // If combo number and map match up
         if (nActive == n && mapCandidate == Aliases.toIndexNormalForm(map)) {
             // Load the three unique data cells in the current alt combo row
-            await sheet.loadCells(`${ALT_COLS.MAP}${row}:${ALT_COLS.LINK}${row}`);
+            await sheet.loadCells(
+                `${ALT_COLS.MAP}${row}:${ALT_COLS.LINK}${row}`
+            );
 
-            let values = {}
+            let values = {};
             values.MAP = map;
             values.PERSON = sheet.getCellByA1(`${ALT_COLS.PERSON}${row}`).value;
 
@@ -370,32 +409,31 @@ async function displayAlt2TCFromN(message, n, map) {
 
     if (og2TCData.MAP == Aliases.toIndexNormalForm(map)) {
         data = og2TCData;
-        embedFooter = 'This is the OG map completion. Enter the same query without the map to see more info.'
+        embedFooter =
+            'This is the OG map completion. Enter the same query without the map to see more info.';
     } else {
-        const alt2TCData = await getAlt2TCFromNAndMap(
-            parseInt(n), 
-            map
-        );
-    
+        const alt2TCData = await getAlt2TCFromNAndMap(parseInt(n), map);
+
         // Combine the data between OG and ALT, override shared data with the alt entry
         data = {
             ...og2TCData,
             ...alt2TCData,
-        }
+        };
     }
 
     // Exclude irrelevant information from OG towers lookup and embed title
-    delete data.NUMBER
+    delete data.NUMBER;
     delete data.MAP;
     delete data.VERSION;
     delete data.DATE;
     delete data.CURRENT;
 
     embed2TC(
-        message, 
-        data, 
+        message,
+        data,
         `2TC Combo #${n} on ${Aliases.toIndexNormalForm(map)}`,
-        embedFooter);
+        embedFooter
+    );
 }
 
 ////////////////
@@ -412,22 +450,24 @@ async function displayAlt2TCFromTowers(message, towers, map) {
     // Stick with OG data if the map being queried is the OG map
     if (og2TCData.MAP == Aliases.toIndexNormalForm(map)) {
         data = og2TCData;
-        embedFooter = 'This is the OG map completion. Enter the same query without the map to see more info.'
-    } else { // Otherwise, stick to the plan of parsing the alt maps table
+        embedFooter =
+            'This is the OG map completion. Enter the same query without the map to see more info.';
+    } else {
+        // Otherwise, stick to the plan of parsing the alt maps table
         const alt2TCData = await getAlt2TCFromNAndMap(
-            parseInt(og2TCData.NUMBER), 
+            parseInt(og2TCData.NUMBER),
             map
         );
-    
+
         // Combine the data between OG and ALT, override shared data with the alt entry
         data = {
             ...og2TCData,
             ...alt2TCData,
-        }
+        };
     }
 
     // Recollect towers in tower# order and with upgrades
-    towers = [data.TOWER_1, data.TOWER_2]
+    towers = [data.TOWER_1, data.TOWER_2];
 
     // Exclude irrelevant information from OG towers lookup and embed title
     delete data.TOWER_1;
@@ -436,11 +476,11 @@ async function displayAlt2TCFromTowers(message, towers, map) {
     delete data.VERSION;
     delete data.DATE;
     delete data.CURRENT;
-    data.NUMBER = data.NUMBER.replace('*', '')
+    data.NUMBER = data.NUMBER.replace('*', '');
 
     embed2TC(
-        message, 
-        data, 
+        message,
+        data,
         `2TC Combo on ${Aliases.toIndexNormalForm(map)}: ${towers.join(' + ')}`,
         embedFooter
     );

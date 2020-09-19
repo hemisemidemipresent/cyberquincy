@@ -14,14 +14,14 @@ module.exports = class Parsed extends Object {
 
     addField(type, value) {
         if (!value) return;
-        
-        var types = pluralize(type)
+
+        let types = pluralize(type);
 
         // If this is the second+ of the type (<round>/<difficulty>/etc.) being parsed
         if (this[type]) {
             // Add it to the list for the given type
             this[types].push(value);
-        } 
+        }
         // If this is the first of the type being parsed
         else {
             // Add it to the currently empty list for the given type
@@ -44,7 +44,9 @@ module.exports = class Parsed extends Object {
             this.__mergeField(type, parsed, otherParsed);
         }
 
-        parsed.parsingErrors = this.parsingErrors.concat(otherParsed.parsingErrors);
+        parsed.parsingErrors = this.parsingErrors.concat(
+            otherParsed.parsingErrors
+        );
 
         return parsed;
     }
@@ -52,12 +54,12 @@ module.exports = class Parsed extends Object {
     __mergeField(type, newParsed, oldParsed) {
         if (oldParsed[type] instanceof Array) {
             if (newParsed[type]) {
-                newParsed[type].push(...oldParsed[type])
+                newParsed[type].push(...oldParsed[type]);
             } else {
-                newParsed[type] = [...oldParsed[type]]
+                newParsed[type] = [...oldParsed[type]];
             }
         } else {
-            newParsed[type] = oldParsed[type]
+            newParsed[type] = oldParsed[type];
         }
     }
 
@@ -79,4 +81,4 @@ module.exports = class Parsed extends Object {
     hasErrors() {
         return this.parsingErrors.length > 0;
     }
-}
+};

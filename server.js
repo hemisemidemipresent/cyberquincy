@@ -58,8 +58,6 @@ function consoleBootup() {
         setTimeout(too, 1000);
 
         client.user.setActivity(`${prefix}help`);
-        // Start auto posting
-        botInfoHelper.auto();
     });
 }
 
@@ -96,6 +94,9 @@ function dbSetup() {
 }
 
 async function googleSheetsInitialization() {
+    btd6index = require('./1/config.json')['btd6index'];
+    if (btd6index == false) return;
+
     const GoogleSheetsHelper = require('./helpers/google-sheets.js');
     // Load the BTD6 Index
     global.Btd6Index = await GoogleSheetsHelper.load(
@@ -133,6 +134,9 @@ function generateListeners(commandCenter) {
     });
 }
 function botStats() {
+    botposting = require('./1/config.json')['botposting'];
+    if (botposting == false) return;
+    botInfoHelper.auto();
     botInfoHelper.statcord();
     botInfoHelper.post();
 }

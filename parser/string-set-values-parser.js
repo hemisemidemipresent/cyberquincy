@@ -26,7 +26,7 @@ module.exports = class StringSetValuesParser {
 
         // Construct a delegate parser for the list of permitted values
         // by ORing them together into a regular expression
-        var regex = new RegExp('^(' + values.join('|') + ')$', 'i');
+        let regex = new RegExp('^(' + values.join('|') + ')$', 'i');
         this.delegateParser = new RegexParser(regex);
     }
 
@@ -36,7 +36,7 @@ module.exports = class StringSetValuesParser {
         } catch (e) {
             // Catch the regex error and print out a more helpful error
             if (e instanceof UserCommandError) {
-                var errorValues = null;
+                let errorValues = null;
                 if (this.values.length > 10) {
                     errorValues =
                         this.values
@@ -49,7 +49,7 @@ module.exports = class StringSetValuesParser {
                             .map((v) => `\`${v}\``)
                             .join(', ');
                 } else {
-                    errorValues = this.values.join(', ')
+                    errorValues = this.values.join(', ');
                 }
                 throw new UserCommandError(
                     `"${arg}" is not one of available values: ${errorValues}`

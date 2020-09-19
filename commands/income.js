@@ -17,9 +17,7 @@ module.exports = {
             args,
             new AnyOrderParser(
                 new RoundParser('ALL'),
-                new OptionalParser(
-                    new RoundParser('ALL')
-                ),
+                new OptionalParser(new RoundParser('ALL')),
                 new OptionalParser(
                     new ModeParser(),
                     'CHIMPS' // default if not provided
@@ -36,10 +34,12 @@ module.exports = {
         let embed = null;
 
         if (startround < 3 && mode == 'abr') {
-            return module.exports.errorMessage(message, ['There is no support for rounds 1 and 2 abr income calculation']);
+            return module.exports.errorMessage(message, [
+                'There is no support for rounds 1 and 2 abr income calculation',
+            ]);
         }
 
-        switch(mode) {
+        switch (mode) {
             case 'deflation':
                 embed = module.exports.deflation();
                 break;
@@ -49,12 +49,15 @@ module.exports = {
             default:
                 if (endround) {
                     embed = module.exports.income(startround, endround, mode);
-                }
-                else {
+                } else {
                     if (startround >= 6) {
-                        embed = message.channel.send(chincomeMessage(mode, startround));
+                        embed = message.channel.send(
+                            chincomeMessage(mode, startround)
+                        );
                     } else {
-                        return module.exports.errorMessage(message, ['<round> must be at least 6 if only one round is specified']);
+                        return module.exports.errorMessage(message, [
+                            '<round> must be at least 6 if only one round is specified',
+                        ]);
                     }
                 }
         }
@@ -71,15 +74,17 @@ module.exports = {
             .addField(
                 '`q!income <round> {gamemode}` (Order agnostic)',
                 'In specified gamemode or standard as default:' +
-                '  • Cash generated during round <round>\n' +
-                '  • Cash generated from start of round 6 through end of round <round>\n' +
-                '  • Cash generated from start of round <round> through end of round 100'
+                    '  • Cash generated during round <round>\n' +
+                    '  • Cash generated from start of round 6 through end of round <round>\n' +
+                    '  • Cash generated from start of round <round> through end of round 100'
             )
             .addField('Ex. #1', '`q!income 8 64`')
             .addField('Ex. #2', '`q!income 69 94 halfcash`')
             .addField('Ex. #3', '`q!income 8`')
             .addField('Ex. #4', '`q!income 94 abr`')
-            .setFooter('Currently only supports hard difficulty.\nAlso, q!chincome has been combined into q!income.');
+            .setFooter(
+                'Currently only supports hard difficulty.\nAlso, q!chincome has been combined into q!income.'
+            );
 
         return message.channel.send(errorEmbed);
     },
@@ -99,7 +104,7 @@ module.exports = {
         message.channel.send(errorEmbed);
     },
     income(startround, endround, mode) {
-        switch(mode) {
+        switch (mode) {
             case 'halfcash':
                 return module.exports.halfIncome(startround, endround);
             case 'abr':
@@ -172,7 +177,7 @@ module.exports = {
 chincomeMessage = function (mode, round) {
     incomes = calculateIncomes(mode, round);
 
-    var mode_str_iden = (function (mode) {
+    let mode_str_iden = (function (mode) {
         switch (mode) {
             case 'HALFCASH':
                 return 'Half Cash';
@@ -216,8 +221,7 @@ calculateIncomes = function (mode, round) {
     } else {
         index = round;
 
-        chincome =
-            r[index].cumulativeCash - r[5].cumulativeCash + 650;
+        chincome = r[index].cumulativeCash - r[5].cumulativeCash + 650;
         rincome = r[index].cashThisRound;
         lincome = r[100].cumulativeCash - r[index - 1].cumulativeCash;
 

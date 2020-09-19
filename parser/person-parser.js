@@ -1,16 +1,17 @@
-const AnythingParser = require("./anything-parser");
+const UserCommandError = require("../exceptions/user-command-error");
 
 // Parses a user listed in the BTD6 Index
 module.exports = class PersonParser {
     type() {
         return "person";
     }
-
-    constructor() {
-        this.delegateParser = new AnythingParser();
-    }
     
     parse(arg) {
-        return this.delegateParser.parse(arg);
+        const result = arg.match(/u#(.*)/)
+        if (result) {
+            return result[1];
+        } else {
+            throw new UserCommandError(`Username must start with \`u#\` but got ${arg} instead`)
+        }
     }
 }

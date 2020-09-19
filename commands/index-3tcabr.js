@@ -170,30 +170,66 @@ function embed(message, values, title, footer=null) {
     message.channel.send(challengeEmbed);
 }
 
-async function embedMultiple(message, valuesList, towers, title, footer=null) {
+MAX_VALUES_LIST_LENGTH = 20;
+
+function embedMultiple(message, valuesList, towers, title, footer=null) {
+    if (valuesList.length > MAX_VALUES_LIST_LENGTH) {
+        return embedPages(message, valuesList, towers, title);
+    }
+
+    challengeEmbed = multipleEmbedded(valuesList, towers, valuesList.length, title);
+
+    message.channel.send(challengeEmbed);
+}
+
+function embedPages(message, valuesList, towers, title) {
+    valuesChunks = h.chunk(valuesList, MAX_VALUES_LIST_LENGTH);
+    numPages = valuesChunks.length;
+    pg = 0;
+
+    REACTIONS = ['⬅️', '➡️', '❌']
+    function reactLoop(msg) {
+        for (var i = 0; i < REACTIONS.length; i++) {
+            msg.react(REACTIONS[i]);
+        }
+
+        msg.createReactionCollector((reaction, user) => 
+            user.id === message.author.id && REACTIONS.includes(reaction.emoji.name),
+            {time: 20000}
+        ).once('collect', reaction => {
+            switch(reaction.emoji.name) {
+                case '⬅️':
+                    pg--;
+                    break;
+                case '➡️':
+                    pg++;
+                    break;
+                case '❌':
+                default:
+                    return msg.delete();
+            }
+            pg += numPages; // Avoid negative numbers
+            pg %= numPages;
+            displayCurrentPage();
+        });
+    }
+
+    function displayCurrentPage() {
+        challengeEmbed = multipleEmbedded(valuesChunks[pg], towers, valuesList.length, title, `${pg+1}/${numPages}`);
+        message.channel.send(challengeEmbed).then(msg => reactLoop(msg));
+    }
+
+    displayCurrentPage();
+}
+
+function multipleEmbedded(valuesList, towers, numCombos, title, footer=null) {
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(title)
         .setColor(colours['cyber']);
     
-    towersList = valuesList.map(v => [v.TOWER_1, v.TOWER_2, v.TOWER_3])
+    const towersDisplayStrings = getTowersDisplayStrings(valuesList, towers);
 
-    // Take a list of tower-triplets and format them in such a way that there
-    // are 3 columns; Tower 1, Tower 2, and Tower 3.
-    //
-    // [t1, t2, t3], [t4, t5, t6], [t7, t8, t9]
-    //    goes to
-    //       Tower 1   Tower 2   Tower 3
-    //       t1        t2        t3
-    //       t4        t5        t6
-    //       t7        t8        t9
-    let towersDisplayStrings = h.zip(towersList)
-                                .map(l => {
-                                    return l.map(t => towers.map(t => t.toLowerCase()).includes(t.toLowerCase()) ? `**${t}**` : t)
-                                     .join("\n")
-                                });
-
-    challengeEmbed = challengeEmbed.addField('#Combos', valuesList.length);
-
+    challengeEmbed = challengeEmbed.addField('#Combos', numCombos);
 
     for (var i = 0; i < towersDisplayStrings.length; i++) {
         challengeEmbed = challengeEmbed.addField(
@@ -203,12 +239,31 @@ async function embedMultiple(message, valuesList, towers, title, footer=null) {
         );
     }
     
-
     if (footer) {
         challengeEmbed.setFooter(footer)
     }
 
-    message.channel.send(challengeEmbed);
+    return challengeEmbed;
+}
+
+// Take a list of tower-triplets and format them in such a way that there
+// are 3 columns; Tower 1, Tower 2, and Tower 3.
+//
+// [t1, t2, t3], [t4, t5, t6], [t7, t8, t9]
+//    goes to
+//       Tower 1   Tower 2   Tower 3
+//       t1        t2        t3
+//       t4        t5        t6
+//       t7        t8        t9
+function getTowersDisplayStrings(valuesList, towers) {
+    towersList = valuesList.map(v => [v.TOWER_1, v.TOWER_2, v.TOWER_3])
+
+    
+    return h.zip(towersList)
+            .map(l => {
+                return l.map(t => towers.map(t => t.toLowerCase()).includes(t.toLowerCase()) ? `**${t}**` : t)
+                    .join("\n")
+            });
 }
 
 async function numCombos() {
@@ -308,7 +363,7 @@ async function displayOG3TCABRFromSubsetTowers(message, towers) {
     if (matchingCombos.length == 0) {
         throw new UserCommandError(`There is no 3-Tower ABR CHIMPS with ${towers.join(' + ')}`)
     } else if (matchingCombos.length == 1) {
-        // Re-gather the data so it's properly formatted and display
+        // Re-gather the data so it's properly formatted and displayed
         return displayOG3TCABRFromTowers(message, towers, matchingCombos[0]);
     } else {
         return embedMultiple(message, matchingCombos, towers, `3-Tower ABR CHIMPS with ${towers.join(' and ')}`);

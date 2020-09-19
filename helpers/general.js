@@ -86,6 +86,16 @@ module.exports = {
         return rows[0].map((_,col) => rows.map(row => row[col]))
     },
 
+    chunk(array, size) {
+        const chunked_arr = [];
+        let index = 0;
+        while (index < array.length) {
+            chunked_arr.push(array.slice(index, size + index));
+            index += size;
+        }
+        return chunked_arr;
+    },
+
     arraysEqual(_arr1, _arr2) {
         if (
             !Array.isArray(_arr1) ||

@@ -172,6 +172,8 @@ function embed(message, values, title, footer=null) {
 
 MAX_VALUES_LIST_LENGTH = 20;
 
+// Embeds multi-combo results
+// Delegates to pagination function if number of results exceeds max limit
 function embedMultiple(message, valuesList, towers, title, footer=null) {
     if (valuesList.length > MAX_VALUES_LIST_LENGTH) {
         return embedPages(message, valuesList, towers, title);
@@ -182,17 +184,24 @@ function embedMultiple(message, valuesList, towers, title, footer=null) {
     message.channel.send(challengeEmbed);
 }
 
+//  If >20 combos are found, it paginates the results; navigation is driven by emoji reactions
 function embedPages(message, valuesList, towers, title) {
+    // Divide results into chunks of MAX_VALUES_LIST_LENGTH
     valuesChunks = h.chunk(valuesList, MAX_VALUES_LIST_LENGTH);
     numPages = valuesChunks.length;
     pg = 0;
 
     REACTIONS = ['⬅️', '➡️', '❌']
+    // Gets the reaction to the pagination message by the command author
+    // and respond appropriate action (turning page or deleting message)
     function reactLoop(msg) {
+        // Lays out predefined reactions
         for (var i = 0; i < REACTIONS.length; i++) {
             msg.react(REACTIONS[i]);
         }
 
+        // Read author reaction (time limit specified below in milliseconds)
+        // and respond with appropriate action
         msg.createReactionCollector((reaction, user) => 
             user.id === message.author.id && REACTIONS.includes(reaction.emoji.name),
             {time: 20000}
@@ -209,7 +218,7 @@ function embedPages(message, valuesList, towers, title) {
                     return msg.delete();
             }
             pg += numPages; // Avoid negative numbers
-            pg %= numPages;
+            pg %= numPages; // Avoid page numbers greater than max page number
             displayCurrentPage();
         });
     }
@@ -222,6 +231,7 @@ function embedPages(message, valuesList, towers, title) {
     displayCurrentPage();
 }
 
+// Common code that displays multi-combo results
 function multipleEmbedded(valuesList, towers, numCombos, title, footer=null) {
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(title)

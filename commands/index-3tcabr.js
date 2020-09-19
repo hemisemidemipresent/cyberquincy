@@ -64,17 +64,13 @@ module.exports = {
         }
 
         if (parsed.natural_number) { // Combo # provided
-            return displayOG3TCABRFromN(message, parsed.natural_number);
+            return displayOG3TCABRFromN(message, parsed.natural_number).catch(e => err(e, message));
         } else if (parsed.hero || parsed.tower_upgrade) { // Tower(s) specified
             towers = null;
             try { towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes) }
             catch(e) { return err(e, message) }
 
-            if (towers.length == 3) {
-
-            } else {
-                return displayOG3TCABRFromSubsetTowers(message, towers).catch(e => err(e, message));
-            }
+            return displayOG3TCABRFromSubsetTowers(message, towers).catch(e => err(e, message));
         } else {
             return message.channel.send('Searching combos by person coming soon');
         }
@@ -82,10 +78,14 @@ module.exports = {
 
     helpMessage(message) {
         let helpEmbed = new Discord.MessageEmbed()
-            .setTitle('`q!2tc` HELP')
+            .setTitle('`q!3tcabr` HELP')
             .addField(
-                '`q!2tc <n>`', 
-                'Get the nth combo on the OG map\n`q!2tc 44`'
+                '`q!3tcabr <n>`', 
+                'Get the nth combo on the OG map\n`q!3tcabr 441`'
+            )
+            .addField(
+                '`q!3tcabr <tower> {tower} {tower}`', 
+                'Get all combos containing 1-3 entered towers\n`q!3tcabr wlp obyn mb`'
             )
         
         return message.channel.send(helpEmbed);
@@ -98,7 +98,7 @@ module.exports = {
                 'Likely Cause(s)',
                 parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
-            .addField('Type `q!2tc` for help', ':)')
+            .addField('Type `q!3tcabr` for help', ':)')
             .setColor(colours['orange']);
 
         return message.channel.send(errorEmbed);
@@ -113,12 +113,48 @@ function err(e, message) {
     }
 }
 
-function embed(message, values, title, footer) {
+function normalizeTowers(tower_upgrades, heroes) {
+    if (heroes && heroes.length >= 2) {
+        throw new UserCommandError(`Can't have a completion with more than 1 hero`);
+    }
+
+    // wizard#400 => arcane_spike => Arcane Spike
+    tower_upgrades = tower_upgrades ? 
+                        tower_upgrades.map(
+                            tu => Aliases.towerUpgradeToIndexNormalForm(tu)
+                        ) : []
+    
+    // obyn => Obyn
+    heroes = heroes ? heroes.map(hr => h.toTitleCase(hr)) : [];
+    return heroes.concat(tower_upgrades);
+}
+
+function embed(message, values, title, footer=null) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(title)
         .setColor(colours['cyber']);
+    
+    // Format embed so towers come first
+    towers = []
+    towers.push(values.TOWER_1)
+    towers.push(values.TOWER_2)
+    towers.push(values.TOWER_3)
 
+    delete values.TOWER_1
+    delete values.TOWER_2
+    delete values.TOWER_3
+    
+    // Embed towers
+    for (var i = 0; i < towers.length; i++) {
+        challengeEmbed = challengeEmbed.addField(
+            `Tower ${i + 1}`,
+            towers[i],
+            true
+        );
+    }
+
+    // Embed the rest of the fields
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
             h.toTitleCase(field.replace('_', ' ')),
@@ -134,40 +170,88 @@ function embed(message, values, title, footer) {
     message.channel.send(challengeEmbed);
 }
 
-async function displayOG3TCABRFromSubsetTowers(message, towers) {
-    combos = await succCombos();
-    const matchingCombos = combos.filter(c => {
-        const comboTowers = [c.TOWER_1, c.TOWER_2, c.TOWER_3];
-        return towers.every(t => comboTowers.includes(t));
-    });
-    console.log(matchingCombos);
-    // return embedMultiple(message, matchingCombos);
-}
+async function embedMultiple(message, valuesList, towers, title, footer=null) {
+    var challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(title)
+        .setColor(colours['cyber']);
+    
+    towersList = valuesList.map(v => [v.TOWER_1, v.TOWER_2, v.TOWER_3])
 
-function normalizeTowers(tower_upgrades, heroes) {
-    if (heroes && heroes.length >= 2) {
-        throw new UserCommandError(`Can't have a completion with more than 1 hero`);
+    // Take a list of tower-triplets and format them in such a way that there
+    // are 3 columns; Tower 1, Tower 2, and Tower 3.
+    //
+    // [t1, t2, t3], [t4, t5, t6], [t7, t8, t9]
+    //    goes to
+    //       Tower 1   Tower 2   Tower 3
+    //       t1        t2        t3
+    //       t4        t5        t6
+    //       t7        t8        t9
+    let towersDisplayStrings = h.zip(towersList)
+                                .map(l => {
+                                    return l.map(t => towers.map(t => t.toLowerCase()).includes(t.toLowerCase()) ? `**${t}**` : t)
+                                     .join("\n")
+                                });
+
+    challengeEmbed = challengeEmbed.addField('#Combos', valuesList.length);
+
+
+    for (var i = 0; i < towersDisplayStrings.length; i++) {
+        challengeEmbed = challengeEmbed.addField(
+            `Tower ${i + 1}`,
+            towersDisplayStrings[i],
+            true
+        );
+    }
+    
+
+    if (footer) {
+        challengeEmbed.setFooter(footer)
     }
 
-    tower_upgrades = tower_upgrades ? 
-                        tower_upgrades.map(
-                            tu => Aliases.towerUpgradeToIndexNormalForm(tu)
-                        ) : []
-    heroes = heroes ? heroes.map(hr => h.toTitleCase(hr)) : [];
-    return heroes.concat(tower_upgrades);
+    message.channel.send(challengeEmbed);
 }
-
-NUM_COMBOS_COUNTER = 'L6'
 
 async function numCombos() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
+
+    // The number of combos is listed in L6
+    NUM_COMBOS_COUNTER = 'L6'
 
     await sheet.loadCells(`${NUM_COMBOS_COUNTER}:${NUM_COMBOS_COUNTER}`);
 
     return parseInt(sheet.getCellByA1(NUM_COMBOS_COUNTER).value);
 }
 
+async function findOGRowOffset() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
+
+    const MIN_OFFSET = 1;
+    const MAX_OFFSET = 20;
+
+    await sheet.loadCells(`${OG_COLS.NUMBER}${MIN_OFFSET}:${OG_COLS.NUMBER}${MAX_OFFSET}`);
+
+    // Search through a few cells to ensure that row headers are where we expect them to be
+    for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
+        cellValue = sheet.getCellByA1(`B${row}`).value
+        if(cellValue) {
+            if (cellValue.toLowerCase().includes("number")) {
+                return row;
+            }
+        }
+    }
+
+    throw `Cannot find 3TC ABR header "Number" to orient combo searching`;
+}
+
 async function displayOG3TCABRFromN(message, n) {
+    values = await getOG3TCABRFromN(n);
+
+    delete values.NUMBER; // Display combo # in title rather than embedded values
+
+    return embed(message, values, `3-Tower ABR CHIMPS Combo #${n}`)
+}
+
+async function getOG3TCABRFromN(n) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
 
     NUM_COMBOS = await numCombos();
@@ -182,6 +266,12 @@ async function displayOG3TCABRFromN(message, n) {
 
     await sheet.loadCells(`${OG_COLS.NUMBER}${row}:${OG_COLS.LINK}${row}`);
 
+    return await extractRow(row);
+}
+
+async function extractRow(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
+
     // Assign each value to be discord-embedded in a simple default way
     let values = {};
     for (key in OG_COLS) {
@@ -189,13 +279,11 @@ async function displayOG3TCABRFromN(message, n) {
             `${OG_COLS[key]}${row}`
         ).value;
     }
-
-    delete values.NUMBER; // Display combo # in title
     
     const upgrades = values.UPGRADES.split('|').map(u => u.replace(/^\s+|\s+$/g, ''));
     for (var i = 0; i < upgrades.length; i++) {
         // Display upgrade next to tower
-        values[`TOWER_${i + 1}`] += "\n(" + upgrades[i] + ")";
+        values[`TOWER_${i + 1}`] = `**${values[`TOWER_${i + 1}`]}**` + " (" + upgrades[i] + ")";
     }
     delete values.UPGRADES; // Don't display upgrades on their own, display with towers
 
@@ -206,27 +294,38 @@ async function displayOG3TCABRFromN(message, n) {
     const linkCell = sheet.getCellByA1(`${OG_COLS.LINK}${row}`);
     values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
 
-    return embed(message, values, `3-Tower ABR CHIMPS Combo #${n}`)
+    return values;
 }
 
-async function findOGRowOffset() {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '3tc abr');
-
-    const MIN_OFFSET = 1;
-    const MAX_OFFSET = 20;
-
-    await sheet.loadCells(`${OG_COLS.NUMBER}${MIN_OFFSET}:${OG_COLS.NUMBER}${MAX_OFFSET}`);
-
-    for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
-        cellValue = sheet.getCellByA1(`B${row}`).value
-        if(cellValue) {
-            if (cellValue.toLowerCase().includes("number")) {
-                return row;
-            }
-        }
+async function displayOG3TCABRFromSubsetTowers(message, towers) {
+    combos = await succCombos();
+    // Filter all all 3-Tower ABR CHIMPS combos by ones that contain the command-user-specified towers
+    const matchingCombos = combos.filter(c => {
+        const comboTowers = [c.TOWER_1, c.TOWER_2, c.TOWER_3].map(t => t.toLowerCase());
+        return towers.every(t => comboTowers.includes(t.toLowerCase()));
+    });
+    
+    if (matchingCombos.length == 0) {
+        throw new UserCommandError(`There is no 3-Tower ABR CHIMPS with ${towers.join(' + ')}`)
+    } else if (matchingCombos.length == 1) {
+        // Re-gather the data so it's properly formatted and display
+        return displayOG3TCABRFromTowers(message, towers, matchingCombos[0]);
+    } else {
+        return embedMultiple(message, matchingCombos, towers, `3-Tower ABR CHIMPS with ${towers.join(' and ')}`);
     }
+}
 
-    throw `Cannot find 2TC header "Number" to orient combo searching`;
+async function displayOG3TCABRFromTowers(message, towers, combo) {
+    // 3rd => 3; 231st => 231; etc.
+    n = parseInt(combo.NUMBER.match(/(\d+).*/)[1]);
+
+    values = await getOG3TCABRFromN(n);
+
+    // Order towers in completion order
+    titleTowers = [combo.TOWER_1, combo.TOWER_2, combo.TOWER_3]
+    titleTowers = titleTowers.filter(tt => towers.includes(tt))
+
+    return embed(message, values, `3-Tower ABR CHIMPS Combo with ${titleTowers.join(' + ')}`)
 }
 
 async function succCombos() {
@@ -234,14 +333,15 @@ async function succCombos() {
 
     const NUM_COMBOS = await numCombos();
     
-    const START_ROW = await findOGRowOffset();
+    const START_ROW = await findOGRowOffset() + 1;
     const END_ROW = START_ROW + NUM_COMBOS - 1;
 
     await sheet.loadCells(`${OG_COLS.NUMBER}${START_ROW}:${OG_COLS.LINK}${END_ROW}`);
 
+    // Read the data from all rows one at a time and combine into a list
     let valuesList = []
     for (var row = START_ROW; row <= END_ROW; row++) {
-        let values = {}
+        values = {}
         for (key in OG_COLS) {
             values[key] = sheet.getCellByA1(
                 `${OG_COLS[key]}${row}`

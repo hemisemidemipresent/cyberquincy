@@ -1,8 +1,16 @@
 {
     "xyz": ["mortar-monkey", "mortar", "mor"],
+    "222": ["base_mortar_monkey"],
+
+    "300": ["shell_shock", "sshock"],
     "400": ["the_big_one", "bigone", "big", "tbo"],
     "500": ["the_biggest_one", "tb1"],
+
+    "030": ["heavy_shells", "heavy"],
     "040": ["artillery_battery", "art", "artillery"],
     "050": ["pop_and_awe", "paa"],
+
+    "003": ["signal_flare", "signal", "flare"],
+    "004": ["shattering_shells", "sshells", "shattering", "shatt", "shat", "shatter"],
     "005": ["blooncineration", "blooncin", "bcin"]
 }

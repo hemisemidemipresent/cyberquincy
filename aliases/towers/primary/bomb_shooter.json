@@ -1,5 +1,16 @@
 {
     "xyz": ["bomb-shooter", "bs", "cannon", "bomb"],
+    "222": ["base_bomb_shooter"],
+
+    "300": ["really_big_bombs", "rbb"],
+    "400": ["bloon_impact", "impact"],
+    "500": ["bloon_crush", "crush", "crunch", "bcrush"],
+
+    "030": ["moab_mauler", "mauler", "maul", "golden_shark"],
+    "040": ["moab_assassin", "assassin", "ass", "black_shark"],
+    "050": ["moab_eliminator", "elim", "moab_elim"],
+    
+    "003": ["cluster_bombs", "cluster"],
     "004": ["recursive_cluster", "recursive", "clusters", "recurs", "recurse", "recur"],
     "005": ["bomb_blitz", "blitz", "bblitz"]
 }

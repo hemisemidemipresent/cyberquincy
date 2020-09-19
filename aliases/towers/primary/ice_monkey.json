@@ -1,4 +1,16 @@
 {
     "xyz": ["ice-monkey", "ice", "im"],
+    "222": ["base_ice_monkey"],
+
+    "300": ["ice_shards", "shards", "ishards"],
+    "400": ["embrittlement", "brittle", "brit", "brittlement"],
+    "500": ["super_brittle", "sbrit", "sbrittle", "super_brit"],
+
+    "030": ["arctic_wind", "wind", "arctic"],
+    "040": ["snowstorm", "snow"],
+    "050": ["absolute_zero", "az"],
+    
+    "003": ["cryo_cannon", "cryo"],
+    "004": ["icicles", "icy"],
     "005": ["icicle_impale", "impale", "iimpale", "impa"]
 }

@@ -26,8 +26,7 @@ module.exports = {
                 .createReactionCollector(
                     (reaction, user) =>
                         user.id === message.author.id &&
-                        (reaction.emoji.name == '⬅️' ||
-                            reaction.emoji.name == '➡️' ||
+                        (reaction.emoji.name == '➡️' ||
                             reaction.emoji.name == '❌'),
                     { time: 20000 }
                 )

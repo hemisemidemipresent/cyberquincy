@@ -136,9 +136,9 @@ function generateListeners(commandCenter) {
 function botStats() {
     botposting = require('./1/config.json')['botposting'];
     if (botposting == false) return;
-    botInfoHelper.auto();
     botInfoHelper.statcord();
     botInfoHelper.post();
+    botInfoHelper.auto();
 }
 function login() {
     token = require('./1/config.json')['token'];

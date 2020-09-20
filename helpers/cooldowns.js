@@ -21,21 +21,23 @@ function handleCooldown(command, message) {
 
 function getTimePassed(command, user_id, now) {
     // Cooldowns are stored as {command.name: {discord_user_id: Date Timestamp}}
-    timestamps = cooldowns.get(command.name);
+    let timestamps = cooldowns.get(command.name);
 
     // Command doesn't have an entry so it was never used
     if (!timestamps) return Infinity;
 
-    timestamp = timestamps[user_id.toString()];
+    let timestamp = timestamps[user_id.toString()];
 
-    // Author doesn't have an entry within the command so they never used it
-    if (timestamp) return (now - timestamp) / 1000;
-    else return Infinity;
+    // Author doesn't have an entry within the command (they never used it)
+    if (!timestamp) return Infinity;
+
+    // Convert from milliseconds to seconds
+    return (now - timestamp) / 1000;
 }
 
 function getTimeNeeded(command, message) {
     // Default
-    cooldown = 3;
+    let cooldown = 3;
 
     // Prioritization:
     // 1. Command specific cooldown in code
@@ -44,11 +46,11 @@ function getTimeNeeded(command, message) {
     if (!isNaN(command.cooldown)) {
         cooldown = command.cooldown;
     } else if (message.channel.topic) {
-        regex_match = message.channel.topic.match(
+        let regex_match = message.channel.topic.match(
             CHANNEL_TOPIC_COOLDOWN_REGEX
         );
         if (regex_match) {
-            [_, cooldown] = regex_match;
+            cooldown = regex_match[1];
         }
     }
 
@@ -60,7 +62,7 @@ function updateCooldown(command, user_id, now) {
         cooldowns.set(command.name, new Discord.Collection());
     }
 
-    timestamps = cooldowns.get(command.name);
+    let timestamps = cooldowns.get(command.name);
     timestamps[user_id] = now;
 }
 

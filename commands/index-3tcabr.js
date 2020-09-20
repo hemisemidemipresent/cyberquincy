@@ -407,7 +407,13 @@ async function displayOG3TCABRFromSubsetTowers(message, towers) {
         const comboTowers = [c.TOWER_1, c.TOWER_2, c.TOWER_3].map((t) =>
             t.toLowerCase()
         );
-        return towers.every((t) => comboTowers.includes(t.toLowerCase()));
+        
+        // Make sure that towers is a subset of comboTowers accounting for duplicate tower appearances
+        // in both the queried towers and the existing 3tc abr combos
+        return towers.map(t => t.toLowerCase()).every((t, _, ltowers) =>
+            comboTowers.includes(t) &&
+            ltowers.filter(tt => tt === t).length <= comboTowers.filter(ct => ct === t).length
+        );
     });
 
     if (matchingCombos.length == 0) {

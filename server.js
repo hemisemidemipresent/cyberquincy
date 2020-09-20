@@ -133,13 +133,12 @@ function generateListeners(commandCenter) {
         commandCenter.handleCommand(message);
     });
 }
+
 function botStats() {
-    botposting = require('./1/config.json')['botposting'];
-    if (botposting == false) return;
     botInfoHelper.statcord();
-    botInfoHelper.post();
-    statcord.autopost();
+    botInfoHelper.discordbotlist();
 }
+
 function login() {
     token = require('./1/config.json')['token'];
     client.login(token);

@@ -1,6 +1,11 @@
 function statcord() {
-    const Statcord = require('statcord.js');
     let key = require('../1/config.json')['statcord'];
+    if (!key || key === 'no') {
+        console.log("[INFO] statcord is not configured")
+        return;
+    }
+
+    const Statcord = require('statcord.js');
 
     global.statcord = new Statcord.Client({
         client,
@@ -20,11 +25,18 @@ function statcord() {
         if (!status) console.log('Successful post');
         else console.error(status);
     });
+
+    statcord.autopost();
 }
 
-function post() {
+function discordbotlist() {
+    const key = require('../1/config.json')['discordbotlist'];
+    if (!key || key === 'no') {
+        console.log("[INFO] discordbotlist is not configured")
+        return;
+    }
+
     const fetch = require('node-fetch');
-    const dblkey = (key = require('../1/config.json')['discordbotlist']);
 
     let users = client.users.cache.size;
     let guilds = client.guilds.cache.size;
@@ -39,19 +51,14 @@ function post() {
             method: 'post',
             body: JSON.stringify(body),
             headers: {
-                Authorization: dblkey,
+                Authorization: key,
                 'Content-Type': 'application/json',
             },
         }
     ).then((res) => res.json());
 }
 
-function auto() {
-    statcord.autopost();
-}
-
 module.exports = {
     statcord,
-    post,
-    auto,
+    discordbotlist,
 };

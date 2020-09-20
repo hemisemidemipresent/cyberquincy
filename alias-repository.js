@@ -6,12 +6,12 @@ module.exports = class AliasRepository extends Array {
     // Configuration/Initialization
     ////////////////////////////////////////////////////
 
-    // {source_directory: handling function}
-    SPECIAL_HANDLING_CASES = {
-        './aliases/towers': this.loadTowerAliasFile,
-    };
-
     asyncAliasFiles() {
+        // {source_directory: handling function}
+        const SPECIAL_HANDLING_CASES = {
+            './aliases/towers': this.loadTowerAliasFile,
+        };
+
         (async () => {
             for await (const absolutePath of Files.getFiles('./aliases', [
                 '.json',
@@ -31,9 +31,9 @@ module.exports = class AliasRepository extends Array {
                 let handlingFunction = this.loadAliasFile;
 
                 // See if the file has a special handler
-                for (const specialRelPath in this.SPECIAL_HANDLING_CASES) {
+                for (const specialRelPath in SPECIAL_HANDLING_CASES) {
                     if (relPath.startsWith(specialRelPath)) {
-                        handlingFunction = this.SPECIAL_HANDLING_CASES[
+                        handlingFunction = SPECIAL_HANDLING_CASES[
                             specialRelPath
                         ];
                         break;
@@ -109,18 +109,19 @@ module.exports = class AliasRepository extends Array {
     }
 
     // If "spike-o-pult", adds "spike_o_pult", "spike_o-pult", "spike-o_pult", "spike_opult", etc.
-    SEPARATOR_TOKENS = ["_", "-"]
-    JOIN_TOKENS = ["_", "-", ""]
     permuteSeparators(al) {
-        const tokens = al.split(/_|-/)
+        const SEPARATOR_TOKENS = ["_", "-"]
+        const JOIN_TOKENS = ["_", "-", ""]
+
+        const tokens = al.split(new RegExp(SEPARATOR_TOKENS.join('|')))
         let aliases = [tokens[0]]        
 
         for (var i = 1; i < tokens.length; i++) {
             let new_aliases = []
             for (var j = 0; j < aliases.length; j++) {
-                for (var k = 0; k < this.JOIN_TOKENS.length; k++) {
+                for (var k = 0; k < JOIN_TOKENS.length; k++) {
                     new_aliases.push(
-                        aliases[j] + this.JOIN_TOKENS[k] + tokens[i]
+                        aliases[j] + JOIN_TOKENS[k] + tokens[i]
                     );
                 }
             }
@@ -253,17 +254,23 @@ module.exports = class AliasRepository extends Array {
         return modes.map((ag) => ag.canonical);
     }
 
-    TOWER_CANONICAL_REGEX = /[a-z]#\d\d\d/i;
-
     allTowerUpgrades() {
+        const TOWER_CANONICAL_REGEX = /[a-z]#\d\d\d/i;
+
         let upgrades = [];
         for (let i = 0; i < this.length; i++) {
             const canonical = this[i].canonical;
-            if (this.TOWER_CANONICAL_REGEX.test(canonical)) {
+            if (TOWER_CANONICAL_REGEX.test(canonical)) {
                 upgrades.push(canonical);
             }
         }
         return upgrades;
+    }
+
+    // Gets all 0-0-0 tower names
+    allTowers() {
+        return this.filter(ag => ag.canonical.endsWith('#300'))
+                   .map(ag => ag.canonical.slice(0, -4))
     }
 
     allHeroes() {

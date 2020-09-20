@@ -5,6 +5,7 @@ const AnyOrderParser = require('../parser/any-order-parser');
 const OptionalParser = require('../parser/optional-parser');
 const OrParser = require('../parser/or-parser');
 
+const TowerParser = require('../parser/tower-parser.js');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const HeroParser = require('../parser/hero-parser.js');
 const NaturalNumberParser = require('../parser/natural-number-parser');
@@ -37,7 +38,8 @@ module.exports = {
 
         towerOrHeroParser = new OrParser(
             new TowerUpgradeParser(),
-            new HeroParser()
+            new HeroParser(),
+            new TowerParser(),
         );
 
         const parsed = CommandParser.parse(
@@ -65,6 +67,12 @@ module.exports = {
                 message,
                 parsed.natural_number
             ).catch((e) => err(e, message));
+        } else if (parsed.tower) {
+            const ex_tower_upgrade = Aliases.getAliasGroup(parsed.tower + '#300').aliases[0]
+            return module.exports.errorMessage(
+                message, 
+                [`You must enter a tower upgrade like \`${ex_tower_upgrade}\` rather than a tower like \`${parsed.tower}\``]
+            );
         } else if (parsed.hero || parsed.tower_upgrade) {
             // Tower(s) specified
             towers = null;

@@ -427,7 +427,9 @@ async function displayOG3TCABRFromTowers(message, towers, combo) {
 
     // Order towers in completion order
     titleTowers = [combo.TOWER_1, combo.TOWER_2, combo.TOWER_3];
-    titleTowers = titleTowers.filter((tt) => towers.includes(tt));
+    titleTowers = titleTowers.filter(
+        (tt) => towers.map(t => t.toLowerCase()).includes(tt.toLowerCase())
+    );
 
     return embed(
         message,

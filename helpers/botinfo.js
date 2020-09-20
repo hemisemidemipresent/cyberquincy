@@ -1,4 +1,7 @@
 function statcord() {
+    // Ensure that a 'statcord' object exists, even if not configured
+    global.statcord = null;
+
     let key = require('../1/config.json')['statcord'];
     if (!key || key === 'no') {
         console.log("[INFO] statcord is not configured")

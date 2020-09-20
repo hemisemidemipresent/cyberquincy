@@ -1,9 +1,15 @@
 {
     "xyz": ["monkey-ace", "ace", "pilot", "plane"],
+    "222": ["base ace", "base_monkey_ace"],
+
+    "300": ["fighter_plane", "fighter", "fplane"],
     "400": ["operation:_dart_storm", "ods"],
     "500": ["sky_shredder", "shredder", "shred"],
+
+    "030": ["bomber_ace", "bomber"],
     "040": ["ground_zero", "gz"],
     "050": ["tsar_bomba", "tb", "tsar", "bomba", "bombagang"],
+    
     "003": ["neva-miss_targeting", "nevamiss", "neva", "nm"],
     "004": ["spectre", "spect"],
     "005": ["flying_fortress", "ff", "big_plane"]

@@ -86,6 +86,7 @@ module.exports = class AliasRepository extends Array {
     // Ensure that none of the aliases clash before adding it in
     addAliasGroup(ag) {
         try {
+            ag.aliases = ag.aliases.map(al => this.permuteSeparators(al)).flat()
             this.preventSharedAliases(ag);
         } catch (e) {
             if (e instanceof AliasError) {
@@ -95,6 +96,30 @@ module.exports = class AliasRepository extends Array {
             }
         }
         this.push(ag);
+    }
+
+    // If "spike-o-pult", adds "spike_o_pult", "spike_o-pult", "spike-o_pult", "spike_opult", etc.
+    SEPARATOR_TOKENS = ["_", "-"]
+    JOIN_TOKENS = ["_", "-", ""]
+    permuteSeparators(al) {
+        const tokens = al.split(/_|-/)
+        let aliases = [tokens[0]]        
+
+        for (var i = 1; i < tokens.length; i++) {
+            let new_aliases = []
+            for (var j = 0; j < aliases.length; j++) {
+                for (var k = 0; k < this.JOIN_TOKENS.length; k++) {
+                    new_aliases.push(
+                        aliases[j] + this.JOIN_TOKENS[k] + tokens[i]
+                    );
+                }
+            }
+            aliases = [...new_aliases];
+        }
+
+
+        delete aliases[aliases.findIndex(a => a == al)]
+        return [al].concat(aliases);
     }
 
     // Checks canonical + aliases against all other alias groups' canonical + aliases

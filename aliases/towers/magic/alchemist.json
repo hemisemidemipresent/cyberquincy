@@ -12,23 +12,17 @@
         "liquor",
         "intoxicant"
     ],
+    "222": ["base_alch", "base_alchemist"],
+
     "300": ["berserker_brew", "bbrew"],
-    "400": ["stronger_stimulant", "stim"],
+    "400": ["stronger_stimulant", "str_stim", "stronger_stim", "stim", "strim"],
     "500": ["permanent_brew", "permabrew", "pbrew", "pb"],
+
     "030": ["conc", "unstable"],
     "040": ["tonic", "transforming_tonic", "tt4", "trans_tonic"],
-    "050": [
-        "totaltrans",
-        "tt5",
-        "total_transformation",
-        "total-transformation"
-    ],
-    "003": ["leadtogold", "lead_to_gold", "lead-to-gold"],
-    "004": ["rubbertogold", "rubber_to_gold", "rubber-to-gold"],
-    "005": [
-        "bma",
-        "bloonmaster",
-        "bloon-master-alchemist",
-        "bloon_master_alchemist"
-    ]
+    "050": ["totaltrans","tt5","total_transformation"],
+
+    "003": ["lead_to_gold", "ltg"],
+    "004": ["rubber_to_gold", "rtg"],
+    "005": ["bloon_master_alchemist","bma","bloon_master"]
 }

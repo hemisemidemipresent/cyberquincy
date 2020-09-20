@@ -1,7 +1,16 @@
 {
     "xyz": ["tack-shooter", "tac", "tak", "ta", "tacc", "tack"],
+    "222": ["base_tack", "base_tack_shooter"],
+
+    "300": ["hot_shots", "hshots"],
+    "400": ["ring_of_fire", "rof"],
     "500": ["inferno_ring", "inferno", "iring", "ir"],
+
+    "030": ["blade_shooter", "blades", "blade", "blad"],
+    "040": ["blade_maelstrom", "mael", "bmal", "blam"],
     "050": ["super_maelstrom", "smael", "who", "who?", "smaelstrom", "smal"],
+
+    "003": ["tack_sprayer", "spray", "sprayer"],
     "004": ["overdrive", "od", "odrive"],
     "005": ["the_tack_zone", "tz", "tzone", "tackzone", "tack_zone"]
 }

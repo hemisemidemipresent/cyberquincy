@@ -1,0 +1,16 @@
+{
+    "xyz": ["monkey_farm", "farm"],
+    "222": ["base_farm", "base_banana_farm"],
+
+    "300": ["banana_plantation", "plantation", "plant"],
+    "400": ["banana_research_facility", "research", "facility"],
+    "500": ["banana_central", "bcent"],
+
+    "030": ["monkey_bank", "bank"],
+    "040": ["imf_loan", "imf"],
+    "050": ["monkey-nomics", "nomics", "economics"],
+
+    "003": ["marketplace", "place"],
+    "004": ["central_market", "cmarket"],
+    "005": ["monkey_wall_street", "wall_street", "wall"]
+}

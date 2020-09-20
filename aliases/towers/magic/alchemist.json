@@ -15,7 +15,7 @@
     "222": ["base_alch", "base_alchemist"],
 
     "300": ["berserker_brew", "bbrew"],
-    "400": ["stronger_stimulant", "stim"],
+    "400": ["stronger_stimulant", "str_stim", "stronger_stim", "stim", "strim"],
     "500": ["permanent_brew", "permabrew", "pbrew", "pb"],
 
     "030": ["conc", "unstable"],

@@ -11,6 +11,6 @@
     "050": ["grand_saboteur", "gsabo"],
 
     "003": ["flash_bomb", "flash", "fbomb"],
-    "004": ["sticky_bomb", "sticky"],
+    "004": ["sticky_bomb", "sticky", "stick"],
     "005": ["master_bomber", "mb"]
 }

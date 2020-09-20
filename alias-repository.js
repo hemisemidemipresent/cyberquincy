@@ -80,6 +80,16 @@ module.exports = class AliasRepository extends Array {
                 sourcefile: f,
             };
             this.addAliasGroup(nextAliasGroup);
+
+            // Hack to add appropriate base tower entry
+            if (upgrade == 'xyz') {
+                const baseTowerAliasGroup = {
+                    canonical: `${baseName}#222`,
+                    aliases: [baseName].concat(towerUpgrades['xyz']).map(al => `base_${al}`),
+                    sourcefile: f,
+                }
+                this.addAliasGroup(baseTowerAliasGroup);
+            }
         }
     }
 

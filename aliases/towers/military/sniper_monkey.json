@@ -1,16 +1,16 @@
 {
     "xyz": ["sniper-monkey", "sniper", "sn", "snip", "snooper", "snipermonkey"],
-    "222": ["base_sniper"],
+    "222": ["base_sniper", "base_sniper_monkey"],
 
-    "300": ["deadly_precision", "deadly", "precision", "deadlyprecision", "deadly-precision"],
+    "300": ["deadly_precision", "dprecision", "precision", "deadlyprecision"],
     "400": ["maim_moab", "maim", "maimoab", "maimmoab", "mainmoan"],
-    "500": ["cripple_moab", "cripple", "cripplemoab", "cripple-moab"],
+    "500": ["cripple_moab", "cripple", "cripplemoab"],
 
-    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb", "bouncing-bullet"],
+    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb"],
     "040": ["supply_drop", "supplydrop", "supply", "sd"],
-    "050": ["elite_sniper", "es", "esniper", "elitesniper", "elite-sniper"],
+    "050": ["elite_sniper", "es", "esniper", "elitesniper"],
     
-    "003": ["semi_automatic", "semi", "semiauto", "semi-automatic"],
-    "004": ["fully_automatic", "fullauto", "fullyauto", "fully-automatic"],
+    "003": ["semi_automatic", "semi", "semiauto"],
+    "004": ["fully_automatic", "fullauto", "fullyauto"],
     "005": ["elite_defender", "ed"]
 }

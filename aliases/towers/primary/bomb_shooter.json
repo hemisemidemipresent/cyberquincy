@@ -1,6 +1,6 @@
 {
     "xyz": ["bomb-shooter", "bs", "cannon", "bomb"],
-    "222": ["base_bomb_shooter"],
+    "222": ["base_cannon", "base_bomb_shooter"],
 
     "300": ["really_big_bombs", "rbb"],
     "400": ["bloon_impact", "impact"],

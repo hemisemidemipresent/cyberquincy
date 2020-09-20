@@ -1,10 +1,10 @@
 {
     "xyz": ["dart-monkey", "dart", "dm"],
-    "222": ["base_dart"],
+    "222": ["base_dart", "base_dart_monkey"],
 
     "300": ["spike-o-pult", "pult", "cat", "cata", "cato", "spikepult", "spult"],
     "400": ["juggernaut", "jugg", "jug", "naut"],
-    "500": ["ultra-juggernaut", "ultra_juggernaut", "ultra", "ujug", "uj"],
+    "500": ["ultra-juggernaut", "ultra", "ujug", "uj"],
 
     "030": ["triple_shot", "trip", "tripshot", "tdarts", "tdart"],
     "040": ["super_monkey_fan_club", "smfc"],

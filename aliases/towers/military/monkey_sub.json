@@ -1,9 +1,9 @@
 {
     "xyz": ["monkey-sub", "submarine", "sub"],
-    "222": ["base_sub"],
+    "222": ["base_sub", "base_monkey_sub"],
 
     "300": ["submerge_and_support", "sas", "submerge"],
-    "400": ["bloontonium_reactor", "react", "reactor", "rr"],
+    "400": ["bloontonium_reactor", "react", "reactor"],
     "500": ["energizer", "engz", "egz"],
 
     "030": ["ballistic_missile", "balm", "bmiss", "bmissile"],

@@ -1,6 +1,6 @@
 {
     "xyz": ["mortar-monkey", "mortar", "mor"],
-    "222": ["base_mortar_monkey"],
+    "222": ["base_mortar", "base_mortar_monkey"],
 
     "300": ["shell_shock", "sshock"],
     "400": ["the_big_one", "bigone", "big", "tbo"],

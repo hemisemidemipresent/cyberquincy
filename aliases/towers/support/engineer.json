@@ -1,5 +1,16 @@
 {
     "xyz": ["engineer_monkey","engineer","engie","engi","eng","engie"],
+    "222": ["base_engineer", "base_engineer_monkey"],
+
+    "300": ["sprockets", "sproc", "sprock", "sproct"],
+    "400": ["sentry_expert", "sexpert"],
     "500": ["sentry_paragon", "para", "paragon"],
+
+    "030": ["cleansing_foam", "cleansing", "foam", "cfoam"],
+    "040": ["overclock", "oc"],
+    "050": ["ultraboost", "uboost"],
+
+    "003": ["double_gun", "dgun"],
+    "004": ["bloon_trap", "btrap"],
     "005": ["xxxl_trap", "xxl", "xl", "xtrap", "xxl_trap", "xxxl"]
 }

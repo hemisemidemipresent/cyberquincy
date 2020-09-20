@@ -1,6 +1,6 @@
 {
     "xyz": ["glue-gunner", "glue", "gg"],
-    "222": ["base_glue_gunner"],
+    "222": ["base_glue", "base_glue_gunner"],
     
     "300": ["bloon_dissolver", "diss"],
     "400": ["bloon_liquefier", "liq"],

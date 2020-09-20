@@ -1,5 +1,16 @@
 {
-    "xyz": ["spike_factory","factory","spike","spac","spak","spanc","spikes","spikefactory","spi","sf","spacc","spikeshooter","basetrash","spact","spactory"],
-    "005": ["perma-spike", "permaspike", "pspike"],
-    "050": ["carpet_of_spikes", "cos", "carpet", "carpetofspikes"]
+    "xyz": ["spike-factory","factory","spike","spac","spak","spanc","spikes","spikefactory","spi","sf","spacc","spikeshooter","basetrash","spact","spactory"],
+    "222": ["base_spike"],
+
+    "300": ["spiked_balls", "sballs"],
+    "400": ["spiked_mines", "spines"],
+    "500": ["super_mines", "swines"],
+
+    "030": ["moab_shredr", "moab_shredder"],
+    "040": ["spike_storm"],
+    "050": ["carpet_of_spikes", "cos", "carpet", "carpetofspikes"],
+
+    "003": ["long_life_spikes", "ll", "lls"],
+    "004": ["deadly_spikes", "deadly", "dspikes"],
+    "005": ["perma-spike", "permaspike", "pspike"]
 }

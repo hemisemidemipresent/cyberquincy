@@ -1,6 +1,16 @@
 {
     "xyz": ["ninja-monkey", "ninja", "n", "ninj", "shuriken"],
+    "222": ["base_ninja", "base_ninja_monkey"],
+    
+    "300": ["double_shot", "dshot", "dub", "doub", "double"],
     "400": ["bloonjitsu", "bloonjitzu", "jitsu", "jitzu", "bj"],
     "500": ["grandmaster_ninja", "gmn", "gm"],
+
+    "030": ["shinobi_tactics", "shinobi", "shin", "chinobi", "tactics", "tact", "tacts"],
+    "040": ["bloon_sabatoge", "sabo"],
+    "050": ["grand_saboteur", "gsabo"],
+
+    "003": ["flash_bomb", "flash", "fbomb"],
+    "004": ["sticky_bomb", "sticky"],
     "005": ["master_bomber", "mb"]
 }

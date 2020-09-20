@@ -120,6 +120,12 @@ function arraysEqual(_arr1, _arr2) {
 }
 
 module.exports = {
+    IMPOPPABLE_ROUNDS,
+    HARD_ROUNDS,
+    MEDIUM_ROUNDS,
+    EASY_ROUNDS,
+    ALL_ROUNDS,
+
     is_str,
     is_fn,
     numberWithCommas,

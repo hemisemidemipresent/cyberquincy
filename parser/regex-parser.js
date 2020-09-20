@@ -1,5 +1,5 @@
 // Parses a regular expression!
-module.exports = class RegexParser {
+class RegexParser {
     type() {
         return 'regex';
     }
@@ -28,4 +28,6 @@ module.exports = class RegexParser {
             );
         }
     }
-};
+}
+
+module.exports = RegexParser;

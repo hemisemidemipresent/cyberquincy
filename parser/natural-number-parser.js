@@ -2,7 +2,7 @@ const NumberParser = require('./number-parser.js');
 
 // NumberParser with the added restriction that also must be a positive integer
 // Great for round number and combo number for a particular spreadsheet
-module.exports = class NaturalNumberParser {
+class NaturalNumberParser {
     type() {
         return 'natural_number';
     }
@@ -42,4 +42,6 @@ module.exports = class NaturalNumberParser {
         }
         return result;
     }
-};
+}
+
+module.exports = NaturalNumberParser;

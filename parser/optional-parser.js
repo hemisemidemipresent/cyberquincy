@@ -1,11 +1,11 @@
 // A wrapper around another parser to signify that the corresponding argument is optional
-module.exports = class OptionalParser {
+class OptionalParser {
     // Takes in the concrete parser and a default value is the parser fails to parse
     constructor(parser, defaultValue=null) {
         this.parser = parser;
         // Default value must validate with the concrete parser itself
-        // i.e. if `this.parser` is a DifficultyParser, 
-        // then defaultValue must be a valid difficulty 
+        // i.e. if `this.parser` is a DifficultyParser,
+        // then defaultValue must be a valid difficulty
         try {
             if (defaultValue)
                 this.parser.parse(defaultValue)
@@ -25,3 +25,5 @@ module.exports = class OptionalParser {
         throw `Must not parse directly from the Optional Parser. Try parsing using the nested parser \`${this.parser.constructor.name}\` instead`
     }
 }
+
+module.exports = OptionalParser;

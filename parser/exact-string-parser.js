@@ -3,7 +3,7 @@ const RegexParser = require('./regex-parser.js');
 // Takes a list of values in the constructor
 // If the arg equals any one of the provided values
 // then the parsing succeeds.
-module.exports = class ExactStringParser {
+class ExactStringParser {
     type() {
         return 'exact_string';
     }
@@ -34,4 +34,6 @@ module.exports = class ExactStringParser {
             }
         }
     }
-};
+}
+
+module.exports = ExactStringParser;

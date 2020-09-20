@@ -1,6 +1,6 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
-module.exports = class MapDifficultyParser {
+class MapDifficultyParser {
     type() {
         return 'map_difficulty';
     }
@@ -17,4 +17,6 @@ module.exports = class MapDifficultyParser {
         // Delegate the parsing work to the StringSetValuesParser
         return this.delegateParser.parse(arg);
     }
-};
+}
+
+module.exports = MapDifficultyParser;

@@ -1,7 +1,7 @@
 const filepath = require('filepath');
 const AliasError = require('./exceptions/alias-error.js');
 
-module.exports = class AliasRepository extends Array {
+class AliasRepository extends Array {
     ////////////////////////////////////////////////////
     // Configuration/Initialization
     ////////////////////////////////////////////////////
@@ -294,3 +294,5 @@ module.exports = class AliasRepository extends Array {
             .join(' ');
     }
 };
+
+module.exports = AliasRepository

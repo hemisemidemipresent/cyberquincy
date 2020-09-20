@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'bank',

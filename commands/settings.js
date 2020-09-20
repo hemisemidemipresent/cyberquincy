@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 module.exports = {
     name: 'setting',
     aliases: ['set', 'settings', 'options', 'o'],

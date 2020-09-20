@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { cyber } = require('../jsons/colours.json');
 const fetch = require('node-fetch');
 const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
@@ -225,7 +224,7 @@ module.exports = {
         const newArgs = message.content.slice(2).split(/ +/);
         const commandName = newArgs.shift().toLowerCase();
         let name = findName(commandName);
-        if (!args || args[1]) {
+        if (!args || args[1] || isValidPath(args[0])) {
             return baseTower(message, name);
         }
         const pathStr = args[0].toString();
@@ -407,4 +406,18 @@ function findName(commandName) {
         }
     }
     return;
+}
+function isValidPath(u) {
+    if (!h.is_str(u) || u.length != 3) return false;
+
+    if (isNaN(u)) return false;
+
+    if (!u.includes('0')) return false;
+
+    if (/6|7|8|9/.test(u)) return false;
+
+    d = u.match(/3|4|5/g);
+    if (d && d.length > 1) return false;
+
+    return true;
 }

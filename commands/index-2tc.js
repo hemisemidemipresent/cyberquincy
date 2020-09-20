@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const OrParser = require('../parser/or-parser.js');

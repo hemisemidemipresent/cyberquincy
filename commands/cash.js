@@ -1,6 +1,5 @@
 const r = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json'); // array containing arrays, nth index is nth round, in the returned array 0th value is new cash, 1st value is total cash
-const Discord = require('discord.js');
 const { cyber, orange } = require('../jsons/colours.json');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');

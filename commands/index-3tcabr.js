@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 module.exports = {
     name: '3tcabr',
     execute(message, args) {

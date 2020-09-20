@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const quiz = require('../jsons/quiz.json');
 const { cyber, orange, turq, magenta } = require('../jsons/colours.json');
 const Quiz = require('../helpers/quizxp.js');

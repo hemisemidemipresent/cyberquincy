@@ -1,5 +1,4 @@
 const { cyber } = require('../jsons/colours.json');
-const Discord = require('discord.js');
 module.exports = {
     name: 'info',
     description: 'shows info',

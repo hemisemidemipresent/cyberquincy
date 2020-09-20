@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { cyber } = require('../jsons/colours.json');
 const map = require('../jsons/map.json');
 const MapParser = require('../parser/map-parser.js');

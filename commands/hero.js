@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { cyber, red } = require('../jsons/colours.json');
 const fetch = require('node-fetch');
 const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';

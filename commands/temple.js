@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { vtsg, temple } = require('../jsons/colours.json');
 const t = require('../jsons/temple.json');
 module.exports = {

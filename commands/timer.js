@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { green } = require('../jsons/colours.json');
 module.exports = {
     name: 'timer',

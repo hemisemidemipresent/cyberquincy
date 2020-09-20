@@ -1,6 +1,5 @@
 const r = require('../jsons/round2.json');
 const abr = require('../jsons/abrincome.json');
-const Discord = require('discord.js');
 const { red, magenta, purple, yellow } = require('../jsons/colours.json');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');

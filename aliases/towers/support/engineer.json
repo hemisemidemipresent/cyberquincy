@@ -6,7 +6,7 @@
     "400": ["sentry_expert", "sexpert"],
     "500": ["sentry_paragon", "para", "paragon"],
 
-    "030": ["cleansing_foam", "cleansing", "foam", "cfoam"],
+    "030": ["cleansing_foam", "cleansing", "foam", "cfoam", "clean", "cleans", "cleanse"],
     "040": ["overclock", "oc"],
     "050": ["ultraboost", "uboost"],
 

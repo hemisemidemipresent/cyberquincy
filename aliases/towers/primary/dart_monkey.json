@@ -11,6 +11,6 @@
     "050": ["plasma_monkey_fan_club", "pmfc"],
 
     "003": ["crossbow", "xbow"],
-    "004": ["sharp_shooter", "sshot", "sshoot"],
-    "005": ["crossbow_master", "xbm"]
+    "004": ["sharp_shooter", "sharp", "sharp_shot", "sshot", "sshoot"],
+    "005": ["crossbow_master", "xbm"] 
 }

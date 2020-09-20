@@ -4,18 +4,11 @@ const cooldowns = new Discord.Collection();
 
 function handleCooldown(command, message) {
     const now = Date.now();
-    secondsSince = calculateSecondsSinceLastCommandUsage(
-        command,
-        message.author.id,
-        now
-    );
-    activeCooldownSeconds = determineCooldown(
-        command,
-        message
-    );
+    let timePassed = getTimePassed(command, message.author.id, now);
+    let timeNeeded = getTimeNeeded(command, message);
 
     // Round to nearest tenth
-    secondsLeft = (activeCooldownSeconds - secondsSince).toFixed(1);
+    let secondsLeft = (timeNeeded - timePassed).toFixed(1);
 
     if (secondsLeft <= 0) {
         updateCooldown(command, message.author.id, now);
@@ -26,7 +19,7 @@ function handleCooldown(command, message) {
     }
 }
 
-function calculateSecondsSinceLastCommandUsage(command, user_id, now) {
+function getTimePassed(command, user_id, now) {
     // Cooldowns are stored as {command.name: {discord_user_id: Date Timestamp}}
     timestamps = cooldowns.get(command.name);
 
@@ -40,7 +33,7 @@ function calculateSecondsSinceLastCommandUsage(command, user_id, now) {
     else return Infinity;
 }
 
-function determineCooldown(command, message) {
+function getTimeNeeded(command, message) {
     // Default
     cooldown = 3;
 

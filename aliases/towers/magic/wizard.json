@@ -1,6 +1,5 @@
 {
     "xyz": ["wizard-monkey", "wizard", "apprentice", "wiz"],
-    "222": ["base_wizard", "base_wizard_monkey"],
 
     "300": ["arcane_mastery", "mastery"],
     "400": ["arcane_spike", "aspike"],

@@ -5,6 +5,7 @@ const AnyOrderParser = require('../parser/any-order-parser');
 const OptionalParser = require('../parser/optional-parser');
 const OrParser = require('../parser/or-parser');
 
+const TowerParser = require('../parser/tower-parser.js');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const HeroParser = require('../parser/hero-parser.js');
 const NaturalNumberParser = require('../parser/natural-number-parser');
@@ -37,7 +38,8 @@ module.exports = {
 
         towerOrHeroParser = new OrParser(
             new TowerUpgradeParser(),
-            new HeroParser()
+            new HeroParser(),
+            new TowerParser(),
         );
 
         const parsed = CommandParser.parse(
@@ -65,6 +67,12 @@ module.exports = {
                 message,
                 parsed.natural_number
             ).catch((e) => err(e, message));
+        } else if (parsed.tower) {
+            const ex_tower_upgrade = Aliases.getAliasGroup(parsed.tower + '#300').aliases[0]
+            return module.exports.errorMessage(
+                message, 
+                [`You must enter a tower upgrade like \`${ex_tower_upgrade}\` rather than a tower like \`${parsed.tower}\``]
+            );
         } else if (parsed.hero || parsed.tower_upgrade) {
             // Tower(s) specified
             towers = null;
@@ -399,7 +407,13 @@ async function displayOG3TCABRFromSubsetTowers(message, towers) {
         const comboTowers = [c.TOWER_1, c.TOWER_2, c.TOWER_3].map((t) =>
             t.toLowerCase()
         );
-        return towers.every((t) => comboTowers.includes(t.toLowerCase()));
+        
+        // Make sure that towers is a subset of comboTowers accounting for duplicate tower appearances
+        // in both the queried towers and the existing 3tc abr combos
+        return towers.map(t => t.toLowerCase()).every((t, _, ltowers) =>
+            comboTowers.includes(t) &&
+            ltowers.filter(tt => tt === t).length <= comboTowers.filter(ct => ct === t).length
+        );
     });
 
     if (matchingCombos.length == 0) {

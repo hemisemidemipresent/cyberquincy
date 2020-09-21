@@ -10,7 +10,7 @@ function statcord() {
 
     const Statcord = require('statcord.js');
 
-    global.statcord = new Statcord.Client({
+    const statcord = new Statcord.Client({
         client,
         key: key,
         postCpuStatistics: false /* Whether to post memory statistics or not, defaults to true */,
@@ -30,6 +30,9 @@ function statcord() {
     });
 
     statcord.autopost();
+
+    // Make available globally
+    global.statcord = statcord;
 }
 
 function discordbotlist() {

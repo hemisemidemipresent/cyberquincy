@@ -72,6 +72,9 @@ module.exports = {
             .get('598768024761139240')
             .members.cache.array()
             .find((m) => m.id === user.id);
+        if (!guildmember) {
+            return console.log('user is not in discord server');
+        }
         if (newLevel === 3) {
             await guildmember.roles.add('645126928340353036');
         } else if (newLevel === 10) {

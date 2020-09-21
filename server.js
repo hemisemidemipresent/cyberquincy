@@ -138,7 +138,7 @@ function botStats() {
     if (botposting == false) return;
     botInfoHelper.statcord();
     botInfoHelper.post();
-    botInfoHelper.auto();
+    statcord.autopost();
 }
 function login() {
     token = require('./1/config.json')['token'];

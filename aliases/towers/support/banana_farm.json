@@ -1,6 +1,5 @@
 {
     "xyz": ["monkey_farm", "farm"],
-    "222": ["base_farm", "base_banana_farm"],
 
     "300": ["banana_plantation", "plantation", "plant"],
     "400": ["banana_research_facility", "research", "facility"],

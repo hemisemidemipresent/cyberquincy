@@ -96,7 +96,17 @@ module.exports = class AliasRepository extends Array {
     // Ensure that none of the aliases clash before adding it in
     addAliasGroup(ag) {
         try {
-            ag.aliases = ag.aliases.map(al => this.permuteSeparators(al)).flat()
+            // If another_brick is an alias, include another-brick and anotherbrick as well
+            ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteSeparators(al)).flat()
+            // Note that here, the alias list includes the canonical. This will be remedied shortly
+
+            // Reduce the alias list to a list of unique aliases, maintaining the order
+            ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i)
+
+            // Delete the canonical verbatim from the alias list because
+            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
+
+            // Make sure that none of these aliases overlap with t
             this.preventSharedAliases(ag);
         } catch (e) {
             if (e instanceof AliasError) {

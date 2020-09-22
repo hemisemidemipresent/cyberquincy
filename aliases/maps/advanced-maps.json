@@ -7,18 +7,16 @@
         "hi-fi",
         "finance",
         "fin",
-        "highfinance",
         "high"
     ],
-    "another_brick": ["ab", "abrick", "anotherbrick", "another"],
-    "off_the_coast": ["of", "off", "otc", "offthecoast", "coast"],
+    "another_brick": ["ab", "abrick", "another"],
+    "off_the_coast": ["of", "off", "otc", "coast"],
     "peninsula": ["pn", "peni", "penis", "pen", "penin"],
     "pat's_pond": [
         "pp",
         "pond",
         "ppond",
         "pats_pond",
-        "pat'spond",
         "patspond",
         "pats"
     ],

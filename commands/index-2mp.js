@@ -267,7 +267,7 @@ async function display2MPAlt(message, tower, map) {
         message.channel.send(challengeEmbed);
     } else {
         throw new UserCommandError(
-            `Tower \`${towerFormatted}\` has not yet been completed on ${mapFormatted}`
+            `Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``
         );
     }
 }

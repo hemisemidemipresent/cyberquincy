@@ -3,7 +3,7 @@ const RegexParser = require('./regex-parser.js');
 // Takes a list of values in the constructor
 // If the arg equals any one of the provided values
 // then the parsing succeeds.
-module.exports = class StringSetValuesParser {
+class StringSetValuesParser {
     type() {
         return 'string_set_value';
     }
@@ -59,4 +59,6 @@ module.exports = class StringSetValuesParser {
             }
         }
     }
-};
+}
+
+module.exports = StringSetValuesParser;

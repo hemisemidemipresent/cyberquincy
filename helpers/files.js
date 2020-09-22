@@ -1,7 +1,3 @@
-module.exports = {
-    getFiles,
-};
-
 const resolve = require('path').resolve;
 const readdir = require('fs').promises.readdir;
 
@@ -24,3 +20,7 @@ async function* getFiles(dir, fileTypes) {
         }
     }
 }
+
+module.exports = {
+    getFiles,
+};

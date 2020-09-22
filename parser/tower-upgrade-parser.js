@@ -1,6 +1,6 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
-module.exports = class TowerUpgradeParser {
+class TowerUpgradeParser {
     type() {
         return 'tower_upgrade';
     }
@@ -17,4 +17,6 @@ module.exports = class TowerUpgradeParser {
         // Delegate the parsing work to the StringSetValuesParser
         return this.delegateParser.parse(arg);
     }
-};
+}
+
+module.exports = TowerUpgradeParser;

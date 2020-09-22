@@ -1,6 +1,6 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
-module.exports = class ModeParser {
+class ModeParser {
     type() {
         return 'mode';
     }
@@ -17,4 +17,6 @@ module.exports = class ModeParser {
         // Delegate the parsing work to the StringSetValuesParser
         return this.delegateParser.parse(arg);
     }
-};
+}
+
+module.exports = ModeParser;

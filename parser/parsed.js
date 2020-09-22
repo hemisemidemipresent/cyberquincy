@@ -6,7 +6,7 @@ pluralize = require('pluralize');
 // then parsed.rounds will give a list of all the parsed rounds,
 // at which point the command developer can then decide how to read and handle them.
 // Note that there's no guarantee on ordering for the values of the pluralized keys
-module.exports = class Parsed extends Object {
+class Parsed extends Object {
     constructor() {
         super();
         this.parsingErrors = [];
@@ -81,4 +81,6 @@ module.exports = class Parsed extends Object {
     hasErrors() {
         return this.parsingErrors.length > 0;
     }
-};
+}
+
+module.exports = Parsed;

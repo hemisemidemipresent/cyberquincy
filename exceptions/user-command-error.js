@@ -1,1 +1,3 @@
-module.exports = class UserCommandError extends Error {}
+class UserCommandError extends Error {}
+
+module.exports = UserCommandError;

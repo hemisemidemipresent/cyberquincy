@@ -1,10 +1,12 @@
 // Parses anything!
-module.exports = class AnythingParser {
+class AnythingParser {
     type() {
         return "anything";
     }
-    
+
     parse(arg) {
         return arg;
     }
 }
+
+module.exports = AnythingParser;

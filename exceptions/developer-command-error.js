@@ -1,1 +1,3 @@
-module.exports = class DeveloperCommandError extends Error {}
+class DeveloperCommandError extends Error {}
+
+module.exports = DeveloperCommandError;

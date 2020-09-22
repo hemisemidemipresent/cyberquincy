@@ -1,11 +1,11 @@
 const UserCommandError = require("../exceptions/user-command-error");
 
 // Parses a user listed in the BTD6 Index
-module.exports = class PersonParser {
+class PersonParser {
     type() {
         return "person";
     }
-    
+
     parse(arg) {
         const result = arg.match(/u#(.*)/)
         if (result) {
@@ -15,3 +15,5 @@ module.exports = class PersonParser {
         }
     }
 }
+
+module.exports = PersonParser;

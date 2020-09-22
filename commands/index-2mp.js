@@ -29,7 +29,7 @@ function execute(message, args) {
         return module.exports.helpMessage(message);
     }
 
-    standardParser = 
+    completionParser = 
         new AnyOrderParser(
             new OrParser(new TowerUpgradeParser(), new HeroParser()),
             new OrParser(
@@ -41,12 +41,14 @@ function execute(message, args) {
         )
     
     towerCompletionParser = new TowerParser()
+    allTowersOnGivenMapParser = new MapParser()
 
     const parsed = CommandParser.parse(
         args,
         new OrParser(
-            standardParser,
-            towerCompletionParser
+            completionParser,
+            towerCompletionParser,
+            allTowersOnGivenMapParser,
         )
     );
 
@@ -54,28 +56,30 @@ function execute(message, args) {
         return module.exports.errorMessage(message, parsed.parsingErrors);
     }
 
-    if (parsed.tower) {
-        return message.channel.send('Tower completion statistics in progress')
-    }
-
     let tower = null;
     if (parsed.tower_upgrade) {
+        // The index-standard representation for a tower upgrade
+        // is stored as the first alias (not including the canonical)
         tower = Aliases.getAliasSet(parsed.tower_upgrade)[1];
     } else if (parsed.hero) {
         tower = parsed.hero;
+    } else if (parsed.map) { // Only map is provided, no tower
+        return message.channel.send('All-tower completions on a given map coming soon')
+    } else if (parsed.tower) { // 0-0-0 tower name provided
+        return message.channel.send('Tower completion statistics in progress')
     } else {
-        throw `Somehow the \`q!2mp\` command parsed successfully without grabbing a hero or tower upgrade`;
+        return message.channel.send("Feature yet to be decided")
     }
 
-    if (parsed.map) {
+    if (parsed.map) { // tower + map
         return display2MPAlt(message, tower, parsed.map).catch(e => err(e, message))
-    } else if (parsed.exact_string) {
+    } else if (parsed.exact_string) { // tower on all maps
         // TODO
         return message.channel.send('Feature in progress');
-    } else if (parsed.map_difficulty) {
+    } else if (parsed.map_difficulty) { // tower on maps under specified difficulty
         // TODO
         return display2MPMapDifficulty(message, tower, parsed.map_difficulty).catch(e => err(e, message))
-    } else {
+    } else { // tower (OG completion)
         return display2MPOG(message, tower).catch(e => err(e, message));
     }
 }
@@ -192,14 +196,12 @@ async function display2MPAlt(message, tower, map) {
     notes = parseMapNotes(ogMapCell.note);
 
     if (altCompletion = notes[Aliases.mapToIndexAbbreviation(map)]) {
-        linkFormatted = `[${altCompletion.LINK}](http://${altCompletion.LINK})`
-        
         // Embed and send the message
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(`${towerFormatted} 2MPC Combo on ${mapFormatted}`)
             .setColor(colours['cyber'])
             .addField('Person', altCompletion.PERSON, true)
-            .addField('Link', linkFormatted, true)
+            .addField('Link', altCompletion.LINK, true)
 
         message.channel.send(challengeEmbed);
     } else {
@@ -223,7 +225,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     );
 
     ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
-    ogMapAbbr = Aliases.mapToIndexAbbreviation(ogMapCell.value)
+    ogMapAbbr = Aliases.mapToIndexAbbreviation(ogMapCell.value.split(' ').join('_'))
     ogPerson = sheet.getCellByA1(`${COLS.PERSON}${entryRow}`).value;
     ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
 
@@ -246,21 +248,48 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
                               return relevantNote
                           }, {});
     
-    console.log(relevantNotes)
+    if (Object.keys(relevantNotes).length > 0) {
+        mapColumn = []
+        personColumn = []
+        linkColumn = []
+        for (const mapAbbr in relevantNotes) {
+            mapColumn.push(Aliases.indexAbbreviationToMap(mapAbbr))
+            personColumn.push(relevantNotes[mapAbbr].PERSON)
+            linkColumn.push(relevantNotes[mapAbbr].LINK)
+        }
+        mapColumn = mapColumn.join("\n");
+        personColumn = personColumn.join("\n")
+        linkColumn = linkColumn.join("\n")
 
-    if (altCompletion = 'b'+notes[Aliases.mapToIndexAbbreviation(map)]) {
-        
         // Embed and send the message
         let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(`${towerFormatted} 2MPC Combo on ${mapFormatted}`)
-            .setColor(colours['cyber'])
-            .addField('Person', altCompletion.PERSON, true)
-            .addField('Link', altCompletion.LINK, true)
+                .setTitle(`${towerFormatted} 2MPCs on ${mapDifficultyFormatted} Maps`)
+                .setColor(colours['cyber'])
+        
+        numCombosCompleted = Object.keys(relevantNotes).length
+        numCombosPossible = permittedMapAbbrs.length
 
-        message.channel.send(challengeEmbed);
+        if (numCombosPossible == numCombosCompleted) {
+            challengeEmbed.addField(`All ${mapDifficulty} maps completed`, '-'.repeat(40))
+        } else {
+            challengeEmbed.addField('Combos', `**${numCombosCompleted}**/${numCombosPossible}`)
+        }
+        
+        challengeEmbed.addField('Map', mapColumn, true)
+                .addField('Map', personColumn, true)
+                .addField('Map', linkColumn, true)
+        
+
+        if (numCombosCompleted < numCombosPossible) {
+            mapsLeft = permittedMapAbbrs.filter(pm => !Object.keys(relevantNotes).includes(pm))
+            challengeEmbed.addField('Maps Left', mapsLeft.join(', '))
+        }
+                
+
+        return message.channel.send(challengeEmbed);
     } else {
         throw new UserCommandError(
-            `Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``
+            `Tower \`${towerFormatted}\` has not yet been completed on any \`${mapDifficulty}\` maps`
         );
     }
 }

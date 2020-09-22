@@ -226,7 +226,6 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     ogMapAbbr = Aliases.mapToIndexAbbreviation(ogMapCell.value)
     ogPerson = sheet.getCellByA1(`${COLS.PERSON}${entryRow}`).value;
     ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
-    console.log(ogLinkCell);
 
     notes = {}
     notes[ogMapAbbr] = {
@@ -234,9 +233,22 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`
     }
     notes = {
-        ...notes, 
+        ...notes,
         ...parseMapNotes(ogMapCell.note)
     };
+
+    console.log(notes);
+
+    permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map(map => Aliases.mapToIndexAbbreviation(map));
+    // Filter the completion entries by the permitted maps specified by the command-entered map difficulty
+    relevantNotes = Object.keys(notes)
+                          .filter(noteMapAbbr => permittedMapAbbrs.includes(noteMapAbbr))
+                          .reduce((relevantNote, noteMapAbbr) => {
+                              relevantNote[noteMapAbbr] = notes[noteMapAbbr];
+                              return relevantNote
+                          }, {});
+    
+    console.log(relevantNotes)
 
     if (altCompletion = 'b'+notes[Aliases.mapToIndexAbbreviation(map)]) {
         

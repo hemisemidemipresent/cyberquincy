@@ -293,6 +293,11 @@ module.exports = class AliasRepository extends Array {
         return this.getAliasSet(map)[1].toUpperCase();
     }
 
+    indexAbbreviationToMap(mapAbbr) {
+        const indexNormalUnformatted = this.getAliasSet(mapAbbr.toLowerCase())[0]
+        return this.toIndexNormalForm(indexNormalUnformatted)
+    }
+
     toIndexNormalForm(canonical) {
         return canonical
             .split('_')

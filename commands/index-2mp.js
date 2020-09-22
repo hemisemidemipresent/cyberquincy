@@ -74,7 +74,7 @@ function execute(message, args) {
         return message.channel.send('Feature in progress');
     } else if (parsed.map_difficulty) {
         // TODO
-        return message.channel.send('Feature in progress');
+        return display2MPMapDifficulty(message, tower, parsed.map_difficulty).catch(e => err(e, message))
     } else {
         return display2MPOG(message, tower).catch(e => err(e, message));
     }
@@ -127,35 +127,7 @@ function err(e, message) {
 async function display2MPOG(message, tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
-    // Load the column containing the different maps
-    await sheet.loadCells(
-        `${COLS.TOWER}1:${COLS.TOWER}${sheet.rowCount}`
-    ); // loads all possible cells with tower
-
-    // The row where the queried map is found
-    let entryRow = null;
-
-    // Search for the row in all "possible" rows
-    for (let row = 1; row <= sheet.rowCount; row++) {
-        let towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`)
-            .value;
-        // input is "in_the_loop" but needs to be compared to "In The Loop"
-        if (
-            towerCandidate &&
-            towerCandidate.toLowerCase().split(' ').join('_') === tower
-        ) {
-            entryRow = row;
-            break;
-        }
-    }
-
-    if (!entryRow) {
-        throw new UserCommandError(
-            `Tower \`${h.toTitleCase(
-                tower.split('_').join(' ')
-            )}\` doesn't yet have a 2MP completion`
-        );
-    }
+    entryRow = await rowFromTower(tower);
 
     // Load the row where the map was found
     await sheet.loadCells(
@@ -202,35 +174,7 @@ async function display2MPAlt(message, tower, map) {
     mapFormatted = h.toTitleCase(map.split('_').join(' '))
     towerFormatted = h.toTitleCase(tower.split('_').join(' '))
 
-    // Load the column containing the different maps
-    await sheet.loadCells(
-        `${COLS.TOWER}1:${COLS.TOWER}${sheet.rowCount}`
-    ); // loads all possible cells with tower
-
-    // The row where the queried map is found
-    let entryRow = null;
-
-    // Search for the row in all "possible" rows
-    for (let row = 1; row <= sheet.rowCount; row++) {
-        let towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`)
-            .value;
-        // input is "in_the_loop" but needs to be compared to "In The Loop"
-        if (
-            towerCandidate &&
-            towerCandidate.toLowerCase().split(' ').join('_') === tower
-        ) {
-            entryRow = row;
-            break;
-        }
-    }
-
-    if (!entryRow) {
-        throw new UserCommandError(
-            `Tower \`${h.toTitleCase(
-                tower.split('_').join(' ')
-            )}\` doesn't yet have a 2MP completion`
-        );
-    }
+    entryRow = await rowFromTower(tower);
 
     // Load the map cell, the only cell that likely matters
     await sheet.loadCells(
@@ -245,14 +189,7 @@ async function display2MPAlt(message, tower, map) {
         return display2MPOG(message, tower);
     }
 
-    notes = ogMapCell.note.split("\n")
-    notes = Object.fromEntries(
-        notes.map(n => {
-            let altmap, altperson, altbitly
-            [altmap, altperson, altbitly] = n.split(/[,:]/).map(t => t.replace(/ /g, ''));
-            return [altmap, {PERSON: altperson, LINK: altbitly}]
-        })
-    );
+    notes = parseMapNotes(ogMapCell.note);
 
     if (altCompletion = notes[Aliases.mapToIndexAbbreviation(map)]) {
         linkFormatted = `[${altCompletion.LINK}](http://${altCompletion.LINK})`
@@ -270,6 +207,99 @@ async function display2MPAlt(message, tower, map) {
             `Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``
         );
     }
+}
+
+async function display2MPMapDifficulty(message, tower, mapDifficulty) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    mapDifficultyFormatted = h.toTitleCase(mapDifficulty)
+    towerFormatted = h.toTitleCase(tower.split('_').join(' '))
+
+    entryRow = await rowFromTower(tower);
+
+    // Load the map cell, person cell, link cell and a few in between
+    await sheet.loadCells(
+        `${COLS.OG_MAP}${entryRow}:${COLS.LINK}${entryRow}`
+    );
+
+    ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
+    ogMapAbbr = Aliases.mapToIndexAbbreviation(ogMapCell.value)
+    ogPerson = sheet.getCellByA1(`${COLS.PERSON}${entryRow}`).value;
+    ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
+    console.log(ogLinkCell);
+
+    notes = {}
+    notes[ogMapAbbr] = {
+        PERSON: ogPerson, 
+        LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`
+    }
+    notes = {
+        ...notes, 
+        ...parseMapNotes(ogMapCell.note)
+    };
+
+    if (altCompletion = 'b'+notes[Aliases.mapToIndexAbbreviation(map)]) {
+        
+        // Embed and send the message
+        let challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(`${towerFormatted} 2MPC Combo on ${mapFormatted}`)
+            .setColor(colours['cyber'])
+            .addField('Person', altCompletion.PERSON, true)
+            .addField('Link', altCompletion.LINK, true)
+
+        message.channel.send(challengeEmbed);
+    } else {
+        throw new UserCommandError(
+            `Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``
+        );
+    }
+}
+
+async function rowFromTower(tower) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    // Load the column containing the different maps
+    await sheet.loadCells(
+        `${COLS.TOWER}1:${COLS.TOWER}${sheet.rowCount}`
+    ); // loads all possible cells with tower
+
+    // The row where the queried map is found
+    let entryRow = null;
+
+    // Search for the row in all "possible" rows
+    for (let row = 1; row <= sheet.rowCount; row++) {
+        let towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`)
+                                  .value;
+
+        // input is "in_the_loop" but needs to be compared to "In The Loop"
+        if (Aliases.toIndexNormalForm(tower) === towerCandidate) {
+            entryRow = row;
+            break;
+        }
+    }
+
+    if (!entryRow) {
+        throw new UserCommandError(
+            `Tower \`${Aliases.toIndexNormalForm(tower)}\` doesn't yet have a 2MP completion`
+        );
+    }
+
+    return entryRow;
+}
+
+function parseMapNotes(notes) {
+    return Object.fromEntries(
+        notes.split("\n").map(n => {
+            let altmap, altperson, altbitly
+            [altmap, altperson, altbitly] = n.split(/[,:]/).map(t => t.replace(/ /g, ''));
+            
+            return [altmap, 
+                {
+                    PERSON: altperson, 
+                    LINK: `[${altbitly}](http://${altbitly})`
+                }]
+        })
+    );
 }
 
 module.exports = {

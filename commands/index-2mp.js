@@ -33,10 +33,10 @@ function execute(message, args) {
         new AnyOrderParser(
             new OrParser(new TowerUpgradeParser(), new HeroParser()),
             new OrParser(
-                new EmptyParser(), // OG completion for tower
                 new MapParser(), // Completion of tower on specified map
                 new MapDifficultyParser(), // Completions of tower on maps under specified difficulty
-                new ExactStringParser('ALL') // All completions for tower
+                new ExactStringParser('ALL'), // All completions for tower
+                new EmptyParser() // OG completion for tower
             )
         )
     
@@ -89,20 +89,19 @@ function helpMessage(message) {
         .setTitle('`q!2mp` HELP')
         .addField(
             '`q!2mp <tower_upgrade>`',
-            'The OG 2MP completion for the specified tower.\n' +
-                ' • Can either be `base_tower#\\d\\d\\d` (where \\d represents a digit).\n' +
-                'or an upgrade name like `sentry_paragon`. Cannot combine both.\n' +
-                ' • Upgrades must not include crosspathing.'
+            'The OG 2MPC completion for the specified tower.\n' + 
+            '`q!2mp wlp`'
         )
         .addField(
-            'Valid `<tower_upgrade>` values',
-            '`pspike`, `spact#005`, `spike_factory#005`, `permaspike`, `perma-spike`, etc.'
+            '`q!2mp <tower_upgrade> <map>`',
+            'The Alt-Map 2MPC completion for the specified tower and map.\n' +
+            '`q!2mp dartship another-brick`'
         )
         .addField(
-            'Invalid `<tower_upgrade>` values',
-            'spact#025, permaspike#005'
+            '`q!2mp <tower_upgrade> <map_difficulty>`',
+            'All 2MPC completions for the specified tower on maps that fall under the specified map difficulty.\n' +
+            '`q!2mp savatar expert`'
         )
-        .addField('Example', '`q!2mp gmn`');
 
     return message.channel.send(helpEmbed);
 }

@@ -255,7 +255,7 @@ async function display2MPAlt(message, tower, map) {
     );
 
     if (altCompletion = notes[Aliases.mapToIndexAbbreviation(map)]) {
-        linkFormatted = `[${altCompletion.LINK}](${altCompletion.LINK})`
+        linkFormatted = `[${altCompletion.LINK}](http://${altCompletion.LINK})`
         
         // Embed and send the message
         let challengeEmbed = new Discord.MessageEmbed()

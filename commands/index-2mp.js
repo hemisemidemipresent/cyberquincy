@@ -237,8 +237,6 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         ...parseMapNotes(ogMapCell.note)
     };
 
-    console.log(notes);
-
     permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map(map => Aliases.mapToIndexAbbreviation(map));
     // Filter the completion entries by the permitted maps specified by the command-entered map difficulty
     relevantNotes = Object.keys(notes)
@@ -283,8 +281,10 @@ async function rowFromTower(tower) {
         let towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`)
                                   .value;
 
+        if (!towerCandidate) continue;
+
         // input is "in_the_loop" but needs to be compared to "In The Loop"
-        if (Aliases.toIndexNormalForm(tower) === towerCandidate) {
+        if (Aliases.toIndexNormalForm(tower) === h.toTitleCase(towerCandidate)) {
             entryRow = row;
             break;
         }
@@ -300,6 +300,7 @@ async function rowFromTower(tower) {
 }
 
 function parseMapNotes(notes) {
+    if (!notes) return {}
     return Object.fromEntries(
         notes.split("\n").map(n => {
             let altmap, altperson, altbitly

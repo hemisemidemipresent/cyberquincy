@@ -221,17 +221,26 @@ module.exports = class AliasRepository extends Array {
     // Expedited Access
     ////////////////////////////////////////////////////
     allMaps() {
-        const easyMaps = this.getAliasGroupsFromSameFileAs('LOGS');
-        const intermediateMaps = this.getAliasGroupsFromSameFileAs('HAUNTED');
-        const hardMaps = this.getAliasGroupsFromSameFileAs('CORNFIELD');
-        const expertMaps = this.getAliasGroupsFromSameFileAs('INFERNAL');
+        return this.easyMaps()
+            .concat(this.intermediateMaps())
+            .concat(this.advancedMaps())
+            .concat(this.expertMaps());
+    }
 
-        const allMaps = easyMaps
-            .concat(intermediateMaps)
-            .concat(hardMaps)
-            .concat(expertMaps);
+    easyMaps() {
+        return this.getAliasGroupsFromSameFileAs('LOGS').map(ag => ag.canonical);
+    }
 
-        return allMaps.map((ag) => ag.canonical);
+    intermediateMaps() {
+        return this.getAliasGroupsFromSameFileAs('HAUNTED').map(ag => ag.canonical);
+    }
+
+    advancedMaps() {
+        return this.getAliasGroupsFromSameFileAs('CORNFIELD').map(ag => ag.canonical);
+    }
+
+    expertMaps() {
+        return this.getAliasGroupsFromSameFileAs('INFERNAL').map(ag => ag.canonical);
     }
 
     allMapDifficulties() {

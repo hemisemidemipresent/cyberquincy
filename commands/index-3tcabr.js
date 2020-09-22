@@ -39,7 +39,7 @@ module.exports = {
         towerOrHeroParser = new OrParser(
             new TowerUpgradeParser(),
             new HeroParser(),
-            new TowerParser(),
+            new TowerParser()
         );
 
         const parsed = CommandParser.parse(
@@ -68,11 +68,12 @@ module.exports = {
                 parsed.natural_number
             ).catch((e) => err(e, message));
         } else if (parsed.tower) {
-            const ex_tower_upgrade = Aliases.getAliasGroup(parsed.tower + '#300').aliases[0]
-            return module.exports.errorMessage(
-                message, 
-                [`You must enter a tower upgrade like \`${ex_tower_upgrade}\` rather than a tower like \`${parsed.tower}\``]
-            );
+            const ex_tower_upgrade = Aliases.getAliasGroup(
+                parsed.tower + '#300'
+            ).aliases[0];
+            return module.exports.errorMessage(message, [
+                `You must enter a tower upgrade like \`${ex_tower_upgrade}\` rather than a tower like \`${parsed.tower}\``,
+            ]);
         } else if (parsed.hero || parsed.tower_upgrade) {
             // Tower(s) specified
             towers = null;
@@ -114,7 +115,7 @@ module.exports = {
                 'Likely Cause(s)',
                 parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
-            .addField('Type `q!3tcabr` for help', ':)')
+            .addField('Type `q!3tcabr` for help', '\u200b')
             .setColor(colours['orange']);
 
         return message.channel.send(errorEmbed);
@@ -407,13 +408,17 @@ async function displayOG3TCABRFromSubsetTowers(message, towers) {
         const comboTowers = [c.TOWER_1, c.TOWER_2, c.TOWER_3].map((t) =>
             t.toLowerCase()
         );
-        
+
         // Make sure that towers is a subset of comboTowers accounting for duplicate tower appearances
         // in both the queried towers and the existing 3tc abr combos
-        return towers.map(t => t.toLowerCase()).every((t, _, ltowers) =>
-            comboTowers.includes(t) &&
-            ltowers.filter(tt => tt === t).length <= comboTowers.filter(ct => ct === t).length
-        );
+        return towers
+            .map((t) => t.toLowerCase())
+            .every(
+                (t, _, ltowers) =>
+                    comboTowers.includes(t) &&
+                    ltowers.filter((tt) => tt === t).length <=
+                        comboTowers.filter((ct) => ct === t).length
+            );
     });
 
     if (matchingCombos.length == 0) {
@@ -441,8 +446,8 @@ async function displayOG3TCABRFromTowers(message, towers, combo) {
 
     // Order towers in completion order
     titleTowers = [combo.TOWER_1, combo.TOWER_2, combo.TOWER_3];
-    titleTowers = titleTowers.filter(
-        (tt) => towers.map(t => t.toLowerCase()).includes(tt.toLowerCase())
+    titleTowers = titleTowers.filter((tt) =>
+        towers.map((t) => t.toLowerCase()).includes(tt.toLowerCase())
     );
 
     return embed(

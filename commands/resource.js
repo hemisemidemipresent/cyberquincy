@@ -37,7 +37,7 @@ module.exports = {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
             .addField('Cause', error_message)
-            .addField('Type `q!resource` for help', ':)')
+            .addField('Type `q!resource` for help', '\u200b')
             .setColor(colours['orange']);
 
         return message.channel.send(errorEmbed);

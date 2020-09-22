@@ -236,12 +236,16 @@ module.exports = {
                 });
         }
         let input = args[0].toString();
-        let arr = [input.charAt(0), input.charAt(1), input.charAt(2)];
+        let arr = [
+            parseInt(input.charAt(0)),
+            parseInt(input.charAt(1)),
+            parseInt(input.charAt(2)),
+        ];
         let temp = [...arr];
-        temp.sort;
-        const tier = temp[0];
+        temp.sort();
+        const tier = temp[2];
         let path = 1;
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 3; i++) {
             if (parseInt(tier) == parseInt(arr[i])) {
                 path = i + 1;
             }

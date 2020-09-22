@@ -172,7 +172,7 @@ module.exports = {
                 'Likely Cause(s)',
                 parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
-            .addField('Type `q!2mp` for help', ':)')
+            .addField('Type `q!2mp` for help', '\u200b')
             .setColor(colours['orange']);
 
         return message.channel.send(errorEmbed);

@@ -221,13 +221,13 @@ module.exports = class AliasRepository extends Array {
     // Expedited Access
     ////////////////////////////////////////////////////
     allMaps() {
-        return this.easyMaps()
+        return this.beginnerMaps()
             .concat(this.intermediateMaps())
             .concat(this.advancedMaps())
             .concat(this.expertMaps());
     }
 
-    easyMaps() {
+    beginnerMaps() {
         return this.getAliasGroupsFromSameFileAs('LOGS').map(ag => ag.canonical);
     }
 

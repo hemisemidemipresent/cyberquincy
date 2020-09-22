@@ -278,13 +278,19 @@ module.exports = class AliasRepository extends Array {
 
         return heroes.map((ag) => ag.canonical);
     }
+
     allBloons() {
         const bloons = this.getAliasGroupsFromSameFileAs('RED');
         return bloons.map((ag) => ag.canonical);
     }
+
     towerUpgradeToIndexNormalForm(upgrade) {
-        const index_normal_unformatted = this.getAliasSet(upgrade)[1];
-        return this.toIndexNormalForm(index_normal_unformatted);
+        const indexNormalUnformatted = this.getAliasSet(upgrade)[1];
+        return this.toIndexNormalForm(indexNormalUnformatted);
+    }
+
+    mapToIndexAbbreviation(map) {
+        return this.getAliasSet(map)[1].toUpperCase();
     }
 
     toIndexNormalForm(canonical) {

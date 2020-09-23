@@ -1,7 +1,6 @@
 const fs = require('fs');
 const secrets_config = require('./1/config.json');
 const Advertisements = require('./helpers/advertisements.js');
-const AliasRepository = require('./alias-repository');
 
 const PREFIX = secrets_config['prefix'];
 const XPCOMMANDS = ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'];
@@ -60,17 +59,24 @@ async function handleCommand(message) {
             return;
         }
 
-        // Each item in [args] either looks like `arg` or `argp1#argp2`
-        // This converts each arg part to its canonical form.
-        // `spact#025` gets converted to `spike_factory#025` for example.
-        const canonicalArgs = args.map(function (arg) {
-            return arg
-                .split(ARG_SPLITTER)
-                .map(function (t) {
-                    return Aliases.getCanonicalForm(t) || t;
-                })
-                .join(ARG_SPLITTER);
-        });
+        let canonicalArgs = null;
+        if (command.rawargs) {
+            console.log(true)
+            // If the command specifies that the arguments should come in raw, don't canonicize them
+            canonicalArgs = args;
+        } else {
+            // Each item in [args] either looks like `arg` or `argp1#argp2`
+            // This converts each arg part to its canonical form.
+            // `spact#025` gets converted to `spike_factory#025` for example.
+            canonicalArgs = args.map(function (arg) {
+                return arg
+                    .split(ARG_SPLITTER)
+                    .map(function (t) {
+                        return Aliases.getCanonicalForm(t) || t;
+                    })
+                    .join(ARG_SPLITTER);
+            });
+        }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
         if (Cooldowns.handleCooldown(command, message)) {
@@ -83,7 +89,7 @@ async function handleCommand(message) {
             ) {
                 Xp.addCommandXp(message);
             }
-            //post information to statcord
+            // post information to statcord
             const botposting = require('./1/config.json')['botposting'];
             if (statcord && botposting) {
                 statcord.postCommand(command.name, message.author.id);

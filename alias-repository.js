@@ -85,7 +85,7 @@ class AliasRepository extends Array {
             if (upgrade == 'xyz') {
                 const baseTowerAliasGroup = {
                     canonical: `${baseName}#222`,
-                    aliases: [baseName].concat(towerUpgrades['xyz']).map(al => `base_${al}`),
+                    aliases: towerUpgrades['xyz'].concat(baseName).map(al => `base_${al}`),
                     sourcefile: f,
                 }
                 this.addAliasGroup(baseTowerAliasGroup);
@@ -96,19 +96,18 @@ class AliasRepository extends Array {
     // Ensure that none of the aliases clash before adding it in
     addAliasGroup(ag) {
         try {
-            // If another_brick is an alias, include another-brick and anotherbrick as well
-            ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteSeparators(al)).flat()
-            // Delete the canonical verbatim from the alias list
-            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
-
             // If adora's_temple is an alias, include adoras_temple as well
             ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteRemovalForgettableCharacters(al)).flat()
             // Delete the canonical verbatim from the alias list
             ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
 
+            // If another_brick is an alias, include another-brick and anotherbrick as well
+            ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteSeparators(al)).flat()
+            // Delete the canonical verbatim from the alias list
+            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
+
             // Remove duplicates, maintaining alias order
             ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i)
-            
 
             // Make sure that none of these aliases overlap with other alias sets
             this.preventSharedAliases(ag);
@@ -333,6 +332,52 @@ class AliasRepository extends Array {
     towerUpgradeToIndexNormalForm(upgrade) {
         const indexNormalUnformatted = this.getAliasSet(upgrade)[1];
         return this.toIndexNormalForm(indexNormalUnformatted);
+    }
+
+    towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
+        // Re-assign tower to canonical and ensure that it exists and is a tower
+        if(!( tower = this.getCanonicalForm(tower) ) || !this.allTowers().includes(tower)) {
+            throw 'First argument must be a tower'
+        };
+
+        // Validate path
+        if (isNaN(path)) {
+            throw 'Second argument `path` must be 1, 2, or 3'
+        }
+        try {
+            path = parseInt(path);
+        } catch(e) {
+            throw 'Second argument `path` must be 1, 2, or 3'
+        }
+        
+        if (path < 1 || path > 3) {
+            throw 'Second argument `path` must be 1, 2, or 3'
+        }
+
+        // Validate tier
+        if (!tier) {
+            return this.towerUpgradeToIndexNormalForm(`${tower}#222`)
+        }
+
+        if (isNaN(tier)) {
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+        }
+        try {
+            tier = parseInt(tier);
+        } catch(e) {
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+        }
+        
+        if (tier < 0 || tier > 5) {
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+        }
+
+        // Convert path + tier to appropriate upgrade string like 003 or 400
+        const upgradeInt = tier * Math.pow(10, 3 - path)
+        const upgradeStr = upgradeInt.toString().padStart(3, '0')
+
+        // Combine tower with upgrade string to get tower upgrade canonical like wizard#300
+        return this.towerUpgradeToIndexNormalForm(`${tower}#${upgradeStr}`);
     }
 
     mapToIndexAbbreviation(map) {

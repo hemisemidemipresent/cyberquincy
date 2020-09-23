@@ -24,9 +24,19 @@ const COLS = {
     LINK: 'L',
 };
 
+const TOWER_COLS = {
+    TOWER: 'O',
+    BASE: 'P',
+    LAST: 'Y',
+}
+
+HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
+WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
+RED_X = String.fromCharCode(10060);
+
 function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
-        return module.exports.helpMessage(message);
+        return helpMessage(message);
     }
 
     completionParser = 
@@ -66,7 +76,7 @@ function execute(message, args) {
     } else if (parsed.map) { // Only map is provided, no tower
         return message.channel.send('All-tower completions on a given map coming soon')
     } else if (parsed.tower) { // 0-0-0 tower name provided
-        return message.channel.send('Tower completion statistics in progress')
+        return display2MPTowerStatistics(message, parsed.tower).catch(e => err(e, message));
     } else {
         return message.channel.send("Feature yet to be decided")
     }
@@ -127,6 +137,7 @@ function err(e, message) {
     }
 }
 
+// Displays the OG 2MPC completion
 async function display2MPOG(message, tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
@@ -171,6 +182,7 @@ async function display2MPOG(message, tower) {
     return message.channel.send(challengeEmbed);
 }
 
+// Displays a 2MPC completion on the specified map
 async function display2MPAlt(message, tower, map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
@@ -194,6 +206,7 @@ async function display2MPAlt(message, tower, map) {
 
     notes = parseMapNotes(ogMapCell.note);
 
+    // Tower has been completed on queried map if the map abbreviation can be found in the notes
     if (altCompletion = notes[Aliases.mapToIndexAbbreviation(map)]) {
         // Embed and send the message
         let challengeEmbed = new Discord.MessageEmbed()
@@ -210,6 +223,7 @@ async function display2MPAlt(message, tower, map) {
     }
 }
 
+// Displays all 2MPCs completed on all maps specified by the map difficulty
 async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
@@ -229,15 +243,18 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
 
     notes = {}
+    // Add OG map to list of maps completed
     notes[ogMapAbbr] = {
         PERSON: ogPerson, 
         LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`
     }
+    // Add rest of maps found in notes
     notes = {
         ...notes,
         ...parseMapNotes(ogMapCell.note)
     };
 
+    // Get all map abbreviations for the specified map difficulty
     permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map(map => Aliases.mapToIndexAbbreviation(map));
     // Filter the completion entries by the permitted maps specified by the command-entered map difficulty
     relevantNotes = Object.keys(notes)
@@ -248,6 +265,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
                           }, {});
     
     if (Object.keys(relevantNotes).length > 0) {
+        // Format 3 columns: map, person, link
         mapColumn = []
         personColumn = []
         linkColumn = []
@@ -292,6 +310,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     }
 }
 
+// Gets the row of tower completion stats for the given tower
 async function rowFromTower(tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
@@ -326,6 +345,7 @@ async function rowFromTower(tower) {
     return entryRow;
 }
 
+// Parses the map notes by splitting on comma and colon to get the map+person+link
 function parseMapNotes(notes) {
     if (!notes) return {}
     return Object.fromEntries(
@@ -340,6 +360,95 @@ function parseMapNotes(notes) {
                 }]
         })
     );
+}
+
+// Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier above base
+// Also displays base
+async function display2MPTowerStatistics(message, tower) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    entryRow = await findTowerRow(tower);
+
+    // Load the row where the map was found
+    await sheet.loadCells(
+        `${TOWER_COLS.TOWER}${entryRow}:${TOWER_COLS.LAST}${entryRow}`
+    );
+
+    // Check or X
+    baseTowerCompletionMarking = await getCompletionMarking(entryRow, null, 2)
+
+    const towerFormatted = Aliases.toIndexNormalForm(tower);
+    
+    let challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(`2MPC Completions for ${towerFormatted}`)
+        .setColor(colours['cyber'])
+        .addField('\u200b', '\u200b', true) // Left column placeholder
+        .addField('Base Tower', baseTowerCompletionMarking, true) // Base tower
+        .addField('\u200b', '\u200b', true) // Right column placeholder
+    
+    for (var path = 1; path <= 3; path++) {
+        for (var tier = 3; tier <=5; tier++) {
+            towerUpgradeName = Aliases.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
+            upgradeCompletionMarking = await getCompletionMarking(entryRow, path, tier)
+            challengeEmbed.addField(towerUpgradeName, upgradeCompletionMarking, true)
+        }
+    }
+
+    message.channel.send(challengeEmbed);
+}
+
+// Converts the Index's marking of whether a tower's path/tier has been completed
+// to symbols that are recognizable on the discord embed level
+async function getCompletionMarking(entryRow, path, tier) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    upgradeCol = null;
+
+    if (tier == 2) {
+        upgradeCol = TOWER_COLS.BASE
+    } else {
+        upgradeCol = String.fromCharCode(TOWER_COLS.BASE.charCodeAt(0) + (path - 1)*3 + tier - 2)
+    }
+
+    completion = sheet.getCellByA1(`${upgradeCol}${entryRow}`).value.trim()
+
+    if(completion == HEAVY_CHECK_MARK) {
+        return WHITE_HEAVY_CHECK_MARK
+    } else {
+        return RED_X;
+    }
+}
+
+async function findTowerRow(tower) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    // Load the column containing the different towers
+    await sheet.loadCells(
+        `${TOWER_COLS.TOWER}1:${TOWER_COLS.TOWER}${sheet.rowCount}`
+    );
+
+    entryRow = null;
+
+    // Search for the row in all "possible" rows
+    for (let row = 1; row <= sheet.rowCount; row++) {
+        let towerCandidate = sheet.getCellByA1(`${TOWER_COLS.TOWER}${row}`)
+                                  .value;
+
+        if (!towerCandidate) continue;
+
+        if (Aliases.towerUpgradeToIndexNormalForm(tower) == towerCandidate) {
+            entryRow = row;
+            break;
+        }
+    }
+
+    if (!entryRow) {
+        throw new UserCommandError(
+            `Tower \`${Aliases.toIndexNormalForm(tower)}\` doesn't yet have a 2MP completion`
+        );
+    }
+
+    return entryRow;
 }
 
 module.exports = {

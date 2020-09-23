@@ -4,8 +4,6 @@ const settings = { method: 'Get' };
 const { cyber, red } = require('../jsons/colours.json');
 module.exports = {
     name: 'abround',
-    description:
-        'tells you about the abr rounds (below 100 cos freeplay abr is the same as normal)',
     aliases: ['abr'],
     execute(message, args) {
         if (!args[0] || isNaN(args[0])) {

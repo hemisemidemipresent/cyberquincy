@@ -97,9 +97,7 @@ module.exports = {
     name: '<hero>',
     aliases: aliases.flat(),
 
-    execute(message, args) {
-        const newArgs = message.content.slice(2).split(/ +/);
-        const commandName = newArgs.shift().toLowerCase();
+    execute(message, args, newArgs, commandName) {
         let name = findName(commandName);
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()

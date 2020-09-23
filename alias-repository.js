@@ -98,15 +98,19 @@ module.exports = class AliasRepository extends Array {
         try {
             // If another_brick is an alias, include another-brick and anotherbrick as well
             ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteSeparators(al)).flat()
-            // Note that here, the alias list includes the canonical. This will be remedied shortly
-
-            // Reduce the alias list to a list of unique aliases, maintaining the order
-            ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i)
-
-            // Delete the canonical verbatim from the alias list because
+            // Delete the canonical verbatim from the alias list
             ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
 
-            // Make sure that none of these aliases overlap with t
+            // If adora's_temple is an alias, include adoras_temple as well
+            ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteRemovalForgettableCharacters(al)).flat()
+            // Delete the canonical verbatim from the alias list
+            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
+
+            // Remove duplicates, maintaining alias order
+            ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i)
+            
+
+            // Make sure that none of these aliases overlap with other alias sets
             this.preventSharedAliases(ag);
         } catch (e) {
             if (e instanceof AliasError) {
@@ -120,6 +124,8 @@ module.exports = class AliasRepository extends Array {
 
     // If "spike-o-pult", adds "spike_o_pult", "spike_o-pult", "spike-o_pult", "spike_opult", etc.
     permuteSeparators(al) {
+        if (al.includes('#')) return [al];
+
         const SEPARATOR_TOKENS = ["_", "-"]
         const JOIN_TOKENS = ["_", "-", ""]
 
@@ -138,9 +144,30 @@ module.exports = class AliasRepository extends Array {
             aliases = [...new_aliases];
         }
 
-
-        delete aliases[aliases.findIndex(a => a == al)]
+        // Move the original alias to the front of the transformed list
+        aliases.splice(aliases.findIndex(a => a == al), 1)
         return [al].concat(aliases);
+    }
+
+    permuteRemovalForgettableCharacters(al) {
+        if (al.includes('#')) return [al];
+
+        const FORGETTABLE_CHARACTERS = [":", "'"]
+        return this.forgetRecursive(al, FORGETTABLE_CHARACTERS)
+    }
+
+    forgetRecursive(w, chars) {
+        const sepIndex = w.search(new RegExp(chars.join('|')))
+        if (sepIndex == -1) return [w];
+
+        const prefix = w.slice(0, sepIndex)
+        const suffix = w.slice(sepIndex + 1)
+        const sep = w[sepIndex]
+        
+        const useits = this.forgetRecursive(suffix, chars).map(sfx => prefix + sep + sfx);
+        const loseits = this.forgetRecursive(suffix, chars).map(sfx => prefix + sfx);
+
+        return useits.concat(loseits);
     }
 
     // Checks canonical + aliases against all other alias groups' canonical + aliases

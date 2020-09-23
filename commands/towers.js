@@ -224,14 +224,16 @@ function baseTower(json, name) {
     let object = json[`${name}`];
     const embed = new Discord.MessageEmbed()
         .setColor(cyber)
-        .addField('name', object.name)
+        .addField('name', object.name, true)
         .addField(
             'cost',
-            `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`
+            `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`,
+            true
         )
-        .addField('notes', object.notes)
+        .addField('notes', object.notes, true)
         .setFooter(
-            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
+            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration',
+            true
         );
     return embed;
 }
@@ -250,16 +252,18 @@ function anyOtherTower(json, name, path, tier) {
 
     const embed = new Discord.MessageEmbed()
         .setColor(cyber)
-        .addField('name', object.name)
+        .addField('name', object.name, true)
         .addField(
             'cost',
-            `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`
+            `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`,
+            true
         )
-        .addField('notes', object.notes)
-        .addField('xp needed:', `${object.xp}`)
+        .addField('notes', object.notes, true)
+        .addField('xp needed:', `${object.xp}`, true)
         .addField(
             'total cost',
-            `${hard(totalCost)} (hard), ${totalCost} (medium)`
+            `${hard(totalCost)} (hard), ${totalCost} (medium)`,
+            true
         )
         .setFooter(
             'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'

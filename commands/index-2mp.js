@@ -386,8 +386,8 @@ async function display2MPTowerStatistics(message, tower) {
         .addField('Base Tower', baseTowerCompletionMarking, true) // Base tower
         .addField('\u200b', '\u200b', true) // Right column placeholder
     
-    for (var path = 1; path <= 3; path++) {
-        for (var tier = 3; tier <=5; tier++) {
+    for (var tier = 3; tier <=5; tier++) {
+        for (var path = 1; path <= 3; path++) {
             towerUpgradeName = Aliases.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
             upgradeCompletionMarking = await getCompletionMarking(entryRow, path, tier)
             challengeEmbed.addField(towerUpgradeName, upgradeCompletionMarking, true)

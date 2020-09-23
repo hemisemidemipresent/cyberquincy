@@ -98,7 +98,7 @@ module.exports = {
     aliases: aliases.flat(),
 
     execute(message, args, newArgs, commandName) {
-\        let name = findName(commandName);
+        let name = findName(commandName);
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setColor(red)

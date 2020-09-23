@@ -74,13 +74,10 @@ async function handleCommand(message) {
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
         if (Cooldowns.handleCooldown(command, message)) {
-            command.execute(message, canonicalArgs);
+            command.execute(message, canonicalArgs, args, commandName);
 
             // Don't want the user gaining xp from metacommands
-            if (
-                !XPCOMMANDS.includes(command.name) &&
-                xpEnabled
-            ) {
+            if (!XPCOMMANDS.includes(command.name) && xpEnabled) {
                 Xp.addCommandXp(message);
             }
             //post information to statcord

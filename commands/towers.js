@@ -95,9 +95,7 @@ module.exports = {
     name: '<tower>',
     aliases: aliases.flat(),
 
-    execute(message, args) {
-        const newArgs = message.content.slice(2).split(/ +/);
-        const commandName = newArgs.shift().toLowerCase();
+    execute(message, args, newArgs, commandName) {
         let name = findName(commandName);
         if (!isValidPath(args[0])) {
             provideHelpMsg(message, name);

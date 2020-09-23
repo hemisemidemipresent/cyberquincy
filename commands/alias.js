@@ -5,7 +5,7 @@ module.exports = {
 
     aliases: ['al', 'aliases'],
 
-    execute(message, args) {
+    execute(message, args, newArgs) {
         // search up alias db
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);
@@ -29,8 +29,7 @@ module.exports = {
         }
         // search up command alias db
         let cmdStr = '';
-        const newArgs = message.content.slice(2).split(/ +/);
-        newArgs.shift();
+
         let command =
             client.commands.get(newArgs[0]) ||
             client.commands.find(

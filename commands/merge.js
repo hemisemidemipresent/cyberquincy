@@ -1,10 +1,8 @@
 module.exports = {
     name: 'merge',
     alias: ['combine'],
-    execute(message, args) {
+    execute(message, args, newArgs) {
         const merges = require('../jsons/merges.json');
-        const newArgs = message.content.slice(2).split(/ +/);
-        newArgs.shift();
         let tower1 = `${newArgs[0]} ${newArgs[1]}`;
         let tower2 = `${newArgs[2]} ${newArgs[3]}`;
         for (let i = 0; i < merges.length; i++) {

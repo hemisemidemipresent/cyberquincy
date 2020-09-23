@@ -1,9 +1,11 @@
-const RegexParser = require('../parser/regex-parser');
+const AnythingParser = require('../parser/anything-parser');
 
 module.exports = {
     name: 'alias',
 
     aliases: ['al', 'aliases'],
+
+    rawargs: true,
 
     execute(message, args) {
         // search up alias db
@@ -11,14 +13,13 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        alias = CommandParser.parse(
-            args,
-            new RegexParser(/^(.*?)$/) // Match anything
-        ).regex;
+        parsed = CommandParser.parse(args, new AnythingParser());
 
-        if (parsed.hasErorrs) {
+        if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
+
+        alias = parsed.anything;
 
         aliasSet = Aliases.getAliasSet(alias);
         let aliasStr = '';
@@ -28,24 +29,29 @@ module.exports = {
             aliasStr = 'none';
         }
         // search up command alias db
-        let cmdStr = '';
-        const newArgs = message.content.slice(2).split(/ +/);
-        newArgs.shift();
         let command =
-            client.commands.get(newArgs[0]) ||
+            client.commands.get(alias) ||
             client.commands.find(
-                (cmd) => cmd.aliases && cmd.aliases.includes(newArgs[0])
+                (cmd) => cmd.aliases && cmd.aliases.includes(alias) 
             );
 
         if (command) {
-            cmdStr = command.aliases.join(', ');
+            commandAliases = command.aliases
+            cmdStr = null
+            suffix = "" 
+            // 1024 embedded field character limit
+            while((cmdStr = commandAliases.join(', ')).length > 1016) {
+                commandAliases = commandAliases.slice(0, commandAliases.length/2)
+                suffix = ", ..."
+            }
+            cmdStr += suffix
         } else {
             cmdStr = 'none';
         }
         // actual fn
         return module.exports.aliasMessageArg(
             message,
-            newArgs[0],
+            alias,
             aliasStr,
             cmdStr
         );
@@ -73,6 +79,15 @@ module.exports = {
                 'Use',
                 'Learn all of the different ways to provide arguments/invoke commands'
             )
+            .addField(
+                'Clarification',
+                'Some words can be both commands and arguments that you can provide to commands, such as `wizard'
+            )
+            .addField(
+                'Example: `q!wizard 300`; `q!2mp wizard`',
+                'Command aliases to invoke `q!wizard` might be different than argument aliases to invoke `q!2mp wizard`'
+            )
+            .setFooter('An "alias" is the technical term for "synonym"')
             .setColor(colours['cyber']);
 
         return message.channel.send(messageEmbed);

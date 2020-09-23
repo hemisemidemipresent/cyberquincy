@@ -5,7 +5,7 @@ const MIN_ROW = 1;
 const MAX_ROW = 100;
 
 const COLS = {
-    'TWO': {
+    TWO: {
         MAP: 'B',
         TOWERS: ['D', 'F'],
         UPGRADES: 'H',
@@ -15,7 +15,7 @@ const COLS = {
         LINK: 'N',
         CURRENT: 'O',
     },
-    'THREE': {
+    THREE: {
         MAP: 'B',
         TOWERS: ['D', 'F', 'H'],
         UPGRADES: 'J',
@@ -25,7 +25,7 @@ const COLS = {
         LINK: 'P',
         CURRENT: 'Q',
     },
-    'FOUR': {
+    FOUR: {
         MAP: 'B',
         TOWERS: ['D', 'F', 'H', 'J'],
         UPGRADES: 'L',
@@ -35,7 +35,7 @@ const COLS = {
         LINK: 'S',
         CURRENT: 'T',
     },
-    'FIVE': {
+    FIVE: {
         MAP: 'B',
         TOWERS: ['D', 'F', 'H', 'J', 'L'],
         UPGRADES: 'N',
@@ -53,8 +53,8 @@ const COLS = {
         PERSON: 'G',
         LINK: 'I',
         CURRENT: 'J',
-    }
-}
+    },
+};
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
@@ -68,16 +68,16 @@ module.exports = {
         }
 
         const parsed = CommandParser.parse(args, new MapParser());
-        
+
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
-        
+
         var btd6_map = parsed.map;
 
         async function displayLTC(btd6_map) {
             const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
-            
+
             // Load the column containing the different maps
             await sheet.loadCells(
                 `${COLS['TWO'].MAP}${MIN_ROW}:${COLS['TWO'].MAP}${MAX_ROW}`
@@ -88,7 +88,8 @@ module.exports = {
 
             // Search for the row in all "possible" rows
             for (let row = 1; row <= MAX_ROW; row++) {
-                var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`).value;
+                var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`)
+                    .value;
                 // input is "in_the_loop" but needs to be compared to "In The Loop"
                 if (
                     mapCandidate &&
@@ -113,15 +114,19 @@ module.exports = {
 
             // Towers + Upgrades need some special handling since #towers varies
             if (colset['TOWERS']) {
-                const upgrades = sheet.getCellByA1(
-                    `${colset['UPGRADES']}${entryRow}`
-                ).value.split('|').map(u => u.replace(/^\s+|\s+$/g, ''))
+                const upgrades = sheet
+                    .getCellByA1(`${colset['UPGRADES']}${entryRow}`)
+                    .value.split('|')
+                    .map((u) => u.replace(/^\s+|\s+$/g, ''));
 
                 for (var i = 0; i < colset['TOWERS'].length; i++) {
-                    values[`Tower ${i + 1}`] = 
+                    values[`Tower ${i + 1}`] =
                         sheet.getCellByA1(
                             `**${colset['TOWERS'][i]}${entryRow}**`
-                        ).value + " (" + upgrades[i] + ")";
+                        ).value +
+                        ' (' +
+                        upgrades[i] +
+                        ')';
                 }
             }
 
@@ -187,9 +192,9 @@ module.exports = {
             .setTitle('ERROR')
             .addField(
                 'Likely Cause(s)',
-                parsingErrors.map(msg => ` • ${msg}`).join('\n')
+                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
-            .addField('Type `q!ltc` for help', ':)')
+            .addField('Type `q!ltc` for help', '\u200b')
             .setColor(colours['orange']);
 
         return message.channel.send(errorEmbed);
@@ -198,12 +203,17 @@ module.exports = {
 
 function getColumnSet(mapRow, sheet) {
     // Looks for "Two|Three|...|Six+ Towers" in the closest above header cell
-    headerRegex = new RegExp(`(${Object.keys(COLS).join('|').replace('+', '\\+')}) Towers`, 'i');
+    headerRegex = new RegExp(
+        `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Towers`,
+        'i'
+    );
 
     candidateHeaderRow = mapRow - 1;
-    while(true) {
+    while (true) {
         // Check cell to see if it's a header indicating the number of towers
-        let candidateHeaderCell = sheet.getCellByA1(`${COLS['TWO'].MAP}${candidateHeaderRow}`);
+        let candidateHeaderCell = sheet.getCellByA1(
+            `${COLS['TWO'].MAP}${candidateHeaderRow}`
+        );
 
         // Header rows take up 2 rows. If you check the bottom row, the data value is null.
         if (candidateHeaderCell.value) {

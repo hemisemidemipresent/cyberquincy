@@ -4,7 +4,7 @@ const NumberParser = require('./number-parser.js');
 // Discord command users can provide the round in any of the following forms:
 //    - 15, r15, round15
 // Check the DifficultyParser for all possible difficulties that can be provided
-module.exports = class CashParser {
+class CashParser {
     type() {
         return 'cash';
     }
@@ -31,4 +31,6 @@ module.exports = class CashParser {
             );
         }
     }
-};
+}
+
+module.exports = CashParser;

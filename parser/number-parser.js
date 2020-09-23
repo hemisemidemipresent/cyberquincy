@@ -1,4 +1,4 @@
-module.exports = class NumberParser {
+class NumberParser {
     type() {
         return "number";
     }
@@ -47,3 +47,5 @@ module.exports = class NumberParser {
         return n;
     }
 }
+
+module.exports = NumberParser;

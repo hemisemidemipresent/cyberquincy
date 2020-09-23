@@ -1,6 +1,6 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
-module.exports = class HeroParser {
+class HeroParser {
     type() {
         return 'hero';
     }
@@ -17,4 +17,6 @@ module.exports = class HeroParser {
         // Delegate the parsing work to the StringSetValuesParser
         return this.delegateParser.parse(arg);
     }
-};
+}
+
+module.exports = HeroParser;

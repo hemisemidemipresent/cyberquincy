@@ -1,4 +1,4 @@
-module.exports = class AnyOrderParser {
+class AnyOrderParser {
     constructor(...parsers) {
         this.parsers = parsers;
     }
@@ -11,3 +11,5 @@ module.exports = class AnyOrderParser {
         throw `Must not parse directly from the AnyOrderParser. Must parse argument list parsers instead`
     }
 }
+
+module.exports = AnyOrderParser;

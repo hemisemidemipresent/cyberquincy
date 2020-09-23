@@ -93,167 +93,38 @@ const aliases = [
 ];
 module.exports = {
     name: '<tower>',
-    aliases: [
-        'dart-monkey',
-        'dart',
-        'dm',
-        'boomerang-monkey',
-        'boomerang',
-        'bm',
-        'boom',
-        '💥',
-        'rang',
-        'bomerang',
-        'boo',
-        'boomer',
-        'bomer',
-        'rangs',
-        'bomerrang',
-        'bomb-shooter',
-        'bs',
-        'bomb',
-        'cannon',
-        'tack-shooter',
-        'tac',
-        'tak',
-        'ta',
-        'tacc',
-        'tack',
-        'ice-monkey',
-        'ice',
-        'im',
-        'glue-gunner',
-        'glue',
-        'gs',
-        'glu',
-        'stick',
-        'sniper-monkey',
-        'sniper',
-        'sn',
-        'snip',
-        'snooper',
-        'gun',
-        'snipermonkey',
-        'monkey-sub',
-        'submarine',
-        'sub',
-        'sm',
-        'st',
-        'monkey-buccaneer',
-        'boat',
-        'buc',
-        'bucc',
-        'buccaneer',
-        'monkey-ace',
-        'ace',
-        'pilot',
-        'plane',
-        'heli-pilot',
-        'heli',
-        'helicopter',
-        'helipilot',
-        'mortar-monkey',
-        'mortar',
-        'mor',
-        'wizard-monkey',
-        'wizard',
-        'apprentice',
-        'wiz',
-        'super-monkey',
-        'super',
-        'supermonkey',
-        'ninja-monkey',
-        'ninja',
-        'n',
-        'ninj',
-        'shuriken',
-        'alchemist',
-        'al',
-        'alk',
-        'alcc',
-        'elk',
-        'alc',
-        'alch',
-        'alche',
-        'potion',
-        'beer',
-        'wine',
-        'liquor',
-        'intoxicant',
-        'liquid',
-        'op',
-        'druid',
-        'drood',
-        'd',
-        'banana-farm',
-        'farm',
-        'monkeyfarm',
-        'spike-factory',
-        'factory',
-        'spike',
-        'spac',
-        'spak',
-        'spanc',
-        'spikes',
-        'spikefactory',
-        'spi',
-        'sf',
-        'spacc',
-        'spikeshooter',
-        'basetrash',
-        'spact',
-        'monkey-village',
-        'village',
-        'vill',
-        'vil',
-        'villi',
-        'town',
-        'house',
-        'energy',
-        'building',
-        'hut',
-        'circle',
-        'fort',
-        'engineer-monkey',
-        'engi',
-        'eng',
-        'overclock',
-        'engie',
-    ],
+    aliases: aliases.flat(),
+
     execute(message, args) {
         const newArgs = message.content.slice(2).split(/ +/);
         const commandName = newArgs.shift().toLowerCase();
         let name = findName(commandName);
-        if (!args || args[1] || isValidPath(args[0])) {
-            return baseTower(message, name);
+        if (!isValidPath(args[0])) {
+            provideHelpMsg(message, name);
         }
-        const pathStr = args[0].toString();
-        const path1 = parseInt(pathStr.charAt(0));
-        const path2 = parseInt(pathStr.charAt(1));
-        const path3 = parseInt(pathStr.charAt(2));
+        if (!args[0] || args[1]) {
+            fetch(url, settings)
+                .then((res) => res.json())
+                .then((json) => {
+                    let embed = baseTower(json, name);
+                    return message.channel.send(embed);
+                });
+        }
+        let input = args[0].toString();
+        let arr = [
+            parseInt(input.charAt(0)),
+            parseInt(input.charAt(1)),
+            parseInt(input.charAt(2)),
+        ];
+        let temp = [...arr];
+        temp.sort();
+        const tier = temp[2];
         let path = 1;
-        if (path2 < 1 && path3 < 1) {
-            path = 1;
-        } else if (path1 < 1 && path3 < 1) {
-            path = 2;
-        } else if (path1 < 1 && path2 < 1) {
-            path = 3;
-        } else {
-            return provideHelpMsg(message, name);
+        for (let i = 0; i < 3; i++) {
+            if (parseInt(tier) == parseInt(arr[i])) {
+                path = i + 1;
+            }
         }
-        let tier = 0;
-        switch (path) {
-            case 1:
-                tier = path1;
-                break;
-            case 2:
-                tier = path2;
-                break;
-            case 3:
-                tier = path3;
-                break;
-        }
-
         fetch(url, settings)
             .then((res) => res.json())
             .then((json) => {
@@ -359,7 +230,6 @@ function baseTower(json, name) {
             `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`
         )
         .addField('notes', object.notes)
-        .addField('in game description', object.description)
         .setFooter(
             'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
         );

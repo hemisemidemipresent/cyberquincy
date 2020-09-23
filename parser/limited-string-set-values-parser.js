@@ -5,7 +5,7 @@ const UserCommandError = require('../exceptions/user-command-error.js');
 
 StringSetValuesParser = require('./string-set-values-parser.js');
 
-module.exports = class LimitedStringSetValuesParser {
+class LimitedStringSetValuesParser {
     type() {
         return 'limited_string_set_value';
     }
@@ -77,4 +77,6 @@ module.exports = class LimitedStringSetValuesParser {
         msg += `to learn shorthands for various ${pluralize(this.supertype)}.`
         return msg;
     }
-};
+}
+
+module.exports = LimitedStringSetValuesParser;

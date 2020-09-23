@@ -1,1 +1,3 @@
-module.exports = class AliasError extends Error {}
+class AliasError extends Error {}
+
+module.exports = AliasError;

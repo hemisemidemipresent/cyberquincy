@@ -113,7 +113,7 @@ function errorMessage(message, parsingErrors) {
             'Likely Cause(s)',
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
         )
-        .addField('Type `q!2mp` for help', ':)')
+        .addField('Type `q!2mp` for help', '\u200b')
         .setColor(colours['orange']);
 
     return message.channel.send(errorEmbed);
@@ -284,7 +284,6 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
             challengeEmbed.addField('Maps Left', mapsLeft.join(', '))
         }
                 
-
         return message.channel.send(challengeEmbed);
     } else {
         throw new UserCommandError(

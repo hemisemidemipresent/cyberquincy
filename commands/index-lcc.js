@@ -27,7 +27,7 @@ module.exports = {
         }
 
         const parsed = CommandParser.parse(args, new MapParser());
-        
+
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(message, parsed.parsingErrors);
         }
@@ -36,7 +36,7 @@ module.exports = {
 
         async function displayLCC(btd6_map) {
             const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
-            
+
             // Load the column containing the different maps
             await sheet.loadCells(
                 `${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`
@@ -132,9 +132,9 @@ module.exports = {
             .setTitle('ERROR')
             .addField(
                 'Likely Cause(s)',
-                parsingErrors.map(msg => ` • ${msg}`).join('\n')
+                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
             )
-            .addField('Type `q!lcc` for help', ':)')
+            .addField('Type `q!lcc` for help', '\u200b')
             .setColor(colours['orange']);
 
         return message.channel.send(errorEmbed);

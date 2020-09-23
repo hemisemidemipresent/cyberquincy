@@ -5,7 +5,7 @@ const NaturalNumberParser = require('./natural-number-parser.js');
 // Discord command users can provide the round in any of the following forms:
 //    - 15, r15, round15
 // Check the DifficultyParser for all possible difficulties that can be provided
-module.exports = class RoundParser {
+class RoundParser {
     type() {
         return 'round';
     }
@@ -62,4 +62,6 @@ module.exports = class RoundParser {
             return arg;
         }
     }
-};
+}
+
+module.exports = RoundParser;

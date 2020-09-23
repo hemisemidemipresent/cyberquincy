@@ -23,11 +23,11 @@ module.exports = {
 
             .addField('time since last restart:', `${uptime}`, true)
             .addField('XP gain enabled?', xpEnabled)
-            .addField(
+            /*.addField(
                 'more data',
                 '[full bot statistics](https://statcord.com/bot/591922988832653313)',
                 true
-            )
+            )*/
             .addField(
                 'discord server, join for updates (happens pretty often)',
                 'https://discord.gg/VMX5hZA',

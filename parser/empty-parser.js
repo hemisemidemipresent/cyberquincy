@@ -1,7 +1,7 @@
 const DeveloperCommandError = require("../exceptions/developer-command-error");
 
 // parses nothing
-module.exports = class EmptyParser {
+class EmptyParser {
     type() {
         return 'empty';
     }
@@ -10,3 +10,5 @@ module.exports = class EmptyParser {
         throw new DeveloperCommandError(`EmptyParser is a placeholder not meant to be parsed`);
     }
 }
+
+module.exports = EmptyParser;

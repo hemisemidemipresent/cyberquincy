@@ -85,7 +85,7 @@ class AliasRepository extends Array {
             if (upgrade == 'xyz') {
                 const baseTowerAliasGroup = {
                     canonical: `${baseName}#222`,
-                    aliases: [baseName].concat(towerUpgrades['xyz']).map(al => `base_${al}`),
+                    aliases: towerUpgrades['xyz'].concat(baseName).map(al => `base_${al}`),
                     sourcefile: f,
                 }
                 this.addAliasGroup(baseTowerAliasGroup);
@@ -96,7 +96,20 @@ class AliasRepository extends Array {
     // Ensure that none of the aliases clash before adding it in
     addAliasGroup(ag) {
         try {
-            ag.aliases = ag.aliases.map(al => this.permuteSeparators(al)).flat()
+            // If adora's_temple is an alias, include adoras_temple as well
+            ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteRemovalForgettableCharacters(al)).flat()
+            // Delete the canonical verbatim from the alias list
+            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
+
+            // If another_brick is an alias, include another-brick and anotherbrick as well
+            ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteSeparators(al)).flat()
+            // Delete the canonical verbatim from the alias list
+            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
+
+            // Remove duplicates, maintaining alias order
+            ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i)
+
+            // Make sure that none of these aliases overlap with other alias sets
             this.preventSharedAliases(ag);
         } catch (e) {
             if (e instanceof AliasError) {
@@ -110,6 +123,8 @@ class AliasRepository extends Array {
 
     // If "spike-o-pult", adds "spike_o_pult", "spike_o-pult", "spike-o_pult", "spike_opult", etc.
     permuteSeparators(al) {
+        if (al.includes('#')) return [al];
+
         const SEPARATOR_TOKENS = ["_", "-"]
         const JOIN_TOKENS = ["_", "-", ""]
 
@@ -128,9 +143,30 @@ class AliasRepository extends Array {
             aliases = [...new_aliases];
         }
 
-
-        delete aliases[aliases.findIndex(a => a == al)]
+        // Move the original alias to the front of the transformed list
+        aliases.splice(aliases.findIndex(a => a == al), 1)
         return [al].concat(aliases);
+    }
+
+    permuteRemovalForgettableCharacters(al) {
+        if (al.includes('#')) return [al];
+
+        const FORGETTABLE_CHARACTERS = [":", "'"]
+        return this.forgetRecursive(al, FORGETTABLE_CHARACTERS)
+    }
+
+    forgetRecursive(w, chars) {
+        const sepIndex = w.search(new RegExp(chars.join('|')))
+        if (sepIndex == -1) return [w];
+
+        const prefix = w.slice(0, sepIndex)
+        const suffix = w.slice(sepIndex + 1)
+        const sep = w[sepIndex]
+        
+        const useits = this.forgetRecursive(suffix, chars).map(sfx => prefix + sep + sfx);
+        const loseits = this.forgetRecursive(suffix, chars).map(sfx => prefix + sfx);
+
+        return useits.concat(loseits);
     }
 
     // Checks canonical + aliases against all other alias groups' canonical + aliases
@@ -221,17 +257,26 @@ class AliasRepository extends Array {
     // Expedited Access
     ////////////////////////////////////////////////////
     allMaps() {
-        const easyMaps = this.getAliasGroupsFromSameFileAs('LOGS');
-        const intermediateMaps = this.getAliasGroupsFromSameFileAs('HAUNTED');
-        const hardMaps = this.getAliasGroupsFromSameFileAs('CORNFIELD');
-        const expertMaps = this.getAliasGroupsFromSameFileAs('INFERNAL');
+        return this.beginnerMaps()
+            .concat(this.intermediateMaps())
+            .concat(this.advancedMaps())
+            .concat(this.expertMaps());
+    }
 
-        const allMaps = easyMaps
-            .concat(intermediateMaps)
-            .concat(hardMaps)
-            .concat(expertMaps);
+    beginnerMaps() {
+        return this.getAliasGroupsFromSameFileAs('LOGS').map(ag => ag.canonical);
+    }
 
-        return allMaps.map((ag) => ag.canonical);
+    intermediateMaps() {
+        return this.getAliasGroupsFromSameFileAs('HAUNTED').map(ag => ag.canonical);
+    }
+
+    advancedMaps() {
+        return this.getAliasGroupsFromSameFileAs('CORNFIELD').map(ag => ag.canonical);
+    }
+
+    expertMaps() {
+        return this.getAliasGroupsFromSameFileAs('INFERNAL').map(ag => ag.canonical);
     }
 
     allMapDifficulties() {
@@ -278,13 +323,70 @@ class AliasRepository extends Array {
 
         return heroes.map((ag) => ag.canonical);
     }
+
     allBloons() {
         const bloons = this.getAliasGroupsFromSameFileAs('RED');
         return bloons.map((ag) => ag.canonical);
     }
+
     towerUpgradeToIndexNormalForm(upgrade) {
-        const index_normal_unformatted = this.getAliasSet(upgrade)[1];
-        return this.toIndexNormalForm(index_normal_unformatted);
+        const indexNormalUnformatted = this.getAliasSet(upgrade)[1];
+        return this.toIndexNormalForm(indexNormalUnformatted);
+    }
+
+    towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
+        // Re-assign tower to canonical and ensure that it exists and is a tower
+        if(!( tower = this.getCanonicalForm(tower) ) || !this.allTowers().includes(tower)) {
+            throw 'First argument must be a tower'
+        };
+
+        // Validate path
+        if (isNaN(path)) {
+            throw 'Second argument `path` must be 1, 2, or 3'
+        }
+        try {
+            path = parseInt(path);
+        } catch(e) {
+            throw 'Second argument `path` must be 1, 2, or 3'
+        }
+        
+        if (path < 1 || path > 3) {
+            throw 'Second argument `path` must be 1, 2, or 3'
+        }
+
+        // Validate tier
+        if (!tier) {
+            return this.towerUpgradeToIndexNormalForm(`${tower}#222`)
+        }
+
+        if (isNaN(tier)) {
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+        }
+        try {
+            tier = parseInt(tier);
+        } catch(e) {
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+        }
+        
+        if (tier < 0 || tier > 5) {
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+        }
+
+        // Convert path + tier to appropriate upgrade string like 003 or 400
+        const upgradeInt = tier * Math.pow(10, 3 - path)
+        const upgradeStr = upgradeInt.toString().padStart(3, '0')
+
+        // Combine tower with upgrade string to get tower upgrade canonical like wizard#300
+        return this.towerUpgradeToIndexNormalForm(`${tower}#${upgradeStr}`);
+    }
+
+    mapToIndexAbbreviation(map) {
+        return this.getAliasSet(map)[1].toUpperCase();
+    }
+
+    indexAbbreviationToMap(mapAbbr) {
+        const indexNormalUnformatted = this.getAliasSet(mapAbbr.toLowerCase())[0]
+        return this.toIndexNormalForm(indexNormalUnformatted)
     }
 
     toIndexNormalForm(canonical) {

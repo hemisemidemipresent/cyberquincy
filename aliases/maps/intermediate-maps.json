@@ -1,14 +1,11 @@
 {
-    "moon_landing": ["ml", "moon", "landing", "moonlanding"],
+    "moon_landing": ["ml", "moon", "landing"],
     "cracked": ["cr", "ck", "crkd"],
-    "kartsndarts": ["kd", "kar", "kart", "karts", "kartsanddarts", "kartsn"],
-    "firing_range": ["fr", "fir", "firing", "firingrange"],
+    "kartsndarts": ["kd", "kar", "kart", "karts", "karts_n_darts", "kartsn"],
+    "firing_range": ["fr", "fir", "firing"],
     "adora's_temple": [
         "at",
-        "adoras_temple",
-        "adora_temple",
         "atemple",
-        "adora'stemple",
         "adora's"
     ],
     "downstream": ["ds", "down"],

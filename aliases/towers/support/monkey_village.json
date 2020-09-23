@@ -1,5 +1,5 @@
 {
-    "xyz": ["monkey_village", "village", "vil", "vill", "mvil"],
+    "xyz": ["village", "monkey_village", "vil", "vill", "mvil"],
 
     "300": ["primary_training", "ptraining", "ptrain"],
     "400": ["primary_mentoring", "pment", "pmentoring"],

@@ -1,5 +1,5 @@
 {
-    "xyz": ["wizard-monkey", "wizard", "apprentice", "wiz"],
+    "xyz": ["wizard", "wizard_monkey", "apprentice", "wiz"],
 
     "300": ["arcane_mastery", "mastery"],
     "400": ["arcane_spike", "aspike"],

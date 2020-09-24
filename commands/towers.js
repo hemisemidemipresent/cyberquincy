@@ -95,11 +95,12 @@ module.exports = {
     name: '<tower>',
     aliases: aliases.flat(),
 
-    execute(message, args, newArgs, commandName) {
-        let name = findName(commandName);
+    execute(message, args, commandName) {
         if (!isValidPath(args[0])) {
             provideHelpMsg(message, name);
         }
+        let name = findName(commandName);
+
         if (!args[0] || args[1]) {
             fetch(url, settings)
                 .then((res) => res.json())
@@ -256,7 +257,7 @@ function anyOtherTower(json, name, path, tier) {
             `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`,
             true
         )
-        .addField('notes', object.notes, true)
+        .addField('notes', object.notes)
         .addField('xp needed:', `${object.xp}`, true)
         .addField(
             'total cost',

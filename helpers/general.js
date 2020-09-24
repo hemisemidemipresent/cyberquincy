@@ -88,7 +88,7 @@ function toTitleCase(str) {
 }
 
 function zip(rows) {
-    return rows[0].map((_,col) => rows.map(row => row[col]))
+    return rows[0].map((_, col) => rows.map((row) => row[col]));
 }
 
 function chunk(array, size) {

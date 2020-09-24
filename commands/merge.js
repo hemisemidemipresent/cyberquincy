@@ -1,10 +1,12 @@
 module.exports = {
     name: 'merge',
     alias: ['combine'],
-    execute(message, args, newArgs) {
+    rawargs: true,
+
+    execute(message, args) {
         const merges = require('../jsons/merges.json');
-        let tower1 = `${newArgs[0]} ${newArgs[1]}`;
-        let tower2 = `${newArgs[2]} ${newArgs[3]}`;
+        let tower1 = `${args[0]} ${args[1]}`;
+        let tower2 = `${args[2]} ${args[3]}`;
         for (let i = 0; i < merges.length; i++) {
             let t1 = merges[i].tower1.toLowerCase();
             let t2 = merges[i].tower2.toLowerCase();

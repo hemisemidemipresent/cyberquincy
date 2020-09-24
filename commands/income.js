@@ -67,11 +67,11 @@ module.exports = {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('`q!income` HELP')
             .addField(
-                '`q!income <startround> <endround> {gamemode}` (Order agnostic)',
+                '`q!income <startround> <endround> {gamemode}` (Order doesnt matter)',
                 'Cash generated from round <startround> to <endround> in specified gamemode or standard mode'
             )
             .addField(
-                '`q!income <round> {gamemode}` (Order agnostic)',
+                '`q!income <round> {gamemode}` (Order doesnt matter)',
                 'In specified gamemode or standard as default:' +
                     '  • Cash generated during round <round>\n' +
                     '  • Cash generated from start of round 6 through end of round <round>\n' +

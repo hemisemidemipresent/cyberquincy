@@ -32,29 +32,27 @@ module.exports = {
         let command =
             client.commands.get(alias) ||
             client.commands.find(
-                (cmd) => cmd.aliases && cmd.aliases.includes(alias) 
+                (cmd) => cmd.aliases && cmd.aliases.includes(alias)
             );
 
         if (command) {
-            commandAliases = command.aliases
-            cmdStr = null
-            suffix = "" 
+            commandAliases = command.aliases;
+            cmdStr = null;
+            suffix = '';
             // 1024 embedded field character limit
-            while((cmdStr = commandAliases.join(', ')).length > 1016) {
-                commandAliases = commandAliases.slice(0, commandAliases.length/2)
-                suffix = ", ..."
+            while ((cmdStr = commandAliases.join(', ')).length > 1016) {
+                commandAliases = commandAliases.slice(
+                    0,
+                    commandAliases.length / 2
+                );
+                suffix = ', ...';
             }
-            cmdStr += suffix
+            cmdStr += suffix;
         } else {
             cmdStr = 'none';
         }
         // actual fn
-        return module.exports.aliasMessageArg(
-            message,
-            alias,
-            aliasStr,
-            cmdStr
-        );
+        return module.exports.aliasMessageArg(message, alias, aliasStr, cmdStr);
     },
 
     aliasMessageArg(message, input, aliasStr, cmdStr) {
@@ -87,7 +85,7 @@ module.exports = {
                 'Example: `q!wizard 300`; `q!2mp wizard`',
                 'Command aliases to invoke `q!wizard` might be different than argument aliases to invoke `q!2mp wizard`'
             )
-            .setFooter('An "alias" is the technical term for "synonym"')
+            .setFooter('"alias" = "synonym"; "argument" = "input"')
             .setColor(colours['cyber']);
 
         return message.channel.send(messageEmbed);

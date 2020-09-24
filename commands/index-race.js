@@ -5,6 +5,11 @@ module.exports = {
     aliases: ['rac', 'ra', 'racc', 'rae'],
     cooldown: 5,
     execute(message, args) {
+        if (message.author.id == 279126808455151628) {
+            return message.channel.send(
+                'You have been banned from abusing this command.'
+            );
+        }
         if (!args) {
             return message.channel.send(
                 'please specify a race number/name\nexamples:\nq!race 10\nq!race Primary Qualifiers'

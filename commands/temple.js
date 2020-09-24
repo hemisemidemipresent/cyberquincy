@@ -3,7 +3,7 @@ const t = require('../jsons/temple.json');
 module.exports = {
     name: 'temple',
     aliases: ['t', 'tsg', 'sg', 'monkeygod', 'god', 'totmg', 'vtsg'],
-    execute(message, args, newArgs, commandName) {
+    execute(message, args, commandName) {
         if (commandName.includes('v')) {
             const VTSGembed = new Discord.MessageEmbed()
                 .setDescription(

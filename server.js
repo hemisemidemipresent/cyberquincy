@@ -55,7 +55,8 @@ function consoleBootup() {
         function too() {
             console.log('<Eradicate Bloons>');
         }
-        setTimeout(too, 1000);
+
+        setTimeout(too, 500);
 
         client.user.setActivity(`${prefix}help`);
     });

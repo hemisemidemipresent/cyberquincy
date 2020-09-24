@@ -47,21 +47,31 @@ async function handleCommand(message) {
 
         // The command name is the first token; args are the rest
         const commandName = args.shift().toLowerCase();
+        let command;
+        // exception: check with they inputted a path as the commandName
+        if (isValidPath(commandName)) {
+            command =
+                client.commands.get(args[0]) ||
+                client.commands.find(
+                    (cmd) => cmd.aliases && cmd.aliases.includes(args[0])
+                );
 
-        // Search through command names taking into account their aliases
-        const command =
-            client.commands.get(commandName) ||
-            client.commands.find(
-                (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
-            );
-
+            if (!command) {
+                return;
+            }
+        } else {
+            // Search through command names taking into account their aliases
+            command =
+                client.commands.get(commandName) ||
+                client.commands.find(
+                    (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
+                );
+        }
         if (!command) {
             return;
         }
-
         let canonicalArgs = null;
         if (command.rawargs) {
-            console.log(true)
             // If the command specifies that the arguments should come in raw, don't canonicize them
             canonicalArgs = args;
         } else {
@@ -79,26 +89,30 @@ async function handleCommand(message) {
         }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
-        if (Cooldowns.handleCooldown(command, message)) {
-            command.execute(message, canonicalArgs, args, commandName);
-
-            // Don't want the user gaining xp from metacommands
-            if (!XPCOMMANDS.includes(command.name) && xpEnabled) {
-                Xp.addCommandXp(message);
-            }
-            // post information to statcord
-            const botposting = require('./1/config.json')['botposting'];
-            if (statcord && botposting) {
-                statcord.postCommand(command.name, message.author.id);
-                console.log(
-                    `Command ${command.name} by ${message.author.id} posted to statcord,`
-                );
-            }
-
-            // May or may not embed an advertisement message in addition to the command output
-
-            Advertisements.spin(message);
+        if (!Cooldowns.handleCooldown(command, message)) return;
+        if (isValidPath(commandName)) {
+            let inputs = [commandName];
+            command.execute(message, inputs, args[0]);
+        } else {
+            command.execute(message, canonicalArgs, commandName);
         }
+        // Don't want the user gaining xp from metacommands
+        if (!XPCOMMANDS.includes(command.name) && xpEnabled) {
+            Xp.addCommandXp(message);
+        }
+        // post information to statcord
+        const botposting = require('./1/config.json')['botposting'];
+        if (statcord && botposting) {
+            statcord.postCommand(command.name, message.author.id);
+            console.log(
+                `Command ${command.name} by ${message.author.id} posted to statcord,`
+            );
+        }
+
+        // May or may not embed an advertisement message in addition to the command output
+
+        Advertisements.spin(message);
+
         /* let GLOBAL_COOLDOWN_REGEX = /gcd ?= ?(\d+)/;
         regex_match = message.channel.topic.match(GLOBAL_COOLDOWN_REGEX);
         if (regex_match) {
@@ -122,3 +136,17 @@ module.exports = {
     configureCommands,
     handleCommand,
 };
+function isValidPath(u) {
+    if (!h.is_str(u) || u.length != 3) return false;
+
+    if (isNaN(u)) return false;
+
+    if (!u.includes('0')) return false;
+
+    if (/6|7|8|9/.test(u)) return false;
+
+    d = u.match(/3|4|5/g);
+    if (d && d.length > 1) return false;
+
+    return true;
+}

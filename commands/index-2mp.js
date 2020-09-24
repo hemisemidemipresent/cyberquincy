@@ -264,7 +264,9 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
                               return relevantNote
                           }, {});
     
-    if (Object.keys(relevantNotes).length > 0) {
+    numCombosCompleted = Object.keys(relevantNotes).length
+    
+    if (numCombosCompleted > 0) {
         // Format 3 columns: map, person, link
         mapColumn = []
         personColumn = []
@@ -278,27 +280,41 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         personColumn = personColumn.join("\n")
         linkColumn = linkColumn.join("\n")
 
+        mapsLeft = permittedMapAbbrs.filter(m => !Object.keys(relevantNotes).includes(m))
+
+        // Check if tower is water tower
+        impossibleMaps = []
+        if (Aliases.allWaterTowers().includes(Aliases.towerUpgradeToTower(tower))) {
+            // Calculate impossible maps (those that do not contain any water)
+            nonWaterMaps = Aliases.allNonWaterMaps().map(m => Aliases.mapToIndexAbbreviation(m));
+            impossibleMaps = mapsLeft.filter(m => nonWaterMaps.includes(m))
+
+            mapsLeft = mapsLeft.filter(m => !impossibleMaps.includes(m))
+        }
+
         // Embed and send the message
         let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(`${towerFormatted} 2MPCs on ${mapDifficultyFormatted} Maps`)
                 .setColor(colours['cyber'])
         
-        numCombosCompleted = Object.keys(relevantNotes).length
-        numCombosPossible = permittedMapAbbrs.length
-
-        if (numCombosPossible == numCombosCompleted) {
-            challengeEmbed.addField(`All ${mapDifficulty} maps completed`, '-'.repeat(40))
+        numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
+        if (mapsLeft.length > 0) {
+            possiblePhrasing = impossibleMaps.length > 0 ? ' (that are possible)' : ''
+            challengeEmbed.addField(`Combos${possiblePhrasing}`, `**${numCombosCompleted}**/${numCombosPossible}`)
         } else {
-            challengeEmbed.addField('Combos', `**${numCombosCompleted}**/${numCombosPossible}`)
+            possiblePhrasing = impossibleMaps.length > 0 ? ' possible' : ''
+            challengeEmbed.addField(`All${possiblePhrasing} ${mapDifficulty} maps completed`, '-'.repeat(40))
         }
         
         challengeEmbed.addField('Map', mapColumn, true)
-                .addField('Map', personColumn, true)
-                .addField('Map', linkColumn, true)
+                .addField('Person', personColumn, true)
+                .addField('Link', linkColumn, true)
         
-
-        if (numCombosCompleted < numCombosPossible) {
-            mapsLeft = permittedMapAbbrs.filter(pm => !Object.keys(relevantNotes).includes(pm))
+        if (impossibleMaps.length > 0) {
+            challengeEmbed.addField('Impossible maps', impossibleMaps.join(', '))
+        }
+        
+        if (mapsLeft.length > 0) {
             challengeEmbed.addField('Maps Left', mapsLeft.join(', '))
         }
                 

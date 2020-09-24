@@ -48,12 +48,7 @@ module.exports = {
                 quiz: 0,
             });
         }
-        let level = xp.xpToLevel(tag.xp);
-        if (level > 3) {
-            await guildmember.roles.add('645126928340353036');
-        } else if (level > 10) {
-            await guildmember.roles.add('645629187322806272');
-        }
+
         // Display level+xp
         const xpEmbed = new Discord.MessageEmbed()
             .setTitle(`${whose_xp} xp`)

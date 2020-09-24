@@ -380,6 +380,10 @@ class AliasRepository extends Array {
         return this.towerUpgradeToIndexNormalForm(`${tower}#${upgradeStr}`);
     }
 
+    towerUpgradeToTower(towerUpgrade) {
+        return this.getCanonicalForm(towerUpgrade).slice(0, -4)
+    }
+
     mapToIndexAbbreviation(map) {
         return this.getAliasSet(map)[1].toUpperCase();
     }

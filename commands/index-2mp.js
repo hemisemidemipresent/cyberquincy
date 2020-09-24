@@ -30,6 +30,29 @@ const TOWER_COLS = {
     LAST: 'Y',
 }
 
+const WATER_TOWERS = [
+    'sub',
+    'bucc',
+    'brickell',
+]
+
+const NO_WATER_MAPS = [
+    'TS',
+    'H',
+    'AR',
+    'MM',
+    'ML',
+    'KD',
+    'BZ',
+    'HA',
+    'R',
+    'CF',
+    'GD',
+    'UG',
+    'MS',
+    'W'
+]
+
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 RED_X = String.fromCharCode(10060);
@@ -293,12 +316,23 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         }
         
         challengeEmbed.addField('Map', mapColumn, true)
-                .addField('Map', personColumn, true)
-                .addField('Map', linkColumn, true)
-        
+                .addField('Person', personColumn, true)
+                .addField('Link', linkColumn, true)
 
-        if (numCombosCompleted < numCombosPossible) {
-            mapsLeft = permittedMapAbbrs.filter(pm => !Object.keys(relevantNotes).includes(pm))
+        mapsLeft = permittedMapAbbrs.filter(pm => !Object.keys(relevantNotes).includes(pm))
+        impossibleMaps = []
+
+        // Check if tower is water tower
+        if (WATER_TOWERS.map(wt => Aliases.getCanonicalForm(wt))
+                        .includes(Aliases.towerUpgradeToTower(tower))) {
+            // List impossible maps (those that do not contain any water)
+            impossibleMaps = mapsLeft.filter(m => NO_WATER_MAPS.includes(m))
+            challengeEmbed.addField('Impossible maps', impossibleMaps.join(', '))
+
+            mapsLeft = mapsLeft.filter(m => !impossibleMaps.includes(m))
+        }
+        
+        if (mapsLeft.length > 0) {
             challengeEmbed.addField('Maps Left', mapsLeft.join(', '))
         }
                 

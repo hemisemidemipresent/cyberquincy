@@ -263,6 +263,30 @@ class AliasRepository extends Array {
             .concat(this.expertMaps());
     }
 
+    allWaterMaps() {
+        return this.allMaps().filter(m => this.allNonWaterMaps().includes(m))
+    }
+
+    // TODO: rewrite this involving the q!map command results rather than hardcoding it
+    allNonWaterMaps() {
+        return [
+            'TS',
+            'H',
+            'AR',
+            'MM',
+            'ML',
+            'KD',
+            'BZ',
+            'HA',
+            'R',
+            'CF',
+            'GD',
+            'UG',
+            'MS',
+            'W'
+        ].map(m => this.getCanonicalForm(m.toLowerCase()))
+    }
+
     beginnerMaps() {
         return this.getAliasGroupsFromSameFileAs('LOGS').map(ag => ag.canonical);
     }
@@ -316,6 +340,10 @@ class AliasRepository extends Array {
     allTowers() {
         return this.filter(ag => ag.canonical.endsWith('#300'))
                    .map(ag => ag.canonical.slice(0, -4))
+    }
+
+    allWaterTowers() {
+        return ['sub', 'bucc', 'brick'].map(t => this.getCanonicalForm(t))
     }
 
     allHeroes() {
@@ -381,6 +409,10 @@ class AliasRepository extends Array {
     }
 
     towerUpgradeToTower(towerUpgrade) {
+        if (this.allHeroes().includes(this.getCanonicalForm(towerUpgrade))) {
+            return towerUpgrade;
+        }
+        
         return this.getCanonicalForm(towerUpgrade).slice(0, -4)
     }
 

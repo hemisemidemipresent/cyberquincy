@@ -73,9 +73,15 @@ async function levelUpRole(user, newLevel) {
         .members.cache.array()
         .find((m) => m.id === user.id);
     if (!guildmember) {
-        return console.log('user is not in discord server');
+        if (newLevel == 3 || newLevel == 10) {
+            let roleEmbed = new Discord.MessageEmbed().setTitle(
+                'You can now get a role in the discord server: https://discord.gg/VMX5hZA'
+            );
+            return message.channel.send(roleEmbed);
+        }
     }
     if (newLevel === 3) {
+        // if member is level 3 add role
         await guildmember.roles.add('645126928340353036');
     } else if (newLevel === 10) {
         // if member is level 10 add role

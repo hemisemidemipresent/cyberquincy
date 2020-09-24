@@ -1,7 +1,7 @@
 const CYBER_SUPPORT = 598768024761139240;
 const BTD6_INDEX = 661812833771847700;
 const RACE_SERVER = 543957081183617024;
-
+const xp = require('../helpers/xp');
 function enterGuild(guild) {
     let channeltosend = guild.channels.cache.find(
         (channel) => channel.name.includes('general') === true
@@ -9,9 +9,7 @@ function enterGuild(guild) {
     if (channeltosend) {
         let helpEmbed = new Discord.MessageEmbed()
             .setColor(colours['cyber'])
-            .setDescription(
-                `Hi! I am Cyber Quincy. I am a btd6 discord bot.`
-            )
+            .setDescription(`Hi! I am Cyber Quincy. I am a btd6 discord bot.`)
             .addField(
                 'General Info',
                 '[List of commands](https://cq.netlify.com)\n[Discord server](https://discord.gg/VMX5hZA)'
@@ -31,7 +29,30 @@ function enterGuild(guild) {
 }
 
 async function addMember(member) {
-    if (member.guild.id == BTD6_INDEX) {
+    if (member.guild.id == CYBER_SUPPORT) {
+        let tag = await Tags.findOne({
+            where: {
+                name: member.id,
+            },
+        });
+
+        // Create db user if it doesn't already exist
+        if (!tag) {
+            tag = await Tags.create({
+                name: member.id,
+                xp: 0,
+                showAds: true,
+                showLevelUpMsg: true,
+                quiz: 0,
+            });
+        }
+        let level = xp.xpToLevel(tag.xp);
+        if (level > 3) {
+            await member.roles.add('645126928340353036');
+        } else if (level > 10) {
+            await member.roles.add('645629187322806272');
+        }
+    } else if (member.guild.id == BTD6_INDEX) {
         const wel = new Discord.MessageEmbed()
             .setTitle('Welcome to the BTD6 Index Discord Server!')
             .setThumbnail(

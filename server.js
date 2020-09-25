@@ -20,7 +20,9 @@ function pingHeroku() {
     const app = express();
     app.use(express.static('public'));
     app.get('/', (request, response) => {
-        console.log(Date.now() + ' Ping Received');
+        let d = new Date(Date.now());
+        d.toString();
+        console.log(`[PING] at ${d}`);
         response.sendStatus(200);
     });
     app.listen(process.env.PORT);

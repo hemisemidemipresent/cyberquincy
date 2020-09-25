@@ -1,5 +1,4 @@
 const DiscordUsers = require('../helpers/discord-users.js');
-const { isMention } = require('../helpers/discord-users.js');
 
 module.exports = {
     name: 'setxp',
@@ -14,7 +13,7 @@ module.exports = {
             )
         ) {
             return message.channel.send(
-                'Must be a contributor to use this command. It is for testing.'
+                'Must be a dev to use this command. It is for testing.'
             );
         }
 
@@ -36,7 +35,6 @@ module.exports = {
                 return module.exports.helpMessage(message);
             }
         }
-
         let tag = await Tags.findOne({
             where: {
                 name: user.id,

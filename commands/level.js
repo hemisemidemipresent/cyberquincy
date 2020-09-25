@@ -25,8 +25,10 @@ module.exports = {
                 return module.exports.showsDiscordServer(message);
             }
         }
-        const user = getDiscordUserFromId(args[0]);
-        return module.exports.displayStats(user, message);
+        if (!isNaN(args[0])) {
+            const user = DiscordUsers.getDiscordUserFromId(args[0]);
+            return module.exports.displayStats(user, message);
+        }
     },
 
     async displayStats(user, message) {

@@ -104,9 +104,7 @@ async function handleCommand(message) {
         const botposting = require('./1/config.json')['botposting'];
         if (statcord && botposting) {
             statcord.postCommand(command.name, message.author.id);
-            console.log(
-                `Command ${command.name} by ${message.author.id} posted to statcord,`
-            );
+            console.log(`[POST] q!${command.name} to statcord,`);
         }
 
         // May or may not embed an advertisement message in addition to the command output

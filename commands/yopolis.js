@@ -1,15 +1,15 @@
-const OptionalParser = require('../parser/optional-parser');
 const { cyber, red } = require('../jsons/colours.json');
 const CashParser = require('../parser/cash-parser');
 const NaturalNumberParser = require('../parser/natural-number-parser');
+const AnyOrderParser = require('../parser/any-order-parser');
 
 module.exports = {
     name: 'monkeyopolis',
     aliases: ['mp', 'yopolis', '005'],
     execute(message, args) {
         let parsed = CommandParser.parse(
-            new CashParser(),
-            new OptionalParser(new NaturalNumberParser(1, Infinity), 1)
+            args,
+            new AnyOrderParser(new CashParser(), new NaturalNumberParser(1, 69))
         );
         if (parsed.hasErrors()) {
             return module.exports.errorMessage(
@@ -18,13 +18,14 @@ module.exports = {
             );
         }
         let farmcount = parsed.natural_number;
-        const money = 300 * Math.floor(args[0] / 2000);
+        let amtSacrificed = parsed.cash;
+        const money = 300 * Math.floor(amtSacrificed / 2000);
         const price = farmcount * 5000;
         const even = Math.ceil(price / money);
         const mpembed = new Discord.MessageEmbed()
             .setTitle('Monkeyopolis Simulator')
             .setColor(cyber)
-            .addField('amount sacrificed', `${args[0]}`)
+            .addField('amount sacrificed', `${amtSacrificed}`)
             .addField('farms sacrificed', `${farmcount}`)
             .addField('Money produced in a round', `${money}`, true)
             .addField('cost of upgrade', `${price}`, true)

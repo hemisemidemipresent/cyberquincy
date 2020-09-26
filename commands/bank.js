@@ -29,89 +29,119 @@ module.exports = {
             'Please type the corresponding number to select the difficulty\n1 - easy\n2 - medium\n3 - hard\n4 - impoppable\n5 - half cash';
         const errorDiffMsg =
             'Please specify a correct number (1 - 5). Run the command again';
-        if (!args[0] && !args[1] && !args[2]) {
-            message.channel.send(selectBankMsg);
+        message.channel.send(selectBankMsg);
+        message.channel
+            .awaitMessages(filter, options)
+            .then((collected) => {
+                let bankTier = collected.first().content;
+                if (isNaN(bankTier) || bankTier < 3 || bankTier > 5) {
+                    return message.channel.send(errorBankMsg);
+                }
+                mm(bankTier);
+            })
+            .catch(() => {
+                tookTooLong(message);
+            });
+        function mm(bankTier) {
+            message.channel.send(selectMKMsg);
             message.channel
                 .awaitMessages(filter, options)
-                .then((collected) => {
-                    let bankTier = collected.first().content;
-                    if (isNaN(bankTier) || bankTier < 3 || bankTier > 5) {
-                        return message.channel.send(errorBankMsg);
+                .then((collect) => {
+                    let mk = collect.first().content;
+                    let flatPackBuilding, BiggerBanks;
+                    if (isNaN(mk) || mk > 2 || mk < 0) {
+                        return message.channel.send(errorMKMsg);
                     }
-
-                    message.channel.send(selectMKMsg);
-                    message.channel
-                        .awaitMessages(filter, options)
-                        .then((collect) => {
-                            let mk = collect.first().content;
-                            let flatPackBuilding, BiggerBanks;
-                            if (isNaN(mk) || mk > 2 || mk < 0) {
-                                return message.channel.send(errorMKMsg);
-                            }
-                            if (mk > 0) {
-                                flatPackBuilding = true;
-                            }
-                            if (mk > 1) {
-                                BiggerBanks = true;
-                            }
-                            message.channel.send(selectBenjaminMsg);
-                            message.channel
-                                .awaitMessages(filter, options)
-                                .then((collectt) => {
-                                    let hackPercent = collectt.first().content;
-                                    if (isValidHack(hackPercent)) {
-                                        return message.channel.send(
-                                            errorBenjaminMsg
-                                        );
-                                    }
-                                    message.channel.send(selectCrosspathMsg);
-                                    message.channel
-                                        .awaitMessages(filter, options)
-                                        .then((collectt2) => {
-                                            let crosspathNum = collectt2.first()
-                                                .content;
-                                            if (
-                                                isNaN(crosspathNum) ||
-                                                crosspathNum < 0 ||
-                                                crosspathNum > 2
-                                            ) {
-                                                return message.channel.send(
-                                                    errorCrosspathMsg
-                                                );
-                                            }
-                                            message.channel.send(selectDiffMsg);
-                                            message.channel
-                                                .awaitMessages(filter, options)
-                                                .then((collectt3) => {
-                                                    let difficultyId = collectt3.first()
-                                                        .content;
-                                                    if (
-                                                        isNaN(difficultyId) ||
-                                                        difficultyId < 0 ||
-                                                        difficultyId > 5
-                                                    ) {
-                                                        return message.channel.send(
-                                                            errorDiffMsg
-                                                        );
-                                                    }
-                                                    const bankEmbed = calculate(
-                                                        bankTier,
-                                                        flatPackBuilding,
-                                                        BiggerBanks,
-                                                        hackPercent,
-                                                        crosspathNum,
-                                                        difficultyId
-                                                    );
-                                                    return message.channel.send(
-                                                        bankEmbed
-                                                    );
-                                                });
-                                        });
-                                });
-                        })
-                        .catch(() => {
-                            tookTooLong(message);
-                        });
+                    if (mk > 0) {
+                        flatPackBuilding = true;
+                    }
+                    if (mk > 1) {
+                        BiggerBanks = true;
+                    }
+                    benjamin(bankTier, flatPackBuilding, BiggerBanks);
+                })
+                .catch(() => {
+                    tookTooLong(message);
+                });
+        }
+        function benjamin(bankTier, flatPackBuilding, BiggerBanks) {
+            message.channel.send(selectBenjaminMsg);
+            message.channel
+                .awaitMessages(filter, options)
+                .then((collectt) => {
+                    let hackPercent = collectt.first().content;
+                    if (!isValidHack(hackPercent)) {
+                        return message.channel.send(errorBenjaminMsg);
+                    }
+                    crosspath(
+                        bankTier,
+                        flatPackBuilding,
+                        BiggerBanks,
+                        hackPercent
+                    );
+                })
+                .catch(() => {
+                    tookTooLong(message);
+                });
+        }
+        function crosspath(
+            bankTier,
+            flatPackBuilding,
+            BiggerBanks,
+            hackPercent
+        ) {
+            message.channel.send(selectCrosspathMsg);
+            message.channel
+                .awaitMessages(filter, options)
+                .then((collectt2) => {
+                    let crosspathNum = collectt2.first().content;
+                    if (
+                        isNaN(crosspathNum) ||
+                        crosspathNum < 0 ||
+                        crosspathNum > 2
+                    ) {
+                        return message.channel.send(errorCrosspathMsg);
+                    }
+                    findDifficulty(
+                        bankTier,
+                        flatPackBuilding,
+                        BiggerBanks,
+                        hackPercent,
+                        crosspathNum
+                    );
+                })
+                .catch(() => {
+                    tookTooLong(message);
+                });
+        }
+        function findDifficulty(
+            bankTier,
+            flatPackBuilding,
+            BiggerBanks,
+            hackPercent,
+            crosspathNum
+        ) {
+            message.channel.send(selectDiffMsg);
+            message.channel
+                .awaitMessages(filter, options)
+                .then((collectt3) => {
+                    let difficultyId = collectt3.first().content;
+                    if (
+                        isNaN(difficultyId) ||
+                        difficultyId < 0 ||
+                        difficultyId > 5
+                    ) {
+                        return message.channel.send(errorDiffMsg);
+                    }
+                    const bankEmbed = calculate(
+                        bankTier,
+                        flatPackBuilding,
+                        BiggerBanks,
+                        hackPercent,
+                        crosspathNum,
+                        difficultyId
+                    );
+                    return message.channel.send(bankEmbed);
                 })
                 .catch(() => {
                     tookTooLong(message);

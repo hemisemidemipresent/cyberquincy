@@ -223,11 +223,10 @@ function baseTower(json, name) {
     let object = json[`${name}`];
     const embed = new Discord.MessageEmbed()
         .setColor(cyber)
-        .addField('name', object.name, true)
+        .setTitle(object.name)
         .addField(
             'cost',
-            `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`,
-            true
+            `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`
         )
         .addField('notes', object.notes, true)
         .setFooter(

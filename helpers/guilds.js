@@ -35,7 +35,6 @@ async function addMember(member) {
                 name: member.id,
             },
         });
-
         // Create db user if it doesn't already exist
         if (!tag) {
             tag = await Tags.create({
@@ -49,7 +48,8 @@ async function addMember(member) {
         let level = xp.xpToLevel(tag.xp);
         if (level > 3) {
             await member.roles.add('645126928340353036');
-        } else if (level > 10) {
+        }
+        if (level > 10) {
             await member.roles.add('645629187322806272');
         }
     } else if (member.guild.id == BTD6_INDEX) {

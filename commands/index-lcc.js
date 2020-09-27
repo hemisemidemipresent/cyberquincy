@@ -16,6 +16,16 @@ const COLS = {
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
+module.exports = {
+    name: 'lcc',
+
+    aliases: ['leastcash', 'lcash'],
+
+    execute,
+    helpMessage,
+    errorMessage,
+}
+
 function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
         return helpMessage(message);
@@ -132,13 +142,3 @@ function errorMessage(message, parsingErrors) {
 
     return message.channel.send(errorEmbed);
 }
-
-module.exports = {
-    name: 'lcc',
-
-    aliases: ['leastcash', 'lcash'],
-
-    execute,
-    helpMessage,
-    errorMessage,
-};

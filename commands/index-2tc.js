@@ -36,123 +36,127 @@ const ALT_COLS = {
 
 module.exports = {
     name: '2tc',
-    execute(message, args) {
-        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
-            return module.exports.helpMessage(message);
+    execute,
+    helpMessage,
+    errorMessage,
+};
+
+function execute(message, args) {
+    if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+        return module.exports.helpMessage(message);
+    }
+
+    (towerOrHeroParser = new OrParser(
+        new TowerUpgradeParser(),
+        new HeroParser()
+    )),
+        (parsers = [
+            // Which 2TC's have been done on this map?
+            new MapParser(),
+            // Get 2TC by combo number, optionally on the specified map
+            new AnyOrderParser(
+                new NaturalNumberParser(),
+                new OptionalParser(new MapParser())
+            ),
+            // Get 2TCs containing tower (optionally both towers), optionally on the specified map
+            new AnyOrderParser(
+                towerOrHeroParser,
+                new OptionalParser(towerOrHeroParser),
+                new OptionalParser(new MapParser())
+            ),
+        ]);
+
+    const parsed = CommandParser.parse(args, new OrParser(...parsers));
+
+    if (parsed.hasErrors()) {
+        return module.exports.errorMessage(message, parsed.parsingErrors);
+    }
+
+    if (parsed.natural_number) {
+        // Combo # provided
+        if (parsed.map) {
+            // and map specified
+            return displayAlt2TCFromN(
+                message,
+                parsed.natural_number,
+                parsed.map
+            ).catch((e) => err(e, message));
+        } else {
+            // and map NOT specified
+            // OG completion
+            return displayOG2TCFromN(
+                message,
+                parsed.natural_number
+            ).catch((e) => err(e, message));
+        }
+    } else if (parsed.hero || parsed.tower_upgrade) {
+        // Tower(s) specified
+        towers = null;
+        try {
+            towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes);
+        } catch (e) {
+            return err(e, message);
         }
 
-        (towerOrHeroParser = new OrParser(
-            new TowerUpgradeParser(),
-            new HeroParser()
-        )),
-            (parsers = [
-                // Which 2TC's have been done on this map?
-                new MapParser(),
-                // Get 2TC by combo number, optionally on the specified map
-                new AnyOrderParser(
-                    new NaturalNumberParser(),
-                    new OptionalParser(new MapParser())
-                ),
-                // Get 2TCs containing tower (optionally both towers), optionally on the specified map
-                new AnyOrderParser(
-                    towerOrHeroParser,
-                    new OptionalParser(towerOrHeroParser),
-                    new OptionalParser(new MapParser())
-                ),
-            ]);
-
-        const parsed = CommandParser.parse(args, new OrParser(...parsers));
-
-        if (parsed.hasErrors()) {
-            return module.exports.errorMessage(message, parsed.parsingErrors);
-        }
-
-        if (parsed.natural_number) {
-            // Combo # provided
+        if (towers.length == 1) {
+            // 1 tower provided
+            return message.channel.send(
+                `Multiple-combo searching coming soon`
+            );
+        } else {
+            // 2 towers provided
             if (parsed.map) {
-                // and map specified
-                return displayAlt2TCFromN(
+                return displayAlt2TCFromTowers(
                     message,
-                    parsed.natural_number,
+                    towers,
                     parsed.map
                 ).catch((e) => err(e, message));
             } else {
-                // and map NOT specified
-                // OG completion
-                return displayOG2TCFromN(
-                    message,
-                    parsed.natural_number
-                ).catch((e) => err(e, message));
-            }
-        } else if (parsed.hero || parsed.tower_upgrade) {
-            // Tower(s) specified
-            towers = null;
-            try {
-                towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes);
-            } catch (e) {
-                return err(e, message);
-            }
-
-            if (towers.length == 1) {
-                // 1 tower provided
-                return message.channel.send(
-                    `Multiple-combo searching coming soon`
+                return displayOG2TCFromTowers(message, towers).catch((e) =>
+                    err(e, message)
                 );
-            } else {
-                // 2 towers provided
-                if (parsed.map) {
-                    return displayAlt2TCFromTowers(
-                        message,
-                        towers,
-                        parsed.map
-                    ).catch((e) => err(e, message));
-                } else {
-                    return displayOG2TCFromTowers(message, towers).catch((e) =>
-                        err(e, message)
-                    );
-                }
             }
-        } else {
-            return message.channel.send('Multiple-combo searching coming soon');
         }
-    },
+    } else {
+        return message.channel.send('Multiple-combo searching coming soon');
+    }
+}
 
-    helpMessage(message) {
-        let helpEmbed = new Discord.MessageEmbed()
-            .setTitle('`q!2tc` HELP')
-            .addField(
-                '`q!2tc <n>`',
-                'Get the nth combo on the OG map\n`q!2tc 44`'
-            )
-            .addField(
-                '`q!2tc <n> <map>`',
-                'Get the nth combo on the specified map\n`q!2tc 44 frozen_over`'
-            )
-            .addField(
-                '`q!2tc <tower_upgrade/hero> <tower_upgrade/hero>`',
-                'Get a combo by the towers involved on the OG map\n`q!2tc obyn dch`'
-            )
-            .addField(
-                '`q!2tc <tower_upgrade/hero> <tower_upgrade/hero> <map>`',
-                'Get a combo by the towers involved on the specified map\n`q!2tc obyn dch cube`'
-            );
+function helpMessage(message) {
+    let helpEmbed = new Discord.MessageEmbed()
+        .setTitle('`q!2tc` HELP')
+        .addField(
+            '`q!2tc <n>`',
+            'Get the nth combo on the OG map\n`q!2tc 44`'
+        )
+        .addField(
+            '`q!2tc <n> <map>`',
+            'Get the nth combo on the specified map\n`q!2tc 44 frozen_over`'
+        )
+        .addField(
+            '`q!2tc <tower_upgrade/hero> <tower_upgrade/hero>`',
+            'Get a combo by the towers involved on the OG map\n`q!2tc obyn dch`'
+        )
+        .addField(
+            '`q!2tc <tower_upgrade/hero> <tower_upgrade/hero> <map>`',
+            'Get a combo by the towers involved on the specified map\n`q!2tc obyn dch cube`'
+        );
 
-        return message.channel.send(helpEmbed);
-    },
+    return message.channel.send(helpEmbed);
+}
 
-    errorMessage(message, parsingErrors) {
-        let errorEmbed = new Discord.MessageEmbed()
-            .setTitle('ERROR')
-            .addField(
-                'Likely Cause(s)',
-                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-            )
-            .addField('Type `q!2tc` for help', '\u200b')
-            .setColor(colours['orange']);
+function errorMessage(message, parsingErrors) {
+    let errorEmbed = new Discord.MessageEmbed()
+        .setTitle('ERROR')
+        .addField(
+            'Likely Cause(s)',
+            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+        )
+        .addField('Type `q!2tc` for help', '\u200b')
+        .setColor(colours['orange']);
 
-        return message.channel.send(errorEmbed);
-    },
-};
+    return message.channel.send(errorEmbed);
+}
 
 function err(e, message) {
     if (e instanceof UserCommandError) {

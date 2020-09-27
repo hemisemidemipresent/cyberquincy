@@ -62,6 +62,14 @@ const COLS = {
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
+module.exports = {
+    name: 'ltc',
+
+    execute,
+    helpMessage,
+    errorMessage,
+}
+
 function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
         return helpMessage(message);
@@ -244,12 +252,3 @@ function getColumnSet(mapRow, sheet) {
         candidateHeaderRow -= 1;
     }
 }
-
-
-module.exports = {
-    name: 'ltc',
-
-    execute,
-    helpMessage,
-    errorMessage,
-};

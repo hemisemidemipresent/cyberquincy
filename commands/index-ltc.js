@@ -1,4 +1,5 @@
 const MapParser = require('../parser/map-parser');
+const AnyOrderParser = require('../parser/any-order-parser')
 const OrParser = require('../parser/or-parser')
 const ExactStringParser = require('../parser/exact-string-parser')
 const EmptyParser = require('../parser/empty-parser')

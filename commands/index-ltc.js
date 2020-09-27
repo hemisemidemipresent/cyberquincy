@@ -81,7 +81,13 @@ function execute(message, args) {
         new EmptyParser(),
     )
 
-    const parsed = CommandParser.parse(args, new MapParser(), parseModifier);
+    const parsed = CommandParser.parse(
+        args, 
+        new AnyOrderParser(
+            new MapParser(), 
+            parseModifier
+        )
+    );
 
     if (parsed.hasErrors()) {
         return errorMessage(message, parsed.parsingErrors);

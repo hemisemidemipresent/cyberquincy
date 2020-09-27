@@ -25,33 +25,68 @@ The command parser serves a number of advantages
 -   It makes it quite easy to accept arguments in any order
 -   It allows you to make certain command arguments optional and provide a default value if the user doesn't provide a matching argument
 -   It provides validations based on the permitted values that get passed into the parser's constructor
--   A user who structures a command + arguments incorrectly will be provided the smallest and most helpful set of error messages in order to understand what went wrong.
+-   A user who structures a command + arguments incorrectly will be provided the smallest set of error messages in order to understand what went wrong.
 
 <a name="utilization"></a>
 
 #### Utilization techniques
 
-**Example Usage**
-
+**Example Usages**
+Simple Example (Index LCC command)
 ```js
-try {
-    parsed = CommandParser.parseAnyOrder(
-        args,
-        new OptionalParser(
-            new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
-            'CHIMPS' // default if not provided
-        ),
-        new RoundParser('IMPOPPABLE')
-    );
-
-    return message.channel.send(chincomeMessage(parsed.mode, parsed.round));
-} catch (e) {
-    if (e instanceof ParsingError) {
-        module.exports.errorMessage(message, e);
-    } else {
-        throw e;
-    }
+// Catch help arguments before the parser
+if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+    return module.exports.helpMessage(message);
 }
+
+// Expects one argument; just a map
+const parsed = CommandParser.parse(args, new MapParser());
+
+// No exceptions are thrown. Errors must be dealt with manually
+if (parsed.hasErrors()) {
+    return module.exports.errorMessage(message, parsed.parsingErrors);
+}
+
+// If parsing was successful, then parsed.map will be the map the user entered as the 1 arg
+return displayLCC(parsed.map;)
+```
+
+Complex Example (Index 2TC command)
+```js
+if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+    return module.exports.helpMessage(message);
+}
+
+towerOrHeroParser = new OrParser(
+    new TowerUpgradeParser(),
+    new HeroParser()
+)
+    
+parsers = [
+    // Which 2TC's have been done on this map?
+    new MapParser(),
+    // Get 2TC by combo number, optionally on the specified map
+    new AnyOrderParser(
+        new NaturalNumberParser(),
+        new OptionalParser(new MapParser())
+    ),
+    // Get 2TCs containing tower (optionally both towers), optionally on the specified map
+    new AnyOrderParser(
+        towerOrHeroParser,
+        new OptionalParser(towerOrHeroParser),
+        new OptionalParser(new MapParser())
+    ),
+];
+
+const parsed = CommandParser.parse(args, new OrParser(...parsers));
+
+if (parsed.hasErrors()) {
+    return module.exports.errorMessage(message, parsed.parsingErrors);
+}
+
+// Here, you'll have to check whether parsed.map, parsed.natural_number, parsed.tower_upgrade, etc.
+// have been collected from the parser. The number of optional parsers means you'll have to check
+// what was parsed and what wasn't and decide how to reply to the user accordingly
 ```
 
 The following parser usage guidelines will reference the above example.

@@ -1,4 +1,7 @@
 const MapParser = require('../parser/map-parser');
+const OrParser = require('../parser/or-parser')
+const ExactStringParser = require('../parser/exact-string-parser')
+const EmptyParser = require('../parser/empty-parser')
 const GoogleSheetsHelper = require('../helpers/google-sheets');
 
 const MIN_ROW = 1;
@@ -64,108 +67,26 @@ function execute(message, args) {
         return helpMessage(message);
     }
 
-    const parsed = CommandParser.parse(args, new MapParser());
+    const parseModifier = new OrParser(
+        new ExactStringParser('OG'),
+        new ExactStringParser('CHEAPEST'),
+        new EmptyParser(),
+    )
+
+    const parsed = CommandParser.parse(args, new MapParser(), parseModifier);
 
     if (parsed.hasErrors()) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
-    var btd6_map = parsed.map;
-
-    async function displayLTC(btd6_map) {
-        const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
-
-        // Load the column containing the different maps
-        await sheet.loadCells(
-            `${COLS['TWO'].MAP}${MIN_ROW}:${COLS['TWO'].MAP}${MAX_ROW}`
-        ); // loads all possible cells with map
-
-        // The row where the queried map is found
-        var entryRow = null;
-
-        // Search for the row in all "possible" rows
-        for (let row = 1; row <= MAX_ROW; row++) {
-            var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`)
-                .value;
-            // input is "in_the_loop" but needs to be compared to "In The Loop"
-            if (
-                mapCandidate &&
-                mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map
-            ) {
-                entryRow = row;
-                break;
-            }
-        }
-
-        // Determines correspondence between column letter and data type depending on
-        // how many towers it took to complete the LTC run
-        colset = getColumnSet(entryRow, sheet);
-
-        // Load the row where the map was found
-        await sheet.loadCells(
-            `${colset.MAP}${entryRow}:${colset.CURRENT}${entryRow}`
-        );
-
-        // Values to be included in the LTC embedded message
-        values = {};
-
-        // Towers + Upgrades need some special handling since #towers varies
-        if (colset['TOWERS']) {
-            const upgrades = sheet
-                .getCellByA1(`${colset['UPGRADES']}${entryRow}`)
-                .value.split('|')
-                .map((u) => u.replace(/^\s+|\s+$/g, ''));
-
-            for (var i = 0; i < colset['TOWERS'].length; i++) {
-                values[`Tower ${i + 1}`] =
-                    sheet.getCellByA1(
-                        `**${colset['TOWERS'][i]}${entryRow}**`
-                    ).value +
-                    ' (' +
-                    upgrades[i] +
-                    ')';
-            }
-        }
-
-        // Assign each value to be discord-embedded in a simple default way
-        for (key in colset) {
-            if (key == 'TOWERS' || key == 'UPGRADES') continue; // Handle next
-            values[key] = sheet.getCellByA1(
-                `${colset[key]}${entryRow}`
-            ).value;
-        }
-
-        // Special formatting for date (get formattedValue instead)
-        dateCell = sheet.getCellByA1(`${colset.DATE}${entryRow}`);
-        values.DATE = dateCell.formattedValue;
-
-        // Special handling for link (use hyperlink to cleverly embed in discord)
-        linkCell = sheet.getCellByA1(`${colset.LINK}${entryRow}`);
-        values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
-
-        // Special handling for current
-        // (heavy checkmark doesn't format, use white heavy checkmark instead)
-        if (values.CURRENT === HEAVY_CHECK_MARK) {
-            values.CURRENT = WHITE_HEAVY_CHECK_MARK;
-        }
-
-        // Embed and send the message
-        var challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(`${values.MAP} LTC Combo`)
-            .setColor(colours['cyber']);
-
-        for (field in values) {
-            challengeEmbed = challengeEmbed.addField(
-                h.toTitleCase(field),
-                values[field],
-                true
-            );
-        }
-
-        message.channel.send(challengeEmbed);
+    if (parsed.exact_string == 'cheapest') {
+        return message.channel.send('Cheapest LTC coming soon')
+    } else if (parsed.exact_string == 'og') {
+        return message.channel.send('OG LTC coming soon')
+    } else {
+        displayLTC(message, parsed.map);
+        return true;
     }
-
-    displayLTC(btd6_map);
 }
 
 function helpMessage(message) {
@@ -195,6 +116,99 @@ function errorMessage(message, parsingErrors) {
         .setColor(colours['orange']);
 
     return message.channel.send(errorEmbed);
+}
+
+async function displayLTC(message, btd6_map) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
+
+    // Load the column containing the different maps
+    await sheet.loadCells(
+        `${COLS['TWO'].MAP}${MIN_ROW}:${COLS['TWO'].MAP}${MAX_ROW}`
+    ); // loads all possible cells with map
+
+    // The row where the queried map is found
+    var entryRow = null;
+
+    // Search for the row in all "possible" rows
+    for (let row = 1; row <= MAX_ROW; row++) {
+        var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`)
+            .value;
+        // input is "in_the_loop" but needs to be compared to "In The Loop"
+        if (
+            mapCandidate &&
+            mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map
+        ) {
+            entryRow = row;
+            break;
+        }
+    }
+
+    // Determines correspondence between column letter and data type depending on
+    // how many towers it took to complete the LTC run
+    colset = getColumnSet(entryRow, sheet);
+
+    // Load the row where the map was found
+    await sheet.loadCells(
+        `${colset.MAP}${entryRow}:${colset.CURRENT}${entryRow}`
+    );
+
+    // Values to be included in the LTC embedded message
+    values = {};
+
+    // Towers + Upgrades need some special handling since #towers varies
+    if (colset['TOWERS']) {
+        const upgrades = sheet
+            .getCellByA1(`${colset['UPGRADES']}${entryRow}`)
+            .value.split('|')
+            .map((u) => u.replace(/^\s+|\s+$/g, ''));
+
+        for (var i = 0; i < colset['TOWERS'].length; i++) {
+            values[`Tower ${i + 1}`] =
+                sheet.getCellByA1(
+                    `**${colset['TOWERS'][i]}${entryRow}**`
+                ).value +
+                ' (' +
+                upgrades[i] +
+                ')';
+        }
+    }
+
+    // Assign each value to be discord-embedded in a simple default way
+    for (key in colset) {
+        if (key == 'TOWERS' || key == 'UPGRADES') continue; // Handle next
+        values[key] = sheet.getCellByA1(
+            `${colset[key]}${entryRow}`
+        ).value;
+    }
+
+    // Special formatting for date (get formattedValue instead)
+    dateCell = sheet.getCellByA1(`${colset.DATE}${entryRow}`);
+    values.DATE = dateCell.formattedValue;
+
+    // Special handling for link (use hyperlink to cleverly embed in discord)
+    linkCell = sheet.getCellByA1(`${colset.LINK}${entryRow}`);
+    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+
+    // Special handling for current
+    // (heavy checkmark doesn't format, use white heavy checkmark instead)
+    if (values.CURRENT === HEAVY_CHECK_MARK) {
+        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+    }
+
+    // Embed and send the message
+    var challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(`${values.MAP} LTC Combo`)
+        .setColor(colours['cyber']);
+
+    for (field in values) {
+        challengeEmbed = challengeEmbed.addField(
+            h.toTitleCase(field),
+            values[field],
+            true
+        );
+    }
+
+    message.channel.send(challengeEmbed);
 }
 
 function getColumnSet(mapRow, sheet) {

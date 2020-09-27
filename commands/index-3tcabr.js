@@ -31,100 +31,104 @@ module.exports = {
 
     aliases: ['3tabrc', '3tabr', '3tcalt', '3talt'],
 
-    execute(message, args) {
-        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
-            return module.exports.helpMessage(message);
-        }
-
-        towerOrHeroParser = new OrParser(
-            new TowerUpgradeParser(),
-            new HeroParser(),
-            new TowerParser()
-        );
-
-        const parsed = CommandParser.parse(
-            args,
-            new AnyOrderParser(
-                new OrParser(
-                    [new NaturalNumberParser()],
-                    [
-                        towerOrHeroParser,
-                        new OptionalParser(towerOrHeroParser),
-                        new OptionalParser(towerOrHeroParser),
-                    ],
-                    [new PersonParser()]
-                )
-            )
-        );
-
-        if (parsed.hasErrors()) {
-            return module.exports.errorMessage(message, parsed.parsingErrors);
-        }
-
-        if (parsed.natural_number) {
-            // Combo # provided
-            return displayOG3TCABRFromN(
-                message,
-                parsed.natural_number
-            ).catch((e) => err(e, message));
-        } else if (parsed.tower) {
-            const ex_tower_upgrade = Aliases.getAliasGroup(
-                parsed.tower + '#300'
-            ).aliases[0];
-            return module.exports.errorMessage(message, [
-                `You must enter a tower upgrade like \`${ex_tower_upgrade}\` rather than a tower like \`${parsed.tower}\``,
-            ]);
-        } else if (parsed.hero || parsed.tower_upgrade) {
-            // Tower(s) specified
-            towers = null;
-            try {
-                towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes);
-            } catch (e) {
-                return err(e, message);
-            }
-
-            return displayOG3TCABRFromSubsetTowers(message, towers).catch((e) =>
-                err(e, message)
-            );
-        } else {
-            return message.channel.send(
-                'Searching combos by person coming soon'
-            );
-        }
-    },
-
-    helpMessage(message) {
-        let helpEmbed = new Discord.MessageEmbed()
-            .setTitle('`q!3tcabr` HELP')
-            .addField(
-                '`q!3tcabr <n>`',
-                'Get the nth combo on the OG map\n`q!3tcabr 441`'
-            )
-            .addField(
-                '`q!3tcabr <tower> {tower} {tower}`',
-                'Get all combos containing 1-3 entered towers\n`q!3tcabr wlp obyn mb`'
-            );
-
-        return message.channel.send(helpEmbed);
-    },
-
-    errorMessage(message, parsingErrors) {
-        let errorEmbed = new Discord.MessageEmbed()
-            .setTitle('ERROR')
-            .addField(
-                'Likely Cause(s)',
-                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-            )
-            .addField('Type `q!3tcabr` for help', '\u200b')
-            .setColor(colours['orange']);
-
-        return message.channel.send(errorEmbed);
-    },
+    execute,
+    helpMessage,
+    errorMessage,
 };
+
+function execute(message, args) {
+    if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+        return helpMessage(message);
+    }
+
+    towerOrHeroParser = new OrParser(
+        new TowerUpgradeParser(),
+        new HeroParser(),
+        new TowerParser()
+    );
+
+    const parsed = CommandParser.parse(
+        args,
+        new AnyOrderParser(
+            new OrParser(
+                [new NaturalNumberParser()],
+                [
+                    towerOrHeroParser,
+                    new OptionalParser(towerOrHeroParser),
+                    new OptionalParser(towerOrHeroParser),
+                ],
+                [new PersonParser()]
+            )
+        )
+    );
+
+    if (parsed.hasErrors()) {
+        return errorMessage(message, parsed.parsingErrors);
+    }
+
+    if (parsed.natural_number) {
+        // Combo # provided
+        return displayOG3TCABRFromN(
+            message,
+            parsed.natural_number
+        ).catch((e) => err(e, message));
+    } else if (parsed.tower) {
+        const ex_tower_upgrade = Aliases.getAliasGroup(
+            parsed.tower + '#300'
+        ).aliases[0];
+        return errorMessage(message, [
+            `You must enter a tower upgrade like \`${ex_tower_upgrade}\` rather than a tower like \`${parsed.tower}\``,
+        ]);
+    } else if (parsed.hero || parsed.tower_upgrade) {
+        // Tower(s) specified
+        towers = null;
+        try {
+            towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes);
+        } catch (e) {
+            return err(e, message);
+        }
+
+        return displayOG3TCABRFromSubsetTowers(message, towers).catch((e) =>
+            err(e, message)
+        );
+    } else {
+        return message.channel.send(
+            'Searching combos by person coming soon'
+        );
+    }
+}
+
+function helpMessage(message) {
+    let helpEmbed = new Discord.MessageEmbed()
+        .setTitle('`q!3tcabr` HELP')
+        .addField(
+            '`q!3tcabr <n>`',
+            'Get the nth combo on the OG map\n`q!3tcabr 441`'
+        )
+        .addField(
+            '`q!3tcabr <tower> {tower} {tower}`',
+            'Get all combos containing 1-3 entered towers\n`q!3tcabr wlp obyn mb`'
+        );
+
+    return message.channel.send(helpEmbed);
+}
+
+function errorMessage(message, parsingErrors) {
+    let errorEmbed = new Discord.MessageEmbed()
+        .setTitle('ERROR')
+        .addField(
+            'Likely Cause(s)',
+            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+        )
+        .addField('Type `q!3tcabr` for help', '\u200b')
+        .setColor(colours['orange']);
+
+    return message.channel.send(errorEmbed);
+}
 
 function err(e, message) {
     if (e instanceof UserCommandError) {
-        return module.exports.errorMessage(message, [e.message]);
+        return errorMessage(message, [e.message]);
     } else {
         throw e;
     }

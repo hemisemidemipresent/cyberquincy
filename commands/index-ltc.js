@@ -79,14 +79,8 @@ function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
-    if (parsed.exact_string == 'cheapest') {
-        return message.channel.send('Cheapest LTC coming soon')
-    } else if (parsed.exact_string == 'og') {
-        return message.channel.send('OG LTC coming soon')
-    } else {
-        displayLTC(message, parsed.map);
-        return true;
-    }
+    displayLTC(message, parsed.map, parsed.exact_string);
+    return true;
 }
 
 function helpMessage(message) {
@@ -118,7 +112,7 @@ function errorMessage(message, parsingErrors) {
     return message.channel.send(errorEmbed);
 }
 
-async function displayLTC(message, btd6_map) {
+async function displayLTC(message, btd6_map, modifier) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
 
     // Load the column containing the different maps
@@ -155,6 +149,18 @@ async function displayLTC(message, btd6_map) {
     // Values to be included in the LTC embedded message
     values = {};
 
+    if (modifier == 'cheapest') {
+        return message.channel.send('Cheapest LTC coming soon')
+    } else if (modifier == 'og') {
+        return message.channel.send('OG LTC coming soon')
+    } else {
+        return await getRowStandardData(message, entryRow, colset)
+    }
+}
+
+async function getRowStandardData(message, entryRow, colset) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
+    
     // Towers + Upgrades need some special handling since #towers varies
     if (colset['TOWERS']) {
         const upgrades = sheet
@@ -208,7 +214,7 @@ async function displayLTC(message, btd6_map) {
         );
     }
 
-    message.channel.send(challengeEmbed);
+    return message.channel.send(challengeEmbed);
 }
 
 function getColumnSet(mapRow, sheet) {

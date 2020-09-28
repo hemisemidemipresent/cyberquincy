@@ -93,9 +93,10 @@ if (parsed.hasErrors()) {
 // what was parsed and what wasn't and decide how to reply to the user accordingly
 ```
 
-The following breakdown of available parsers will reference the above examples
+The following breakdown of available parsers will reference the above examples.
 
 <a name="parser-breakdown"></a>
+### Parser Breakdown
 Note you must call `.parse()` on the global `CommandParser` module with arguments `args, Parser1{, Parser2, ... ParserN}`. The parsers have to evaluate to a concrete-parsing expression
 
 <a name="concrete-parsers">

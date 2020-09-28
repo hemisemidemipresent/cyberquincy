@@ -4,14 +4,18 @@
     "description": "A discord bot for btd6",
     "main": "server.js",
     "scripts": {
-        "start": "node server.js"
+        "start": "node server.js",
+        "push": "git push heroku master",
+        "copy": "del /f database.sqlite && heroku ps:copy database.sqlite",
+        "add": "git add . && git commit -m p",
+        "refresh": "del /f package-lock.json && npm install"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/hemisemidemipresent/cyberquincy.git"
     },
     "keywords": [],
-    "author": "",
+    "author": "hemidemisemipresent",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/hemisemidemipresent/cyberquincy/issues"
@@ -21,6 +25,7 @@
     },
     "homepage": "https://github.com/hemisemidemipresent/cyberquincy#readme",
     "dependencies": {
+        "bufferutil": "^4.0.1",
         "discord.js": "^12.2.0",
         "express": "^4.17.1",
         "filepath": "^1.1.0",
@@ -30,7 +35,8 @@
         "sequelize": "^6.3.4",
         "sequelize-cli": "^6.2.0",
         "sqlite3": "^4.2.0",
-        "statcord.js": "^3.0.7"
+        "statcord.js": "^3.0.7",
+        "utf-8-validate": "^5.0.2"
     },
     "devDependencies": {}
 }

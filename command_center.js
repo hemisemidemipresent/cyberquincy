@@ -94,6 +94,20 @@ async function handleCommand(message) {
             let inputs = [commandName];
             command.execute(message, inputs, args[0]);
         } else {
+            if (command.dependencies) {
+                if (command.dependencies.includes('btd6index')) {
+                    let btd6index = require('./1/config.json')['btd6index'];
+                    if (!btd6index) {
+                        return message.channel.send('This command is disabled');
+                    }
+                }
+                if (command.dependencies.includes('towerJSON')) {
+                    let btd6index = require('./1/config.json')['towerJSON'];
+                    if (!btd6index) {
+                        return message.channel.send('This command is disabled');
+                    }
+                }
+            }
             command.execute(message, canonicalArgs, commandName);
         }
         // Don't want the user gaining xp from metacommands

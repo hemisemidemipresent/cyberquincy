@@ -4,7 +4,13 @@ module.exports = {
     name: 'race',
     aliases: ['rac', 'ra', 'racc', 'rae'],
     cooldown: 5,
+
     execute,
+
+    dependencies: ['btd6index'],
+
+
+
 };
 
 function execute(message, args) {

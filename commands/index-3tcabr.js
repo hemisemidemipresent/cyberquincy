@@ -28,6 +28,7 @@ const OG_COLS = {
 
 module.exports = {
     name: '3tcabr',
+    dependencies: ['btd6index'],
 
     aliases: ['3tabrc', '3tabr', '3tcalt', '3talt'],
 

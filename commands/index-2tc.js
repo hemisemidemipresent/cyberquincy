@@ -39,6 +39,7 @@ module.exports = {
     execute,
     helpMessage,
     errorMessage,
+  dependencies:['btd6index']
 };
 
 function execute(message, args) {

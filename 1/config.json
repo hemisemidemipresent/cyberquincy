@@ -13,5 +13,8 @@
     "auth_provider_x509_cert_url": "no",
     "client_x509_cert_url": "no",
     "statcord": "no",
-    "discordbotlist": "no"
+    "discordbotlist": "no",
+    "botposting": false,
+    "btd6index": true,
+    "towerJSON": true
 }

@@ -94,6 +94,8 @@ module.exports = {
     name: 'discount',
     aliases: ['002village'],
     rawargs: true,
+    usages: ['q!discount <tower> <path>'],
+    examples: ['q!discount dart 502'],
     execute(message, args) {
         // all this is a bit sketch
 

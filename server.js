@@ -15,6 +15,8 @@ function main() {
 }
 
 function pingHeroku() {
+    let isTesting = require('./1/config.json')['testing'];
+    if (isTesting) return;
     const express = require('express');
 
     // this part is to keep the project going
@@ -60,7 +62,7 @@ function consoleBootup() {
             },
             status: 'online',
         });
-        console.log('<INITIATE>');
+        console.log('<Program Directive>');
     });
 }
 
@@ -105,7 +107,7 @@ async function googleSheetsInitialization() {
     global.Btd6Index = await GoogleSheetsHelper.load(
         GoogleSheetsHelper.BTD6_INDEX_KEY
     );
-    console.log('<Eradicate Bloons>');
+    console.log('<INITIATE>');
 }
 async function towerJSONinit() {
     let bool = require('./1/config.json')['towerJSON'];
@@ -117,7 +119,7 @@ async function towerJSONinit() {
         .then((res) => res.json())
         .then((json) => {
             global.towerJSON = json;
-            console.log('<Program Directive>');
+            console.log('<Eradicate Bloons>');
         })
         .catch(() => {
             console.log(

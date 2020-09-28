@@ -7,7 +7,8 @@
         "start": "node server.js",
         "push": "git push heroku master",
         "copy": "del /f database.sqlite && heroku ps:copy database.sqlite",
-        "add": "git add . && git commit -m p"
+        "add": "git add . && git commit -m p",
+        "refresh": "del /f package-lock.json && npm install"
     },
     "repository": {
         "type": "git",

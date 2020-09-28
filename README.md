@@ -31,20 +31,24 @@ Cyber Quincy is a BTD6 Discord bot.
 
 # npm dependencies
 
--   `express` every node.js project has one of these, even though this isn't used here
 -   `discord.js` what makes this bot work
--   `google-spreadsheet` to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) and [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
 -   `node-fetch` for accessing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
--   `sequelize` (DB)
--   `sqlite3` (DB dialect)
--   `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be, just suggest something in this discord instead. If you are interested look at `./migrations`, and check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527)
+-   `sequelize` DB
+-   `sqlite3` DB dialect
 -   `pluralize` used in parser
--   `statcord` used for [bot statistics](https://statcord.com/bot/591922988832653313), see below
+-   `filepath` used in alias reopsitory
+
+## Used, but technically optional
+
+-   `express` used to receive pings to keep app awake
+-   `google-spreadsheet` to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) and [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
+-   `statcord` used for [bot statistics](https://statcord.com/bot/591922988832653313)
 
 ## Optional
 
 -   `bufferutil` for a much faster WebSocket connection
 -   `utf-8-validate` in combination with bufferutil for much faster WebSocket processing
+-   `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be preferably, just suggest something instead. If you are interested check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527) (this makes a `./migrations` folder)
 
 # Database fields
 

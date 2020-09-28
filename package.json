@@ -4,14 +4,16 @@
     "description": "A discord bot for btd6",
     "main": "server.js",
     "scripts": {
-        "start": "node server.js"
+        "start": "node server.js",
+        "push": "git push heroku master",
+        "copy": "heroku ps:copy database.sqlite"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/hemisemidemipresent/cyberquincy.git"
     },
     "keywords": [],
-    "author": "",
+    "author": "hemidemisemipresent",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/hemisemidemipresent/cyberquincy/issues"

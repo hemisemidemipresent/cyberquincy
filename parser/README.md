@@ -100,6 +100,7 @@ The following breakdown of available parsers will reference the above examples.
 Note you must call `.parse()` on the global `CommandParser` module with arguments `args, Parser1{, Parser2, ... ParserN}`. The parsers have to evaluate to a concrete-parsing expression
 
 <a name="concrete-parsers">
+
 **Concrete Parsers**
 Concrete parsers will make much more sense when abstract parsers are introduced, but for now, just understand that these are your basic building blocks to interpret a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like `wlp` and `spirit_of_the_forest`), `HeroParser` (`obyn`, `ben`, `ezi`), and `BloonParser` (`red`, `zebra`, `zomg`), and much more.
 

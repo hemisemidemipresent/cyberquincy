@@ -5,6 +5,8 @@
 -   [For Command Developers](#command-devs)
     -   [Introduction](#introduction)
     -   [Utilization Techniques](#utilization)
+        - [Examples](#utilization-examples)
+        - [Parser Breakdown](#parser-breakdown)
     -   [The Above in Simple Terms](#simplified)
     -   [Parser Library Glimpse](#parser-library)
     -   [Parser Structure](#parser-class)
@@ -31,8 +33,10 @@ The command parser serves a number of advantages
 
 #### Utilization techniques
 
+<a name="utilization-examples"></a>
+
 **Example Usages**
-Simple Example (Index LCC command)
+Example #1 (Simple Example - Index LCC command)
 ```js
 // Catch help arguments before the parser
 if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
@@ -51,7 +55,7 @@ if (parsed.hasErrors()) {
 return displayLCC(parsed.map;)
 ```
 
-Complex Example (Index 2TC command)
+Example #2 (Complex Example - Index 2TC command)
 ```js
 if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
     return module.exports.helpMessage(message);
@@ -89,11 +93,24 @@ if (parsed.hasErrors()) {
 // what was parsed and what wasn't and decide how to reply to the user accordingly
 ```
 
-The following parser usage guidelines will reference the above examples throughout.
+The following breakdown of available parsers will reference the above examples
 
-**Requirements**
+<a name="parser-breakdown"></a>
+Note you must call `.parse()` on the global `CommandParser` module with arguments `args, Parser1{, Parser2, ... ParserN}`. The parsers have to evaluate to a concrete-parsing expression
 
-- Must call `.parse()` on the global `CommandParser` module with `args, Parser1{, Parser2, ... ParserN}`.
+<a name="concrete-parsers">
+**Concrete Parsers**
+Concrete parsers will make much more sense when abstract parsers are introduced, but for now, just understand that these are your basic building blocks to interpret a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like `wlp` and `spirit_of_the_forest`), `HeroParser` (`obyn`, `ben`, `ezi`), and `BloonParser` (`red`, `zebra`, `zomg`), and much more.
+
+If your command needs to parse a single map (such as for the command `q!lcc`), then you would write what can be seen in example #1 above. If your command expects a round number and a game mode (such as `abr` or `impoppable`) then you would write:
+
+```js
+{...}
+const parsed = CommandParser.parse(args, new RoundParser(), new ModeParser());
+{...}
+```
+
+making items optional or order-agnostic will be introduced in the next section.
 
 **Options**
 

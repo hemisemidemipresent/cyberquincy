@@ -96,7 +96,7 @@ const aliases = [
 module.exports = {
     name: '<hero>',
     aliases: aliases.flat(),
-
+    dependencies: ['towerJSON'],
     execute(message, args, commandName) {
         let name = findName(commandName);
         if (!args) {

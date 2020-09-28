@@ -97,7 +97,7 @@ function dbSetup() {
 }
 
 async function googleSheetsInitialization() {
-    btd6index = require('./1/config.json')['btd6index'];
+    let btd6index = require('./1/config.json')['btd6index'];
     if (!btd6index) return;
 
     const GoogleSheetsHelper = require('./helpers/google-sheets.js');
@@ -108,7 +108,7 @@ async function googleSheetsInitialization() {
     console.log('<INITIATE>');
 }
 async function towerJSONinit() {
-    let bool = require('./1/config.json')['btd6index'];
+    let bool = require('./1/config.json')['towerJSON'];
     if (!bool) return;
     const fetch = require('node-fetch');
     const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
@@ -160,7 +160,13 @@ function botStats() {
 }
 
 function login() {
-    token = require('./1/config.json')['token'];
+    let isTesting = require('./1/config.json')['testing'];
+    let token = '';
+    if (isTesting) {
+        token = require('./1/config.json')['testToken'];
+    } else {
+        token = require('./1/config.json')['token'];
+    }
     client.login(token);
 }
 

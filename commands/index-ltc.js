@@ -61,6 +61,7 @@ WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 module.exports = {
     name: 'ltc',
+    dependencies: ['btd6index'],
 
     execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {

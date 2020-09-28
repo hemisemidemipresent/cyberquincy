@@ -4,6 +4,8 @@ module.exports = {
     name: 'race',
     aliases: ['rac', 'ra', 'racc', 'rae'],
     cooldown: 5,
+    dependencies: ['btd6index'],
+
     execute(message, args) {
         if (message.author.id == 279126808455151628) {
             return message.channel.send(

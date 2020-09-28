@@ -18,6 +18,7 @@ WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 module.exports = {
     name: 'lcc',
+    dependencies: ['btd6index'],
 
     aliases: ['leastcash', 'lcash'],
 

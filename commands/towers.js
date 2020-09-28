@@ -90,6 +90,8 @@ const aliases = [
 ];
 module.exports = {
     name: '<tower>',
+    dependencies: ['towerJSON'],
+
     aliases: aliases.flat(),
 
     execute(message, args, commandName) {

@@ -36,6 +36,8 @@ const ALT_COLS = {
 
 module.exports = {
     name: '2tc',
+    dependencies: ['btd6index'],
+
     execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);

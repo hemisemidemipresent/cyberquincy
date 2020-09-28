@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node server.js",
         "push": "git push heroku master",
-        "copy": "heroku ps:copy database.sqlite"
+        "copy": "del /f database.sqlite && heroku ps:copy database.sqlite",
+        "add": "git add . && git commit -m p"
     },
     "repository": {
         "type": "git",

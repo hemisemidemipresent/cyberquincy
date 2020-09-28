@@ -102,14 +102,13 @@ Note you must call `.parse()` on the global `CommandParser` module with argument
 <a name="concrete-parsers">
 
 ##### Concrete Parsers
-Concrete parsers will make much more sense when abstract parsers are introduced, but for now, just understand that these are your basic building blocks to interpret a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like `wlp` and `spirit_of_the_forest`), `HeroParser` (`obyn`, `ben`, `ezi`), and `BloonParser` (`red`, `zebra`, `zomg`), and much more.
+
+Concrete parsers will make much more sense when abstract parsers are introduced, but for now, just understand that these are your basic building blocks to interpret a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like "wlp" and "spirit_of_the_forest"), `HeroParser` ("obyn", "ben", "ezi"), `BloonParser` ("red", "zebra", "zomg"), and much more.
 
 If your command needs to parse a single map (such as for the command `q!lcc`), then you would write what can be seen in example #1 above. If your command expects a round number and a game mode (such as `abr` or `impoppable`) then you would write:
 
 ```js
-{...}
 const parsed = CommandParser.parse(args, new RoundParser(), new ModeParser());
-{...}
 ```
 
 making items optional or order-agnostic will be introduced in the next section.

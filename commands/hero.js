@@ -108,48 +108,45 @@ module.exports = {
             return message.channel.send(errorEmbed);
         }
         let level = parseInt(args[0]);
-        fetch(url, settings)
-            .then((res) => res.json())
-            .then((json) => {
-                let base = json[`${name}`];
-                let object = base.upgrades[level - 1];
-                if (!object) {
-                    let errorEmbed = new Discord.MessageEmbed()
-                        .setColor(red)
-                        .setDescription(
-                            `Please specify a level for the hero\ne.g. **q!${name} 20**`
-                        );
-                    return message.channel.send(errorEmbed);
-                }
-                let skins = base.skins.toString();
-                if (!skins) skins = 'none';
-                const embed = new Discord.MessageEmbed()
-                    .setTitle(`${name} level ${level}`)
-                    .addField('cost (xp)', `${object.xp}`, true)
-                    .addField('desc', `${object.notes}`, true)
-                    .addField('xp modifier', `${base['xp-mod']}`, true)
-                    .addField('skins', `${skins}`)
-                    .setColor(cyber)
-                    .setFooter(
-                        'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
-                    );
-                message.channel.send(embed).then((msg) => {
-                    msg.react('❌');
-                    let filter = (reaction, user) => {
-                        return (
-                            reaction.emoji.name === '❌' &&
-                            user.id === message.author.id
-                        );
-                    };
-                    const collector = msg.createReactionCollector(filter, {
-                        time: 20000,
-                    });
 
-                    collector.on('collect', () => {
-                        msg.delete();
-                    });
-                });
+        let base = towerJSON[`${name}`];
+        let object = base.upgrades[level - 1];
+        if (!object) {
+            let errorEmbed = new Discord.MessageEmbed()
+                .setColor(red)
+                .setDescription(
+                    `Please specify a level for the hero\ne.g. **q!${name} 20**`
+                );
+            return message.channel.send(errorEmbed);
+        }
+        let skins = base.skins.toString();
+        if (!skins) skins = 'none';
+        const embed = new Discord.MessageEmbed()
+            .setTitle(`${name} level ${level}`)
+            .addField('cost (xp)', `${object.xp}`, true)
+            .addField('desc', `${object.notes}`, true)
+            .addField('xp modifier', `${base['xp-mod']}`, true)
+            .addField('skins', `${skins}`)
+            .setColor(cyber)
+            .setFooter(
+                'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
+            );
+        message.channel.send(embed).then((msg) => {
+            msg.react('❌');
+            let filter = (reaction, user) => {
+                return (
+                    reaction.emoji.name === '❌' &&
+                    user.id === message.author.id
+                );
+            };
+            const collector = msg.createReactionCollector(filter, {
+                time: 20000,
             });
+
+            collector.on('collect', () => {
+                msg.delete();
+            });
+        });
     },
 };
 function findName(commandName) {

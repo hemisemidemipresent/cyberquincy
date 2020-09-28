@@ -6,6 +6,7 @@ function main() {
     consoleBootup();
     dbSetup();
     googleSheetsInitialization();
+    towerJSONinit();
     configureAliases();
     commandCenter = configureCommands();
     generateListeners(commandCenter);
@@ -53,14 +54,13 @@ function globalRequirements() {
 
 function consoleBootup() {
     client.once('ready', () => {
+        client.user.setPresence({
+            activity: {
+                name: `${prefix}help`,
+            },
+            status: 'online',
+        });
         console.log('<Program Directive>');
-        function too() {
-            console.log('<Eradicate Bloons>');
-        }
-
-        setTimeout(too, 500);
-
-        client.user.setActivity(`${prefix}help`);
     });
 }
 
@@ -98,7 +98,7 @@ function dbSetup() {
 
 async function googleSheetsInitialization() {
     btd6index = require('./1/config.json')['btd6index'];
-    if (btd6index == false) return;
+    if (!btd6index) return;
 
     const GoogleSheetsHelper = require('./helpers/google-sheets.js');
     // Load the BTD6 Index
@@ -107,7 +107,24 @@ async function googleSheetsInitialization() {
     );
     console.log('<INITIATE>');
 }
-
+async function towerJSONinit() {
+    let bool = require('./1/config.json')['btd6index'];
+    if (!bool) return;
+    const fetch = require('node-fetch');
+    const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
+    const settings = { method: 'Get' };
+    fetch(url, settings)
+        .then((res) => res.json())
+        .then((json) => {
+            global.towerJSON = json;
+            console.log('<Eradicate Bloons>');
+        })
+        .catch(() => {
+            console.log(
+                "[ERROR] Something is wrong with fetching topper's json"
+            );
+        });
+}
 function configureAliases() {
     const AliasRepository = require('./alias-repository.js');
     global.Aliases = new AliasRepository();

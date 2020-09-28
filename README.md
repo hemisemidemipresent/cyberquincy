@@ -6,9 +6,9 @@ Cyber Quincy is a BTD6 Discord bot.
 
 ### Links
 
-- [discord server](https://discord.gg/VMX5hZA) (join for bot updates and online/offline status)
-- [invite link](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881)
-- [website](https://cq.netlify.com)
+-   [discord server](https://discord.gg/VMX5hZA) (join for bot updates and online/offline status)
+-   [invite link](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881)
+-   [website](https://cq.netlify.com)
 
 **For help, simply use `q!help`**
 
@@ -23,36 +23,42 @@ Cyber Quincy is a BTD6 Discord bot.
 2. you need credentials for google-spreadsheet (I recommend [this video to set up credentials](https://www.youtube.com/watch?v=UGN6EUi4Yio) and paste the credentials in `./1/config.json`). (Not strictly necessary, but many commands require it.)
 
 3. Optional:
-   - [add bot to statcord](https://statcord.com/add), and copy the key into `./1/config.json` as `statcord`
-   - [add bot to discordbotlist](https://discordbotlist.com), and copy the auth token into `./1/config.json` as `discordbotlist`
+
+    - [add bot to statcord](https://statcord.com/add), and copy the key into `./1/config.json` as `statcord`
+    - [add bot to discordbotlist](https://discordbotlist.com), and copy the auth token into `./1/config.json` as `discordbotlist`
 
 4. to run type `node server` (this sets up a `database.sqlite` file).
 
 # npm dependencies
 
-- `express` every node.js project has one of these, even though this isn't used here
-- `discord.js` what makes this bot work
-- `google-spreadsheet` to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) and [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
-- `node-fetch` for accessing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
-- `sequelize` (DB)
-- `sqlite3` (DB dialect)
-- `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be, just suggest something in this discord instead. If you are interested look at `./migrations`, and check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527)
-- `pluralize` used in parser
-- `statcord` used for [bot statistics](https://statcord.com/bot/591922988832653313), see below
+-   `express` every node.js project has one of these, even though this isn't used here
+-   `discord.js` what makes this bot work
+-   `google-spreadsheet` to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) and [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
+-   `node-fetch` for accessing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
+-   `sequelize` (DB)
+-   `sqlite3` (DB dialect)
+-   `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be, just suggest something in this discord instead. If you are interested look at `./migrations`, and check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527)
+-   `pluralize` used in parser
+-   `statcord` used for [bot statistics](https://statcord.com/bot/591922988832653313), see below
+
+## Optional
+
+-   `bufferutil` for a much faster WebSocket connection
+-   `utf-8-validate` in combination with bufferutil for much faster WebSocket processing
 
 # Database fields
 
 (I think they are called fields)
 
-- `xp` - user xp
-- `level` - isn't really used since you can reverse-engineer the level from xp
-- `showAds` - setting for turning on/off the ads in `./helpers/advertisments.js`
-- `showLevelUpMsg` - setting for turning on/off level up messages in `./helpers/xp.js`
-- `quiz` - how many q!quiz questions they answered correctly
-- `freezexp` - unused
+-   `xp` - user xp
+-   `level` - isn't really used since you can reverse-engineer the level from xp
+-   `showAds` - setting for turning on/off the ads in `./helpers/advertisments.js`
+-   `showLevelUpMsg` - setting for turning on/off level up messages in `./helpers/xp.js`
+-   `quiz` - how many q!quiz questions they answered correctly
+-   `freezexp` - unused
 
 # Contributing Guidelines
 
-- try to use camelCase
-- dont use `var` to define variables. JS is weird enough
-- try not to do too much at once
+-   try to use camelCase
+-   dont use `var` to define variables. JS is weird enough
+-   try not to do too much at once

@@ -1,7 +1,4 @@
 const { cyber } = require('../jsons/colours.json');
-const fetch = require('node-fetch');
-const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
-const settings = { method: 'Get' };
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
     [
@@ -102,12 +99,8 @@ module.exports = {
         let name = findName(commandName);
 
         if (!args[0] || args[1]) {
-            fetch(url, settings)
-                .then((res) => res.json())
-                .then((json) => {
-                    let embed = baseTower(json, name);
-                    return message.channel.send(embed);
-                });
+            let embed = baseTower(towerJSON, name);
+            return message.channel.send(embed);
         }
         let input = args[0].toString();
         let arr = [
@@ -124,97 +117,91 @@ module.exports = {
                 path = i + 1;
             }
         }
-        fetch(url, settings)
-            .then((res) => res.json())
-            .then((json) => {
-                let object = json[`${name}`].upgrades[path - 1][tier - 1];
-                if (!object) {
-                    const embed = baseTower(json, name);
 
-                    return message.channel.send(embed).then((msg) => {
-                        msg.react('❌');
-                        const filter = (reaction, user) => {
-                            return (
-                                reaction.emoji.name === '❌' &&
-                                user.id === message.author.id
-                            );
-                        };
-                        const collector = msg.createReactionCollector(filter, {
-                            time: 20000,
-                        });
+        //let object = json[`${name}`].upgrades[path - 1][tier - 1];
+        let object = towerJSON[`${name}`].upgrades[path - 1][tier - 1];
+        if (!object) {
+            const embed = baseTower(json, name);
 
-                        collector.on('collect', () => {
-                            msg.delete();
-                        });
-                    });
-                } else {
-                    const embed = anyOtherTower(json, name, path, tier);
-                    message.channel.send(embed).then((msg) => {
-                        msg.react('❌');
-                        const filter = (reaction, user) => {
-                            return (
-                                reaction.emoji.name === '❌' &&
-                                user.id === message.author.id
-                            );
-                        };
-                        const collector = msg.createReactionCollector(filter, {
-                            time: 20000,
-                        });
+            return message.channel.send(embed).then((msg) => {
+                msg.react('❌');
+                const filter = (reaction, user) => {
+                    return (
+                        reaction.emoji.name === '❌' &&
+                        user.id === message.author.id
+                    );
+                };
+                const collector = msg.createReactionCollector(filter, {
+                    time: 20000,
+                });
 
-                        collector.on('collect', () => {
-                            msg.delete();
-                        });
-                    });
-                }
+                collector.on('collect', () => {
+                    msg.delete();
+                });
             });
+        } else {
+            const embed = anyOtherTower(towerJSON, name, path, tier);
+            message.channel.send(embed).then((msg) => {
+                msg.react('❌');
+                const filter = (reaction, user) => {
+                    return (
+                        reaction.emoji.name === '❌' &&
+                        user.id === message.author.id
+                    );
+                };
+                const collector = msg.createReactionCollector(filter, {
+                    time: 20000,
+                });
+
+                collector.on('collect', () => {
+                    msg.delete();
+                });
+            });
+        }
     },
 };
 function provideHelpMsg(message, name) {
-    fetch(url, settings)
-        .then((res) => res.json())
-        .then((json) => {
-            let str = `Please use the number in \`\`codeblocks\`\` to specify the upgrade.\nFor example, **q!${name} 030**`;
-            const pathsArr = [
-                '100',
-                '200',
-                '300',
-                '400',
-                '500',
-                '010',
-                '020',
-                '030',
-                '040',
-                '050',
-                '001',
-                '002',
-                '003',
-                '004',
-                '005',
-            ];
-            for (let i = 0; i < 15; i++) {
-                let path;
-                let tier = 0;
-                if (parseInt(pathsArr[i]) % 100 == 0) {
-                    path = 1;
-                    tier = parseInt(pathsArr[i]) / 100;
-                } else if (parseInt(pathsArr[i]) % 10 == 0) {
-                    path = 2;
-                    tier = parseInt(pathsArr[i]) / 10;
-                } else {
-                    path = 3;
-                    tier = parseInt(pathsArr[i]);
-                }
-                const object = json[`${name}`].upgrades[path - 1][tier - 1];
-                if (i % 5 == 0) {
-                    str += '\n';
-                } else {
-                    str += ',   ';
-                }
-                str += `__${object.name}__   \`\`${pathsArr[i]}\`\``;
-            }
+    let str = `Please use the number in \`\`codeblocks\`\` to specify the upgrade.\nFor example, **q!${name} 030**`;
+    const pathsArr = [
+        '100',
+        '200',
+        '300',
+        '400',
+        '500',
+        '010',
+        '020',
+        '030',
+        '040',
+        '050',
+        '001',
+        '002',
+        '003',
+        '004',
+        '005',
+    ];
+    for (let i = 0; i < 15; i++) {
+        let path;
+        let tier = 0;
+        if (parseInt(pathsArr[i]) % 100 == 0) {
+            path = 1;
+            tier = parseInt(pathsArr[i]) / 100;
+        } else if (parseInt(pathsArr[i]) % 10 == 0) {
+            path = 2;
+            tier = parseInt(pathsArr[i]) / 10;
+        } else {
+            path = 3;
+            tier = parseInt(pathsArr[i]);
+        }
+        const object = towerJSON[`${name}`].upgrades[path - 1][tier - 1];
+        if (i % 5 == 0) {
+            str += '\n';
+        } else {
+            str += ',   ';
+        }
+        str += `__${object.name}__   \`\`${pathsArr[i]}\`\``;
+    }
 
-            return message.channel.send(str);
-        });
+    return message.channel.send(str);
 }
 function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;

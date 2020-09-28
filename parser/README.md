@@ -89,13 +89,11 @@ if (parsed.hasErrors()) {
 // what was parsed and what wasn't and decide how to reply to the user accordingly
 ```
 
-The following parser usage guidelines will reference the above example.
+The following parser usage guidelines will reference the above examples throughout.
 
 **Requirements**
 
-1. Must either call `.parse()` or `.parseAnyOrder()` on the global `CommandParser` module.
-2. Arguments must be `args, Parser1, Parser2, ... ParserN`
-3. The default value for `OptionalParser` must be a value that the wrapped parser would accept as an argument.
+- Must call `.parse()` on the global `CommandParser` module with `args, Parser1{, Parser2, ... ParserN}`.
 
 **Options**
 

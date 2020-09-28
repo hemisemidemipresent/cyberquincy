@@ -36,6 +36,8 @@ The command parser serves a number of advantages
 <a name="utilization-examples"></a>
 
 **Example Usages**
+<a name="utilization-example-1"></a>
+
 Example #1 (Simple Example - Index LCC command)
 ```js
 // Catch help arguments before the parser
@@ -54,6 +56,7 @@ if (parsed.hasErrors()) {
 // If parsing was successful, then parsed.map will be the map the user entered as the 1 arg
 return displayLCC(parsed.map;)
 ```
+<a name="utilization-example-2"></a>
 
 Example #2 (Complex Example - Index 2TC command)
 ```js
@@ -105,7 +108,7 @@ Note you must call `.parse()` on the global `CommandParser` module with argument
 
 Concrete parsers will make much more sense when abstract parsers are introduced, but for now, just understand that these are your basic building blocks to interpret a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like "wlp" and "spirit_of_the_forest"), `HeroParser` ("obyn", "ben", "ezi"), `BloonParser` ("red", "zebra", "zomg"), and much more.
 
-If your command needs to parse a single map (such as for the command `q!lcc`), then you would write what can be seen in example #1 above. If your command expects a round number and a game mode (such as `abr` or `impoppable`) then you would write:
+If your command needs to parse a single map (such as for the command `q!lcc`), then you would write what can be seen in [example #1](#utilization-example-1) above. If your command expects a round number and a game mode (such as `abr` or `impoppable`) then you would write:
 
 ```js
 const parsed = CommandParser.parse(args, new RoundParser(), new ModeParser());

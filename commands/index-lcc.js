@@ -22,122 +22,124 @@ module.exports = {
 
     aliases: ['leastcash', 'lcash'],
 
-    execute(message, args) {
-        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
-            return module.exports.helpMessage(message);
+    execute,
+    helpMessage,
+    errorMessage,
+}
+
+function execute(message, args) {
+    if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+        return helpMessage(message);
+    }
+
+    const parsed = CommandParser.parse(args, new MapParser());
+
+    if (parsed.hasErrors()) {
+        return errorMessage(message, parsed.parsingErrors);
+    }
+
+    return displayLCC(message, parsed.map)
+}
+
+async function displayLCC(message, btd6_map) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
+
+    // Load the column containing the different maps
+    await sheet.loadCells(
+        `${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`
+    ); // loads all possible cells with map
+
+    // The row where the queried map is found
+    var entryRow = null;
+
+    // Search for the row in all "possible" rows
+    for (let row = 1; row <= MAX_ROW; row++) {
+        var mapCandidate = sheet.getCellByA1(`${COLS.MAP}${row}`).value;
+        // input is "in_the_loop" but needs to be compared to "In The Loop"
+        if (
+            mapCandidate &&
+            mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map
+        ) {
+            entryRow = row;
+            break;
         }
+    }
 
-        const parsed = CommandParser.parse(args, new MapParser());
+    if (!entryRow) {
+        throw `Something has gone horribly wrong; ${btd6_map} passed parsing validation but can't be found in the LCC spreadsheet`;
+    }
 
-        if (parsed.hasErrors()) {
-            return module.exports.errorMessage(message, parsed.parsingErrors);
-        }
+    // Load the row where the map was found
+    await sheet.loadCells(
+        `${COLS.MAP}${entryRow}:${COLS.CURRENT}${entryRow}`
+    );
 
-        var btd6_map = parsed.map;
+    // Assign each value to be discord-embedded in a simple default way
+    values = {};
+    for (key in COLS) {
+        values[key] = sheet.getCellByA1(
+            `${COLS[key]}${entryRow}`
+        ).value;
+    }
 
-        async function displayLCC(btd6_map) {
-            const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
+    // Special formatting for date (get formattedValue instead)
+    dateCell = sheet.getCellByA1(`${COLS.DATE}${entryRow}`);
+    values.DATE = dateCell.formattedValue;
 
-            // Load the column containing the different maps
-            await sheet.loadCells(
-                `${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`
-            ); // loads all possible cells with map
+    // Special formatting for cost (format like cost)
+    values.COST = h.numberAsCost(values.COST);
 
-            // The row where the queried map is found
-            var entryRow = null;
+    // Special handling for link (use hyperlink to cleverly embed in discord)
+    linkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
+    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
 
-            // Search for the row in all "possible" rows
-            for (let row = 1; row <= MAX_ROW; row++) {
-                var mapCandidate = sheet.getCellByA1(`${COLS.MAP}${row}`).value;
-                // input is "in_the_loop" but needs to be compared to "In The Loop"
-                if (
-                    mapCandidate &&
-                    mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map
-                ) {
-                    entryRow = row;
-                    break;
-                }
-            }
+    // Special handling for current
+    // (heavy checkmark doesn't format, use white heavy checkmark instead)
+    if (values.CURRENT === HEAVY_CHECK_MARK) {
+        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+    }
 
-            if (!entryRow) {
-                throw `Something has gone horribly wrong; ${btd6_map} passed parsing validation but can't be found in the LCC spreadsheet`;
-            }
+    // Embed and send the message
+    var challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(`${values.MAP} LCC Combo`)
+        .setColor(colours['cyber']);
 
-            // Load the row where the map was found
-            await sheet.loadCells(
-                `${COLS.MAP}${entryRow}:${COLS.CURRENT}${entryRow}`
-            );
+    for (field in values) {
+        challengeEmbed = challengeEmbed.addField(
+            h.toTitleCase(field),
+            values[field],
+            true
+        );
+    }
 
-            // Assign each value to be discord-embedded in a simple default way
-            values = {};
-            for (key in COLS) {
-                values[key] = sheet.getCellByA1(
-                    `${COLS[key]}${entryRow}`
-                ).value;
-            }
+    message.channel.send(challengeEmbed);
+}
 
-            // Special formatting for date (get formattedValue instead)
-            dateCell = sheet.getCellByA1(`${COLS.DATE}${entryRow}`);
-            values.DATE = dateCell.formattedValue;
+function helpMessage(message) {
+    let helpEmbed = new Discord.MessageEmbed()
+        .setTitle('`q!lcc` HELP')
+        .addField(
+            '`q!lcc <map>`',
+            'The BTD6 Index entry for Least Cash CHIMPS for the queried map'
+        )
+        .addField(
+            'Valid `<map>` values',
+            '`logs`, `cubism`, `pen`, `#ouch`, ...'
+        )
+        .addField('Example', '`q!lcc bloodles`');
 
-            // Special formatting for cost (format like cost)
-            values.COST = h.numberAsCost(values.COST);
+    return message.channel.send(helpEmbed);
+}
 
-            // Special handling for link (use hyperlink to cleverly embed in discord)
-            linkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
-            values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+function errorMessage(message, parsingErrors) {
+    let errorEmbed = new Discord.MessageEmbed()
+        .setTitle('ERROR')
+        .addField(
+            'Likely Cause(s)',
+            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+        )
+        .addField('Type `q!lcc` for help', '\u200b')
+        .setColor(colours['orange']);
 
-            // Special handling for current
-            // (heavy checkmark doesn't format, use white heavy checkmark instead)
-            if (values.CURRENT === HEAVY_CHECK_MARK) {
-                values.CURRENT = WHITE_HEAVY_CHECK_MARK;
-            }
-
-            // Embed and send the message
-            var challengeEmbed = new Discord.MessageEmbed()
-                .setTitle(`${values.MAP} LCC Combo`)
-                .setColor(colours['cyber']);
-
-            for (field in values) {
-                challengeEmbed = challengeEmbed.addField(
-                    h.toTitleCase(field),
-                    values[field],
-                    true
-                );
-            }
-
-            message.channel.send(challengeEmbed);
-        }
-
-        displayLCC(btd6_map);
-    },
-
-    helpMessage(message) {
-        let helpEmbed = new Discord.MessageEmbed()
-            .setTitle('`q!lcc` HELP')
-            .addField(
-                '`q!lcc <map>`',
-                'The BTD6 Index entry for Least Cash CHIMPS for the queried map'
-            )
-            .addField(
-                'Valid `<map>` values',
-                '`logs`, `cubism`, `pen`, `#ouch`, ...'
-            )
-            .addField('Example', '`q!lcc bloodles`');
-
-        return message.channel.send(helpEmbed);
-    },
-
-    errorMessage(message, parsingErrors) {
-        let errorEmbed = new Discord.MessageEmbed()
-            .setTitle('ERROR')
-            .addField(
-                'Likely Cause(s)',
-                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-            )
-            .addField('Type `q!lcc` for help', '\u200b')
-            .setColor(colours['orange']);
-
-        return message.channel.send(errorEmbed);
-    },
-};
+    return message.channel.send(errorEmbed);
+}

@@ -212,7 +212,7 @@ const parsed = CommandParser.parse(
     new OrParser(
         new MapParser(),
         new MapDifficultyParser(),
-        new EmptyParser(), // Works great here if you want one parsing possibility to be just a single natural number, no map or map difficulty needed.
+        new EmptyParser(),
     )
 )
 ```

@@ -36,9 +36,10 @@ The command parser serves a number of advantages
 <a name="utilization-examples"></a>
 
 **Example Usages**
-<a name="utilization-example-1"></a>
 
 Example #1 (Simple Example - Index LCC command)
+<a name="utilization-example-1"></a>
+
 ```js
 // Catch help arguments before the parser
 if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
@@ -100,13 +101,13 @@ The following breakdown of available parsers will reference the above examples.
 
 <a name="parser-breakdown"></a>
 ### Parser Breakdown
-Note you must call `.parse()` on the global `CommandParser` module with arguments `args, Parser1{, Parser2, ... ParserN}`. The parsers have to evaluate to a concrete-parsing expression
+You must call `CommandParser.parse()` with arguments `args, Parser1{, Parser2, ... ParserN}`. A parser is meant to interpret a single user argument, where the arguments are space-separated tokens entered by the user following the `q!<command>`. There are two classes of Parsers: Concrete Parsers and Abstract Parsers.
 
 <a name="concrete-parsers">
 
 ##### Concrete Parsers
 
-Concrete parsers will make much more sense when abstract parsers are introduced, but for now, just understand that these are your basic building blocks to interpret a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like "wlp" and "spirit_of_the_forest"), `HeroParser` ("obyn", "ben", "ezi"), `BloonParser` ("red", "zebra", "zomg"), and much more.
+Concrete parsers are your basic building blocks for interpreting a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like "wlp" and "spirit_of_the_forest"), `HeroParser` ("obyn", "ben", "ezi"), `BloonParser` ("red", "zebra", "zomg"), and much more.
 
 If your command needs to parse a single map (such as for the command `q!lcc`), then you would write what can be seen in [example #1](#utilization-example-1) above. If your command expects a round number and a game mode (such as `abr` or `impoppable`) then you would write:
 
@@ -114,7 +115,80 @@ If your command needs to parse a single map (such as for the command `q!lcc`), t
 const parsed = CommandParser.parse(args, new RoundParser(), new ModeParser());
 ```
 
-making items optional or order-agnostic will be introduced in the next section.
+Each concrete parser dictates what values they accept, so if the first argument is "banana" to a command that uses the above parsing structure, then `RoundParser` would fail to parse the argument and there would be a parsing error (to be discussed soon) contained within the `parsed` return value once the attempt finishes.
+
+Making items optional or order-agnostic will be introduced in the next section.
+
+<a name="abstract-parsers">
+
+##### Abstract Parsers
+
+Abstract parsers and parsers that take in zero or more parsers to provide an enhanced parsing mechanism. One good example is the `OrParser` as in [Example #2](#utilization-example-2) which takes in a list of arguments, each of which represents a parsing possibility. So if you had something like
+
+```js
+const parsed = CommandParser.parse(
+    args,
+    new OrParser(
+        new NaturalNumberParser(),
+        new Mode Parser(),
+        new Map Parser(),
+    )
+)
+```
+
+parsing would succeed if the user provided one argument that either one of the three parsers recognized. A 2-argument command invocation would fail here because in any case, the parser is expecting just one argument.
+
+Another key parser to be aware of is `AnyOrderParser`. It's pretty simple: you provide a list of parsers and the command parser will look for user input in any permutation of the parser ordering, as in
+
+```js
+const parsed = CommandParser.parse(
+    args,
+    new AnyOrderParser(
+        new NaturalNumberParser(),
+        new Mode Parser(),
+        new Map Parser(),
+    )
+)
+```
+
+A command that uses this parsing structure would be looking for a 3-argument invocation of the command with a natural number, a mode (like "impoppable"), and a map (like "cube"). `AnyOrderParser` allows the order to not matter though, so `q!<command> abr cube 3` would parse successfully here.
+
+There are two other parsers to be aware of. `OptionalParser` takes in a parser and a default value if the parsing fails. The default value must be a value that if the user entered it, the parser itself could parse. The default value is optional though and can be left out. Here are two examples:
+
+```js
+// With default value
+const parsed = CommandParser.parse(
+    args,
+    new OptionalParser(
+        new ModeParser(),
+        'abr'
+    )
+)
+```
+
+```js
+// Without default value
+const parsed = CommandParser.parse(
+    args,
+    new OptionalParser(
+        new ModeParser(),
+    )
+)
+```
+
+Finally, `EmptyParser` parses nothing and doesn't throw away an argument slot. It's useful when you have an `OrParser` and you want one of the options to be an expectation of nothing at all as in
+
+```js
+const parsed = CommandParser.parse(
+    args,
+    new NaturalNumberParser()
+    new OrParser(
+        new MapParser(),
+        new MapDifficultyParser(),
+        new EmptyParser(), // Works great here if you want one parsing possibility to be just a single natural number, no map or map difficulty needed.
+    )
+)
+```
 
 **Options**
 

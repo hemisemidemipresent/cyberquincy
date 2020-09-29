@@ -136,7 +136,21 @@ const parsed = CommandParser.parse(
 )
 ```
 
-parsing would succeed if the user provided one argument that either one of the three parsers recognized. A 2-argument command invocation would fail here because in any case, the parser is expecting just one argument.
+parsing would succeed if the user provided one argument that either one of the three parsers recognized. A 2-argument command invocation would fail here because in any case, the parser is expecting just one argument. Note that arguments to `OrParser` can also be lists of parsers as in
+
+```js
+const parsed = CommandParser.parse(
+    args,
+    new OrParser(
+        [new NaturalNumberParser(), new ModeParser()],
+        new Map Parser(),
+    )
+)
+```
+
+In contrast, this takes in either
+1. a natural number AND a mode
+2. just a map.
 
 Another key parser to be aware of is `AnyOrderParser`. It's pretty simple: you provide a list of parsers and the command parser will look for user input in any permutation of the parser ordering, as in
 

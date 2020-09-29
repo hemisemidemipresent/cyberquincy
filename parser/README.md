@@ -190,7 +190,7 @@ const parsed = CommandParser.parse(
 )
 ```
 
-The following would fail because `8` is not a valid "mode":
+The following would raise an exception because `8` is not a valid "mode":
 
 ```js
 // With default value
@@ -203,7 +203,7 @@ const parsed = CommandParser.parse(
 )
 ```
 
-Finally, `EmptyParser` parses nothing and doesn't throw away an argument slot. It's useful when you have an `OrParser` and you want one of the options to be an expectation of nothing at all as in
+Finally, `EmptyParser` parses nothing and doesn't throw away an argument slot. It's useful when you have an `OrParser` and you want one of the options to be no extra argument as in
 
 ```js
 const parsed = CommandParser.parse(

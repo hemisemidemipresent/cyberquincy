@@ -220,7 +220,9 @@ const parsed = CommandParser.parse(
 That is to say that the following are all valid
 
 `q!<command> 1 cube`
+
 `q!<command> 1 beginner`
+
 `q!<command> 1` (<-- This is what the `EmptyParser` allows!)
 
 **Options**

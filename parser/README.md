@@ -217,6 +217,12 @@ const parsed = CommandParser.parse(
 )
 ```
 
+That is to say that the following are all valid
+
+`q!<command> 1 cube`
+`q!<command> 1 beginner`
+`q!<command> 1` (<-- This is what the `EmptyParser` allows!)
+
 **Options**
 
 1. `OptionalParser`: delegates parsing to the constructor's _first_ argument (which must be a parser). If the delegate parser succeeds, the `OptionalParser` will return that parsed value; otherwise it will return the default value that gets passed into the `OptionalParser` constructor's _second_ argument.

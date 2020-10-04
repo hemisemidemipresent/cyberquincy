@@ -7,9 +7,10 @@
     -   [Utilization Techniques](#utilization)
         - [Examples](#utilization-examples)
         - [Parsing Breakdown](#parsing-breakdown)
+    -   [Parser Structure](#parser-structure)
     -   [The Above in Simple Terms](#simplified)
-    -   [Parser Library Glimpse](#parser-library)
-    -   [Parser Structure](#parser-class)
+    -   [Appendix](#appendix)
+        -   [Parser Library Glimpse](#parser-library)
 
 <a name="command-devs"></a>
 
@@ -102,7 +103,7 @@ The following breakdown of available parsers will reference the above examples.
 
 <a name="parsing-breakdown"></a>
 ### Parsing Breakdown
-You must call `CommandParser.parse()` with arguments `args, Parser1, Parser2, ... ParserN` (You should probably have at least one parser in the list although technically you could have 0 and be looking for a command invocation with no arguments). Each parser interprets a single user argument, where an argument is a space-separate token that comes after `q!<command>`. For example the arguments in `q!2mp sun-avatar end_of_the_road` are `sun-avatar` and `end_of_the_road`.
+You must call `CommandParser.parse()` with arguments `args, Parser1, Parser2, ... ParserN` (one or more parsers is highly recommended). Each parser interprets a single user argument, where an argument is a space-separate token that comes after `q!<command>`. For example the arguments in `q!2mp sun-avatar end_of_the_road` are `sun-avatar` and `end_of_the_road`.
 
 There are two classes of Parsers: Concrete Parsers and Abstract Parsers.
 
@@ -112,7 +113,7 @@ There are two classes of Parsers: Concrete Parsers and Abstract Parsers.
 
 Concrete parsers are your basic building blocks for interpreting a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like "wlp" and "spirit_of_the_forest"), `HeroParser` ("obyn", "ben", "ezi"), `BloonParser` ("red", "zebra", "zomg"), and much more.
 
-If your command needs to parse a single map (such as for the command `q!lcc`), then you would write what can be seen in [example #1](#utilization-example-1) above. If your command expects a round number and ALSO a game mode (such as `abr` or `impoppable`) then you would write:
+If your command needs to parse a single map (such as for the command `q!lcc`), then you would write exactly what's in [example #1](#utilization-example-1) above. If your command expects a round number and ALSO a game mode (such as `abr` or `impoppable`) then you would write:
 
 ```js
 const parsed = CommandParser.parse(args, new RoundParser(), new ModeParser());
@@ -126,7 +127,7 @@ Making items optional or order-agnostic will be introduced in the next section.
 
 ##### Abstract Parsers
 
-Abstract parsers and parsers that take in some number of parsers (including 0 in certain cases) and create a new parser based on the ones given to it. One good example is the `OrParser` as in [Example #2](#utilization-example-2) which looks for an argument that matches ANY of the OrParser arguments. So if you had something like
+Abstract parsers and parsers that take in some number of parsers (0 in certain cases) and spit out a new parser that combines them. One good example is the `OrParser` as in [Example #2](#utilization-example-2) which takes in a variable number of parsers and tries to match ANY of them to the corresponding user argument. So if you had something like
 
 ```js
 const parsed = CommandParser.parse(
@@ -170,7 +171,7 @@ const parsed = CommandParser.parse(
 
 The above parsing structure would be looking for a 3-argument invocation of `q!<command>` with a natural number, a mode (like "impoppable"), and a map (like "cube") but not necessarily in that order; `q!<command> abr cube 3` would parse successfully here. Note that none of the arguments are optional; all 3 must be there.
 
-There are two other parsers to be aware of. `OptionalParser` takes in 1. a parser and 2. a default value if the parsing fails. The default value must be a value that the parser accepts (see examples to understand). The default value can be excluded though, so if the parsing fails to parse using the provided concrete parser, it'll just skip over it entirely and not parse anything. Here are two basic examples:
+There are two other parsers to be aware of. `OptionalParser` takes in 1. a parser and 2. a default value if the parsing fails. The default value must be a value that the parser accepts (see examples below to understand). The default value can be excluded though, so if the parsing fails to parse using the provided concrete parser, it'll just skip over it entirely and not parse anything. Here are two basic examples:
 
 This:
 
@@ -186,7 +187,7 @@ const parsed = CommandParser.parse(
 ```
 
 will accept 
-1. `q!<command>`, and will result in `parsed.mode` equal to `abr`
+1. `q!<command>`, and will result in `parsed.mode` equal to `abr` <-- Compare \/
 2. `q!<command> chimps`, and will result in `parsed.mode` equal to `chimps`
 
 This:
@@ -202,7 +203,7 @@ const parsed = CommandParser.parse(
 ```
 
 will accept 
-1. `q!<command>`, and will result in `parsed.mode` equal to `undefined`
+1. `q!<command>`, and will result in `parsed.mode` equal to `undefined` <-- Compare /\
 2. `q!<command> chimps`, and will result in `parsed.mode` equal to `chimps`
 
 The following would raise a `DeveloperCommandError` because `8` is not a valid "mode":
@@ -242,136 +243,7 @@ That is to say that the following are all valid
 
 <a name="simplified"></a>
 
-#### The Above in Simpler Terms
-
-So you know how commands can take a long list of arguments? It's in the array `args`. The parser basically helps to parse all that raw user input.
-
-First you define a variable. In the example above its called `parsed` and you let that be `CommandParser.parse()`.
-
-You first put `args` inside the function. Then you put in your parsers. How? Lets say you want an optional parser for a mode, e.g. like in `q!income`, you don't _need_ a mode, but the mode matters. you then put in `new OptionalParser()` into the function.
-
-The function should look something like this:
-
-```js
-let parsed = CommandParser.parse(args, new OptionalParser());
-```
-
-In the new `OptionalParser()` it accepts 2 things, a parser and a "fallback option". So for example
-
-```js
-new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS');
-```
-
-means that this `OptionalParser()` has `ModeParser()` as its parser, and if the parser can't find that mode, it resorts to the second input, in this case `'CHIMPS'`.
-We can add more parsers inside the `parse()` function. In this case we would like to know the round (compulsory), so we add `newRoundParser('IMPOPPABLE')`. What this does is check whether the round provided fits into the impoppable gamemode criteria, i.e. whether or not `6<=round<=100`
-
-So far, it should look something like this:
-
-```js
-parsed = CommandParser.parse(
-    args,
-    new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
-    new RoundParser('IMPOPPABLE')
-);
-```
-
-that is essentially it. There is just a few more steps:
-
-1. Allow the user to enter the command arguments in any order (so mode then round OR round then mode):
-
-```js
-parsed = CommandParser.parse(
-    args,
-    new AnyOrderParser(
-        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
-        new RoundParser('IMPOPPABLE')
-    )  
-);
-```
-
-2. Catch any errors
-
-```js
-parsed = CommandParser.parse(
-    args,
-    new AnyOrderParser(
-        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
-        new RoundParser('IMPOPPABLE')
-    )  
-);
-
-if (parsed.hasErrors()) {
-    // Return a message to the command user with a new-line separated list of parsing errors
-    return message.channel.send(`Error: ${parsed.parsingErrors.join("\n")}`)
-}
-```
-
-You can access the mode inputted by using `parsed.mode` at the end:
-
-```js
-parsed = CommandParser.parse(
-    args,
-    new AnyOrderParser(
-        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
-        new RoundParser('IMPOPPABLE')
-    )  
-);
-
-if (parsed.hasErrors()) {
-    // Return a message to the command user with a new-line separated list of parsing errors
-    return message.channel.send(`Error: ${parsed.parsingErrors.join("\n")}`)
-}
-
-return message.channel.send(
-    `mode inputted is ${parsed.mode}, round inputted is ${parsed.round}`
-);
-```
-
-and that's it! You've not only ensured that the commands you run are "safe", but you've also given the user opportunities to learn from entering incorrectly-formatted commands!
-
-<a name="parser-library"></a>
-
-### Parser Library Glimpse
-
-<table>
-    <thead>
-        <tr>
-            <th>Parser</th>
-            <th>Description</th>
-            <th>Developer Inputs</th>
-            <th>User Inputs</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>RoundParser</code></td>
-            <td>Utilizes <code>NaturalNumberParser</code> to parse a round number, limited by the difficulty (<code>IMPOPPABLE</code> --> <code>6-100</code>).</td>
-            <td>"IMPOPPABLE", "HARD", "MEDIUM", "EASY"</td>
-            <td>Formats: <code>15</code>, <code>R15</code>, <code>round15</code></td>
-        </tr>
-        <tr>
-            <td><code>NaturalNumberParser</code></td>
-            <td>Parses a positive integer between <code>low</code> and <code>high</code></td>
-            <td><code>(6, 100)</code>, <code>(-Infinity, 0)</code>, ...</td>
-            <td>1, 2, 3, ..., 1000, ..., <code>Infinity</code></td>
-        </tr>
-        <tr>
-            <td><code>ModeParser</code></td>
-            <td>Parses a Btd6 Gamemode</td>
-            <td>"STANDARD","PRIMARYONLY","DEFLATION","MILITARYONLY",
-            "APOPALYPSE","REVERSE","MAGICONLY","DOUBLEHP","HALFCASH"
-            ,"ABR","IMPOPPABLE","CHIMPS"</td>
-            <td><-- Same</td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <th colspan="4">Check the /parser folder (you're in it) for a full list of parsers</th>
-        </tr>
-    </tfoot>
-</table>
-
-<a name="parser-class"></a>
+<a name="parser-structure"></a>
 
 ## Parser Structure
 
@@ -463,3 +335,137 @@ transformArgument(arg) {
 `parse()` does the actual parsing, though it usually calls upon the `this.delegateParser`. A delegate parser is a tool you can use to take advantage of existing parsers so your new parser doesn't have to do too much work. For example, a cash parser is just a number that can take in commas to separate thousands places and a `$` beforehand to distinguish it from round numbers, combo #s and other ambiguous arguments. This extra bit of work happens in the `transformArgument` function in the above case of `CashParser`.
 
 #### Any other functions are probably just to help the parsing go smoother
+
+
+#### The Above in Simpler Terms
+
+So you know how commands can take a long list of arguments? It's in the array `args`. The parser basically helps to parse all that raw user input.
+
+First you define a variable. In the example above its called `parsed` and you let that be `CommandParser.parse()`.
+
+You first put `args` inside the function. Then you put in your parsers. How? Lets say you want an optional parser for a mode, e.g. like in `q!income`, you don't _need_ a mode, but the mode matters. you then put in `new OptionalParser()` into the function.
+
+The function should look something like this:
+
+```js
+let parsed = CommandParser.parse(args, new OptionalParser());
+```
+
+In the new `OptionalParser()` it accepts 2 things, a parser and a "fallback option". So for example
+
+```js
+new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS');
+```
+
+means that this `OptionalParser()` has `ModeParser()` as its parser, and if the parser can't find that mode, it resorts to the second input, in this case `'CHIMPS'`.
+We can add more parsers inside the `parse()` function. In this case we would like to know the round (compulsory), so we add `newRoundParser('IMPOPPABLE')`. What this does is check whether the round provided fits into the impoppable gamemode criteria, i.e. whether or not `6<=round<=100`
+
+So far, it should look something like this:
+
+```js
+parsed = CommandParser.parse(
+    args,
+    new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
+    new RoundParser('IMPOPPABLE')
+);
+```
+
+that is essentially it. There is just a few more steps:
+
+1. Allow the user to enter the command arguments in any order (so mode then round OR round then mode):
+
+```js
+parsed = CommandParser.parse(
+    args,
+    new AnyOrderParser(
+        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
+        new RoundParser('IMPOPPABLE')
+    )  
+);
+```
+
+2. Catch any errors
+
+```js
+parsed = CommandParser.parse(
+    args,
+    new AnyOrderParser(
+        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
+        new RoundParser('IMPOPPABLE')
+    )  
+);
+
+if (parsed.hasErrors()) {
+    // Return a message to the command user with a new-line separated list of parsing errors
+    return message.channel.send(`Error: ${parsed.parsingErrors.join("\n")}`)
+}
+```
+
+You can access the mode inputted by using `parsed.mode` at the end:
+
+```js
+parsed = CommandParser.parse(
+    args,
+    new AnyOrderParser(
+        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
+        new RoundParser('IMPOPPABLE')
+    )  
+);
+
+if (parsed.hasErrors()) {
+    // Return a message to the command user with a new-line separated list of parsing errors
+    return message.channel.send(`Error: ${parsed.parsingErrors.join("\n")}`)
+}
+
+return message.channel.send(
+    `mode inputted is ${parsed.mode}, round inputted is ${parsed.round}`
+);
+```
+
+and that's it! You've not only ensured that the commands you run are "safe", but you've also given the user opportunities to learn from entering incorrectly-formatted commands!
+
+<a name="appendix"></a>
+
+## Appendix
+
+<a name="parser-library"></a>
+
+### Parser Library Glimpse
+
+<table>
+    <thead>
+        <tr>
+            <th>Parser</th>
+            <th>Description</th>
+            <th>Developer Inputs</th>
+            <th>User Inputs</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>RoundParser</code></td>
+            <td>Utilizes <code>NaturalNumberParser</code> to parse a round number, limited by the difficulty (<code>IMPOPPABLE</code> --> <code>6-100</code>).</td>
+            <td>"IMPOPPABLE", "HARD", "MEDIUM", "EASY"</td>
+            <td>Formats: <code>15</code>, <code>R15</code>, <code>round15</code></td>
+        </tr>
+        <tr>
+            <td><code>NaturalNumberParser</code></td>
+            <td>Parses a positive integer between <code>low</code> and <code>high</code></td>
+            <td><code>(6, 100)</code>, <code>(-Infinity, 0)</code>, ...</td>
+            <td>1, 2, 3, ..., 1000, ..., <code>Infinity</code></td>
+        </tr>
+        <tr>
+            <td><code>ModeParser</code></td>
+            <td>Parses a Btd6 Gamemode</td>
+            <td>"STANDARD","PRIMARYONLY","DEFLATION","MILITARYONLY",
+            "APOPALYPSE","REVERSE","MAGICONLY","DOUBLEHP","HALFCASH"
+            ,"ABR","IMPOPPABLE","CHIMPS"</td>
+            <td><-- Same</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="4">Check the /parser folder (you're in it) for a full list of parsers</th>
+        </tr>
+    </tfoot>
+</table>

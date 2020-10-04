@@ -397,7 +397,7 @@ So you know how commands can take a long list of arguments? It's in the array `a
 
 First you define a variable. In the example above its called `parsed` and you let that be `CommandParser.parse()`.
 
-You first put `args` inside the function. Then you put in your parsers. How? Lets say you want an optional parser for a mode, e.g. like in `q!income`, you don't _need_ a mode, but the mode matters. you then put in `new OptionalParser()` into the function.
+You first put `args` inside the function. Then you put in your parsers. How? Lets say you want an optional parser for a mode, e.g. like in `q!income`; you don't _need_ a mode, but the mode matters. you then put in `new OptionalParser()` into the function.
 
 The function should look something like this:
 

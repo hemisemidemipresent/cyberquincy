@@ -7,6 +7,7 @@
     -   [Utilization Techniques](#utilization)
         - [Examples](#utilization-examples)
         - [Parsing Breakdown](#parsing-breakdown)
+        - [parsed](#parsed)
     -   [Parser Structure](#parser-structure)
     -   [The Above in Simple Terms](#simplified)
     -   [Appendix](#appendix)
@@ -241,6 +242,23 @@ That is to say that the following are all valid
 
 `q!<command> 1` (<-- This is what the `EmptyParser` allows!)
 
+<a name="parsed"></a>
+
+### "Parsed"
+
+`parsed` is the return-value of `CommandParser.parse`. It is of type `Parsed` (can be found in the `/parsed` folder which you're already in if you're reading this).
+
+Looking back at [example #1](#utilization-example-1), you should be able to access `parsed.map` to get back the map that the user entered. `parsed.cash` for `CashParser`, `parsed.natural_number` for `NaturalNumberParser`, etc. It will be made more explicit later on what to expect `parsed.{value}` to be when you have  `{Value}Parser`.
+
+Before you try to access any of the `parsed` fields, you should check for parsing errors. 
+
+```js
+if (parsed.hasErrors()) {
+    // Do something here like report errors back to user and don't continue with the command
+    return message.channel.send(`Error: ${parsed.parsingErrors.join("\n")}`);
+}
+```
+
 <a name="parser-structure"></a>
 
 ## Parser Structure
@@ -295,7 +313,7 @@ type() {
 
 ```
 
-`type()` defines how to access the parsed value in the variable `parsed` when parsing finishes. In this case, since the cash parser has set `type()` to be `cash`, you use `parsed.cash` to get the cash amount that got parsed.
+`type()` defines how to access the Parser's resulting value once parsing completes. In this case, since the cash parser has set `type()` to be `cash`, you use `parsed.cash` to get the cash amount that was found in the user's command arguments.
 
 ### constructor()
 
@@ -305,7 +323,11 @@ constructor(low=0, high=Infinity) {
 }
 ```
 
-`constructor()` is the initializing method for when the parser gets created in the `.parse` arguments and is always invoked in the following way `new ThingParser()`. In the case of Parsers, it's good for allowing the command _developer_ to further restrict values from what the defaults already are.
+`constructor()` is the initializing method for when the parser gets created. In most of the examples shown, this happens in the `CommandParser.parse` call. It pretty much just looks like `new ThingParser()`. In the case of Parsers, it's good for allowing the command _developer_ to further restrict values beyond what they're already restricted to. For example, as a developer you can write a command that accepts a cash value but no more than 100,000:
+
+```js
+parsed = CommandParser.parse(args, CashParser(0, 100000))
+```
 
 ### parse()
 
@@ -330,11 +352,11 @@ transformArgument(arg) {
 }
 ```
 
-`parse()` does the actual parsing, though it usually calls upon the `this.delegateParser`. A delegate parser is a tool you can use to take advantage of existing parsers so your new parser doesn't have to do too much work. For example, a cash parser is just a number that can take in commas to separate thousands places and a `$` beforehand to distinguish it from round numbers, combo #s and other ambiguous arguments. This extra bit of work happens in the `transformArgument` function in the above case of `CashParser`.
+`parse()` does the actual parsing, though it usually calls upon the `this.delegateParser`. A delegate parser is a tool you can use to take advantage of existing parsers so your new parser doesn't have to do too much work. For example, a cash parser is just a number that can take in commas to separate thousands places and a `$` beforehand to allow the user to be most explicit. By utilizing the number parser, you don't have to worry about the user entering `abcd` because the `NumberParser` will throw an error for you. In the above example, the cash value is stripped of commas and a preceding dollar sign (achieved in the method `transformArgument`) before it's passed to be validated by the delegate `NumberParser`.
 
 <a name="simplified"></a>
 
-#### The Above in Simpler Terms
+### The Above in Simpler Terms
 
 So you know how commands can take a long list of arguments? It's in the array `args`. The parser basically helps to parse all that raw user input.
 

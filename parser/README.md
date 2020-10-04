@@ -26,8 +26,8 @@ The command parser serves a number of advantages
 -   It makes you think carefully about what values each argument in the command expects
 -   It makes it quite easy to accept arguments in any order
 -   It allows you to make certain command arguments optional and provide a default value if the user doesn't provide a matching argument
--   It provides validations based on the permitted values that get passed into the parser's constructor
--   A user who structures a command + arguments incorrectly will be provided the smallest set of error messages in order to understand what went wrong.
+-   It provides validations based on values that the user enters into commands
+-   A user who structures a command + arguments incorrectly will be provided the smallest set of error messages in order to better understand what went wrong.
 
 <a name="utilization"></a>
 
@@ -41,7 +41,7 @@ Example #1 (Simple Example - Index LCC command)
 <a name="utilization-example-1"></a>
 
 ```js
-// Catch help arguments before the parser
+// Catch help arguments before the parser or else parsing will fail because it's not looking for 0 args or 'help'
 if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
     return module.exports.helpMessage(message);
 }
@@ -49,7 +49,7 @@ if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
 // Expects one argument; just a map
 const parsed = CommandParser.parse(args, new MapParser());
 
-// No exceptions are thrown. Errors must be dealt with manually
+// No exceptions are thrown by `.parse` above. Errors must be dealt with manually
 if (parsed.hasErrors()) {
     return module.exports.errorMessage(message, parsed.parsingErrors);
 }
@@ -65,6 +65,7 @@ if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
     return module.exports.helpMessage(message);
 }
 
+// Looks for either a tower upgrade OR a hero in a given argument slot
 towerOrHeroParser = new OrParser(
     new TowerUpgradeParser(),
     new HeroParser()
@@ -101,7 +102,7 @@ The following breakdown of available parsers will reference the above examples.
 
 <a name="parser-breakdown"></a>
 ### Parser Breakdown
-You must call `CommandParser.parse()` with arguments `args, Parser1{, Parser2, ... ParserN}`. A parser is meant to interpret a single user argument, where the arguments are space-separated tokens entered by the user following the `q!<command>`. There are two classes of Parsers: Concrete Parsers and Abstract Parsers.
+You must call `CommandParser.parse()` with arguments `args, Parser1, Parser2, ... ParserN` (You should probably have at least one parser in the list although technically you could have 0 and be looking for a command invocation with no arguments). A parser is meant to interpret a single user argument, where the arguments are space-separated tokens entered by the user following the `q!<command>`. There are two classes of Parsers: Concrete Parsers and Abstract Parsers.
 
 <a name="concrete-parsers">
 
@@ -109,13 +110,13 @@ You must call `CommandParser.parse()` with arguments `args, Parser1{, Parser2, .
 
 Concrete parsers are your basic building blocks for interpreting a user's command. Concrete parsers include `TowerUpgradeParser` (which parses things like "wlp" and "spirit_of_the_forest"), `HeroParser` ("obyn", "ben", "ezi"), `BloonParser` ("red", "zebra", "zomg"), and much more.
 
-If your command needs to parse a single map (such as for the command `q!lcc`), then you would write what can be seen in [example #1](#utilization-example-1) above. If your command expects a round number and a game mode (such as `abr` or `impoppable`) then you would write:
+If your command needs to parse a single map (such as for the command `q!lcc`), then you would write what can be seen in [example #1](#utilization-example-1) above. If your command expects a round number and ALSO a game mode (such as `abr` or `impoppable`) then you would write:
 
 ```js
 const parsed = CommandParser.parse(args, new RoundParser(), new ModeParser());
 ```
 
-Each concrete parser dictates what values they accept, so if the first argument is "banana" to a command that uses the above parsing structure, then `RoundParser` would fail to parse the argument and there would be a parsing error (to be discussed soon) contained within the `parsed` return value once the attempt finishes.
+Each concrete parser dictates what values they accept, so if the first argument is "banana" to a command that uses the above parsing structure, then `RoundParser` would fail to parse the argument and there would be a parsing error (to be discussed soon) contained within the `parsed` variable.
 
 Making items optional or order-agnostic will be introduced in the next section.
 
@@ -123,7 +124,7 @@ Making items optional or order-agnostic will be introduced in the next section.
 
 ##### Abstract Parsers
 
-Abstract parsers and parsers that take in zero or more parsers to provide an enhanced parsing mechanism. One good example is the `OrParser` as in [Example #2](#utilization-example-2) which takes in a list of arguments, each of which represents a parsing possibility. So if you had something like
+Abstract parsers and parsers that take in some number of parsers (including 0 in certain cases) and create a new parser based on the ones given to it. One good example is the `OrParser` as in [Example #2](#utilization-example-2) which looks for an argument that matches ANY of the OrParser arguments. So if you had something like
 
 ```js
 const parsed = CommandParser.parse(
@@ -136,7 +137,7 @@ const parsed = CommandParser.parse(
 )
 ```
 
-parsing would succeed if the user provided one argument that either one of the three parsers recognized. A 2-argument command invocation would fail here because in any case, the parser is expecting just one argument. Note that arguments to `OrParser` can also be lists of parsers as in
+parsing would succeed if the user provided a single argument that was either a natural number, a mode, or a map. A 2-argument command invocation would fail here because in the parser is expecting just one argument. Note that arguments to `OrParser` can also be lists of parsers as in
 
 ```js
 const parsed = CommandParser.parse(
@@ -148,11 +149,11 @@ const parsed = CommandParser.parse(
 )
 ```
 
-In contrast, this takes in either
+In contrast, this takes in EITHER
 1. a natural number AND a mode
 2. just a map.
 
-Another key parser to be aware of is `AnyOrderParser`. It's pretty simple: you provide a list of parsers and the command parser will look for user input in any permutation of the parser ordering, as in
+Another key parser to be aware of is `AnyOrderParser`. It's pretty simple: you provide a list of parsers and the command parser will look for an order-agnostic match. Here's an example:
 
 ```js
 const parsed = CommandParser.parse(
@@ -165,9 +166,9 @@ const parsed = CommandParser.parse(
 )
 ```
 
-A command that uses this parsing structure would be looking for a 3-argument invocation of the command with a natural number, a mode (like "impoppable"), and a map (like "cube"). `AnyOrderParser` allows the order to not matter though, so `q!<command> abr cube 3` would parse successfully here.
+The command that uses the above parsing structure would be looking for a 3-argument invocation of the command with a natural number, a mode (like "impoppable"), and a map (like "cube") but not necessarily in that order; `q!<command> abr cube 3` would parse successfully here.
 
-There are two other parsers to be aware of. `OptionalParser` takes in a parser and a default value if the parsing fails. The default value must be a value that if the user entered it, the parser itself could parse. The default value is optional though and can be left out. Here are two examples:
+There are two other parsers to be aware of. `OptionalParser` takes in 1. a parser and 2. a default value if the parsing fails. The default value must be a value that if the user entered it, the parser would accept. The default value is optional though and can be left out. Here are two examples:
 
 ```js
 // With default value
@@ -190,7 +191,7 @@ const parsed = CommandParser.parse(
 )
 ```
 
-The following would raise an exception because `8` is not a valid "mode":
+The following would raise a `DeveloperCommandError` because `8` is not a valid "mode":
 
 ```js
 // With default value
@@ -203,7 +204,7 @@ const parsed = CommandParser.parse(
 )
 ```
 
-Finally, `EmptyParser` parses nothing and doesn't throw away an argument slot. It's useful when you have an `OrParser` and you want one of the options to be no extra argument as in
+Finally, `EmptyParser` parses nothing and doesn't waste the argument slot. It's useful when you have an `OrParser` and you want one of the options to be no extra argument as in
 
 ```js
 const parsed = CommandParser.parse(
@@ -225,38 +226,20 @@ That is to say that the following are all valid
 
 `q!<command> 1` (<-- This is what the `EmptyParser` allows!)
 
-**Options**
-
-1. `OptionalParser`: delegates parsing to the constructor's _first_ argument (which must be a parser). If the delegate parser succeeds, the `OptionalParser` will return that parsed value; otherwise it will return the default value that gets passed into the `OptionalParser` constructor's _second_ argument.
-2. Call `CommandParser.parse()` to lock down the ordering in which discord users must provide the command arguments . Call `CommandParser.parseAnyOrder()` to allow any ordering of the arguments.
-3. The returned value is a `Parsed` object, which is just an enhanced Object. It's accessor keys are based on the `types()`s of the parsers used.
-   i. The key that gets added to `parsed` for an `OptionalParser` is the wrapped parser's `type()`. In the above example, that would be `mode`.
-4. `Parsed` also keeps pluralized versions of each parser's `type()`. In the above example, that would be `rounds` and (optionally) `modes`. This should be used if something like 2 `RoundParser`s are supplied, in which case `pased.round` will remain the first round that was parsed while `parsed.rounds` will be a(n unordered) list of all `RoundParser` results.
-
-**Recommendations**
-
-1. Catch HELP arguments before parsing. Parsing will likely fail if you try to do so after.
-2. If `parseAnyOrder()` is used with `OptionalParser`s, play around with the ordering of the parsers to consistently get the best error messages for incorrect inputs. It's likely that putting the optional parsers at the end will produce the best error messages, but not much testing on that has been done.
-3. Use `try-catch` as done so in the above example:
-
-    i. Catch a `ParsingError` and provide the user with the list of errors encountered by the `CommandParser`: `parsingError.parsingErrors.join('\n')`
-
-    ii. Bubble up any other type of error
-
 <a name="simplified"></a>
 
 #### The Above in Simpler Terms
 
 So you know how commands can take a long list of arguments? It's in the array `args`. The parser basically helps to parse all that raw user input.
 
-First you define a variable. In the example above its called `parsed`. You let that either be a `CommandParser.parse()` or `CommandParser.parseAnyOrder()`.
+First you define a variable. In the example above its called `parsed` and you let that be `CommandParser.parse()`.
 
-You first put `args` inside the function. Then you put in your parsers. How? Lets say you want an optional parser for a mode, e.g. like in `q!income`, you don't need a mode, but the mode matters. you then put in `new OptionalParser()` into the function.
+You first put `args` inside the function. Then you put in your parsers. How? Lets say you want an optional parser for a mode, e.g. like in `q!income`, you don't _need_ a mode, but the mode matters. you then put in `new OptionalParser()` into the function.
 
 The function should look something like this:
 
 ```js
-let parsed = CommandParser.parseAnyOrder(args, new OptionalParser());
+let parsed = CommandParser.parse(args, new OptionalParser());
 ```
 
 In the new `OptionalParser()` it accepts 2 things, a parser and a "fallback option". So for example
@@ -266,12 +249,12 @@ new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS');
 ```
 
 means that this `OptionalParser()` has `ModeParser()` as its parser, and if the parser can't find that mode, it resorts to the second input, in this case `'CHIMPS'`.
-We can add more parsers inside the `parseAnyOrder()` function. In this case we would like to know the round (compulsory), so we add `newRoundParser('IMPOPPABLE')`. What this does is check whether the round provided fits into the impoppable gamemode criteria, i.e. whether or not `6<=round<=100`
+We can add more parsers inside the `parse()` function. In this case we would like to know the round (compulsory), so we add `newRoundParser('IMPOPPABLE')`. What this does is check whether the round provided fits into the impoppable gamemode criteria, i.e. whether or not `6<=round<=100`
 
 So far, it should look something like this:
 
 ```js
-parsed = CommandParser.parseAnyOrder(
+parsed = CommandParser.parse(
     args,
     new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
     new RoundParser('IMPOPPABLE')
@@ -280,65 +263,54 @@ parsed = CommandParser.parseAnyOrder(
 
 that is essentially it. There is just a few more steps:
 
-1. add a `try{}` and `catch{}` code blocks:
+1. Allow the user to enter the command arguments in any order (so mode then round OR round then mode):
 
 ```js
-try {
-    parsed = CommandParser.parseAnyOrder(
-        args,
-        new OptionalParser(
-            new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
-            'CHIMPS'
-        ),
+parsed = CommandParser.parse(
+    args,
+    new AnyOrderParser(
+        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
         new RoundParser('IMPOPPABLE')
-    );
-} catch (e) {}
+    )  
+);
 ```
 
-2. add a form of error message for `ParsingError`s specifically
+2. Catch any errors
 
 ```js
-try {
-    parsed = CommandParser.parseAnyOrder(
-        args,
-        new OptionalParser(
-            new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
-            'CHIMPS'
-        ),
+parsed = CommandParser.parse(
+    args,
+    new AnyOrderParser(
+        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
         new RoundParser('IMPOPPABLE')
-    );
-} catch (e) {
-    if (e instanceof ParsingError) {
-        module.exports.errorMessage(message, e);
-    } else {
-        throw e;
-    }
+    )  
+);
+
+if (parsed.hasErrors()) {
+    // Return a message to the command user with a new-line separated list of parsing errors
+    return message.channel.send(`Error: ${parsed.parsingErrors.join("\n")}`)
 }
 ```
 
-You can access the mode inputted by using `parsed.mode` like this:
+You can access the mode inputted by using `parsed.mode` at the end:
 
 ```js
-try {
-    parsed = CommandParser.parseAnyOrder(
-        args,
-        new OptionalParser(
-            new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
-            'CHIMPS'
-        ),
+parsed = CommandParser.parse(
+    args,
+    new AnyOrderParser(
+        new OptionalParser(new ModeParser('CHIMPS', 'ABR', 'HALFCASH'), 'CHIMPS'),
         new RoundParser('IMPOPPABLE')
-    );
+    )  
+);
 
-    return message.channel.send(
-        `mode inputted is ${parsed.mode}, round inputted is ${parsed.round}`
-    );
-} catch (e) {
-    if (e instanceof ParsingError) {
-        module.exports.errorMessage(message, e);
-    } else {
-        throw e;
-    }
+if (parsed.hasErrors()) {
+    // Return a message to the command user with a new-line separated list of parsing errors
+    return message.channel.send(`Error: ${parsed.parsingErrors.join("\n")}`)
 }
+
+return message.channel.send(
+    `mode inputted is ${parsed.mode}, round inputted is ${parsed.round}`
+);
 ```
 
 and that's it! You've not only ensured that the commands you run are "safe", but you've also given the user opportunities to learn from entering incorrectly-formatted commands!
@@ -389,7 +361,7 @@ and that's it! You've not only ensured that the commands you run are "safe", but
 
 ## Parser Structure
 
-There are 2 types of parsers, logic parsers (OrParser, OptionalParser, AnyOrderParser, etc) and arg parsers (map, mode, hero, difficulty, number, round, cash, etc...) This will be talking about arg parsers because logic parsers are deep
+As a reminder, there are 2 types of parsers: abstract parsers (OrParser, OptionalParser, AnyOrderParser, etc) and concrete parsers (map, mode, hero, difficulty, number, round, cash, etc...). This illustration will only be focused on concrete parsing structure because it's super unlikely you'll want to/need to write an abstract parser.
 
 -   example: cashParser
 
@@ -439,7 +411,7 @@ type() {
 
 ```
 
-`type()` defines the key the value is stored. In this case since you get the cash using `parsed.cash`, it returns `'cash'`
+`type()` defines how to access the parsed value in the variable `parsed` when parsing finishes. In this case, since the cash parser has set `type()` to be `cash`, you use `parsed.cash` to get the cash amount that got parsed.
 
 ### constructor()
 
@@ -449,7 +421,7 @@ constructor(low=0, high=Infinity) {
     }
 ```
 
-`constructor()` only defines the `this` object, common examples include `this.delegateParser`, which is the "base" parser (for example round parser is basically a number parser for examoke)
+`constructor()` is the initializing method for when the parser gets created in the `.parse` arguments and is always invoked in the following way `new ThingParser()`. In the case of Parsers, it's good for allowing the command _developer_ to further restrict values from what the defaults already are.
 
 ### parse()
 
@@ -461,6 +433,6 @@ parse(arg) {
     }
 ```
 
-`parse()` does the actual parsing, though it usually calls upon the `this.delegateParser`
+`parse()` does the actual parsing, though it usually calls upon the `this.delegateParser`. A delegate parser is a tool you can use to take advantage of existing parsers so your new parser doesn't have to do too much work. For example, a cash parser is just a number that can take in commas to separate thousands places and a `$` beforehand to distinguish it from round numbers, combo #s and other ambiguous arguments. This extra bit of work happens in the `transformArgument` function in the above case of `CashParser`.
 
 #### Any other functions are probably just to help the parsing go smoother

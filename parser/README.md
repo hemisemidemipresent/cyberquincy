@@ -250,6 +250,19 @@ That is to say that the following are all valid
 
 Looking back at [example #1](#utilization-example-1), you should be able to access `parsed.map` to get back the map that the user entered; `parsed.cash` for `CashParser`; `parsed.natural_number` for `NaturalNumberParser`, etc. It will be made more explicit later on what to expect `parsed.{value}` to be when you have  `{Value}Parser`.
 
+Note that if you, the command developer, pass in let's say 2 rounds like so:
+
+```js
+parsed = CommandParser.parse(args, new RoundParser(), new RoundParser())
+```
+
+`parsed.round` will only give you the latest (in this case) the second round parsed. In order to get a list of all parsed rounds, just use `parsed.rounds` (plural). If you want them from lowest to highest just write
+
+```js
+parsed = CommandParser.parse(args, new RoundParser(), new RoundParser())
+rounds = parsed.rounds.sort // parsed.rounds is just a list so you can run .sort on it 
+```
+
 Before you try to access any of the `parsed` fields, you should check for parsing errors. 
 
 ```js

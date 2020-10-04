@@ -6,7 +6,7 @@
     -   [Introduction](#introduction)
     -   [Utilization Techniques](#utilization)
         - [Examples](#utilization-examples)
-        - [Parser Breakdown](#parser-breakdown)
+        - [Parsing Breakdown](#parsing-breakdown)
     -   [The Above in Simple Terms](#simplified)
     -   [Parser Library Glimpse](#parser-library)
     -   [Parser Structure](#parser-class)
@@ -100,8 +100,8 @@ if (parsed.hasErrors()) {
 
 The following breakdown of available parsers will reference the above examples.
 
-<a name="parser-breakdown"></a>
-### Parser Breakdown
+<a name="parsing-breakdown"></a>
+### Parsing Breakdown
 You must call `CommandParser.parse()` with arguments `args, Parser1, Parser2, ... ParserN` (You should probably have at least one parser in the list although technically you could have 0 and be looking for a command invocation with no arguments). A parser is meant to interpret a single user argument, where the arguments are space-separated tokens entered by the user following the `q!<command>`. There are two classes of Parsers: Concrete Parsers and Abstract Parsers.
 
 <a name="concrete-parsers">

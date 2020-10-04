@@ -246,9 +246,9 @@ That is to say that the following are all valid
 
 ### "Parsed"
 
-`parsed` is the return-value of `CommandParser.parse`. It is of type `Parsed` (can be found in the `/parsed` folder which you're already in if you're reading this).
+`parsed` is the return-value of `CommandParser.parse`. It will be of type `Parsed`, for which you can read through the implementation [here](https://github.com/rmlgaming/cyberquincy/blob/master/parser/parsed.js)
 
-Looking back at [example #1](#utilization-example-1), you should be able to access `parsed.map` to get back the map that the user entered. `parsed.cash` for `CashParser`, `parsed.natural_number` for `NaturalNumberParser`, etc. It will be made more explicit later on what to expect `parsed.{value}` to be when you have  `{Value}Parser`.
+Looking back at [example #1](#utilization-example-1), you should be able to access `parsed.map` to get back the map that the user entered; `parsed.cash` for `CashParser`; `parsed.natural_number` for `NaturalNumberParser`, etc. It will be made more explicit later on what to expect `parsed.{value}` to be when you have  `{Value}Parser`.
 
 Before you try to access any of the `parsed` fields, you should check for parsing errors. 
 

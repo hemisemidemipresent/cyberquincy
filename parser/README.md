@@ -96,8 +96,8 @@ if (parsed.hasErrors()) {
 }
 
 // Here, you'll have to check whether parsed.map, parsed.natural_number, parsed.tower_upgrade, etc.
-// have been collected from the parser. The number of optional parsers means you'll have to check
-// what was parsed and what wasn't and decide how to reply to the user accordingly
+// have been collected from the parser. The presence of optional parsers means you'll have to check
+// what was parsed and what wasn't and decide how to execute the command accordingly
 ```
 
 The following breakdown of available parsers will reference the above examples.
@@ -141,7 +141,7 @@ const parsed = CommandParser.parse(
 )
 ```
 
-parsing would succeed if the user provided a single argument that was either a natural number, a mode, or a map. A 2-argument command invocation (like `q!<command> 2 abr`) would fail here because in the parser is expecting just one argument. Note that arguments to `OrParser` can also be lists of parsers as in
+parsing would succeed if the user provided a single argument that was either a natural number, a mode, or a map (as in `q!<command> infernal`). A 2-argument command invocation (like `q!<command> 2 abr`) would fail here because in the parser is expecting just one argument. Note that arguments to `OrParser` can also be lists of parsers as in
 
 ```js
 const parsed = CommandParser.parse(
@@ -157,7 +157,7 @@ In contrast, this takes in EITHER
 1. a natural number AND a mode (`q!<command> 4 abr`)
 2. just a map. (`q!<command> logs`)
 
-Another key parser to be aware of is `AnyOrderParser`. It's pretty simple: you provide a list of parsers and the command parser will look for a match ignoring the ordering of the arguments/parsers. Here's an example:
+Another key parser to be aware of is `AnyOrderParser`. It's pretty simple: you provide a variable number of parsers to the `AnyOrderParser` and the command parser will try to match the concrete parsers with the arguments in any order. Here's an example:
 
 ```js
 const parsed = CommandParser.parse(
@@ -170,7 +170,7 @@ const parsed = CommandParser.parse(
 )
 ```
 
-The above parsing structure would be looking for a 3-argument invocation of `q!<command>` with a natural number, a mode (like "impoppable"), and a map (like "cube") but not necessarily in that order; `q!<command> abr cube 3` would parse successfully here. Note that none of the arguments are optional; all 3 must be there.
+The above parsing structure would be looking for a 3-argument invocation of `q!<command>` with a natural number, a mode (like "impoppable"), AND a map (like "cube") although not necessarily in that order; for example, `q!<command> abr cube 3` would parse successfully here. Note that none of the arguments are optional; all 3 must be there.
 
 There are two other parsers to be aware of. `OptionalParser` takes in 1. a parser and 2. a default value if the parsing fails. The default value must be a value that the parser accepts (see examples below to understand). The default value _can_ be excluded though, so if the `OptionalParser` fails to parse its corresponding argument using the provided concrete parser (`ModeParser` in the following examples), it'll just skip over it entirely and not parse anything. Here are two basic examples:
 
@@ -240,7 +240,29 @@ That is to say that the following are all valid
 
 `q!<command> 1 beginner`
 
-`q!<command> 1` (<-- This is what the `EmptyParser` allows!)
+`q!<command> 1` (<-- This is what the `EmptyParser` allows!).
+
+Note that in the worst case scenario, you can avoid using all abstract parsers but the `OrParser` in the following way:
+
+```js
+parsingOption1 = [new RoundParser(), new ModeParser],
+parsingOption2 = [new RoundParser()]
+parsingOption3 = [new ModeParser(), new RoundParser()]
+...
+
+const parsed = CommandParser.parse(
+    args,
+    new NaturalNumberParser()
+    new OrParser(
+        parsingOption1,
+        parsingOption2,
+        parsingOption3,
+        ...
+    )
+)
+```
+
+this sort of structure would allow you to skip using `OptionalParser` and `AnyOrderParser` and might make smaller use cases easier to reason about. However, once you start writing large and more complex ones, you probably won't want to be replacing `AnyOrderParser`s, which can save you from writing out possibly dozens of different acceptance cases.
 
 <a name="parsed"></a>
 

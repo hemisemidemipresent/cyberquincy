@@ -406,8 +406,8 @@ module.exports = class CashParser {
 
 ```js
 type() {
-        return 'cash';
-    }
+    return 'cash';
+}
 
 ```
 
@@ -417,8 +417,8 @@ type() {
 
 ```js
 constructor(low=0, high=Infinity) {
-        this.delegateParser = new NumberParser(low, high);
-    }
+    this.delegateParser = new NumberParser(low, high);
+}
 ```
 
 `constructor()` is the initializing method for when the parser gets created in the `.parse` arguments and is always invoked in the following way `new ThingParser()`. In the case of Parsers, it's good for allowing the command _developer_ to further restrict values from what the defaults already are.
@@ -427,10 +427,23 @@ constructor(low=0, high=Infinity) {
 
 ```js
 parse(arg) {
-        // Convert `$5` to just `5`
-        arg = this.transformArgument(arg);
-        return this.delegateParser.parse(arg);
+    // Convert `$5` to just `5`
+    arg = this.transformArgument(arg);
+    return this.delegateParser.parse(arg);
+}
+
+// Parses all ways the command user could enter a round
+transformArgument(arg) {
+    if (arg[0] == '$') {
+        return arg.slice(1);
+    } else if (/\d|\./.test(arg[0])) {
+        return arg;
+    } else {
+        throw new UserCommandError(
+            `Cash must be of form \`15\` or \`$15\` (Got \`${arg}\` instead)`
+        );
     }
+}
 ```
 
 `parse()` does the actual parsing, though it usually calls upon the `this.delegateParser`. A delegate parser is a tool you can use to take advantage of existing parsers so your new parser doesn't have to do too much work. For example, a cash parser is just a number that can take in commas to separate thousands places and a `$` beforehand to distinguish it from round numbers, combo #s and other ambiguous arguments. This extra bit of work happens in the `transformArgument` function in the above case of `CashParser`.

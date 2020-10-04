@@ -102,7 +102,9 @@ The following breakdown of available parsers will reference the above examples.
 
 <a name="parsing-breakdown"></a>
 ### Parsing Breakdown
-You must call `CommandParser.parse()` with arguments `args, Parser1, Parser2, ... ParserN` (You should probably have at least one parser in the list although technically you could have 0 and be looking for a command invocation with no arguments). A parser is meant to interpret a single user argument, where the arguments are space-separated tokens entered by the user following the `q!<command>`. There are two classes of Parsers: Concrete Parsers and Abstract Parsers.
+You must call `CommandParser.parse()` with arguments `args, Parser1, Parser2, ... ParserN` (You should probably have at least one parser in the list although technically you could have 0 and be looking for a command invocation with no arguments). Each parser interprets a single user argument, where an argument is a space-separate token that comes after `q!<command>`. For example the arguments in `q!2mp sun-avatar end_of_the_road` are `sun-avatar` and `end_of_the_road`.
+
+There are two classes of Parsers: Concrete Parsers and Abstract Parsers.
 
 <a name="concrete-parsers">
 
@@ -116,7 +118,7 @@ If your command needs to parse a single map (such as for the command `q!lcc`), t
 const parsed = CommandParser.parse(args, new RoundParser(), new ModeParser());
 ```
 
-Each concrete parser dictates what values they accept, so if the first argument is "banana" to a command that uses the above parsing structure, then `RoundParser` would fail to parse the argument and there would be a parsing error (to be discussed soon) contained within the `parsed` variable.
+Each concrete parser dictates what values they accept (see [parser structure](#parser-structure) below), so if a user enters a command like `q!<command> BANANA abr` to the above parsing structure, then `RoundParser` will try to parse `BANANA` but fail because banana can't be interpreted as a round; therefore, there would be a parsing error (to be discussed soon) contained within the `parsed` variable.
 
 Making items optional or order-agnostic will be introduced in the next section.
 
@@ -137,7 +139,7 @@ const parsed = CommandParser.parse(
 )
 ```
 
-parsing would succeed if the user provided a single argument that was either a natural number, a mode, or a map. A 2-argument command invocation would fail here because in the parser is expecting just one argument. Note that arguments to `OrParser` can also be lists of parsers as in
+parsing would succeed if the user provided a single argument that was either a natural number, a mode, or a map. A 2-argument command invocation (like `q!<command> 2 abr`) would fail here because in the parser is expecting just one argument. Note that arguments to `OrParser` can also be lists of parsers as in
 
 ```js
 const parsed = CommandParser.parse(
@@ -150,10 +152,10 @@ const parsed = CommandParser.parse(
 ```
 
 In contrast, this takes in EITHER
-1. a natural number AND a mode
-2. just a map.
+1. a natural number AND a mode (`q!<command> 4 abr`)
+2. just a map. (`q!<command> logs`)
 
-Another key parser to be aware of is `AnyOrderParser`. It's pretty simple: you provide a list of parsers and the command parser will look for an order-agnostic match. Here's an example:
+Another key parser to be aware of is `AnyOrderParser`. It's pretty simple: you provide a list of parsers and the command parser will look for a match ignoring the ordering of the arguments/parsers. Here's an example:
 
 ```js
 const parsed = CommandParser.parse(
@@ -166,9 +168,11 @@ const parsed = CommandParser.parse(
 )
 ```
 
-The command that uses the above parsing structure would be looking for a 3-argument invocation of the command with a natural number, a mode (like "impoppable"), and a map (like "cube") but not necessarily in that order; `q!<command> abr cube 3` would parse successfully here.
+The above parsing structure would be looking for a 3-argument invocation of `q!<command>` with a natural number, a mode (like "impoppable"), and a map (like "cube") but not necessarily in that order; `q!<command> abr cube 3` would parse successfully here. Note that none of the arguments are optional; all 3 must be there.
 
-There are two other parsers to be aware of. `OptionalParser` takes in 1. a parser and 2. a default value if the parsing fails. The default value must be a value that if the user entered it, the parser would accept. The default value is optional though and can be left out. Here are two examples:
+There are two other parsers to be aware of. `OptionalParser` takes in 1. a parser and 2. a default value if the parsing fails. The default value must be a value that the parser accepts (see examples to understand). The default value can be excluded though, so if the parsing fails to parse using the provided concrete parser, it'll just skip over it entirely and not parse anything. Here are two basic examples:
+
+This:
 
 ```js
 // With default value
@@ -181,6 +185,12 @@ const parsed = CommandParser.parse(
 )
 ```
 
+will accept 
+1. `q!<command>`, and will result in `parsed.mode` equal to `abr`
+2. `q!<command> chimps`, and will result in `parsed.mode` equal to `chimps`
+
+This:
+
 ```js
 // Without default value
 const parsed = CommandParser.parse(
@@ -190,6 +200,10 @@ const parsed = CommandParser.parse(
     )
 )
 ```
+
+will accept 
+1. `q!<command>`, and will result in `parsed.mode` equal to `undefined`
+2. `q!<command> chimps`, and will result in `parsed.mode` equal to `chimps`
 
 The following would raise a `DeveloperCommandError` because `8` is not a valid "mode":
 

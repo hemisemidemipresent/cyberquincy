@@ -363,7 +363,7 @@ and that's it! You've not only ensured that the commands you run are "safe", but
 
 As a reminder, there are 2 types of parsers: abstract parsers (OrParser, OptionalParser, AnyOrderParser, etc) and concrete parsers (map, mode, hero, difficulty, number, round, cash, etc...). This illustration will only be focused on concrete parsing structure because it's super unlikely you'll want to/need to write an abstract parser.
 
--   example: cashParser
+-   example: `CashParser`
 
 ```js
 const NumberParser = require('./number-parser.js');

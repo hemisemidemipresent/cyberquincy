@@ -391,7 +391,7 @@ transformArgument(arg) {
 
 <a name="simplified"></a>
 
-### The Above in Simpler Terms
+## All of the Above in Simpler Terms
 
 So you know how commands can take a long list of arguments? It's in the array `args`. The parser basically helps to parse all that raw user input.
 

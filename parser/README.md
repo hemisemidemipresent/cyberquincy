@@ -241,8 +241,6 @@ That is to say that the following are all valid
 
 `q!<command> 1` (<-- This is what the `EmptyParser` allows!)
 
-<a name="simplified"></a>
-
 <a name="parser-structure"></a>
 
 ## Parser Structure
@@ -334,8 +332,7 @@ transformArgument(arg) {
 
 `parse()` does the actual parsing, though it usually calls upon the `this.delegateParser`. A delegate parser is a tool you can use to take advantage of existing parsers so your new parser doesn't have to do too much work. For example, a cash parser is just a number that can take in commas to separate thousands places and a `$` beforehand to distinguish it from round numbers, combo #s and other ambiguous arguments. This extra bit of work happens in the `transformArgument` function in the above case of `CashParser`.
 
-#### Any other functions are probably just to help the parsing go smoother
-
+<a name="simplified"></a>
 
 #### The Above in Simpler Terms
 

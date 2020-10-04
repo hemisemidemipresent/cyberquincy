@@ -172,7 +172,7 @@ const parsed = CommandParser.parse(
 
 The above parsing structure would be looking for a 3-argument invocation of `q!<command>` with a natural number, a mode (like "impoppable"), and a map (like "cube") but not necessarily in that order; `q!<command> abr cube 3` would parse successfully here. Note that none of the arguments are optional; all 3 must be there.
 
-There are two other parsers to be aware of. `OptionalParser` takes in 1. a parser and 2. a default value if the parsing fails. The default value must be a value that the parser accepts (see examples below to understand). The default value can be excluded though, so if the parsing fails to parse using the provided concrete parser, it'll just skip over it entirely and not parse anything. Here are two basic examples:
+There are two other parsers to be aware of. `OptionalParser` takes in 1. a parser and 2. a default value if the parsing fails. The default value must be a value that the parser accepts (see examples below to understand). The default value _can_ be excluded though, so if the `OptionalParser` fails to parse its corresponding argument using the provided concrete parser (`ModeParser` in the following examples), it'll just skip over it entirely and not parse anything. Here are two basic examples:
 
 This:
 
@@ -188,7 +188,7 @@ const parsed = CommandParser.parse(
 ```
 
 will accept 
-1. `q!<command>`, and will result in `parsed.mode` equal to `abr` <-- Compare \/
+1. `q!<command>`, and will result in `parsed.mode` equal to `abr` <-- Compare to \\/
 2. `q!<command> chimps`, and will result in `parsed.mode` equal to `chimps`
 
 This:
@@ -204,7 +204,7 @@ const parsed = CommandParser.parse(
 ```
 
 will accept 
-1. `q!<command>`, and will result in `parsed.mode` equal to `undefined` <-- Compare /\
+1. `q!<command>`, and will result in `parsed.mode` equal to `undefined` <-- Compare to /\
 2. `q!<command> chimps`, and will result in `parsed.mode` equal to `chimps`
 
 The following would raise a `DeveloperCommandError` because `8` is not a valid "mode":
@@ -263,7 +263,7 @@ if (parsed.hasErrors()) {
 
 ## Parser Structure
 
-As a reminder, there are 2 types of parsers: abstract parsers (OrParser, OptionalParser, AnyOrderParser, etc) and concrete parsers (map, mode, hero, difficulty, number, round, cash, etc...). This illustration will only be focused on concrete parsing structure because it's super unlikely you'll want to/need to write an abstract parser.
+As a reminder, there are 2 types of parsers: abstract parsers (`OrParser`, `OptionalParser`, `AnyOrderParser`, etc) and concrete parsers (map, mode, hero, difficulty, number, round, cash, etc...). This illustration will only be focused on concrete parsing structure because it's super unlikely you'll want to/need to write an abstract parser.
 
 -   example: `CashParser`
 

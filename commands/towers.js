@@ -101,7 +101,7 @@ module.exports = {
         let name = findName(commandName);
 
         if (!args[0] || args[1]) {
-            let embed = baseTower(towerJSON, name);
+            let embed = baseTower(name);
             return message.channel.send(embed);
         }
         let input = args[0].toString();
@@ -123,7 +123,7 @@ module.exports = {
         //let object = json[`${name}`].upgrades[path - 1][tier - 1];
         let object = towerJSON[`${name}`].upgrades[path - 1][tier - 1];
         if (!object) {
-            const embed = baseTower(json, name);
+            const embed = baseTower(name);
 
             return message.channel.send(embed).then((msg) => {
                 msg.react('❌');
@@ -208,8 +208,8 @@ function provideHelpMsg(message, name) {
 function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;
 }
-function baseTower(json, name) {
-    let object = json[`${name}`];
+function baseTower(name) {
+    let object = towerJSON[`${name}`];
     const embed = new Discord.MessageEmbed()
         .setColor(cyber)
         .setTitle(object.name)

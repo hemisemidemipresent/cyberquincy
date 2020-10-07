@@ -5,6 +5,8 @@ const RoundParser = require('../parser/round-parser');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
 const AnyOrderParser = require('../parser/any-order-parser');
+const json = require('../jsons/rounds_topper.json');
+
 module.exports = {
     name: 'round',
     description: 'tells you about the rounds (below 100)',
@@ -66,7 +68,6 @@ module.exports = {
                 1665 * (parsed.round - 50) +
                 45 * Math.pow(parsed.round - 50, 2);
         }
-        const json = require('../jsons/rounds_topper.json');
         let object = json.reg;
         let length = getLength(parsed.round, object);
         let data = getData(parsed.round, object);

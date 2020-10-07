@@ -4,29 +4,36 @@ module.exports = {
     name: 'race',
     aliases: ['rac', 'ra', 'racc', 'rae'],
     cooldown: 5,
+
+    execute,
+
     dependencies: ['btd6index'],
 
-    execute(message, args) {
-        if (message.author.id == 279126808455151628) {
-            return message.channel.send(
-                'You have been banned from abusing this command.'
-            );
-        }
-        if (!args) {
-            return message.channel.send(
-                'please specify a race number/name\nexamples:\nq!race 10\nq!race Primary Qualifiers'
-            );
-        }
-        if (isNaN(args[0])) {
-            let str = args.join(' ');
-            return findRaceByStr(str, message);
-        } else if (isNaN(args[0]) || args[0] < 1)
-            return message.channel.send('please specify a valid race number');
-        else {
-            findRaceByNum(parseInt(args[0]), message);
-        }
-    },
+
+
 };
+
+function execute(message, args) {
+    if (message.author.id == 279126808455151628) {
+        return message.channel.send(
+            'You have been banned from abusing this command.'
+        );
+    }
+    if (!args) {
+        return message.channel.send(
+            'please specify a race number/name\nexamples:\nq!race 10\nq!race Primary Qualifiers'
+        );
+    }
+    if (isNaN(args[0])) {
+        let str = args.join(' ');
+        return findRaceByStr(str, message);
+    } else if (isNaN(args[0]) || args[0] < 1)
+        return message.channel.send('please specify a valid race number');
+    else {
+        findRaceByNum(parseInt(args[0]), message);
+    }
+}
+
 async function findRaceByStr(str, message) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'Races');
     await sheet.loadCells('G3:G3'); // loads race #

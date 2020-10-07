@@ -16,5 +16,6 @@
     "discordbotlist": "no",
     "botposting": false,
     "btd6index": true,
-    "towerJSON": true
+    "towerJSON": true,
+    "testing": true
 }

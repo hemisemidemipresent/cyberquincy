@@ -8,6 +8,7 @@
         "push": "git push heroku master",
         "copy": "del /f database.sqlite && heroku ps:copy database.sqlite",
         "add": "git add . && git commit -m p",
+        "everything": "npm run copy && npm run add && npm run push",
         "refresh": "del /f package-lock.json && npm install"
     },
     "repository": {

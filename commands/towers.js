@@ -219,8 +219,7 @@ function baseTower(name) {
         )
         .addField('notes', object.notes, true)
         .setFooter(
-            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration',
-            true
+            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
         );
     return embed;
 }

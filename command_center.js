@@ -117,8 +117,14 @@ async function handleCommand(message) {
         // post information to statcord
         const botposting = require('./1/config.json')['botposting'];
         if (statcord && botposting) {
-            statcord.postCommand(command.name, message.author.id);
-            console.log(`[POST] q!${command.name} to statcord,`);
+            statcord
+                .postCommand(command.name, message.author.id)
+                .then(() => {
+                    console.log(`[POST] q!${command.name} to statcord,`);
+                })
+                .catch((err) => {
+                    console.log(`[ERROR] q!${command.name} failed to post`);
+                });
         }
 
         // May or may not embed an advertisement message in addition to the command output

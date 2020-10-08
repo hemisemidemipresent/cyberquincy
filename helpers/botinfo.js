@@ -18,13 +18,13 @@ function statcord() {
         });
         statcord.on('autopost-start', () => {
             // Emitted when statcord autopost starts
-            console.log('Started autopost');
+            console.log('[POST] started autopost');
         });
 
         statcord.on('post', (status) => {
             // status = false if the post was successful
             // status = "Error message" or status = Error if there was an error
-            if (!status) console.log('Successful post');
+            if (!status) console.log('[POST] successful Statcord post');
             else console.error(status);
         });
         statcord.autopost().catch((error) => {
@@ -59,7 +59,14 @@ function discordbotlist() {
             Authorization: key,
             'Content-Type': 'application/json',
         },
-    }).then((res) => res.json());
+    })
+        .then((res) => {
+            res.json();
+            console.log('[POST] Posted to discordbotlist');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
 module.exports = {

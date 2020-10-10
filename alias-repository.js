@@ -276,9 +276,6 @@ class AliasRepository extends Array {
             'MM',
             'ML',
             'KD',
-            'BZ',
-            'HA',
-            'R',
             'CF',
             'GD',
             'UG',
@@ -423,6 +420,10 @@ class AliasRepository extends Array {
     indexAbbreviationToMap(mapAbbr) {
         const indexNormalUnformatted = this.getAliasSet(mapAbbr.toLowerCase())[0]
         return this.toIndexNormalForm(indexNormalUnformatted)
+    }
+
+    toAliasNormalForm(indexForm) {
+        return indexForm.toLowerCase().split(' ').join('_')
     }
 
     toIndexNormalForm(canonical) {

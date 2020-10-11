@@ -265,6 +265,10 @@ async function display2MPMap(message, map) {
         linkColumn.push(singleMapNotes.LINK)
     }
 
+    if (towerColumn.length == 0) {
+        return message.channel.send(`No combos on ${mapFormatted}`)
+    }
+
     title = `All 2MPCs on ${mapFormatted}`;
 
     if (towerColumn.length > MAX_VALUES_LIST_LENGTH_2MP) {

@@ -236,7 +236,7 @@ async function display2MPAlt(message, tower, map) {
 async function display2MPMap(message, map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
-    mapFormatted = h.toTitleCase(map);
+    mapFormatted = Aliases.toIndexNormalForm(map);
 
     // Load TOWER and MAP columns
     [startRow, endRow] = await rowBoundaries();
@@ -244,17 +244,41 @@ async function display2MPMap(message, map) {
 
     mapAbbr = Aliases.mapToIndexAbbreviation(map)
 
+    // Format 3 columns: map, person, link
+    towerColumn = [];
+    personColumn = [];
+    linkColumn = [];
+
     // Retrieve alt-map notes from each tower row
     for (var row = startRow; row <= endRow; row++) {
         towerCell = sheet.getCellByA1(`${COLS.TOWER}${row}`);
 
-        towerNotes = parsePreloadedMapNotesWithOG(row);
-        mapNotes = towerNotes[mapAbbr]
+        towerMapNotes = parsePreloadedMapNotesWithOG(row);
+        singleMapNotes = towerMapNotes[mapAbbr]
 
-        console.log(mapNotes)
+        if(!singleMapNotes) continue;
+
+        towerColumn.push(towerCell.value)
+        personColumn.push(singleMapNotes.PERSON)
+        linkColumn.push(singleMapNotes.LINK)
     }
 
-    // console.log(towersNotes);
+    towerColumn = towerColumn.join("\n")
+    personColumn = personColumn.join("\n")
+    linkColumn = linkColumn.join("\n")
+
+    let challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(
+                `All 2MPCs on ${mapFormatted}`
+            )
+            .setColor(colours['cyber']);
+    
+    challengeEmbed
+        .addField('Tower', towerColumn, true)
+        .addField('Person', personColumn, true)
+        .addField('Link', linkColumn, true);
+    
+    return message.channel.send(challengeEmbed);
 }
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty

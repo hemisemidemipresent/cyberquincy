@@ -271,18 +271,14 @@ async function display2MPMap(message, map) {
         return embedPages(message, towerColumn, personColumn, linkColumn, title)
     }
 
-    towerColumn = towerColumn.join("\n")
-    personColumn = personColumn.join("\n")
-    linkColumn = linkColumn.join("\n")
-
     let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
             .setColor(colours['cyber']);
     
     challengeEmbed
-        .addField('Tower', towerColumn, true)
-        .addField('Person', personColumn, true)
-        .addField('Link', linkColumn, true);
+        .addField('Tower', towerColumn.join("\n"), true)
+        .addField('Person', personColumn.join("\n"), true)
+        .addField('Link', linkColumn.join("\n"), true);
     
     return message.channel.send(challengeEmbed);
 }

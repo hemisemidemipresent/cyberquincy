@@ -233,6 +233,8 @@ async function display2MPAlt(message, tower, map) {
     }
 }
 
+MAX_VALUES_LIST_LENGTH_2MP = 15;
+
 async function display2MPMap(message, map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
@@ -263,14 +265,18 @@ async function display2MPMap(message, map) {
         linkColumn.push(singleMapNotes.LINK)
     }
 
+    title = `All 2MPCs on ${mapFormatted}`;
+
+    if (towerColumn.length > MAX_VALUES_LIST_LENGTH_2MP) {
+        return embedPages(message, towerColumn, personColumn, linkColumn, title)
+    }
+
     towerColumn = towerColumn.join("\n")
     personColumn = personColumn.join("\n")
     linkColumn = linkColumn.join("\n")
 
     let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(
-                `All 2MPCs on ${mapFormatted}`
-            )
+            .setTitle(title)
             .setColor(colours['cyber']);
     
     challengeEmbed
@@ -279,6 +285,66 @@ async function display2MPMap(message, map) {
         .addField('Link', linkColumn, true);
     
     return message.channel.send(challengeEmbed);
+}
+
+//  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
+function embedPages(message, towers, persons, links, title) {
+    towerChunks = h.chunk(towers, MAX_VALUES_LIST_LENGTH_2MP);
+    personChunks = h.chunk(persons, MAX_VALUES_LIST_LENGTH_2MP);
+    linkChunks = h.chunk(links, MAX_VALUES_LIST_LENGTH_2MP);
+
+    // Divide results into chunks of MAX_VALUES_LIST_LENGTH_2MP
+    numPages = towerChunks.length;
+    pg = 0;
+
+    REACTIONS = ['⬅️', '➡️', '❌'];
+    // Gets the reaction to the pagination message by the command author
+    // and respond appropriate action (turning page or deleting message)
+    function reactLoop(msg) {
+        // Lays out predefined reactions
+        for (var i = 0; i < REACTIONS.length; i++) {
+            msg.react(REACTIONS[i]);
+        }
+
+        // Read author reaction (time limit specified below in milliseconds)
+        // and respond with appropriate action
+        msg.createReactionCollector(
+            (reaction, user) =>
+                user.id === message.author.id &&
+                REACTIONS.includes(reaction.emoji.name),
+            { time: 20000 }
+        ).once('collect', (reaction) => {
+            switch (reaction.emoji.name) {
+                case '⬅️':
+                    pg--;
+                    break;
+                case '➡️':
+                    pg++;
+                    break;
+                case '❌':
+                default:
+                    return msg.delete();
+            }
+            pg += numPages; // Avoid negative numbers
+            pg %= numPages; // Avoid page numbers greater than max page number
+            displayCurrentPage();
+        });
+    }
+
+    function displayCurrentPage() {
+        challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(title)
+            .setColor(colours['cyber'])
+            .addField('#Combos', towers.length)
+            .addField('Tower', towerChunks[pg].join("\n"), true)
+            .addField('Person', personChunks[pg].join("\n"), true)
+            .addField('Link', linkChunks[pg].join("\n"), true)
+            .setFooter(`${pg + 1}/${numPages}`);
+
+        message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
+    }
+
+    displayCurrentPage();
 }
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty

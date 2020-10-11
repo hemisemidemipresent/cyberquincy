@@ -110,7 +110,7 @@ module.exports = {
                     heroCost = sumOftempArr[level] + roundArr[levelUpRound];
                     levelUpRound++;
                 }
-                if (levelUpRound > 100) {
+                if (levelUpRound > 101) {
                     // if the hero wont level up until round 100
                     finalArr.push('>100');
                 } else {
@@ -188,12 +188,14 @@ module.exports = {
                                 reaction.emoji.name === 'Churchill' ||
                                 reaction.emoji.name === 'Brickell' ||
                                 reaction.emoji.name === 'Benjamin' ||
-                                reaction.emoji.name === 'Ezili'),
+                                reaction.emoji.name === 'Ezili' ||
+                                reaction.emoji.name === 'Etienne'),
                         { time: 20000 } // might turn into function to check later
                     )
                     .once('collect', (reaction) => {
                         const chosen = reaction.emoji.name;
                         let heroID = 0;
+                        // shit code:
                         if (chosen === 'Quincy') {
                             heroID = 0;
                         } else if (chosen === 'Gwen') {
@@ -214,6 +216,8 @@ module.exports = {
                             heroID = 8;
                         } else if (chosen === 'Brickell') {
                             heroID = 9;
+                        } else if (chosen === 'Etienne') {
+                            heroID = 10;
                         }
                         const heroname = heroes[heroID];
                         const xpCurve = xpSlopeArr[heroID];

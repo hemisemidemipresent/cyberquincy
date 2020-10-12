@@ -8,9 +8,6 @@ module.exports = {
     execute,
 
     dependencies: ['btd6index'],
-
-
-
 };
 
 function execute(message, args) {
@@ -82,6 +79,18 @@ async function findRaceByNum(number, message) {
     const fifthPlaceName = sheet.getCellByA1(`W${row2}`);
     const fifthPlaceTime = sheet.getCellByA1(`W${row3}`);
     const players = sheet.getCellByA1(`Y${row1}`);
+
+    const time = [
+        firstPlaceTime.hyperlink,
+        secondPlaceTime.hyperlink,
+        thirdPlaceTime.hyperlink,
+        fourthPlaceTime.hyperlink,
+        fifthPlaceTime.hyperlink,
+    ];
+    let output = '';
+    for (i = 0; i < 5; i++) {
+        output += `[${i + 1}](${time[i]}) `;
+    }
     const RaceEmbed = new Discord.MessageEmbed()
         .setTitle(`Race ${number}`)
         .setTitle(name.value)
@@ -91,6 +100,7 @@ async function findRaceByNum(number, message) {
             'Top 5',
             `\`\`\`fix\n${firstPlaceNick.value} ${firstPlaceName.value} ${firstPlaceTime.value}\n\`\`\`\`\`\`diff\n- ${secondPlaceNick.value} ${secondPlaceName.value} ${secondPlaceTime.value}\n\`\`\`\`\`\`tex\n$ ${thirdPlaceNick.value} ${thirdPlaceName.value} ${thirdPlaceTime.value}\n\`\`\`\`\`\`\n${fourthPlaceNick.value} ${fourthPlaceName.value} ${fourthPlaceTime.value}\n\`\`\`\`\`\`\n${fifthPlaceNick.value} ${fifthPlaceName.value} ${fifthPlaceTime.value}\`\`\``
         )
+        .addField('Links', `${output}`)
         .addField('Players', `${players.value}`);
 
     return message.channel.send(RaceEmbed);

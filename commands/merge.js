@@ -3,27 +3,23 @@ module.exports = {
     alias: ['combine'],
     rawargs: true,
 
-    execute(message, args) {
-        const merges = require('../jsons/merges.json');
-        let tower1 = `${args[0]} ${args[1]}`;
-        let tower2;
-        if (!args[3]) tower2 = `${args[2]}`;
-        else tower2 = `${args[2]} ${args[3]}`;
-        let res;
-        for (let i = 0; i < merges.length; i++) {
-            let t1 = merges[i].tower1.toLowerCase();
-            let t2 = merges[i].tower2.toLowerCase();
+    async execute(message, args) {
+        const { GoogleSpreadsheet } = require('google-spreadsheet');
 
-            if (t1 == tower1 && t2 == tower2) {
-                res = merges[i].link;
-                break;
-            }
-        }
-        if (!res) {
-            return message.channel.send(
-                'example: q!merge t dart m dart\norder: t path before m path before b path\ntower order/names: dart, boomer, bomb, tack, glue, sniper, sub, boat, ace, heli, mortar, wiz, super, ninja, alch, druid, village, farm, spact, engi\nhero names: quincy, gwen, striker, obyn, churchill, ben, ezili, pat, adora, brickell, etienne'
-            );
-        }
-        return message.channel.send(res);
+        // spreadsheet key is the long id in the sheets URL
+        const doc = new GoogleSpreadsheet(
+            '12JUuBijnLNsD_rWh28CFlEQDlOErqZBOYkiBXlhzUY4'
+        );
+
+        // load directly from json file if not in secure environment
+        await doc.useServiceAccountAuth(require('../1/config.json'));
+
+        await doc.loadInfo(); // loads document properties and worksheets
+        console.log(doc.title);
+
+        let sheet = doc.sheetsByIndex[0];
+        await sheet.loadCells('D3:D3');
+        let cell = sheet.getCellByA1('D3');
+        console.log(cell);
     },
 };

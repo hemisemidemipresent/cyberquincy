@@ -12,6 +12,7 @@ const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const TowerParser = require('../parser/tower-parser.js');
 const AnyOrderParser = require('../parser/any-order-parser.js');
 const UserCommandError = require('../exceptions/user-command-error.js');
+const DeveloperCommandError = require('../exceptions/developer-command-error.js');
 
 const COLS = {
     NUMBER: 'B',
@@ -73,9 +74,8 @@ function execute(message, args) {
     } else if (parsed.hero) {
         tower = parsed.hero;
     } else if (parsed.map) {
-        // Only map is provided, no tower
-        return message.channel.send(
-            'All-tower completions on a given map coming soon'
+        return display2MPMap(message, parsed.map).catch((e) =>
+            err(e, message)
         );
     } else if (parsed.tower) {
         // 0-0-0 tower name provided
@@ -233,6 +233,120 @@ async function display2MPAlt(message, tower, map) {
     }
 }
 
+MAX_VALUES_LIST_LENGTH_2MP = 15;
+
+async function display2MPMap(message, map) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    mapFormatted = Aliases.toIndexNormalForm(map);
+
+    // Load TOWER and MAP columns
+    [startRow, endRow] = await rowBoundaries();
+    await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`)
+
+    mapAbbr = Aliases.mapToIndexAbbreviation(map)
+
+    // Format 3 columns: map, person, link
+    towerColumn = [];
+    personColumn = [];
+    linkColumn = [];
+
+    // Retrieve alt-map notes from each tower row
+    for (var row = startRow; row <= endRow; row++) {
+        towerCell = sheet.getCellByA1(`${COLS.TOWER}${row}`);
+
+        towerMapNotes = parsePreloadedMapNotesWithOG(row);
+        singleMapNotes = towerMapNotes[mapAbbr]
+
+        if(!singleMapNotes) continue;
+
+        towerColumn.push(towerCell.value)
+        personColumn.push(singleMapNotes.PERSON)
+        linkColumn.push(singleMapNotes.LINK)
+    }
+
+    if (towerColumn.length == 0) {
+        return message.channel.send(`No combos on ${mapFormatted}`)
+    }
+
+    title = `All 2MPCs on ${mapFormatted}`;
+
+    if (towerColumn.length > MAX_VALUES_LIST_LENGTH_2MP) {
+        return embedPages(message, towerColumn, personColumn, linkColumn, title)
+    }
+
+    let challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(title)
+            .setColor(colours['cyber']);
+    
+    challengeEmbed
+        .addField('Tower', towerColumn.join("\n"), true)
+        .addField('Person', personColumn.join("\n"), true)
+        .addField('Link', linkColumn.join("\n"), true);
+    
+    return message.channel.send(challengeEmbed);
+}
+
+//  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
+function embedPages(message, towers, persons, links, title) {
+    towerChunks = h.chunk(towers, MAX_VALUES_LIST_LENGTH_2MP);
+    personChunks = h.chunk(persons, MAX_VALUES_LIST_LENGTH_2MP);
+    linkChunks = h.chunk(links, MAX_VALUES_LIST_LENGTH_2MP);
+
+    // Divide results into chunks of MAX_VALUES_LIST_LENGTH_2MP
+    numPages = towerChunks.length;
+    pg = 0;
+
+    REACTIONS = ['⬅️', '➡️', '❌'];
+    // Gets the reaction to the pagination message by the command author
+    // and respond appropriate action (turning page or deleting message)
+    function reactLoop(msg) {
+        // Lays out predefined reactions
+        for (var i = 0; i < REACTIONS.length; i++) {
+            msg.react(REACTIONS[i]);
+        }
+
+        // Read author reaction (time limit specified below in milliseconds)
+        // and respond with appropriate action
+        msg.createReactionCollector(
+            (reaction, user) =>
+                user.id === message.author.id &&
+                REACTIONS.includes(reaction.emoji.name),
+            { time: 20000 }
+        ).once('collect', (reaction) => {
+            switch (reaction.emoji.name) {
+                case '⬅️':
+                    pg--;
+                    break;
+                case '➡️':
+                    pg++;
+                    break;
+                case '❌':
+                default:
+                    return msg.delete();
+            }
+            pg += numPages; // Avoid negative numbers
+            pg %= numPages; // Avoid page numbers greater than max page number
+            displayCurrentPage();
+        });
+    }
+
+    function displayCurrentPage() {
+        challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(title)
+            .setColor(colours['cyber'])
+            .addField('#Combos', towers.length)
+            .addField('Tower', towerChunks[pg].join("\n"), true)
+            .addField('Person', personChunks[pg].join("\n"), true)
+            .addField('Link', linkChunks[pg].join("\n"), true)
+            .setFooter(`${pg + 1}/${numPages}`);
+
+        message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
+    }
+
+    displayCurrentPage();
+}
+
 // Displays all 2MPCs completed on all maps specified by the map difficulty
 async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
@@ -245,24 +359,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     // Load the map cell, person cell, link cell and a few in between
     await sheet.loadCells(`${COLS.OG_MAP}${entryRow}:${COLS.LINK}${entryRow}`);
 
-    ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
-    ogMapAbbr = Aliases.mapToIndexAbbreviation(
-        ogMapCell.value.split(' ').join('_')
-    );
-    ogPerson = sheet.getCellByA1(`${COLS.PERSON}${entryRow}`).value;
-    ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
-
-    notes = {};
-    // Add OG map to list of maps completed
-    notes[ogMapAbbr] = {
-        PERSON: ogPerson,
-        LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
-    };
-    // Add rest of maps found in notes
-    notes = {
-        ...notes,
-        ...parseMapNotes(ogMapCell.note),
-    };
+    notes = parsePreloadedMapNotesWithOG(entryRow);
 
     // Get all map abbreviations for the specified map difficulty
     permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) =>
@@ -359,18 +456,49 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     }
 }
 
+async function rowBoundaries() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+    await sheet.loadCells(`${COLS.NUMBER}1:${COLS.NUMBER}${sheet.rowCount}`);
+
+    startRow = null
+    endRow = null
+
+    for (let row = 1; row <= sheet.rowCount; row++) {
+        numberCandidate = sheet.getCellByA1(`${COLS.NUMBER}${row}`).value;
+
+        // If startRow has been found, find the first occurence of a blank cell
+        if (startRow && !numberCandidate) {
+            endRow = row - 1;
+            break;
+        } else if (numberCandidate && numberCandidate.replace(/ /g, '') === '1st') {
+            startRow = row;
+        }
+    }
+
+    if (!startRow) {
+        throw new DeveloperCommandError(`Orientation failed because \`1st\` couldn't be found in the "Number" column.`)
+    }
+
+    // If there wasn't a trailing blank cell, then the last cell viewed must be the end cell
+    if (!endRow) endRow = sheet.rowCount;
+
+    return [startRow, endRow];
+}
+
 // Gets the row of tower completion stats for the given tower
 async function rowFromTower(tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
+    [rowBegin, rowEnd] = await rowBoundaries();
+
     // Load the column containing the different maps
-    await sheet.loadCells(`${COLS.TOWER}1:${COLS.TOWER}${sheet.rowCount}`); // loads all possible cells with tower
+    await sheet.loadCells(`${COLS.TOWER}${rowBegin}:${COLS.TOWER}${rowEnd}`); // loads all possible cells with tower
 
     // The row where the queried map is found
     let entryRow = null;
 
     // Search for the row in all "possible" rows
-    for (let row = 1; row <= sheet.rowCount; row++) {
+    for (let row = rowBegin; row <= rowEnd; row++) {
         let towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
 
         if (!towerCandidate) continue;
@@ -393,6 +521,30 @@ async function rowFromTower(tower) {
     }
 
     return entryRow;
+}
+
+// Assumes appropriate cells are loaded beforehand!
+function parsePreloadedMapNotesWithOG(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
+    ogMapAbbr = Aliases.mapToIndexAbbreviation(
+        Aliases.toAliasNormalForm(ogMapCell.value)
+    );
+    ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
+    ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
+
+    notes = {};
+    // Add OG map to list of maps completed
+    notes[ogMapAbbr] = {
+        PERSON: ogPerson,
+        LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
+    };
+    // Add rest of maps found in notes
+    return {
+        ...notes,
+        ...parseMapNotes(ogMapCell.note),
+    };
 }
 
 // Parses the map notes by splitting on comma and colon to get the map+person+link

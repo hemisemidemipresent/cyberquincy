@@ -104,13 +104,16 @@ function helpMessage(message) {
         .setTitle('`q!ltc` HELP')
         .addField(
             '`q!ltc <map>`',
-            'The BTD6 Index entry for Least Tower CHIMPS for the queried map'
+            "The BTD6 Index Least Tower CHIMPS entry for the queried map\n`q!2mp fo`"
         )
         .addField(
-            'Valid `<map>` values',
-            '`logs`, `cubism`, `pen`, `#ouch`, ...'
+            '`q!ltc <map> chp`',
+            "The BTD6 Index Least Tower CHIMPS cheapest entry for the queried map\n`q!2mp eotr cheapest`"
         )
-        .addField('Example', '`q!ltc cuddles`');
+        .addField(
+            '`q!ltc <map> og`',
+            "The BTD6 Index Least Tower CHIMPS originally completed entry for the queried map (Needs to match tower amount of current LTC).\n`q!2mp og dc`"
+        )
 
     return message.channel.send(helpEmbed);
 }

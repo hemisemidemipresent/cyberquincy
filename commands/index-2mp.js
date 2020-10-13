@@ -13,6 +13,7 @@ const TowerParser = require('../parser/tower-parser.js');
 const AnyOrderParser = require('../parser/any-order-parser.js');
 const UserCommandError = require('../exceptions/user-command-error.js');
 const DeveloperCommandError = require('../exceptions/developer-command-error.js');
+const PersonParser = require('../parser/person-parser.js');
 
 const COLS = {
     NUMBER: 'B',
@@ -52,13 +53,15 @@ function execute(message, args) {
 
     towerCompletionParser = new TowerParser();
     allTowersOnGivenMapParser = new MapParser();
+    personParser = new PersonParser();
 
     const parsed = CommandParser.parse(
         args,
         new OrParser(
             completionParser,
             towerCompletionParser,
-            allTowersOnGivenMapParser
+            allTowersOnGivenMapParser,
+            personParser
         )
     );
 
@@ -82,6 +85,10 @@ function execute(message, args) {
         return display2MPTowerStatistics(message, parsed.tower).catch((e) =>
             err(e, message)
         );
+    } else if (parsed.person) {
+        return display2MPPerson(message, parsed.person).catch((e) =>
+            err(e, message)
+        )
     } else {
         return message.channel.send('Feature yet to be decided');
     }
@@ -235,66 +242,127 @@ async function display2MPAlt(message, tower, map) {
 
 MAX_VALUES_LIST_LENGTH_2MP = 15;
 
-async function display2MPMap(message, map) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+async function display2MPPerson(message, person) {
+    return await display2MPFilterAll(
+        message,
+        function filterCombo(c) {
+            return c.PERSON.toLowerCase() === person
+        },
+        function titleClarification(c) {
+            return `All 2MPCs by ${c.PERSON}`
+        },
+        `No 2MPCs by \`${person}\` found`,
+        ['person']
+    )
+}
 
+async function display2MPMap(message, map) {
     mapFormatted = Aliases.toIndexNormalForm(map);
+    mapAbbr = Aliases.mapToIndexAbbreviation(map)
+
+    return await display2MPFilterAll(
+        message,
+        function filterCombo(c) {
+            return c.MAP === mapAbbr
+        },
+        function titleClarification(_) {
+            return `All 2MPCs on ${mapFormatted}`
+        },
+        `No 2MPCs on \`${mapFormatted}\` found`,
+        ['map']
+    )
+}
+
+async function display2MPFilterAll(message, conditional, title, noCombos, excludedColumns) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     // Load TOWER and MAP columns
     [startRow, endRow] = await rowBoundaries();
     await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`)
 
-    mapAbbr = Aliases.mapToIndexAbbreviation(map)
-
-    // Format 3 columns: map, person, link
+    // Collect data from 4 columns: tower, map, person, link
+    // Only 3 can be used maximum to format a discord embed
     towerColumn = [];
     personColumn = [];
     linkColumn = [];
+    mapColumn = [];
 
-    // Retrieve alt-map notes from each tower row
+    // Retrieve og- and alt-map notes from each tower row
     for (var row = startRow; row <= endRow; row++) {
         towerCell = sheet.getCellByA1(`${COLS.TOWER}${row}`);
 
         towerMapNotes = parsePreloadedMapNotesWithOG(row);
-        singleMapNotes = towerMapNotes[mapAbbr]
+        for (map in towerMapNotes) {
+            note = {
+                MAP: map,
+                ...towerMapNotes[map]
+            }
 
-        if(!singleMapNotes) continue;
+            if(!conditional(note)) {
+                continue;
+            }
 
-        towerColumn.push(towerCell.value)
-        personColumn.push(singleMapNotes.PERSON)
-        linkColumn.push(singleMapNotes.LINK)
+            towerColumn.push(towerCell.value)
+            mapColumn.push(note.MAP)
+            linkColumn.push(note.LINK)
+            personColumn.push(note.PERSON)
+        }        
     }
 
+    // Format the title using the method passed in and the first filtered combo found
+    t = title({
+        TOWER: towerColumn[0],
+        PERSON: personColumn[0],
+        MAP: mapColumn[0],
+        LINK: linkColumn[0]
+    })
+
+    // If no combos were found after filtering
     if (towerColumn.length == 0) {
-        return message.channel.send(`No combos on ${mapFormatted}`)
+        return message.channel.send(noCombos)
     }
 
-    title = `All 2MPCs on ${mapFormatted}`;
+    // Exclude columns from data output based on function input
+    columns = {}
+    columns.TOWER = towerColumn
+    if (!excludedColumns.includes('map')) columns.MAP = mapColumn
+    if (!excludedColumns.includes('person')) columns.PERSON = personColumn
+    columns.LINK = linkColumn
 
-    if (towerColumn.length > MAX_VALUES_LIST_LENGTH_2MP) {
-        return embedPages(message, towerColumn, personColumn, linkColumn, title)
+    // Paginate if there are too many combos to display at once
+    if (columns.TOWER.length > MAX_VALUES_LIST_LENGTH_2MP) {
+        return embedPages(message, t, columns)
     }
 
     let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(title)
+            .setTitle(t)
+            .addField('#Combos', columns.LINK.length)
             .setColor(colours['cyber']);
-    
-    challengeEmbed
-        .addField('Tower', towerColumn.join("\n"), true)
-        .addField('Person', personColumn.join("\n"), true)
-        .addField('Link', linkColumn.join("\n"), true);
+
+    // Display the non-excluded columns
+    for (columnHeader in columns) {
+        challengeEmbed.addField(
+            h.toTitleCase(columnHeader), 
+            columns[columnHeader].join("\n"),
+            true
+        )
+    }
     
     return message.channel.send(challengeEmbed);
 }
 
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
-function embedPages(message, towers, persons, links, title) {
-    towerChunks = h.chunk(towers, MAX_VALUES_LIST_LENGTH_2MP);
-    personChunks = h.chunk(persons, MAX_VALUES_LIST_LENGTH_2MP);
-    linkChunks = h.chunk(links, MAX_VALUES_LIST_LENGTH_2MP);
+function embedPages(message, title, columns) {
+    columnChunks = {};
+    for (columnHeader in columns) {
+        columnChunks[columnHeader] = h.chunk(
+            columns[columnHeader], 
+            MAX_VALUES_LIST_LENGTH_2MP
+        )
+    }
 
     // Divide results into chunks of MAX_VALUES_LIST_LENGTH_2MP
-    numPages = towerChunks.length;
+    numPages = columnChunks.LINK.length;
     pg = 0;
 
     REACTIONS = ['⬅️', '➡️', '❌'];
@@ -335,11 +403,16 @@ function embedPages(message, towers, persons, links, title) {
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
             .setColor(colours['cyber'])
-            .addField('#Combos', towers.length)
-            .addField('Tower', towerChunks[pg].join("\n"), true)
-            .addField('Person', personChunks[pg].join("\n"), true)
-            .addField('Link', linkChunks[pg].join("\n"), true)
+            .addField('#Combos', columns.LINK.length)
             .setFooter(`${pg + 1}/${numPages}`);
+        
+        for (columnHeader in columnChunks) {
+            challengeEmbed.addField(
+                columnHeader, 
+                columnChunks[columnHeader][pg].join("\n"),
+                true
+            )
+        }
 
         message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
     }
@@ -551,7 +624,7 @@ function parsePreloadedMapNotesWithOG(row) {
 function parseMapNotes(notes) {
     if (!notes) return {};
     return Object.fromEntries(
-        notes.split('\n').map((n) => {
+        notes.trim().split('\n').map((n) => {
             let altmap, altperson, altbitly;
             [altmap, altperson, altbitly] = n
                 .split(/[,:]/)

@@ -89,7 +89,9 @@ async function findRaceByNum(number, message) {
     ];
     let output = '';
     for (i = 0; i < 5; i++) {
-        output += `[${i + 1}](${time[i]}) `;
+        hyperlink = time[i];
+        if (!hyperlink) hyperlink = 'none';
+        output += `${i + 1}:${hyperlink}`;
     }
     const RaceEmbed = new Discord.MessageEmbed()
         .setTitle(`Race ${number}`)

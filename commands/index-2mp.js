@@ -273,7 +273,7 @@ async function display2MPMap(message, map) {
     )
 }
 
-async function display2MPFilterAll(message, conditional, title, noCombos, excludedColumns) {
+async function display2MPFilterAll(message, conditional, titleFunction, noCombosMessage, excludedColumns) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     // Load TOWER and MAP columns
@@ -310,7 +310,7 @@ async function display2MPFilterAll(message, conditional, title, noCombos, exclud
     }
 
     // Format the title using the method passed in and the first filtered combo found
-    t = title({
+    title = titleFunction({
         TOWER: towerColumn[0],
         PERSON: personColumn[0],
         MAP: mapColumn[0],
@@ -319,7 +319,7 @@ async function display2MPFilterAll(message, conditional, title, noCombos, exclud
 
     // If no combos were found after filtering
     if (towerColumn.length == 0) {
-        return message.channel.send(noCombos)
+        return message.channel.send(noCombosMessage)
     }
 
     // Exclude columns from data output based on function input
@@ -331,11 +331,11 @@ async function display2MPFilterAll(message, conditional, title, noCombos, exclud
 
     // Paginate if there are too many combos to display at once
     if (columns.TOWER.length > MAX_VALUES_LIST_LENGTH_2MP) {
-        return embedPages(message, t, columns)
+        return embedPages(message, title, columns)
     }
 
     let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(t)
+            .setTitle(title)
             .addField('#Combos', columns.LINK.length)
             .setColor(colours['cyber']);
 

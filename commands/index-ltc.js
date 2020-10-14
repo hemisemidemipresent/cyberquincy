@@ -104,16 +104,13 @@ function helpMessage(message) {
         .setTitle('`q!ltc` HELP')
         .addField(
             '`q!ltc <map>`',
-            "The BTD6 Index Least Tower CHIMPS entry for the queried map\n`q!2mp fo`"
+            'The BTD6 Index entry for Least Tower CHIMPS for the queried map'
         )
         .addField(
-            '`q!ltc <map> chp`',
-            "The BTD6 Index Least Tower CHIMPS cheapest entry for the queried map\n`q!2mp eotr cheapest`"
+            'Valid `<map>` values',
+            '`logs`, `cubism`, `pen`, `#ouch`, ...'
         )
-        .addField(
-            '`q!ltc <map> og`',
-            "The BTD6 Index Least Tower CHIMPS originally completed entry for the queried map (Needs to match tower amount of current LTC).\n`q!2mp og dc`"
-        )
+        .addField('Example', '`q!ltc cuddles`');
 
     return message.channel.send(helpEmbed);
 }
@@ -169,9 +166,9 @@ async function displayLTC(message, btd6_map, modifier) {
     values = {};
 
     if (modifier == 'cheapest') {
-        return await getRowAltData(message, entryRow, 'CHEAPEST', colset)
+        return message.channel.send('Cheapest LTC coming soon')
     } else if (modifier == 'og') {
-        return await getRowAltData(message, entryRow, 'OG', colset)
+        return message.channel.send('OG LTC coming soon')
     } else {
         return await getRowStandardData(message, entryRow, colset)
     }
@@ -234,45 +231,6 @@ async function getRowStandardData(message, entryRow, colset) {
     }
 
     return message.channel.send(challengeEmbed);
-}
-
-async function getRowAltData(message, entryRow, qualifier, colset) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
-
-    mapCell = sheet.getCellByA1(`${colset.MAP}${entryRow}`);
-    notes = parseMapNotes(mapCell.note);
-
-    if (!notes || !notes[qualifier]) {
-        return await getRowStandardData(message, entryRow, colset)
-    }
-
-    var challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${h.toTitleCase(qualifier)} ${mapCell.value} LTC Combo`)
-        .setColor(colours['cyber'])
-        .addField('Person', notes[qualifier].PERSON, true)
-        .addField('Link', notes[qualifier].LINK, true)
-    
-    return message.channel.send(challengeEmbed);
-}
-
-function parseMapNotes(notes) {
-    if (!notes) return {};
-    return Object.fromEntries(
-        notes.trim().split('\n').map((n) => {
-            let qualifier, person, bitly;
-            [qualifier, person, bitly] = n
-                .split(/[,:]/)
-                .map((t) => t.replace(/ /g, ''));
-
-            return [
-                qualifier.toUpperCase(),
-                {
-                    PERSON: person,
-                    LINK: `[${bitly}](http://${bitly})`,
-                },
-            ];
-        })
-    );
 }
 
 function getColumnSet(mapRow, sheet) {

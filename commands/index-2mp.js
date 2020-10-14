@@ -120,31 +120,19 @@ function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!2mp` HELP')
         .addField(
-            '`q!2mp <tower_upgrade/hero>`',
-            'The OG 2MPC completion for the specified tower upgrade or hero.\n' + 
-            '`q!2mp wlp` / `q!2mp pat`'
+            '`q!2mp <tower_upgrade>`',
+            'The OG 2MPC completion for the specified tower.\n' + '`q!2mp wlp`'
         )
         .addField(
-            '`q!2mp <map>`',
-            'All 2MPC completions on the specified map.\n' + 
-            '`q!2mp inf`'
+            '`q!2mp <tower_upgrade> <map>`',
+            'The Alt-Map 2MPC completion for the specified tower and map.\n' +
+                '`q!2mp dartship another-brick`'
         )
         .addField(
-            '`q!2mp <user>`',
-            'All 2MPC completions (including alt maps) by the specified user.\n' + 
-            '`q!2mp u#rmlgaming`'
-        )
-        .addField(
-            '`q!2mp <tower>`',
-            'The path-completion statistics for a given tower.\n' +
-            '`q!2mp wiz`'
-        )
-        .addField(
-            'Further usages',
-            '`q!2mp dartship another_brick`\n' + 
-            '`q!2mp prime expert`\n' +
-            '`q!2mp sav dc`'
-        )
+            '`q!2mp <tower_upgrade> <map_difficulty>`',
+            'All 2MPC completions for the specified tower on maps that fall under the specified map difficulty.\n' +
+                '`q!2mp savatar expert`'
+        );
 
     return message.channel.send(helpEmbed);
 }

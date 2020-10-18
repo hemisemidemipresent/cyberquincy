@@ -1,4 +1,5 @@
 const { cyber } = require('../jsons/colours.json');
+
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
     [
@@ -95,10 +96,11 @@ module.exports = {
     aliases: aliases.flat(),
 
     execute(message, args, commandName) {
-        if (!isValidPath(args[0])) {
-            provideHelpMsg(message, name);
-        }
         let name = findName(commandName);
+
+        if (!isValidPath(args[0])) {
+            return provideHelpMsg(message, name);
+        }
 
         if (!args[0] || args[1]) {
             let embed = baseTower(name);

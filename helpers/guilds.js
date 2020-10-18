@@ -2,6 +2,8 @@ const CYBER_SUPPORT = 598768024761139240;
 const BTD6_INDEX = 661812833771847700;
 const RACE_SERVER = 543957081183617024;
 const xp = require('../helpers/xp');
+const { discord } = require('../aliases/misc.json');
+
 function enterGuild(guild) {
     let channeltosend = guild.channels.cache.find(
         (channel) => channel.name.includes('general') === true
@@ -12,7 +14,7 @@ function enterGuild(guild) {
             .setDescription(`Hi! I am Cyber Quincy. I am a btd6 discord bot.`)
             .addField(
                 'General Info',
-                '[List of commands](https://cq.netlify.com)\n[Discord server](https://discord.gg/VMX5hZA)'
+                `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})`
             )
             .addField(
                 'Note',

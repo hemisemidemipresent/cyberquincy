@@ -1,4 +1,5 @@
 xpCurve = require('../jsons/discord-user-xp.json');
+const { discord } = require('../aliases/misc.json');
 
 async function addCommandXp(message) {
     user = message.author;
@@ -75,7 +76,7 @@ async function levelUpRole(user, newLevel) {
     if (!guildmember) {
         if (newLevel == 3 || newLevel == 10) {
             let roleEmbed = new Discord.MessageEmbed().setTitle(
-                'You can now get a role in the discord server: https://discord.gg/VMX5hZA'
+                `You can now get a role in the discord server: ${discord}`
             );
             return message.channel.send(roleEmbed);
         }

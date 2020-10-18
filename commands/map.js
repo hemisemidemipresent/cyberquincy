@@ -1,6 +1,7 @@
 const { cyber } = require('../jsons/colours.json');
 const map = require('../jsons/map.json');
 const MapParser = require('../parser/map-parser.js');
+const { discord } = require('../aliases/misc.json');
 
 module.exports = {
     name: 'map',
@@ -32,11 +33,7 @@ module.exports = {
             .addField('Water body percentage', `${m['wa%']}`, true)
             .addField('Entrances/Exits', `${m.e.e}`, true)
             //.addField('Line of sight obstructions', `${m.los}`, true)
-            .addField(
-                'Bug reporting',
-                'report [here](https://discord.gg/VMX5hZA)',
-                true
-            )
+            .addField('Bug reporting', `report [here](${discord})`, true)
             .setFooter(
                 'I am Quincy, Evolved from quincy.',
                 'https://vignette.wikia.nocookie.net/b__/images/0/0c/QuincyCyberPortraitLvl20.png/revision/latest/scale-to-width-down/179?cb=20190612022025&path-prefix=bloons'

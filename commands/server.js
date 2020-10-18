@@ -1,3 +1,5 @@
+const { discord } = require('../aliases/misc.json');
+
 module.exports = {
     name: 'server',
 
@@ -11,7 +13,7 @@ module.exports = {
             );
         }
         return message.channel.send(
-            'Join this discord server to get notifications on bot updates, downtime, report bugs and to suggest features: https://discord.gg/VMX5hZA'
+            `Join this discord server to get notifications on bot updates, downtime, report bugs and to suggest features: ${discord}`
         );
     },
 };

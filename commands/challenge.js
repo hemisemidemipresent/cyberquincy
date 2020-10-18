@@ -1,4 +1,5 @@
 const { cyber } = require('../jsons/colours.json');
+const { discord } = require('../aliases/misc.json');
 module.exports = {
     name: 'challenge',
     aliases: ['rc', 'randomc', 'random', 'rchallenge', 'rch'],
@@ -162,7 +163,7 @@ module.exports = {
             )
             .addField(
                 'this command is prone to errors',
-                'pls click [here](https://discord.gg/VMX5hZA) to report bugs and and get help, or just chill out'
+                `pls click [here](${discord}) to report bugs and and get help, or just chill out`
             );
         message.channel.send(ChallengeEmbed);
     },

@@ -1,5 +1,7 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 const { lightgreen, red } = require('../jsons/colours.json');
+const { discord } = require('../aliases/misc.json');
+
 const hardmodeodyssey =
     'https://vignette.wikia.nocookie.net/b__/images/f/f4/OdysseyModeHardBtn.png/revision/latest?cb=20200714061957&path-prefix=bloons';
 module.exports = {
@@ -88,7 +90,7 @@ module.exports = {
             )
             .addField(
                 'if this is an actual issue',
-                '[report this bug](https://discord.gg/VMX5hZA)'
+                `[report this bug](${discord})`
             );
         channel.send(embed);
     },

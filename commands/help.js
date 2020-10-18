@@ -1,3 +1,5 @@
+const { discord } = require('../aliases/misc.json');
+
 module.exports = {
     name: 'help',
     description: 'List all of my commands or info about a specific command.',
@@ -18,7 +20,7 @@ module.exports = {
         let embed = new Discord.MessageEmbed()
             .setTitle('Need help?')
             .setDescription(
-                'if you want to report a bug, suggest a feature, complain to the dev personally, or flex that you added the bot to some popular discord, feel free to do so in the discord server: https://discord.gg/VMX5hZA'
+                `if you want to report a bug, suggest a feature, complain to the dev personally, or flex that you added the bot to some popular discord, feel free to do so in the discord server: ${discord}`
             )
             .addField(
                 'List of commands',

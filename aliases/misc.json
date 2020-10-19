@@ -1,4 +1,5 @@
 {
     "cheapest": ["cheap", "chp", "chea", "chpst"],
-    "user": ["u"]
+    "user": ["u"],
+    "discord": ["https://discord.gg/"]
 }

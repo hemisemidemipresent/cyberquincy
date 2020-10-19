@@ -1,8 +1,8 @@
 const MapParser = require('../parser/map-parser');
-const AnyOrderParser = require('../parser/any-order-parser')
-const OrParser = require('../parser/or-parser')
-const ExactStringParser = require('../parser/exact-string-parser')
-const EmptyParser = require('../parser/empty-parser')
+const AnyOrderParser = require('../parser/any-order-parser');
+const OrParser = require('../parser/or-parser');
+const ExactStringParser = require('../parser/exact-string-parser');
+const EmptyParser = require('../parser/empty-parser');
 const GoogleSheetsHelper = require('../helpers/google-sheets');
 
 const MIN_ROW = 1;
@@ -70,7 +70,7 @@ module.exports = {
     execute,
     helpMessage,
     errorMessage,
-}
+};
 
 function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
@@ -80,15 +80,12 @@ function execute(message, args) {
     const parseModifier = new OrParser(
         new ExactStringParser('OG'),
         new ExactStringParser('CHEAPEST'),
-        new EmptyParser(),
-    )
+        new EmptyParser()
+    );
 
     const parsed = CommandParser.parse(
-        args, 
-        new AnyOrderParser(
-            new MapParser(), 
-            parseModifier
-        )
+        args,
+        new AnyOrderParser(new MapParser(), parseModifier)
     );
 
     if (parsed.hasErrors()) {
@@ -144,8 +141,7 @@ async function displayLTC(message, btd6_map, modifier) {
 
     // Search for the row in all "possible" rows
     for (let row = 1; row <= MAX_ROW; row++) {
-        var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`)
-            .value;
+        var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`).value;
         // input is "in_the_loop" but needs to be compared to "In The Loop"
         if (
             mapCandidate &&
@@ -173,13 +169,13 @@ async function displayLTC(message, btd6_map, modifier) {
     } else if (modifier == 'og') {
         return await getRowAltData(message, entryRow, 'OG', colset)
     } else {
-        return await getRowStandardData(message, entryRow, colset)
+        return await getRowStandardData(message, entryRow, colset);
     }
 }
 
 async function getRowStandardData(message, entryRow, colset) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
-    
+
     // Towers + Upgrades need some special handling since #towers varies
     if (colset['TOWERS']) {
         const upgrades = sheet
@@ -189,9 +185,8 @@ async function getRowStandardData(message, entryRow, colset) {
 
         for (var i = 0; i < colset['TOWERS'].length; i++) {
             values[`Tower ${i + 1}`] =
-                sheet.getCellByA1(
-                    `**${colset['TOWERS'][i]}${entryRow}**`
-                ).value +
+                sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`)
+                    .value +
                 ' (' +
                 upgrades[i] +
                 ')';
@@ -201,9 +196,7 @@ async function getRowStandardData(message, entryRow, colset) {
     // Assign each value to be discord-embedded in a simple default way
     for (key in colset) {
         if (key == 'TOWERS' || key == 'UPGRADES') continue; // Handle next
-        values[key] = sheet.getCellByA1(
-            `${colset[key]}${entryRow}`
-        ).value;
+        values[key] = sheet.getCellByA1(`${colset[key]}${entryRow}`).value;
     }
 
     // Special formatting for date (get formattedValue instead)

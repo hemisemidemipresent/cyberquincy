@@ -77,9 +77,7 @@ function execute(message, args) {
     } else if (parsed.hero) {
         tower = parsed.hero;
     } else if (parsed.map) {
-        return display2MPMap(message, parsed.map).catch((e) =>
-            err(e, message)
-        );
+        return display2MPMap(message, parsed.map).catch((e) => err(e, message));
     } else if (parsed.tower) {
         // 0-0-0 tower name provided
         return display2MPTowerStatistics(message, parsed.tower).catch((e) =>
@@ -88,7 +86,7 @@ function execute(message, args) {
     } else if (parsed.person) {
         return display2MPPerson(message, parsed.person).catch((e) =>
             err(e, message)
-        )
+        );
     } else {
         return message.channel.send('Feature yet to be decided');
     }
@@ -120,18 +118,29 @@ function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!2mp` HELP')
         .addField(
-            '`q!2mp <tower_upgrade>`',
-            'The OG 2MPC completion for the specified tower.\n' + '`q!2mp wlp`'
+            '`q!2mp <tower_upgrade/hero>`',
+            'The OG 2MPC completion for the specified tower upgrade or hero.\n' +
+                '`q!2mp wlp` / `q!2mp pat`'
         )
         .addField(
-            '`q!2mp <tower_upgrade> <map>`',
-            'The Alt-Map 2MPC completion for the specified tower and map.\n' +
-                '`q!2mp dartship another-brick`'
+            '`q!2mp <map>`',
+            'All 2MPC completions on the specified map.\n' + '`q!2mp inf`'
         )
         .addField(
-            '`q!2mp <tower_upgrade> <map_difficulty>`',
-            'All 2MPC completions for the specified tower on maps that fall under the specified map difficulty.\n' +
-                '`q!2mp savatar expert`'
+            '`q!2mp <user>`',
+            'All 2MPC completions (including alt maps) by the specified user.\n' +
+                '`q!2mp u#rmlgaming`'
+        )
+        .addField(
+            '`q!2mp <tower>`',
+            'The path-completion statistics for a given tower.\n' +
+                '`q!2mp wiz`'
+        )
+        .addField(
+            'Further usages',
+            '`q!2mp dartship another_brick`\n' +
+                '`q!2mp prime expert`\n' +
+                '`q!2mp sav dc`'
         );
 
     return message.channel.send(helpEmbed);
@@ -246,39 +255,45 @@ async function display2MPPerson(message, person) {
     return await display2MPFilterAll(
         message,
         function filterCombo(c) {
-            return c.PERSON.toLowerCase() === person
+            return c.PERSON.toLowerCase() === person;
         },
         function titleClarification(c) {
-            return `All 2MPCs by ${c.PERSON}`
+            return `All 2MPCs by ${c.PERSON}`;
         },
         `No 2MPCs by \`${person}\` found`,
         ['person']
-    )
+    );
 }
 
 async function display2MPMap(message, map) {
     mapFormatted = Aliases.toIndexNormalForm(map);
-    mapAbbr = Aliases.mapToIndexAbbreviation(map)
+    mapAbbr = Aliases.mapToIndexAbbreviation(map);
 
     return await display2MPFilterAll(
         message,
         function filterCombo(c) {
-            return c.MAP === mapAbbr
+            return c.MAP === mapAbbr;
         },
         function titleClarification(_) {
-            return `All 2MPCs on ${mapFormatted}`
+            return `All 2MPCs on ${mapFormatted}`;
         },
         `No 2MPCs on \`${mapFormatted}\` found`,
         ['map']
-    )
+    );
 }
 
-async function display2MPFilterAll(message, conditional, titleFunction, noCombosMessage, excludedColumns) {
+async function display2MPFilterAll(
+    message,
+    conditional,
+    titleFunction,
+    noCombosMessage,
+    excludedColumns
+) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     // Load TOWER and MAP columns
     [startRow, endRow] = await rowBoundaries();
-    await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`)
+    await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`);
 
     // Collect data from 4 columns: tower, map, person, link
     // Only 3 can be used maximum to format a discord embed
@@ -295,18 +310,18 @@ async function display2MPFilterAll(message, conditional, titleFunction, noCombos
         for (map in towerMapNotes) {
             note = {
                 MAP: map,
-                ...towerMapNotes[map]
-            }
+                ...towerMapNotes[map],
+            };
 
-            if(!conditional(note)) {
+            if (!conditional(note)) {
                 continue;
             }
 
-            towerColumn.push(towerCell.value)
-            mapColumn.push(note.MAP)
-            linkColumn.push(note.LINK)
-            personColumn.push(note.PERSON)
-        }        
+            towerColumn.push(towerCell.value);
+            mapColumn.push(note.MAP);
+            linkColumn.push(note.LINK);
+            personColumn.push(note.PERSON);
+        }
     }
 
     // Format the title using the method passed in and the first filtered combo found
@@ -314,40 +329,40 @@ async function display2MPFilterAll(message, conditional, titleFunction, noCombos
         TOWER: towerColumn[0],
         PERSON: personColumn[0],
         MAP: mapColumn[0],
-        LINK: linkColumn[0]
-    })
+        LINK: linkColumn[0],
+    });
 
     // If no combos were found after filtering
     if (towerColumn.length == 0) {
-        return message.channel.send(noCombosMessage)
+        return message.channel.send(noCombosMessage);
     }
 
     // Exclude columns from data output based on function input
-    columns = {}
-    columns.TOWER = towerColumn
-    if (!excludedColumns.includes('map')) columns.MAP = mapColumn
-    if (!excludedColumns.includes('person')) columns.PERSON = personColumn
-    columns.LINK = linkColumn
+    columns = {};
+    columns.TOWER = towerColumn;
+    if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
+    if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
+    columns.LINK = linkColumn;
 
     // Paginate if there are too many combos to display at once
     if (columns.TOWER.length > MAX_VALUES_LIST_LENGTH_2MP) {
-        return embedPages(message, title, columns)
+        return embedPages(message, title, columns);
     }
 
     let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(title)
-            .addField('#Combos', columns.LINK.length)
-            .setColor(colours['cyber']);
+        .setTitle(title)
+        .addField('#Combos', columns.LINK.length)
+        .setColor(colours['cyber']);
 
     // Display the non-excluded columns
     for (columnHeader in columns) {
         challengeEmbed.addField(
-            h.toTitleCase(columnHeader), 
-            columns[columnHeader].join("\n"),
+            h.toTitleCase(columnHeader),
+            columns[columnHeader].join('\n'),
             true
-        )
+        );
     }
-    
+
     return message.channel.send(challengeEmbed);
 }
 
@@ -356,9 +371,9 @@ function embedPages(message, title, columns) {
     columnChunks = {};
     for (columnHeader in columns) {
         columnChunks[columnHeader] = h.chunk(
-            columns[columnHeader], 
+            columns[columnHeader],
             MAX_VALUES_LIST_LENGTH_2MP
-        )
+        );
     }
 
     // Divide results into chunks of MAX_VALUES_LIST_LENGTH_2MP
@@ -405,13 +420,13 @@ function embedPages(message, title, columns) {
             .setColor(colours['cyber'])
             .addField('#Combos', columns.LINK.length)
             .setFooter(`${pg + 1}/${numPages}`);
-        
+
         for (columnHeader in columnChunks) {
             challengeEmbed.addField(
-                columnHeader, 
-                columnChunks[columnHeader][pg].join("\n"),
+                columnHeader,
+                columnChunks[columnHeader][pg].join('\n'),
                 true
-            )
+            );
         }
 
         message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
@@ -533,8 +548,8 @@ async function rowBoundaries() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
     await sheet.loadCells(`${COLS.NUMBER}1:${COLS.NUMBER}${sheet.rowCount}`);
 
-    startRow = null
-    endRow = null
+    startRow = null;
+    endRow = null;
 
     for (let row = 1; row <= sheet.rowCount; row++) {
         numberCandidate = sheet.getCellByA1(`${COLS.NUMBER}${row}`).value;
@@ -543,13 +558,18 @@ async function rowBoundaries() {
         if (startRow && !numberCandidate) {
             endRow = row - 1;
             break;
-        } else if (numberCandidate && numberCandidate.replace(/ /g, '') === '1st') {
+        } else if (
+            numberCandidate &&
+            numberCandidate.replace(/ /g, '') === '1st'
+        ) {
             startRow = row;
         }
     }
 
     if (!startRow) {
-        throw new DeveloperCommandError(`Orientation failed because \`1st\` couldn't be found in the "Number" column.`)
+        throw new DeveloperCommandError(
+            `Orientation failed because \`1st\` couldn't be found in the "Number" column.`
+        );
     }
 
     // If there wasn't a trailing blank cell, then the last cell viewed must be the end cell
@@ -624,20 +644,23 @@ function parsePreloadedMapNotesWithOG(row) {
 function parseMapNotes(notes) {
     if (!notes) return {};
     return Object.fromEntries(
-        notes.trim().split('\n').map((n) => {
-            let altmap, altperson, altbitly;
-            [altmap, altperson, altbitly] = n
-                .split(/[,:]/)
-                .map((t) => t.replace(/ /g, ''));
+        notes
+            .trim()
+            .split('\n')
+            .map((n) => {
+                let altmap, altperson, altbitly;
+                [altmap, altperson, altbitly] = n
+                    .split(/[,:]/)
+                    .map((t) => t.replace(/ /g, ''));
 
-            return [
-                altmap,
-                {
-                    PERSON: altperson,
-                    LINK: `[${altbitly}](http://${altbitly})`,
-                },
-            ];
-        })
+                return [
+                    altmap,
+                    {
+                        PERSON: altperson,
+                        LINK: `[${altbitly}](http://${altbitly})`,
+                    },
+                ];
+            })
     );
 }
 

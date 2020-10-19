@@ -1,4 +1,5 @@
 const WHEEL_SIZE = 50;
+const { discord } = require('../aliases/misc.json');
 
 async function spin(message) {
     user = message.author;
@@ -11,12 +12,7 @@ async function spin(message) {
     if (!tag.showAds || tag.showAds == false) {
         return;
     }
-    advertisingWheel = [
-        botOffline,
-        ownServer,
-        upvoteBot,
-        bugReport,
-    ];
+    advertisingWheel = [botOffline, ownServer, upvoteBot, bugReport];
 
     const wheelSpin = Math.floor(Math.random() * WHEEL_SIZE);
 
@@ -29,7 +25,7 @@ function botOffline(message) {
         .setTitle('Are you tired of the bot being offline?')
         .addField(
             'Join the discord server!',
-            'Get notifications for new updates and bot status at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
+            `Get notifications for new updates and bot status at ${discord}`
         )
         .setColor(colours['blurple'])
         .setFooter(
@@ -56,12 +52,10 @@ function ownServer(message) {
 
 function bugReport(message) {
     const bugEmbed = new Discord.MessageEmbed()
-        .setTitle(
-            'Want to suggest a new feature? Fix a typo? Report a bug?'
-        )
+        .setTitle('Want to suggest a new feature? Fix a typo? Report a bug?')
         .addField(
             'join the discord server!',
-            'suggest a new feature and report a bug at [https://discord.gg/VMX5hZA](https://discord.gg/VMX5hZA)'
+            `suggest a new feature and report a bug at ${discord}`
         )
         .setColor(colours['turq'])
         .setFooter(

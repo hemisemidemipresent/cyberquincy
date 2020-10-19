@@ -11,11 +11,6 @@ module.exports = {
 };
 
 function execute(message, args) {
-    if (message.author.id == 279126808455151628) {
-        return message.channel.send(
-            'You have been banned from abusing this command.'
-        );
-    }
     if (!args) {
         return message.channel.send(
             'please specify a race number/name\nexamples:\nq!race 10\nq!race Primary Qualifiers'
@@ -63,21 +58,38 @@ async function findRaceByNum(number, message) {
     const info1 = sheet.getCellByA1(`G${row1}`);
     const info2 = sheet.getCellByA1(`G${row2}`);
     const info3 = sheet.getCellByA1(`G${row3}`);
-    const firstPlaceNick = sheet.getCellByA1(`O${row1}`);
-    const firstPlaceName = sheet.getCellByA1(`O${row2}`);
-    const firstPlaceTime = sheet.getCellByA1(`O${row3}`);
-    const secondPlaceNick = sheet.getCellByA1(`Q${row1}`);
-    const secondPlaceName = sheet.getCellByA1(`Q${row2}`);
-    const secondPlaceTime = sheet.getCellByA1(`Q${row3}`);
-    const thirdPlaceNick = sheet.getCellByA1(`S${row1}`);
-    const thirdPlaceName = sheet.getCellByA1(`S${row2}`);
-    const thirdPlaceTime = sheet.getCellByA1(`S${row3}`);
-    const fourthPlaceNick = sheet.getCellByA1(`U${row1}`);
-    const fourthPlaceName = sheet.getCellByA1(`U${row2}`);
-    const fourthPlaceTime = sheet.getCellByA1(`U${row3}`);
-    const fifthPlaceNick = sheet.getCellByA1(`W${row1}`);
-    const fifthPlaceName = sheet.getCellByA1(`W${row2}`);
-    const fifthPlaceTime = sheet.getCellByA1(`W${row3}`);
+    const firstPlaceNick = sheet.getCellByA1(`O${row1}`).value;
+    const firstPlaceName = sheet.getCellByA1(`O${row2}`).value;
+    const firstPlaceTime = sheet.getCellByA1(`O${row3}`).value;
+    const secondPlaceNick = sheet.getCellByA1(`Q${row1}`).value;
+    const secondPlaceName = sheet.getCellByA1(`Q${row2}`).value;
+    const secondPlaceTime = sheet.getCellByA1(`Q${row3}`).value;
+    const thirdPlaceNick = sheet.getCellByA1(`S${row1}`).value;
+    const thirdPlaceName = sheet.getCellByA1(`S${row2}`).value;
+    const thirdPlaceTime = sheet.getCellByA1(`S${row3}`).value;
+    const fourthPlaceNick = sheet.getCellByA1(`U${row1}`).value;
+    const fourthPlaceName = sheet.getCellByA1(`U${row2}`).value;
+    const fourthPlaceTime = sheet.getCellByA1(`U${row3}`).value;
+    const fifthPlaceNick = sheet.getCellByA1(`W${row1}`).value;
+    const fifthPlaceName = sheet.getCellByA1(`W${row2}`).value;
+    const fifthPlaceTime = sheet.getCellByA1(`W${row3}`).value;
+    let times = [
+        firstPlaceNick,
+        firstPlaceName,
+        firstPlaceTime,
+        secondPlaceNick,
+        secondPlaceName,
+        secondPlaceTime,
+        thirdPlaceNick,
+        thirdPlaceName,
+        thirdPlaceTime,
+        fourthPlaceNick,
+        fourthPlaceName,
+        fourthPlaceTime,
+        fifthPlaceNick,
+        fifthPlaceName,
+        fifthPlaceTime,
+    ];
     const players = sheet.getCellByA1(`Y${row1}`);
 
     const time = [
@@ -90,9 +102,13 @@ async function findRaceByNum(number, message) {
     let output = '';
     for (i = 0; i < 5; i++) {
         hyperlink = time[i];
-        if (!hyperlink) hyperlink = 'none';
-        output += `${i + 1}:${hyperlink}`;
+        if (!hyperlink) {
+            hyperlink = 'none';
+        }
+        output += `${i + 1}:${hyperlink} `;
     }
+    let timeOutput = '';
+
     const RaceEmbed = new Discord.MessageEmbed()
         .setTitle(`Race ${number}`)
         .setTitle(name.value)

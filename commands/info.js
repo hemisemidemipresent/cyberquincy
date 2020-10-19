@@ -1,4 +1,6 @@
 const { cyber } = require('../jsons/colours.json');
+const { discord } = require('../aliases/misc.json');
+
 module.exports = {
     name: 'info',
     description: 'shows info',
@@ -15,7 +17,7 @@ module.exports = {
         const infoEmbed = new Discord.MessageEmbed()
             .setColor(cyber)
             .setTitle('access help here')
-            .setURL('https://discord.gg/VMX5hZA')
+            .setURL(`${discord}`)
             .setDescription(
                 `Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons and training ${client.users.cache.size} monkeys`
             )
@@ -30,7 +32,7 @@ module.exports = {
             )*/
             .addField(
                 'discord server, join for updates (happens pretty often)',
-                'https://discord.gg/VMX5hZA',
+                `${discord}`,
                 true
             )
             .setFooter('thank you for using it! Please share!');

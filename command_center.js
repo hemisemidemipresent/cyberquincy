@@ -6,6 +6,8 @@ const PREFIX = secrets_config['prefix'];
 const XPCOMMANDS = ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'];
 const ARG_SPLITTER = '#';
 
+const { discord } = require('./aliases/misc.json');
+
 function configureCommands(client) {
     client.commands = new Discord.Collection();
 
@@ -144,7 +146,7 @@ async function handleCommand(message) {
             .setDescription('Oh no! Something went wrong!')
             .addField(
                 '~~I got bonked by a DDT again~~',
-                'Please [report the bug](https://discord.gg/VMX5hZA)'
+                `Please [report the bug](${discord})`
             );
         return message.channel.send(errorEmbed);
     }

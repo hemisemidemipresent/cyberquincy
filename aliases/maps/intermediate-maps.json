@@ -1,19 +1,69 @@
 {
-    "moon_landing": ["ml", "moon", "landing"],
-    "cracked": ["cr", "ck", "crkd"],
-    "kartsndarts": ["kd", "kar", "kart", "karts", "karts_n_darts", "kartsn"],
-    "firing_range": ["fr", "fir", "firing"],
+    "moon_landing": [
+        "ml",
+        "moon",
+        "landing"
+    ],
+    "cracked": [
+        "cr",
+        "ck",
+        "crkd"
+    ],
+    "kartsndarts": [
+        "kd",
+        "kar",
+        "kart",
+        "karts",
+        "karts_n_darts",
+        "kartsn"
+    ],
+    "firing_range": [
+        "fr",
+        "fir",
+        "firing"
+    ],
     "adora's_temple": [
         "at",
         "atemple",
         "adora's"
     ],
-    "downstream": ["ds", "down"],
-    "streambed": ["sb", "stream"],
-    "spring_spring": ["ss", "spring"],
-    "spice_islands": ["sp", "si", "spice"],
-    "bazaar": ["bz", "baz"],
-    "haunted": ["ha", "haunt"],
-    "chutes": ["ch", "chut"],
-    "rake": ["r", "rk", "rke"]
+    "downstream": [
+        "ds",
+        "down"
+    ],
+    "streambed": [
+        "sb",
+        "stream"
+    ],
+    "spring_spring": [
+        "ss",
+        "spring"
+    ],
+    "spice_islands": [
+        "sp",
+        "si",
+        "spice"
+    ],
+    "bazaar": [
+        "bz",
+        "baz"
+    ],
+    "haunted": [
+        "ha",
+        "haunt"
+    ],
+    "chutes": [
+        "ch",
+        "chut"
+    ],
+    "rake": [
+        "r",
+        "rk",
+        "rke"
+    ],
+    "encrypted": [
+        "en",
+        "secret",
+        "locked"
+    ]
 }

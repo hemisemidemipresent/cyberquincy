@@ -62,7 +62,7 @@ function consoleBootup() {
             },
             status: 'online',
         });
-        console.log('<Program Directive>');
+        console.log('<Program Directive> Discord Bot Client is ready');
     });
 }
 
@@ -107,7 +107,7 @@ async function googleSheetsInitialization() {
     global.Btd6Index = await GoogleSheetsHelper.load(
         GoogleSheetsHelper.BTD6_INDEX_KEY
     );
-    console.log('<INITIATE>');
+    console.log('<INITIATE> Btd6 Index has been loaded');
 }
 async function towerJSONinit() {
     let bool = require('./1/config.json')['towerJSON'];
@@ -119,7 +119,7 @@ async function towerJSONinit() {
         .then((res) => res.json())
         .then((json) => {
             global.towerJSON = json;
-            console.log('<Eradicate Bloons>');
+            console.log("<Eradicate Bloons> Topper's JSON is loaded");
         })
         .catch(() => {
             console.log(

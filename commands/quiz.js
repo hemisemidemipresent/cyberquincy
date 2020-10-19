@@ -1,6 +1,7 @@
 const quiz = require('../jsons/quiz.json');
 const { cyber, orange, turq, magenta } = require('../jsons/colours.json');
 const Quiz = require('../helpers/quizxp.js');
+const { discord } = require('../aliases/misc.json');
 
 module.exports = {
     name: 'quiz',
@@ -23,7 +24,7 @@ module.exports = {
             )
             .addField(
                 'people **HAVE** contributed to this command!',
-                'join [this server](https://discord.gg/VMX5hZA) to suggest an idea, as well as get the lastest updates, bug fixes and reports.'
+                `join [this server](${discord}) to suggest an idea, as well as get the lastest updates, bug fixes and reports.`
             )
             .setFooter(
                 'This command is unstable and dont expect it to be 100% working'

@@ -2,7 +2,7 @@ const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'herolevel',
     aliases: ['hl', 'hero', 'her', 'hlvl'],
-    execute(message) {
+    async execute(message) {
         const xp_per_level = [
             0,
             0,

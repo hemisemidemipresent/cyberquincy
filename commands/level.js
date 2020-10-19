@@ -1,3 +1,4 @@
+const { discord } = require('../aliases/misc.json');
 module.exports = {
     name: 'level',
     aliases: ['xp', 'rank', 'getxp'],
@@ -59,7 +60,7 @@ module.exports = {
             .setColor(colours['cyber'])
             .addField(
                 'Have a suggestion or found a bug?',
-                'Please tell us [here](https://discord.gg/VMX5hZA)!'
+                `Please tell us [here](${discord})!`
             )
             .setFooter('use `q!level rewards` to see role rewards');
         return message.channel.send(xpEmbed);
@@ -97,7 +98,7 @@ module.exports = {
             .setTitle(`XP Rewards`)
             .setColor(colours['cyber'])
             .setDescription(
-                'You only get role rewards in the bot discord server\n[Discord Server](https://discord.gg/VMX5hZA)'
+                `You only get role rewards in the bot discord server\n[Discord Server](${discord})`
             );
         return message.channel.send(lvlMebed);
     },

@@ -20,8 +20,9 @@ module.exports = {
         }
 
         alias = parsed.anything;
+        canonicizedAlias = Aliases.canonicizeArg(alias);
 
-        aliasSet = Aliases.getAliasSet(alias);
+        aliasSet = Aliases.getAliasSet(canonicizedAlias);
         let aliasStr = '';
         if (aliasSet) {
             aliasStr = aliasSet.join(', ');

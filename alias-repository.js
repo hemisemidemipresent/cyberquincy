@@ -33,9 +33,8 @@ class AliasRepository extends Array {
                 // See if the file has a special handler
                 for (const specialRelPath in SPECIAL_HANDLING_CASES) {
                     if (relPath.startsWith(specialRelPath)) {
-                        handlingFunction = SPECIAL_HANDLING_CASES[
-                            specialRelPath
-                        ];
+                        handlingFunction =
+                            SPECIAL_HANDLING_CASES[specialRelPath];
                         break;
                     }
                 }
@@ -85,9 +84,11 @@ class AliasRepository extends Array {
             if (upgrade == 'xyz') {
                 const baseTowerAliasGroup = {
                     canonical: `${baseName}#222`,
-                    aliases: towerUpgrades['xyz'].concat(baseName).map(al => `base_${al}`),
+                    aliases: towerUpgrades['xyz']
+                        .concat(baseName)
+                        .map((al) => `base_${al}`),
                     sourcefile: f,
-                }
+                };
                 this.addAliasGroup(baseTowerAliasGroup);
             }
         }
@@ -97,17 +98,23 @@ class AliasRepository extends Array {
     addAliasGroup(ag) {
         try {
             // If adora's_temple is an alias, include adoras_temple as well
-            ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteRemovalForgettableCharacters(al)).flat()
+            ag.aliases = ag.aliases
+                .concat(ag.canonical)
+                .map((al) => this.permuteRemovalForgettableCharacters(al))
+                .flat();
             // Delete the canonical verbatim from the alias list
-            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
+            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1);
 
             // If another_brick is an alias, include another-brick and anotherbrick as well
-            ag.aliases = ag.aliases.concat(ag.canonical).map(al => this.permuteSeparators(al)).flat()
+            ag.aliases = ag.aliases
+                .concat(ag.canonical)
+                .map((al) => this.permuteSeparators(al))
+                .flat();
             // Delete the canonical verbatim from the alias list
-            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1)
+            ag.aliases.splice(ag.aliases.indexOf(ag.canonical), 1);
 
             // Remove duplicates, maintaining alias order
-            ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i)
+            ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i);
 
             // Make sure that none of these aliases overlap with other alias sets
             this.preventSharedAliases(ag);
@@ -125,46 +132,51 @@ class AliasRepository extends Array {
     permuteSeparators(al) {
         if (al.includes('#')) return [al];
 
-        const SEPARATOR_TOKENS = ["_", "-"]
-        const JOIN_TOKENS = ["_", "-", ""]
+        const SEPARATOR_TOKENS = ['_', '-'];
+        const JOIN_TOKENS = ['_', '-', ''];
 
-        const tokens = al.split(new RegExp(SEPARATOR_TOKENS.join('|')))
-        let aliases = [tokens[0]]        
+        const tokens = al.split(new RegExp(SEPARATOR_TOKENS.join('|')));
+        let aliases = [tokens[0]];
 
         for (var i = 1; i < tokens.length; i++) {
-            let new_aliases = []
+            let new_aliases = [];
             for (var j = 0; j < aliases.length; j++) {
                 for (var k = 0; k < JOIN_TOKENS.length; k++) {
-                    new_aliases.push(
-                        aliases[j] + JOIN_TOKENS[k] + tokens[i]
-                    );
+                    new_aliases.push(aliases[j] + JOIN_TOKENS[k] + tokens[i]);
                 }
             }
             aliases = [...new_aliases];
         }
 
         // Move the original alias to the front of the transformed list
-        aliases.splice(aliases.findIndex(a => a == al), 1)
+        aliases.splice(
+            aliases.findIndex((a) => a == al),
+            1
+        );
         return [al].concat(aliases);
     }
 
     permuteRemovalForgettableCharacters(al) {
         if (al.includes('#')) return [al];
 
-        const FORGETTABLE_CHARACTERS = [":", "'"]
-        return this.forgetRecursive(al, FORGETTABLE_CHARACTERS)
+        const FORGETTABLE_CHARACTERS = [':', "'"];
+        return this.forgetRecursive(al, FORGETTABLE_CHARACTERS);
     }
 
     forgetRecursive(w, chars) {
-        const sepIndex = w.search(new RegExp(chars.join('|')))
+        const sepIndex = w.search(new RegExp(chars.join('|')));
         if (sepIndex == -1) return [w];
 
-        const prefix = w.slice(0, sepIndex)
-        const suffix = w.slice(sepIndex + 1)
-        const sep = w[sepIndex]
-        
-        const useits = this.forgetRecursive(suffix, chars).map(sfx => prefix + sep + sfx);
-        const loseits = this.forgetRecursive(suffix, chars).map(sfx => prefix + sfx);
+        const prefix = w.slice(0, sepIndex);
+        const suffix = w.slice(sepIndex + 1);
+        const sep = w[sepIndex];
+
+        const useits = this.forgetRecursive(suffix, chars).map(
+            (sfx) => prefix + sep + sfx
+        );
+        const loseits = this.forgetRecursive(suffix, chars).map(
+            (sfx) => prefix + sfx
+        );
 
         return useits.concat(loseits);
     }
@@ -264,7 +276,7 @@ class AliasRepository extends Array {
     }
 
     allWaterMaps() {
-        return this.allMaps().filter(m => this.allNonWaterMaps().includes(m))
+        return this.allMaps().filter((m) => this.allNonWaterMaps().includes(m));
     }
 
     // TODO: rewrite this involving the q!map command results rather than hardcoding it
@@ -280,24 +292,32 @@ class AliasRepository extends Array {
             'GD',
             'UG',
             'MS',
-            'W'
-        ].map(m => this.getCanonicalForm(m.toLowerCase()))
+            'W',
+        ].map((m) => this.getCanonicalForm(m.toLowerCase()));
     }
 
     beginnerMaps() {
-        return this.getAliasGroupsFromSameFileAs('LOGS').map(ag => ag.canonical);
+        return this.getAliasGroupsFromSameFileAs('LOGS').map(
+            (ag) => ag.canonical
+        );
     }
 
     intermediateMaps() {
-        return this.getAliasGroupsFromSameFileAs('HAUNTED').map(ag => ag.canonical);
+        return this.getAliasGroupsFromSameFileAs('HAUNTED').map(
+            (ag) => ag.canonical
+        );
     }
 
     advancedMaps() {
-        return this.getAliasGroupsFromSameFileAs('CORNFIELD').map(ag => ag.canonical);
+        return this.getAliasGroupsFromSameFileAs('CORNFIELD').map(
+            (ag) => ag.canonical
+        );
     }
 
     expertMaps() {
-        return this.getAliasGroupsFromSameFileAs('INFERNAL').map(ag => ag.canonical);
+        return this.getAliasGroupsFromSameFileAs('INFERNAL').map(
+            (ag) => ag.canonical
+        );
     }
 
     allMapDifficulties() {
@@ -335,12 +355,13 @@ class AliasRepository extends Array {
 
     // Gets all 0-0-0 tower names
     allTowers() {
-        return this.filter(ag => ag.canonical.endsWith('#300'))
-                   .map(ag => ag.canonical.slice(0, -4))
+        return this.filter((ag) => ag.canonical.endsWith('#300')).map((ag) =>
+            ag.canonical.slice(0, -4)
+        );
     }
 
     allWaterTowers() {
-        return ['sub', 'bucc', 'brick'].map(t => this.getCanonicalForm(t))
+        return ['sub', 'bucc', 'brick'].map((t) => this.getCanonicalForm(t));
     }
 
     allHeroes() {
@@ -361,45 +382,48 @@ class AliasRepository extends Array {
 
     towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
         // Re-assign tower to canonical and ensure that it exists and is a tower
-        if(!( tower = this.getCanonicalForm(tower) ) || !this.allTowers().includes(tower)) {
-            throw 'First argument must be a tower'
-        };
+        if (
+            !(tower = this.getCanonicalForm(tower)) ||
+            !this.allTowers().includes(tower)
+        ) {
+            throw 'First argument must be a tower';
+        }
 
         // Validate path
         if (isNaN(path)) {
-            throw 'Second argument `path` must be 1, 2, or 3'
+            throw 'Second argument `path` must be 1, 2, or 3';
         }
         try {
             path = parseInt(path);
-        } catch(e) {
-            throw 'Second argument `path` must be 1, 2, or 3'
+        } catch (e) {
+            throw 'Second argument `path` must be 1, 2, or 3';
         }
-        
+
         if (path < 1 || path > 3) {
-            throw 'Second argument `path` must be 1, 2, or 3'
+            throw 'Second argument `path` must be 1, 2, or 3';
         }
 
         // Validate tier
         if (!tier) {
-            return this.towerUpgradeToIndexNormalForm(`${tower}#222`)
+            return this.towerUpgradeToIndexNormalForm(`${tower}#222`);
         }
 
         if (isNaN(tier)) {
-            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
         }
         try {
             tier = parseInt(tier);
-        } catch(e) {
-            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+        } catch (e) {
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
         }
-        
+
         if (tier < 0 || tier > 5) {
-            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive'
+            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
         }
 
         // Convert path + tier to appropriate upgrade string like 003 or 400
-        const upgradeInt = tier * Math.pow(10, 3 - path)
-        const upgradeStr = upgradeInt.toString().padStart(3, '0')
+        const upgradeInt = tier * Math.pow(10, 3 - path);
+        const upgradeStr = upgradeInt.toString().padStart(3, '0');
 
         // Combine tower with upgrade string to get tower upgrade canonical like wizard#300
         return this.towerUpgradeToIndexNormalForm(`${tower}#${upgradeStr}`);
@@ -409,8 +433,8 @@ class AliasRepository extends Array {
         if (this.allHeroes().includes(this.getCanonicalForm(towerUpgrade))) {
             return towerUpgrade;
         }
-        
-        return this.getCanonicalForm(towerUpgrade).slice(0, -4)
+
+        return this.getCanonicalForm(towerUpgrade).slice(0, -4);
     }
 
     mapToIndexAbbreviation(map) {
@@ -418,12 +442,14 @@ class AliasRepository extends Array {
     }
 
     indexAbbreviationToMap(mapAbbr) {
-        const indexNormalUnformatted = this.getAliasSet(mapAbbr.toLowerCase())[0]
-        return this.toIndexNormalForm(indexNormalUnformatted)
+        const indexNormalUnformatted = this.getAliasSet(
+            mapAbbr.toLowerCase()
+        )[0];
+        return this.toIndexNormalForm(indexNormalUnformatted);
     }
 
     toAliasNormalForm(indexForm) {
-        return indexForm.toLowerCase().split(' ').join('_')
+        return indexForm.toLowerCase().split(' ').join('_');
     }
 
     toIndexNormalForm(canonical) {
@@ -432,6 +458,6 @@ class AliasRepository extends Array {
             .map((tk) => h.toTitleCase(tk))
             .join(' ');
     }
-};
+}
 
-module.exports = AliasRepository
+module.exports = AliasRepository;

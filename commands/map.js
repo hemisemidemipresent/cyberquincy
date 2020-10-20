@@ -31,7 +31,7 @@ module.exports = {
             .addField('Total $ to clear out all the objects', `$${m.Cos}`, true)
             .addField('Version added:', `${m.ver}`, true)
             .addField('Water body percentage', `${m['wa%']}`, true)
-            .addField('Entrances/Exits', `${m.e.e}`, true)
+            .addField('Entrances/Exits', `${m.e}`, true)
             //.addField('Line of sight obstructions', `${m.los}`, true)
             .addField('Bug reporting', `report [here](${discord})`, true)
             .setFooter(

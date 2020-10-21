@@ -98,7 +98,7 @@ class AliasRepository extends Array {
     addAliasGroup(ag) {
         try {
             // If adora's_temple is an alias, include adoras_temple as well
-            ag.aliases = ag.aliases
+            ag.aliases = [ag.aliases].flat()
                 .concat(ag.canonical)
                 .map((al) => this.permuteRemovalForgettableCharacters(al))
                 .flat();
@@ -457,6 +457,15 @@ class AliasRepository extends Array {
             .split('_')
             .map((tk) => h.toTitleCase(tk))
             .join(' ');
+    }
+
+    ARG_SPLITTER = '#'
+    
+    canonicizeArg(arg) {
+        return arg
+            .split(this.ARG_SPLITTER)
+            .map((t) => Aliases.getCanonicalForm(t) || t)
+            .join(this.ARG_SPLITTER);
     }
 }
 

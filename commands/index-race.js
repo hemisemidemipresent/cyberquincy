@@ -60,36 +60,20 @@ async function findRaceByNum(number, message) {
     const info3 = sheet.getCellByA1(`G${row3}`);
     const firstPlaceNick = sheet.getCellByA1(`O${row1}`).value;
     const firstPlaceName = sheet.getCellByA1(`O${row2}`).value;
-    const firstPlaceTime = sheet.getCellByA1(`O${row3}`).value;
+    const firstPlaceTime = sheet.getCellByA1(`O${row3}`);
     const secondPlaceNick = sheet.getCellByA1(`Q${row1}`).value;
     const secondPlaceName = sheet.getCellByA1(`Q${row2}`).value;
-    const secondPlaceTime = sheet.getCellByA1(`Q${row3}`).value;
+    const secondPlaceTime = sheet.getCellByA1(`Q${row3}`);
     const thirdPlaceNick = sheet.getCellByA1(`S${row1}`).value;
     const thirdPlaceName = sheet.getCellByA1(`S${row2}`).value;
-    const thirdPlaceTime = sheet.getCellByA1(`S${row3}`).value;
+    const thirdPlaceTime = sheet.getCellByA1(`S${row3}`);
     const fourthPlaceNick = sheet.getCellByA1(`U${row1}`).value;
     const fourthPlaceName = sheet.getCellByA1(`U${row2}`).value;
-    const fourthPlaceTime = sheet.getCellByA1(`U${row3}`).value;
+    const fourthPlaceTime = sheet.getCellByA1(`U${row3}`);
     const fifthPlaceNick = sheet.getCellByA1(`W${row1}`).value;
     const fifthPlaceName = sheet.getCellByA1(`W${row2}`).value;
-    const fifthPlaceTime = sheet.getCellByA1(`W${row3}`).value;
-    let times = [
-        firstPlaceNick,
-        firstPlaceName,
-        firstPlaceTime,
-        secondPlaceNick,
-        secondPlaceName,
-        secondPlaceTime,
-        thirdPlaceNick,
-        thirdPlaceName,
-        thirdPlaceTime,
-        fourthPlaceNick,
-        fourthPlaceName,
-        fourthPlaceTime,
-        fifthPlaceNick,
-        fifthPlaceName,
-        fifthPlaceTime,
-    ];
+    const fifthPlaceTime = sheet.getCellByA1(`W${row3}`);
+
     const players = sheet.getCellByA1(`Y${row1}`);
 
     const time = [
@@ -107,7 +91,6 @@ async function findRaceByNum(number, message) {
         }
         output += `${i + 1}:${hyperlink} `;
     }
-    let timeOutput = '';
 
     const RaceEmbed = new Discord.MessageEmbed()
         .setTitle(`Race ${number}`)
@@ -116,7 +99,7 @@ async function findRaceByNum(number, message) {
         .addField('Date', `${dates.value}`)
         .addField(
             'Top 5',
-            `\`\`\`fix\n${firstPlaceNick.value} ${firstPlaceName.value} ${firstPlaceTime.value}\n\`\`\`\`\`\`diff\n- ${secondPlaceNick.value} ${secondPlaceName.value} ${secondPlaceTime.value}\n\`\`\`\`\`\`tex\n$ ${thirdPlaceNick.value} ${thirdPlaceName.value} ${thirdPlaceTime.value}\n\`\`\`\`\`\`\n${fourthPlaceNick.value} ${fourthPlaceName.value} ${fourthPlaceTime.value}\n\`\`\`\`\`\`\n${fifthPlaceNick.value} ${fifthPlaceName.value} ${fifthPlaceTime.value}\`\`\``
+            `\`\`\`fix\n${firstPlaceNick} ${firstPlaceName} ${firstPlaceTime.value}\n${secondPlaceNick} ${secondPlaceName} ${secondPlaceTime.value}\n${thirdPlaceNick} ${thirdPlaceName} ${thirdPlaceTime.value}\n${fourthPlaceNick} ${fourthPlaceName} ${fourthPlaceTime.value}\n${fifthPlaceNick} ${fifthPlaceName} ${fifthPlaceTime.value}\`\`\``
         )
         .addField('Links', `${output}`)
         .addField('Players', `${players.value}`);

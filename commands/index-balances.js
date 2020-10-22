@@ -75,8 +75,8 @@ const indexTowerNames = [
     ['dart-monkey', 4],
     ['boomerang-monkey', 6],
     ['bomb-shooter', 8],
-    ['ice-monkey', 10],
-    ['tack-shooter', 12],
+    ['tack-shooter', 10],
+    ['ice-monkey', 12],
     ['glue-gunner', 14],
     ['sniper-monkey', 16],
     ['monkey-sub', 18],
@@ -108,6 +108,7 @@ async function showBuffNerf(message, tower) {
     let col0 = alphabet[tnum - 1];
 
     let col1 = alphabet[tnum];
+
     let balances = [];
     for (i = 0; i < 21; i++) {
         let buff = sheet.getCellByA1(`${col0}${i + 24}`).note;
@@ -132,10 +133,9 @@ async function showBuffNerf(message, tower) {
         if (balances[i][0] == 'none' && balances[i][1] == 'none') {
             continue;
         } else {
-            embed.addField(
-                `**v${i + 1}.0:**`,
-                `**buffs:**\n${balances[i][0]}\n**nerfs:**\n${balances[i][1]}`
-            );
+            let str = `${balances[i][0]}\n${balances[i][1]}`;
+            if (str.length > 1024) str = 'way too many';
+            embed.addField(`**v${i + 2}.0:**`, `${str}`);
         }
     }
     message.channel.send(embed);

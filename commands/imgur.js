@@ -16,14 +16,21 @@ module.exports = {
             return message.channel.send(
                 'if you dont know that this command its because this isnt an actual feature'
             );
-        imgur.uploadUrl(image).then((json) => {
-            const Embed = new Discord.MessageEmbed()
-                .setTimestamp()
-                .setFooter(`by ${message.author.tag}`)
-                .setColor(cyber)
-                .setImage(`${json.data.link}`);
-            message.channel.send(Embed);
-            message.delete();
-        });
+        imgur
+            .uploadUrl(image)
+            .then((json) => {
+                const Embed = new Discord.MessageEmbed()
+                    .setTimestamp()
+                    .setDescription(`${json.data.link}`)
+                    .setFooter(`by ${message.author.tag}`)
+                    .setColor(cyber)
+                    .setImage(`${json.data.link}`);
+                message.channel.send(Embed);
+                message.delete();
+            })
+            .catch((err) => {
+                console.log(err);
+                return message.channel.send('vrej');
+            });
     },
 };

@@ -107,9 +107,20 @@ module.exports = {
                 );
             return message.channel.send(errorEmbed);
         }
+        let base = towerJSON[`${name}`];
+
+        if (args[0] == '-all') {
+            let embed = new Discord.MessageEmbed()
+                .setTitle(`${name}`)
+                .setColor(cyber);
+            let desc = '';
+            for (i = 0; i < 20; i++) {
+                embed.addField(`${i + 1}`, `${base.upgrades[i].notes}`);
+            }
+            return message.channel.send(embed);
+        }
         let level = parseInt(args[0]);
 
-        let base = towerJSON[`${name}`];
         let object = base.upgrades[level - 1];
         if (!object) {
             let errorEmbed = new Discord.MessageEmbed()

@@ -1,5 +1,12 @@
 {
-    "cheapest": ["cheap", "chp", "chea", "chpst"],
-    "user": ["u"],
-    "discord": "https://discord.gg/"
+    "cheapest": [
+        "cheap",
+        "chp",
+        "chea",
+        "chpst"
+    ],
+    "user": [
+        "u"
+    ],
+    "discord": "https://discord.gg/VMX5hZA"
 }

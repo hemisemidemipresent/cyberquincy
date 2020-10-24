@@ -31,6 +31,12 @@ async function handleCommand(message) {
         // "Normalize" message
         let c = message.content.toLowerCase();
 
+        // check for pings
+        if (c.includes('<@591922988832653313>')) {
+            command = client.commands.get('help');
+            return command.execute(message, args, 'help');
+        }
+
         // Queries must begin with q!
         if (!c.startsWith(PREFIX)) return;
 

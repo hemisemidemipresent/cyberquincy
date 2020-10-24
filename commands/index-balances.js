@@ -97,15 +97,20 @@ async function showBuffNerf(message, tower) {
             balances[v] += nerf
         }
     }
-    console.log(balances)
-    
+
+    formattedTower = Aliases.toIndexNormalForm(tower)
+
     let embed = new Discord.MessageEmbed()
-        .setTitle(`Buffs and Nerfs for ${Aliases.toIndexNormalForm(tower)}\n`)
+        .setTitle(`Buffs and Nerfs for ${formattedTower}\n`)
         .setColor(darkgreen)
     
     for (const version in balances) {
         embed.addField(`v. ${version}`, balances[version] + "\n\u200b")
     }
 
-    message.channel.send(embed);
+    try {
+        await message.channel.send(embed);
+    } catch(e) {
+        return message.channel.send(`Too many balance changes for ${formattedTower}; fix in progress`)
+    }
 }

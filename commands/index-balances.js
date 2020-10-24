@@ -25,7 +25,31 @@ async function execute(message, args) {
     return showBuffNerf(message, parsed.tower);
 }
 
-MIN_COLUMN = 'D'
+function errorMessage(message, parsingErrors) {
+    let errorEmbed = new Discord.MessageEmbed()
+        .setTitle('ERROR')
+        .addField(
+            'Likely Cause(s)',
+            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+        )
+        .addField('Type `q!2tc` for help', '\u200b')
+        .setColor(colours['orange']);
+
+    return message.channel.send(errorEmbed);
+}
+
+function helpMessage(message) {
+    let helpEmbed = new Discord.MessageEmbed()
+        .setTitle('`q!balance` HELP')
+        .addField(
+            '`q!balance <tower>`',
+            'Get the patch notes for a given tower\n`q!balance heli`'
+        )
+
+    return message.channel.send(helpEmbed);
+}
+
+MIN_COLUMN = 'C'
 MIN_ROW = 23
 
 async function showBuffNerf(message, tower) {
@@ -44,11 +68,11 @@ async function showBuffNerf(message, tower) {
 
     // Parse {column}23 until tower alias is reached
     entryColIndex = null
-    const headerRowInex = MIN_ROW - 1 
-    const minColIndex = MIN_COLUMN.charCodeAt(0) - 65;
+    const headerRowIndex = MIN_ROW - 1 
+    const dartColIndex = MIN_COLUMN.charCodeAt(0) + 1 - 65;
 
-    for (colIndex = minColIndex; colIndex < sheet.columnCount; colIndex += 2) {
-        towerHeader = sheet.getCell(headerRowInex, colIndex).value
+    for (colIndex = dartColIndex; colIndex < sheet.columnCount; colIndex += 2) {
+        towerHeader = sheet.getCell(headerRowIndex, colIndex).value
 
         if(!towerHeader) throw `Something went wrong; ${tower} couldn't be found in the headers`
         
@@ -58,33 +82,30 @@ async function showBuffNerf(message, tower) {
         }
     }
 
-    let balances = [];
-    for (row = headerRowInex + 1; row < headerRowInex + 1 + currentVersion; row++) {
+    let balances = {};
+    // Iterate rows until column C no longer shows a version number
+    for (row = headerRowIndex + 1; v = sheet.getCell(row, dartColIndex - 1).formattedValue; row++) {
         let buff = sheet.getCell(row, entryColIndex).note;
         let nerf = sheet.getCell(row, entryColIndex + 1).note;
 
         if (buff) {
             buff = buff.replace(/✔️/g, '✅');
-            buff = buff.replace(/\n\n/g, '\n');
+            balances[v] = buff
         }
-        balances.push(buff)
         if (nerf) {
-            nerf = nerf.replace(/\n\n/g, '\n');
+            balances[v] = balances[v] ? balances[v] + "\n\n" : ""
+            balances[v] += nerf
         }
-        balances.push(nerf);
     }
+    console.log(balances)
+    
     let embed = new Discord.MessageEmbed()
-        .setTitle(`Buffs and Nerfs for ${tower}\n`)
-        .setColor(darkgreen);
-
-    for (i = 0; i < 21; i++) {
-        if (balances[i][0] == 'none' && balances[i][1] == 'none') {
-            continue;
-        } else {
-            let str = `${balances[i][0]}\n${balances[i][1]}`;
-            if (str.length > 1024) str = 'way too many';
-            embed.addField(`**v${i + 2}.0:**`, `${str}`);
-        }
+        .setTitle(`Buffs and Nerfs for ${Aliases.toIndexNormalForm(tower)}\n`)
+        .setColor(darkgreen)
+    
+    for (const version in balances) {
+        embed.addField(`v. ${version}`, balances[version] + "\n\u200b")
     }
+
     message.channel.send(embed);
 }

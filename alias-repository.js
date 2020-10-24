@@ -261,7 +261,19 @@ class AliasRepository extends Array {
         let ag = this.getAliasGroup(aliasMember);
         let result = this.filter(
             (otherAliasGroup) => otherAliasGroup.sourcefile === ag.sourcefile
-        );
+        )
+        return result;
+    }
+
+    getAliasGroupsFromSameImmediateDirectoryAs(aliasMember) {
+        aliasMember = aliasMember.toLowerCase();
+        let ag = this.getAliasGroup(aliasMember);
+        let result = this.filter(function (otherAliasGroup) {
+            let agPathTokens = ag.sourcefile.split('/')
+            let otherAgPathTokens = otherAliasGroup.sourcefile.split('/')
+            return agPathTokens[agPathTokens.length - 2] == 
+                    otherAgPathTokens[otherAgPathTokens.length - 2]
+        })
         return result;
     }
 
@@ -355,9 +367,36 @@ class AliasRepository extends Array {
 
     // Gets all 0-0-0 tower names
     allTowers() {
-        return this.filter((ag) => ag.canonical.endsWith('#300')).map((ag) =>
-            ag.canonical.slice(0, -4)
-        );
+        return this.allPrimaryTowers() + this.allMilitaryTowers() + 
+                this.allMagicTowers() + this.allSupportTowers()
+    }
+
+    allPrimaryTowers() {
+        const primaryTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('DART');
+
+        return primaryTowers.map((ag) => ag.canonical)
+                            .filter((upgrade) => !upgrade.includes('#'))
+    }
+
+    allMilitaryTowers() {
+        const militaryTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('HELI');
+
+        return militaryTowers.map((ag) => ag.canonical)
+                            .filter((upgrade) => !upgrade.includes('#'))
+    }
+
+    allMagicTowers() {
+        const magicTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('WIZ');
+
+        return magicTowers.map((ag) => ag.canonical)
+                            .filter((upgrade) => !upgrade.includes('#'))
+    }
+
+    allSupportTowers() {
+        const supportTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('FARM');
+
+        return supportTowers.map((ag) => ag.canonical)
+                            .filter((upgrade) => !upgrade.includes('#'))
     }
 
     allWaterTowers() {
@@ -459,13 +498,11 @@ class AliasRepository extends Array {
             .join(' ');
     }
 
-    ARG_SPLITTER = '#'
-    
     canonicizeArg(arg) {
         return arg
-            .split(this.ARG_SPLITTER)
+            .split('#')
             .map((t) => Aliases.getCanonicalForm(t) || t)
-            .join(this.ARG_SPLITTER);
+            .join('#');
     }
 }
 

@@ -1,5 +1,8 @@
 const { darkgreen } = require('../jsons/colours.json');
-const GoogleSheetsHelper = require('../helpers/google-sheets.js');
+const GoogleSheetsHelper = require('../helpers/google-sheets');
+const TowerParser = require('../parser/tower-parser');
+
+
 module.exports = {
     name: 'balance',
     dependencies: ['btd6index'],
@@ -7,96 +10,34 @@ module.exports = {
     aliases: ['changes', 'balances'],
     execute,
 };
+
 async function execute(message, args) {
-    let name = args[0];
-    if (!name) {
-        return message.channel.send(
-            `\`${args[0]}\` is not a proper tower name.`
-        );
-    } else {
-        return showBuffNerf(message, name);
+    if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+        return helpMessage(message);
     }
+
+    const parsed = CommandParser.parse(args, new TowerParser());
+
+    if (parsed.hasErrors()) {
+        return errorMessage(message, parsed.parsingErrors);
+    }
+
+    console.log(Aliases.allPrimaryTowers())
+
+    return showBuffNerf(message, parsed.tower);
 }
-const alphabet = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z',
-    'AA',
-    'AB',
-    'AC',
-    'AD',
-    'AE',
-    'AF',
-    'AG',
-    'AH',
-    'AI',
-    'AJ',
-    'AK',
-    'AL',
-    'AM',
-    'AN',
-    'AO',
-    'AP',
-    'AQ',
-    'AR',
-    'AS',
-    'AT',
-    'AU',
-    'AV',
-    'AW',
-    'AX',
-    'AY',
-    'AZ',
-];
-const indexTowerNames = [
-    ['dart-monkey', 4],
-    ['boomerang-monkey', 6],
-    ['bomb-shooter', 8],
-    ['tack-shooter', 10],
-    ['ice-monkey', 12],
-    ['glue-gunner', 14],
-    ['sniper-monkey', 16],
-    ['monkey-sub', 18],
-    ['monkey-bucc', 20],
-    ['monkey-ace', 22],
-    ['heli-pilot', 24],
-    ['mortar-monkey', 26],
-    ['wizard-monkey', 28],
-    ['super-monkey', 30],
-    ['ninja-monkey', 32],
-    ['alchemist', 34],
-    ['druid', 36],
-    ['banana-farm', 38],
-    ['spike-factory', 40],
-    ['monkey-village', 42],
-    ['engineer-monkey', 44],
-];
+
+MIN_COLUMN = 'D'
+MAX_COLUMN = 'AS'
+
+
+
 async function showBuffNerf(message, tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'Towers');
-    await sheet.loadCells('D23:AS44');
+    // Get version number from J3
+    // Load from C23 to {end_column}{C+v#}
+    // Parse {column}23 until tower alias is reached
+    await sheet.loadCells(`${MIN_COLUMN}23:AS44`);
     let tnum = 0;
     for (i = 0; i < 21; i++) {
         let indexTowerName = indexTowerNames[i][0];

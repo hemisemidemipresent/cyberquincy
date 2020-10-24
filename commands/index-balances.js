@@ -59,20 +59,19 @@ async function showBuffNerf(message, tower) {
     }
 
     let balances = [];
-    for (i = 0; i < 21; i++) {
-        let buff = sheet.getCellByA1(`${col0}${i + 24}`).note;
-        let nerf = sheet.getCellByA1(`${col1}${i + 24}`).note;
-        if (!buff) buff = 'none';
-        else {
+    for (row = headerRowInex + 1; row < headerRowInex + 1 + currentVersion; row++) {
+        let buff = sheet.getCell(row, entryColIndex).note;
+        let nerf = sheet.getCell(row, entryColIndex + 1).note;
+
+        if (buff) {
             buff = buff.replace(/✔️/g, '✅');
             buff = buff.replace(/\n\n/g, '\n');
         }
-        if (!nerf) nerf = 'none';
-        else {
+        balances.push(buff)
+        if (nerf) {
             nerf = nerf.replace(/\n\n/g, '\n');
         }
-        res = [buff.toString(), nerf.toString()];
-        balances.push(res);
+        balances.push(nerf);
     }
     let embed = new Discord.MessageEmbed()
         .setTitle(`Buffs and Nerfs for ${tower}\n`)

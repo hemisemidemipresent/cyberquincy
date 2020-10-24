@@ -22,33 +22,41 @@ async function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
-    console.log(Aliases.allPrimaryTowers())
-
     return showBuffNerf(message, parsed.tower);
 }
 
 MIN_COLUMN = 'D'
-MAX_COLUMN = 'AS'
-
-
+MIN_ROW = 23
 
 async function showBuffNerf(message, tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'Towers');
     // Get version number from J3
-    // Load from C23 to {end_column}{C+v#}
+    await sheet.loadCells(`J3`);
+    const lastUpdatedAsOf = sheet.getCellByA1(`J3`).value
+    const lastUpdatedAsOfTokens = lastUpdatedAsOf.split(' ')
+    const currentVersion = parseInt(
+        lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1].split('.')[0]
+    )
+
+    // Load from C23 to {end_column}{C+version}
+    bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(MIN_ROW + currentVersion, sheet.columnCount)
+    await sheet.loadCells(`${MIN_COLUMN}${MIN_ROW}:${bottomRightCellToBeLoaded}`);
+
     // Parse {column}23 until tower alias is reached
-    await sheet.loadCells(`${MIN_COLUMN}23:AS44`);
-    let tnum = 0;
-    for (i = 0; i < 21; i++) {
-        let indexTowerName = indexTowerNames[i][0];
-        if (tower.includes(indexTowerName) || indexTowerName.includes(tower)) {
-            tnum = indexTowerNames[i][1];
-            break;
+    entryColIndex = null
+    const headerRowInex = MIN_ROW - 1 
+    const minColIndex = MIN_COLUMN.charCodeAt(0) - 65;
+
+    for (colIndex = minColIndex; colIndex < sheet.columnCount; colIndex += 2) {
+        towerHeader = sheet.getCell(headerRowInex, colIndex).value
+
+        if(!towerHeader) throw `Something went wrong; ${tower} couldn't be found in the headers`
+        
+        if(Aliases.getCanonicalForm(towerHeader) == tower) {
+            entryColIndex = colIndex
+            break
         }
     }
-    let col0 = alphabet[tnum - 1];
-
-    let col1 = alphabet[tnum];
 
     let balances = [];
     for (i = 0; i < 21; i++) {

@@ -222,7 +222,7 @@ class AliasRepository extends Array {
 
     // Converts a member of an alias group to its canonical form
     getCanonicalForm(aliasMember) {
-        let ag = this.getAliasGroup(aliasMember);
+        let ag = this.getAliasGroup(aliasMember.toLowerCase());
         if (ag) return ag.canonical;
         else return null;
     }
@@ -367,8 +367,10 @@ class AliasRepository extends Array {
 
     // Gets all 0-0-0 tower names
     allTowers() {
-        return this.allPrimaryTowers() + this.allMilitaryTowers() + 
-                this.allMagicTowers() + this.allSupportTowers()
+        return [].concat(this.allPrimaryTowers())
+                 .concat(this.allMilitaryTowers())
+                 .concat(this.allMagicTowers())
+                 .concat(this.allSupportTowers()) 
     }
 
     allPrimaryTowers() {

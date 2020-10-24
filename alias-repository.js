@@ -459,13 +459,11 @@ class AliasRepository extends Array {
             .join(' ');
     }
 
-    ARG_SPLITTER = '#'
-    
     canonicizeArg(arg) {
         return arg
-            .split(this.ARG_SPLITTER)
+            .split('#')
             .map((t) => Aliases.getCanonicalForm(t) || t)
-            .join(this.ARG_SPLITTER);
+            .join('#');
     }
 }
 

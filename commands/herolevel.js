@@ -3,7 +3,11 @@ const { cyber } = require('../jsons/colours.json')
 async function execute(message) {
     const heroes = Aliases.allHeroes();
     console.log(heroes);
+<<<<<<< Updated upstream
     return
+=======
+    return;
+>>>>>>> Stashed changes
 
     const difficultyEmojiIDs = [
         '734966523487322202',

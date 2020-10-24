@@ -10,9 +10,7 @@ module.exports = {
 async function execute(message, args) {
     let name = args[0];
     if (!name) {
-        return message.channel.send(
-            `\`${args[0]}\` is not a proper tower name.`
-        );
+        return message.channel.send(`Please specify a proper tower name.`);
     } else {
         return showBuffNerf(message, name);
     }
@@ -113,15 +111,12 @@ async function showBuffNerf(message, tower) {
     for (i = 0; i < 21; i++) {
         let buff = sheet.getCellByA1(`${col0}${i + 24}`).note;
         let nerf = sheet.getCellByA1(`${col1}${i + 24}`).note;
-        if (!buff) buff = 'none';
-        else {
-            buff = buff.replace(/✔️/g, '✅');
-            buff = buff.replace(/\n\n/g, '\n');
-        }
-        if (!nerf) nerf = 'none';
-        else {
-            nerf = nerf.replace(/\n\n/g, '\n');
-        }
+
+        buff = buff.replace(/✔️/g, '✅');
+        buff = buff.replace(/\n\n/g, '\n');
+
+        nerf = nerf.replace(/\n\n/g, '\n');
+
         res = [buff.toString(), nerf.toString()];
         balances.push(res);
     }

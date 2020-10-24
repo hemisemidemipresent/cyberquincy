@@ -2,6 +2,7 @@ const fact = require('../jsons/fact.json');
 module.exports = {
     name: 'fact',
     description: 'random fact/lore from the NK blog. BIG credit to it',
+    rawArgs: true,
     aliases: ['random', 'f'],
     execute(message, args) {
         function searchStringInArray(str, strArray) {

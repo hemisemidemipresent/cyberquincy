@@ -90,10 +90,22 @@ async function collectRound() {
 }
 
 function calculateHeroLevels(hero, round, mapDifficulty) {
+    heroSpecificLevelingMultiplier = Constants.HERO_LEVELING_MODIFIERS[hero.toUpperCase()]
+
     /*
     these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0
     I had to expose everything from it using this: https://docs.google.com/spreadsheets/d/1p5OXpBQATUnQNw4MouUjyfE0dxGDWEkWBrxFTAS2uSk/edit#gid=0
-    */
+    */    
+    const heroXpToGetLevel = Constants.BASE_HERO_XP_TO_GET_LEVEL.map((baseXp) =>
+        Math.ceil(
+            baseXp * heroSpecificLevelingMultiplier
+        )
+    );
+    totalXpAtLevel = 0;
+    const totalHeroXpAtLevel = heroXpToGetLevel.map(xpToGetLevel =>
+        totalXpAtLevel = totalXpAtLevel + xpToGetLevel
+    )
+
     let processedRound;
     if (round <= 21) {
         processedRound = 10 * round * round + 10 * round - 20;
@@ -102,24 +114,13 @@ function calculateHeroLevels(hero, round, mapDifficulty) {
     } else {
         processedRound = 45 * round * round - 2925 * round + 67930;
     }
+    processedRound *= heroSpecificLevelingMultiplier
+    processedRound = Math.floor(processedRound)
 
-    heroSpecificLevelingMultiplier = Constants.HERO_LEVELING_MODIFIERS[hero.toUpperCase()]
-    
-    const heroXpToGetLevel = Constants.BASE_HERO_XP_TO_GET_LEVEL.map((baseXp) =>
-        Math.ceil(
-            baseXp * heroSpecificLevelingMultiplier
-        )
-    );
-    totalXpAtLevel = 0;
-    const heroXpAtLevel = heroXpToGetLevel.map(xpToGetLevel =>
-        totalXpAtLevel = totalXpAtLevel + xpToGetLevel
-    )
-    
     let roundArr = [
         0,
-        Math.floor(processedRound * diffMultiplier),
-        Math.floor(processedRound * diffMultiplier) -
-            40 * diffMultiplier,
+        processedRound,
+        processedRound - 40 * diffMultiplier,
     ];
     for (i = 3; i < 22; i++) {
         roundArr.push(
@@ -134,7 +135,7 @@ function calculateHeroLevels(hero, round, mapDifficulty) {
                     diffMultiplier
         );
     }
-    for (i = 52; i < 102; i++) {
+    for (i = 52; i <= 101; i++) {
         //might be broken
         roundArr.push(
             roundArr[i - 1] -
@@ -144,11 +145,11 @@ function calculateHeroLevels(hero, round, mapDifficulty) {
         );
     }
     let finalArr = []; // the round where the hero reaches level 1 is the round it gets placed
-    for (level = 1; level < 21; level++) {
+    for (level = 1; level <= 20; level++) {
         let heroCost = 1; //cost of levelling up
         let levelUpRound = round; //round used for calulcations, -1 because the increment is after while loop
         while (heroCost > 0) {
-            heroCost = sumOftempArr[level] + roundArr[levelUpRound];
+            heroCost = totalHeroXpAtLevel[level] + roundArr[levelUpRound];
             levelUpRound++;
         }
         if (levelUpRound > 101) {

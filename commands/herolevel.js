@@ -1,8 +1,10 @@
 const RoundParser = require('../parser/round-parser');
+const Emojis = require('../jsons/emojis.json')
 
 async function execute(message) {
-    await message.channel.send('React with the hero you want to choose!')
-    hero = await collectReaction(msg, 'heroes');
+    heroMessage = await message.channel.send('React with the hero you want to choose!')
+    hero = await collectReaction(message, heroMessage, 'heroes');
+    return;
     await message.channel.send('Please type the starting round in the chat')
     round = await collectRound();
     await message.channel.send('Please react with the map difficulty')
@@ -11,47 +13,28 @@ async function execute(message) {
     finalArr = calculateHeroLevels(hero, round, mapDifficulty)
 
     const embed = new Discord.MessageEmbed()
-    .setTitle(heroname)
-    .setDescription(
-        'This shows which round the hero will reach which level'
-    )
-    .addField('level 1', `r${finalArr[0]}`, true)
-    .addField('level 2', `r${finalArr[1]}`, true)
-    .addField('level 3', `r${finalArr[2]}`, true)
-    .addField('level 4', `r${finalArr[3]}`, true)
-    .addField('level 5', `r${finalArr[4]}`, true)
-    .addField('level 6', `r${finalArr[5]}`, true)
-    .addField('level 7', `r${finalArr[6]}`, true)
-    .addField('level 8', `r${finalArr[7]}`, true)
-    .addField('level 9', `r${finalArr[8]}`, true)
-    .addField('level 10', `r${finalArr[9]}`, true)
-    .addField('level 11', `r${finalArr[10]}`, true)
-    .addField('level 12', `r${finalArr[11]}`, true)
-    .addField('level 13', `r${finalArr[12]}`, true)
-    .addField('level 14', `r${finalArr[13]}`, true)
-    .addField('level 15', `r${finalArr[14]}`, true)
-    .addField('level 16', `r${finalArr[15]}`, true)
-    .addField('level 17', `r${finalArr[16]}`, true)
-    .addField('level 18', `r${finalArr[17]}`, true)
-    .addField('level 19', `r${finalArr[18]}`, true)
-    .addField('level 20', `r${finalArr[19]}`, true)
-    .setColor(cyber);
-return embed;
+        .setTitle(`${h.toTitleCase(hero)} Leveling Chart`)
+        .addField('Level', h.range(1, 20).join("\n"), true)
+        .addField('Round', finalArr.slice(1).join("\n"), true)
+        .setColor(cyber);
+
+    return embed;
 }
 
-async function collectReaction(msg, emojis) {
-    emojis = emojis[Guilds.WHAT_IS_THIS_SERVER][emojis]
+async function collectReaction(ogMessage, reactMessage, emojiGroup) {
+    emojis = Emojis[Guilds.WHAT_IS_THIS_SERVER.toString()][emojiGroup]
+    console.log(client.guilds.cache)
     for (const hero in emojis) {
-        msg.react(
+        reactMessage.react(
             client.guilds.cache
                 .get(Guilds.WHAT_IS_THIS_SERVER) // this is the server with the emojis the bot uses
                 .emojis.cache.get(emojis[hero])
         );
     }
-    let collector = msg
+    let collector = await reactMessage
         .createReactionCollector(
             (reaction, user) =>
-                user.id === message.author.id && 
+                user.id === ogMessage.author.id && 
                 emojis.includes(reaction.emoji.id),
             { time: 20000 } // might turn into function to check later
         )
@@ -117,49 +100,50 @@ function calculateHeroLevels(hero, round, mapDifficulty) {
     processedRound *= heroSpecificLevelingMultiplier
     processedRound = Math.floor(processedRound)
 
-    let roundArr = [
+    let xpGainedOnRound = [
         0,
         processedRound,
-        processedRound - 40 * diffMultiplier,
+        processedRound - 40 * heroSpecificLevelingMultiplier,
     ];
+
     for (i = 3; i < 22; i++) {
-        roundArr.push(
-            roundArr[i - 1] * 2 - roundArr[i - 2] - 20 * diffMultiplier
+        xpGainedOnRound.push(
+            xpGainedOnRound[i - 1] * 2 - xpGainedOnRound[i - 2] - 20 * heroSpecificLevelingMultiplier
         );
     }
     for (i = 22; i < 52; i++) {
-        roundArr.push(
-            roundArr[i - 1] -
-                ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
+        xpGainedOnRound.push(
+            xpGainedOnRound[i - 1] -
+                ((xpGainedOnRound[i - 2] - xpGainedOnRound[i - 1]) / heroSpecificLevelingMultiplier +
                     40) *
-                    diffMultiplier
+                    heroSpecificLevelingMultiplier
         );
     }
     for (i = 52; i <= 101; i++) {
         //might be broken
-        roundArr.push(
-            roundArr[i - 1] -
-                ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
+        xpGainedOnRound.push(
+            xpGainedOnRound[i - 1] -
+                ((xpGainedOnRound[i - 2] - xpGainedOnRound[i - 1]) / heroSpecificLevelingMultiplier +
                     90) *
-                    diffMultiplier
+                    heroSpecificLevelingMultiplier
         );
     }
-    let finalArr = []; // the round where the hero reaches level 1 is the round it gets placed
-    for (level = 1; level <= 20; level++) {
-        let heroCost = 1; //cost of levelling up
-        let levelUpRound = round; //round used for calulcations, -1 because the increment is after while loop
+
+    let roundToAcquireHeroLevelAt = [];
+    for (level = 0; level <= 20; level++) {
+        let heroCost = 1; // Placeholder to enter the while loop
+        let roundOfXpGain = round - 1; //round used for calculating the xp gained on a given round
         while (heroCost > 0) {
-            heroCost = totalHeroXpAtLevel[level] + roundArr[levelUpRound];
-            levelUpRound++;
+            heroCost = totalHeroXpAtLevel[level] + xpGainedOnRound[++roundOfXpGain];
         }
-        if (levelUpRound > 101) {
+        if (roundOfXpGain > 100) {
             // if the hero wont level up until round 100
-            finalArr.push('>100');
+            roundToAcquireHeroLevelAt.push('>100');
         } else {
-            finalArr.push(levelUpRound - 1);
+            roundToAcquireHeroLevelAt.push(roundOfXpGain);
         }
     }
-    return finalArr;
+    return roundToAcquireHeroLevelAt;
 }
 
 module.exports = {

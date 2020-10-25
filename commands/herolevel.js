@@ -1,72 +1,72 @@
+const RoundParser = require('../parser/round-parser');
+
 async function execute(message) {
-    message.channel.send('React with the hero you want to choose!')
-        .then((msg) => collectHero(msg));
+    await message.channel.send('React with the hero you want to choose!')
+    hero = await collectReaction(msg, 'heroes');
+    await message.channel.send('Please type the starting round in the chat')
+    round = await collectRound();
+    await message.channel.send('Please react with the map difficulty')
+    mapDifficulty = await collectReaction(msg, 'map_difficulties');
+
+    finalArr = calculateHeroLevels(hero, round, mapDifficulty)
+
+    const embed = new Discord.MessageEmbed()
+    .setTitle(heroname)
+    .setDescription(
+        'This shows which round the hero will reach which level'
+    )
+    .addField('level 1', `r${finalArr[0]}`, true)
+    .addField('level 2', `r${finalArr[1]}`, true)
+    .addField('level 3', `r${finalArr[2]}`, true)
+    .addField('level 4', `r${finalArr[3]}`, true)
+    .addField('level 5', `r${finalArr[4]}`, true)
+    .addField('level 6', `r${finalArr[5]}`, true)
+    .addField('level 7', `r${finalArr[6]}`, true)
+    .addField('level 8', `r${finalArr[7]}`, true)
+    .addField('level 9', `r${finalArr[8]}`, true)
+    .addField('level 10', `r${finalArr[9]}`, true)
+    .addField('level 11', `r${finalArr[10]}`, true)
+    .addField('level 12', `r${finalArr[11]}`, true)
+    .addField('level 13', `r${finalArr[12]}`, true)
+    .addField('level 14', `r${finalArr[13]}`, true)
+    .addField('level 15', `r${finalArr[14]}`, true)
+    .addField('level 16', `r${finalArr[15]}`, true)
+    .addField('level 17', `r${finalArr[16]}`, true)
+    .addField('level 18', `r${finalArr[17]}`, true)
+    .addField('level 19', `r${finalArr[18]}`, true)
+    .addField('level 20', `r${finalArr[19]}`, true)
+    .setColor(cyber);
+return embed;
 }
 
-async function collectHero(msg) {
-    heroEmojis = emojis[Guilds.WHAT_IS_THIS_SERVER]['heroes']
-    for (const hero in heroEmojis) {
+async function collectReaction(msg, emojis) {
+    emojis = emojis[Guilds.WHAT_IS_THIS_SERVER][emojis]
+    for (const hero in emojis) {
         msg.react(
             client.guilds.cache
                 .get(Guilds.WHAT_IS_THIS_SERVER) // this is the server with the emojis the bot uses
-                .emojis.cache.get(heroEmojis[hero])
+                .emojis.cache.get(emojis[hero])
         );
     }
     let collector = msg
         .createReactionCollector(
             (reaction, user) =>
-                user.id === message.author.id &&
-                (reaction.emoji.name === 'Quincy' ||
-                    reaction.emoji.name === 'Gwen' ||
-                    reaction.emoji.name === 'Obyn' ||
-                    reaction.emoji.name === 'StrikerJones' ||
-                    reaction.emoji.name === 'PatFusty' ||
-                    reaction.emoji.name === 'Adora' ||
-                    reaction.emoji.name === 'Churchill' ||
-                    reaction.emoji.name === 'Brickell' ||
-                    reaction.emoji.name === 'Benjamin' ||
-                    reaction.emoji.name === 'Ezili' ||
-                    reaction.emoji.name === 'Etienne'),
+                user.id === message.author.id && 
+                emojis.includes(reaction.emoji.id),
             { time: 20000 } // might turn into function to check later
         )
         .once('collect', (reaction) => {
-            const chosen = reaction.emoji.name;
-            let heroID = 0;
-            // shit code:
-            if (chosen === 'Quincy') {
-                heroID = 0;
-            } else if (chosen === 'Gwen') {
-                heroID = 1;
-            } else if (chosen === 'Obyn') {
-                heroID = 2;
-            } else if (chosen === 'StrikerJones') {
-                heroID = 3;
-            } else if (chosen === 'Ezili') {
-                heroID = 4;
-            } else if (chosen === 'Benjamin') {
-                heroID = 5;
-            } else if (chosen === 'Churchill') {
-                heroID = 6;
-            } else if (chosen === 'PatFusty') {
-                heroID = 7;
-            } else if (chosen === 'Adora') {
-                heroID = 8;
-            } else if (chosen === 'Brickell') {
-                heroID = 9;
-            } else if (chosen === 'Etienne') {
-                heroID = 10;
-            }
-            const heroname = heroes[heroID];
-            const xpCurve = xpSlopeArr[heroID];
-
+            collectedEmoji = Object.keys(emojis).find(
+                (key) => emojis[key] === reaction.emoji.id
+            );
+            
             collector.stop();
-            message.channel
-                .send('Please type the starting round in the chat')
-                .then(() => collectRound(msg));
+
+            return collectedEmoji;
         });
 }
 
-async function collectRound(msg) {
+async function collectRound() {
     const filter = (msg) =>
         msg.author.id === `${message.author.id}`;
 
@@ -78,112 +78,18 @@ async function collectRound(msg) {
         })
         .then((collected) => {
             let round = collected.first().content;
-            if (
-                isNaN(round) ||
-                round < 1 ||
-                round > 100
-            ) {
-                return message.channel.send(
-                    'Sorry, please specify a valid round next time. Run the commands again'
-                );
+            let parsed = CommandParser.parse(
+                round,
+                new RoundParser('ALL'),
+            );
+            if (parsed.hasErrors()) {
+                throw parsed.parsingErrors[0];
             }
-
-            message.channel
-                .send(
-                    'Please react with the map difficulty'
-                )
-                .then((msg) => collectMapDifficulty(msg));
+            return round;
         });
 }
 
-async function collectMapDifficulty(msg) {
-    for (
-        i = 0;
-        i <
-        difficultyEmojiIDs.length;
-        i++
-    ) {
-        msg.react(
-            client.guilds.cache
-                .get(
-                    '614111055890612225'
-                ) // this is the server with the emojis the bot uses
-                .emojis.cache.get(
-                    difficultyEmojiIDs[
-                        i
-                    ]
-                )
-        );
-    }
-    let collector = msg
-        .createReactionCollector(
-            (reaction, user) =>
-                user.id ===
-                    message.author
-                        .id &&
-                (reaction.emoji
-                    .name ===
-                    'Beginner' ||
-                    reaction.emoji
-                        .name ===
-                        'Intermediate' ||
-                    reaction.emoji
-                        .name ===
-                        'Advanced' ||
-                    reaction.emoji
-                        .name ===
-                        'Expert'),
-            { time: 20000 }
-        )
-        .once(
-            'collect',
-            (reaction) => {
-                const chosen =
-                    reaction.emoji
-                        .name;
-                let difficultyID = 0;
-                if (
-                    chosen ===
-                    'Beginner'
-                ) {
-                    difficultyID = 1;
-                } else if (
-                    chosen ===
-                    'Intermediate'
-                ) {
-                    difficultyID = 2;
-                } else if (
-                    chosen ===
-                    'Advanced'
-                ) {
-                    difficultyID = 3;
-                } else if (
-                    chosen ===
-                    'Expert'
-                ) {
-                    difficultyID = 4;
-                }
-                collector.stop();
-
-                let diffMultiplier =
-                    0.1 *
-                        difficultyID +
-                    0.9;
-
-                let embed = level_cal(
-                    round,
-                    xpCurve,
-                    diffMultiplier,
-                    heroname
-                );
-                message.channel.send(
-                    embed
-                );
-            }
-        );
-}
-
-function level_cal(round, xpCurve, diffMultiplier, heroname) {
+function calculateHeroLevels(hero, round, mapDifficulty) {
     /*
     these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0
     I had to expose everything from it using this: https://docs.google.com/spreadsheets/d/1p5OXpBQATUnQNw4MouUjyfE0dxGDWEkWBrxFTAS2uSk/edit#gid=0
@@ -196,27 +102,19 @@ function level_cal(round, xpCurve, diffMultiplier, heroname) {
     } else {
         processedRound = 45 * round * round - 2925 * round + 67930;
     }
-    let tempArr = [0, 0];
-    for (i = 2; i <= 20; i++) {
-        tempArr.push(Math.ceil(Constants.HERO_XP_AT_LEVEL[i] * xpCurve));
-    }
-    let justPlacedCostArr = [
-        0,
-        Math.floor(processedRound * diffMultiplier),
-    ]; // the total cost of upgrading to a level when placed
-    for (level = 2; level <= 20; level++) {
-        justPlacedCostArr.push(
-            justPlacedCostArr[level - 1] + tempArr[level]
-        );
-    }
-    let sumOftempArr = [0, 0]; // we need an array where each index is the sum of all prev. coreeesponding indexes of tempArr
-    for (i = 2; i <= 20; i++) {
-        let tempSum = 0;
-        for (j = 0; j <= i; j++) {
-            tempSum += tempArr[j];
-        }
-        sumOftempArr.push(tempSum);
-    }
+
+    heroSpecificLevelingMultiplier = Constants.HERO_LEVELING_MODIFIERS[hero.toUpperCase()]
+    
+    const heroXpToGetLevel = Constants.BASE_HERO_XP_TO_GET_LEVEL.map((baseXp) =>
+        Math.ceil(
+            baseXp * heroSpecificLevelingMultiplier
+        )
+    );
+    totalXpAtLevel = 0;
+    const heroXpAtLevel = heroXpToGetLevel.map(xpToGetLevel =>
+        totalXpAtLevel = totalXpAtLevel + xpToGetLevel
+    )
+    
     let roundArr = [
         0,
         Math.floor(processedRound * diffMultiplier),
@@ -260,33 +158,7 @@ function level_cal(round, xpCurve, diffMultiplier, heroname) {
             finalArr.push(levelUpRound - 1);
         }
     }
-    const embed = new Discord.MessageEmbed()
-        .setTitle(heroname)
-        .setDescription(
-            'This shows which round the hero will reach which level'
-        )
-        .addField('level 1', `r${finalArr[0]}`, true)
-        .addField('level 2', `r${finalArr[1]}`, true)
-        .addField('level 3', `r${finalArr[2]}`, true)
-        .addField('level 4', `r${finalArr[3]}`, true)
-        .addField('level 5', `r${finalArr[4]}`, true)
-        .addField('level 6', `r${finalArr[5]}`, true)
-        .addField('level 7', `r${finalArr[6]}`, true)
-        .addField('level 8', `r${finalArr[7]}`, true)
-        .addField('level 9', `r${finalArr[8]}`, true)
-        .addField('level 10', `r${finalArr[9]}`, true)
-        .addField('level 11', `r${finalArr[10]}`, true)
-        .addField('level 12', `r${finalArr[11]}`, true)
-        .addField('level 13', `r${finalArr[12]}`, true)
-        .addField('level 14', `r${finalArr[13]}`, true)
-        .addField('level 15', `r${finalArr[14]}`, true)
-        .addField('level 16', `r${finalArr[15]}`, true)
-        .addField('level 17', `r${finalArr[16]}`, true)
-        .addField('level 18', `r${finalArr[17]}`, true)
-        .addField('level 19', `r${finalArr[18]}`, true)
-        .addField('level 20', `r${finalArr[19]}`, true)
-        .setColor(cyber);
-    return embed;
+    return finalArr;
 }
 
 module.exports = {

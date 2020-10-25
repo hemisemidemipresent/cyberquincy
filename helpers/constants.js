@@ -1,4 +1,4 @@
-HERO_XP_AT_LEVEL = [
+BASE_HERO_XP_TO_GET_LEVEL = [
     0,
     0,
     180,
@@ -37,6 +37,6 @@ HERO_LEVELING_MODIFIERS = {
 }
 
 module.exports = {
-    HERO_XP_AT_LEVEL,
+    BASE_HERO_XP_TO_GET_LEVEL,
     HERO_LEVELING_MODIFIERS,
 }

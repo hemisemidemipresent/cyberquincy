@@ -39,7 +39,7 @@ module.exports = {
             'Brickell',
             'Etienne',
         ];
-        const xpSlopeArr = [1, 1, 1, 1, 1.425, 1.5, 1.8, 1.425, 1.8, 1.425, 1];
+        const xpSlopeArr = [1, 1, 1, 1, 1.425, 1.5, 1.71, 1.425, 1.71, 1.425, 1];
         function level_cal(round, xpCurve, diffMultiplier, heroname) {
             /*
             these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0

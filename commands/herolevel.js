@@ -6,17 +6,13 @@ roundCollected = false
 mapDifficultyCollected = false
 
 async function execute(message) {
-    chain = [
-        (message) => collectReaction(message, 'hero'),
-        (message) => collectRound(message),
-        (message) => collectReaction(message, 'map difficulty')
+    methodChain = [
+        (message, chain, results) => collectReaction(message, chain, results, 'hero'),
+        (message, chain, results) => collectRound(message, chain, results, 'starting'),
+        (message, chain, results) => collectReaction(message, chain, results, 'map difficulty'),
+        (message, chain, results) => calculateHeroLevels(message, results),
     ]
-    heroMessage = await 
-    hero = collectReaction(collectRound, message, heroMessage, 'heroes');
-    await message.channel.send('Please type the starting round in the chat')
-    round = await collectRound();
     await message.channel.send('Please react with the map difficulty')
-    mapDifficulty = await collectReaction(msg, 'map_difficulties');
 
     finalArr = calculateHeroLevels(hero, round, mapDifficulty)
 
@@ -29,7 +25,7 @@ async function execute(message) {
     return embed;
 }
 
-async function collectReaction(message, emojiGroup) {
+async function collectReaction(message, chain, results, emojiGroup) {
     reactMessage = await message.channel.send(`React with the ${emojiGroup} you want to choose!`)
     emojis = Emojis[Guilds.EMOJIS_SERVER.toString()][emojiGroup]
     for (const hero in emojis) {
@@ -54,16 +50,23 @@ async function collectReaction(message, emojiGroup) {
             
             collector.stop();
 
-            andThen();
+            results[`${emojiGroup}_emoji`]
+
+            // Invoke first method in chain and remove it from the array
+            // Then pass in the new chain with the first element having been removed
+            chain.shift()(message, chain)
+
+
         });
 }
 
-async function collectRound() {
-    const filter = (msg) =>
+async function collectRound(message, chain, results, roundType) {
+    await message.channel.send(`Please type the ${roundType} round in the chat`)
+    const sameUserFilter = (msg) =>
         msg.author.id === `${message.author.id}`;
 
     message.channel
-        .awaitMessages(filter, {
+        .awaitMessages(sameUserFilter, {
             max: 1,
             time: 10000,
             errors: ['time'],

@@ -1,10 +1,18 @@
 const RoundParser = require('../parser/round-parser');
 const Emojis = require('../jsons/emojis.json')
 
+heroCollected = false
+roundCollected = false
+mapDifficultyCollected = false
+
 async function execute(message) {
-    heroMessage = await message.channel.send('React with the hero you want to choose!')
-    hero = await collectReaction(message, heroMessage, 'heroes');
-    return;
+    chain = [
+        (message) => collectReaction(message, 'hero'),
+        (message) => collectRound(message),
+        (message) => collectReaction(message, 'map difficulty')
+    ]
+    heroMessage = await 
+    hero = collectReaction(collectRound, message, heroMessage, 'heroes');
     await message.channel.send('Please type the starting round in the chat')
     round = await collectRound();
     await message.channel.send('Please react with the map difficulty')
@@ -21,31 +29,32 @@ async function execute(message) {
     return embed;
 }
 
-async function collectReaction(ogMessage, reactMessage, emojiGroup) {
-    emojis = Emojis[Guilds.WHAT_IS_THIS_SERVER.toString()][emojiGroup]
-    console.log(client.guilds.cache)
+async function collectReaction(message, emojiGroup) {
+    reactMessage = await message.channel.send(`React with the ${emojiGroup} you want to choose!`)
+    emojis = Emojis[Guilds.EMOJIS_SERVER.toString()][emojiGroup]
     for (const hero in emojis) {
         reactMessage.react(
             client.guilds.cache
-                .get(Guilds.WHAT_IS_THIS_SERVER) // this is the server with the emojis the bot uses
+                .get(Guilds.EMOJIS_SERVER) // this is the server with the emojis the bot uses
                 .emojis.cache.get(emojis[hero])
         );
     }
-    let collector = await reactMessage
+    let collector = reactMessage
         .createReactionCollector(
             (reaction, user) =>
                 user.id === ogMessage.author.id && 
-                emojis.includes(reaction.emoji.id),
+                Object.values(emojis).includes(reaction.emoji.id),
             { time: 20000 } // might turn into function to check later
         )
-        .once('collect', (reaction) => {
+    
+    collector.once('collect', (reaction) => {
             collectedEmoji = Object.keys(emojis).find(
                 (key) => emojis[key] === reaction.emoji.id
             );
             
             collector.stop();
 
-            return collectedEmoji;
+            andThen();
         });
 }
 

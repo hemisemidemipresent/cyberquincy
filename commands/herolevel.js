@@ -1,32 +1,73 @@
-const RoundParser = require('../parser/round-parser');
 const Emojis = require('../jsons/emojis.json')
 
-heroCollected = false
-roundCollected = false
-mapDifficultyCollected = false
+const AnyOrderParser = require('../parser/any-order-parser.js');
+const OptionalParser = require('../parser/optional-parser.js');
 
-async function execute(message) {
+const HeroParser = require('../parser/hero-parser.js');
+const RoundParser = require('../parser/round-parser');
+const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
+
+function execute(message, args) {
+    if (args.length == 1 && args[0] == 'help') {
+        return message.channel.send('Type `q!herolevel` and follow the instructions');
+    }
+
+    const parsed = CommandParser.parse(
+        args,
+        new AnyOrderParser(
+            new OptionalParser(
+            new HeroParser()
+            ),
+            new OptionalParser(
+                new RoundParser('ALL')
+            ),
+            new OptionalParser(
+                new MapDifficultyParser()
+            )
+        )
+    );
+
+    if (parsed.hasErrors()) {
+        return errorMessage(message, parsed.parsingErrors)
+    }
+
+    results = {}
+    if (parsed.hero) results['hero'] = parsed.hero
+    if (parsed.round) results['starting'] = parsed.round
+    if (parsed.map_difficulty) results['map_difficulty'] = parsed.map_difficulty
+
     methodChain = [
         (message, chain, results) => collectReaction(message, chain, results, 'hero'),
         (message, chain, results) => collectRound(message, chain, results, 'starting'),
-        (message, chain, results) => collectReaction(message, chain, results, 'map difficulty'),
-        (message, chain, results) => calculateHeroLevels(message, results),
+        (message, chain, results) => collectReaction(message, chain, results, 'map_difficulty'),
+        (message, chain, results) => displayHeroLevels(message, results),
     ]
-    await message.channel.send('Please react with the map difficulty')
 
-    finalArr = calculateHeroLevels(hero, round, mapDifficulty)
+    // Remove first function from array, call method, include new shortened array as call argument
+    methodChain.shift()(message, methodChain, results)
+}
 
-    const embed = new Discord.MessageEmbed()
-        .setTitle(`${h.toTitleCase(hero)} Leveling Chart`)
-        .addField('Level', h.range(1, 20).join("\n"), true)
-        .addField('Round', finalArr.slice(1).join("\n"), true)
-        .setColor(cyber);
+function errorMessage(message, parsingErrors) {
+    let errorEmbed = new Discord.MessageEmbed()
+        .setTitle('ERROR')
+        .addField(
+            'Likely Cause(s)',
+            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+        )
+        .addField('Type `q!herolevel help` for help', '\u200b')
+        .setColor(colours['orange']);
 
-    return embed;
+    return message.channel.send(errorEmbed);
 }
 
 async function collectReaction(message, chain, results, emojiGroup) {
-    reactMessage = await message.channel.send(`React with the ${emojiGroup} you want to choose!`)
+    // Continue to the next interaction if this one has been satisfied through command arguments
+    if (results[emojiGroup]) {
+        chain.shift()(message, chain, results)
+        return
+    }
+
+    reactMessage = await message.channel.send(`React with the ${emojiGroup.split('_').join(' ')} you want to choose!`)
     emojis = Emojis[Guilds.EMOJIS_SERVER.toString()][emojiGroup]
     for (const hero in emojis) {
         reactMessage.react(
@@ -38,7 +79,7 @@ async function collectReaction(message, chain, results, emojiGroup) {
     let collector = reactMessage
         .createReactionCollector(
             (reaction, user) =>
-                user.id === ogMessage.author.id && 
+                user.id === message.author.id && 
                 Object.values(emojis).includes(reaction.emoji.id),
             { time: 20000 } // might turn into function to check later
         )
@@ -50,17 +91,21 @@ async function collectReaction(message, chain, results, emojiGroup) {
             
             collector.stop();
 
-            results[`${emojiGroup}_emoji`]
+            results[emojiGroup] = collectedEmoji
 
             // Invoke first method in chain and remove it from the array
             // Then pass in the new chain with the first element having been removed
-            chain.shift()(message, chain)
-
-
+            chain.shift()(message, chain, results)
         });
 }
 
 async function collectRound(message, chain, results, roundType) {
+    // Continue to the next interaction if this one has been satisfied through command arguments
+    if (results[roundType]) {
+        chain.shift()(message, chain, results)
+        return;
+    }
+
     await message.channel.send(`Please type the ${roundType} round in the chat`)
     const sameUserFilter = (msg) =>
         msg.author.id === `${message.author.id}`;
@@ -74,17 +119,32 @@ async function collectRound(message, chain, results, roundType) {
         .then((collected) => {
             let round = collected.first().content;
             let parsed = CommandParser.parse(
-                round,
+                [round],
                 new RoundParser('ALL'),
             );
             if (parsed.hasErrors()) {
                 throw parsed.parsingErrors[0];
             }
-            return round;
+            results[roundType] = parsed.round;
+            chain.shift()(message, chain, results)
         });
 }
 
+function displayHeroLevels(message, results) {
+    heroLevels = calculateHeroLevels(results['hero'], results['round'], results['map_difficulty'])
+
+    const embed = new Discord.MessageEmbed()
+        .setTitle(`${h.toTitleCase(results['hero'])} Leveling Chart`)
+        .setDescription(`Placed: **R${results['starting']}**\nMaps: **${h.toTitleCase(results['map_difficulty'])}**`)
+        .addField('Level', h.range(1, 20).join("\n"), true)
+        .addField('Round', heroLevels.slice(1).join("\n"), true)
+        .setColor(colours['cyber']);
+
+    message.channel.send(embed);
+}
+
 function calculateHeroLevels(hero, round, mapDifficulty) {
+    return h.range(0, 20)
     heroSpecificLevelingMultiplier = Constants.HERO_LEVELING_MODIFIERS[hero.toUpperCase()]
 
     /*

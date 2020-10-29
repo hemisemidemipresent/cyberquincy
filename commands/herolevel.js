@@ -180,7 +180,7 @@ function fillLevel1CostArray(startingRound, heroSpecificLevelingMultiplier, mapS
     if (startingRound <= 21) {
         baseCost = (10 * startingRound * startingRound) + (10 * startingRound) - 20
     } else if (startingRound <= 51) {
-        baseCost = (20 * startingRound * startingRound) - (400 * startingRound) + 41800
+        baseCost = (20 * startingRound * startingRound) - (400 * startingRound) + 4180
     } else {
         baseCost = (45 * startingRound * startingRound) - (2925 * startingRound) + 67930
     }
@@ -193,7 +193,7 @@ function fillLevel1CostArray(startingRound, heroSpecificLevelingMultiplier, mapS
     )
     level1CostArray.push( //round 2
         Math.floor(
-            level1CostArray[1] - (2 * 20 * heroSpecificLevelingMultiplier)
+            level1CostArray[1] - (2 * 20 * mapSpecificLevelingMultiplier)
         )
     )
     
@@ -208,12 +208,12 @@ function fillLevel1CostArray(startingRound, heroSpecificLevelingMultiplier, mapS
             level1RoundGroupAddend = 90
         }
 
-        r1 = level1CostArray[round - 1]
-        r2 = level1CostArray[round - 2]
-        heroWeightedDifference = (r2 - r1) / heroSpecificLevelingMultiplier
+        rm1 = level1CostArray[round - 1]
+        rm2 = level1CostArray[round - 2]
+        heroWeightedDifference = (rm2 - rm1) / mapSpecificLevelingMultiplier
 
         level1CostArray.push(
-            r1 - ((heroWeightedDifference + level1RoundGroupAddend) * heroSpecificLevelingMultiplier)
+            rm1 - ((heroWeightedDifference + level1RoundGroupAddend) * mapSpecificLevelingMultiplier)
         )
     }
 

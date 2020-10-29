@@ -131,7 +131,7 @@ async function collectRound(message, chain, results, roundType) {
 }
 
 function displayHeroLevels(message, results) {
-    heroLevels = calculateHeroLevels(results['hero'], results['round'], results['map_difficulty'])
+    heroLevels = calculateHeroLevels(results['hero'], results['starting'], results['map_difficulty'])
 
     const embed = new Discord.MessageEmbed()
         .setTitle(`${h.toTitleCase(results['hero'])} Leveling Chart`)
@@ -143,79 +143,71 @@ function displayHeroLevels(message, results) {
     message.channel.send(embed);
 }
 
-function calculateHeroLevels(hero, round, mapDifficulty) {
-    return h.range(0, 20)
+function calculateHeroLevels(hero, startingRound, mapDifficulty) {
     heroSpecificLevelingMultiplier = Constants.HERO_LEVELING_MODIFIERS[hero.toUpperCase()]
+    mapSpecificLevelingMultiplier = Constants.HERO_LEVELING_MAP_DIFFICULTY_MODIFIERS[mapDifficulty.toUpperCase()]
 
-    /*
-    these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0
-    I had to expose everything from it using this: https://docs.google.com/spreadsheets/d/1p5OXpBQATUnQNw4MouUjyfE0dxGDWEkWBrxFTAS2uSk/edit#gid=0
-    */    
-    const heroXpToGetLevel = Constants.BASE_HERO_XP_TO_GET_LEVEL.map((baseXp) =>
-        Math.ceil(
-            baseXp * heroSpecificLevelingMultiplier
-        )
-    );
-    totalXpAtLevel = 0;
-    const totalHeroXpAtLevel = heroXpToGetLevel.map(xpToGetLevel =>
-        totalXpAtLevel = totalXpAtLevel + xpToGetLevel
+    roundVsLevelMatrix = [[]] // Level 0 instantiated
+    roundVsLevelMatrix.push(
+        fillLevel1CostArray(startingRound, heroSpecificLevelingMultiplier, mapSpecificLevelingMultiplier)
     )
 
-    let processedRound;
-    if (round <= 21) {
-        processedRound = 10 * round * round + 10 * round - 20;
-    } else if (round <= 51) {
-        processedRound = 20 * round * round - 400 * round + 4180;
+    for (level = 2; level <= 20; level++) {
+        levelCostArray = [Infinity] // level 0
+        for (round = 1; round <= 100; round++) {
+            levelCostArray.push(
+                Constants.BASE_HERO_COST_TO_GET_LEVEL[level] + roundVsLevelMatrix[level - 1][round]
+            )
+        }
+        roundVsLevelMatrix.push(
+            levelCostArray
+        )
+    }
+}
+
+function fillLevel1CostArray(startingRound, heroSpecificLevelingMultiplier, mapSpecificLevelingMultiplier) {
+    baseCost = null;
+    if (startingRound <= 21) {
+        baseCost = (10 * startingRound * startingRound) + (10 * startingRound) - 20
+    } else if (startingRound <= 51) {
+        baseCost = (20 * startingRound * startingRound) - (400 * startingRound) + 41800
     } else {
-        processedRound = 45 * round * round - 2925 * round + 67930;
+        baseCost = (45 * startingRound * startingRound) - (2925 * startingRound) + 67930
     }
-    processedRound *= heroSpecificLevelingMultiplier
-    processedRound = Math.floor(processedRound)
+    
+    level1CostArray = [Infinity] // round 0
+    level1CostArray.push( // round 1
+        Math.floor(
+            baseCost * mapSpecificLevelingMultiplier
+        )
+    )
+    level1CostArray.push( //round 2
+        Math.floor(
+            level1CostArray[1] - (2 * 20 * heroSpecificLevelingMultiplier)
+        )
+    )
+    
+    level1RoundGroupAddend = null;
 
-    let xpGainedOnRound = [
-        0,
-        processedRound,
-        processedRound - 40 * heroSpecificLevelingMultiplier,
-    ];
-
-    for (i = 3; i < 22; i++) {
-        xpGainedOnRound.push(
-            xpGainedOnRound[i - 1] * 2 - xpGainedOnRound[i - 2] - 20 * heroSpecificLevelingMultiplier
-        );
-    }
-    for (i = 22; i < 52; i++) {
-        xpGainedOnRound.push(
-            xpGainedOnRound[i - 1] -
-                ((xpGainedOnRound[i - 2] - xpGainedOnRound[i - 1]) / heroSpecificLevelingMultiplier +
-                    40) *
-                    heroSpecificLevelingMultiplier
-        );
-    }
-    for (i = 52; i <= 101; i++) {
-        //might be broken
-        xpGainedOnRound.push(
-            xpGainedOnRound[i - 1] -
-                ((xpGainedOnRound[i - 2] - xpGainedOnRound[i - 1]) / heroSpecificLevelingMultiplier +
-                    90) *
-                    heroSpecificLevelingMultiplier
-        );
-    }
-
-    let roundToAcquireHeroLevelAt = [];
-    for (level = 0; level <= 20; level++) {
-        let heroCost = 1; // Placeholder to enter the while loop
-        let roundOfXpGain = round - 1; //round used for calculating the xp gained on a given round
-        while (heroCost > 0) {
-            heroCost = totalHeroXpAtLevel[level] + xpGainedOnRound[++roundOfXpGain];
-        }
-        if (roundOfXpGain > 100) {
-            // if the hero wont level up until round 100
-            roundToAcquireHeroLevelAt.push('>100');
+    for (round = 3; round <= 100; round++) {
+        if (round <= 21) {
+            level1RoundGroupAddend = 20
+        } else if (round <= 51) {
+            level1RoundGroupAddend = 40
         } else {
-            roundToAcquireHeroLevelAt.push(roundOfXpGain);
+            level1RoundGroupAddend = 90
         }
+
+        r1 = level1CostArray[round - 1]
+        r2 = level1CostArray[round - 2]
+        heroWeightedDifference = (r2 - r1) / heroSpecificLevelingMultiplier
+
+        level1CostArray.push(
+            r1 - ((heroWeightedDifference + level1RoundGroupAddend) * heroSpecificLevelingMultiplier)
+        )
     }
-    return roundToAcquireHeroLevelAt;
+
+    return level1CostArray;
 }
 
 module.exports = {

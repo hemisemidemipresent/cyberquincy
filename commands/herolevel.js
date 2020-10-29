@@ -136,7 +136,7 @@ function displayHeroLevels(message, results) {
     const embed = new Discord.MessageEmbed()
         .setTitle(`${h.toTitleCase(results['hero'])} Leveling Chart`)
         .setDescription(`Placed: **R${results['starting']}**\nMaps: **${h.toTitleCase(results['map_difficulty'])}**`)
-        .addField('Level', h.range(1, 20).join("\n"), true)
+        .addField('Level', h.range(1, 20).map(lvl => `L${lvl}`).join("\n"), true)
         .addField('Round', heroLevels.slice(1).join("\n"), true)
         .setColor(colours['cyber']);
 
@@ -149,14 +149,15 @@ function calculateHeroLevels(hero, startingRound, mapDifficulty) {
 
     roundVsLevelMatrix = [[]] // Level 0 instantiated
     roundVsLevelMatrix.push(
-        fillLevel1CostArray(startingRound, heroSpecificLevelingMultiplier, mapSpecificLevelingMultiplier)
+        fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier)
     )
 
     for (level = 2; level <= 20; level++) {
         levelCostArray = [Infinity] // round 0
         for (round = 1; round <= 100; round++) {
+            totalCostToGetLevel = Constants.BASE_HERO_COST_TO_GET_LEVEL[level] * heroSpecificLevelingMultiplier
             levelCostArray.push(
-                Constants.BASE_HERO_COST_TO_GET_LEVEL[level] + roundVsLevelMatrix[level - 1][round]
+                totalCostToGetLevel + roundVsLevelMatrix[level - 1][round]
             )
         }
         roundVsLevelMatrix.push(
@@ -168,14 +169,15 @@ function calculateHeroLevels(hero, startingRound, mapDifficulty) {
         // Take the levelCostArray for level 2-20...
         roundVsLevelMatrix.slice(2).map(levelCostArray => {
             // Find the first level at which the cost to level the hero up is 0 or less
-            return levelCostArray.findIndex(cost => cost <= 0)
+            levelOrNotFound = levelCostArray.findIndex(cost => cost <= 0)
+            return levelOrNotFound == -1 ? '—' : levelOrNotFound
         })
     )
 
     return roundForLevelUpTo;
 }
 
-function fillLevel1CostArray(startingRound, heroSpecificLevelingMultiplier, mapSpecificLevelingMultiplier) {
+function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier) {
     baseCost = null;
     if (startingRound <= 21) {
         baseCost = (10 * startingRound * startingRound) + (10 * startingRound) - 20

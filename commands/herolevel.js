@@ -153,7 +153,7 @@ function calculateHeroLevels(hero, startingRound, mapDifficulty) {
     )
 
     for (level = 2; level <= 20; level++) {
-        levelCostArray = [Infinity] // level 0
+        levelCostArray = [Infinity] // round 0
         for (round = 1; round <= 100; round++) {
             levelCostArray.push(
                 Constants.BASE_HERO_COST_TO_GET_LEVEL[level] + roundVsLevelMatrix[level - 1][round]
@@ -163,6 +163,16 @@ function calculateHeroLevels(hero, startingRound, mapDifficulty) {
             levelCostArray
         )
     }
+
+    roundForLevelUpTo = [0, startingRound].concat( // Levels 0 and 1
+        // Take the levelCostArray for level 2-20...
+        roundVsLevelMatrix.slice(2).map(levelCostArray => {
+            // Find the first level at which the cost to level the hero up is 0 or less
+            return levelCostArray.findIndex(cost => cost <= 0)
+        })
+    )
+
+    return roundForLevelUpTo;
 }
 
 function fillLevel1CostArray(startingRound, heroSpecificLevelingMultiplier, mapSpecificLevelingMultiplier) {

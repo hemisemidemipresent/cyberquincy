@@ -212,10 +212,10 @@ function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier) {
 
         rm1 = level1CostArray[round - 1]
         rm2 = level1CostArray[round - 2]
-        heroWeightedDifference = (rm2 - rm1) / mapSpecificLevelingMultiplier
+        mapWeightedDifference = (rm2 - rm1) / mapSpecificLevelingMultiplier
 
         level1CostArray.push(
-            rm1 - ((heroWeightedDifference + level1RoundGroupAddend) * mapSpecificLevelingMultiplier)
+            rm1 - ((mapWeightedDifference + level1RoundGroupAddend) * mapSpecificLevelingMultiplier)
         )
     }
 

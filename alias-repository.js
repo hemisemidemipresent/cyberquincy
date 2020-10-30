@@ -500,6 +500,9 @@ class AliasRepository extends Array {
             .join(' ');
     }
 
+    // Arg looks like `arg` or `argp1#argp2`
+    // This converts each arg part to its canonical form.
+    // `spact#025` gets converted to `spike_factory#025` for example.
     canonicizeArg(arg) {
         return arg
             .split('#')

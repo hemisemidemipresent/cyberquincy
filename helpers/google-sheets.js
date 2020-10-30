@@ -27,9 +27,29 @@ function sheetByName(doc, title) {
     }
 }
 
+function rowColToA1(row, col) {
+    return `${getA1ColumnName(col)}${row}`
+}
+
+function getA1ColumnName(col)
+{
+    dividend = col;
+    columnName = "";
+
+    while (dividend > 0)
+    {
+        modulo = (dividend - 1) % 26;
+        columnName = String.fromCharCode(65 + modulo) + columnName;
+        dividend = Math.floor((dividend - modulo) / 26);
+    } 
+
+    return columnName;
+}
+
 module.exports = {
     BTD6_INDEX_KEY,
 
     load,
     sheetByName,
+    rowColToA1,
 };

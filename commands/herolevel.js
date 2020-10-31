@@ -10,7 +10,6 @@ const EmojiReactor = require('../reactor/emoji_reactor')
 const SingleTextParser = require('../reactor/single_text_parser')
 
 function execute(message, args) {
-    console.log(message)
     if (args.length == 1 && args[0] == 'help') {
         return message.channel.send('Type `q!herolevel` and follow the instructions');
     }
@@ -57,7 +56,6 @@ function errorMessage(message, parsingErrors) {
 }
 
 function displayHeroLevels(message, results) {
-    console.log(results)
     heroLevels = calculateHeroLevels(results.hero, results.starting, results.map_difficulty)
 
     const embed = new Discord.MessageEmbed()
@@ -97,7 +95,7 @@ function calculateHeroLevels(hero, startingRound, mapDifficulty) {
         roundVsLevelMatrix.slice(2).map(levelCostArray => {
             // Find the first level at which the cost to level the hero up is 0 or less
             levelOrNotFound = levelCostArray.findIndex(cost => cost <= 0)
-            return levelOrNotFound == -1 ? '—' : levelOrNotFound
+            return levelOrNotFound == -1 ? '>100' : levelOrNotFound
         })
     )
 

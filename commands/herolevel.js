@@ -10,6 +10,7 @@ const EmojiReactor = require('../reactor/emoji_reactor')
 const SingleTextParser = require('../reactor/single_text_parser')
 
 function execute(message, args) {
+    console.log(message)
     if (args.length == 1 && args[0] == 'help') {
         return message.channel.send('Type `q!herolevel` and follow the instructions');
     }

@@ -16,6 +16,7 @@
  */
 function process(message, resultsProcessingFunction, ...reactors) {
     methodChain = []
+    // Add reactors IN ORDER to react-loop
     for (var i = 0; i < reactors.length; i++) {
         const reactor = reactors[i]
         
@@ -25,10 +26,14 @@ function process(message, resultsProcessingFunction, ...reactors) {
             }
         )
     }
+    // Add the resultsProcessingFunction as the last step in the react-loop
     methodChain.push(
         (message, chain, results) => resultsProcessingFunction(message, results)
     )
 
+    // Invoke first method in chain and remove it from the array
+    // Then pass in the new chain with the first element having been removed
+    // This begins the react-loop.
     methodChain.shift()(message, methodChain, {})
 }
 

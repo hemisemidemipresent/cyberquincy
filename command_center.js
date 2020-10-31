@@ -85,7 +85,7 @@ async function handleCommand(message) {
             // Each item in [args] either looks like `arg` or `argp1#argp2`
             // This converts each arg part to its canonical form.
             // `spact#025` gets converted to `spike_factory#025` for example.
-            canonicalArgs = args.map(arg => aliases.canonicizeArg(arg))
+            canonicalArgs = args.map(arg => Aliases.canonicizeArg(arg))
         }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired

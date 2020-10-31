@@ -1,12 +1,20 @@
-class ReactionChain {
-    process(...reactors) {
-        methodChain = []
-        for (var i = 0; i < reactors.length; i++) {
-            methodChain.push(
-                (message, chain, results) => reactors[i].execute(message, chain, results)
-            )
-        }
+function process(message, resultsProcessingFunction, ...reactors) {
+    methodChain = []
+    for (var i = 0; i < reactors.length; i++) {
+        const reactor = reactors[i]
+        
+        methodChain.push(
+            (message, chain, results) => {
+                console.log(reactor)
+                reactor.execute(message, chain, results)
+            }
+        )
     }
+    methodChain.push(
+        (message, chain, results) => resultsProcessingFunction(message, results)
+    )
+
+    methodChain.shift()(message, methodChain, {})
 }
 
-module.exports = ReactionChain
+module.exports = {process}

@@ -32,7 +32,7 @@ async function handleCommand(message) {
         let c = message.content.toLowerCase();
 
         // check for pings
-        if (c.includes('<@591922988832653313>')) {
+        if (c.includes('<@&591922988832653313>')) {
             command = client.commands.get('help');
             return command.execute(message, args, 'help');
         }

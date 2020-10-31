@@ -16,6 +16,9 @@ function execute(message, args) {
 
     const parsed = CommandParser.parse(
         args,
+        
+        // Make any of the available arguments optional to add in any order in the command args
+        // Arguments that aren't entered will be gathered through the react-loop
         new AnyOrderParser(
             new OptionalParser(
             new HeroParser()
@@ -33,6 +36,7 @@ function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors)
     }
 
+    // Start react loop to collect the data that the user didn't provide at command-time
     ReactionChain.process(
         message,
         (message, results) => displayHeroLevels(message, results),

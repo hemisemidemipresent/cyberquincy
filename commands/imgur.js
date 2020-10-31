@@ -14,7 +14,7 @@ module.exports = {
         }
         if (!image)
             return message.channel.send(
-                'if you dont know that this command its because this isnt an actual feature'
+                'Attach an image to upload to imgur, vrej'
             );
         imgur
             .uploadUrl(image)

@@ -1,345 +1,168 @@
-const { cyber } = require('../jsons/colours.json');
+const AnyOrderParser = require('../parser/any-order-parser.js');
+const OptionalParser = require('../parser/optional-parser.js');
+
+const HeroParser = require('../parser/hero-parser.js');
+const RoundParser = require('../parser/round-parser');
+const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
+
+const ReactionChain = require('../reactor/reaction_chain')
+const EmojiReactor = require('../reactor/emoji_reactor')
+const SingleTextParser = require('../reactor/single_text_parser')
+
+function execute(message, args) {
+    if (args.length == 1 && args[0] == 'help') {
+        return message.channel.send('Type `q!herolevel` and follow the instructions');
+    }
+
+    const parsed = CommandParser.parse(
+        args,
+        
+        // Make any of the available arguments optional to add in any order in the command args
+        // Arguments that aren't entered will be gathered through the react-loop
+        new AnyOrderParser(
+            new OptionalParser(
+            new HeroParser()
+            ),
+            new OptionalParser(
+                new RoundParser('ALL')
+            ),
+            new OptionalParser(
+                new MapDifficultyParser()
+            )
+        )
+    );
+
+    if (parsed.hasErrors()) {
+        return errorMessage(message, parsed.parsingErrors)
+    }
+
+    // Start react loop to collect the data that the user didn't provide at command-time
+    ReactionChain.process(
+        message,
+        (message, results) => displayHeroLevels(message, results),
+        new EmojiReactor('hero', Guilds.EMOJIS_SERVER, parsed.hero),
+        new SingleTextParser(new RoundParser('ALL'), 'starting', parsed.round),
+        new EmojiReactor('map_difficulty', Guilds.EMOJIS_SERVER, parsed.map_difficulty),
+    )
+}
+
+function errorMessage(message, parsingErrors) {
+    let errorEmbed = new Discord.MessageEmbed()
+        .setTitle('ERROR')
+        .addField(
+            'Likely Cause(s)',
+            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+        )
+        .addField('Type `q!herolevel help` for help', '\u200b')
+        .setColor(colours['orange']);
+
+    return message.channel.send(errorEmbed);
+}
+
+function displayHeroLevels(message, results) {
+    heroLevels = calculateHeroLevels(results.hero, results.starting, results.map_difficulty)
+
+    const embed = new Discord.MessageEmbed()
+        .setTitle(`${h.toTitleCase(results.hero)} Leveling Chart`)
+        .setDescription(`Placed: **R${results.starting}**\nMaps: **${h.toTitleCase(results.map_difficulty)}**`)
+        .addField('Level', h.range(1, 20).map(lvl => `L${lvl}`).join("\n"), true)
+        .addField('Round', heroLevels.slice(1).join("\n"), true)
+        .setColor(colours['cyber']);
+
+    message.channel.send(embed);
+}
+
+// Builds up an array for each level with elements representing rounds 0 to 100 inclusive
+// starting with level 1, which is a special case, and moving from 2 all the way through 20.
+// This needs to be done because the level 2 array depends on the level 1 array,
+// the level 3 array depends on 2, etc.
+//
+// Once these level arrays are built up, they're collapsed each into a single value that is
+// the lowest index (which represents the round) where the value (which represents the cost the level up)
+// is 0 or less, meaning the level has already been reached.
+//
+// These calculations are super analogous to those in the BTD6 Index written in VBA
+function calculateHeroLevels(hero, startingRound, mapDifficulty) {
+    heroSpecificLevelingMultiplier = Constants.HERO_LEVELING_MODIFIERS[hero.toUpperCase()]
+    mapSpecificLevelingMultiplier = Constants.HERO_LEVELING_MAP_DIFFICULTY_MODIFIERS[mapDifficulty.toUpperCase()]
+
+    roundVsLevelMatrix = [[]] // Level 0 instantiated
+    roundVsLevelMatrix.push(
+        fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier)
+    )
+
+    for (level = 2; level <= 20; level++) {
+        levelCostArray = [Infinity] // round 0
+        for (round = 1; round <= 100; round++) {
+            totalCostToGetLevel = Constants.BASE_HERO_COST_TO_GET_LEVEL[level] * heroSpecificLevelingMultiplier
+            levelCostArray.push(
+                totalCostToGetLevel + roundVsLevelMatrix[level - 1][round]
+            )
+        }
+        roundVsLevelMatrix.push(
+            levelCostArray
+        )
+    }
+
+    roundForLevelUpTo = [0, startingRound].concat( // Levels 0 and 1
+        // Take the levelCostArray for level 2-20...
+        roundVsLevelMatrix.slice(2).map(levelCostArray => {
+            // Find the first level at which the cost to level the hero up is 0 or less
+            levelOrNotFound = levelCostArray.findIndex(cost => cost <= 0)
+            return levelOrNotFound == -1 ? '>100' : levelOrNotFound
+        })
+    )
+
+    return roundForLevelUpTo;
+}
+
+function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier) {
+    baseCost = null;
+    if (startingRound <= 21) {
+        baseCost = (10 * startingRound * startingRound) + (10 * startingRound) - 20
+    } else if (startingRound <= 51) {
+        baseCost = (20 * startingRound * startingRound) - (400 * startingRound) + 4180
+    } else {
+        baseCost = (45 * startingRound * startingRound) - (2925 * startingRound) + 67930
+    }
+    
+    level1CostArray = [Infinity] // round 0
+    level1CostArray.push( // round 1
+        Math.floor(
+            baseCost * mapSpecificLevelingMultiplier
+        )
+    )
+    level1CostArray.push( //round 2
+        Math.floor(
+            level1CostArray[1] - (2 * 20 * mapSpecificLevelingMultiplier)
+        )
+    )
+    
+    level1RoundGroupAddend = null;
+
+    for (round = 3; round <= 100; round++) {
+        if (round <= 21) {
+            level1RoundGroupAddend = 20
+        } else if (round <= 51) {
+            level1RoundGroupAddend = 40
+        } else {
+            level1RoundGroupAddend = 90
+        }
+
+        rm1 = level1CostArray[round - 1]
+        rm2 = level1CostArray[round - 2]
+        mapWeightedDifference = (rm2 - rm1) / mapSpecificLevelingMultiplier
+
+        level1CostArray.push(
+            rm1 - ((mapWeightedDifference + level1RoundGroupAddend) * mapSpecificLevelingMultiplier)
+        )
+    }
+
+    return level1CostArray;
+}
+
 module.exports = {
     name: 'herolevel',
     aliases: ['hl', 'hero', 'her', 'hlvl'],
-    async execute(message) {
-        const xp_per_level = [
-            0,
-            0,
-            180,
-            460,
-            1000,
-            1860,
-            3280,
-            5180,
-            8320,
-            9380,
-            13620,
-            16380,
-            14400,
-            16650,
-            14940,
-            16380,
-            17820,
-            19260,
-            20700,
-            16470,
-            17280,
-        ];
-        const heroes = [
-            'Quincy',
-            'Gwen',
-            'Obyn',
-            'Striker',
-            'Ezili',
-            'Ben',
-            'Churchill',
-            'Pat',
-            'Adora',
-            'Brickell',
-            'Etienne',
-        ];
-        const xpSlopeArr = [1, 1, 1, 1, 1.425, 1.5, 1.71, 1.425, 1.71, 1.425, 1];
-        function level_cal(round, xpCurve, diffMultiplier, heroname) {
-            /*
-            these caluclations are emulations of the BTD6 Index levelling sheet: https://docs.google.com/spreadsheets/d/1tkDPEpX51MosjKCAwduviJ94xoyeYGCLKq5U5UkNJcU/edit#gid=0
-            I had to expose everything from it using this: https://docs.google.com/spreadsheets/d/1p5OXpBQATUnQNw4MouUjyfE0dxGDWEkWBrxFTAS2uSk/edit#gid=0
-            */
-            let processedRound;
-            if (round <= 21) {
-                processedRound = 10 * round * round + 10 * round - 20;
-            } else if (round <= 51) {
-                processedRound = 20 * round * round - 400 * round + 4180;
-            } else {
-                processedRound = 45 * round * round - 2925 * round + 67930;
-            }
-            let tempArr = [0, 0];
-            for (i = 2; i <= 20; i++) {
-                tempArr.push(Math.ceil(xp_per_level[i] * xpCurve));
-            }
-            let justPlacedCostArr = [
-                0,
-                Math.floor(processedRound * diffMultiplier),
-            ]; // the total cost of upgrading to a level when placed
-            for (level = 2; level <= 20; level++) {
-                justPlacedCostArr.push(
-                    justPlacedCostArr[level - 1] + tempArr[level]
-                );
-            }
-            let sumOftempArr = [0, 0]; // we need an array where each index is the sum of all prev. coreeesponding indexes of tempArr
-            for (i = 2; i <= 20; i++) {
-                let tempSum = 0;
-                for (j = 0; j <= i; j++) {
-                    tempSum += tempArr[j];
-                }
-                sumOftempArr.push(tempSum);
-            }
-            let roundArr = [
-                0,
-                Math.floor(processedRound * diffMultiplier),
-                Math.floor(processedRound * diffMultiplier) -
-                    40 * diffMultiplier,
-            ];
-            for (i = 3; i < 22; i++) {
-                roundArr.push(
-                    roundArr[i - 1] * 2 - roundArr[i - 2] - 20 * diffMultiplier
-                );
-            }
-            for (i = 22; i < 52; i++) {
-                roundArr.push(
-                    roundArr[i - 1] -
-                        ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
-                            40) *
-                            diffMultiplier
-                );
-            }
-            for (i = 52; i < 102; i++) {
-                //might be broken
-                roundArr.push(
-                    roundArr[i - 1] -
-                        ((roundArr[i - 2] - roundArr[i - 1]) / diffMultiplier +
-                            90) *
-                            diffMultiplier
-                );
-            }
-            let finalArr = []; // the round where the hero reaches level 1 is the round it gets placed
-            for (level = 1; level < 21; level++) {
-                let heroCost = 1; //cost of levelling up
-                let levelUpRound = round; //round used for calulcations, -1 because the increment is after while loop
-                while (heroCost > 0) {
-                    heroCost = sumOftempArr[level] + roundArr[levelUpRound];
-                    levelUpRound++;
-                }
-                if (levelUpRound > 101) {
-                    // if the hero wont level up until round 100
-                    finalArr.push('>100');
-                } else {
-                    finalArr.push(levelUpRound - 1);
-                }
-            }
-            const embed = new Discord.MessageEmbed()
-                .setTitle(heroname)
-                .setDescription(
-                    'This shows which round the hero will reach which level'
-                )
-                .addField('level 1', `r${finalArr[0]}`, true)
-                .addField('level 2', `r${finalArr[1]}`, true)
-                .addField('level 3', `r${finalArr[2]}`, true)
-                .addField('level 4', `r${finalArr[3]}`, true)
-                .addField('level 5', `r${finalArr[4]}`, true)
-                .addField('level 6', `r${finalArr[5]}`, true)
-                .addField('level 7', `r${finalArr[6]}`, true)
-                .addField('level 8', `r${finalArr[7]}`, true)
-                .addField('level 9', `r${finalArr[8]}`, true)
-                .addField('level 10', `r${finalArr[9]}`, true)
-                .addField('level 11', `r${finalArr[10]}`, true)
-                .addField('level 12', `r${finalArr[11]}`, true)
-                .addField('level 13', `r${finalArr[12]}`, true)
-                .addField('level 14', `r${finalArr[13]}`, true)
-                .addField('level 15', `r${finalArr[14]}`, true)
-                .addField('level 16', `r${finalArr[15]}`, true)
-                .addField('level 17', `r${finalArr[16]}`, true)
-                .addField('level 18', `r${finalArr[17]}`, true)
-                .addField('level 19', `r${finalArr[18]}`, true)
-                .addField('level 20', `r${finalArr[19]}`, true)
-                .setColor(cyber);
-            return embed;
-        }
-        const heroEmojiIDs = [
-            '734951814016794645',
-            '734953281830387882',
-            '734953281205436456',
-            '734953662446567554',
-            '734953631048138851',
-            '734954248105623633',
-            '734953812762034278',
-            '734955619697688587',
-            '734953700551950427',
-            '734953612924420107',
-            '753231376618356789',
-        ];
-        const difficultyEmojiIDs = [
-            '734966523487322202',
-            '734966523352973362',
-            '734966523575140423',
-            '734966523575140423',
-            '734966521822183475',
-        ];
-        message.channel
-            .send('react with the hero you want to choose!')
-            .then((msg) => {
-                for (i = 0; i < heroEmojiIDs.length; i++) {
-                    msg.react(
-                        client.guilds.cache
-                            .get('614111055890612225') // this is the server with the emojis the bot uses
-                            .emojis.cache.get(heroEmojiIDs[i])
-                    );
-                }
-                let collector = msg
-                    .createReactionCollector(
-                        (reaction, user) =>
-                            user.id === message.author.id &&
-                            (reaction.emoji.name === 'Quincy' ||
-                                reaction.emoji.name === 'Gwen' ||
-                                reaction.emoji.name === 'Obyn' ||
-                                reaction.emoji.name === 'StrikerJones' ||
-                                reaction.emoji.name === 'PatFusty' ||
-                                reaction.emoji.name === 'Adora' ||
-                                reaction.emoji.name === 'Churchill' ||
-                                reaction.emoji.name === 'Brickell' ||
-                                reaction.emoji.name === 'Benjamin' ||
-                                reaction.emoji.name === 'Ezili' ||
-                                reaction.emoji.name === 'Etienne'),
-                        { time: 20000 } // might turn into function to check later
-                    )
-                    .once('collect', (reaction) => {
-                        const chosen = reaction.emoji.name;
-                        let heroID = 0;
-                        // shit code:
-                        if (chosen === 'Quincy') {
-                            heroID = 0;
-                        } else if (chosen === 'Gwen') {
-                            heroID = 1;
-                        } else if (chosen === 'Obyn') {
-                            heroID = 2;
-                        } else if (chosen === 'StrikerJones') {
-                            heroID = 3;
-                        } else if (chosen === 'Ezili') {
-                            heroID = 4;
-                        } else if (chosen === 'Benjamin') {
-                            heroID = 5;
-                        } else if (chosen === 'Churchill') {
-                            heroID = 6;
-                        } else if (chosen === 'PatFusty') {
-                            heroID = 7;
-                        } else if (chosen === 'Adora') {
-                            heroID = 8;
-                        } else if (chosen === 'Brickell') {
-                            heroID = 9;
-                        } else if (chosen === 'Etienne') {
-                            heroID = 10;
-                        }
-                        const heroname = heroes[heroID];
-                        const xpCurve = xpSlopeArr[heroID];
-
-                        collector.stop();
-                        message.channel
-                            .send('Please type the starting round in the chat')
-                            .then(() => {
-                                const filter = (msg) =>
-                                    msg.author.id === `${message.author.id}`;
-
-                                message.channel
-                                    .awaitMessages(filter, {
-                                        max: 1,
-                                        time: 10000,
-                                        errors: ['time'],
-                                    })
-                                    .then((collected) => {
-                                        let round = collected.first().content;
-                                        if (
-                                            isNaN(round) ||
-                                            round < 1 ||
-                                            round > 100
-                                        ) {
-                                            return message.channel.send(
-                                                'Sorry, please specify a valid round next time. Run the commands again'
-                                            );
-                                        }
-
-                                        message.channel
-                                            .send(
-                                                'Please react with the map difficulty'
-                                            )
-                                            .then((msg) => {
-                                                for (
-                                                    i = 0;
-                                                    i <
-                                                    difficultyEmojiIDs.length;
-                                                    i++
-                                                ) {
-                                                    msg.react(
-                                                        client.guilds.cache
-                                                            .get(
-                                                                '614111055890612225'
-                                                            ) // this is the server with the emojis the bot uses
-                                                            .emojis.cache.get(
-                                                                difficultyEmojiIDs[
-                                                                    i
-                                                                ]
-                                                            )
-                                                    );
-                                                }
-                                                let collector = msg
-                                                    .createReactionCollector(
-                                                        (reaction, user) =>
-                                                            user.id ===
-                                                                message.author
-                                                                    .id &&
-                                                            (reaction.emoji
-                                                                .name ===
-                                                                'Beginner' ||
-                                                                reaction.emoji
-                                                                    .name ===
-                                                                    'Intermediate' ||
-                                                                reaction.emoji
-                                                                    .name ===
-                                                                    'Advanced' ||
-                                                                reaction.emoji
-                                                                    .name ===
-                                                                    'Expert'),
-                                                        { time: 20000 }
-                                                    )
-                                                    .once(
-                                                        'collect',
-                                                        (reaction) => {
-                                                            const chosen =
-                                                                reaction.emoji
-                                                                    .name;
-                                                            let difficultyID = 0;
-                                                            if (
-                                                                chosen ===
-                                                                'Beginner'
-                                                            ) {
-                                                                difficultyID = 1;
-                                                            } else if (
-                                                                chosen ===
-                                                                'Intermediate'
-                                                            ) {
-                                                                difficultyID = 2;
-                                                            } else if (
-                                                                chosen ===
-                                                                'Advanced'
-                                                            ) {
-                                                                difficultyID = 3;
-                                                            } else if (
-                                                                chosen ===
-                                                                'Expert'
-                                                            ) {
-                                                                difficultyID = 4;
-                                                            }
-                                                            collector.stop();
-
-                                                            let diffMultiplier =
-                                                                0.1 *
-                                                                    difficultyID +
-                                                                0.9;
-
-                                                            let embed = level_cal(
-                                                                round,
-                                                                xpCurve,
-                                                                diffMultiplier,
-                                                                heroname
-                                                            );
-                                                            message.channel.send(
-                                                                embed
-                                                            );
-                                                        }
-                                                    );
-                                            });
-                                    });
-                            });
-                    });
-            });
-    },
+    execute,
 };

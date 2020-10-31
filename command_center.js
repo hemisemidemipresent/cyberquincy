@@ -4,7 +4,6 @@ const Advertisements = require('./helpers/advertisements.js');
 
 const PREFIX = secrets_config['prefix'];
 const XPCOMMANDS = ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'];
-const ARG_SPLITTER = '#';
 
 const { discord } = require('./aliases/misc.json');
 
@@ -86,14 +85,7 @@ async function handleCommand(message) {
             // Each item in [args] either looks like `arg` or `argp1#argp2`
             // This converts each arg part to its canonical form.
             // `spact#025` gets converted to `spike_factory#025` for example.
-            canonicalArgs = args.map(function (arg) {
-                return arg
-                    .split(ARG_SPLITTER)
-                    .map(function (t) {
-                        return Aliases.getCanonicalForm(t) || t;
-                    })
-                    .join(ARG_SPLITTER);
-            });
+            canonicalArgs = args.map(arg => Aliases.canonicizeArg(arg))
         }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired

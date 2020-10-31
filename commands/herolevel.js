@@ -36,6 +36,13 @@ function execute(message, args) {
     if (parsed.round) results['starting'] = parsed.round
     if (parsed.map_difficulty) results['map_difficulty'] = parsed.map_difficulty
 
+    // ReactionChain.process(
+    //     (message, results) => displayHeroLevels(message, results),
+    //     new EmojiReactor('hero', Guilds.EMOJIS_SERVER, parsed.hero),
+    //     new TextParser(new RoundParser('ALL'), parsed.round),
+    //     new EmojiReactor('map_difficulty', Guilds.EMOJIS_SERVER, parsed.map_difficulty),
+    // )
+
     methodChain = [
         (message, chain, results) => collectReaction(message, chain, results, 'hero'),
         (message, chain, results) => collectRound(message, chain, results, 'starting'),

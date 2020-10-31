@@ -4,6 +4,10 @@ const OrParser = require('./or-parser.js');
 const EmptyParser = require('./empty-parser.js');
 const AnyOrderParser = require('./any-order-parser.js');
 
+isAbstractParser = function (parser) {
+    return ABSTRACT_PARSERS.map((ap) => ap.parser).includes(parser.constructor);
+};
+
 module.exports = {
     /**
      * Parses arguments minding the ordering `parsers` array
@@ -23,6 +27,8 @@ module.exports = {
         // The one with the least number of errors is likely to tell the best story
         return parseds[0];
     },
+
+    isAbstractParser,
 };
 
 concretizeAndParse = function (args, parsers, abstractParserIndex) {
@@ -64,10 +70,6 @@ concretizeAndParse = function (args, parsers, abstractParserIndex) {
     }
 
     return parseds;
-};
-
-isAbstractParser = function (parser) {
-    return ABSTRACT_PARSERS.map((ap) => ap.parser).includes(parser.constructor);
 };
 
 /**

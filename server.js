@@ -34,6 +34,7 @@ function pingHeroku() {
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.h = require('./helpers/general.js');
+    global.Constants = require('./helpers/constants')
     global.Files = require('./helpers/files.js');
     global.AliasRepository = require('./alias-repository.js');
 
@@ -140,7 +141,7 @@ function configureCommands() {
 }
 
 function generateListeners(commandCenter) {
-    Guilds = require('./helpers/guilds.js');
+    global.Guilds = require('./helpers/guilds.js');
 
     client.on('guildCreate', (guild) => {
         return Guilds.enterGuild(guild);

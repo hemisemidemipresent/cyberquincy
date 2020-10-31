@@ -1,6 +1,8 @@
 const CYBER_SUPPORT = 598768024761139240;
 const BTD6_INDEX = 661812833771847700;
 const RACE_SERVER = 543957081183617024;
+const EMOJIS_SERVER = "614111055890612225";
+
 const xp = require('../helpers/xp');
 const { discord } = require('../aliases/misc.json');
 
@@ -108,4 +110,9 @@ module.exports = {
     enterGuild,
     addMember,
     removeMember,
+
+    CYBER_SUPPORT,
+    BTD6_INDEX,
+    RACE_SERVER,
+    EMOJIS_SERVER,
 };

@@ -72,6 +72,16 @@ function displayHeroLevels(message, results) {
     message.channel.send(embed);
 }
 
+// Builds up an array for each level with elements representing rounds 0 to 100 inclusive
+// starting with level 1, which is a special case, and moving from 2 all the way through 20.
+// This needs to be done because the level 2 array depends on the level 1 array,
+// the level 3 array depends on 2, etc.
+//
+// Once these level arrays are built up, they're collapsed each into a single value that is
+// the lowest index (which represents the round) where the value (which represents the cost the level up)
+// is 0 or less, meaning the level has already been reached.
+//
+// These calculations are super analogous to those in the BTD6 Index written in VBA
 function calculateHeroLevels(hero, startingRound, mapDifficulty) {
     heroSpecificLevelingMultiplier = Constants.HERO_LEVELING_MODIFIERS[hero.toUpperCase()]
     mapSpecificLevelingMultiplier = Constants.HERO_LEVELING_MAP_DIFFICULTY_MODIFIERS[mapDifficulty.toUpperCase()]

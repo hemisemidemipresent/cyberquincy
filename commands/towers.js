@@ -258,6 +258,7 @@ function anyOtherTower(json, name, path, tier) {
         );
     return embed;
 }
+
 function findName(commandName) {
     for (let i = 0; i < aliases.length; i++) {
         let towerAliasSet = aliases[i];
@@ -268,18 +269,4 @@ function findName(commandName) {
         }
     }
     return;
-}
-function isValidPath(u) {
-    if (!h.is_str(u) || u.length != 3) return false;
-
-    if (isNaN(u)) return false;
-
-    if (!u.includes('0')) return false;
-
-    if (/6|7|8|9/.test(u)) return false;
-
-    d = u.match(/3|4|5/g);
-    if (d && d.length > 1) return false;
-
-    return true;
 }

@@ -42,7 +42,7 @@ module.exports = {
   dependencies:['btd6index']
 };
 
-function execute(message, args) {
+async function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
         return module.exports.helpMessage(message);
     }
@@ -72,6 +72,10 @@ function execute(message, args) {
     if (parsed.hasErrors()) {
         return module.exports.errorMessage(message, parsed.parsingErrors);
     }
+
+    await scrapeAllCombos();
+
+    return;
 
     if (parsed.natural_number) {
         // Combo # provided
@@ -167,6 +171,40 @@ function err(e, message) {
     }
 }
 
+function sheet2TC() {
+    return GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+}
+
+async function scrapeAllCombos() {
+    ogCombos = await scrapeAllOGCombos()
+    altCombos = await scrapeAllAltCombos()
+    return mergeCombos(ogCombos, altCombos)
+}
+
+async function scrapeAllOGCombos() {
+    sheet = sheet2TC();
+    nCombos = await numCombos();
+    rOffset = await findOGRowOffset();
+
+    ogCombos = [null]
+
+    await sheet.loadCells(`${OG_COLS.NUMBER}${rOffset + 1}:${OG_COLS.CURRENT}${rOffset + nCombos}`);
+
+    for (var n = 1; n <= nCombos; n++) {
+        row = rOffset + n
+
+        ogCombos.push(
+            await getOG2TCFromPreloadedRow(row)
+        )
+    }
+
+    return ogCombos;
+}
+
+async function scrapeAllAltCombos() {
+    sheet = sheet2TC();
+}
+
 function normalizeTowers(tower_upgrades, heroes) {
     if (heroes && heroes.length == 2) {
         throw new UserCommandError(`Can't have a 2TC with 2 heroes`);
@@ -210,10 +248,8 @@ function embed2TC(message, values, title, footer) {
 // OG Combos
 ////////////////////////////////////////////////////////////
 
-async function getOG2TCFromRow(row) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
-
-    await sheet.loadCells(`${OG_COLS.NUMBER}${row}:${OG_COLS.CURRENT}${row}`);
+async function getOG2TCFromPreloadedRow(row) {
+    const sheet = sheet2TC();
 
     // Assign each value to be discord-embedded in a simple default way
     let values = {};

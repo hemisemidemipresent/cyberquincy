@@ -100,7 +100,7 @@ module.exports = {
         // all this is a bit sketch
 
         let name = findName(args[0]);
-        if (!isValidPath(args[1])) {
+        if (!b.isValidUpgrade(args[1])) {
             return message.channel.send('not valid path');
         }
         fetch(url, settings)
@@ -151,20 +151,6 @@ function findName(commandName) {
         }
     }
     return;
-}
-function isValidPath(u) {
-    if (!h.is_str(u) || u.length != 3) return false;
-
-    if (isNaN(u)) return false;
-
-    if (!u.includes('0')) return false;
-
-    if (/6|7|8|9/.test(u)) return false;
-
-    d = u.match(/3|4|5/g);
-    if (d && d.length > 1) return false;
-
-    return true;
 }
 
 function findcost(object, path, tier) {

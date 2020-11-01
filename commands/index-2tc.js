@@ -73,7 +73,7 @@ async function execute(message, args) {
         return module.exports.errorMessage(message, parsed.parsingErrors);
     }
 
-    await scrapeAllCombos();
+    allCombos = await scrapeAllCombos();
 
     return;
 

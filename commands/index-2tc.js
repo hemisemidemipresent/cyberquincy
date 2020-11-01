@@ -178,6 +178,7 @@ function sheet2TC() {
 async function scrapeAllCombos() {
     ogCombos = await scrapeAllOGCombos()
     altCombos = await scrapeAllAltCombos()
+    console.log(altCombos)
     return mergeCombos(ogCombos, altCombos)
 }
 
@@ -203,6 +204,23 @@ async function scrapeAllOGCombos() {
 
 async function scrapeAllAltCombos() {
     sheet = sheet2TC();
+    rOffset = await findOGRowOffset();
+    
+    await sheet.loadCells(
+        `${ALT_COLS.NUMBER}${rOffset + 1}:${ALT_COLS.LINK}${sheet.rowCount}`
+    );
+
+    altCombos = []
+
+    for (var row = rOffset + 1; row <= sheet.rowCount; row++) {
+        if (await hasGonePastLastAlt2TCCombo(row)) break;
+
+        altCombos.push(
+            await getAlt2TCFromPreloadedRow(row)
+        )
+    }
+
+    return altCombos;
 }
 
 function normalizeTowers(tower_upgrades, heroes) {
@@ -380,60 +398,30 @@ async function getOGRowFromTowers(towers) {
 // Alt Combos
 ////////////////////////////////////////////////////////////
 
-async function getAlt2TCFromNAndMap(n, map) {
+async function getAlt2TCFromPreloadedRow(row) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 
-    START_ROW = 12;
-    END_ROW = sheet.rowCount;
-
-    await sheet.loadCells(
-        `${ALT_COLS.NUMBER}${START_ROW}:${ALT_COLS.MAP}${END_ROW}`
-    );
-
-    // Will be true towards the end of a below iteration if the alt row
-    // being examined corresponds to the queried combo (whether by combo # or towers).
-    let nActive = -1;
-    for (var row = START_ROW; row <= END_ROW; row++) {
-        let mapCandidate = sheet.getCellByA1(`${ALT_COLS.MAP}${row}`).value;
-        // End condition
-        if (!mapCandidate) {
-            throw new UserCommandError(
-                `Combo #${n} exists but doesn't have an alt map on ${map}`
-            );
-        }
-
-        let numberCandidate = sheet.getCellByA1(`${ALT_COLS.NUMBER}${row}`)
-            .value;
-        if (numberCandidate) {
-            nActive = parseInt(numberCandidate.match(/\d+.*?/)[0]);
-
-            // If previous alt map rows were based off the correct combo number,
-            // reaching a new combo number means that there wasn't a match with the queried map
-            if (nActive > n) {
-                throw new UserCommandError(
-                    `Combo #${n} exists but doesn't have an alt map on ${map}`
-                );
-            }
-        }
-
-        // If combo number and map match up
-        if (nActive == n && mapCandidate == Aliases.toIndexNormalForm(map)) {
-            // Load the three unique data cells in the current alt combo row
-            await sheet.loadCells(
-                `${ALT_COLS.MAP}${row}:${ALT_COLS.LINK}${row}`
-            );
-
-            let values = {};
-            values.MAP = map;
-            values.PERSON = sheet.getCellByA1(`${ALT_COLS.PERSON}${row}`).value;
-
-            // Format link properly
-            const linkCell = sheet.getCellByA1(`${ALT_COLS.LINK}${row}`);
-            values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
-
-            return values;
-        }
+    // Assign each value to be discord-embedded in a simple default way
+    let values = {};
+    for (key in ALT_COLS) {
+        values[key] = sheet.getCellByA1(`${ALT_COLS[key]}${row}`).value;
     }
+
+    // Format link properly
+    const linkCell = sheet.getCellByA1(`${ALT_COLS.LINK}${row}`);
+    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+
+    while (!values.NUMBER) {
+        values.NUMBER = sheet.getCellByA1(`${ALT_COLS.NUMBER}${--row}`).value;
+    }
+
+    return values;
+}
+
+async function hasGonePastLastAlt2TCCombo(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+
+    return !sheet.getCellByA1(`${ALT_COLS.PERSON}${row}`).value;
 }
 
 ////////////////

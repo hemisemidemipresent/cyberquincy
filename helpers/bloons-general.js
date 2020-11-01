@@ -1,4 +1,4 @@
-function isValidUpgrade(u) {
+function isValidUpgradeSet(u) {
     if (!h.is_str(u) || u.length !== 3) return false;
 
     if (isNaN(u)) return false;
@@ -16,5 +16,5 @@ function isValidUpgrade(u) {
 }
 
 module.exports = {
-    isValidUpgrade,
+    isValidUpgradeSet,
 }

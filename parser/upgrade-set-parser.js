@@ -5,7 +5,7 @@ class UpgradeSetParser {
 
     parse(arg) {
         arg = arg.replace(/[-\|\/]/g, '')
-        if (!b.isValidUpgrade(arg)) {
+        if (!b.isValidUpgradeSet(arg)) {
             throw new UserCommandError(`\`${arg}\` is not a valid BTD6 upgrade set`);
         }
         return arg;

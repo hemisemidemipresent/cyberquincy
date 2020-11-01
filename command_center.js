@@ -56,7 +56,7 @@ async function handleCommand(message) {
         const commandName = args.shift().toLowerCase();
         let command;
         // exception: check with they inputted a path as the commandName
-        if (b.isValidUpgrade(commandName)) {
+        if (b.isValidUpgradeSet(commandName)) {
             command =
                 client.commands.get(args[0]) ||
                 client.commands.find(
@@ -90,7 +90,7 @@ async function handleCommand(message) {
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
         if (!Cooldowns.handleCooldown(command, message)) return;
-        if (b.isValidUpgrade(commandName)) {
+        if (b.isValidUpgradeSet(commandName)) {
             let inputs = [commandName];
             command.execute(message, inputs, args[0]);
         } else {

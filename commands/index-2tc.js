@@ -178,8 +178,47 @@ function sheet2TC() {
 async function scrapeAllCombos() {
     ogCombos = await scrapeAllOGCombos()
     altCombos = await scrapeAllAltCombos()
-    console.log(altCombos)
     return mergeCombos(ogCombos, altCombos)
+}
+
+function mergeCombos(ogCombos, altCombos) {
+    mergedCombos = [null] // 0th combo
+
+    for (var i = 0; i < ogCombos.length; i++) {
+        toBeMergedOgCombo = ogCombos[i]
+
+        delete toBeMergedOgCombo.NUMBER // Incorporated as array index
+
+        map = toBeMergedOgCombo.MAP
+        delete toBeMergedOgCombo.MAP // Incorporated as key of outer Object within array index
+
+        mapComboObject = {}
+        mapComboObject[map] = {
+            ...toBeMergedOgCombo,
+            OG: true
+        }
+
+        mergedCombos.push(
+            mapComboObject
+        )
+    }
+
+    for (var i = 0; i < altCombos.length; i++) {
+        toBeMergedAltCombo = altCombos[i]
+
+        n = h.fromOrdinalSuffix(toBeMergedAltCombo.NUMBER)
+        delete toBeMergedAltCombo.NUMBER
+
+        map = toBeMergedAltCombo.MAP
+        delete toBeMergedAltCombo.MAP
+
+        mergedCombos[n][map] = {
+            ...toBeMergedAltCombo,
+            OG: false
+        }
+    }
+
+    return mergedCombos
 }
 
 async function scrapeAllOGCombos() {
@@ -187,7 +226,7 @@ async function scrapeAllOGCombos() {
     nCombos = await numCombos();
     rOffset = await findOGRowOffset();
 
-    ogCombos = [null]
+    ogCombos = []
 
     await sheet.loadCells(`${OG_COLS.NUMBER}${rOffset + 1}:${OG_COLS.CURRENT}${rOffset + nCombos}`);
 

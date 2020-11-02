@@ -34,7 +34,7 @@ module.exports = {
 concretizeAndParse = function (args, parsers, abstractParserIndex) {
     // Base case: all abstract parsers have been concretized
     if (parsers.filter((p) => isAbstractParser(p)).length == 0) {
-        return [parseConcrete(args, parsers)];
+        return parseConcrete(args, parsers);
     }
 
     // Get abstact parser function using the cycling index
@@ -222,13 +222,78 @@ ABSTRACT_PARSERS = [
  * @param {[{Type}Parser]} parsers An expanded list of parsers
  */
 parseConcrete = function (args, parsers) {
+    results = []
+    if (args.length < parsers.length) {
+        // If there are extra parsers, fill in the gaps in args with null buffers
+        // but not just at the end of the array..in every possible permutable way within the array
+        // giving error-handling the best chance at finding the closest match
+        argPaddingPermutations = h.permutatePaddings(args, parsers.length)
+        for (var i = 0; i < argPaddingPermutations.length; i++) {
+            results.push(
+                parseConcreteArgsParsersAligned(argPaddingPermutations[i], parsers)
+            )
+        }
+    } else if (args.length > parsers.length) {
+        // If there are extra args, fill in the gaps in parsers with null buffers
+        // but not just at the end of the array..in every possible permutable way within the array
+        // giving error-handling the best chance at finding the closest match
+        parserPaddingPermutations = h.permutatePaddings(parsers, args.length)
+        for (var i = 0; i < parserPaddingPermutations.length; i++) {
+            results.push(
+                parseConcreteArgsParsersAligned(args, parserPaddingPermutations[i])
+            )
+        }
+    } else {
+        // If the lengths match up then just make a direct call
+        results.push(
+            parseConcreteArgsParsersAligned(args, parsers)
+        )
+    }
+    return results;
+}
+
+/**
+ * 
+ * @param {[String]} args Command arguments; some might be null to fill in the length mismatch between args vs parsers
+ * @param {[{Type}Parser]} parsers Argument parsers; some might be null to fill in the length mismatch between args vs parsers
+ * 
+ * Runs N arguments against N parsers. If one is null, the appropriate error message will be returned
+ * i.e. "missing"/"extra" argument at position X
+ */
+function parseConcreteArgsParsersAligned(args, parsers) {
     // The returned result that the command can read
     parsed = new Parsed();
+
+    argPosition = 1;
 
     // Iterate over parsers + arguments
     for (let i = 0; i < Math.min(parsers.length, args.length); i++) {
         parser = parsers[i];
         arg = args[i];
+
+        if (!arg && !parser) throw `Null parser and null argument at index ${i} in the arg-parser traversal. This shouldn't happen.`
+
+        // If there is missing argument in the position
+        if (!arg) {
+            parsed.addError(
+                new UserCommandError(
+                    `Command is missing ${h.toOrdinalSuffix(
+                        argPosition
+                    )} argument of type \`${parsers[i].type()}\``
+                )
+            );
+            continue;
+        }
+
+        // If there is an missing parser (i.e. extra argument) in the position
+        if (!parser) {
+            parsed.addError(
+                new UserCommandError(
+                    `Extra argument \`${args[i]}\` at position ${argPosition}`
+                )
+            );
+            continue;
+        }
 
         if (isAbstractParser(parser)) {
             throw `Abstract parser of type ${typeof Parser} found in concrete parsing. Something went wrong here.`;
@@ -245,27 +310,9 @@ parseConcrete = function (args, parsers) {
                 throw e;
             }
         }
-    }
 
-    // Include an error for every missing argument
-    for (let i = args.length; i < parsers.length; i++) {
-        parsed.addError(
-            new UserCommandError(
-                `Command is missing ${h.toOrdinalSuffix(
-                    i + 1
-                )} argument of type \`${parsers[i].type()}\``
-            )
-        );
-    }
-
-    // Include an error for every extra argument
-    for (let i = parsers.length; i < args.length; i++) {
-        parsed.addError(
-            new UserCommandError(
-                `Extra argument \`${args[i]}\` at position ${i + 1}`
-            )
-        );
+        argPosition++
     }
 
     return parsed;
-};
+}

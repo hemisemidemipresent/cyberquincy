@@ -5,7 +5,7 @@
     "400": ["arcane_spike", "aspike"],
     "500": ["archmage", "arch"],
 
-    "030": ["dragon's_breath","dbreath","db"],
+    "030": ["dragon's_breath","dbreath","db", "dragon's", "breath"],
     "040": ["summon_phoenix", "sump", "sumpho", "summon"],
     "050": ["wizard_lord_phoenix", "wlp"],
 

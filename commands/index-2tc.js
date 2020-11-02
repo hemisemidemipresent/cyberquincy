@@ -2,12 +2,18 @@ const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const OrParser = require('../parser/or-parser.js');
 const OptionalParser = require('../parser/optional-parser.js');
+const AnyOrderParser = require('../parser/any-order-parser.js');
+
+const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
+const TowerPathParser = require('../parser/tower-path-parser')
+const TowerParser = require('../parser/tower-parser')
+const HeroParser = require('../parser/hero-parser.js');
 
 const MapParser = require('../parser/map-parser.js');
+const PersonParser = require('../parser/person-parser')
+
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
-const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
-const HeroParser = require('../parser/hero-parser.js');
-const AnyOrderParser = require('../parser/any-order-parser.js');
+const VersionParser = require('../parser/version-parser')
 
 const UserCommandError = require('../exceptions/user-command-error.js');
 
@@ -39,7 +45,7 @@ module.exports = {
     execute,
     helpMessage,
     errorMessage,
-  dependencies:['btd6index']
+    dependencies:['btd6index']
 };
 
 async function execute(message, args) {
@@ -47,27 +53,41 @@ async function execute(message, args) {
         return module.exports.helpMessage(message);
     }
 
-    (towerOrHeroParser = new OrParser(
+    towerOrHeroParser = new OrParser(
+        new HeroParser(),
+        new TowerParser(),
+        new TowerPathParser(),
         new TowerUpgradeParser(),
-        new HeroParser()
-    )),
-        (parsers = [
-            // Which 2TC's have been done on this map?
-            new MapParser(),
-            // Get 2TC by combo number, optionally on the specified map
-            new AnyOrderParser(
-                new NaturalNumberParser(),
-                new OptionalParser(new MapParser())
-            ),
-            // Get 2TCs containing tower (optionally both towers), optionally on the specified map
-            new AnyOrderParser(
-                towerOrHeroParser,
-                new OptionalParser(towerOrHeroParser),
-                new OptionalParser(new MapParser())
-            ),
-        ]);
+    )
 
-    const parsed = CommandParser.parse(args, new OrParser(...parsers));
+    parsers = [
+        new OptionalParser(
+            new MapParser()
+        ),
+        new OptionalParser(
+            new OrParser(
+                towerOrHeroParser, // 1 tower
+                [ // 2 towers
+                    towerOrHeroParser, 
+                    towerOrHeroParser
+                ],
+                new NaturalNumberParser() // combo #
+            ),
+        ),
+        new OptionalParser(
+            new PersonParser()
+        ),
+        new OptionalParser(
+            new VersionParser()
+        )
+    ];
+
+    const parsed = CommandParser.parse(
+        args,
+        new AnyOrderParser(...parsers)
+    );
+
+    console.log(parsed)
 
     if (parsed.hasErrors()) {
         return module.exports.errorMessage(message, parsed.parsingErrors);

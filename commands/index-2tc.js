@@ -137,15 +137,15 @@ function towerMatch(combo, tower) {
         return comboTowers.map(t => {
             return t.NAME.toLowerCase()
         }).indexOf(tower) + 1
-    } else if (Aliases.isTowerPath()) {
+    } else if (Aliases.isTowerPath(tower)) {
         return comboTowers.map(t => {
-            upgradeArray = t.UPGRADE.split('-')
+            upgradeArray = t.UPGRADE.split('-').map(u => parseInt(u))
             pathIndex = upgradeArray.indexOf(Math.max(...upgradeArray))
             path = pathIndex == 0 ? "top" : pathIndex == 1 ? "middle" : "bottom"
             
             towerUpgrade = Aliases.toAliasNormalForm(t.NAME)
             towerBase = Aliases.towerUpgradeToTower(towerUpgrade)
-            return `${towerBase}#${path}`
+            return `${towerBase}#${path}-path`
         }).indexOf(tower) + 1
     } else {
         throw `Somehow received tower that is not in any of [tower, tower_upgrade, tower_path, hero]`

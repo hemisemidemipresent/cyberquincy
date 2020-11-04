@@ -45,7 +45,7 @@ module.exports = {
     execute,
     helpMessage,
     errorMessage,
-    dependencies:['btd6index']
+    dependencies: ['btd6index']
 };
 
 async function execute(message, args) {
@@ -68,7 +68,7 @@ async function execute(message, args) {
             new OrParser(
                 towerOrHeroParser, // 1 tower
                 [ // 2 towers
-                    towerOrHeroParser, 
+                    towerOrHeroParser,
                     towerOrHeroParser
                 ],
                 new NaturalNumberParser() // combo #
@@ -94,6 +94,10 @@ async function execute(message, args) {
     }
 
     allCombos = await scrapeAllCombos();
+
+    console.log(allCombos)
+
+    
 
     return;
 
@@ -264,7 +268,7 @@ async function scrapeAllOGCombos() {
 async function scrapeAllAltCombos() {
     sheet = sheet2TC();
     rOffset = await findOGRowOffset();
-    
+
     await sheet.loadCells(
         `${ALT_COLS.NUMBER}${rOffset + 1}:${ALT_COLS.LINK}${sheet.rowCount}`
     );
@@ -339,7 +343,10 @@ async function getOG2TCFromPreloadedRow(row) {
     );
     for (var i = 0; i < upgrades.length; i++) {
         // Display upgrade next to tower
-        values[`TOWER_${i + 1}`] += ' (' + upgrades[i] + ')';
+        values[`TOWER_${i + 1}`] = { 
+            NAME: values[`TOWER_${i + 1}`],
+            UPGRADE: upgrades[i],
+        }
     }
     delete values.UPGRADES; // Don't display upgrades on their own, display with towers
 

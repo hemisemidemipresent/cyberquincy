@@ -373,6 +373,28 @@ class AliasRepository extends Array {
                  .concat(this.allSupportTowers()) 
     }
 
+    allTowerPaths() {
+        return this.allTowers().map(t => {
+            return [`${t}#top-path`, `${t}#middle-path`, `${t}#bottom-path`]
+        }).flat()
+    }
+    
+    isHero(candidate) {
+        return this.allHeroes().includes(candidate.toLowerCase())
+    }
+
+    isTowerUpgrade(candidate) {
+        return this.allTowerUpgrades().includes(candidate.toLowerCase())
+    }
+
+    isTower(candidate) {
+        return this.allTowers().includes(candidate.toLowerCase())
+    }
+
+    isTowerPath(candidate) {
+        return this.allTowerPaths().includes(candidate.toLowerCase())
+    }
+
     allPrimaryTowers() {
         const primaryTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('DART');
 

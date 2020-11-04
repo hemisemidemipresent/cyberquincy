@@ -87,67 +87,68 @@ async function execute(message, args) {
         new AnyOrderParser(...parsers)
     );
 
-    console.log(parsed)
-
     if (parsed.hasErrors()) {
         return module.exports.errorMessage(message, parsed.parsingErrors);
     }
 
     allCombos = await scrapeAllCombos();
 
-    console.log(allCombos)
-
-    
-
-    return;
-
-    if (parsed.natural_number) {
-        // Combo # provided
-        if (parsed.map) {
-            // and map specified
-            return displayAlt2TCFromN(
-                message,
-                parsed.natural_number,
-                parsed.map
-            ).catch((e) => err(e, message));
-        } else {
-            // and map NOT specified
-            // OG completion
-            return displayOG2TCFromN(
-                message,
-                parsed.natural_number
-            ).catch((e) => err(e, message));
-        }
-    } else if (parsed.hero || parsed.tower_upgrade) {
-        // Tower(s) specified
-        towers = null;
+    if (parsed.natural_number) { // Combo #
+        allCombos = [allCombos[parsed.natural_number - 1]] // Wrap single combo object in an array for consistency
+    } else if (parsed.hero || parsed.tower_upgrade || parsed.tower || parsed.tower_path) {
         try {
-            towers = normalizeTowers(parsed.tower_upgrades, parsed.heroes);
+            if (parsed.heroes && parsed.heroes.length > 1) {
+                return message.channel.send(`Combo cannot have more than 1 hero (${parsed.heroes.join(" + ")})`)
+            }
+
+            providedTowers = [].concat(parsed.tower_upgrades)
+                                    .concat(parsed.tower_paths)
+                                    .concat(parsed.towers)
+                                    .concat(parsed.heroes)
+                                    .filter(el => el) // Remove null items
+            
+            allCombos = allCombos.filter(combo => {
+                towerNum = towerMatch(combo, providedTowers[0])
+                if (!providedTowers[1]) return towerNum != 0
+
+                otherTowerNum = towerMatch(combo, providedTowers[1])
+                return towerNum + otherTowerNum == 3 // Ensure that one tower matched to tower 1, other matched to tower 2
+                // Note that failed matches return 0
+            })
         } catch (e) {
             return err(e, message);
         }
+    }
+}
 
-        if (towers.length == 1) {
-            // 1 tower provided
-            return message.channel.send(
-                `Multiple-combo searching coming soon`
-            );
-        } else {
-            // 2 towers provided
-            if (parsed.map) {
-                return displayAlt2TCFromTowers(
-                    message,
-                    towers,
-                    parsed.map
-                ).catch((e) => err(e, message));
-            } else {
-                return displayOG2TCFromTowers(message, towers).catch((e) =>
-                    err(e, message)
-                );
-            }
-        }
+function towerMatch(combo, tower) {
+    comboTowers = [combo.TOWER_1, combo.TOWER_2]
+    if (Aliases.isTower(tower)) {
+        return comboTowers.map(t => {
+            towerUpgrade = Aliases.toAliasNormalForm(t.NAME)
+            return Aliases.towerUpgradeToTower(towerUpgrade)
+        }).indexOf(tower) + 1
+    } else if(Aliases.isTowerUpgrade(tower)) {
+        return comboTowers.map(t => {
+            towerUpgrade = Aliases.toAliasNormalForm(t.NAME)
+            return Aliases.getCanonicalForm(towerUpgrade)
+        }).indexOf(tower) + 1
+    } else if (Aliases.isHero(tower)) {
+        return comboTowers.map(t => {
+            return t.NAME.toLowerCase()
+        }).indexOf(tower) + 1
+    } else if (Aliases.isTowerPath()) {
+        return comboTowers.map(t => {
+            upgradeArray = t.UPGRADE.split('-')
+            pathIndex = upgradeArray.indexOf(Math.max(...upgradeArray))
+            path = pathIndex == 0 ? "top" : pathIndex == 1 ? "middle" : "bottom"
+            
+            towerUpgrade = Aliases.toAliasNormalForm(t.NAME)
+            towerBase = Aliases.towerUpgradeToTower(towerUpgrade)
+            return `${towerBase}#${path}`
+        }).indexOf(tower) + 1
     } else {
-        return message.channel.send('Multiple-combo searching coming soon');
+        throw `Somehow received tower that is not in any of [tower, tower_upgrade, tower_path, hero]`
     }
 }
 
@@ -206,7 +207,7 @@ async function scrapeAllCombos() {
 }
 
 function mergeCombos(ogCombos, altCombos) {
-    mergedCombos = [null] // 0th combo
+    mergedCombos = []
 
     for (var i = 0; i < ogCombos.length; i++) {
         toBeMergedOgCombo = ogCombos[i]
@@ -216,14 +217,21 @@ function mergeCombos(ogCombos, altCombos) {
         map = toBeMergedOgCombo.MAP
         delete toBeMergedOgCombo.MAP // Incorporated as key of outer Object within array index
 
-        mapComboObject = {}
-        mapComboObject[map] = {
-            ...toBeMergedOgCombo,
+        person = toBeMergedOgCombo.PERSON
+        delete toBeMergedOgCombo.PERSON // Incorporated as key-value pair in comboObject
+
+        link = toBeMergedOgCombo.LINK
+        delete toBeMergedOgCombo.LINK // Incorporated as key-value pair in comboObject
+
+        comboObject = {...toBeMergedOgCombo}
+        comboObject[map] = {
+            PERSON: person,
+            LINK: link,
             OG: true
         }
 
         mergedCombos.push(
-            mapComboObject
+            comboObject
         )
     }
 

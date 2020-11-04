@@ -8,9 +8,7 @@ class TowerPathParser {
     constructor(...permittedValues) {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
-            Aliases.allTowers().map(t => {
-                return [`${t}#top-path`, `${t}#middle-path`, `${t}#bottom-path`]
-            }).flat(),
+            Aliases.allTowerPaths(),
             permittedValues.map(pv => pv.toLowerCase())
         );
     }

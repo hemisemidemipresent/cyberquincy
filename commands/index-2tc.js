@@ -94,9 +94,11 @@ async function execute(message, args) {
     allCombos = await scrapeAllCombos();
     filteredCombos = allCombos;
 
-    if (parsed.natural_number) { // Combo #
+    if (parsed.natural_number) { 
+        // Filter by combo # provided
         filteredCombos = [filteredCombos[parsed.natural_number - 1]] // Wrap single combo object in an array for consistency
     } else if (parsed.hero || parsed.tower_upgrade || parsed.tower || parsed.tower_path) {
+        // Filter by towers/heroes provided
         if (parsed.heroes && parsed.heroes.length > 1) {
             return message.channel.send(`Combo cannot have more than 1 hero (${parsed.heroes.join(" + ")})`)
         }
@@ -127,13 +129,42 @@ async function execute(message, args) {
         })
     }
 
-    console.log(filteredCombos)
-
     if (parsed.person) {
-        filteredCombos = filteredCombos.filter(combo => {
-            return combo.PERSON
-        })
+        function personFilter(map, completion) {
+            return completion.PERSON.toLowerCase() == parsed.person
+        };
+        filteredCombos = filterByCompletion(personFilter, filteredCombos)
     }
+
+    if (parsed.map) {
+        function mapFilter(map, completion) {
+            return Aliases.toAliasNormalForm(map) == parsed.map
+        }
+        filteredCombos = filterByCompletion(mapFilter, filteredCombos)
+    }
+
+    if (false) { // TODO: When to filter by OG?
+        function ogFilter(map, completion) {
+            return completion.OG
+        }
+        filteredCombos = filterByCompletion(ogFilter, filteredCombos)
+    }
+
+    console.log(filteredCombos)
+}
+
+function filterByCompletion(filter, combos) {
+    for (var i = combos.length - 1; i >= 0; i--) {
+        combos[i].MAPS = Object.keys(combos[i].MAPS)
+            .filter(map => filter(map, combos[i].MAPS[map]))
+            .reduce((completion, map) => {
+                completion[map] = combos[i].MAPS[map];
+                return completion;
+            }, {});
+
+        if (Object.keys(combos[i].MAPS).length === 0) combos.splice(i, 1)
+    }
+    return combos;
 }
 
 function towerMatch(combo, tower) {
@@ -210,8 +241,6 @@ function mergeCombos(ogCombos, altCombos) {
 
     for (var i = 0; i < ogCombos.length; i++) {
         toBeMergedOgCombo = ogCombos[i]
-
-        delete toBeMergedOgCombo.NUMBER // Incorporated as array index
 
         map = toBeMergedOgCombo.MAP
         delete toBeMergedOgCombo.MAP // Incorporated as key of outer Object within array index

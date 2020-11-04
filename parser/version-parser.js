@@ -17,19 +17,19 @@ class VersionParser {
             this.delegateParser.parse(arg)
         );
 
-        if(arg[arg.length - 1] == '.') {
-            result += '.'
+        if(/\../.test(arg) && !result.includes('.')) {
+            result += '.0'
         }
         return result;
     }
 
     // Parses all ways the command user could enter a round
     transformArgument(arg) {
-        var result = arg.match(/v(\d\d?\.\d?)/i);
+        var result = arg.match(/v(\d\d?\.?\d?)/i);
         if (result) return result[1];
         else
             throw new UserCommandError(
-                `Version number must look like \`v#(#).(#)\`. (V10. refers to v10.0, v10.1, and v10.2 e.g.)`
+                `Version number must look like \`v#{#.#}\`. (V10{.} refers to v10.0, v10.1, and v10.2 e.g.)`
             );
     }
 }

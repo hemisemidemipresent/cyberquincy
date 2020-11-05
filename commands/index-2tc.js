@@ -92,8 +92,64 @@ async function execute(message, args) {
     }
 
     allCombos = await scrapeAllCombos();
-    filteredCombos = allCombos;
+    
+    filteredCombos = filterCombos(allCombos, parsed);
 
+    displayCombos(message, filteredCombos, parsed);
+}
+
+function displayCombos(message, combos, parsed) {
+    console.log(combos);
+
+    if (combos.length == 0) {
+        return message.channel.send('No combos')
+    }
+
+    let challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(embedTitle(parsed, combos[0]))
+            .setColor(colours['cyber'])
+
+    if (combos.length == 1) {
+        combo = combos[0]
+        if (combo.OG) {
+            return message.channel.send('1 OG combo')
+        } else {
+            return message.channel.send('1 ALT combo')
+        }
+    } else {
+        return message.channel.send('more than 1 combo')
+    }
+}
+
+// include sampleCombo for the correct capitalization and punctuation
+function embedTitle(parsed, sampleCombo) {
+    towers = parsedProvidedTowers(parsed)
+
+    title = ""
+    if (parsed.natural_number) title += `${sampleCombo.NUMBER} 2TC `
+    else title += 'All 2TCs '
+    if (parsed.person) title += `by ${sampleCombo.PERSON} `
+    if (parsed.map) `on ${sampleCombo.MAP} `
+    if (towers.length > 0) {
+        towers.forEach(tower => {
+            title += 'with '
+            if (Aliases.isTower(tower)) {
+                title += `${tower} `
+            } else if (Aliases.isTowerPath(tower)) {
+                towerName, path = tower.split('#')
+                title += `${path.split('-').join(' ')} ${towerName} `
+            } else if(Aliases.isTowerUpgrade(tower)) {
+                title += `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
+            } else if (Aliases.isHero(tower)) {
+                title += `${tower} `
+            } else {
+                throw `tower ${tower} is not within allotted tower/hero category. Failed to build 2TC embed title`
+            }
+        })
+    }
+}
+
+function filterCombos(filteredCombos, parsed) {
     if (parsed.natural_number) { 
         // Filter by combo # provided
         filteredCombos = [filteredCombos[parsed.natural_number - 1]] // Wrap single combo object in an array for consistency
@@ -103,11 +159,7 @@ async function execute(message, args) {
             return message.channel.send(`Combo cannot have more than 1 hero (${parsed.heroes.join(" + ")})`)
         }
 
-        providedTowers = [].concat(parsed.tower_upgrades)
-                                .concat(parsed.tower_paths)
-                                .concat(parsed.towers)
-                                .concat(parsed.heroes)
-                                .filter(el => el) // Remove null items
+        providedTowers = parsedProvidedTowers(parsed)
         
         filteredCombos = filteredCombos.filter(combo => {
             towerNum = towerMatch(combo, providedTowers[0])
@@ -143,14 +195,22 @@ async function execute(message, args) {
         filteredCombos = filterByCompletion(mapFilter, filteredCombos)
     }
 
-    if (false) { // TODO: When to filter by OG?
+    // Unless searching by map or person, the command user wants OG completions and not alt map spam
+    if (!parsed.person && !parsed.map) { 
         function ogFilter(map, completion) {
             return completion.OG
         }
         filteredCombos = filterByCompletion(ogFilter, filteredCombos)
     }
+    return filteredCombos;
+}
 
-    console.log(filteredCombos)
+function parsedProvidedTowers(parsed) {
+    return [].concat(parsed.tower_upgrades)
+                .concat(parsed.tower_paths)
+                .concat(parsed.towers)
+                .concat(parsed.heroes)
+                .filter(el => el) // Remove null items
 }
 
 function filterByCompletion(filter, combos) {
@@ -216,14 +276,6 @@ function errorMessage(message, parsingErrors) {
         .setColor(colours['orange']);
 
     return message.channel.send(errorEmbed);
-}
-
-function err(e, message) {
-    if (e instanceof UserCommandError) {
-        return module.exports.errorMessage(message, [e.message]);
-    } else {
-        throw e;
-    }
 }
 
 function sheet2TC() {
@@ -326,30 +378,9 @@ async function scrapeAllAltCombos() {
 }
 
 async function numCombos() {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+    const sheet = sheet2TC()
     await sheet.loadCells(`J6`);
     return sheet.getCellByA1('J6').value;
-}
-
-function embed2TC(message, values, title, footer) {
-    // Embed and send the message
-    var challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(title)
-        .setColor(colours['cyber']);
-
-    for (field in values) {
-        challengeEmbed = challengeEmbed.addField(
-            h.toTitleCase(field.replace('_', ' ')),
-            values[field],
-            true
-        );
-    }
-
-    if (footer) {
-        challengeEmbed.setFooter(footer);
-    }
-
-    message.channel.send(challengeEmbed);
 }
 
 ////////////////////////////////////////////////////////////

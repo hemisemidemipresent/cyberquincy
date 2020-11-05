@@ -108,11 +108,24 @@ function displayCombos(message, combos, parsed) {
     let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos[0]))
             .setColor(colours['cyber'])
+    
+    message.channel.send(challengeEmbed)
 
     if (combos.length == 1) {
-        combo = combos[0]
-        if (combo.OG) {
-            return message.channel.send('1 OG combo')
+        combo = flattenCombo(combos[0])
+        combo = stripCombo(combo, parsed)
+
+        if (OG) {
+            combo = orderCombo(combo)
+            
+            for (field in combo) {
+                challengeEmbed.addField(
+                    h.toTitleCase(field),
+                    combo[field],
+                    true
+                )
+            }
+            return message.channel.send(challengeEmbed)
         } else {
             return message.channel.send('1 ALT combo')
         }
@@ -121,32 +134,78 @@ function displayCombos(message, combos, parsed) {
     }
 }
 
+function stripCombo(combo, parsed) {
+    wellDefinedTowers = [].concat(parsed.tower_upgrades).concat(parsed.heroes).filter(el => el)
+
+    if (parsed.natural_number) delete combo.NUMBER
+    if (wellDefinedTowers.length == 2) {
+        delete combo.TOWER_1
+        delete combo.TOWER_2
+    }
+    if (parsed.version) delete combo.VERSION
+    if (parsed.map) delete combo.MAP
+    if (parsed.person) delete combo.PERSON
+
+    return combo
+}
+
+function orderCombo(combo) {
+    ordering = Object.keys(OG_COLS).filter(v => v !== 'UPGRADES')
+    newCombo = {}
+    ordering.forEach(key => {
+        if(combo[key]) newCombo[key] = combo[key]
+    })
+    return newCombo
+}
+
+function flattenCombo(combo) {
+    map = Object.keys(combo.MAPS)[0]
+    subcombo = combo.MAPS[map]
+
+    combo.MAP = map
+    combo.PERSON = subcombo.PERSON
+    combo.LINK = subcombo.LINK
+    OG = subcombo.OG
+    delete combo.MAPS
+
+    for (var tn = 1; tn <= 2; tn++) {
+        combo[`TOWER_${tn}`] = `**${combo[`TOWER_${tn}`].NAME}** (${combo[`TOWER_${tn}`].UPGRADE})`
+    }
+
+    return combo;
+}
+
 // include sampleCombo for the correct capitalization and punctuation
 function embedTitle(parsed, sampleCombo) {
     towers = parsedProvidedTowers(parsed)
+    map = Object.keys(sampleCombo.MAPS)[0]
 
     title = ""
-    if (parsed.natural_number) title += `${sampleCombo.NUMBER} 2TC `
-    else title += 'All 2TCs '
-    if (parsed.person) title += `by ${sampleCombo.PERSON} `
-    if (parsed.map) `on ${sampleCombo.MAP} `
-    if (towers.length > 0) {
-        towers.forEach(tower => {
-            title += 'with '
-            if (Aliases.isTower(tower)) {
-                title += `${tower} `
-            } else if (Aliases.isTowerPath(tower)) {
-                towerName, path = tower.split('#')
-                title += `${path.split('-').join(' ')} ${towerName} `
-            } else if(Aliases.isTowerUpgrade(tower)) {
-                title += `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
-            } else if (Aliases.isHero(tower)) {
-                title += `${tower} `
-            } else {
-                throw `tower ${tower} is not within allotted tower/hero category. Failed to build 2TC embed title`
-            }
-        })
+    if (parsed.natural_number) title += `${sampleCombo.NUMBER} Combo `
+    else title += 'All Combos '
+    if (parsed.person) title += `by ${sampleCombo.MAPS[map].PERSON} `
+    if (parsed.map) title += `on ${map} `
+    for (var i = 0; i < towers.length; i++) {
+        tower = towers[i]
+
+        if (i == 0) title += 'with '
+        else title += 'and '
+        if (Aliases.isTower(tower)) {
+            title += `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
+        } else if (Aliases.isTowerPath(tower)) {
+            [towerName, path] = tower.split('#')
+            title += `${h.toTitleCase(path.split('-').join(' '))} `
+            title += `${Aliases.towerUpgradeToIndexNormalForm(towerName)} `
+        } else if(Aliases.isTowerUpgrade(tower)) {
+            title += `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
+        } else if (Aliases.isHero(tower)) {
+            title += `${h.toTitleCase(tower)} `
+        } else {
+            throw `tower ${tower} is not within allotted tower/hero category. Failed to build 2TC embed title`
+        }
     }
+    if (parsed.version) title += `in v${parsed.version} `
+    return title.slice(0, title.length - 1)
 }
 
 function filterCombos(filteredCombos, parsed) {

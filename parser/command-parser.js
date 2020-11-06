@@ -43,10 +43,7 @@ concretizeAndParse = function (args, parsers, abstractParserIndex) {
     const concretizeParserFunction =
         ABSTRACT_PARSERS[abstractParserIndex].handler;
     // and call the function on the parsers
-    const moreConcreteParsingAttempts = concretizeParserFunction.call(
-        this,
-        parsers
-    );
+    const moreConcreteParsingAttempts = concretizeParserFunction(parsers);
 
     let parseds = [];
 
@@ -59,7 +56,7 @@ concretizeAndParse = function (args, parsers, abstractParserIndex) {
 
         // Cycle to the next abstract parser
         const newAbstractParserIndex =
-            (abstractParserIndex + 1) % this.ABSTRACT_PARSERS.length;
+            (abstractParserIndex + 1) % ABSTRACT_PARSERS.length;
 
         // Recurse and save result
         const newParseds = concretizeAndParse(

@@ -276,7 +276,6 @@ function embedTitle(parsed, sampleCombo) {
         tower = towers[i]
         if (i == 0) title += 'with '
         else title += 'and '
-        console.log(tower);
         title += `${formatTower(tower)} `
     }
     if (parsed.version) title += `in v${parsed.version} `

@@ -380,7 +380,7 @@ function embedPages(message, title, columns) {
     numPages = columnChunks.LINK.length;
     pg = 0;
 
-    REACTIONS = ['⬅️', '➡️', '❌'];
+    REACTIONS = ['⬅️', '➡️'];
     // Gets the reaction to the pagination message by the command author
     // and respond appropriate action (turning page or deleting message)
     function reactLoop(msg) {
@@ -404,17 +404,16 @@ function embedPages(message, title, columns) {
                 case '➡️':
                     pg++;
                     break;
-                case '❌':
                 default:
                     return msg.delete();
             }
             pg += numPages; // Avoid negative numbers
             pg %= numPages; // Avoid page numbers greater than max page number
-            displayCurrentPage();
+            displayCurrentPage(msg);
         });
     }
 
-    function displayCurrentPage() {
+    function displayCurrentPage(msg) {
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
             .setColor(colours['cyber'])
@@ -429,7 +428,12 @@ function embedPages(message, title, columns) {
             );
         }
 
-        message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
+        if (msg) {
+            msg.reactions.cache.get('⬅️').users.remove(message.author.id)
+            msg.reactions.cache.get('➡️').users.remove(message.author.id)
+            msg.edit(challengeEmbed).then(msg => reactLoop(msg))
+        }
+        else message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
     }
 
     displayCurrentPage();

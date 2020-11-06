@@ -46,6 +46,27 @@ function allLengthNPermutations(inputArr) {
     return result;
 }
 
+// [1, 2, 3], 5 => [null, null, 1, 2, 3], [null, 1, null, 2, 3], [null, 1, 2, null, 3], [null, 1, 2, 3, null], [1, null, null, 2, 3], etc.
+function permutatePaddings(arr, newLength) {
+    const numPads = newLength - arr.length;
+    
+    if (numPads <= 0) return [arr];
+    
+    let results = []
+
+    for (var i = 0; i < arr.length + 1; i++) {
+        endArr = arr.slice(i)
+        const recursiveResults = permutatePaddings(endArr, endArr.length + numPads - 1)
+        for (var j = 0; j < recursiveResults.length; j++) {
+            results.push(
+                arr.slice(0, i).concat(null).concat(recursiveResults[j])
+            )
+        }
+    }
+
+    return results;
+}
+
 function shuffle(inputArr) {
     arr = [...inputArr];
     for (let i = arr.length - 1; i > 0; i--) {
@@ -138,6 +159,7 @@ module.exports = {
     numberAsCost,
     randomIntegerFromInclusiveRange,
     allLengthNPermutations,
+    permutatePaddings,
     shuffle,
     range,
     toOrdinalSuffix,

@@ -136,7 +136,7 @@ function displayCombos(message, combos, parsed) {
     }
 
     let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(embedTitle(parsed, combos[0]))
+            .setTitle(embedTitle(parsed, combos))
             .setColor(colours['cyber'])
     
     if (combos.length == 1) {
@@ -181,13 +181,24 @@ function displayCombos(message, combos, parsed) {
             }
         }
 
+        numRows = colData[Object.keys(colData)[0]].length
+        MAX_NUM_ROWS = 10
+
+        challengeEmbed.addField('#Combos', numRows)
+
         for (header in colData) {
+            data = numRows <= MAX_NUM_ROWS ? 
+                                colData[header] : 
+                                colData[header].slice(0, MAX_NUM_ROWS).concat('...')
+
             challengeEmbed.addField(
                 h.toTitleCase(header.split('_').join(' ')),
-                colData[header].join("\n"),
+                data.join("\n"),
                 true
             )
         }
+
+        if (numRows > MAX_NUM_ROWS) challengeEmbed.setFooter('Too many combos to display all at once')
     }
     return message.channel.send(challengeEmbed)
 }
@@ -264,13 +275,16 @@ function flattenCombo(combo, map) {
 }
 
 // include sampleCombo for the correct capitalization and punctuation
-function embedTitle(parsed, sampleCombo) {
+function embedTitle(parsed, combos) {
+    sampleCombo = combos[0]
+    multipleCombos = combos.length > 1 || Object.keys(combos[0].MAPS).length > 1
+
     towers = parsedProvidedTowers(parsed)
     map = Object.keys(sampleCombo.MAPS)[0]
 
     title = ""
     if (parsed.natural_number) title += `${sampleCombo.NUMBER} Combo `
-    else title += 'All Combos '
+    else title += multipleCombos ? 'All Combos ' : 'Only Combo '
     if (parsed.person) title += `by ${sampleCombo.MAPS[map].PERSON} `
     if (parsed.map) title += `on ${map} `
     for (var i = 0; i < towers.length; i++) {

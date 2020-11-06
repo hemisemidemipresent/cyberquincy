@@ -65,14 +65,13 @@ async function execute(message, args) {
             new MapParser()
         ),
         new OptionalParser(
-            new OrParser(
-                towerOrHeroParser, // 1 tower
-                [ // 2 towers
-                    towerOrHeroParser,
-                    towerOrHeroParser
-                ],
-                new NaturalNumberParser() // combo #
-            ),
+            towerOrHeroParser
+        ),
+        new OptionalParser(
+            towerOrHeroParser
+        ),
+        new OptionalParser(
+            new NaturalNumberParser()
         ),
         new OptionalParser(
             new PersonParser()
@@ -91,11 +90,56 @@ async function execute(message, args) {
         return module.exports.errorMessage(message, parsed.parsingErrors);
     }
 
+    semanticErrors = checkSemanticErrors(parsed)
+
     allCombos = await scrapeAllCombos();
     
     filteredCombos = filterCombos(allCombos, parsed);
 
     displayCombos(message, filteredCombos, parsed);
+}
+
+function checkSemanticErrors(parsed) {
+    errors = []
+
+    parsedTowers = parsedProvidedTowers(parsed).map(t => formatTower(t))
+    if (parsedTowers.length > 0 && parsed.natural_number) {
+        twrs = parsedTowers.length > 1 ? 'towers' : 'tower'
+        errors.push(
+            `You searched for combo #${parsed.natural_number}, so ` +
+            `it doesn't make sense to also search for ${twrs} ${parsedTowers.join(', ')}`)
+    }
+
+    if (parsed.version && parsed.number) {
+        errors.push(`You searched for combo #${parsed.natural_number} but a version was needlessly specified (${parsed.version})`)
+    }
+
+    if (parsed.version && parsed.tower_upgrades.length == 2) {
+        errors.push(`You searched for an exact combo containing ${parsedTowers.join(' & ')} but a version was needlessly specified (${parsed.version})`)
+    }
+
+    if (parsed.version && parsed.map) {
+        errors.push(
+            `You searched for all combos on ${Aliases.toIndexNormalForm(parsed.map)}` +
+            `but you specified a version, which the index doesn't list for alt maps.`
+        )
+    }
+}
+
+function formatTower(tower) {
+    if (Aliases.isTower(tower)) {
+        return `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
+    } else if (Aliases.isTowerPath(tower)) {
+        [towerName, path] = tower.split('#')
+        return `${h.toTitleCase(path.split('-').join(' '))} ` +
+                `${Aliases.towerUpgradeToIndexNormalForm(towerName)} `
+    } else if(Aliases.isTowerUpgrade(tower)) {
+        return `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
+    } else if (Aliases.isHero(tower)) {
+        return `${h.toTitleCase(tower)} `
+    } else {
+        throw `tower ${tower} is not within allotted tower/hero category. Failed to build 2TC embed title`
+    }
 }
 
 function displayCombos(message, combos, parsed) {
@@ -114,23 +158,59 @@ function displayCombos(message, combos, parsed) {
     if (combos.length == 1) {
         combo = flattenCombo(combos[0])
         combo = stripCombo(combo, parsed)
-
-        if (OG) {
-            combo = orderCombo(combo)
-            
-            for (field in combo) {
-                challengeEmbed.addField(
-                    h.toTitleCase(field),
-                    combo[field],
-                    true
-                )
-            }
-            return message.channel.send(challengeEmbed)
-        } else {
-            return message.channel.send('1 ALT combo')
+        combo = orderCombo(combo)
+        
+        for (field in combo) {
+            challengeEmbed.addField(
+                h.toTitleCase(field),
+                combo[field],
+                true
+            )
         }
     } else {
-        return message.channel.send('more than 1 combo')
+        cols = getDisplayCols(parsed)
+        for (var i = 0; i < combos.length; i++) {
+            for (map in combo.MAPS) {
+                combo = flattenCombo(combos[i], map)
+
+                for (field in cols) {
+                    if (field === 'OTHER_TOWER') {
+                        providedTower = parsedProvidedTowers(parsed)[0]
+                        towerNum = towerMatch(combos[i], providedTower)
+                        field = `TOWER_${towerNum}`
+                    }
+
+                    challengeEmbed.addField(
+                        h.toTitleCase(field),
+                        combo[field],
+                        true
+                    )
+                }
+            }
+        }
+    }
+    return message.channel.send(challengeEmbed)
+}
+
+function getDisplayCols(parsed) {
+    if (parsed.person) {
+        if (parsed.tower_upgrades.length == 2) {
+            return ['NUMBER', 'MAP', 'LINK']
+        } else if (parsed.tower_upgrades) {
+            return ['OTHER_TOWER', 'MAP', 'LINK']
+        } else if (parsed.MAP) {
+            return ['TOWER_1', 'TOWER_2', 'LINK']
+        } else {
+            return ['TOWER_1', 'TOWER_2', 'MAP']
+        }
+    } else if (parsed.tower_upgrades.length == 2) {
+        return ['NUMBER', 'PERSON', 'LINK']
+    } else if (parsed.tower_upgrade) {
+        return ['OTHER_TOWER', 'PERSON', 'LINK']
+    } else if (parsed.version) {
+        return ['NUMBER', 'TOWER_1', 'TOWER_2']
+    } else {
+        return ['TOWER_1', 'TOWER_2', 'LINK']
     }
 }
 
@@ -142,9 +222,14 @@ function stripCombo(combo, parsed) {
         delete combo.TOWER_1
         delete combo.TOWER_2
     }
-    if (parsed.version) delete combo.VERSION
+    if (parsed.version || !combo.OG) delete combo.VERSION
     if (parsed.map) delete combo.MAP
     if (parsed.person) delete combo.PERSON
+
+    if (!combo.OG) delete combo.CURRENT
+    if (!combo.OG) delete combo.DATE
+
+    delete combo.OG
 
     return combo
 }
@@ -158,14 +243,14 @@ function orderCombo(combo) {
     return newCombo
 }
 
-function flattenCombo(combo) {
-    map = Object.keys(combo.MAPS)[0]
+function flattenCombo(combo, map) {
+    if(!map) map = Object.keys(combo.MAPS)[0]
     subcombo = combo.MAPS[map]
 
     combo.MAP = map
     combo.PERSON = subcombo.PERSON
     combo.LINK = subcombo.LINK
-    OG = subcombo.OG
+    combo.OG = subcombo.OG
     delete combo.MAPS
 
     for (var tn = 1; tn <= 2; tn++) {
@@ -187,22 +272,10 @@ function embedTitle(parsed, sampleCombo) {
     if (parsed.map) title += `on ${map} `
     for (var i = 0; i < towers.length; i++) {
         tower = towers[i]
-
+        title += `${formatTower(tower)} `
         if (i == 0) title += 'with '
         else title += 'and '
-        if (Aliases.isTower(tower)) {
-            title += `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
-        } else if (Aliases.isTowerPath(tower)) {
-            [towerName, path] = tower.split('#')
-            title += `${h.toTitleCase(path.split('-').join(' '))} `
-            title += `${Aliases.towerUpgradeToIndexNormalForm(towerName)} `
-        } else if(Aliases.isTowerUpgrade(tower)) {
-            title += `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
-        } else if (Aliases.isHero(tower)) {
-            title += `${h.toTitleCase(tower)} `
-        } else {
-            throw `tower ${tower} is not within allotted tower/hero category. Failed to build 2TC embed title`
-        }
+
     }
     if (parsed.version) title += `in v${parsed.version} `
     return title.slice(0, title.length - 1)
@@ -255,7 +328,7 @@ function filterCombos(filteredCombos, parsed) {
     }
 
     // Unless searching by map or person, the command user wants OG completions and not alt map spam
-    if (!parsed.person && !parsed.map) { 
+    if (parsed.version || (!parsed.person && !parsed.map)) { 
         function ogFilter(map, completion) {
             return completion.OG
         }

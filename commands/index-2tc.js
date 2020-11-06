@@ -140,23 +140,34 @@ function displayCombos(message, combos, parsed) {
             )
         }
     } else {
-        cols = getDisplayCols(parsed)
+        fieldHeaders = getDisplayCols(parsed)
+
+        colData = Object.fromEntries(
+            fieldHeaders.map(fieldHeader => {
+                return [fieldHeader, []]
+            })
+        )
+
+        console.log(colData)
+
         for (var i = 0; i < combos.length; i++) {
             for (map in combos[i].MAPS) {
                 combo = flattenCombo(combos[i], map)
 
-                for (var colIndex = 0; colIndex < cols.length; colIndex++) {
-                    field = cols[colIndex];
+                for (var colIndex = 0; colIndex < fieldHeaders.length; colIndex++) {
+                    fieldHeader = fieldHeaders[colIndex];
 
-                    if (field === 'OTHER_TOWER') {
+                    header = fieldHeader;
+
+                    if (fieldHeader === 'OTHER_TOWER') {
                         providedTower = parsedProvidedTowers(parsed)[0]
                         towerNum = towerMatch(combos[i], providedTower)
-                        field = `TOWER_${towerNum}`
+                        header = `TOWER_${towerNum}`
                     }
 
                     challengeEmbed.addField(
-                        h.toTitleCase(field),
-                        combo[field],
+                        h.toTitleCase(fieldHeader),
+                        combo[header],
                         true
                     )
                 }
@@ -221,17 +232,19 @@ function flattenCombo(combo, map) {
     if(!map) map = Object.keys(combo.MAPS)[0]
     subcombo = combo.MAPS[map]
 
-    combo.MAP = map
-    combo.PERSON = subcombo.PERSON
-    combo.LINK = subcombo.LINK
-    combo.OG = subcombo.OG
-    delete combo.MAPS
+    flattenedCombo = {...combo}
+
+    flattenedCombo.MAP = map
+    flattenedCombo.PERSON = subcombo.PERSON
+    flattenedCombo.LINK = subcombo.LINK
+    flattenedCombo.OG = subcombo.OG
+    delete flattenedCombo.MAPS
 
     for (var tn = 1; tn <= 2; tn++) {
-        combo[`TOWER_${tn}`] = `**${combo[`TOWER_${tn}`].NAME}** (${combo[`TOWER_${tn}`].UPGRADE})`
+        flattenedCombo[`TOWER_${tn}`] = `**${flattenedCombo[`TOWER_${tn}`].NAME}** (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`
     }
 
-    return combo;
+    return flattenedCombo;
 }
 
 // include sampleCombo for the correct capitalization and punctuation

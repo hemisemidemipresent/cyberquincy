@@ -70,12 +70,12 @@ async function execute(message, args) {
         new OptionalParser(
             towerOrHeroParser
         ),
-        // new OptionalParser(
-        //     towerOrHeroParser
-        // ),
-        // new OptionalParser(
-        //     new PersonParser()
-        // ),
+        new OptionalParser(
+            towerOrHeroParser
+        ),
+        new OptionalParser(
+            new PersonParser()
+        ),
         // new OptionalParser(
         //     new VersionParser()
         // )
@@ -143,18 +143,18 @@ function formatTower(tower) {
 }
 
 function displayCombos(message, combos, parsed) {
-    console.log(combos);
-
     if (combos.length == 0) {
-        return message.channel.send('No combos')
+        return message.channel.send(
+            new Discord.MessageEmbed()
+                .setTitle(`No combos found`)
+                .setColor(colours['yellow'])
+        )
     }
 
     let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos[0]))
             .setColor(colours['cyber'])
     
-    message.channel.send(challengeEmbed)
-
     if (combos.length == 1) {
         combo = flattenCombo(combos[0])
         combo = stripCombo(combo, parsed)
@@ -274,10 +274,10 @@ function embedTitle(parsed, sampleCombo) {
     if (parsed.map) title += `on ${map} `
     for (var i = 0; i < towers.length; i++) {
         tower = towers[i]
-        title += `${formatTower(tower)} `
         if (i == 0) title += 'with '
         else title += 'and '
-
+        console.log(tower);
+        title += `${formatTower(tower)} `
     }
     if (parsed.version) title += `in v${parsed.version} `
     return title.slice(0, title.length - 1)
@@ -285,8 +285,9 @@ function embedTitle(parsed, sampleCombo) {
 
 function filterCombos(filteredCombos, parsed) {
     if (parsed.natural_number) { 
+        combo = filteredCombos[parsed.natural_number - 1]
         // Filter by combo # provided
-        filteredCombos = [filteredCombos[parsed.natural_number - 1]] // Wrap single combo object in an array for consistency
+        filteredCombos = combo ? [combo] : [] // Wrap single combo object in an array for consistency
     } else if (parsed.hero || parsed.tower_upgrade || parsed.tower || parsed.tower_path) {
         // Filter by towers/heroes provided
         if (parsed.heroes && parsed.heroes.length > 1) {

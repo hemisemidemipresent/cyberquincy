@@ -21,8 +21,6 @@ module.exports = {
     parse(args, ...parsers) {
         let parseds = concretizeAndParse(args, parsers, 0);
 
-        console.log(parseds.length)
-
         // Sort parsing errors from least to most caught errors
         parseds.sort((a, b) => a.parsingErrors.length - b.parsingErrors.length);
 

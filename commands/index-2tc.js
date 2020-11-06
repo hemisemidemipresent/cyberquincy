@@ -61,24 +61,25 @@ async function execute(message, args) {
     )
 
     parsers = [
-        // new OptionalParser(
-        //     new MapParser()
-        // ),
         new OptionalParser(
-            new NaturalNumberParser()
+            new OrParser(
+                new MapParser(),
+                new VersionParser()
+            )
         ),
         new OptionalParser(
-            towerOrHeroParser
-        ),
-        new OptionalParser(
-            towerOrHeroParser
+            new OrParser(
+                new NaturalNumberParser(),
+                towerOrHeroParser,
+                [
+                    towerOrHeroParser,
+                    towerOrHeroParser,
+                ]
+            )
         ),
         new OptionalParser(
             new PersonParser()
         ),
-        // new OptionalParser(
-        //     new VersionParser()
-        // )
     ];
 
     const parsed = CommandParser.parse(
@@ -90,40 +91,11 @@ async function execute(message, args) {
         return module.exports.errorMessage(message, parsed.parsingErrors);
     }
 
-    semanticErrors = checkSemanticErrors(parsed)
-
     allCombos = await scrapeAllCombos();
     
     filteredCombos = filterCombos(allCombos, parsed);
 
     displayCombos(message, filteredCombos, parsed);
-}
-
-function checkSemanticErrors(parsed) {
-    errors = []
-
-    parsedTowers = parsedProvidedTowers(parsed).map(t => formatTower(t))
-    if (parsedTowers.length > 0 && parsed.natural_number) {
-        twrs = parsedTowers.length > 1 ? 'towers' : 'tower'
-        errors.push(
-            `You searched for combo #${parsed.natural_number}, so ` +
-            `it doesn't make sense to also search for ${twrs} ${parsedTowers.join(', ')}`)
-    }
-
-    if (parsed.version && parsed.number) {
-        errors.push(`You searched for combo #${parsed.natural_number} but a version was needlessly specified (${parsed.version})`)
-    }
-
-    if (parsed.version && parsed.tower_upgrades.length == 2) {
-        errors.push(`You searched for an exact combo containing ${parsedTowers.join(' & ')} but a version was needlessly specified (${parsed.version})`)
-    }
-
-    if (parsed.version && parsed.map) {
-        errors.push(
-            `You searched for all combos on ${Aliases.toIndexNormalForm(parsed.map)}` +
-            `but you specified a version, which the index doesn't list for alt maps.`
-        )
-    }
 }
 
 function formatTower(tower) {

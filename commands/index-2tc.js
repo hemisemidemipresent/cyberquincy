@@ -91,11 +91,23 @@ async function execute(message, args) {
         return module.exports.errorMessage(message, parsed.parsingErrors);
     }
 
-    allCombos = await scrapeAllCombos();
+    try {
+        allCombos = await scrapeAllCombos();
     
-    filteredCombos = filterCombos(allCombos, parsed);
-
-    displayCombos(message, filteredCombos, parsed);
+        filteredCombos = filterCombos(allCombos, parsed);
+    
+        displayCombos(message, filteredCombos, parsed);
+    } catch(e) {
+        if (e instanceof UserCommandError) {
+            message.channel.send(
+                new Discord.MessageEmbed()
+                    .setTitle(e.message)
+                    .setColor(colours['orange'])
+            )
+        } else {
+            throw e
+        }
+    }
 }
 
 function formatTower(tower) {
@@ -157,8 +169,8 @@ function displayCombos(message, combos, parsed) {
 
                     key = fieldHeader;
 
-                    if (fieldHeader === 'OTHER_TOWER') {
-                        providedTower = parsedProvidedTowers(parsed)[0]
+                    if (fieldHeader === 'UNSPECIFIED_TOWER') {
+                        providedTower = parseProvidedDefinedTowers(parsed)[0]
                         towerNum = towerMatch(combos[i], providedTower)
                         otherTowerNum = 3 - towerNum
                         key = `TOWER_${otherTowerNum}`
@@ -181,20 +193,21 @@ function displayCombos(message, combos, parsed) {
 }
 
 function getDisplayCols(parsed) {
+    definiteTowers = parseProvidedDefinedTowers(parsed)
     if (parsed.person) {
-        if (parsed.tower_upgrades && parsed.tower_upgrades.length == 2) {
+        if (definiteTowers.length == 2) {
             return ['NUMBER', 'MAP', 'LINK']
-        } else if (parsed.tower_upgrades) {
-            return ['OTHER_TOWER', 'MAP', 'LINK']
-        } else if (parsed.MAP) {
+        } else if (definiteTowers.length == 1) {
+            return ['UNSPECIFIED_TOWER', 'MAP', 'LINK']
+        } else if (parsed.map) {
             return ['TOWER_1', 'TOWER_2', 'LINK']
         } else {
             return ['TOWER_1', 'TOWER_2', 'MAP']
         }
-    } else if (parsed.tower_upgrades && parsed.tower_upgrades.length == 2) {
+    } else if (definiteTowers.length == 2) {
         return ['NUMBER', 'PERSON', 'LINK']
-    } else if (parsed.tower_upgrade) {
-        return ['OTHER_TOWER', 'PERSON', 'LINK']
+    } else if (parsed.tower_upgrade || parsed.hero) {
+        return ['UNSPECIFIED_TOWER', 'PERSON', 'LINK']
     } else if (parsed.version) {
         return ['NUMBER', 'TOWER_1', 'TOWER_2']
     } else {
@@ -278,7 +291,7 @@ function filterCombos(filteredCombos, parsed) {
     } else if (parsed.hero || parsed.tower_upgrade || parsed.tower || parsed.tower_path) {
         // Filter by towers/heroes provided
         if (parsed.heroes && parsed.heroes.length > 1) {
-            return message.channel.send(`Combo cannot have more than 1 hero (${parsed.heroes.join(" + ")})`)
+            throw new UserCommandError(`Combo cannot have more than 1 hero (${h.toTitleCase(parsed.heroes.join(" + "))})`)
         }
 
         providedTowers = parsedProvidedTowers(parsed)
@@ -325,6 +338,12 @@ function filterCombos(filteredCombos, parsed) {
         filteredCombos = filterByCompletion(ogFilter, filteredCombos)
     }
     return filteredCombos;
+}
+
+function parseProvidedDefinedTowers(parsed) {
+    return [].concat(parsed.tower_upgrades)
+                .concat(parsed.heroes)
+                .filter(el => el) // Remove null items
 }
 
 function parsedProvidedTowers(parsed) {

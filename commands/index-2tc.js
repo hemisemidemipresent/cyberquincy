@@ -100,15 +100,15 @@ async function execute(message, args) {
 
 function formatTower(tower) {
     if (Aliases.isTower(tower)) {
-        return `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
+        return `${Aliases.towerUpgradeToIndexNormalForm(tower)}`
     } else if (Aliases.isTowerPath(tower)) {
         [towerName, path] = tower.split('#')
         return `${h.toTitleCase(path.split('-').join(' '))} ` +
-                `${Aliases.towerUpgradeToIndexNormalForm(towerName)} `
+                `${Aliases.towerUpgradeToIndexNormalForm(towerName)}`
     } else if(Aliases.isTowerUpgrade(tower)) {
-        return `${Aliases.towerUpgradeToIndexNormalForm(tower)} `
+        return `${Aliases.towerUpgradeToIndexNormalForm(tower)}`
     } else if (Aliases.isHero(tower)) {
-        return `${h.toTitleCase(tower)} `
+        return `${h.toTitleCase(tower)}`
     } else {
         throw `tower ${tower} is not within allotted tower/hero category. Failed to build 2TC embed title`
     }
@@ -148,8 +148,6 @@ function displayCombos(message, combos, parsed) {
             })
         )
 
-        console.log(colData)
-
         for (var i = 0; i < combos.length; i++) {
             for (map in combos[i].MAPS) {
                 combo = flattenCombo(combos[i], map)
@@ -157,21 +155,26 @@ function displayCombos(message, combos, parsed) {
                 for (var colIndex = 0; colIndex < fieldHeaders.length; colIndex++) {
                     fieldHeader = fieldHeaders[colIndex];
 
-                    header = fieldHeader;
+                    key = fieldHeader;
 
                     if (fieldHeader === 'OTHER_TOWER') {
                         providedTower = parsedProvidedTowers(parsed)[0]
                         towerNum = towerMatch(combos[i], providedTower)
-                        header = `TOWER_${towerNum}`
+                        otherTowerNum = 3 - towerNum
+                        key = `TOWER_${otherTowerNum}`
                     }
 
-                    challengeEmbed.addField(
-                        h.toTitleCase(fieldHeader),
-                        combo[header],
-                        true
-                    )
+                    colData[fieldHeader].push(combo[key])
                 }
             }
+        }
+
+        for (header in colData) {
+            challengeEmbed.addField(
+                h.toTitleCase(header.split('_').join(' ')),
+                colData[header].join("\n"),
+                true
+            )
         }
     }
     return message.channel.send(challengeEmbed)
@@ -241,7 +244,7 @@ function flattenCombo(combo, map) {
     delete flattenedCombo.MAPS
 
     for (var tn = 1; tn <= 2; tn++) {
-        flattenedCombo[`TOWER_${tn}`] = `**${flattenedCombo[`TOWER_${tn}`].NAME}** (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`
+        flattenedCombo[`TOWER_${tn}`] = `${flattenedCombo[`TOWER_${tn}`].NAME} (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`
     }
 
     return flattenedCombo;

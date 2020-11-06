@@ -61,24 +61,24 @@ async function execute(message, args) {
     )
 
     parsers = [
-        new OptionalParser(
-            new MapParser()
-        ),
-        new OptionalParser(
-            towerOrHeroParser
-        ),
-        new OptionalParser(
-            towerOrHeroParser
-        ),
+        // new OptionalParser(
+        //     new MapParser()
+        // ),
         new OptionalParser(
             new NaturalNumberParser()
         ),
         new OptionalParser(
-            new PersonParser()
+            towerOrHeroParser
         ),
-        new OptionalParser(
-            new VersionParser()
-        )
+        // new OptionalParser(
+        //     towerOrHeroParser
+        // ),
+        // new OptionalParser(
+        //     new PersonParser()
+        // ),
+        // new OptionalParser(
+        //     new VersionParser()
+        // )
     ];
 
     const parsed = CommandParser.parse(
@@ -170,10 +170,12 @@ function displayCombos(message, combos, parsed) {
     } else {
         cols = getDisplayCols(parsed)
         for (var i = 0; i < combos.length; i++) {
-            for (map in combo.MAPS) {
+            for (map in combos[i].MAPS) {
                 combo = flattenCombo(combos[i], map)
 
-                for (field in cols) {
+                for (var colIndex = 0; colIndex < cols.length; colIndex++) {
+                    field = cols[colIndex];
+
                     if (field === 'OTHER_TOWER') {
                         providedTower = parsedProvidedTowers(parsed)[0]
                         towerNum = towerMatch(combos[i], providedTower)
@@ -194,7 +196,7 @@ function displayCombos(message, combos, parsed) {
 
 function getDisplayCols(parsed) {
     if (parsed.person) {
-        if (parsed.tower_upgrades.length == 2) {
+        if (parsed.tower_upgrades && parsed.tower_upgrades.length == 2) {
             return ['NUMBER', 'MAP', 'LINK']
         } else if (parsed.tower_upgrades) {
             return ['OTHER_TOWER', 'MAP', 'LINK']
@@ -203,7 +205,7 @@ function getDisplayCols(parsed) {
         } else {
             return ['TOWER_1', 'TOWER_2', 'MAP']
         }
-    } else if (parsed.tower_upgrades.length == 2) {
+    } else if (parsed.tower_upgrades && parsed.tower_upgrades.length == 2) {
         return ['NUMBER', 'PERSON', 'LINK']
     } else if (parsed.tower_upgrade) {
         return ['OTHER_TOWER', 'PERSON', 'LINK']

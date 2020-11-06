@@ -416,6 +416,8 @@ function towerMatch(combo, tower) {
 function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!2tc` HELP')
+        .setDescription('Use ctrl+f to see what other people are doing')
+        .setColor(colours['black'])
 
     return message.channel.send(helpEmbed);
 }

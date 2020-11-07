@@ -413,7 +413,7 @@ function embedPages(message, title, columns) {
         });
     }
 
-    function displayCurrentPage(msg) {
+    async function displayCurrentPage(msg) {
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
             .setColor(colours['cyber'])
@@ -429,8 +429,12 @@ function embedPages(message, title, columns) {
         }
 
         if (msg) {
-            msg.reactions.cache.get('⬅️').users.remove(message.author.id)
-            msg.reactions.cache.get('➡️').users.remove(message.author.id)
+            try {
+                await msg.reactions.cache.get('⬅️').users.remove(message.author.id)
+                await msg.reactions.cache.get('➡️').users.remove(message.author.id)
+            } catch(_) {
+                return message.channel.send(challengeEmbed).then(m => reactLoop(m));
+            }
             msg.edit(challengeEmbed).then(msg => reactLoop(msg))
         }
         else message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));

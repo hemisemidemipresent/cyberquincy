@@ -432,8 +432,12 @@ function embedPages(message, title, columns) {
             try {
                 await msg.reactions.cache.get('⬅️').users.remove(message.author.id)
                 await msg.reactions.cache.get('➡️').users.remove(message.author.id)
-            } catch(_) {
-                return message.channel.send(challengeEmbed).then(m => reactLoop(m));
+            } catch(e) {
+                if (e.code === Discord.Constants.APIErrors.MISSING_PERMISSIONS) {
+                    return message.channel.send(challengeEmbed).then(m => reactLoop(m));
+                } else {
+                    throw e
+                }
             }
             msg.edit(challengeEmbed).then(msg => reactLoop(msg))
         }

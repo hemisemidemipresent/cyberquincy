@@ -140,6 +140,22 @@ function arraysEqual(_arr1, _arr2) {
     return true;
 }
 
+function binaryLambdaSearch(low, high, f) {
+    mid = Math.floor((low + high) / 2)
+    n = f(mid)
+    
+    if (n == 0) return mid
+    if (n < 0 && f(mid + 1) > 0) return mid
+    if (n < 0) {
+        if (low == high) return Infinity
+        else return (mid, high, f)
+    }
+    if (n > 0) {
+        if (low == high) return -Infinity
+        else return (low, mid, f)
+    }
+}
+
 module.exports = {
     IMPOPPABLE_ROUNDS,
     HARD_ROUNDS,

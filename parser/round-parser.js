@@ -36,7 +36,7 @@ class RoundParser {
 
             // Translate difficulty into rounds
             // The general helper module has the conversion between difficulty and valid rounds
-            [startRound, endRound] = h[difficulty + '_ROUNDS'];
+            [startRound, endRound] = b[difficulty + '_ROUNDS'];
         }
 
         // Ultimately at play is just a natural number parser with bounds

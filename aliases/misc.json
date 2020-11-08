@@ -8,5 +8,8 @@
     "user": [
         "u"
     ],
-    "discord": "https://discord.gg/VMX5hZA"
+    "discord": "https://discord.gg/VMX5hZA",
+    "bottom-path": ["bottom", "bot"],
+    "middle-path": ["middle", "mid"],
+    "top-path": ["top"]
 }

@@ -29,7 +29,7 @@ function botOffline(message) {
         )
         .setColor(colours['blurple'])
         .setFooter(
-            'use `q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+            'use q!toggle ad to turn this off | Leaving this on is the least you can do to help'
         );
 
     message.channel.send(serverEmbed);
@@ -44,7 +44,7 @@ function ownServer(message) {
         )
         .setColor(colours['turq'])
         .setFooter(
-            'use `q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+            'use q!toggle ad to turn this off | Leaving this on is the least you can do to help'
         );
 
     message.channel.send(inviteEmbed);
@@ -59,7 +59,7 @@ function bugReport(message) {
         )
         .setColor(colours['turq'])
         .setFooter(
-            'use `q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+            'use q!toggle ad to turn this off | Leaving this on is the least you can do to help'
         );
 
     message.channel.send(bugEmbed);

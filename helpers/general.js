@@ -1,9 +1,3 @@
-const IMPOPPABLE_ROUNDS = [6, 100];
-const HARD_ROUNDS = [3, 80];
-const MEDIUM_ROUNDS = [1, 60];
-const EASY_ROUNDS = [1, 40];
-const ALL_ROUNDS = [1, 100];
-
 function is_str(s) {
     return typeof s === 'string' || s instanceof String;
 }
@@ -95,6 +89,12 @@ function toOrdinalSuffix(num) {
         : int + ordinals[3];
 }
 
+function fromOrdinalSuffix(ordinal) {
+    m = ordinal.match(/(\d+)\w\w/i)
+    if (m) return m[1]
+    else throw 'Not an ordinal number'
+}
+
 function toTitleCase(str) {
     str = str.toLowerCase();
 
@@ -141,12 +141,6 @@ function arraysEqual(_arr1, _arr2) {
 }
 
 module.exports = {
-    IMPOPPABLE_ROUNDS,
-    HARD_ROUNDS,
-    MEDIUM_ROUNDS,
-    EASY_ROUNDS,
-    ALL_ROUNDS,
-
     is_str,
     is_fn,
     numberWithCommas,
@@ -157,6 +151,7 @@ module.exports = {
     shuffle,
     range,
     toOrdinalSuffix,
+    fromOrdinalSuffix,
     toTitleCase,
     zip,
     chunk,

@@ -56,7 +56,7 @@ async function handleCommand(message) {
         const commandName = args.shift().toLowerCase();
         let command;
         // exception: check with they inputted a path as the commandName
-        if (isValidPath(commandName)) {
+        if (b.isValidUpgradeSet(commandName)) {
             command =
                 client.commands.get(args[0]) ||
                 client.commands.find(
@@ -90,7 +90,7 @@ async function handleCommand(message) {
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
         if (!Cooldowns.handleCooldown(command, message)) return;
-        if (isValidPath(commandName)) {
+        if (b.isValidUpgradeSet(commandName)) {
             let inputs = [commandName];
             command.execute(message, inputs, args[0]);
         } else {
@@ -154,17 +154,3 @@ module.exports = {
     configureCommands,
     handleCommand,
 };
-function isValidPath(u) {
-    if (!h.is_str(u) || u.length != 3) return false;
-
-    if (isNaN(u)) return false;
-
-    if (!u.includes('0')) return false;
-
-    if (/6|7|8|9/.test(u)) return false;
-
-    d = u.match(/3|4|5/g);
-    if (d && d.length > 1) return false;
-
-    return true;
-}

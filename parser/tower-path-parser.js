@@ -1,15 +1,15 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
-class TowerUpgradeParser {
+class TowerPathParser {
     type() {
-        return 'tower_upgrade';
+        return 'tower_path';
     }
 
-    constructor(...permittedTowerUpgrades) {
+    constructor(...permittedValues) {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
-            Aliases.allTowerUpgrades(),
-            permittedTowerUpgrades.map(d => d.toLowerCase()),
+            Aliases.allTowerPaths(),
+            permittedValues.map(pv => pv.toLowerCase())
         );
     }
 
@@ -19,4 +19,4 @@ class TowerUpgradeParser {
     }
 }
 
-module.exports = TowerUpgradeParser;
+module.exports = TowerPathParser;

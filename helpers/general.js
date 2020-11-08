@@ -89,6 +89,12 @@ function toOrdinalSuffix(num) {
         : int + ordinals[3];
 }
 
+function fromOrdinalSuffix(ordinal) {
+    m = ordinal.match(/(\d+)\w\w/i)
+    if (m) return m[1]
+    else throw 'Not an ordinal number'
+}
+
 function toTitleCase(str) {
     str = str.toLowerCase();
 
@@ -145,6 +151,7 @@ module.exports = {
     shuffle,
     range,
     toOrdinalSuffix,
+    fromOrdinalSuffix,
     toTitleCase,
     zip,
     chunk,

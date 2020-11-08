@@ -14,7 +14,7 @@ const Heroes = require('../helpers/heroes')
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
         return message.channel.send(
-            'Type `q!herolevel` and follow the instructions'
+            'Type `q!herolevel` and follow the instructions (you may also want to try `q!herolevelby`)'
         );
     }
 

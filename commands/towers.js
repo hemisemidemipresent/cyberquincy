@@ -1,5 +1,9 @@
 const { cyber } = require('../jsons/colours.json');
 
+const OptionalParser = require('../parser/optional-parser')
+
+const UpgradeSetParser = require('../parser/upgrade-set-parser')
+
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
     [
@@ -98,70 +102,25 @@ module.exports = {
     execute(message, args, commandName) {
         let name = findName(commandName);
 
-        if (!isValidPath(args[0])) {
+        parsed = CommandParser.parse(
+            args, 
+            new OptionalParser(
+                new UpgradeSetParser(),
+                '000'
+            )
+        )
+
+        if (parsed.hasErrors()) {
             return provideHelpMsg(message, name);
         }
 
-        if (!args[0] || args[1]) {
+        if (parsed.upgrade_set == '000') {
             let embed = baseTower(name);
             return message.channel.send(embed);
         }
-        let input = args[0].toString();
-        let arr = [
-            parseInt(input.charAt(0)),
-            parseInt(input.charAt(1)),
-            parseInt(input.charAt(2)),
-        ];
-        let temp = [...arr];
-        temp.sort();
-        const tier = temp[2];
-        let path = 1;
-        for (let i = 0; i < 3; i++) {
-            if (parseInt(tier) == parseInt(arr[i])) {
-                path = i + 1;
-            }
-        }
 
-        //let object = json[`${name}`].upgrades[path - 1][tier - 1];
-        let object = towerJSON[`${name}`].upgrades[path - 1][tier - 1];
-        if (!object) {
-            const embed = baseTower(name);
-
-            return message.channel.send(embed).then((msg) => {
-                msg.react('❌');
-                const filter = (reaction, user) => {
-                    return (
-                        reaction.emoji.name === '❌' &&
-                        user.id === message.author.id
-                    );
-                };
-                const collector = msg.createReactionCollector(filter, {
-                    time: 20000,
-                });
-
-                collector.on('collect', () => {
-                    msg.delete();
-                });
-            });
-        } else {
-            const embed = anyOtherTower(towerJSON, name, path, tier);
-            message.channel.send(embed).then((msg) => {
-                msg.react('❌');
-                const filter = (reaction, user) => {
-                    return (
-                        reaction.emoji.name === '❌' &&
-                        user.id === message.author.id
-                    );
-                };
-                const collector = msg.createReactionCollector(filter, {
-                    time: 20000,
-                });
-
-                collector.on('collect', () => {
-                    msg.delete();
-                });
-            });
-        }
+        const embed = anyOtherTower(towerJSON, name, parsed.upgrade_set);
+        return message.channel.send(embed);
     },
 };
 function provideHelpMsg(message, name) {
@@ -225,39 +184,55 @@ function baseTower(name) {
         );
     return embed;
 }
-function anyOtherTower(json, name, path, tier) {
+function anyOtherTower(json, name, upgradeSet) {
+    upgrades = upgradeSet.split('')
+    let sortedUpgrades = [...upgrades].sort();
+    const tier = sortedUpgrades[2];
+    const path = upgrades.findIndex(u => u == tier) + 1
+
+    const crossTier = sortedUpgrades[1];
+    const crossPath = upgrades.findIndex(u => u == crossTier) + 1
+
     let object = json[`${name}`].upgrades[path - 1][tier - 1];
 
-    let totalCost = 0;
-    let newCost = 0;
-    for (i = tier; i > 0; i--) {
-        newCost = json[`${name}`].upgrades[path - 1][i - 1].cost;
-
-        totalCost += parseInt(newCost);
-    }
     const baseCost = parseInt(json[`${name}`].cost);
-    totalCost += baseCost;
+
+    let pathCost = 0;
+    for (var subTier = 1; subTier <= tier; subTier++) {
+        pathCost += parseInt(
+            json[`${name}`].upgrades[path - 1][subTier - 1].cost
+        );
+    }
+
+    let crossPathCost = 0;
+    for (var subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
+        crossPathCost += parseInt(
+            json[`${name}`].upgrades[crossPath - 1][subCrossTier - 1].cost
+        );
+    }
+    const totalCost = baseCost + pathCost + crossPathCost;
 
     const embed = new Discord.MessageEmbed()
         .setColor(cyber)
-        .addField('name', object.name, true)
+        .setTitle(`${object.name} (${upgradeSet.split('').join('-')})`)
         .addField(
-            'cost',
+            'Cost',
             `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`,
             true
         )
-        .addField('notes', object.notes)
-        .addField('xp needed:', `${object.xp}`, true)
         .addField(
-            'total cost',
+            'Total cost',
             `${hard(totalCost)} (hard), ${totalCost} (medium)`,
             true
         )
+        .addField('Notes', object.notes)
+        .addField('XP Needed:', `${object.xp}`, true)
         .setFooter(
             'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
         );
     return embed;
 }
+
 function findName(commandName) {
     for (let i = 0; i < aliases.length; i++) {
         let towerAliasSet = aliases[i];
@@ -268,18 +243,4 @@ function findName(commandName) {
         }
     }
     return;
-}
-function isValidPath(u) {
-    if (!h.is_str(u) || u.length != 3) return false;
-
-    if (isNaN(u)) return false;
-
-    if (!u.includes('0')) return false;
-
-    if (/6|7|8|9/.test(u)) return false;
-
-    d = u.match(/3|4|5/g);
-    if (d && d.length > 1) return false;
-
-    return true;
 }

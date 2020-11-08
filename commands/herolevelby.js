@@ -61,13 +61,14 @@ function errorMessage(message, parsingErrors) {
 }
 
 function displayHeroPlacementRounds(message, results) {
-    heroLevels = calculateHeroPlacementRounds(
+    heroPlacementRound = calculateHeroPlacementRounds(
         results.hero,
         results.goal_round,
         results.desired_hero_level,
         results.map_difficulty
     );
     const embed = new Discord.MessageEmbed()
+        .setTitle(heroPlacementRound)
         .setColor(colours['cyber']);
 
     message.channel.send(embed);

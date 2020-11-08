@@ -11,7 +11,7 @@ function numberWithCommas(x) {
 }
 
 function numberAsCost(x) {
-    return '$' + module.exports.numberWithCommas(x);
+    return '$' + numberWithCommas(x);
 }
 
 function randomIntegerFromInclusiveRange(low, high) {
@@ -148,11 +148,11 @@ function binaryLambdaSearch(low, high, f) {
     if (n < 0 && f(mid + 1) > 0) return mid
     if (n < 0) {
         if (low == high) return Infinity
-        else return (mid, high, f)
+        else return binaryLambdaSearch(mid, high, f)
     }
     if (n > 0) {
         if (low == high) return -Infinity
-        else return (low, mid, f)
+        else return binaryLambdaSearch(low, mid, f)
     }
 }
 
@@ -172,4 +172,5 @@ module.exports = {
     zip,
     chunk,
     arraysEqual,
+    binaryLambdaSearch,
 };

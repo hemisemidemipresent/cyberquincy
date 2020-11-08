@@ -54,7 +54,11 @@ class SingleTextParser {
                 );
 
                 if (parsed.hasErrors()) {
-                    throw parsed.parsingErrors[0];
+                    return message.channel.send(
+                        new Discord.MessageEmbed()
+                            .setTitle(parsed.parsingErrors[0])
+                            .setColor(colours['red'])
+                    )
                 }
 
                 // Add result

@@ -238,6 +238,10 @@ function anyOtherTower(json, name, path, tier) {
     const baseCost = parseInt(json[`${name}`].cost);
     totalCost += baseCost;
 
+    let alternateCase = object.name.replace(/ +/g, ''); // removes all spaces from the upgrade name
+
+    let link = `https://github.com/hemisemidemipresent/cq-imgs/blob/main/tower/${alternateCase}UpgradeIcon.png?raw=true`;
+    // note: for identical upgrade names, AAAAAAAAAAAAAAAA (will be excluded in the future)
     const embed = new Discord.MessageEmbed()
         .setColor(cyber)
         .addField('name', object.name, true)
@@ -255,7 +259,8 @@ function anyOtherTower(json, name, path, tier) {
         )
         .setFooter(
             'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
-        );
+        )
+        .setThumbnail(link);
     return embed;
 }
 function findName(commandName) {

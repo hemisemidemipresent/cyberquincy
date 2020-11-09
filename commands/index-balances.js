@@ -28,8 +28,7 @@ async function execute(message, args) {
     entityParser = new OrParser(
         new TowerParser(),
         new TowerPathParser(),
-        new TowerUpgradeParser(),
-        new HeroParser()
+        new TowerUpgradeParser()
     )
 
     const parsed = CommandParser.parse(
@@ -73,6 +72,7 @@ async function locateSpecifiedTowerColumnIndex(parsed) {
 
         if(!towerHeader) throw `Something went wrong; ${parsed.tower} couldn't be found in the headers`
         
+        // TODO: Filter by other tower search types too
         if(Aliases.getCanonicalForm(towerHeader) == parsed.tower) {
             return colIndex
         }
@@ -108,7 +108,10 @@ async function parseBalanceChanges(parsed, entryColIndex) {
         v = sheet.getCell(rowIndex, GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN)).formattedValue
 
         let buff = sheet.getCell(rowIndex, entryColIndex).note;
+        buff = filterChangeNotes(buff, v, parsed)
+
         let nerf = sheet.getCell(rowIndex, entryColIndex + 1).note;
+        nerf = filterChangeNotes(nerf, v, parsed)
 
         if (buff) {
             buff = buff.replace(/✔️/g, '✅');
@@ -121,6 +124,18 @@ async function parseBalanceChanges(parsed, entryColIndex) {
     }
 
     return balances
+}
+
+function filterChangeNotes(note, v, parsed) {
+    const version = new Number(v)
+    if (parsed.versions.length == 2) {
+        minV, maxV = parsed.versions.sort
+        if (version < minV || version > maxV) return null;
+    } else if (parsed.versions.length == 1) {
+        if (version !== parsed.version) return null;
+    }
+
+    // TODO: Filter by tower specification here too
 }
 
 async function formatAndDisplayBalanceChanges(message, parsed, balances) {

@@ -46,10 +46,21 @@ function getA1ColumnName(col)
     return columnName;
 }
 
+function getColumnIndexFromLetter(letter) {
+    var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', i, j, result = 0;
+
+    for (i = 0, j = letter.length - 1; i < letter.length; i += 1, j -= 1) {
+      result += Math.pow(base.length, j) * (base.indexOf(letter[i]) + 1);
+    }
+  
+    return result;
+}
+
 module.exports = {
     BTD6_INDEX_KEY,
 
     load,
     sheetByName,
     rowColToA1,
+    getColumnIndexFromLetter,
 };

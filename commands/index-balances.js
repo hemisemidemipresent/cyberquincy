@@ -48,7 +48,97 @@ async function execute(message, args) {
         return message.channel.send('Feature in progress')
     }
 
-    return showBuffNerf(message, parsed.tower);
+    await loadTowerBuffNerfsTableCells()
+    colIndex = await locateSpecifiedTowerColumnIndex(parsed)
+    balanceChanges = await parseBalanceChanges(parsed, colIndex)
+    return await formatAndDisplayBalanceChanges(message, parsed, balanceChanges)
+}
+
+async function loadTowerBuffNerfsTableCells() {
+    const sheet = towersSheet();
+    const currentVersion = await parseCurrentVersion();
+
+    // Load from C23 to {end_column}{C+version}
+    bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(HEADER_ROW + currentVersion - 1, sheet.columnCount)
+    await sheet.loadCells(`${VERSION_COLUMN}${HEADER_ROW}:${bottomRightCellToBeLoaded}`);
+}
+
+async function locateSpecifiedTowerColumnIndex(parsed) {
+    const sheet = towersSheet();
+
+    // Parse {column}23 until tower alias is reached
+    for (colIndex = GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN); colIndex < sheet.columnCount; colIndex += 2) {
+        towerHeader = sheet.getCell(HEADER_ROW - 1, colIndex).value
+
+        if(!towerHeader) throw `Something went wrong; ${parsed.tower} couldn't be found in the headers`
+        
+        if(Aliases.getCanonicalForm(towerHeader) == parsed.tower) {
+            return colIndex
+        }
+    }
+}
+
+VERSION_COLUMN = 'C'
+HEADER_ROW = 23
+
+function towersSheet() {
+    return GoogleSheetsHelper.sheetByName(Btd6Index, 'Towers');
+}
+
+async function parseCurrentVersion() {
+    const sheet = towersSheet();
+
+    // Get version number from J3
+    await sheet.loadCells(`J3`);
+    const lastUpdatedAsOf = sheet.getCellByA1(`J3`).value
+    const lastUpdatedAsOfTokens = lastUpdatedAsOf.split(' ')
+    return new Number(
+        lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1]
+    )
+}
+
+async function parseBalanceChanges(parsed, entryColIndex) {
+    const sheet = towersSheet();
+    const currentVersion = await parseCurrentVersion();
+
+    let balances = {};
+    // Iterate for currentVersion - 1 rows since there's no row for v1.0
+    for (rowIndex = HEADER_ROW; rowIndex <= HEADER_ROW + currentVersion - 2; rowIndex++) {
+        console.log(rowIndex)
+        v = sheet.getCell(rowIndex, GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN)).formattedValue
+
+        let buff = sheet.getCell(rowIndex, entryColIndex).note;
+        let nerf = sheet.getCell(rowIndex, entryColIndex + 1).note;
+
+        if (buff) {
+            buff = buff.replace(/✔️/g, '✅');
+            balances[v] = buff
+        }
+        if (nerf) {
+            balances[v] = balances[v] ? balances[v] + "\n\n" : ""
+            balances[v] += nerf
+        }
+    }
+
+    return balances
+}
+
+async function formatAndDisplayBalanceChanges(message, parsed, balances) {
+    formattedTower = Aliases.toIndexNormalForm(parsed.tower)
+
+    let embed = new Discord.MessageEmbed()
+        .setTitle(`Buffs and Nerfs for ${formattedTower}\n`)
+        .setColor(colours['darkgreen'])
+    
+    for (const version in balances) {
+        embed.addField(`v. ${version}`, balances[version] + "\n\u200b")
+    }
+
+    try {
+        await message.channel.send(embed);
+    } catch(e) {
+        return message.channel.send(`Too many balance changes for ${formattedTower}; fix in progress`)
+    }
 }
 
 function errorMessage(message, parsingErrors) {
@@ -73,70 +163,4 @@ function helpMessage(message) {
         )
 
     return message.channel.send(helpEmbed);
-}
-
-MIN_COLUMN = 'C'
-MIN_ROW = 23
-
-async function showBuffNerf(message, tower) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'Towers');
-    // Get version number from J3
-    await sheet.loadCells(`J3`);
-    const lastUpdatedAsOf = sheet.getCellByA1(`J3`).value
-    const lastUpdatedAsOfTokens = lastUpdatedAsOf.split(' ')
-    const currentVersion = new Number(
-        lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1]
-    )
-
-    // Load from C23 to {end_column}{C+version}
-    bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(MIN_ROW + currentVersion, sheet.columnCount)
-    await sheet.loadCells(`${MIN_COLUMN}${MIN_ROW}:${bottomRightCellToBeLoaded}`);
-
-    // Parse {column}23 until tower alias is reached
-    entryColIndex = null
-    const headerRowIndex = MIN_ROW - 1 
-    const dartColIndex = MIN_COLUMN.charCodeAt(0) + 1 - 65;
-
-    for (colIndex = dartColIndex; colIndex < sheet.columnCount; colIndex += 2) {
-        towerHeader = sheet.getCell(headerRowIndex, colIndex).value
-
-        if(!towerHeader) throw `Something went wrong; ${tower} couldn't be found in the headers`
-        
-        if(Aliases.getCanonicalForm(towerHeader) == tower) {
-            entryColIndex = colIndex
-            break
-        }
-    }
-
-    let balances = {};
-    // Iterate rows until column C no longer shows a version number
-    for (row = headerRowIndex + 1; v = sheet.getCell(row, dartColIndex - 1).formattedValue; row++) {
-        let buff = sheet.getCell(row, entryColIndex).note;
-        let nerf = sheet.getCell(row, entryColIndex + 1).note;
-
-        if (buff) {
-            buff = buff.replace(/✔️/g, '✅');
-            balances[v] = buff
-        }
-        if (nerf) {
-            balances[v] = balances[v] ? balances[v] + "\n\n" : ""
-            balances[v] += nerf
-        }
-    }
-
-    formattedTower = Aliases.toIndexNormalForm(tower)
-
-    let embed = new Discord.MessageEmbed()
-        .setTitle(`Buffs and Nerfs for ${formattedTower}\n`)
-        .setColor(colours['darkgreen'])
-    
-    for (const version in balances) {
-        embed.addField(`v. ${version}`, balances[version] + "\n\u200b")
-    }
-
-    try {
-        await message.channel.send(embed);
-    } catch(e) {
-        return message.channel.send(`Too many balance changes for ${formattedTower}; fix in progress`)
-    }
 }

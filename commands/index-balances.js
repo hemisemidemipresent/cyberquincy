@@ -1,7 +1,15 @@
-const { darkgreen } = require('../jsons/colours.json');
 const GoogleSheetsHelper = require('../helpers/google-sheets');
-const TowerParser = require('../parser/tower-parser');
 
+const AnyOrderParser = require('../parser/any-order-parser')
+const OrParser = require('../parser/or-parser')
+const OptionalParser = require('../parser/optional-parser')
+
+const TowerParser = require('../parser/tower-parser');
+const TowerPathParser = require('../parser/tower-path-parser')
+const TowerUpgradeParser = require('../parser/tower-upgrade-parser')
+const HeroParser = require('../parser/hero-parser');
+
+const VersionParser = require('../parser/version-parser')
 
 module.exports = {
     name: 'balance',
@@ -16,10 +24,28 @@ async function execute(message, args) {
         return helpMessage(message);
     }
 
-    const parsed = CommandParser.parse(args, new TowerParser());
+    entityParser = new OrParser(
+        new TowerParser(),
+        new TowerPathParser(),
+        new TowerUpgradeParser(),
+        new HeroParser()
+    )
+
+    const parsed = CommandParser.parse(
+        args,
+        new AnyOrderParser(
+            new OptionalParser(entityParser),
+            new OptionalParser(new VersionParser()),
+            new OptionalParser(new VersionParser())
+        )
+    )
 
     if (parsed.hasErrors()) {
         return errorMessage(message, parsed.parsingErrors);
+    }
+
+    if (parsed.version || !parsed.tower) {
+        return message.channel.send('Feature in progress')
     }
 
     return showBuffNerf(message, parsed.tower);
@@ -58,8 +84,8 @@ async function showBuffNerf(message, tower) {
     await sheet.loadCells(`J3`);
     const lastUpdatedAsOf = sheet.getCellByA1(`J3`).value
     const lastUpdatedAsOfTokens = lastUpdatedAsOf.split(' ')
-    const currentVersion = parseInt(
-        lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1].split('.')[0]
+    const currentVersion = new Number(
+        lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1]
     )
 
     // Load from C23 to {end_column}{C+version}
@@ -102,7 +128,7 @@ async function showBuffNerf(message, tower) {
 
     let embed = new Discord.MessageEmbed()
         .setTitle(`Buffs and Nerfs for ${formattedTower}\n`)
-        .setColor(darkgreen)
+        .setColor(colours['darkgreen'])
     
     for (const version in balances) {
         embed.addField(`v. ${version}`, balances[version] + "\n\u200b")

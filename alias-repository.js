@@ -351,80 +351,9 @@ class AliasRepository extends Array {
 
         return modes.map((ag) => ag.canonical);
     }
-
-    allTowerUpgrades() {
-        const TOWER_CANONICAL_REGEX = /[a-z]#\d\d\d/i;
-
-        let upgrades = [];
-        for (let i = 0; i < this.length; i++) {
-            const canonical = this[i].canonical;
-            if (TOWER_CANONICAL_REGEX.test(canonical)) {
-                upgrades.push(canonical);
-            }
-        }
-        return upgrades;
-    }
-
-    // Gets all 0-0-0 tower names
-    allTowers() {
-        return [].concat(this.allPrimaryTowers())
-                 .concat(this.allMilitaryTowers())
-                 .concat(this.allMagicTowers())
-                 .concat(this.allSupportTowers()) 
-    }
-
-    allTowerPaths() {
-        return this.allTowers().map(t => {
-            return [`${t}#top-path`, `${t}#middle-path`, `${t}#bottom-path`]
-        }).flat()
-    }
     
     isHero(candidate) {
         return this.allHeroes().includes(candidate.toLowerCase())
-    }
-
-    isTowerUpgrade(candidate) {
-        return this.allTowerUpgrades().includes(candidate.toLowerCase())
-    }
-
-    isTower(candidate) {
-        return this.allTowers().includes(candidate.toLowerCase())
-    }
-
-    isTowerPath(candidate) {
-        return this.allTowerPaths().includes(candidate.toLowerCase())
-    }
-
-    allPrimaryTowers() {
-        const primaryTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('DART');
-
-        return primaryTowers.map((ag) => ag.canonical)
-                            .filter((upgrade) => !upgrade.includes('#'))
-    }
-
-    allMilitaryTowers() {
-        const militaryTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('HELI');
-
-        return militaryTowers.map((ag) => ag.canonical)
-                            .filter((upgrade) => !upgrade.includes('#'))
-    }
-
-    allMagicTowers() {
-        const magicTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('WIZ');
-
-        return magicTowers.map((ag) => ag.canonical)
-                            .filter((upgrade) => !upgrade.includes('#'))
-    }
-
-    allSupportTowers() {
-        const supportTowers = this.getAliasGroupsFromSameImmediateDirectoryAs('FARM');
-
-        return supportTowers.map((ag) => ag.canonical)
-                            .filter((upgrade) => !upgrade.includes('#'))
-    }
-
-    allWaterTowers() {
-        return ['sub', 'bucc', 'brick'].map((t) => this.getCanonicalForm(t));
     }
 
     allHeroes() {
@@ -436,68 +365,6 @@ class AliasRepository extends Array {
     allBloons() {
         const bloons = this.getAliasGroupsFromSameFileAs('RED');
         return bloons.map((ag) => ag.canonical);
-    }
-
-    towerUpgradeToIndexNormalForm(upgrade) {
-        const indexNormalUnformatted = this.getAliasSet(upgrade)[1];
-        return this.toIndexNormalForm(indexNormalUnformatted);
-    }
-
-    towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
-        // Re-assign tower to canonical and ensure that it exists and is a tower
-        if (
-            !(tower = this.getCanonicalForm(tower)) ||
-            !this.allTowers().includes(tower)
-        ) {
-            throw 'First argument must be a tower';
-        }
-
-        // Validate path
-        if (isNaN(path)) {
-            throw 'Second argument `path` must be 1, 2, or 3';
-        }
-        try {
-            path = parseInt(path);
-        } catch (e) {
-            throw 'Second argument `path` must be 1, 2, or 3';
-        }
-
-        if (path < 1 || path > 3) {
-            throw 'Second argument `path` must be 1, 2, or 3';
-        }
-
-        // Validate tier
-        if (!tier) {
-            return this.towerUpgradeToIndexNormalForm(`${tower}#222`);
-        }
-
-        if (isNaN(tier)) {
-            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
-        }
-        try {
-            tier = parseInt(tier);
-        } catch (e) {
-            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
-        }
-
-        if (tier < 0 || tier > 5) {
-            throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
-        }
-
-        // Convert path + tier to appropriate upgrade string like 003 or 400
-        const upgradeInt = tier * Math.pow(10, 3 - path);
-        const upgradeStr = upgradeInt.toString().padStart(3, '0');
-
-        // Combine tower with upgrade string to get tower upgrade canonical like wizard#300
-        return this.towerUpgradeToIndexNormalForm(`${tower}#${upgradeStr}`);
-    }
-
-    towerUpgradeToTower(towerUpgrade) {
-        if (this.allHeroes().includes(this.getCanonicalForm(towerUpgrade))) {
-            return towerUpgrade;
-        }
-
-        return this.getCanonicalForm(towerUpgrade).slice(0, -4);
     }
 
     mapToIndexAbbreviation(map) {

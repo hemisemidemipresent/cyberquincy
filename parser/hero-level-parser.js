@@ -26,7 +26,7 @@ class HeroLevelParser {
 
     // Parses all ways the command user could enter a hero level
     transformArgument(arg) {
-        var result = arg.match(/(?:l|lv|lvl)?\-?(\d\d?)/i);
+        var result = arg.match(/(?:l|lv|lvl)?-?(\d\d?)/i);
         if (result) return result[1];
         else
             throw new UserCommandError(

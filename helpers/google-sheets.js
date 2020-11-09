@@ -53,7 +53,7 @@ function getColumnIndexFromLetter(letter) {
       result += Math.pow(base.length, j) * (base.indexOf(letter[i]) + 1);
     }
   
-    return result;
+    return result - 1;
 }
 
 module.exports = {

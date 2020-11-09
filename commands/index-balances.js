@@ -9,7 +9,8 @@ const TowerPathParser = require('../parser/tower-path-parser')
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser')
 const HeroParser = require('../parser/hero-parser');
 
-const VersionParser = require('../parser/version-parser')
+const VersionParser = require('../parser/version-parser');
+const { getColumnIndexFromLetter } = require('../helpers/google-sheets');
 
 module.exports = {
     name: 'balance',
@@ -34,7 +35,7 @@ async function execute(message, args) {
     const parsed = CommandParser.parse(
         args,
         new AnyOrderParser(
-            new OptionalParser(entityParser),
+            entityParser,
             new OptionalParser(new VersionParser()),
             new OptionalParser(new VersionParser())
         )
@@ -67,7 +68,7 @@ async function locateSpecifiedTowerColumnIndex(parsed) {
     const sheet = towersSheet();
 
     // Parse {column}23 until tower alias is reached
-    for (colIndex = GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN); colIndex < sheet.columnCount; colIndex += 2) {
+    for (colIndex = GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN) + 1; colIndex < sheet.columnCount; colIndex += 2) {
         towerHeader = sheet.getCell(HEADER_ROW - 1, colIndex).value
 
         if(!towerHeader) throw `Something went wrong; ${parsed.tower} couldn't be found in the headers`
@@ -104,7 +105,6 @@ async function parseBalanceChanges(parsed, entryColIndex) {
     let balances = {};
     // Iterate for currentVersion - 1 rows since there's no row for v1.0
     for (rowIndex = HEADER_ROW; rowIndex <= HEADER_ROW + currentVersion - 2; rowIndex++) {
-        console.log(rowIndex)
         v = sheet.getCell(rowIndex, GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN)).formattedValue
 
         let buff = sheet.getCell(rowIndex, entryColIndex).note;

@@ -11,6 +11,7 @@ const HeroParser = require('../parser/hero-parser');
 
 const VersionParser = require('../parser/version-parser');
 const { getColumnIndexFromLetter } = require('../helpers/google-sheets');
+const towers = require('../helpers/towers');
 
 module.exports = {
     name: 'balance',
@@ -44,7 +45,7 @@ async function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
-    if (parsed.version || !parsed.tower) {
+    if (parsed.version) {
         return message.channel.send('Feature in progress')
     }
 
@@ -72,8 +73,12 @@ async function locateSpecifiedTowerColumnIndex(parsed) {
 
         if(!towerHeader) throw `Something went wrong; ${parsed.tower} couldn't be found in the headers`
         
-        // TODO: Filter by other tower search types too
-        if(Aliases.getCanonicalForm(towerHeader) == parsed.tower) {
+        canonicalHeader = Aliases.getCanonicalForm(towerHeader)
+        if (parsed.tower && parsed.tower == canonicalHeader) {
+            return colIndex
+        } else if (parsed.tower_path && parsed.tower_path.split('#')[0] == canonicalHeader) {
+            return colIndex
+        } else if (parsed.tower_upgrade && towers.towerUpgradeToTower(parsed.tower_upgrade) == canonicalHeader) {
             return colIndex
         }
     }
@@ -127,15 +132,21 @@ async function parseBalanceChanges(parsed, entryColIndex) {
 }
 
 function filterChangeNotes(note, v, parsed) {
+    if (!note) return null;
+
     const version = new Number(v)
-    if (parsed.versions.length == 2) {
-        minV, maxV = parsed.versions.sort
-        if (version < minV || version > maxV) return null;
-    } else if (parsed.versions.length == 1) {
-        if (version !== parsed.version) return null;
+    if (parsed.versions) {
+        if (parsed.versions.length == 2) {
+            minV, maxV = parsed.versions.sort
+            if (version < minV || version > maxV) return null;
+        } else if (parsed.versions.length == 1) {
+            if (version !== parsed.version) return null;
+        }
     }
 
-    // TODO: Filter by tower specification here too
+    notes = note.split("\n\n").filter(n => {
+        // Filter here by tower specification
+    }).join("\n\n")
 }
 
 async function formatAndDisplayBalanceChanges(message, parsed, balances) {

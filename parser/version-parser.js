@@ -33,13 +33,13 @@ class VersionParser {
             if (result) return result[1]
             else this.badFormattingError(arg);
         } else {
-            result = arg.match(/v(\d\d?)/i);
+            result = arg.match(/^v(\d\d?)$/i);
             if (result) return result[1];
             else {
                 result = arg.match(/v(\d\d?\.?\d?)/i);
                 if (result) {
                     throw new UserCommandError(
-                        `This command doesn't allow subversions, just natural numbers like \`10\` and \`6\`. Received ${arg} instead.`
+                        `This command doesn't allow subversions, just natural numbers like \`v10\` and \`v6\`. Received \`${arg}\` instead.`
                     )
                 } else this.badFormattingError(arg)
             }

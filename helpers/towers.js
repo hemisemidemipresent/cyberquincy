@@ -35,19 +35,6 @@ function isTowerPath(candidate) {
     return allTowerPaths().includes(candidate.toLowerCase())
 }
 
-allXTowerCanonicals = ['PRIMARY', 'MILITARY', 'MAGIC', 'SUPPORT'].map(ttype => {
-    casedType = h.toTitleCase(ttype)
-    allXTowerF = new Function(
-        `ttype`, 
-        `return allGroupTowers(ttype)`
-    )
-    allXTowerUpgradesF = new Function(
-        `ttype`, 
-        `return allGroupTowerUpgrades(ttype)`
-    )
-    return [allXTowerF, allXTowerUpgradesF]
-}).flat()
-
 function allPrimaryTowers() {
     return allGroupTowers('PRIMARY')
 }

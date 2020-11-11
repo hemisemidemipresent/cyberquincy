@@ -137,10 +137,14 @@ function filterChangeNotes(noteSet, v, parsed) {
         }
     }
 
+    // TODOS:
+    // - 4+xx format
+    // - xxx
+    // - Ask index maintainers to prepend ALL patch notes with {symbol} XYZ
     const notes = noteSet.split("\n\n").filter(note => {
         if (parsed.tower) return true;
         else {
-            const upgradeSet = note.split(" ")[1].replace(/x/gi, '0')
+            const upgradeSet = note.replace(/✔️|❌/g, "").trim().split(" ")[0].replace(/x/gi, '0')
             if (!Towers.isValidUpgradeSet(upgradeSet)) return handleIrregularNote(note, parsed)
 
             const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet)
@@ -207,7 +211,8 @@ function errorMessage(message, parsingErrors) {
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
         )
         .addField('Type `q!balance` for help', '\u200b')
-        .setColor(colours['orange']);
+        .setColor(colours['orange'])
+        .setFooter('Currently t1 and t2 towers are not searchable on their own. Fix coming')
 
     return message.channel.send(errorEmbed);
 }

@@ -159,6 +159,55 @@ function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
     return towerUpgradeToIndexNormalForm(`${tower}#${upgradeStr}`);
 }
 
+function pathTierFromUpgradeSet(upgradeSet) {
+    upgrades = upgradeSet.split('')
+    let sortedUpgrades = [...upgrades].sort();
+    const tier = sortedUpgrades[2];
+    const path = upgrades.findIndex(u => u == tier) + 1
+    return [path, tier]
+}
+
+function crossPathTierFromUpgradeSet(upgradeSet) {
+    upgrades = upgradeSet.split('')
+    let sortedUpgrades = [...upgrades].sort();
+    const crossTier = sortedUpgrades[1];
+    const crossPath = upgrades.findIndex(u => u == crossTier) + 1
+    return [crossPath, crossTier]
+}
+
+function isValidUpgradeSet(u) {
+    if (!h.is_str(u) || u.length !== 3) return false;
+
+    if (isNaN(u)) return false;
+
+    // Get array of 3 digits, sorted in ascending order
+    uSorted = u.split('').map(c => parseInt(c)).sort()
+
+    if (uSorted[0] !== 0) return false;
+
+    if (uSorted[1] > 2) return false;
+
+    if (uSorted[2] > 5) return false;
+
+    return true;
+}
+
+function formatTower(tower) {
+    if (isTower(tower)) {
+        return `${towerUpgradeToIndexNormalForm(tower)}`
+    } else if (isTowerPath(tower)) {
+        [towerName, path] = tower.split('#')
+        return `${h.toTitleCase(path.split('-').join(' '))} ` +
+                `${towerUpgradeToIndexNormalForm(towerName)}`
+    } else if(isTowerUpgrade(tower)) {
+        return `${towerUpgradeToIndexNormalForm(tower)}`
+    } else if (Aliases.isHero(tower)) {
+        return `${h.toTitleCase(tower)}`
+    } else {
+        throw `Tower ${tower} is not within allotted tower/hero category`
+    }
+}
+
 module.exports = {
     towerUpgradeToTower,
     allTowerUpgrades,
@@ -170,4 +219,8 @@ module.exports = {
     allWaterTowers,
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,
+    pathTierFromUpgradeSet,
+    crossPathTierFromUpgradeSet,
+    isValidUpgradeSet,
+    formatTower,
 }

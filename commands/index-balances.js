@@ -7,11 +7,8 @@ const OptionalParser = require('../parser/optional-parser')
 const TowerParser = require('../parser/tower-parser');
 const TowerPathParser = require('../parser/tower-path-parser')
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser')
-const HeroParser = require('../parser/hero-parser');
 
 const VersionParser = require('../parser/version-parser');
-const { getColumnIndexFromLetter } = require('../helpers/google-sheets');
-const towers = require('../helpers/towers');
 
 module.exports = {
     name: 'balance',
@@ -36,17 +33,13 @@ async function execute(message, args) {
         args,
         new AnyOrderParser(
             entityParser,
-            new OptionalParser(new VersionParser()),
-            new OptionalParser(new VersionParser())
+            new OptionalParser(new VersionParser(2, null, false)),
+            new OptionalParser(new VersionParser(3, null, false))
         )
     )
 
     if (parsed.hasErrors()) {
         return errorMessage(message, parsed.parsingErrors);
-    }
-
-    if (parsed.version) {
-        return message.channel.send('Feature in progress')
     }
 
     await loadTowerBuffNerfsTableCells()
@@ -78,7 +71,7 @@ async function locateSpecifiedTowerColumnIndex(parsed) {
             return colIndex
         } else if (parsed.tower_path && parsed.tower_path.split('#')[0] == canonicalHeader) {
             return colIndex
-        } else if (parsed.tower_upgrade && towers.towerUpgradeToTower(parsed.tower_upgrade) == canonicalHeader) {
+        } else if (parsed.tower_upgrade && Towers.towerUpgradeToTower(parsed.tower_upgrade) == canonicalHeader) {
             return colIndex
         }
     }
@@ -131,29 +124,67 @@ async function parseBalanceChanges(parsed, entryColIndex) {
     return balances
 }
 
-function filterChangeNotes(note, v, parsed) {
-    if (!note) return null;
+function filterChangeNotes(noteSet, v, parsed) {
+    if (!noteSet) return null;
 
-    const version = new Number(v)
+    const version = Number(v)
     if (parsed.versions) {
         if (parsed.versions.length == 2) {
-            minV, maxV = parsed.versions.sort
-            if (version < minV || version > maxV) return null;
+            const [minV, maxV] = parsed.versions.sort((a, b) => Number(a) - Number(b))
+            if (version < Number(minV) || version > Number(maxV)) return null;
         } else if (parsed.versions.length == 1) {
-            if (version !== parsed.version) return null;
+            if (version !== Number(parsed.version)) return null;
         }
     }
 
-    notes = note.split("\n\n").filter(n => {
-        // Filter here by tower specification
-    }).join("\n\n")
+    const notes = noteSet.split("\n\n").filter(note => {
+        if (parsed.tower) return true;
+        else {
+            const upgradeSet = note.split(" ")[1].replace(/x/gi, '0')
+            if (!Towers.isValidUpgradeSet(upgradeSet)) return handleIrregularNote(note, parsed)
+
+            if (parsed.tower_path) {
+                const parsedPath = parsed.tower_path.split("#")[1]
+                const [path, _] = Towers.pathTierFromUpgradeSet(upgradeSet)
+
+                return Aliases.getCanonicalForm(
+                    [null, "top", "mid", "bot"][path]
+                ) == parsedPath
+            } else if (parsed.tower_upgrade) {
+                const parsedUpgradeSet = parsed.tower_upgrade.split("#")[1]
+                return parsedUpgradeSet == upgradeSet
+            }
+        }
+    })
+
+    return notes.length > 0 ? notes.join("\n") : null
+}
+
+function handleIrregularNote(note, parsed) {
+    // TODO: Handle non-standard notes rather than always just not including them
+    return false
 }
 
 async function formatAndDisplayBalanceChanges(message, parsed, balances) {
-    formattedTower = Aliases.toIndexNormalForm(parsed.tower)
+    formattedTower = Towers.formatTower(parsed.tower || parsed.tower_upgrade || parsed.tower_path)
+
+    if(Object.keys(balances).length == 0) {
+        versionText = ""
+        if (parsed.versions && parsed.versions.length == 2) {
+            sortedVersions = parsed.versions.sort((a, b) => Number(a) - (b))
+            versionText = ` between ${sortedVersions.map(v => `v${v}`).join(" & ")}`
+        } else {
+            versionText = ` in v${parsed.version}`
+        }
+        return message.channel.send(
+            new Discord.MessageEmbed()
+                .setTitle(`No patch notes found for ${formattedTower}${versionText}`)
+                .setColor(colours['yellow'])
+        )
+    }
 
     let embed = new Discord.MessageEmbed()
-        .setTitle(`Buffs and Nerfs for ${formattedTower}\n`)
+        .setTitle(`Buffs and Nerfs for ${formattedTower}`)
         .setColor(colours['darkgreen'])
     
     for (const version in balances) {
@@ -163,7 +194,7 @@ async function formatAndDisplayBalanceChanges(message, parsed, balances) {
     try {
         await message.channel.send(embed);
     } catch(e) {
-        return message.channel.send(`Too many balance changes for ${formattedTower}; fix in progress`)
+        return message.channel.send(`Too many balance changes for ${formattedTower}; Try a more narrow search. Type \`q!balance\` for details.`)
     }
 }
 
@@ -184,8 +215,12 @@ function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!balance` HELP')
         .addField(
-            '`q!balance <tower>`',
-            'Get the patch notes for a given tower\n`q!balance heli`'
+            '`q!balance <tower/tower_path/tower_upgrade>`',
+            'Get the patch notes for a given tower\n`q!balance heli\nq!balance wiz#middle-path\nq!balance icicle_impale`'
+        )
+        .addField(
+            'Incorporate a version, or two to specify a range',
+            '`q!balance sub#mid v15 v18`'
         )
 
     return message.channel.send(helpEmbed);

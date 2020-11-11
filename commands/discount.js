@@ -100,7 +100,7 @@ module.exports = {
         // all this is a bit sketch
 
         let name = findName(args[0]);
-        if (!b.isValidUpgradeSet(args[1])) {
+        if (!Towers.isValidUpgradeSet(args[1])) {
             return message.channel.send('not valid path');
         }
         fetch(url, settings)

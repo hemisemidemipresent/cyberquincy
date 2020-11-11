@@ -34,7 +34,6 @@ function pingHeroku() {
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.h = require('./helpers/general.js');
-    global.b = require('./helpers/bloons-general.js')
     global.Towers = require('./helpers/towers')
     global.Constants = require('./helpers/constants')
     global.Files = require('./helpers/files.js');

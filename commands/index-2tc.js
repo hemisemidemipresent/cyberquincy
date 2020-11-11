@@ -110,22 +110,6 @@ async function execute(message, args) {
     }
 }
 
-function formatTower(tower) {
-    if (Towers.isTower(tower)) {
-        return `${Towers.towerUpgradeToIndexNormalForm(tower)}`
-    } else if (Towers.isTowerPath(tower)) {
-        [towerName, path] = tower.split('#')
-        return `${h.toTitleCase(path.split('-').join(' '))} ` +
-                `${Towers.towerUpgradeToIndexNormalForm(towerName)}`
-    } else if(Towers.isTowerUpgrade(tower)) {
-        return `${Towers.towerUpgradeToIndexNormalForm(tower)}`
-    } else if (Aliases.isHero(tower)) {
-        return `${h.toTitleCase(tower)}`
-    } else {
-        throw `tower ${tower} is not within allotted tower/hero category. Failed to build 2TC embed title`
-    }
-}
-
 function displayCombos(message, combos, parsed) {
     if (combos.length == 0) {
         return message.channel.send(
@@ -291,7 +275,7 @@ function embedTitle(parsed, combos) {
         tower = towers[i]
         if (i == 0) title += 'with '
         else title += 'and '
-        title += `${formatTower(tower)} `
+        title += `${Towers.formatTower(tower)} `
     }
     if (parsed.version) title += `in v${parsed.version} `
     return title.slice(0, title.length - 1)

@@ -143,16 +143,17 @@ function filterChangeNotes(noteSet, v, parsed) {
             const upgradeSet = note.split(" ")[1].replace(/x/gi, '0')
             if (!Towers.isValidUpgradeSet(upgradeSet)) return handleIrregularNote(note, parsed)
 
+            const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet)
             if (parsed.tower_path) {
                 const parsedPath = parsed.tower_path.split("#")[1]
-                const [path, _] = Towers.pathTierFromUpgradeSet(upgradeSet)
 
                 return Aliases.getCanonicalForm(
                     [null, "top", "mid", "bot"][path]
                 ) == parsedPath
             } else if (parsed.tower_upgrade) {
                 const parsedUpgradeSet = parsed.tower_upgrade.split("#")[1]
-                return parsedUpgradeSet == upgradeSet
+                const [parsedPath, parsedTier] = Towers.pathTierFromUpgradeSet(parsedUpgradeSet)
+                return parsedPath == path && parsedTier == tier
             }
         }
     })

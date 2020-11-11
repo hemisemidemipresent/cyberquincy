@@ -174,7 +174,7 @@ async function formatAndDisplayBalanceChanges(message, parsed, balances) {
         if (parsed.versions && parsed.versions.length == 2) {
             sortedVersions = parsed.versions.sort((a, b) => Number(a) - (b))
             versionText = ` between ${sortedVersions.map(v => `v${v}`).join(" & ")}`
-        } else {
+        } else if (parsed.versions) {
             versionText = ` in v${parsed.version}`
         }
         return message.channel.send(

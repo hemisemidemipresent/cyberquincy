@@ -48,7 +48,7 @@ class VersionParser {
 
     badFormattingError(arg) {
         throw new UserCommandError(
-            `Version number must look like \`v#{#.#}\`. (V10{.} refers to v10.0, v10.1, and v10.2 e.g.) Got ${arg} instead.`
+            `Version number must look like \`v#{#.#}\`. (V10{.} refers to v10.0, v10.1, and v10.2 e.g.) Got \`${arg}\` instead.`
         );
     }
 }

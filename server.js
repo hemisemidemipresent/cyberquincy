@@ -34,8 +34,8 @@ function pingHeroku() {
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.h = require('./helpers/general.js');
+    global.b = require('./helpers/bloons-general')
     global.Towers = require('./helpers/towers')
-    global.Constants = require('./helpers/constants')
     global.Files = require('./helpers/files.js');
     global.AliasRepository = require('./alias-repository.js');
 
@@ -111,6 +111,7 @@ async function googleSheetsInitialization() {
     );
     console.log('<INITIATE> Btd6 Index has been loaded');
 }
+
 async function towerJSONinit() {
     let bool = require('./1/config.json')['towerJSON'];
     if (!bool) return;
@@ -129,6 +130,7 @@ async function towerJSONinit() {
             );
         });
 }
+
 function configureAliases() {
     const AliasRepository = require('./alias-repository.js');
     global.Aliases = new AliasRepository();

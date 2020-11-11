@@ -223,6 +223,7 @@ function helpMessage(message) {
             'Incorporate a version, or two to specify a range',
             '`q!balance sub#mid v15 v18`'
         )
+        .setFooter('Currently t1 and t2 towers are not searchable on their own. Fix coming')
 
     return message.channel.send(helpEmbed);
 }

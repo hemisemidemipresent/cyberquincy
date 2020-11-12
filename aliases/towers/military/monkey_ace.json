@@ -3,7 +3,7 @@
 
     "300": ["fighter_plane", "fighter", "fplane"],
     "400": ["operation:_dart_storm", "ods"],
-    "500": ["sky_shredder", "shredder", "shred"],
+    "500": ["sky_shredder", "shredder", "shred", "sshred", "sshredder"],
 
     "030": ["bomber_ace", "bomber"],
     "040": ["ground_zero", "gz"],

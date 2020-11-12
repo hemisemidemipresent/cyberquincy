@@ -10,6 +10,6 @@
     "050": ["special_poperations", "marine", "mar"],
 
     "003": ["moab_shove", "shove"],
-    "004": ["comanche_defense", "cdef"],
+    "004": ["comanche_defense", "cdef", "comdef"],
     "005": ["comanche_commander", "comcom", "commcomm"]
 }

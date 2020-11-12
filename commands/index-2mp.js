@@ -495,11 +495,9 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
 
         // Check if tower is water tower
         impossibleMaps = [];
-        if (
-            Aliases.allWaterTowers().includes(
-                Aliases.towerUpgradeToTower(tower)
-            )
-        ) {
+        if (Towers.allWaterTowers().includes(
+                Aliases.isHero(tower) ? tower : Towers.towerUpgradeToTower(tower)
+        )) {
             // Calculate impossible maps (those that do not contain any water)
             nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
                 Aliases.mapToIndexAbbreviation(m)
@@ -702,7 +700,7 @@ async function display2MPTowerStatistics(message, tower) {
 
     for (var tier = 3; tier <= 5; tier++) {
         for (var path = 1; path <= 3; path++) {
-            towerUpgradeName = Aliases.towerUpgradeFromTowerAndPathAndTier(
+            towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(
                 tower,
                 path,
                 tier
@@ -764,7 +762,7 @@ async function findTowerRow(tower) {
 
         if (!towerCandidate) continue;
 
-        if (Aliases.towerUpgradeToIndexNormalForm(tower) == towerCandidate) {
+        if (Towers.towerUpgradeToIndexNormalForm(tower) == towerCandidate) {
             entryRow = row;
             break;
         }

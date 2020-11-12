@@ -110,22 +110,6 @@ async function execute(message, args) {
     }
 }
 
-function formatTower(tower) {
-    if (Aliases.isTower(tower)) {
-        return `${Aliases.towerUpgradeToIndexNormalForm(tower)}`
-    } else if (Aliases.isTowerPath(tower)) {
-        [towerName, path] = tower.split('#')
-        return `${h.toTitleCase(path.split('-').join(' '))} ` +
-                `${Aliases.towerUpgradeToIndexNormalForm(towerName)}`
-    } else if(Aliases.isTowerUpgrade(tower)) {
-        return `${Aliases.towerUpgradeToIndexNormalForm(tower)}`
-    } else if (Aliases.isHero(tower)) {
-        return `${h.toTitleCase(tower)}`
-    } else {
-        throw `tower ${tower} is not within allotted tower/hero category. Failed to build 2TC embed title`
-    }
-}
-
 function displayCombos(message, combos, parsed) {
     if (combos.length == 0) {
         return message.channel.send(
@@ -291,7 +275,7 @@ function embedTitle(parsed, combos) {
         tower = towers[i]
         if (i == 0) title += 'with '
         else title += 'and '
-        title += `${formatTower(tower)} `
+        title += `${Towers.formatTower(tower)} `
     }
     if (parsed.version) title += `in v${parsed.version} `
     return title.slice(0, title.length - 1)
@@ -331,14 +315,14 @@ function filterCombos(filteredCombos, parsed) {
     }
 
     if (parsed.person) {
-        function personFilter(map, completion) {
+        function personFilter(_, completion) {
             return completion.PERSON.toLowerCase() == parsed.person
         };
         filteredCombos = filterByCompletion(personFilter, filteredCombos)
     }
 
     if (parsed.map) {
-        function mapFilter(map, completion) {
+        function mapFilter(map, _) {
             return Aliases.toAliasNormalForm(map) == parsed.map
         }
         filteredCombos = filterByCompletion(mapFilter, filteredCombos)
@@ -346,7 +330,7 @@ function filterCombos(filteredCombos, parsed) {
 
     // Unless searching by map or person, the command user wants OG completions and not alt map spam
     if (parsed.version || (!parsed.person && !parsed.map)) { 
-        function ogFilter(map, completion) {
+        function ogFilter(_, completion) {
             return completion.OG
         }
         filteredCombos = filterByCompletion(ogFilter, filteredCombos)
@@ -384,12 +368,12 @@ function filterByCompletion(filter, combos) {
 
 function towerMatch(combo, tower) {
     comboTowers = [combo.TOWER_1, combo.TOWER_2]
-    if (Aliases.isTower(tower)) {
+    if (Towers.isTower(tower)) {
         return comboTowers.map(t => {
             towerUpgrade = Aliases.toAliasNormalForm(t.NAME)
-            return Aliases.towerUpgradeToTower(towerUpgrade)
+            return Towers.towerUpgradeToTower(towerUpgrade)
         }).indexOf(tower) + 1
-    } else if(Aliases.isTowerUpgrade(tower)) {
+    } else if(Towers.isTowerUpgrade(tower)) {
         return comboTowers.map(t => {
             towerUpgrade = Aliases.toAliasNormalForm(t.NAME)
             return Aliases.getCanonicalForm(towerUpgrade)
@@ -398,14 +382,14 @@ function towerMatch(combo, tower) {
         return comboTowers.map(t => {
             return t.NAME.toLowerCase()
         }).indexOf(tower) + 1
-    } else if (Aliases.isTowerPath(tower)) {
+    } else if (Towers.isTowerPath(tower)) {
         return comboTowers.map(t => {
             upgradeArray = t.UPGRADE.split('-').map(u => parseInt(u))
             pathIndex = upgradeArray.indexOf(Math.max(...upgradeArray))
             path = pathIndex == 0 ? "top" : pathIndex == 1 ? "middle" : "bottom"
             
             towerUpgrade = Aliases.toAliasNormalForm(t.NAME)
-            towerBase = Aliases.towerUpgradeToTower(towerUpgrade)
+            towerBase = Towers.towerUpgradeToTower(towerUpgrade)
             return `${towerBase}#${path}-path`
         }).indexOf(tower) + 1
     } else {

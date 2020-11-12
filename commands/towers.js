@@ -184,14 +184,10 @@ function baseTower(name) {
         );
     return embed;
 }
-function anyOtherTower(json, name, upgradeSet) {
-    upgrades = upgradeSet.split('')
-    let sortedUpgrades = [...upgrades].sort();
-    const tier = sortedUpgrades[2];
-    const path = upgrades.findIndex(u => u == tier) + 1
 
-    const crossTier = sortedUpgrades[1];
-    const crossPath = upgrades.findIndex(u => u == crossTier) + 1
+function anyOtherTower(json, name, upgradeSet) {
+    const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet)
+    const [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgradeSet)
 
     let object = json[`${name}`].upgrades[path - 1][tier - 1];
 

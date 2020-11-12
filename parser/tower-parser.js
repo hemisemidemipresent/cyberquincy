@@ -8,7 +8,7 @@ module.exports = class TowerParser {
     constructor(...permitted_towers) {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
-            Aliases.allTowers(),
+            Towers.allTowers(),
             permitted_towers.map(d => d.toLowerCase()),
         );
     }

@@ -1,8 +1,8 @@
 const { cyber } = require('../jsons/colours.json');
 
-const OptionalParser = require('../parser/optional-parser')
+const OptionalParser = require('../parser/optional-parser');
 
-const UpgradeSetParser = require('../parser/upgrade-set-parser')
+const UpgradeSetParser = require('../parser/upgrade-set-parser');
 
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
@@ -103,12 +103,9 @@ module.exports = {
         let name = findName(commandName);
 
         parsed = CommandParser.parse(
-            args, 
-            new OptionalParser(
-                new UpgradeSetParser(),
-                '000'
-            )
-        )
+            args,
+            new OptionalParser(new UpgradeSetParser(), '000')
+        );
 
         if (parsed.hasErrors()) {
             return provideHelpMsg(message, name);
@@ -185,13 +182,13 @@ function baseTower(name) {
     return embed;
 }
 function anyOtherTower(json, name, upgradeSet) {
-    upgrades = upgradeSet.split('')
+    upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
     const tier = sortedUpgrades[2];
-    const path = upgrades.findIndex(u => u == tier) + 1
+    const path = upgrades.findIndex((u) => u == tier) + 1;
 
     const crossTier = sortedUpgrades[1];
-    const crossPath = upgrades.findIndex(u => u == crossTier) + 1
+    const crossPath = upgrades.findIndex((u) => u == crossTier) + 1;
 
     let object = json[`${name}`].upgrades[path - 1][tier - 1];
 

@@ -1,15 +1,59 @@
 {
-    "xyz": ["dart", "dart-monkey", "dm"],
-
-    "300": ["spike-o-pult", "pult", "cat", "cata", "cato", "spikepult", "spult"],
-    "400": ["juggernaut", "jugg", "jug", "naut"],
-    "500": ["ultra-juggernaut", "ultra", "ujug", "uj"],
-
-    "030": ["triple_shot", "trip", "tripshot", "tdarts", "tdart"],
-    "040": ["super_monkey_fan_club", "smfc"],
-    "050": ["plasma_monkey_fan_club", "pmfc"],
-
-    "003": ["crossbow", "xbow"],
-    "004": ["sharp_shooter", "sharp", "sharp_shot", "sshot", "sshoot"],
-    "005": ["crossbow_master", "xbm"] 
+    "xyz": [
+        "dart",
+        "dart-monkey",
+        "dm"
+    ],
+    "300": [
+        "spike-o-pult",
+        "pult",
+        "cat",
+        "cata",
+        "cato",
+        "spikepult",
+        "spult"
+    ],
+    "400": [
+        "juggernaut",
+        "jugg",
+        "jug",
+        "naut"
+    ],
+    "500": [
+        "ultra-juggernaut",
+        "ultra",
+        "ujug",
+        "uj",
+        "ujugg"
+    ],
+    "030": [
+        "triple_shot",
+        "trip",
+        "tripshot",
+        "tdarts",
+        "tdart"
+    ],
+    "040": [
+        "super_monkey_fan_club",
+        "smfc"
+    ],
+    "050": [
+        "plasma_monkey_fan_club",
+        "pmfc"
+    ],
+    "003": [
+        "crossbow",
+        "xbow"
+    ],
+    "004": [
+        "sharp_shooter",
+        "sharp",
+        "sharp_shot",
+        "sshot",
+        "sshoot"
+    ],
+    "005": [
+        "crossbow_master",
+        "xbm"
+    ]
 }

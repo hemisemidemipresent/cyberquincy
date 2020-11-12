@@ -21,9 +21,10 @@ class SingleTextParser {
             throw `Must provide just a single concrete parser to ${typeof this}`
         }
 
+        const key = this.fieldName ? `${this.fieldName}_${this.parser.type()}` : this.parser.type()
         // Continue to the next interaction if default is provided
         if (this.default) {
-            results[this.fieldName] = this.default;
+            results[key] = this.default;
             chain.shift()(message, chain, results)
             return;
         }
@@ -53,11 +54,14 @@ class SingleTextParser {
                 );
 
                 if (parsed.hasErrors()) {
-                    throw parsed.parsingErrors[0];
+                    return message.channel.send(
+                        new Discord.MessageEmbed()
+                            .setTitle(parsed.parsingErrors[0])
+                            .setColor(colours['red'])
+                    )
                 }
 
                 // Add result
-                const key = this.fieldName ? this.fieldName : this.parser.type()
                 results[key] = parsed[this.parser.type()];
 
                 // Invoke first method in chain and remove it from the array

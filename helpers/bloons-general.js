@@ -1,3 +1,9 @@
+const IMPOPPABLE_ROUNDS = [6, 100];
+const HARD_ROUNDS = [3, 80];
+const MEDIUM_ROUNDS = [1, 60];
+const EASY_ROUNDS = [1, 40];
+const ALL_ROUNDS = [1, 100];
+
 function isValidUpgradeSet(u) {
     if (!h.is_str(u) || u.length !== 3) return false;
 
@@ -16,5 +22,11 @@ function isValidUpgradeSet(u) {
 }
 
 module.exports = {
+    IMPOPPABLE_ROUNDS,
+    HARD_ROUNDS,
+    MEDIUM_ROUNDS,
+    EASY_ROUNDS,
+    ALL_ROUNDS,
+    
     isValidUpgradeSet,
 }

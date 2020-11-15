@@ -85,7 +85,7 @@ function displayHeroLevels(message, results) {
 // the lowest index (which represents the round) where the value (which represents the cost the level up)
 // is 0 or less, meaning the level has already been reached.
 function calculateHeroLevels(hero, startingRound, mapDifficulty) {
-    heroLevelingChart = Heroes.levelingChart(hero, startingRound, mapDifficulty)
+    heroLevelingChart = Heroes.levelingChart(hero, startingRound, mapDifficulty, 0)
 
     roundForLevelUpTo = [0, startingRound].concat(
         // Levels 0 and 1

@@ -49,7 +49,7 @@ LEVELING_MAP_DIFFICULTY_MODIFIERS = {
 // the level 3 array depends on 2, etc.
 //
 // These calculations are super analogous to those in the BTD6 Index written in VBA
-function levelingChart(hero, startingRound, mapDifficulty) {
+function levelingChart(hero, startingRound, mapDifficulty, engzRound=Infinity) {
     heroSpecificLevelingMultiplier =
         LEVELING_MODIFIERS[hero.toUpperCase()]
     mapSpecificLevelingMultiplier =
@@ -59,7 +59,7 @@ function levelingChart(hero, startingRound, mapDifficulty) {
 
     roundVsLevelMatrix = [[]] // Level 0 instantiated
     roundVsLevelMatrix.push(
-        fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier)
+        fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier, engzRound)
     );
 
     for (level = 2; level <= 20; level++) {
@@ -79,7 +79,7 @@ function levelingChart(hero, startingRound, mapDifficulty) {
     return roundVsLevelMatrix
 }
 
-function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier) {
+function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier, engzRound) {
     baseCost = null;
     if (startingRound <= 21) {
         baseCost = 10 * startingRound * startingRound + 10 * startingRound - 20;
@@ -123,7 +123,9 @@ function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier) {
         );
     }
 
-    return level1CostArray;
+    return level1CostArray.map((cost, round) => {
+        return cost && (round > engzRound) ? cost * 1.5 : cost
+    });
 }
 
 module.exports = {

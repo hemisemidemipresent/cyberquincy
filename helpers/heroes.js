@@ -88,6 +88,16 @@ function heroLevelXpRequirements(hero) {
     })
 }
 
+function levelingChart(hero, startingRound, mapDifficulty) {
+    heroXpGains = heroLevelXpRequirements(hero)
+
+    return accumulatedXpCurve(startingRound, mapDifficulty).map(axp => {
+        if (axp == null) return null
+
+        return heroXpGains.map(txp => txp == null ? null : txp - axp)
+    })
+}
+
 function levelingCurve(hero, startingRound, mapDifficulty) {
     accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty)
 
@@ -105,4 +115,5 @@ function levelingCurve(hero, startingRound, mapDifficulty) {
 
 module.exports = {
     levelingCurve,
+    levelingChart,
 }

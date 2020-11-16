@@ -1,7 +1,7 @@
 module.exports = {
     name: 'merge',
     alias: ['combine'],
-    rawargs: true,
+    rawArgs: true,
 
     async execute(message, args) {
         const { GoogleSpreadsheet } = require('google-spreadsheet');

@@ -20,7 +20,7 @@ BASE_XP_TO_GET_LEVEL = [
     20700,
     16470,
     17280,
-]
+];
 
 LEVELING_MODIFIERS = {
     ADORA: 1.71,
@@ -34,14 +34,14 @@ LEVELING_MODIFIERS = {
     OBYN: 1,
     PAT: 1.425,
     QUINCY: 1,
-}
+};
 
 LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     BEGINNER: 1,
     INTERMEDIATE: 1.1,
     ADVANCED: 1.2,
     EXPERT: 1.3,
-}
+};
 
 function accumulatedXpCurve(startingRound, mapDifficulty) {
     mapSpecificLevelingMultiplier =
@@ -116,4 +116,4 @@ function levelingCurve(hero, startingRound, mapDifficulty) {
 module.exports = {
     levelingCurve,
     levelingChart,
-}
+};

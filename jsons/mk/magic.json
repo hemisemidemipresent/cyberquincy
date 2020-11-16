@@ -1,0 +1,179 @@
+[
+    {
+        "investmentRequired": 0,
+        "tier": 1,
+        "knowledgeSets": [
+            {
+                "level": 1,
+                "mmCost": 0,
+                "knowledges": [
+                    {
+                        "id": "SuperRange",
+                        "prerequisites": []
+                    },
+                    {
+                        "id": "MagicTricks",
+                        "prerequisites": []
+                    },
+                    {
+                        "id": "LingeringMagic",
+                        "prerequisites": []
+                    }
+                ]
+            },
+            {
+                "level": 2,
+                "mmCost": 0,
+                "knowledges": [
+                    {
+                        "id": "CheaperDoubles",
+                        "prerequisites": [
+                            "SuperRange"
+                        ]
+                    },
+                    {
+                        "id": "HeavyKnockback",
+                        "prerequisites": [
+                            "SuperRange"
+                        ]
+                    },
+                    {
+                        "id": "HotMagic",
+                        "prerequisites": [
+                            "LingeringMagic"
+                        ]
+                    },
+                    {
+                        "id": "SpeedyBrewing",
+                        "prerequisites": [
+                            "MagicTricks"
+                        ]
+                    },
+                    {
+                        "id": "MoMonkeyMoney",
+                        "prerequisites": [
+                            "SpeedyBrewing"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "investmentRequired": 4,
+        "tier": 2,
+        "knowledgeSets": [
+            {
+                "level": 3,
+                "mmCost": 0,
+                "knowledges": [
+                    {
+                        "id": "DiversionTactics",
+                        "prerequisites": [
+                            "CheaperDoubles"
+                        ]
+                    },
+                    {
+                        "id": "StrikeDownTheFalse",
+                        "prerequisites": [
+                            "HeavyKnockback"
+                        ]
+                    },
+                    {
+                        "id": "WarmOak",
+                        "prerequisites": [
+                            "HotMagic"
+                        ]
+                    },
+                    {
+                        "id": "FlameJet",
+                        "prerequisites": [
+                            "MagicTricks",
+                            "HotMagic"
+                        ]
+                    },
+                    {
+                        "id": "StrongTonic",
+                        "prerequisites": [
+                            "SpeedyBrewing"
+                        ]
+                    }
+                ]
+            },
+            {
+                "level": 4,
+                "mmCost": 250,
+                "knowledges": [
+                    {
+                        "id": "ArcaneImpale",
+                        "prerequisites": [
+                            "FlameJet"
+                        ]
+                    },
+                    {
+                        "id": "AcidStability",
+                        "prerequisites": [
+                            "StrongTonic"
+                        ]
+                    },
+                    {
+                        "id": "ColdFront",
+                        "prerequisites": [
+                            "WarmOak"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "investmentRequired": 8,
+        "tier": 3,
+        "knowledgeSets": [
+            {
+                "level": 5,
+                "mmCost": 500,
+                "knowledges": [
+                    {
+                        "id": "DeadlyTranquility",
+                        "prerequisites": [
+                            "DiversionTactics"
+                        ]
+                    },
+                    {
+                        "id": "ThereCanBeOnlyOne",
+                        "prerequisites": [
+                            "StrikeDownTheFalse"
+                        ]
+                    },
+                    {
+                        "id": "VineRupture",
+                        "prerequisites": [
+                            "ColdFront"
+                        ]
+                    }
+                ]
+            },
+            {
+                "level": 6,
+                "mmCost": 1000,
+                "knowledges": [
+                    {
+                        "id": "ManaShield",
+                        "prerequisites": [
+                            "ArcaneImpale"
+                        ]
+                    },
+                    {
+                        "id": "TinyTornadoes",
+                        "prerequisites": [
+                            "DeadlyTranquility",
+                            "ColdFront",
+                            "VineRupture"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

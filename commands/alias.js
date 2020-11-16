@@ -5,7 +5,7 @@ module.exports = {
 
     aliases: ['al', 'aliases'],
 
-    rawargs: true,
+    rawArgs: true,
 
     execute(message, args) {
         // search up alias db

@@ -133,7 +133,12 @@ module.exports = {
 
 function levelingCurve(hero, startingRound, mapDifficulty) {
     heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()]
-    total_xp_to_get_level = BASE_COST_TO_GET_LEVEL.map(bxp => Math.ceil(bxp * heroSpecificLevelingMultiplier))
+    acc = 0
+    totalXpToGetLevel = BASE_COST_TO_GET_LEVEL.map(bxp => {
+        return bxp == null ? 
+                null : 
+                acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier)
+    })
 
     mapSpecificLevelingMultiplier =
         LEVELING_MAP_DIFFICULTY_MODIFIERS[
@@ -141,13 +146,12 @@ function levelingCurve(hero, startingRound, mapDifficulty) {
         ]
 
     xpGains = []
-    baseXpGainGain = 0
-    for (round = 0; round < startingRound; round++) {
-        xpGains.push(null)
-    }
-    for (round = startingRound; round <= 100; round++) {
-        if (round == 1) {
-            baseXpGainGain = 40
+    let baseXpGainGain
+    for (round = 0; round <= 100; round++) {
+        if (round == 0) {
+            baseXpGainGain = 0
+        } else if (round == 1) {
+            baseXpGainGain += 40
         } else if (round <= 20) {
             baseXpGainGain += 20
         } else if (round <= 50) {
@@ -155,28 +159,37 @@ function levelingCurve(hero, startingRound, mapDifficulty) {
         } else {
             baseXpGainGain += 90
         }
-        xpGains.push(
-            baseXpGainGain * mapSpecificLevelingMultiplier
-        )
+
+        if (round == startingRound - 1) {
+            xpGains.push(0)
+        } else if (round < startingRound) {
+            xpGains.push(null)
+        } else {
+            xpGains.push(
+                baseXpGainGain * mapSpecificLevelingMultiplier
+            )
+        }
     }
 
     acc = 0
-    accumulatedXp = xpGains.map(xpGain => acc = acc + (xpGain || 0))
+    accumulatedXp = xpGains.map(xpGain => xpGain == null ? null : acc = acc + xpGain)
 
-    console.log(total_xp_to_get_level)
-    acc = 0
-    console.log(total_xp_to_get_level.map(e => acc = acc + e))
-    console.log(accumulatedXp)
+    return totalXpToGetLevel.map(txp => {
+        if (txp == null) return null
 
-    return total_xp_to_get_level.map(txp => {
-        return accumulatedXp.findIndex(axp => txp - axp <= 0)
+        acquiredRound = accumulatedXp.findIndex(axp => {
+            return axp == null ? false : axp - txp >= 0
+        }) + 1
+
+        // findIndex returns -1 if not found, so +1 is 0, which is falsy
+        return acquiredRound ? acquiredRound : '>100'
     })
 
     // // Create chart
     // return accumulatedXp.map(axp => {
     //     if (!axp) return null
 
-    //     return total_xp_to_get_level.map(txp => {
+    //     return totalXpToGetLevel.map(txp => {
     //         if (!txp) return null
 
     //         return txp - axp > 0 ? txp - axp : null

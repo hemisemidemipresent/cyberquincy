@@ -78,14 +78,14 @@ async function handleCommand(message) {
             return;
         }
         let canonicalArgs = null;
-        if (command.rawargs) {
+        if (command.rawArgs) {
             // If the command specifies that the arguments should come in raw, don't canonicize them
             canonicalArgs = args;
         } else {
             // Each item in [args] either looks like `arg` or `argp1#argp2`
             // This converts each arg part to its canonical form.
             // `spact#025` gets converted to `spike_factory#025` for example.
-            canonicalArgs = args.map(arg => Aliases.canonicizeArg(arg))
+            canonicalArgs = args.map((arg) => Aliases.canonicizeArg(arg));
         }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired

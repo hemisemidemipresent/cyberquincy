@@ -20,7 +20,7 @@ BASE_COST_TO_GET_LEVEL = [
     20700,
     16470,
     17280,
-]
+];
 
 LEVELING_MODIFIERS = {
     ADORA: 1.71,
@@ -34,14 +34,14 @@ LEVELING_MODIFIERS = {
     OBYN: 1,
     PAT: 1.425,
     QUINCY: 1,
-}
+};
 
 LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     BEGINNER: 1,
     INTERMEDIATE: 1.1,
     ADVANCED: 1.2,
     EXPERT: 1.3,
-}
+};
 
 // Builds up an array for each level with elements representing rounds 0 to 100 inclusive
 // starting with level 1, which is a special case, and moving from 2 all the way through 20.
@@ -50,14 +50,11 @@ LEVELING_MAP_DIFFICULTY_MODIFIERS = {
 //
 // These calculations are super analogous to those in the BTD6 Index written in VBA
 function levelingChart(hero, startingRound, mapDifficulty) {
-    heroSpecificLevelingMultiplier =
-        LEVELING_MODIFIERS[hero.toUpperCase()]
+    heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()];
     mapSpecificLevelingMultiplier =
-        LEVELING_MAP_DIFFICULTY_MODIFIERS[
-            mapDifficulty.toUpperCase()
-        ];
+        LEVELING_MAP_DIFFICULTY_MODIFIERS[mapDifficulty.toUpperCase()];
 
-    roundVsLevelMatrix = [[]] // Level 0 instantiated
+    roundVsLevelMatrix = [[]]; // Level 0 instantiated
     roundVsLevelMatrix.push(
         fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier)
     );
@@ -66,17 +63,16 @@ function levelingChart(hero, startingRound, mapDifficulty) {
         levelCostArray = [Infinity]; // round 0
         for (round = 1; round <= 100; round++) {
             totalCostToGetLevel =
-                BASE_COST_TO_GET_LEVEL[level] *
-                heroSpecificLevelingMultiplier
+                BASE_COST_TO_GET_LEVEL[level] * heroSpecificLevelingMultiplier;
 
             levelCostArray.push(
                 totalCostToGetLevel + roundVsLevelMatrix[level - 1][round]
             );
         }
-        roundVsLevelMatrix.push(levelCostArray)
+        roundVsLevelMatrix.push(levelCostArray);
     }
 
-    return roundVsLevelMatrix
+    return roundVsLevelMatrix;
 }
 
 function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier) {
@@ -115,17 +111,19 @@ function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier) {
         rm1 = level1CostArray[round - 1];
         rm2 = level1CostArray[round - 2];
         mapWeightedDifference = (rm2 - rm1) / mapSpecificLevelingMultiplier;
-
-        level1CostArray.push(
+        let temp =
             rm1 -
-                (mapWeightedDifference + level1RoundGroupAddend) *
-                    mapSpecificLevelingMultiplier
-        );
+            (mapWeightedDifference + level1RoundGroupAddend) *
+                mapSpecificLevelingMultiplier;
+        level1CostArray.push(temp);
     }
-
-    return level1CostArray;
+    let newArr = [];
+    for (i = 0; i < level1CostArray.length; i++) {
+        newArr.push(level1CostArray[i] * 1.5);
+    }
+    return newArr;
 }
 
 module.exports = {
     levelingChart,
-}
+};

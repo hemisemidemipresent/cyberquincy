@@ -14,6 +14,8 @@ module.exports = {
         'ch',
         'qh',
         'quincyh',
+        'everything',
+        'all',
     ],
     cooldown: 5,
     execute(message) {

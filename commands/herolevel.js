@@ -62,12 +62,12 @@ function errorMessage(message, parsingErrors) {
 }
 
 function displayHeroLevels(message, results) {
-    heroLevels = calculateHeroLevels(
+    heroLevels = Heroes.levelingCurve(
         results.hero,
-        results.starting_round,
+        results.starting_round, 
         results.map_difficulty
-    );
-    let res = table(h.range(1, 20), heroLevels.slice(1));
+    )
+    let res = table(h.range(1, 20), heroLevels.slice(1))
     const embed = new Discord.MessageEmbed()
         .setTitle(`${h.toTitleCase(results.hero)} Leveling Chart`)
         .setDescription(
@@ -76,28 +76,9 @@ function displayHeroLevels(message, results) {
             )}**`
         )
         .addField('\u200b', `${res}`)
-        .setColor(colours['cyber']);
+        .setColor(colours['cyber'])
 
-    message.channel.send(embed);
-}
-
-// Once the hero leveling chart is built up, each leveling array is collapsed each into a single value that is
-// the lowest index (which represents the round) where the value (which represents the cost the level up)
-// is 0 or less, meaning the level has already been reached.
-function calculateHeroLevels(hero, startingRound, mapDifficulty) {
-    heroLevelingChart = Heroes.levelingChart(hero, startingRound, mapDifficulty)
-
-    roundForLevelUpTo = [0, startingRound].concat(
-        // Levels 0 and 1
-        // Take the levelCostArray for level 2-20...
-        heroLevelingChart.slice(2).map((levelCostArray) => {
-            // Find the first level at which the cost to level the hero up is 0 or less
-            levelOrNotFound = levelCostArray.findIndex((cost) => cost <= 0);
-            return levelOrNotFound == -1 ? '>100' : levelOrNotFound;
-        })
-    );
-
-    return roundForLevelUpTo;
+    message.channel.send(embed)
 }
 
 module.exports = {

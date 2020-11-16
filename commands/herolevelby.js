@@ -142,7 +142,7 @@ function calculateLaterPlacementRounds(hero, freePlacementRound, goalRound, desi
 // If it's positive, it means the player needs to pay to get the level
 function costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty) {
     heroLevelingChart = Heroes.levelingChart(hero, startingRound, mapDifficulty)
-    return heroLevelingChart[desiredHeroLevel][goalRound]
+    return heroLevelingChart[goalRound][desiredHeroLevel]
 }
 
 module.exports = {

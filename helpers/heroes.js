@@ -43,15 +43,7 @@ LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     EXPERT: 1.3,
 }
 
-function levelingCurve(hero, startingRound, mapDifficulty) {
-    heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()]
-    acc = 0
-    totalXpToGetLevel = BASE_XP_TO_GET_LEVEL.map(bxp => {
-        return bxp == null ? 
-                null : 
-                acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier)
-    })
-
+function accumulatedXpCurve(startingRound, mapDifficulty) {
     mapSpecificLevelingMultiplier =
         LEVELING_MAP_DIFFICULTY_MODIFIERS[
             mapDifficulty.toUpperCase()
@@ -83,9 +75,23 @@ function levelingCurve(hero, startingRound, mapDifficulty) {
     }
 
     acc = 0
-    accumulatedXp = xpGains.map(xpGain => xpGain == null ? null : acc = acc + xpGain)
+    return xpGains.map(xpGain => xpGain == null ? null : acc = acc + xpGain)
+}
 
-    return totalXpToGetLevel.map(txp => {
+function heroLevelXpRequirements(hero) {
+    heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()]
+    acc = 0
+    return BASE_XP_TO_GET_LEVEL.map(bxp => {
+        return bxp == null ? 
+                null : 
+                acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier)
+    })
+}
+
+function levelingCurve(hero, startingRound, mapDifficulty) {
+    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty)
+
+    return heroLevelXpRequirements(hero).map(txp => {
         if (txp == null) return null
 
         acquiredRound = accumulatedXp.findIndex(axp => {

@@ -1,5 +1,5 @@
-BASE_COST_TO_GET_LEVEL = [
-    null,
+BASE_XP_TO_GET_LEVEL = [
+    null, // Slot for non-existent level-0
     0,
     180,
     460,
@@ -43,98 +43,10 @@ LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     EXPERT: 1.3,
 }
 
-// Builds up an array for each level with elements representing rounds 0 to 100 inclusive
-// starting with level 1, which is a special case, and moving from 2 all the way through 20.
-// This needs to be done because the level 2 array depends on the level 1 array,
-// the level 3 array depends on 2, etc.
-//
-// These calculations are super analogous to those in the BTD6 Index written in VBA
-function levelingChart(hero, startingRound, mapDifficulty, engzRound=Infinity) {
-    heroSpecificLevelingMultiplier =
-        LEVELING_MODIFIERS[hero.toUpperCase()]
-    mapSpecificLevelingMultiplier =
-        LEVELING_MAP_DIFFICULTY_MODIFIERS[
-            mapDifficulty.toUpperCase()
-        ];
-
-    roundVsLevelMatrix = [[]] // Level 0 instantiated
-    roundVsLevelMatrix.push(
-        fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier, engzRound)
-    );
-
-    for (level = 2; level <= 20; level++) {
-        levelCostArray = [Infinity]; // round 0
-        for (round = 1; round <= 100; round++) {
-            totalCostToGetLevel =
-                BASE_COST_TO_GET_LEVEL[level] *
-                heroSpecificLevelingMultiplier
-
-            levelCostArray.push(
-                totalCostToGetLevel + roundVsLevelMatrix[level - 1][round]
-            );
-        }
-        roundVsLevelMatrix.push(levelCostArray)
-    }
-
-    return roundVsLevelMatrix
-}
-
-function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier, engzRound) {
-    baseCost = null;
-    if (startingRound <= 21) {
-        baseCost = 10 * startingRound * startingRound + 10 * startingRound - 20;
-    } else if (startingRound <= 51) {
-        baseCost =
-            20 * startingRound * startingRound - 400 * startingRound + 4180;
-    } else {
-        baseCost =
-            45 * startingRound * startingRound - 2925 * startingRound + 67930;
-    }
-
-    level1CostArray = [Infinity]; // round 0
-    level1CostArray.push(
-        // round 1
-        Math.floor(baseCost * mapSpecificLevelingMultiplier)
-    );
-    level1CostArray.push(
-        //round 2
-        Math.floor(level1CostArray[1] - 2 * 20 * mapSpecificLevelingMultiplier)
-    );
-
-    level1RoundGroupAddend = null;
-
-    for (round = 3; round <= 100; round++) {
-        if (round <= 21) {
-            level1RoundGroupAddend = 20;
-        } else if (round <= 51) {
-            level1RoundGroupAddend = 40;
-        } else {
-            level1RoundGroupAddend = 90;
-        }
-
-        rm1 = level1CostArray[round - 1];
-        rm2 = level1CostArray[round - 2];
-        mapWeightedDifference = (rm2 - rm1) / mapSpecificLevelingMultiplier;
-
-        level1CostArray.push(
-            rm1 -
-                (mapWeightedDifference + level1RoundGroupAddend) *
-                    mapSpecificLevelingMultiplier
-        );
-    }
-
-    return level1CostArray
-}
-
-module.exports = {
-    levelingChart,
-    levelingCurve,
-}
-
 function levelingCurve(hero, startingRound, mapDifficulty) {
     heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()]
     acc = 0
-    totalXpToGetLevel = BASE_COST_TO_GET_LEVEL.map(bxp => {
+    totalXpToGetLevel = BASE_XP_TO_GET_LEVEL.map(bxp => {
         return bxp == null ? 
                 null : 
                 acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier)
@@ -146,7 +58,6 @@ function levelingCurve(hero, startingRound, mapDifficulty) {
         ]
 
     xpGains = []
-    let baseXpGainGain
     for (round = 0; round <= 100; round++) {
         if (round == 0) {
             baseXpGainGain = 0
@@ -184,15 +95,8 @@ function levelingCurve(hero, startingRound, mapDifficulty) {
         // findIndex returns -1 if not found, so +1 is 0, which is falsy
         return acquiredRound ? acquiredRound : '>100'
     })
+}
 
-    // // Create chart
-    // return accumulatedXp.map(axp => {
-    //     if (!axp) return null
-
-    //     return totalXpToGetLevel.map(txp => {
-    //         if (!txp) return null
-
-    //         return txp - axp > 0 ? txp - axp : null
-    //     })
-    // })
+module.exports = {
+    levelingCurve,
 }

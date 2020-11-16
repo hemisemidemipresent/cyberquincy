@@ -1,5 +1,5 @@
 BASE_COST_TO_GET_LEVEL = [
-    0,
+    null,
     0,
     180,
     460,
@@ -123,11 +123,63 @@ function fillLevel1CostArray(startingRound, mapSpecificLevelingMultiplier, engzR
         );
     }
 
-    return level1CostArray.map((cost, round) => {
-        return cost && (round > engzRound) ? cost * 1.5 : cost
-    });
+    return level1CostArray
 }
 
 module.exports = {
     levelingChart,
+    levelingCurve,
+}
+
+function levelingCurve(hero, startingRound, mapDifficulty) {
+    heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()]
+    total_xp_to_get_level = BASE_COST_TO_GET_LEVEL.map(bxp => Math.ceil(bxp * heroSpecificLevelingMultiplier))
+
+    mapSpecificLevelingMultiplier =
+        LEVELING_MAP_DIFFICULTY_MODIFIERS[
+            mapDifficulty.toUpperCase()
+        ]
+
+    xpGains = []
+    baseXpGainGain = 0
+    for (round = 0; round < startingRound; round++) {
+        xpGains.push(null)
+    }
+    for (round = startingRound; round <= 100; round++) {
+        if (round == 1) {
+            baseXpGainGain = 40
+        } else if (round <= 20) {
+            baseXpGainGain += 20
+        } else if (round <= 50) {
+            baseXpGainGain += 40
+        } else {
+            baseXpGainGain += 90
+        }
+        xpGains.push(
+            baseXpGainGain * mapSpecificLevelingMultiplier
+        )
+    }
+
+    acc = 0
+    accumulatedXp = xpGains.map(xpGain => acc = acc + (xpGain || 0))
+
+    console.log(total_xp_to_get_level)
+    acc = 0
+    console.log(total_xp_to_get_level.map(e => acc = acc + e))
+    console.log(accumulatedXp)
+
+    return total_xp_to_get_level.map(txp => {
+        return accumulatedXp.findIndex(axp => txp - axp <= 0)
+    })
+
+    // // Create chart
+    // return accumulatedXp.map(axp => {
+    //     if (!axp) return null
+
+    //     return total_xp_to_get_level.map(txp => {
+    //         if (!txp) return null
+
+    //         return txp - axp > 0 ? txp - axp : null
+    //     })
+    // })
 }

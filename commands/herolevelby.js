@@ -15,7 +15,7 @@ const Heroes = require('../helpers/heroes')
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
         return message.channel.send(
-            'Type `q!herolevelby` and follow the instructions (you may also want to try `q!herolevel`)'
+            'Type `q!herolevelby` and follow the instructions (you may also want to try `q!herolevel` or `q!herolevelengergizer`)'
         );
     }
 
@@ -142,7 +142,7 @@ function calculateLaterPlacementRounds(hero, freePlacementRound, goalRound, desi
 // If it's positive, it means the player needs to pay to get the level
 function costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty) {
     heroLevelingChart = Heroes.levelingChart(hero, startingRound, mapDifficulty)
-    return heroLevelingChart[desiredHeroLevel][goalRound]
+    return heroLevelingChart[goalRound][desiredHeroLevel]
 }
 
 module.exports = {

@@ -3,76 +3,80 @@ function towerUpgradeToTower(towerUpgrade) {
 }
 
 function allTowerUpgrades() {
-    return [].concat(allPrimaryTowerUpgrades())
-             .concat(allMilitaryTowerUpgrades())
-             .concat(allMagicTowerUpgrades())
-             .concat(allSupportTowerUpgrades())
+    return []
+        .concat(allPrimaryTowerUpgrades())
+        .concat(allMilitaryTowerUpgrades())
+        .concat(allMagicTowerUpgrades())
+        .concat(allSupportTowerUpgrades());
 }
 
 // Gets all 0-0-0 tower names
 function allTowers() {
-    return [].concat(allPrimaryTowers())
-             .concat(allMilitaryTowers())
-             .concat(allMagicTowers())
-             .concat(allSupportTowers()) 
+    return []
+        .concat(allPrimaryTowers())
+        .concat(allMilitaryTowers())
+        .concat(allMagicTowers())
+        .concat(allSupportTowers());
 }
 
 function allTowerPaths() {
-    return allTowers().map(t => {
-        return [`${t}#top-path`, `${t}#middle-path`, `${t}#bottom-path`]
-    }).flat()
+    return allTowers()
+        .map((t) => {
+            return [`${t}#top-path`, `${t}#middle-path`, `${t}#bottom-path`];
+        })
+        .flat();
 }
 
 function isTowerUpgrade(candidate) {
-    return allTowerUpgrades().includes(candidate.toLowerCase())
+    return allTowerUpgrades().includes(candidate.toLowerCase());
 }
 
 function isTower(candidate) {
-    return allTowers().includes(candidate.toLowerCase())
+    return allTowers().includes(candidate.toLowerCase());
 }
 
 function isTowerPath(candidate) {
-    return allTowerPaths().includes(candidate.toLowerCase())
+    return allTowerPaths().includes(candidate.toLowerCase());
 }
 
 function allPrimaryTowers() {
-    return allGroupTowers('PRIMARY')
+    return allGroupTowers('PRIMARY');
 }
 
 function allMilitaryTowers() {
-    return allGroupTowers('MILITARY')
+    return allGroupTowers('MILITARY');
 }
 
 function allMagicTowers() {
-    return allGroupTowers('MAGIC')
+    return allGroupTowers('MAGIC');
 }
 
 function allSupportTowers() {
-    return allGroupTowers('SUPPORT')
+    return allGroupTowers('SUPPORT');
 }
 
 function allPrimaryTowerUpgrades() {
-    return allGroupTowerUpgrades('PRIMARY')
+    return allGroupTowerUpgrades('PRIMARY');
 }
 
 function allMilitaryTowerUpgrades() {
-    return allGroupTowerUpgrades('MILITARY')
+    return allGroupTowerUpgrades('MILITARY');
 }
 
 function allMagicTowerUpgrades() {
-    return allGroupTowerUpgrades('MAGIC')
+    return allGroupTowerUpgrades('MAGIC');
 }
 
 function allSupportTowerUpgrades() {
-    return allGroupTowerUpgrades('SUPPORT')
+    return allGroupTowerUpgrades('SUPPORT');
 }
 
 function allGroupTowers(group) {
-    return allGroupTowerCanonicals(group).filter(u => !u.includes('#'))
+    return allGroupTowerCanonicals(group).filter((u) => !u.includes('#'));
 }
 
 function allGroupTowerUpgrades(group) {
-    return allGroupTowerCanonicals(group).filter(u => u.includes('#'))
+    return allGroupTowerCanonicals(group).filter((u) => u.includes('#'));
 }
 
 GROUP_TO_TOWER = {
@@ -80,12 +84,12 @@ GROUP_TO_TOWER = {
     MILITARY: 'HELI',
     MAGIC: 'WIZ',
     SUPPORT: 'FARM',
-}
+};
 
 function allGroupTowerCanonicals(group) {
     return Aliases.getAliasGroupsFromSameImmediateDirectoryAs(
         GROUP_TO_TOWER[group]
-    ).map(ag => ag.canonical)
+    ).map((ag) => ag.canonical);
 }
 
 function allWaterTowers() {
@@ -147,19 +151,19 @@ function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
 }
 
 function pathTierFromUpgradeSet(upgradeSet) {
-    upgrades = upgradeSet.split('')
+    upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
     const tier = sortedUpgrades[2];
-    const path = upgrades.findIndex(u => u == tier) + 1
-    return [path, tier]
+    const path = upgrades.findIndex((u) => u == tier) + 1;
+    return [path, tier];
 }
 
 function crossPathTierFromUpgradeSet(upgradeSet) {
-    upgrades = upgradeSet.split('')
+    upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
     const crossTier = sortedUpgrades[1];
-    const crossPath = upgrades.findIndex(u => u == crossTier) + 1
-    return [crossPath, crossTier]
+    const crossPath = upgrades.findIndex((u) => u == crossTier) + 1;
+    return [crossPath, crossTier];
 }
 
 function isValidUpgradeSet(u) {
@@ -168,7 +172,10 @@ function isValidUpgradeSet(u) {
     if (isNaN(u)) return false;
 
     // Get array of 3 digits, sorted in ascending order
-    uSorted = u.split('').map(c => parseInt(c)).sort()
+    uSorted = u
+        .split('')
+        .map((c) => parseInt(c))
+        .sort();
 
     if (uSorted[0] !== 0) return false;
 
@@ -181,17 +188,19 @@ function isValidUpgradeSet(u) {
 
 function formatTower(tower) {
     if (isTower(tower)) {
-        return `${towerUpgradeToIndexNormalForm(tower)}`
+        return `${towerUpgradeToIndexNormalForm(tower)}`;
     } else if (isTowerPath(tower)) {
-        [towerName, path] = tower.split('#')
-        return `${h.toTitleCase(path.split('-').join(' '))} ` +
-                `${towerUpgradeToIndexNormalForm(towerName)}`
-    } else if(isTowerUpgrade(tower)) {
-        return `${towerUpgradeToIndexNormalForm(tower)}`
+        [towerName, path] = tower.split('#');
+        return (
+            `${h.toTitleCase(path.split('-').join(' '))} ` +
+            `${towerUpgradeToIndexNormalForm(towerName)}`
+        );
+    } else if (isTowerUpgrade(tower)) {
+        return `${towerUpgradeToIndexNormalForm(tower)}`;
     } else if (Aliases.isHero(tower)) {
-        return `${h.toTitleCase(tower)}`
+        return `${h.toTitleCase(tower)}`;
     } else {
-        throw `Tower ${tower} is not within allotted tower/hero category`
+        throw `Tower ${tower} is not within allotted tower/hero category`;
     }
 }
 
@@ -210,4 +219,4 @@ module.exports = {
     crossPathTierFromUpgradeSet,
     isValidUpgradeSet,
     formatTower,
-}
+};

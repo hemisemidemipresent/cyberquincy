@@ -43,18 +43,21 @@ function allLengthNPermutations(inputArr) {
 // [1, 2, 3], 5 => [null, null, 1, 2, 3], [null, 1, null, 2, 3], [null, 1, 2, null, 3], [null, 1, 2, 3, null], [1, null, null, 2, 3], etc.
 function permutatePaddings(arr, newLength) {
     const numPads = newLength - arr.length;
-    
+
     if (numPads <= 0) return [arr];
-    
-    let results = []
+
+    let results = [];
 
     for (var i = 0; i < arr.length + 1; i++) {
-        endArr = arr.slice(i)
-        const recursiveResults = permutatePaddings(endArr, endArr.length + numPads - 1)
+        endArr = arr.slice(i);
+        const recursiveResults = permutatePaddings(
+            endArr,
+            endArr.length + numPads - 1
+        );
         for (var j = 0; j < recursiveResults.length; j++) {
             results.push(
                 arr.slice(0, i).concat(null).concat(recursiveResults[j])
-            )
+            );
         }
     }
 
@@ -90,9 +93,9 @@ function toOrdinalSuffix(num) {
 }
 
 function fromOrdinalSuffix(ordinal) {
-    m = ordinal.match(/(\d+)\w\w/i)
-    if (m) return m[1]
-    else throw 'Not an ordinal number'
+    m = ordinal.match(/(\d+)\w\w/i);
+    if (m) return m[1];
+    else throw 'Not an ordinal number';
 }
 
 function toTitleCase(str) {
@@ -141,18 +144,18 @@ function arraysEqual(_arr1, _arr2) {
 }
 
 function binaryLambdaSearch(low, high, f) {
-    mid = Math.floor((low + high) / 2)
-    n = f(mid)
-    
-    if (n == 0) return mid
-    if (n < 0 && f(mid + 1) > 0) return mid
+    mid = Math.floor((low + high) / 2);
+    n = f(mid);
+
+    if (n == 0) return mid;
+    if (n < 0 && f(mid + 1) > 0) return mid;
     if (n < 0) {
-        if (low == high) return Infinity
-        else return binaryLambdaSearch(mid, high, f)
+        if (low == high) return Infinity;
+        else return binaryLambdaSearch(mid, high, f);
     }
     if (n > 0) {
-        if (low == high) return -Infinity
-        else return binaryLambdaSearch(low, mid, f)
+        if (low == high) return -Infinity;
+        else return binaryLambdaSearch(low, mid, f);
     }
 }
 

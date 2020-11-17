@@ -14,7 +14,7 @@ const Heroes = require('../helpers/heroes')
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
         return message.channel.send(
-            'Type `q!herolevel` and follow the instructions (you may also want to try `q!herolevelby` or `q!herolevelenergizer`)'
+            'Type `q!herolevelenergizer` and follow the instructions (you may also want to try `q!herolevel` or `q!herolevelby`)'
         );
     }
 
@@ -26,7 +26,8 @@ function execute(message, args) {
         new AnyOrderParser(
             new OptionalParser(new HeroParser()),
             new OptionalParser(new RoundParser('ALL')),
-            new OptionalParser(new MapDifficultyParser())
+            new OptionalParser(new MapDifficultyParser()),
+            new OptionalParser(new RoundParser('ALL'))
         )
     );
 
@@ -34,17 +35,27 @@ function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
+    let startingRound, energizerRound
+    if (parsed.rounds) {
+        if (parsed.rounds.length == 1) {
+            startingRound = parsed.round
+        } else {
+            [startingRound, energizerRound] = parsed.rounds.sort()
+        }
+    }
+
     // Start react loop to collect the data that the user didn't provide at command-time
     ReactionChain.process(
         message,
         (message, results) => displayHeroLevels(message, results),
         new EmojiReactor('hero', Guilds.EMOJIS_SERVER, parsed.hero),
-        new SingleTextParser(new RoundParser('ALL'), 'starting', parsed.round),
+        new SingleTextParser(new RoundParser('ALL'), 'starting', startingRound),
         new EmojiReactor(
             'map_difficulty',
             Guilds.EMOJIS_SERVER,
             parsed.map_difficulty
-        )
+        ),
+        new SingleTextParser(new RoundParser('ALL'), 'energizer_acquired', energizerRound),
     );
 }
 
@@ -65,15 +76,16 @@ function displayHeroLevels(message, results) {
     heroLevels = Heroes.levelingCurve(
         results.hero,
         results.starting_round, 
-        results.map_difficulty
+        results.map_difficulty,
+        results.energizer_acquired_round,
     )
     let res = table(h.range(1, 20), heroLevels.slice(1))
     const embed = new Discord.MessageEmbed()
         .setTitle(`${h.toTitleCase(results.hero)} Leveling Chart`)
         .setDescription(
-            `Placed: **R${results.starting_round}**\nMaps: **${h.toTitleCase(
-                results.map_difficulty
-            )}**`
+            `Placed: **R${results.starting_round}**\n` + 
+            `Maps: **${h.toTitleCase(results.map_difficulty)}**\n` + 
+            `Energizer: **R${results.energizer_acquired_round}**`
         )
         .addField('\u200b', `${res}`)
         .setColor(colours['cyber'])
@@ -82,8 +94,8 @@ function displayHeroLevels(message, results) {
 }
 
 module.exports = {
-    name: 'herolevel',
-    aliases: ['hl', 'hero', 'her', 'hlvl'],
+    name: 'herolevelenergizer',
+    aliases: ['hle', 'heroeng', 'heroengz', 'herenz', 'henz', 'heroenz'],
     execute,
 };
 

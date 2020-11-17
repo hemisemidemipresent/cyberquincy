@@ -45,14 +45,14 @@ LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     EXPERT: 1.3,
 };
 
-function accumulatedXpCurve(startingRound, mapDifficulty) {
+function accumulatedXpCurve(startingRound, mapDifficulty, energizerAcquiredRound) {
     mapSpecificLevelingMultiplier =
         LEVELING_MAP_DIFFICULTY_MODIFIERS[
             mapDifficulty.toUpperCase()
         ]
 
     xpGains = []
-    for (round = 0; round <= 100; round++) {
+    for (round = 0; round < 100; round++) {
         if (round == 0) {
             baseXpGainGain = 0
         } else if (round == 1) {
@@ -65,13 +65,15 @@ function accumulatedXpCurve(startingRound, mapDifficulty) {
             baseXpGainGain += 90
         }
 
+        energizerFactor = round >= energizerAcquiredRound ? 1.5 : 1
+
         if (round == startingRound - 1) {
             xpGains.push(0)
         } else if (round < startingRound) {
             xpGains.push(null)
         } else {
             xpGains.push(
-                baseXpGainGain * mapSpecificLevelingMultiplier
+                baseXpGainGain * mapSpecificLevelingMultiplier * energizerFactor
             )
         }
     }
@@ -100,8 +102,8 @@ function levelingChart(hero, startingRound, mapDifficulty) {
     })
 }
 
-function levelingCurve(hero, startingRound, mapDifficulty) {
-    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty)
+function levelingCurve(hero, startingRound, mapDifficulty, energizerAcquiredRound=Infinity) {
+    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty, energizerAcquiredRound)
 
     return heroLevelXpRequirements(hero).map(txp => {
         if (txp == null) return null
@@ -111,7 +113,7 @@ function levelingCurve(hero, startingRound, mapDifficulty) {
         }) + 1
 
         // findIndex returns -1 if not found, so +1 is 0, which is falsy
-        return acquiredRound ? acquiredRound : '>100'
+        return acquiredRound ? acquiredRound : h.numberAsCost(txp - accumulatedXp[99])
     })
 }
 

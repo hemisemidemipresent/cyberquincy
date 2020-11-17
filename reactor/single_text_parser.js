@@ -31,7 +31,7 @@ class SingleTextParser {
 
         // {fieldName: 'starting', parser.type(): 'round'} => "Please type the starting round in the chat"
         // {fieldName: null, parser.type(): 'map_difficulty'} => "Please type the map difficulty in the chat"
-        const fieldName = this.fieldName ? ` ${this.fieldName}` : "" 
+        const fieldName = this.fieldName ? ` ${this.fieldName.split('_').join(' ')}` : "" 
         message.channel.send(`Please type the${fieldName} ${this.parser.type().split('_').join(' ')} in the chat`)
 
         // Only collect the next value entered from the user that started the react-loop

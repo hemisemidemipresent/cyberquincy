@@ -66,7 +66,7 @@ function errorMessage(message, parsingErrors) {
             'Likely Cause(s)',
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
         )
-        .addField('Type `q!herolevel help` for help', '\u200b')
+        .addField('Type `q!herolevelenergizer help` for help', '\u200b')
         .setColor(colours['orange']);
 
     return message.channel.send(errorEmbed);

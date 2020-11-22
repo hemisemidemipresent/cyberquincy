@@ -25,7 +25,7 @@ function execute(message, args) {
         // Arguments that aren't entered will be gathered through the react-loop
         new AnyOrderParser(
             new OptionalParser(new HeroParser()),
-            new OptionalParser(new RoundParser('ALL')),
+            new OptionalParser(new RoundParser('IMPOPPABLE')),
             new OptionalParser(new HeroLevelParser()),
             new OptionalParser(new MapDifficultyParser())
         )
@@ -40,7 +40,7 @@ function execute(message, args) {
         message,
         (message, results) => displayHeroPlacementRounds(message, results),
         new EmojiReactor('hero', Guilds.EMOJIS_SERVER, parsed.hero),
-        new SingleTextParser(new RoundParser('ALL'), 'goal', parsed.round),
+        new SingleTextParser(new RoundParser('IMPOPPABLE'), 'goal', parsed.round),
         new SingleTextParser(new HeroLevelParser(), 'desired', parsed.hero_level),
         new EmojiReactor(
             'map_difficulty',
@@ -57,7 +57,7 @@ function errorMessage(message, parsingErrors) {
             'Likely Cause(s)',
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
         )
-        .addField('Type `q!herolevel help` for help', '\u200b')
+        .addField('Type `q!herolevelby help` for help', '\u200b')
         .setColor(colours['orange']);
 
     return message.channel.send(errorEmbed);

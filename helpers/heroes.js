@@ -94,12 +94,13 @@ function heroLevelXpRequirements(hero) {
 
 function levelingChart(hero, startingRound, mapDifficulty) {
     heroXpGains = heroLevelXpRequirements(hero)
+    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty)
 
-    return accumulatedXpCurve(startingRound, mapDifficulty).map(axp => {
+    return [null].concat(accumulatedXp.map(axp => {
         if (axp == null) return null
 
         return heroXpGains.map(txp => txp == null ? null : txp - axp)
-    })
+    }))
 }
 
 function levelingCurve(hero, startingRound, mapDifficulty, energizerAcquiredRound=Infinity) {

@@ -9,7 +9,7 @@ const ReactionChain = require('../reactor/reaction_chain');
 const EmojiReactor = require('../reactor/emoji_reactor');
 const SingleTextParser = require('../reactor/single_text_parser');
 
-const Heroes = require('../helpers/heroes')
+const Heroes = require('../helpers/heroes');
 
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
@@ -35,12 +35,12 @@ function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
-    let startingRound, energizerRound
+    let startingRound, energizerRound;
     if (parsed.rounds) {
         if (parsed.rounds.length == 1) {
-            startingRound = parsed.round
+            startingRound = parsed.round;
         } else {
-            [startingRound, energizerRound] = parsed.rounds.sort()
+            [startingRound, energizerRound] = parsed.rounds.sort();
         }
     }
 
@@ -55,7 +55,11 @@ function execute(message, args) {
             Guilds.EMOJIS_SERVER,
             parsed.map_difficulty
         ),
-        new SingleTextParser(new RoundParser('ALL'), 'energizer_acquired', energizerRound),
+        new SingleTextParser(
+            new RoundParser('ALL'),
+            'energizer_acquired',
+            energizerRound
+        )
     );
 }
 
@@ -75,27 +79,37 @@ function errorMessage(message, parsingErrors) {
 function displayHeroLevels(message, results) {
     heroLevels = Heroes.levelingCurve(
         results.hero,
-        results.starting_round, 
+        results.starting_round,
         results.map_difficulty,
-        results.energizer_acquired_round,
-    )
-    let res = table(h.range(1, 20), heroLevels.slice(1))
+        results.energizer_acquired_round
+    );
+    let res = table(h.range(1, 20), heroLevels.slice(1));
     const embed = new Discord.MessageEmbed()
         .setTitle(`${h.toTitleCase(results.hero)} Leveling Chart`)
         .setDescription(
-            `Placed: **R${results.starting_round}**\n` + 
-            `Maps: **${h.toTitleCase(results.map_difficulty)}**\n` + 
-            `Energizer: **R${results.energizer_acquired_round}**`
+            `Placed: **R${results.starting_round}**\n` +
+                `Maps: **${h.toTitleCase(results.map_difficulty)}**\n` +
+                `Energizer: **R${results.energizer_acquired_round}**`
         )
         .addField('\u200b', `${res}`)
-        .setColor(colours['cyber'])
+        .setColor(colours['cyber']);
 
-    message.channel.send(embed)
+    message.channel.send(embed);
 }
 
 module.exports = {
     name: 'herolevelenergizer',
-    aliases: ['hle', 'heroeng', 'heroengz', 'herenz', 'henz', 'heroenz'],
+    aliases: [
+        'hle',
+        'heroeng',
+        'heroengz',
+        'herenz',
+        'henz',
+        'heroenz',
+        'herolevelenergiser',
+        'energiser',
+        'energizer',
+    ],
     execute,
 };
 

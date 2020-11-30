@@ -19,17 +19,17 @@ module.exports = {
             .setTitle('access help here')
             .setURL(`${discord}`)
             .setDescription(
-                `Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons and training ${client.users.cache.size} monkeys`
+                `Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons`
             )
             .addField('ping:', `Response time: ${responseTime}ms`, true)
 
             .addField('time since last restart:', `${uptime}`, true)
             .addField('XP gain enabled?', xpEnabled)
-            /*.addField(
+            .addField(
                 'more data',
-                '[full bot statistics](https://statcord.com/bot/591922988832653313)',
+                '[full bot statistics](https://statcord.com/bot/591922988832653313) - note users are inaccurate and servers might be inaccurate',
                 true
-            )*/
+            )
             .addField(
                 'discord server, join for updates (happens pretty often)',
                 `${discord}`,

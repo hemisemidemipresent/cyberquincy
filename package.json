@@ -34,6 +34,7 @@
     },
     "homepage": "https://github.com/hemisemidemipresent/cyberquincy#readme",
     "dependencies": {
+        "atob": "^2.1.2",
         "bufferutil": "^4.0.1",
         "discord.js": "^12.4.1",
         "express": "^4.17.1",
@@ -46,7 +47,8 @@
         "sequelize-cli": "^6.2.0",
         "sqlite3": "^4.2.0",
         "statcord.js": "^3.1.1",
-        "utf-8-validate": "^5.0.2"
+        "utf-8-validate": "^5.0.2",
+        "zlib": "^1.0.5"
     },
     "devDependencies": {}
 }

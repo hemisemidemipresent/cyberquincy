@@ -34,8 +34,8 @@ function pingHeroku() {
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.h = require('./helpers/general.js');
-    global.b = require('./helpers/bloons-general')
-    global.Towers = require('./helpers/towers')
+    global.b = require('./helpers/bloons-general');
+    global.Towers = require('./helpers/towers');
     global.Files = require('./helpers/files.js');
     global.AliasRepository = require('./alias-repository.js');
 
@@ -65,6 +65,38 @@ function consoleBootup() {
             status: 'online',
         });
         console.log('<Program Directive> Discord Bot Client is ready');
+        const Statcord = require('statcord.js');
+        let statcordKey = require('./1/config.json')['statcord'];
+        if (!statcordKey || statcordKey === 'no') {
+            console.log('[INFO] statcord is not configured');
+            return;
+        }
+        const statcord = new Statcord.Client({
+            client,
+            key: statcordKey,
+            postCpuStatistics: false /* Whether to post memory statistics or not, defaults to true */,
+            postMemStatistics: false /* Whether to post memory statistics or not, defaults to true */,
+            postNetworkStatistics: false /* Whether to post memory statistics or not, defaults to true */,
+        });
+        statcord.autopost();
+        statcord.on('autopost-start', () => {
+            // Emitted when statcord autopost starts
+            console.log('[POST] started autopost');
+        });
+
+        statcord.on('post', (status) => {
+            // status = false if the post was successful
+            // status = "Error message" or status = Error if there was an error
+            if (!status) console.log('[POST] successful Statcord post');
+            else console.error(status);
+        });
+        statcord.autopost().catch((error) => {
+            console.log(error);
+            console.error('[ERROR] Something is wrong with statcord autopost');
+        });
+
+        // Make available globally
+        global.statcord = statcord;
     });
 }
 
@@ -161,7 +193,7 @@ function generateListeners(commandCenter) {
 }
 
 function botStats() {
-    botInfoHelper.statcord();
+    statcord();
     botInfoHelper.discordbotlist();
 }
 
@@ -177,3 +209,5 @@ function login() {
 }
 
 main();
+
+function statcord() {}

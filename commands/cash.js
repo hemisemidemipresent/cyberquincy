@@ -49,7 +49,7 @@ module.exports = {
                     `You should get $${cashNeeded} by round ${startRound}`
                 )
                 .setColor(cyber)
-                .setFooter(`in ABR, from round ${args[1]}`);
+                .setFooter(`in ABR, from round ${parsed.round}`);
             return message.channel.send(embed);
         } else if (parsed.mode == 'halfcash') {
             while (cashSoFar <= cashNeeded) {
@@ -70,7 +70,7 @@ module.exports = {
                     `You should get $${cashNeeded} by round ${startRound}`
                 )
                 .setColor(cyber)
-                .setFooter(`in half cash, from round ${args[1]}`);
+                .setFooter(`in half cash, from round ${parsed.round}`);
             return message.channel.send(embed);
         } else {
             while (cashSoFar <= cashNeeded) {
@@ -91,7 +91,7 @@ module.exports = {
                     `You should get $${cashNeeded} by round ${startRound}`
                 )
                 .setColor(cyber)
-                .setFooter(`from round ${args[1]}`);
+                .setFooter(`from round ${parsed.round}`);
             return message.channel.send(embed);
         }
     },

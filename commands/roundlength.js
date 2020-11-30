@@ -1,28 +1,36 @@
 const lengths = require('../jsons/roundlength.json');
 const { red, lightgrey, grey } = require('../jsons/colours.json');
+const RoundParser = require('../parser/round-parser');
+const OptionalParser = require('../parser/optional-parser');
 module.exports = {
     name: 'roundlength',
     aliases: ['length', 'rl', 'l'],
     execute(message, args) {
-        if (!args || isNaN(args[0])) {
+        let parsed = CommandParser.parse(
+            args,
+            new RoundParser(),
+            new OptionalParser(new RoundParser())
+        );
+        if (parsed.hasErrors()) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setDescription(
                     'q!roundlength <start round> <end round> (shows the longest round)'
                 )
                 .setColor(red);
             return message.channel.send(errorEmbed);
-        } else if (!args[1]) {
+        }
+        if (parsed.rounds.length == 1) {
             let embed = new Discord.MessageEmbed()
                 .setDescription(
-                    `round ${args[0]} is ${
-                        lengths[parseInt(args[0]) - 1]
+                    `round ${parsed.round} is ${
+                        lengths[parseInt(parsed.round) - 1]
                     }s long`
                 )
                 .setColor(lightgrey);
             return message.channel.send(embed);
-        } else if (args[1]) {
-            let startRound = parseInt(args[0]);
-            let endRound = parseInt(args[1]);
+        } else {
+            let startRound = parsed.rounds[0];
+            let endRound = parsed.rounds[1];
             let longestRound = 0;
             let longestLength = 0;
             for (i = startRound; i < endRound; i++) {

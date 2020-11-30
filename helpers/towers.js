@@ -167,7 +167,7 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
 }
 
 function isValidUpgradeSet(u) {
-    if (!h.is_str(u) || u.length !== 3) return false;
+    if (!is_str(u) || u.length !== 3) return false;
 
     if (isNaN(u)) return false;
 
@@ -203,8 +203,14 @@ function formatTower(tower) {
         throw `Tower ${tower} is not within allotted tower/hero category`;
     }
 }
-
+function is_str(u) {
+    if (typeof u == 'string') {
+        return true;
+    }
+    return false;
+}
 module.exports = {
+    is_str,
     towerUpgradeToTower,
     allTowerUpgrades,
     allTowers,

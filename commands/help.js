@@ -22,7 +22,7 @@ module.exports = {
         let embed = new Discord.MessageEmbed()
             .setTitle('Need help?')
             .setDescription(
-                `if you want to report a bug, suggest a feature, complain to the dev personally, or flex that you added the bot to some popular discord, feel free to do so in the discord server: ${discord}`
+                `discord server: ${discord} stay up-to-date and talk to the devs`
             )
             .addField(
                 'List of commands',
@@ -31,6 +31,10 @@ module.exports = {
             .addField(
                 'Invite the bot',
                 '[invite link](https://discord.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881%5Cndiscord)'
+            )
+            .addField(
+                'Upvote the bot',
+                '[top.gg](https://top.gg/bot/591922988832653313)\n[discordbotlist](https://discordbotlist.com/bots/cyber-quincy)'
             );
         message.channel.send(embed);
     },

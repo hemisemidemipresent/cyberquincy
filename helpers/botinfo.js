@@ -28,6 +28,7 @@ function statcord() {
             else console.error(status);
         });
         statcord.autopost().catch((error) => {
+            console.log(error);
             console.error('[ERROR] Something is wrong with statcord autopost');
         });
 

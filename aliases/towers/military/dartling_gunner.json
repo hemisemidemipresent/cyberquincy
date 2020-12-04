@@ -1,0 +1,15 @@
+{
+    "xyz": ["dartling", "gun", "gunner", "ling"],
+
+    "300": ["laser_cannon", "lcan"],
+    "400": ["plasma_accelerator", "accelerator", "acc", "accel", "accelerate"],
+    "500": ["ray_of_doom", "rod"],
+
+    "030": ["hydra_rocket_pods", "hydra", "pods", "hrp", "hrps", "hyde", "hyd", "hy"],
+    "040": ["rocket_storm", "rs", "rstorm"],
+    "050": ["m.a.d", "m_a_d", "moab_assured_destroyer"],
+
+    "003": ["buckshot", "buck"],
+    "004": ["bloon_area_denial_system", "bads", "denial"],
+    "005": ["bloon_exclusion_zone", "bez", "excl"]
+}

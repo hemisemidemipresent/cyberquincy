@@ -15,31 +15,30 @@ module.exports = {
             let url = args[0];
             if (isValidURL(url)) {
                 image = url;
+            } else {
+                return message.channel.send('no link specified or attatched');
             }
         }
         if (!image)
             return message.channel.send(
                 'Attach an image to upload to imgur, vrej'
             );
-        let footer;
-        if (attatched) {
-            if (args[0]) {
-                footer = `by ${args[0]}`;
-            }
-        } else {
-            if (args[1]) {
-                footer = ` by ${args[1]}`;
-            }
+
+        if (!attatched) {
+            args.shift();
         }
-        if (!footer) {
-            footer = `by ${message.author.tag}`;
+        let text = args.join(' ');
+        if (text.length == 0) {
+            text = ' ';
         }
+        footer = `sent by ${message.author.tag}`;
+
         imgur
             .uploadUrl(image)
             .then((json) => {
                 const Embed = new Discord.MessageEmbed()
                     .setTimestamp()
-                    .setDescription(`${json.data.link}`)
+                    .setDescription(`${json.data.link}\n${text}`)
                     .setFooter(footer)
                     .setColor(cyber)
                     .setImage(`${json.data.link}`);

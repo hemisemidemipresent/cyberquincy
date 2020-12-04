@@ -1,39 +1,39 @@
+/*
+const Discord = require('discord.js');
 const request = require('request');
-const zlib = require('zlib');
-const atob = require('atob');
+const dgdata = require('node-dgdata');
 module.exports = {
-    name: 'getchallenge',
-    aliases: ['dc', 'get'],
+    name: 'getody',
+
     execute(message, args) {
-        request(
-            `https://static-api.nkstatic.com/appdocs/11/es/challenges/${args[0].toUpperCase()}`,
-            { json: true },
-            (err, res, body) => {
-                if (err) {
-                    return console.log(err);
-                }
-                let data = JSON.stringify(body, null, 4);
-                let g = base64ToArrayBuffer(data);
-                zlib.inflate(g, (err, buffer) => {
+        function meat(num) {
+            let promise = new Promise((resolve, reject) => {
+                let url =
+                    'https://static-api.nkstatic.com/appdocs/11/odysseyData/' +
+                    num;
+                // this website is in bytes, but because you are viewing it in a browser you see weird text. That is what { encoding : null } is for
+                request(url, { encoding: null }, (err, res, body) => {
                     if (err) {
-                        console.log('err happened');
+                        reject('req');
                     }
-                    let object = JSON.parse(buffer.toString('utf8'));
-                    console.log(JSON.stringify(object, null, 4));
-                    let embed = format(object);
-                    message.channel.send(embed);
+                    console.log(body);
+                    let g = dgdata.decode(body).toString('utf-8');
+                    let json = JSON.parse(g);
+                    let data = JSON.stringify(json);
+                    console.log(data);
+                    let embed = format(json);
+                    resolve(embed);
                 });
-            }
-        );
-        function base64ToArrayBuffer(base64) {
-            let binary_string = atob(base64);
-            let len = binary_string.length;
-            let bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binary_string.charCodeAt(i);
-            }
-            return bytes.buffer;
+            });
+            return promise;
         }
+        meat(args[0])
+            .then((result) => {
+                message.channel.send(result);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     },
 };
 function format(object) {
@@ -66,8 +66,8 @@ function format(object) {
                 let path2 = towerObj.path2NumBlockedTiers;
                 let path3 = towerObj.path3NumBlockedTiers;
                 if (path1 == -1) path1 = 5;
-                if (path2 == -1) path1 = 5;
-                if (path3 == -1) path1 = 5;
+                if (path2 == -1) path2 = 5;
+                if (path3 == -1) path3 = 5;
                 towers += `${towerObj.tower} (${towerObj.max}) (${path1}-${path2}-${path3})\n`;
             }
         } else if (towerObj.max == -1) {
@@ -82,3 +82,4 @@ function format(object) {
         );
     return embed;
 }
+*/

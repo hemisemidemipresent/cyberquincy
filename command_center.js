@@ -102,8 +102,8 @@ async function handleCommand(message) {
                     }
                 }
                 if (command.dependencies.includes('towerJSON')) {
-                    let btd6index = require('./1/config.json')['towerJSON'];
-                    if (!btd6index) {
+                    let towerJSON = require('./1/config.json')['towerJSON'];
+                    if (!towerJSON) {
                         return message.channel.send('This command is disabled');
                     }
                 }

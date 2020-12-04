@@ -1,6 +1,6 @@
 module.exports = {
     name: 'merge',
-    alias: ['combine'],
+    aliases: ['combine'],
     rawArgs: true,
 
     async execute(message, args) {

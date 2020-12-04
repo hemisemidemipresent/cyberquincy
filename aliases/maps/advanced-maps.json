@@ -23,5 +23,6 @@
     "geared": ["gd", "gear", "grd", "geard"],
     "underground": ["ug", "under", "ground"],
     "cargo": ["cg", "cgo", "car", "go"],
-    "mesa": ["ms"]
+    "mesa": ["ms"],
+    "x_factor": ["xf", "x", "factor"]
 }

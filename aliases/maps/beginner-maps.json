@@ -28,5 +28,6 @@
         "end",
         "road",
         "eotr"
-    ]
+    ],
+    "skates": ["s", "skate"]
 }

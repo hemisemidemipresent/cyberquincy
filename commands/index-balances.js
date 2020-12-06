@@ -112,7 +112,8 @@ async function parseCurrentVersion() {
     await sheet.loadCells(`J3`);
     const lastUpdatedAsOf = sheet.getCellByA1(`J3`).value;
     const lastUpdatedAsOfTokens = lastUpdatedAsOf.split(' ');
-    return new Number(lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1]);
+    const lastUpdatedOfVersion = lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1]
+    return new Number(lastUpdatedOfVersion.split('.')[0]);
 }
 
 async function parseBalanceChanges(parsed, entryColIndex) {

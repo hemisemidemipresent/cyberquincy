@@ -56,5 +56,6 @@ function parsetime(ms) {
 
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
+    milliseconds = milliseconds < 100 ? '0' + milliseconds : milliseconds;
     return minutes + ':' + seconds + '.' + milliseconds;
 }

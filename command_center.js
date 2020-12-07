@@ -50,10 +50,10 @@ async function handleCommand(message) {
         if (/no+c/i.test(message.channel.topic)) return;
 
         // Command tokens are space-separated tokens starting immediately after the `!`
-        const args = c.slice(PREFIX.length).split(/ +/);
+        let args = c.slice(PREFIX.length).split(/ +/);
 
         // The command name is the first token; args are the rest
-        const commandName = args.shift().toLowerCase();
+        const commandName = args.shift();
         let command;
         // exception: check with they inputted a path as the commandName
         if (Towers.isValidUpgradeSet(commandName)) {
@@ -78,6 +78,10 @@ async function handleCommand(message) {
             return;
         }
         let canonicalArgs = null;
+
+        if (command.casedArgs) {
+            args = message.content.slice(PREFIX.length).split(/ +/);
+        }
         if (command.rawArgs) {
             // If the command specifies that the arguments should come in raw, don't canonicize them
             canonicalArgs = args;
@@ -85,7 +89,9 @@ async function handleCommand(message) {
             // Each item in [args] either looks like `arg` or `argp1#argp2`
             // This converts each arg part to its canonical form.
             // `spact#025` gets converted to `spike_factory#025` for example.
-            canonicalArgs = args.map((arg) => Aliases.canonicizeArg(arg));
+            canonicalArgs = args.map((arg) =>
+                Aliases.canonicizeArg(arg.toLowerCase())
+            );
         }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired

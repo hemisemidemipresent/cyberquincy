@@ -66,7 +66,10 @@ function consoleBootup() {
         });
         console.log('<Program Directive> Discord Bot Client is ready');
         const botposting = require('./1/config.json')['botposting'];
-        if (!botposting) return;
+        if (!botposting) {
+            global.statcord = undefined;
+            return;
+        }
         const Statcord = require('statcord.js');
         let statcordKey = require('./1/config.json')['statcord'];
         if (!statcordKey || statcordKey === 'no') {

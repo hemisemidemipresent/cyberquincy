@@ -116,7 +116,8 @@ async function handleCommand(message) {
         }
         // post information to statcord
         const botposting = require('./1/config.json')['botposting'];
-        if (statcord && botposting) {
+
+        if (statcord !== undefined && botposting === true) {
             statcord
                 .postCommand(command.name, message.author.id)
                 .then(() => {

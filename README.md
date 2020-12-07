@@ -43,7 +43,10 @@ Cyber Quincy is a BTD6 Discord bot.
 -   `express` used to receive pings to keep app awake
 -   `google-spreadsheet` to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) and [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
 -   `statcord` used for [bot statistics](https://statcord.com/bot/591922988832653313)
-
+-   `atob`, `zlib` used for fetching challenge data from NK
+-   `node-dgdata` custom library for using NK API disguised as a dgdata fetcher
+-   `discord.js-minesweeper`: used for minesweeper
+-   
 ## Optional
 
 -   `bufferutil` for a much faster WebSocket connection

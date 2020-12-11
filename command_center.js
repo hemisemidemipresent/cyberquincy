@@ -78,7 +78,9 @@ async function handleCommand(message) {
 
         // doesnt lowerCase the arguments
         if (command.casedArgs) {
-            args = message.content.slice(PREFIX.length).split(/ +/);
+            let dummy = message.content.slice(PREFIX.length);
+            dummy.shift();
+            args = dummy.split(/ +/);
         }
 
         // rawArgs => no getting arg-alias-parsed

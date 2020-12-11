@@ -213,6 +213,12 @@
         "DartMonkey",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "DartMonkey",
+        "BombShooter",
+        "TackShooter",
         "DartlingGunner"
     ],
     [
@@ -279,6 +285,12 @@
         "DartMonkey",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "DartMonkey",
+        "BombShooter",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -322,6 +334,12 @@
         "BombShooter",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "DartMonkey",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
     ],
     [
         "DartMonkey",
@@ -417,6 +435,12 @@
         "DartMonkey",
         "TackShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "DartMonkey",
+        "TackShooter",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -466,6 +490,18 @@
         "TackShooter",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "DartMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "DartMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
     ],
     [
         "DartMonkey",
@@ -716,6 +752,24 @@
     [
         "DartMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "DartMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "DartMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "DartMonkey",
+        "GlueGunner",
         "DartlingGunner",
         "WizardMonkey"
     ],
@@ -874,6 +928,54 @@
         "SniperMonkey",
         "Druid",
         "EngineerMonkey"
+    ],
+    [
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "MonkeyVillage"
     ],
     [
         "DartMonkey",
@@ -1179,6 +1281,12 @@
         "BoomerangMonkey",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "BoomerangMonkey",
+        "BombShooter",
+        "TackShooter",
         "HeliPilot"
     ],
     [
@@ -1215,6 +1323,12 @@
         "BoomerangMonkey",
         "BombShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "BoomerangMonkey",
+        "BombShooter",
+        "IceMonkey",
         "DartlingGunner"
     ],
     [
@@ -1234,6 +1348,12 @@
         "BombShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "BombShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "BoomerangMonkey",
@@ -1288,6 +1408,12 @@
         "BombShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
     ],
     [
         "BoomerangMonkey",
@@ -1383,6 +1509,12 @@
         "BoomerangMonkey",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "BoomerangMonkey",
+        "TackShooter",
+        "IceMonkey",
         "DartlingGunner"
     ],
     [
@@ -1402,6 +1534,12 @@
         "TackShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "BoomerangMonkey",
@@ -1455,6 +1593,18 @@
         "BoomerangMonkey",
         "TackShooter",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "BoomerangMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -1557,6 +1707,12 @@
         "BoomerangMonkey",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "BoomerangMonkey",
+        "IceMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -1599,6 +1755,18 @@
         "BoomerangMonkey",
         "IceMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "BoomerangMonkey",
+        "IceMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -1706,6 +1874,18 @@
     [
         "BoomerangMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "BoomerangMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "GlueGunner",
         "HeliPilot",
         "DartlingGunner"
     ],
@@ -1840,6 +2020,36 @@
         "SniperMonkey",
         "Druid",
         "EngineerMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SpikeFactory"
+    ],
+    [
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "SpikeFactory"
     ],
     [
         "BoomerangMonkey",
@@ -2007,6 +2217,12 @@
         "BombShooter",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "BombShooter",
+        "TackShooter",
+        "IceMonkey",
         "DartlingGunner"
     ],
     [
@@ -2026,6 +2242,12 @@
         "TackShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "BombShooter",
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "BombShooter",
@@ -2056,6 +2278,12 @@
         "TackShooter",
         "GlueGunner",
         "EngineerMonkey"
+    ],
+    [
+        "BombShooter",
+        "TackShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "BombShooter",
@@ -2092,6 +2320,24 @@
         "TackShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "BombShooter",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "BombShooter",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "BombShooter",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "BombShooter",
@@ -2224,6 +2470,12 @@
         "IceMonkey",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "BombShooter",
+        "IceMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "BombShooter",
@@ -2253,6 +2505,12 @@
         "BombShooter",
         "IceMonkey",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "BombShooter",
+        "IceMonkey",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -2290,6 +2548,18 @@
         "IceMonkey",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "BombShooter",
@@ -2481,6 +2751,12 @@
         "BombShooter",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "BombShooter",
+        "GlueGunner",
+        "SniperMonkey",
         "HeliPilot"
     ],
     [
@@ -2518,6 +2794,18 @@
         "GlueGunner",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "BombShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "BombShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "BombShooter",
@@ -2672,6 +2960,18 @@
     [
         "BombShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "BombShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "BombShooter",
+        "SniperMonkey",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -2800,6 +3100,24 @@
         "SniperMonkey",
         "Druid",
         "EngineerMonkey"
+    ],
+    [
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
     ],
     [
         "BombShooter",
@@ -3099,6 +3417,12 @@
         "TackShooter",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "TackShooter",
+        "IceMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -3106,6 +3430,12 @@
         "IceMonkey",
         "GlueGunner",
         "EngineerMonkey"
+    ],
+    [
+        "TackShooter",
+        "IceMonkey",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "TackShooter",
@@ -3135,6 +3465,24 @@
         "TackShooter",
         "IceMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "TackShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "TackShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "TackShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -3238,6 +3586,12 @@
         "IceMonkey",
         "Druid",
         "EngineerMonkey"
+    ],
+    [
+        "TackShooter",
+        "GlueGunner",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "TackShooter",
@@ -3278,6 +3632,30 @@
     [
         "TackShooter",
         "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "TackShooter",
+        "GlueGunner",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -3434,6 +3812,24 @@
     [
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "TackShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "TackShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "TackShooter",
+        "SniperMonkey",
         "HeliPilot",
         "DartlingGunner"
     ],
@@ -3507,6 +3903,42 @@
         "TackShooter",
         "SniperMonkey",
         "Druid",
+        "EngineerMonkey"
+    ],
+    [
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "Alchemist",
         "EngineerMonkey"
     ],
     [
@@ -3759,6 +4191,12 @@
         "IceMonkey",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "IceMonkey",
+        "GlueGunner",
+        "SniperMonkey",
         "DartlingGunner"
     ],
     [
@@ -3789,6 +4227,30 @@
         "IceMonkey",
         "GlueGunner",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "IceMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "IceMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "IceMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "IceMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -3938,6 +4400,30 @@
     [
         "IceMonkey",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "IceMonkey",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "IceMonkey",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "IceMonkey",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "IceMonkey",
+        "SniperMonkey",
         "MonkeySub",
         "DartlingGunner"
     ],
@@ -4066,6 +4552,60 @@
         "SniperMonkey",
         "SpikeFactory",
         "MonkeyVillage"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "Alchemist"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "Alchemist"
+    ],
+    [
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist",
+        "EngineerMonkey"
     ],
     [
         "IceMonkey",
@@ -4670,6 +5210,24 @@
     [
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "GlueGunner",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "GlueGunner",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "GlueGunner",
+        "SniperMonkey",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -4789,6 +5347,36 @@
     ],
     [
         "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "Alchemist"
+    ],
+    [
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist",
+        "EngineerMonkey"
+    ],
+    [
+        "GlueGunner",
         "MonkeySub",
         "HeliPilot",
         "DartlingGunner"
@@ -5215,6 +5803,48 @@
     ],
     [
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "Alchemist"
+    ],
+    [
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist",
+        "EngineerMonkey"
+    ],
+    [
+        "SniperMonkey",
         "MonkeySub",
         "HeliPilot",
         "DartlingGunner"
@@ -5464,6 +6094,132 @@
         "Druid",
         "SpikeFactory",
         "MonkeyVillage"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "MonkeySub",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "MonkeySub",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "MonkeyAce",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "WizardMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey",
+        "SuperMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey",
+        "Alchemist"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey",
+        "SpikeFactory"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey",
+        "Alchemist"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist",
+        "EngineerMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage",
+        "EngineerMonkey"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey",
+        "Alchemist"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "Alchemist",
+        "EngineerMonkey"
     ],
     [
         "MonkeySub",
@@ -6615,6 +7371,12 @@
         "Quincy",
         "DartMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "DartMonkey",
+        "BombShooter",
         "HeliPilot"
     ],
     [
@@ -6652,6 +7414,12 @@
         "DartMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "Quincy",
+        "DartMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "Quincy",
@@ -6729,6 +7497,12 @@
         "Quincy",
         "DartMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "DartMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -6771,6 +7545,36 @@
         "Quincy",
         "DartMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Quincy",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Quincy",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Quincy",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "Quincy",
+        "DartMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -6981,6 +7785,12 @@
         "Quincy",
         "BoomerangMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "BoomerangMonkey",
+        "BombShooter",
         "HeliPilot"
     ],
     [
@@ -7035,6 +7845,12 @@
         "Quincy",
         "BoomerangMonkey",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "BoomerangMonkey",
+        "TackShooter",
         "HeliPilot"
     ],
     [
@@ -7083,6 +7899,12 @@
         "Quincy",
         "BoomerangMonkey",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "BoomerangMonkey",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -7120,6 +7942,12 @@
         "BoomerangMonkey",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "Quincy",
+        "BoomerangMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "Quincy",
@@ -7179,6 +8007,24 @@
         "Quincy",
         "BoomerangMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Quincy",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "Quincy",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -7293,6 +8139,12 @@
         "Quincy",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "BombShooter",
+        "TackShooter",
         "MonkeySub"
     ],
     [
@@ -7342,6 +8194,12 @@
         "BombShooter",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "Quincy",
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "Quincy",
@@ -7401,6 +8259,12 @@
         "Quincy",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "BombShooter",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -7443,6 +8307,12 @@
         "Quincy",
         "BombShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "BombShooter",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -7474,6 +8344,24 @@
         "BombShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "MortarMonkey"
+    ],
+    [
+        "Quincy",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Quincy",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
     ],
     [
         "Quincy",
@@ -7629,6 +8517,12 @@
         "Quincy",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "TackShooter",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -7671,6 +8565,12 @@
         "Quincy",
         "TackShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "TackShooter",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -7713,6 +8613,12 @@
         "Quincy",
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "TackShooter",
+        "SniperMonkey",
         "HeliPilot"
     ],
     [
@@ -7737,6 +8643,24 @@
         "Quincy",
         "TackShooter",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Quincy",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "Quincy",
+        "TackShooter",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -7839,6 +8763,12 @@
         "Quincy",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "IceMonkey",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -7881,6 +8811,12 @@
         "Quincy",
         "IceMonkey",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "IceMonkey",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -7917,6 +8853,30 @@
         "Quincy",
         "IceMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Quincy",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Quincy",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Quincy",
+        "IceMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -8187,6 +9147,12 @@
         "Quincy",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Quincy",
+        "GlueGunner",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -8228,6 +9194,18 @@
     [
         "Quincy",
         "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Quincy",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "GlueGunner",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -8373,6 +9351,30 @@
         "Quincy",
         "GlueGunner",
         "Druid",
+        "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Quincy",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Quincy",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "Quincy",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -8524,6 +9526,96 @@
         "SniperMonkey",
         "Druid",
         "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "WizardMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SpikeFactory"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "SuperMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "SpikeFactory"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Quincy",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "MonkeyVillage"
     ],
     [
         "Quincy",
@@ -9831,6 +10923,12 @@
         "Gwendolin",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Gwendolin",
+        "BombShooter",
+        "TackShooter",
         "HeliPilot"
     ],
     [
@@ -9868,6 +10966,12 @@
         "BombShooter",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "Gwendolin",
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "Gwendolin",
@@ -9933,6 +11037,12 @@
         "Gwendolin",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Gwendolin",
+        "BombShooter",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -9987,6 +11097,12 @@
         "Gwendolin",
         "BombShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Gwendolin",
+        "BombShooter",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -10030,6 +11146,12 @@
         "BombShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "Gwendolin",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
     ],
     [
         "Gwendolin",
@@ -10191,6 +11313,12 @@
         "Gwendolin",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Gwendolin",
+        "TackShooter",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -10228,6 +11356,12 @@
         "TackShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "Gwendolin",
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "Gwendolin",
@@ -10275,6 +11409,12 @@
         "Gwendolin",
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Gwendolin",
+        "TackShooter",
+        "SniperMonkey",
         "DartlingGunner"
     ],
     [
@@ -10299,6 +11439,24 @@
         "Gwendolin",
         "TackShooter",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Gwendolin",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Gwendolin",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Gwendolin",
+        "TackShooter",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -10419,6 +11577,12 @@
         "Gwendolin",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Gwendolin",
+        "IceMonkey",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -10467,6 +11631,12 @@
         "Gwendolin",
         "IceMonkey",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Gwendolin",
+        "IceMonkey",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -10509,6 +11679,30 @@
         "Gwendolin",
         "IceMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Gwendolin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Gwendolin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Gwendolin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Gwendolin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -10707,6 +11901,12 @@
         "Gwendolin",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Gwendolin",
+        "GlueGunner",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -10737,6 +11937,18 @@
         "Gwendolin",
         "GlueGunner",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Gwendolin",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Gwendolin",
+        "GlueGunner",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -10886,6 +12098,30 @@
     [
         "Gwendolin",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Gwendolin",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Gwendolin",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "Gwendolin",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "Gwendolin",
+        "SniperMonkey",
         "MonkeySub",
         "DartlingGunner"
     ],
@@ -11014,6 +12250,60 @@
         "SniperMonkey",
         "SpikeFactory",
         "MonkeyVillage"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SpikeFactory"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "SpikeFactory"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "Gwendolin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "EngineerMonkey"
     ],
     [
         "Gwendolin",
@@ -11595,6 +12885,12 @@
         "StrikerJones",
         "DartMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "DartMonkey",
+        "BombShooter",
         "DartlingGunner"
     ],
     [
@@ -11632,6 +12928,12 @@
         "DartMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "DartMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "StrikerJones",
@@ -11727,6 +13029,12 @@
         "StrikerJones",
         "DartMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "DartMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -11799,6 +13107,36 @@
         "StrikerJones",
         "DartMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "StrikerJones",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "StrikerJones",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "StrikerJones",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "StrikerJones",
+        "DartMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -11967,6 +13305,12 @@
         "StrikerJones",
         "BoomerangMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "BoomerangMonkey",
+        "BombShooter",
         "HeliPilot"
     ],
     [
@@ -11998,6 +13342,12 @@
         "BoomerangMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BoomerangMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "StrikerJones",
@@ -12034,6 +13384,12 @@
         "BoomerangMonkey",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BoomerangMonkey",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "StrikerJones",
@@ -12064,6 +13420,12 @@
         "BoomerangMonkey",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BoomerangMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "StrikerJones",
@@ -12117,6 +13479,30 @@
         "StrikerJones",
         "BoomerangMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "StrikerJones",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "SpikeFactory"
+    ],
+    [
+        "StrikerJones",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -12273,6 +13659,12 @@
         "StrikerJones",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "BombShooter",
+        "TackShooter",
         "HeliPilot"
     ],
     [
@@ -12304,6 +13696,12 @@
         "BombShooter",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "StrikerJones",
@@ -12357,6 +13755,12 @@
         "StrikerJones",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "BombShooter",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -12388,6 +13792,12 @@
         "BombShooter",
         "GlueGunner",
         "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BombShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "StrikerJones",
@@ -12430,6 +13840,24 @@
         "BombShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "StrikerJones",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "StrikerJones",
@@ -12573,6 +14001,12 @@
         "StrikerJones",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "TackShooter",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -12604,6 +14038,12 @@
         "TackShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "StrikerJones",
@@ -12651,6 +14091,12 @@
         "StrikerJones",
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "TackShooter",
+        "SniperMonkey",
         "DartlingGunner"
     ],
     [
@@ -12675,6 +14121,36 @@
         "StrikerJones",
         "TackShooter",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "StrikerJones",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "StrikerJones",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "StrikerJones",
+        "TackShooter",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -12855,6 +14331,12 @@
         "StrikerJones",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "IceMonkey",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -12886,6 +14368,12 @@
         "IceMonkey",
         "GlueGunner",
         "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "IceMonkey",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "StrikerJones",
@@ -12933,6 +14421,36 @@
         "StrikerJones",
         "IceMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "StrikerJones",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "StrikerJones",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "StrikerJones",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "StrikerJones",
+        "IceMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -13191,6 +14709,12 @@
         "StrikerJones",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "StrikerJones",
+        "GlueGunner",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -13227,6 +14751,30 @@
         "StrikerJones",
         "GlueGunner",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "StrikerJones",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "StrikerJones",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "StrikerJones",
+        "GlueGunner",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -13418,6 +14966,36 @@
     [
         "StrikerJones",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "StrikerJones",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "StrikerJones",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "StrikerJones",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "StrikerJones",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "SniperMonkey",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -13588,6 +15166,126 @@
         "SniperMonkey",
         "SpikeFactory",
         "MonkeyVillage"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "WizardMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SpikeFactory"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "Alchemist"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "SpikeFactory"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "Alchemist"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "Alchemist",
+        "EngineerMonkey"
+    ],
+    [
+        "StrikerJones",
+        "MonkeyBuccaneer",
+        "MonkeyVillage",
+        "EngineerMonkey"
     ],
     [
         "StrikerJones",
@@ -14391,6 +16089,12 @@
         "ObynGreenfoot",
         "DartMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "DartMonkey",
+        "BombShooter",
         "HeliPilot"
     ],
     [
@@ -14434,6 +16138,12 @@
         "DartMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "DartMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "ObynGreenfoot",
@@ -14517,6 +16227,12 @@
         "ObynGreenfoot",
         "DartMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "DartMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -14577,6 +16293,30 @@
         "ObynGreenfoot",
         "DartMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "ObynGreenfoot",
+        "DartMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -14763,6 +16503,12 @@
         "ObynGreenfoot",
         "BoomerangMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "BoomerangMonkey",
+        "BombShooter",
         "HeliPilot"
     ],
     [
@@ -14829,6 +16575,12 @@
         "ObynGreenfoot",
         "BoomerangMonkey",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "BoomerangMonkey",
+        "TackShooter",
         "HeliPilot"
     ],
     [
@@ -14889,6 +16641,12 @@
         "ObynGreenfoot",
         "BoomerangMonkey",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "BoomerangMonkey",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -14932,6 +16690,12 @@
         "BoomerangMonkey",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "BoomerangMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "ObynGreenfoot",
@@ -15003,6 +16767,30 @@
         "ObynGreenfoot",
         "BoomerangMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "SpikeFactory"
+    ],
+    [
+        "ObynGreenfoot",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "ObynGreenfoot",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -15171,6 +16959,12 @@
         "ObynGreenfoot",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "BombShooter",
+        "TackShooter",
         "MonkeySub"
     ],
     [
@@ -15237,6 +17031,12 @@
         "ObynGreenfoot",
         "BombShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "BombShooter",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -15309,6 +17109,12 @@
         "ObynGreenfoot",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "BombShooter",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -15369,6 +17175,12 @@
         "ObynGreenfoot",
         "BombShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "BombShooter",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -15418,6 +17230,30 @@
         "BombShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "MortarMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "ObynGreenfoot",
@@ -15711,6 +17547,12 @@
         "ObynGreenfoot",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "TackShooter",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -15754,6 +17596,12 @@
         "TackShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "ObynGreenfoot",
@@ -15813,6 +17661,12 @@
         "ObynGreenfoot",
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "TackShooter",
+        "SniperMonkey",
         "HeliPilot"
     ],
     [
@@ -15843,6 +17697,30 @@
         "ObynGreenfoot",
         "TackShooter",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "ObynGreenfoot",
+        "TackShooter",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -16011,6 +17889,12 @@
         "ObynGreenfoot",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "IceMonkey",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -16065,6 +17949,12 @@
         "ObynGreenfoot",
         "IceMonkey",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "IceMonkey",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -16107,6 +17997,30 @@
         "ObynGreenfoot",
         "IceMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "ObynGreenfoot",
+        "IceMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -16371,6 +18285,12 @@
         "ObynGreenfoot",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "ObynGreenfoot",
+        "GlueGunner",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -16418,6 +18338,24 @@
     [
         "ObynGreenfoot",
         "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "ObynGreenfoot",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "GlueGunner",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -16694,6 +18632,36 @@
     [
         "ObynGreenfoot",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "ObynGreenfoot",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "ObynGreenfoot",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "SniperMonkey",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -16855,6 +18823,90 @@
     ],
     [
         "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "MonkeySub",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "MonkeySub",
+        "SuperMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "MonkeySub",
+        "MonkeyVillage"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SpikeFactory"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "Alchemist"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "Alchemist",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
+        "MonkeyBuccaneer",
+        "MonkeyVillage",
+        "EngineerMonkey"
+    ],
+    [
+        "ObynGreenfoot",
         "MonkeySub",
         "HeliPilot",
         "MortarMonkey"
@@ -17553,6 +19605,12 @@
         "CaptainChurchill",
         "BoomerangMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "CaptainChurchill",
+        "BoomerangMonkey",
+        "BombShooter",
         "DartlingGunner"
     ],
     [
@@ -17560,6 +19618,12 @@
         "BoomerangMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "BoomerangMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "CaptainChurchill",
@@ -17572,6 +19636,12 @@
         "BoomerangMonkey",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "BoomerangMonkey",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "CaptainChurchill",
@@ -17584,6 +19654,12 @@
         "BoomerangMonkey",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "BoomerangMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "CaptainChurchill",
@@ -17608,6 +19684,24 @@
         "BoomerangMonkey",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "CaptainChurchill",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "CaptainChurchill",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
     ],
     [
         "CaptainChurchill",
@@ -17649,6 +19743,12 @@
         "CaptainChurchill",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "CaptainChurchill",
+        "BombShooter",
+        "TackShooter",
         "DartlingGunner"
     ],
     [
@@ -17656,6 +19756,12 @@
         "BombShooter",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "CaptainChurchill",
@@ -17668,6 +19774,12 @@
         "BombShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "BombShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "CaptainChurchill",
@@ -17680,6 +19792,12 @@
         "BombShooter",
         "GlueGunner",
         "SpikeFactory"
+    ],
+    [
+        "CaptainChurchill",
+        "BombShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "CaptainChurchill",
@@ -17704,6 +19822,12 @@
         "BombShooter",
         "SniperMonkey",
         "SpikeFactory"
+    ],
+    [
+        "CaptainChurchill",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
     ],
     [
         "CaptainChurchill",
@@ -17739,6 +19863,12 @@
         "CaptainChurchill",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "CaptainChurchill",
+        "TackShooter",
+        "IceMonkey",
         "DartlingGunner"
     ],
     [
@@ -17751,6 +19881,12 @@
         "CaptainChurchill",
         "TackShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "CaptainChurchill",
+        "TackShooter",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -17758,6 +19894,12 @@
         "TackShooter",
         "GlueGunner",
         "WizardMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "TackShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "CaptainChurchill",
@@ -17776,6 +19918,18 @@
         "TackShooter",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "CaptainChurchill",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "CaptainChurchill",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
     ],
     [
         "CaptainChurchill",
@@ -17817,6 +19971,12 @@
         "CaptainChurchill",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "CaptainChurchill",
+        "IceMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -17824,6 +19984,12 @@
         "IceMonkey",
         "GlueGunner",
         "WizardMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "IceMonkey",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "CaptainChurchill",
@@ -17854,6 +20020,24 @@
         "IceMonkey",
         "SniperMonkey",
         "MonkeyVillage"
+    ],
+    [
+        "CaptainChurchill",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "CaptainChurchill",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
     ],
     [
         "CaptainChurchill",
@@ -17943,6 +20127,12 @@
         "CaptainChurchill",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "CaptainChurchill",
+        "GlueGunner",
+        "SniperMonkey",
         "DartlingGunner"
     ],
     [
@@ -17956,6 +20146,18 @@
         "GlueGunner",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "CaptainChurchill",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "CaptainChurchill",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
     ],
     [
         "CaptainChurchill",
@@ -18026,6 +20228,24 @@
     [
         "CaptainChurchill",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "CaptainChurchill",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "CaptainChurchill",
+        "SniperMonkey",
         "DartlingGunner",
         "NinjaMonkey"
     ],
@@ -18087,6 +20307,42 @@
         "CaptainChurchill",
         "SniperMonkey",
         "SpikeFactory",
+        "MonkeyVillage"
+    ],
+    [
+        "CaptainChurchill",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "CaptainChurchill",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "CaptainChurchill",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "CaptainChurchill",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
         "MonkeyVillage"
     ],
     [
@@ -18411,6 +20667,12 @@
         "Benjamin",
         "DartMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "DartMonkey",
+        "BombShooter",
         "DartlingGunner"
     ],
     [
@@ -18448,6 +20710,12 @@
         "DartMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "Benjamin",
+        "DartMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "Benjamin",
@@ -18543,6 +20811,12 @@
         "Benjamin",
         "DartMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "DartMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -18615,6 +20889,36 @@
         "Benjamin",
         "DartMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Benjamin",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Benjamin",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Benjamin",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "Benjamin",
+        "DartMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -18837,6 +21141,12 @@
         "Benjamin",
         "BoomerangMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "BoomerangMonkey",
+        "BombShooter",
         "HeliPilot"
     ],
     [
@@ -18862,6 +21172,12 @@
         "BoomerangMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "Benjamin",
+        "BoomerangMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "Benjamin",
@@ -18892,6 +21208,12 @@
         "BoomerangMonkey",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "Benjamin",
+        "BoomerangMonkey",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "Benjamin",
@@ -18922,6 +21244,12 @@
         "BoomerangMonkey",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "Benjamin",
+        "BoomerangMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "Benjamin",
@@ -18975,6 +21303,30 @@
         "Benjamin",
         "BoomerangMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Benjamin",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Benjamin",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "Benjamin",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -19119,6 +21471,12 @@
         "Benjamin",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "BombShooter",
+        "TackShooter",
         "MonkeySub"
     ],
     [
@@ -19156,6 +21514,12 @@
         "BombShooter",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "Benjamin",
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "Benjamin",
@@ -19209,6 +21573,12 @@
         "Benjamin",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "BombShooter",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -19240,6 +21610,12 @@
         "BombShooter",
         "GlueGunner",
         "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "BombShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "Benjamin",
@@ -19294,6 +21670,30 @@
         "BombShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "MortarMonkey"
+    ],
+    [
+        "Benjamin",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Benjamin",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "Benjamin",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "Benjamin",
@@ -19449,6 +21849,12 @@
         "Benjamin",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "TackShooter",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -19480,6 +21886,12 @@
         "TackShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "Benjamin",
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "Benjamin",
@@ -19527,6 +21939,12 @@
         "Benjamin",
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "TackShooter",
+        "SniperMonkey",
         "HeliPilot"
     ],
     [
@@ -19557,6 +21975,36 @@
         "Benjamin",
         "TackShooter",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Benjamin",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Benjamin",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "Benjamin",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "Benjamin",
+        "TackShooter",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -19737,6 +22185,12 @@
         "Benjamin",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "IceMonkey",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -19762,6 +22216,12 @@
         "IceMonkey",
         "GlueGunner",
         "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "IceMonkey",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "Benjamin",
@@ -19809,6 +22269,36 @@
         "Benjamin",
         "IceMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Benjamin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Benjamin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Benjamin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "Benjamin",
+        "IceMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -20103,6 +22593,12 @@
         "Benjamin",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Benjamin",
+        "GlueGunner",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -20145,6 +22641,30 @@
         "Benjamin",
         "GlueGunner",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Benjamin",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Benjamin",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "Benjamin",
+        "GlueGunner",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -20331,6 +22851,36 @@
         "Benjamin",
         "GlueGunner",
         "SpikeFactory",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Benjamin",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Benjamin",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "Benjamin",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "Benjamin",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -20524,6 +23074,120 @@
         "SniperMonkey",
         "SpikeFactory",
         "MonkeyVillage"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "WizardMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "SuperMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "Alchemist"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "Alchemist"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "MonkeyVillage"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "Alchemist",
+        "EngineerMonkey"
+    ],
+    [
+        "Benjamin",
+        "MonkeyBuccaneer",
+        "MonkeyVillage",
+        "EngineerMonkey"
     ],
     [
         "Benjamin",
@@ -22137,6 +24801,12 @@
         "Ezili",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Ezili",
+        "BombShooter",
+        "TackShooter",
         "HeliPilot"
     ],
     [
@@ -22180,6 +24850,12 @@
         "BombShooter",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "Ezili",
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "Ezili",
@@ -22245,6 +24921,12 @@
         "Ezili",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Ezili",
+        "BombShooter",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -22293,6 +24975,12 @@
         "Ezili",
         "BombShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Ezili",
+        "BombShooter",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -22330,6 +25018,18 @@
         "BombShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "Ezili",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "MortarMonkey"
+    ],
+    [
+        "Ezili",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
     ],
     [
         "Ezili",
@@ -22527,6 +25227,12 @@
         "Ezili",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Ezili",
+        "TackShooter",
+        "IceMonkey",
         "MonkeySub"
     ],
     [
@@ -22564,6 +25270,12 @@
         "TackShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "Ezili",
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "Ezili",
@@ -22617,6 +25329,12 @@
         "Ezili",
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Ezili",
+        "TackShooter",
+        "SniperMonkey",
         "DartlingGunner"
     ],
     [
@@ -22641,6 +25359,24 @@
         "Ezili",
         "TackShooter",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Ezili",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Ezili",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Ezili",
+        "TackShooter",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -22785,6 +25521,12 @@
         "Ezili",
         "IceMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Ezili",
+        "IceMonkey",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -22833,6 +25575,12 @@
         "Ezili",
         "IceMonkey",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Ezili",
+        "IceMonkey",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -22875,6 +25623,24 @@
         "Ezili",
         "IceMonkey",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Ezili",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Ezili",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Ezili",
+        "IceMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -23091,6 +25857,12 @@
         "Ezili",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Ezili",
+        "GlueGunner",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -23127,6 +25899,24 @@
         "Ezili",
         "GlueGunner",
         "SniperMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Ezili",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Ezili",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "Ezili",
+        "GlueGunner",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -23301,6 +26091,24 @@
         "Ezili",
         "GlueGunner",
         "Druid",
+        "EngineerMonkey"
+    ],
+    [
+        "Ezili",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Ezili",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Ezili",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
         "EngineerMonkey"
     ],
     [
@@ -23470,6 +26278,54 @@
         "SniperMonkey",
         "SpikeFactory",
         "MonkeyVillage"
+    ],
+    [
+        "Ezili",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "Ezili",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "WizardMonkey"
+    ],
+    [
+        "Ezili",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "Ezili",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "EngineerMonkey"
+    ],
+    [
+        "Ezili",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "Ezili",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "Ezili",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "EngineerMonkey"
+    ],
+    [
+        "Ezili",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
     ],
     [
         "Ezili",
@@ -24159,6 +27015,12 @@
         "PatFusty",
         "DartMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "DartMonkey",
+        "BombShooter",
         "DartlingGunner"
     ],
     [
@@ -24201,6 +27063,12 @@
         "PatFusty",
         "DartMonkey",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "DartMonkey",
+        "TackShooter",
         "DartlingGunner"
     ],
     [
@@ -24291,6 +27159,12 @@
         "PatFusty",
         "DartMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "DartMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -24364,6 +27238,24 @@
         "DartMonkey",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "PatFusty",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "PatFusty",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
     ],
     [
         "PatFusty",
@@ -24531,6 +27423,12 @@
         "PatFusty",
         "BoomerangMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "BoomerangMonkey",
+        "BombShooter",
         "HeliPilot"
     ],
     [
@@ -24562,6 +27460,12 @@
         "BoomerangMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "PatFusty",
+        "BoomerangMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "PatFusty",
@@ -24598,6 +27502,12 @@
         "BoomerangMonkey",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "PatFusty",
+        "BoomerangMonkey",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "PatFusty",
@@ -24622,6 +27532,12 @@
         "BoomerangMonkey",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "PatFusty",
+        "BoomerangMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "PatFusty",
@@ -24676,6 +27592,24 @@
         "BoomerangMonkey",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "PatFusty",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "PatFusty",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "SpikeFactory"
     ],
     [
         "PatFusty",
@@ -24843,6 +27777,12 @@
         "PatFusty",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "BombShooter",
+        "TackShooter",
         "HeliPilot"
     ],
     [
@@ -24874,6 +27814,12 @@
         "BombShooter",
         "IceMonkey",
         "SniperMonkey"
+    ],
+    [
+        "PatFusty",
+        "BombShooter",
+        "IceMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "PatFusty",
@@ -24921,6 +27867,12 @@
         "PatFusty",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "BombShooter",
+        "GlueGunner",
         "MonkeySub"
     ],
     [
@@ -24952,6 +27904,12 @@
         "BombShooter",
         "GlueGunner",
         "EngineerMonkey"
+    ],
+    [
+        "PatFusty",
+        "BombShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "PatFusty",
@@ -25000,6 +27958,24 @@
         "BombShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "PatFusty",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "MortarMonkey"
+    ],
+    [
+        "PatFusty",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "PatFusty",
@@ -25149,6 +28125,12 @@
         "PatFusty",
         "TackShooter",
         "IceMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "TackShooter",
+        "IceMonkey",
         "DartlingGunner"
     ],
     [
@@ -25168,6 +28150,12 @@
         "TackShooter",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "PatFusty",
+        "TackShooter",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "PatFusty",
@@ -25209,6 +28197,12 @@
         "PatFusty",
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "TackShooter",
+        "SniperMonkey",
         "DartlingGunner"
     ],
     [
@@ -25234,6 +28228,24 @@
         "TackShooter",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "PatFusty",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "PatFusty",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "PatFusty",
@@ -25390,6 +28402,12 @@
         "IceMonkey",
         "GlueGunner",
         "SniperMonkey"
+    ],
+    [
+        "PatFusty",
+        "IceMonkey",
+        "GlueGunner",
+        "MonkeyBuccaneer"
     ],
     [
         "PatFusty",
@@ -25425,6 +28443,12 @@
         "PatFusty",
         "IceMonkey",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "IceMonkey",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -25468,6 +28492,30 @@
         "IceMonkey",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "PatFusty",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "PatFusty",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "PatFusty",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "PatFusty",
@@ -25695,6 +28743,12 @@
         "PatFusty",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "PatFusty",
+        "GlueGunner",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -25738,6 +28792,24 @@
         "GlueGunner",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "PatFusty",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "WizardMonkey"
+    ],
+    [
+        "PatFusty",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "PatFusty",
@@ -25922,6 +28994,24 @@
     [
         "PatFusty",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "PatFusty",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "PatFusty",
+        "SniperMonkey",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -26086,6 +29176,78 @@
         "SniperMonkey",
         "SpikeFactory",
         "MonkeyVillage"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "MonkeySub",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "WizardMonkey"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "WizardMonkey"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SpikeFactory"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "Alchemist"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "WizardMonkey",
+        "SpikeFactory"
+    ],
+    [
+        "PatFusty",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "Alchemist"
     ],
     [
         "PatFusty",
@@ -26775,6 +29937,12 @@
         "Adora",
         "DartMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "DartMonkey",
+        "BombShooter",
         "DartlingGunner"
     ],
     [
@@ -26811,6 +29979,12 @@
         "Adora",
         "DartMonkey",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "DartMonkey",
+        "TackShooter",
         "DartlingGunner"
     ],
     [
@@ -26841,6 +30015,12 @@
         "Adora",
         "DartMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "DartMonkey",
+        "GlueGunner",
         "DartlingGunner"
     ],
     [
@@ -26884,6 +30064,18 @@
         "DartMonkey",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "Adora",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "DartMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
     ],
     [
         "Adora",
@@ -26931,6 +30123,12 @@
         "Adora",
         "BoomerangMonkey",
         "BombShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "BoomerangMonkey",
+        "BombShooter",
         "HeliPilot"
     ],
     [
@@ -26956,6 +30154,12 @@
         "BoomerangMonkey",
         "TackShooter",
         "SniperMonkey"
+    ],
+    [
+        "Adora",
+        "BoomerangMonkey",
+        "TackShooter",
+        "MonkeyBuccaneer"
     ],
     [
         "Adora",
@@ -27015,6 +30219,12 @@
         "Adora",
         "BoomerangMonkey",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "BoomerangMonkey",
+        "GlueGunner",
         "HeliPilot"
     ],
     [
@@ -27052,6 +30262,18 @@
         "BoomerangMonkey",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "Adora",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "BoomerangMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
     ],
     [
         "Adora",
@@ -27159,6 +30381,12 @@
         "Adora",
         "BombShooter",
         "TackShooter",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "BombShooter",
+        "TackShooter",
         "HeliPilot"
     ],
     [
@@ -27219,6 +30447,12 @@
         "Adora",
         "BombShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "BombShooter",
+        "GlueGunner",
         "HeliPilot"
     ],
     [
@@ -27244,6 +30478,12 @@
         "BombShooter",
         "GlueGunner",
         "EngineerMonkey"
+    ],
+    [
+        "Adora",
+        "BombShooter",
+        "SniperMonkey",
+        "MonkeyBuccaneer"
     ],
     [
         "Adora",
@@ -27274,6 +30514,30 @@
         "BombShooter",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "Adora",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "MortarMonkey"
+    ],
+    [
+        "Adora",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "Adora",
+        "BombShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "Adora",
@@ -27393,6 +30657,12 @@
         "Adora",
         "TackShooter",
         "GlueGunner",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "TackShooter",
+        "GlueGunner",
         "HeliPilot"
     ],
     [
@@ -27423,6 +30693,12 @@
         "Adora",
         "TackShooter",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "TackShooter",
+        "SniperMonkey",
         "HeliPilot"
     ],
     [
@@ -27448,6 +30724,24 @@
         "TackShooter",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "Adora",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "SuperMonkey"
+    ],
+    [
+        "Adora",
+        "TackShooter",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "Adora",
@@ -27729,6 +31023,12 @@
         "Adora",
         "GlueGunner",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "Adora",
+        "GlueGunner",
+        "SniperMonkey",
         "HeliPilot"
     ],
     [
@@ -27754,6 +31054,18 @@
         "GlueGunner",
         "SniperMonkey",
         "Druid"
+    ],
+    [
+        "Adora",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "GlueGunner",
+        "MonkeyBuccaneer",
+        "Alchemist"
     ],
     [
         "Adora",
@@ -27830,6 +31142,24 @@
     [
         "Adora",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "Adora",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "Alchemist"
+    ],
+    [
+        "Adora",
+        "SniperMonkey",
         "MonkeySub",
         "HeliPilot"
     ],
@@ -27916,6 +31246,60 @@
         "SniperMonkey",
         "Alchemist",
         "Druid"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "MonkeySub",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "MonkeySub",
+        "SuperMonkey"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "MonkeyAce",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "Alchemist"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "Adora",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
+        "Alchemist"
     ],
     [
         "Adora",
@@ -29109,6 +32493,12 @@
         "AdmiralBrickell",
         "IceMonkey",
         "SniperMonkey",
+        "MonkeyBuccaneer"
+    ],
+    [
+        "AdmiralBrickell",
+        "IceMonkey",
+        "SniperMonkey",
         "MonkeySub"
     ],
     [
@@ -29152,6 +32542,18 @@
         "IceMonkey",
         "SniperMonkey",
         "EngineerMonkey"
+    ],
+    [
+        "AdmiralBrickell",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "AdmiralBrickell",
+        "IceMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
     ],
     [
         "AdmiralBrickell",
@@ -29552,6 +32954,24 @@
     [
         "AdmiralBrickell",
         "SniperMonkey",
+        "MonkeyBuccaneer",
+        "DartlingGunner"
+    ],
+    [
+        "AdmiralBrickell",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "NinjaMonkey"
+    ],
+    [
+        "AdmiralBrickell",
+        "SniperMonkey",
+        "MonkeyBuccaneer",
+        "MonkeyVillage"
+    ],
+    [
+        "AdmiralBrickell",
+        "SniperMonkey",
         "MonkeySub",
         "DartlingGunner"
     ],
@@ -29703,6 +33123,48 @@
         "AdmiralBrickell",
         "SniperMonkey",
         "SpikeFactory",
+        "MonkeyVillage"
+    ],
+    [
+        "AdmiralBrickell",
+        "MonkeyBuccaneer",
+        "MonkeyAce",
+        "DartlingGunner"
+    ],
+    [
+        "AdmiralBrickell",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "AdmiralBrickell",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "NinjaMonkey"
+    ],
+    [
+        "AdmiralBrickell",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "AdmiralBrickell",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "NinjaMonkey"
+    ],
+    [
+        "AdmiralBrickell",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "MonkeyVillage"
+    ],
+    [
+        "AdmiralBrickell",
+        "MonkeyBuccaneer",
+        "NinjaMonkey",
         "MonkeyVillage"
     ],
     [
@@ -30543,6 +34005,36 @@
         "Etienne",
         "SniperMonkey",
         "SpikeFactory",
+        "MonkeyVillage"
+    ],
+    [
+        "Etienne",
+        "MonkeyBuccaneer",
+        "MonkeyAce",
+        "DartlingGunner"
+    ],
+    [
+        "Etienne",
+        "MonkeyBuccaneer",
+        "MortarMonkey",
+        "DartlingGunner"
+    ],
+    [
+        "Etienne",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SuperMonkey"
+    ],
+    [
+        "Etienne",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
+        "SpikeFactory"
+    ],
+    [
+        "Etienne",
+        "MonkeyBuccaneer",
+        "DartlingGunner",
         "MonkeyVillage"
     ],
     [

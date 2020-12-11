@@ -488,5 +488,25 @@
         "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/598768025289883649/766851194978566144/image0.png",
         "e": "1/2"
+    },
+    "x_factor": {
+        "ver": 22,
+        "len": "18.1",
+        "obj": 1,
+        "Cos": "2000",
+        "wa%": "2%",
+        "los": "no",
+        "thu": "https://cdn.discordapp.com/attachments/770094137713885204/786122866969935892/Screenshot_1409.png",
+        "e": "4/4"
+    },
+    "skates": {
+        "ver": 22,
+        "len": "37.9",
+        "obj": 1,
+        "Cos": "500",
+        "wa%": "11% / 14%",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/770094137713885204/786122872242438174/Screenshot_1410.png",
+        "e": "1/1"
     }
 }

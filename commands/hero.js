@@ -93,12 +93,13 @@ const aliases = [
         'drone',
     ],
 ];
+
 module.exports = {
     name: '<hero>',
     aliases: aliases.flat(),
     dependencies: ['towerJSON'],
-    execute(message, args, commandName) {
-        let name = findName(commandName);
+    execute(message, args, commandName, lang) {
+        let name = findName(commandName, lang);
         if (!args) {
             let errorEmbed = new Discord.MessageEmbed()
                 .setColor(red)
@@ -160,9 +161,15 @@ module.exports = {
         });
     },
 };
-function findName(commandName) {
-    for (let i = 0; i < aliases.length; i++) {
-        let heroAliasSet = aliases[i];
+function findName(commandName, lang) {
+    let aliasArr;
+    if (lang == 'ru') {
+        let aliasArr = aliases; // temp
+    } else {
+        let aliasArr = aliases;
+    }
+    for (let i = 0; i < aliasArr.length; i++) {
+        let heroAliasSet = aliasArr[i];
 
         for (let j = 0; j < heroAliasSet.length; j++) {
             if (commandName == heroAliasSet[j]) {

@@ -30,12 +30,6 @@ async function handleCommand(message) {
         // "Normalize" message
         let c = message.content.toLowerCase();
 
-        // check for pings
-        if (c.includes('<@&591922988832653313>')) {
-            command = client.commands.get('help');
-            return command.execute(message, args, 'help');
-        }
-
         // Queries must begin with q!
         if (!c.startsWith(PREFIX)) return;
 
@@ -54,34 +48,40 @@ async function handleCommand(message) {
 
         // The command name is the first token; args are the rest
         const commandName = args.shift();
-        let command;
+
         // exception: check with they inputted a path as the commandName
         if (Towers.isValidUpgradeSet(commandName)) {
-            command =
-                client.commands.get(args[0]) ||
-                client.commands.find(
-                    (cmd) => cmd.aliases && cmd.aliases.includes(args[0])
-                );
-
-            if (!command) {
-                return;
-            }
-        } else {
-            // Search through command names taking into account their aliases
-            command =
-                client.commands.get(commandName) ||
-                client.commands.find(
-                    (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
-                );
+            return message.channel.send(`its q!${args[0]} $`);
         }
+        // Search through command names taking into account their aliases
+        let command =
+            client.commands.get(commandName) ||
+            client.commands.find(
+                (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
+            );
+
+        let lang = 'en';
+
+        // russian
+        if (
+            message.channel.topic &&
+            message.channel.topic.toLowerCase().includes('<ru>') &&
+            command.languages.includes('ru')
+        ) {
+            lang = 'ru';
+        }
+
         if (!command) {
             return;
         }
         let canonicalArgs = null;
 
+        // doesnt lowerCase the arguments
         if (command.casedArgs) {
             args = message.content.slice(PREFIX.length).split(/ +/);
         }
+
+        // rawArgs => no getting arg-alias-parsed
         if (command.rawArgs) {
             // If the command specifies that the arguments should come in raw, don't canonicize them
             canonicalArgs = args;
@@ -96,26 +96,29 @@ async function handleCommand(message) {
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
         if (!Cooldowns.handleCooldown(command, message)) return;
-        if (Towers.isValidUpgradeSet(commandName)) {
-            let inputs = [commandName];
-            command.execute(message, inputs, args[0]);
-        } else {
-            if (command.dependencies) {
-                if (command.dependencies.includes('btd6index')) {
-                    let btd6index = require('./1/config.json')['btd6index'];
-                    if (!btd6index) {
-                        return message.channel.send('This command is disabled');
-                    }
-                }
-                if (command.dependencies.includes('towerJSON')) {
-                    let towerJSON = require('./1/config.json')['towerJSON'];
-                    if (!towerJSON) {
-                        return message.channel.send('This command is disabled');
-                    }
+
+        if (command.dependencies) {
+            if (command.dependencies.includes('btd6index')) {
+                let btd6index = require('./1/config.json')['btd6index'];
+                if (!btd6index) {
+                    return message.channel.send('This command is disabled');
                 }
             }
-            command.execute(message, canonicalArgs, commandName);
+            if (command.dependencies.includes('towerJSON')) {
+                let towerJSON = require('./1/config.json')['towerJSON'];
+                if (!towerJSON) {
+                    return message.channel.send('This command is disabled');
+                }
+            }
+            if (command.dependencies.includes('reddit')) {
+                let reddit = require('./1/config.json')['reddit'];
+                if (!reddit) {
+                    return message.channel.send('This command is disabled');
+                }
+            }
         }
+        command.execute(message, canonicalArgs, commandName, lang);
+
         // Don't want the user gaining xp from metacommands
         if (!XPCOMMANDS.includes(command.name) && xpEnabled) {
             Xp.addCommandXp(message);

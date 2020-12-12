@@ -164,9 +164,9 @@ module.exports = {
 function findName(commandName, lang) {
     let aliasArr;
     if (lang == 'ru') {
-        let aliasArr = aliases; // temp
+        aliasArr = aliases; // temp
     } else {
-        let aliasArr = aliases;
+        aliasArr = aliases;
     }
     for (let i = 0; i < aliasArr.length; i++) {
         let heroAliasSet = aliasArr[i];

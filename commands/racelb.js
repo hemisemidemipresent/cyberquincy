@@ -33,9 +33,9 @@ module.exports = {
             start = nums[0];
             end = nums[1];
         }
-        let url =
-            'https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_WorkingOnForm_ki9pdqx4.json';
 
+        let url =
+            'https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_Decrypting_kijmo8pe.json';
         request(url, (err, res, body) => {
             if (err) {
                 reject('req');
@@ -45,6 +45,7 @@ module.exports = {
 
             let output = '';
             for (let i = start - 1; i < end; i++) {
+                if (!scores[i]) break;
                 let time = 1000000000 - scores[i].score;
 
                 time = parsetime(time);

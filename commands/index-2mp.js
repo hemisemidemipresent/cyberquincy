@@ -249,7 +249,7 @@ async function display2MPAlt(message, tower, map) {
     }
 }
 
-MAX_VALUES_LIST_LENGTH_2MP = 15;
+MAX_VALUES_LIST_LENGTH_2MP = 12;
 
 async function display2MPPerson(message, person) {
     return await display2MPFilterAll(

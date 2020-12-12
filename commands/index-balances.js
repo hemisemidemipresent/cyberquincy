@@ -295,6 +295,7 @@ function helpMessage(message) {
             '`q!balance <tower/tower_path/tower_upgrade>`',
             'Get the patch notes for a given tower\n`q!balance heli\nq!balance wiz#middle-path\nq!balance icicle_impale`'
         )
+        .addField('`q!balance hero', 'Get the patch notes for a given hero')
         .addField(
             'Incorporate a version, or two to specify a range',
             '`q!balance sub#mid v15 v18`'

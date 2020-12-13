@@ -7,6 +7,7 @@ const OptionalParser = require('../parser/optional-parser');
 const TowerParser = require('../parser/tower-parser');
 const TowerPathParser = require('../parser/tower-path-parser');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser');
+const HeroParser = require('../parser/hero-parser');
 
 const VersionParser = require('../parser/version-parser');
 
@@ -26,7 +27,8 @@ async function execute(message, args) {
     entityParser = new OrParser(
         new TowerParser(),
         new TowerPathParser(),
-        new TowerUpgradeParser()
+        new TowerUpgradeParser(),
+        new HeroParser(),
     );
 
     const parsed = CommandParser.parse(
@@ -42,8 +44,8 @@ async function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
-    await loadTowerBuffNerfsTableCells();
-    colIndex = await locateSpecifiedTowerColumnIndex(parsed);
+    await loadEntityBuffNerfsTableCells(parsed);
+    colIndex = await locateSpecifiedEntityColumnIndex(parsed);
     balanceChanges = await parseBalanceChanges(parsed, colIndex);
     return await formatAndDisplayBalanceChanges(
         message,
@@ -52,34 +54,34 @@ async function execute(message, args) {
     );
 }
 
-async function loadTowerBuffNerfsTableCells() {
-    const sheet = towersSheet();
-    const currentVersion = await parseCurrentVersion();
+async function loadEntityBuffNerfsTableCells(parsed) {
+    let sheet = getSheet(parsed)
+    const currentVersion = await parseCurrentVersion(parsed);
 
     // Load from C23 to {end_column}{C+version}
     bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(
-        HEADER_ROW + currentVersion - 1,
+        headerRow(parsed) + currentVersion - 1,
         sheet.columnCount
     );
     await sheet.loadCells(
-        `${VERSION_COLUMN}${HEADER_ROW}:${bottomRightCellToBeLoaded}`
+        `${VERSION_COLUMN}${headerRow(parsed)}:${bottomRightCellToBeLoaded}`
     );
 }
 
-async function locateSpecifiedTowerColumnIndex(parsed) {
-    const sheet = towersSheet();
+async function locateSpecifiedEntityColumnIndex(parsed) {
+    const sheet = getSheet(parsed);
 
-    // Parse {column}23 until tower alias is reached
+    // Parse {column}{headerRow} until tower alias is reached
     for (
         colIndex =
             GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN) + 1;
         colIndex < sheet.columnCount;
         colIndex += 2
     ) {
-        towerHeader = sheet.getCell(HEADER_ROW - 1, colIndex).value;
+        towerHeader = sheet.getCell(headerRow(parsed) - 1, colIndex).value;
 
         if (!towerHeader)
-            throw `Something went wrong; ${parsed.tower} couldn't be found in the headers`;
+            throw `Something went wrong; ${parsedEntity(parsed)} couldn't be found in the headers`;
 
         canonicalHeader = Aliases.getCanonicalForm(towerHeader);
         if (parsed.tower && parsed.tower == canonicalHeader) {
@@ -94,19 +96,40 @@ async function locateSpecifiedTowerColumnIndex(parsed) {
             Towers.towerUpgradeToTower(parsed.tower_upgrade) == canonicalHeader
         ) {
             return colIndex;
+        } else if (parsed.hero && parsed.hero == canonicalHeader) {
+            return colIndex;
         }
     }
 }
 
+function headerRow(parsed) {
+    return parsed.hero ? 18 : 23
+}
+
 VERSION_COLUMN = 'C';
-HEADER_ROW = 23;
+
+function getSheet(parsed) {
+    if (parsed.hero) return heroesSheet();
+    else return towersSheet();
+}
 
 function towersSheet() {
     return GoogleSheetsHelper.sheetByName(Btd6Index, 'Towers');
 }
 
-async function parseCurrentVersion() {
-    const sheet = towersSheet();
+function heroesSheet() {
+    return GoogleSheetsHelper.sheetByName(Btd6Index, 'Heroes');
+}
+
+function parsedEntity(parsed) {
+    if (parsed.hero) return parsed.hero
+    else if (parsed.tower) return parsed.tower
+    else if (parsed.tower_upgrade) return parsed.tower_upgrade
+    else if (parsed.tower_path) return parsed.tower_path
+}
+
+async function parseCurrentVersion(parsed) {
+    let sheet = getSheet(parsed)
 
     // Get version number from J3
     await sheet.loadCells(`J3`);
@@ -116,14 +139,14 @@ async function parseCurrentVersion() {
 }
 
 async function parseBalanceChanges(parsed, entryColIndex) {
-    const sheet = towersSheet();
-    const currentVersion = await parseCurrentVersion();
+    const sheet = getSheet(parsed);
+    const currentVersion = await parseCurrentVersion(parsed);
 
     let balances = {};
     // Iterate for currentVersion - 1 rows since there's no row for v1.0
     for (
-        rowIndex = HEADER_ROW;
-        rowIndex <= HEADER_ROW + currentVersion - 2;
+        rowIndex = headerRow(parsed);
+        rowIndex <= headerRow(parsed) + currentVersion - 2;
         rowIndex++
     ) {
         v = sheet.getCell(
@@ -171,6 +194,7 @@ function filterChangeNotes(noteSet, v, parsed) {
     // - Ask index maintainers to prepend ALL patch notes with {symbol} XYZ
     const notes = noteSet.split('\n\n').filter((note) => {
         if (parsed.tower) return true;
+        else if (parsed.hero) return true;
         else {
             const upgradeSet = note
                 .replace(/✔️|❌/g, '')
@@ -209,7 +233,7 @@ function handleIrregularNote(note, parsed) {
 
 async function formatAndDisplayBalanceChanges(message, parsed, balances) {
     formattedTower = Towers.formatTower(
-        parsed.tower || parsed.tower_upgrade || parsed.tower_path
+        parsed.tower || parsed.tower_upgrade || parsed.tower_path || parsed.hero
     );
 
     if (Object.keys(balances).length == 0) {
@@ -271,6 +295,7 @@ function helpMessage(message) {
             '`q!balance <tower/tower_path/tower_upgrade>`',
             'Get the patch notes for a given tower\n`q!balance heli\nq!balance wiz#middle-path\nq!balance icicle_impale`'
         )
+        .addField('`q!balance hero', 'Get the patch notes for a given hero')
         .addField(
             'Incorporate a version, or two to specify a range',
             '`q!balance sub#mid v15 v18`'

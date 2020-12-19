@@ -4,6 +4,10 @@ const chimps = require('../jsons/round2.json');
 const RoundParser = require('../parser/round-parser');
 
 function calc(message, args, json) {
+    if (args.length == 0 || args.includes('help')) {
+        return helpMessage(message);
+    }
+
     // Use a "lexer" to parse the operator/operand tokens
     var lexer = new Lexer;
 
@@ -134,6 +138,24 @@ function parseAndValueToken(t, json) {
 
 class UnrecognizedTokenError extends Error {}
 
+function helpMessage(message) {
+    let helpEmbed = new Discord.MessageEmbed()
+        .setTitle('`q!calc` HELP')
+        .setDescription('**CHIMPS Cost Calculator**')
+        .addField('`r52`,`R100`', 'Cumulative cash earned after specified round (6-100)')
+        .addField('`33.21`, `69.4201`', 'Literally just numbers work')
+        .addField('`wiz#420`, `super#000`', 'TOTAL COST of tower#upgradeSet (can\'t do just `wiz`)')
+        .addField('Operators', '`+`, `-`, `*`, `/`')
+        .addField(
+            'Examples', 
+            '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
+            '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
+        .setFooter('No heroes (just plug in the cost yourself), no discounts on towers (apply the cost reduction yourself if possible)')
+        .setColor(colours['black'])
+
+    return message.channel.send(helpEmbed);
+}
+
 module.exports = {
     name: 'calculator',
     aliases: ['calc', 'cash-calc', 'cc'],
@@ -142,4 +164,5 @@ module.exports = {
     execute(message, args) {
         calc(message, args, towerJSON)
     },
+    helpMessage,
 }

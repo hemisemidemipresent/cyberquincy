@@ -1,3 +1,4 @@
+// https://gist.github.com/aaditmshah/6683499
 function LexicalParser(table) {
     this.table = table;
 }

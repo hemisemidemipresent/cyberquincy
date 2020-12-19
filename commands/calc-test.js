@@ -1,7 +1,7 @@
 const { cyber, orange } = require('../jsons/colours.json');
 const filter = (msg) => msg.author.id === `${message.author.id}`;
 module.exports = {
-    name: 'calc',
+    name: 'test-calc',
     aliases: ['calculation'],
     execute(message) {},
 };

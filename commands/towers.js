@@ -183,29 +183,10 @@ function baseTower(name) {
 }
 
 function anyOtherTower(json, name, upgradeSet) {
+    const totalCost = Towers.totalTowerUpgradeCrosspathCost(json, name, upgradeSet);
+
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
-    const [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(
-        upgradeSet
-    );
-
     let object = json[`${name}`].upgrades[path - 1][tier - 1];
-
-    const baseCost = parseInt(json[`${name}`].cost);
-
-    let pathCost = 0;
-    for (var subTier = 1; subTier <= tier; subTier++) {
-        pathCost += parseInt(
-            json[`${name}`].upgrades[path - 1][subTier - 1].cost
-        );
-    }
-
-    let crossPathCost = 0;
-    for (var subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
-        crossPathCost += parseInt(
-            json[`${name}`].upgrades[crossPath - 1][subCrossTier - 1].cost
-        );
-    }
-    const totalCost = baseCost + pathCost + crossPathCost;
 
     let alternateCase = object.name.replace(/ +/g, ''); // removes all spaces from the upgrade name
 

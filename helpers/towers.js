@@ -209,6 +209,31 @@ function is_str(u) {
     }
     return false;
 }
+
+function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
+    const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
+    const [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(
+        upgradeSet
+    );
+
+    const baseCost = parseInt(json[`${jsonTowerName}`].cost);
+
+    let pathCost = 0;
+    for (var subTier = 1; subTier <= tier; subTier++) {
+        pathCost += parseInt(
+            json[`${jsonTowerName}`].upgrades[path - 1][subTier - 1].cost
+        );
+    }
+
+    let crossPathCost = 0;
+    for (var subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
+        crossPathCost += parseInt(
+            json[`${jsonTowerName}`].upgrades[crossPath - 1][subCrossTier - 1].cost
+        );
+    }
+    return baseCost + pathCost + crossPathCost;
+}
+
 module.exports = {
     is_str,
     towerUpgradeToTower,
@@ -225,4 +250,5 @@ module.exports = {
     crossPathTierFromUpgradeSet,
     isValidUpgradeSet,
     formatTower,
+    totalTowerUpgradeCrosspathCost,
 };

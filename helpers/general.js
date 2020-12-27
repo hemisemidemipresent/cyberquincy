@@ -14,6 +14,10 @@ function numberAsCost(x) {
     return '$' + numberWithCommas(x);
 }
 
+function replaceStrAt(str, i, wth) {
+    return str.slice(0, i).concat(wth).concat(str.slice(i + 1))
+}
+
 function randomIntegerFromInclusiveRange(low, high) {
     rangeInclusive = high - low + 1;
 
@@ -164,6 +168,7 @@ module.exports = {
     is_fn,
     numberWithCommas,
     numberAsCost,
+    replaceStrAt,
     randomIntegerFromInclusiveRange,
     allLengthNPermutations,
     permutatePaddings,

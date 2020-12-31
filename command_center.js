@@ -51,7 +51,7 @@ async function handleCommand(message) {
 
         // exception: check with they inputted a path as the commandName
         if (Towers.isValidUpgradeSet(commandName)) {
-            return message.channel.send(`its q!${args[0]} $`);
+            return message.channel.send(`its q!${args[0]} <path>`);
         }
         // Search through command names taking into account their aliases
         let command =
@@ -78,9 +78,10 @@ async function handleCommand(message) {
 
         // doesnt lowerCase the arguments
         if (command.casedArgs) {
-            let dummy = message.content.slice(PREFIX.length);
+            let content = message.content.slice(PREFIX.length);
+            dummy = content.split(/ +/);
             dummy.shift();
-            args = dummy.split(/ +/);
+            args = dummy;
         }
 
         // rawArgs => no getting arg-alias-parsed

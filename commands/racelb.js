@@ -4,22 +4,29 @@ const AnyOrderParser = require('../parser/any-order-parser.js');
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const OptionalParser = require('../parser/optional-parser.js');
 const OrParser = require('../parser/or-parser.js');
+const AnythingParser = require('../parser/anything-parser');
 const { red } = require('../jsons/colours.json');
 module.exports = {
     name: 'raceleaderboard',
     aliases: ['leaderboard', 'lb', 't100'],
-
+    casedArgs: true,
+    rawArgs: true,
     async execute(message, args) {
         const parsed = CommandParser.parse(
             args,
+
             new AnyOrderParser(
                 new OptionalParser(new NaturalNumberParser(1, 99)),
 
-                new OptionalParser(new NaturalNumberParser(1, 99))
+                new OptionalParser(new NaturalNumberParser(1, 99)),
+                new OptionalParser(new AnythingParser())
             )
         );
-        if (parsed.hasErrors()) {
-            return module.exports.errorMessage(message, parsed.parsingErrors);
+        console.log(JSON.stringify(parsed));
+
+        let raceID = 'MerryChristmas_kijmqu10';
+        if (parsed.anything) {
+            raceID = parsed.anything;
         }
         let nums = [];
         if (parsed.natural_numbers !== undefined) {
@@ -35,7 +42,9 @@ module.exports = {
         }
 
         let url =
-            'https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_Decrypting_kijmo8pe.json';
+            //'https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_Decrypting_kijmo8pe.json';
+            `https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_${raceID}.json`;
+        console.log(url);
         request(url, (err, res, body) => {
             if (err) {
                 reject('req');

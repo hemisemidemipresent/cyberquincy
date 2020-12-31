@@ -3,7 +3,7 @@ const { cyber } = require('../jsons/colours.json');
 const imgur = require('imgur');
 module.exports = {
     name: 'imgur',
-
+    rawArgs: true,
     execute(message, args) {
         let image;
         let attatched = false;

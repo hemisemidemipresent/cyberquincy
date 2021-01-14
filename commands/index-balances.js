@@ -189,6 +189,10 @@ function filterChangeNotes(noteSet, v, parsed) {
         }
     }
 
+    // TODOS:
+    // - 4+xx format
+    // - xxx
+    // - Ask index maintainers to prepend ALL patch notes with {symbol} XYZ
     const notes = noteSet.split('\n\n').filter((note) => {
         if (parsed.tower) return true;
         else if (parsed.hero) return true;
@@ -198,50 +202,29 @@ function filterChangeNotes(noteSet, v, parsed) {
                 .trim()
                 .split(' ')[0]
                 .replace(/x/gi, '0');
-            
-            upgradeSets = [upgradeSet]
-            
-            // 4+xx / xx3+ / etc.
-            // There should only be one plus
-            if ((plusIndex = upgradeSet.indexOf('+')) !== -1) {
-                upgradeSets = enumerateUpgradeSetsFromPlus(upgradeSet)
-            }
+            if (!Towers.isValidUpgradeSet(upgradeSet))
+                return handleIrregularNote(note, parsed);
 
-            // Just need one match if there is a plus involved
-            return upgradeSets.some(uset => {
-                return Towers.isValidUpgradeSet(uset) && determineSpecifiedTowerMatch(parsed, uset)
-            })
+            const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
+            if (parsed.tower_path) {
+                const parsedPath = parsed.tower_path.split('#')[1];
+
+                return (
+                    Aliases.getCanonicalForm(
+                        [null, 'top', 'mid', 'bot'][path]
+                    ) == parsedPath
+                );
+            } else if (parsed.tower_upgrade) {
+                const parsedUpgradeSet = parsed.tower_upgrade.split('#')[1];
+                const [parsedPath, parsedTier] = Towers.pathTierFromUpgradeSet(
+                    parsedUpgradeSet
+                );
+                return parsedPath == path && parsedTier == tier;
+            }
         }
     });
 
     return notes.length > 0 ? notes.join('\n') : null;
-}
-
-function enumerateUpgradeSetsFromPlus(upgradeSet) {
-    const toBeFilledInUpgradeSet = h.replaceStrAt(upgradeSet, plusIndex - 1, '@').replace('+', '')
-
-    lowestTier = parseInt(upgradeSet[plusIndex - 1])
-
-    return h.range(lowestTier, 5).map(tier => toBeFilledInUpgradeSet.replace('@', tier))
-}
-
-function determineSpecifiedTowerMatch(parsed, upgradeSet) {
-    const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
-    if (parsed.tower_path) {
-        const parsedPath = parsed.tower_path.split('#')[1];
-
-        return (
-            Aliases.getCanonicalForm(
-                [null, 'top', 'mid', 'bot'][path]
-            ) == parsedPath
-        );
-    } else if (parsed.tower_upgrade) {
-        const parsedUpgradeSet = parsed.tower_upgrade.split('#')[1];
-        const [parsedPath, parsedTier] = Towers.pathTierFromUpgradeSet(
-            parsedUpgradeSet
-        );
-        return parsedPath == path && parsedTier == tier;
-    }
 }
 
 function handleIrregularNote(note, parsed) {

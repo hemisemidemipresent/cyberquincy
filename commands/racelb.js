@@ -24,7 +24,7 @@ module.exports = {
         );
         console.log(JSON.stringify(parsed));
 
-        let raceID = 'MerryChristmas_kijmqu10';
+        let raceID = 'DownhillAvalanche_kjnpk23r';
         if (parsed.anything) {
             raceID = parsed.anything;
         }

@@ -25,7 +25,7 @@ module.exports = {
     execute,
     helpMessage,
     errorMessage,
-}
+};
 
 function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
@@ -38,16 +38,14 @@ function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
-    return displayLCC(message, parsed.map)
+    return displayLCC(message, parsed.map);
 }
 
 async function displayLCC(message, btd6_map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
 
     // Load the column containing the different maps
-    await sheet.loadCells(
-        `${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`
-    ); // loads all possible cells with map
+    await sheet.loadCells(`${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`); // loads all possible cells with map
 
     // The row where the queried map is found
     var entryRow = null;
@@ -70,16 +68,12 @@ async function displayLCC(message, btd6_map) {
     }
 
     // Load the row where the map was found
-    await sheet.loadCells(
-        `${COLS.MAP}${entryRow}:${COLS.CURRENT}${entryRow}`
-    );
+    await sheet.loadCells(`${COLS.MAP}${entryRow}:${COLS.CURRENT}${entryRow}`);
 
     // Assign each value to be discord-embedded in a simple default way
     values = {};
     for (key in COLS) {
-        values[key] = sheet.getCellByA1(
-            `${COLS[key]}${entryRow}`
-        ).value;
+        values[key] = sheet.getCellByA1(`${COLS[key]}${entryRow}`).value;
     }
 
     // Special formatting for date (get formattedValue instead)
@@ -87,7 +81,7 @@ async function displayLCC(message, btd6_map) {
     values.DATE = dateCell.formattedValue;
 
     // Special formatting for cost (format like cost)
-    values.COST = h.numberAsCost(values.COST);
+    values.COST = gHelper.numberAsCost(values.COST);
 
     // Special handling for link (use hyperlink to cleverly embed in discord)
     linkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
@@ -106,7 +100,7 @@ async function displayLCC(message, btd6_map) {
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
-            h.toTitleCase(field),
+            gHelper.toTitleCase(field),
             values[field],
             true
         );

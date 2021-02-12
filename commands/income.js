@@ -191,15 +191,15 @@ chincomeMessage = function (mode, round) {
         .setTitle(`${mode_str_iden} CHIMPS Income (R${round})`)
         .addField(
             `Income gained from just round ${round} itself`,
-            `$${h.numberWithCommas(incomes.rincome)}`
+            `$${gHelper.numberWithCommas(incomes.rincome)}`
         )
         .addField(
             `Total cash gained through the end of round ${round}`,
-            `$${h.numberWithCommas(incomes.chincome)}`
+            `$${gHelper.numberWithCommas(incomes.chincome)}`
         )
         .addField(
             `Income gained from start of round ${round} to end of R100`,
-            `$${h.numberWithCommas(incomes.lincome)}`
+            `$${gHelper.numberWithCommas(incomes.lincome)}`
         )
         .setColor(colours['cyber']);
 };

@@ -12,7 +12,7 @@
         "refresh": "del /f package-lock.json && npm install",
         "logout": "heroku logout",
         "login": "heroku login -i",
-        "connect": "heroku git:remote -a jajajosh"
+        "connect": "heroku git:remote -a cyberquincy"
     },
     "repository": {
         "type": "git",

@@ -5,11 +5,11 @@ const HeroParser = require('../parser/hero-parser.js');
 const RoundParser = require('../parser/round-parser');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 
-const ReactionChain = require('../reactor/reaction_chain');
-const EmojiReactor = require('../reactor/emoji_reactor');
-const SingleTextParser = require('../reactor/single_text_parser');
+const ReactionChain = require('../helpers/reactor/reaction_chain');
+const EmojiReactor = require('../helpers/reactor/emoji_reactor');
+const SingleTextParser = require('../helpers/reactor/single_text_parser');
 
-const Heroes = require('../helpers/heroes')
+const Heroes = require('../helpers/heroes');
 
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
@@ -64,21 +64,21 @@ function errorMessage(message, parsingErrors) {
 function displayHeroLevels(message, results) {
     heroLevels = Heroes.levelingCurve(
         results.hero,
-        results.starting_round, 
+        results.starting_round,
         results.map_difficulty
-    )
-    let res = table(h.range(1, 20), heroLevels.slice(1))
+    );
+    let res = table(gHelper.range(1, 20), heroLevels.slice(1));
     const embed = new Discord.MessageEmbed()
-        .setTitle(`${h.toTitleCase(results.hero)} Leveling Chart`)
+        .setTitle(`${gHelper.toTitleCase(results.hero)} Leveling Chart`)
         .setDescription(
-            `Placed: **R${results.starting_round}**\nMaps: **${h.toTitleCase(
-                results.map_difficulty
-            )}**`
+            `Placed: **R${
+                results.starting_round
+            }**\nMaps: **${gHelper.toTitleCase(results.map_difficulty)}**`
         )
         .addField('\u200b', `${res}`)
-        .setColor(colours['cyber'])
+        .setColor(colours['cyber']);
 
-    message.channel.send(embed)
+    message.channel.send(embed);
 }
 
 module.exports = {

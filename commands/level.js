@@ -4,6 +4,7 @@ module.exports = {
     aliases: ['xp', 'rank', 'getxp'],
 
     async execute(message, args) {
+        return message.channel.send('Work In progress');
         if (!args[0]) {
             const user = DiscordUsers.getDiscordUserFromId(message.author.id);
             return module.exports.displayStats(user, message);
@@ -61,8 +62,8 @@ module.exports = {
             .addField(
                 'Have a suggestion or found a bug?',
                 `Please tell us [here](${discord})!`
-            )
-            .setFooter('use `q!level rewards` to see role rewards');
+            );
+
         return message.channel.send(xpEmbed);
     },
 

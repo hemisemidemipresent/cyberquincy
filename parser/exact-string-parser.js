@@ -12,8 +12,10 @@ class ExactStringParser {
         this.str = str;
 
         // Disallow the case of no values
-        if (!h.is_str(this.str)) {
-            throw new DeveloperCommandError('Must provide an exact string to match against');
+        if (!gHelper.is_str(this.str)) {
+            throw new DeveloperCommandError(
+                'Must provide an exact string to match against'
+            );
         }
 
         var regex = new RegExp(`^(${this.str})$`, 'i');

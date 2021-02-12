@@ -1,7 +1,6 @@
 const { cyber } = require('../jsons/colours.json');
 
 const OptionalParser = require('../parser/optional-parser');
-
 const UpgradeSetParser = require('../parser/upgrade-set-parser');
 
 const aliases = [
@@ -100,6 +99,8 @@ module.exports = {
     aliases: aliases.flat(),
 
     execute(message, args, commandName) {
+        message.channel.send('this command will be under construction');
+
         let name = findName(commandName);
 
         parsed = CommandParser.parse(
@@ -183,7 +184,11 @@ function baseTower(name) {
 }
 
 function anyOtherTower(json, name, upgradeSet) {
-    const totalCost = Towers.totalTowerUpgradeCrosspathCost(json, name, upgradeSet);
+    const totalCost = Towers.totalTowerUpgradeCrosspathCost(
+        json,
+        name,
+        upgradeSet
+    );
 
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
     let object = json[`${name}`].upgrades[path - 1][tier - 1];

@@ -6,7 +6,7 @@ module.exports = {
     execute(message) {},
 };
 function isValidUpgrade(u) {
-    if (!h.is_str(u) || u.length != 3) return false;
+    if (!gHelper.is_str(u) || u.length != 3) return false;
 
     if (isNaN(u)) return false;
 

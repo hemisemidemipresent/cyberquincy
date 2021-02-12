@@ -173,10 +173,10 @@ permutateParsers = function (parsers) {
     if (anyOrderParserIndex == -1) {
         return [{ parsers: parsers, parsed: new Parsed() }];
     }
-    
-    subParsers = parsers[anyOrderParserIndex].parsers
+
+    subParsers = parsers[anyOrderParserIndex].parsers;
     // Get all permutations of parser ordering
-    parserPermutations = h.allLengthNPermutations(subParsers);
+    parserPermutations = gHelper.allLengthNPermutations(subParsers);
 
     parserLists = [];
     for (var i = 0; i < parserPermutations.length; i++) {
@@ -191,7 +191,7 @@ permutateParsers = function (parsers) {
     return parserPermutations.map(function (l) {
         return { parsers: l, parsed: new Parsed() };
     });
-}
+};
 
 /**
  * A list of different types of abstract parsers
@@ -208,9 +208,9 @@ ABSTRACT_PARSERS = [
     { parser: OptionalParser, handler: useItOrLoseIt },
     { parser: OrParser, handler: expandOrParser },
     { parser: EmptyParser, handler: removeEmptyParser },
-    { parser: AnyOrderParser, handler: permutateParsers},
+    { parser: AnyOrderParser, handler: permutateParsers },
 ];
-    
+
 /**
  * Attempts to parse and returns the result if fully successful
  * Otherwise throws a ParsingError encapsulating all command errors encountered along the way.
@@ -219,41 +219,51 @@ ABSTRACT_PARSERS = [
  * @param {[{Type}Parser]} parsers An expanded list of parsers
  */
 parseConcrete = function (args, parsers) {
-    results = []
+    results = [];
     if (args.length < parsers.length) {
         // If there are extra parsers, fill in the gaps in args with null buffers
         // but not just at the end of the array..in every possible permutable way within the array
         // giving error-handling the best chance at finding the closest match
-        argPaddingPermutations = h.permutatePaddings(args, parsers.length)
+        argPaddingPermutations = gHelper.permutatePaddings(
+            args,
+            parsers.length
+        );
         for (var i = 0; i < argPaddingPermutations.length; i++) {
             results.push(
-                parseConcreteArgsParsersAligned(argPaddingPermutations[i], parsers)
-            )
+                parseConcreteArgsParsersAligned(
+                    argPaddingPermutations[i],
+                    parsers
+                )
+            );
         }
     } else if (args.length > parsers.length) {
         // If there are extra args, fill in the gaps in parsers with null buffers
         // but not just at the end of the array..in every possible permutable way within the array
         // giving error-handling the best chance at finding the closest match
-        parserPaddingPermutations = h.permutatePaddings(parsers, args.length)
+        parserPaddingPermutations = gHelper.permutatePaddings(
+            parsers,
+            args.length
+        );
         for (var i = 0; i < parserPaddingPermutations.length; i++) {
             results.push(
-                parseConcreteArgsParsersAligned(args, parserPaddingPermutations[i])
-            )
+                parseConcreteArgsParsersAligned(
+                    args,
+                    parserPaddingPermutations[i]
+                )
+            );
         }
     } else {
         // If the lengths match up then just make a direct call
-        results.push(
-            parseConcreteArgsParsersAligned(args, parsers)
-        )
+        results.push(parseConcreteArgsParsersAligned(args, parsers));
     }
     return results;
-}
+};
 
 /**
- * 
+ *
  * @param {[String]} args Command arguments; some might be null to fill in the length mismatch between args vs parsers
  * @param {[{Type}Parser]} parsers Argument parsers; some might be null to fill in the length mismatch between args vs parsers
- * 
+ *
  * Runs N arguments against N parsers. If one is null, the appropriate error message will be returned
  * i.e. "missing"/"extra" argument at position X
  */
@@ -268,13 +278,14 @@ function parseConcreteArgsParsersAligned(args, parsers) {
         parser = parsers[i];
         arg = args[i];
 
-        if (!arg && !parser) throw `Null parser and null argument at index ${i} in the arg-parser traversal. This shouldn't happen.`
+        if (!arg && !parser)
+            throw `Null parser and null argument at index ${i} in the arg-parser traversal. This shouldn't happen.`;
 
         // If there is missing argument in the position
         if (!arg) {
             parsed.addError(
                 new UserCommandError(
-                    `Command is missing ${h.toOrdinalSuffix(
+                    `Command is missing ${gHelper.toOrdinalSuffix(
                         argPosition
                     )} argument of type \`${parsers[i].type()}\``
                 )
@@ -308,7 +319,7 @@ function parseConcreteArgsParsersAligned(args, parsers) {
             }
         }
 
-        argPosition++
+        argPosition++;
     }
 
     return parsed;

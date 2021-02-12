@@ -1,6 +1,9 @@
-There are a lot of things going on with this bot
+# General Idea
 
-# Command processing
+(somewhat under construction)
+
+if you have used discord.js before (which you should), you would know command processing begins with a message event. This starts with:
+## Command processing
 
 -   first, it starts in `generateListeners()` in `server.js`
 -   then it finds the correct file and command in `command_center.js`
@@ -9,7 +12,7 @@ There are a lot of things going on with this bot
 
 commands are using node.js `module.exports`, and each command is a file in `./commands`
 
-# Parser
+## Parser
 
 [How to use the parser](https://github.com/hemisemidemipresent/cyberquincy/tree/master/parser)
 

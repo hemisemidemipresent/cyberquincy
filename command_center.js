@@ -123,9 +123,10 @@ async function handleCommand(message) {
         command.execute(message, canonicalArgs, commandName, lang);
 
         // Don't want the user gaining xp from metacommands
+        /*
         if (!XPCOMMANDS.includes(command.name) && xpEnabled) {
             Xp.addCommandXp(message);
-        }
+        }*/
         // post information to statcord
         const botposting = require('./1/config.json')['botposting'];
 
@@ -142,7 +143,7 @@ async function handleCommand(message) {
 
         // May or may not embed an advertisement message in addition to the command output
 
-        Advertisements.spin(message);
+        //Advertisements.spin(message);
 
         /* let GLOBAL_COOLDOWN_REGEX = /gcd ?= ?(\d+)/;
         regex_match = message.channel.topic.match(GLOBAL_COOLDOWN_REGEX);

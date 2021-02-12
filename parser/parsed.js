@@ -65,7 +65,7 @@ class Parsed extends Object {
 
     addError(e) {
         // If `e` is a String, then wrap it into an error
-        if (h.is_str(e)) {
+        if (gHelper.is_str(e)) {
             e = new Error(e);
         }
 

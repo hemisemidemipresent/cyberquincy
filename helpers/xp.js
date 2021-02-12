@@ -21,7 +21,7 @@ async function addCommandXp(message) {
         });
     }
 
-    xpGain = h.randomIntegerFromInclusiveRange(5, 12);
+    xpGain = gHelper.randomIntegerFromInclusiveRange(5, 12);
 
     oldLevel = xpToLevel(tag.xp);
 
@@ -81,6 +81,7 @@ async function levelUpRole(user, newLevel) {
             return message.channel.send(roleEmbed);
         }
     }
+    /* nyet
     if (newLevel === 3) {
         // if member is level 3 add role
         await guildmember.roles.add('645126928340353036');
@@ -88,7 +89,7 @@ async function levelUpRole(user, newLevel) {
     if (newLevel === 10) {
         // if member is level 10 add role
         await guildmember.roles.add('645629187322806272');
-    }
+    }*/
 }
 
 module.exports = {

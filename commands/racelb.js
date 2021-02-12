@@ -6,6 +6,9 @@ const OptionalParser = require('../parser/optional-parser.js');
 const OrParser = require('../parser/or-parser.js');
 const AnythingParser = require('../parser/anything-parser');
 const { red } = require('../jsons/colours.json');
+
+let raceID = 'kkq76y9o';
+
 module.exports = {
     name: 'raceleaderboard',
     aliases: ['leaderboard', 'lb', 't100'],
@@ -24,7 +27,6 @@ module.exports = {
         );
         console.log(JSON.stringify(parsed));
 
-        let raceID = 'DownhillAvalanche_kjnpk23r';
         if (parsed.anything) {
             raceID = parsed.anything;
         }

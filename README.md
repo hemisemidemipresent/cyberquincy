@@ -7,7 +7,7 @@ Cyber Quincy is a BTD6 Discord bot.
 ### Links
 
 -   [discord server](https://discord.gg/VMX5hZA) (join for bot updates and online/offline status)
--   [invite the bot to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881)
+-   [invite link](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881)
 -   [website](https://cq.netlify.com)
 
 **For help, simply use `q!help`**

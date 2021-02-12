@@ -6,13 +6,10 @@ const { discord } = require('../aliases/misc.json');
 module.exports = {
     name: 'quiz',
     execute(message, args) {
-        let user = message.author;
-
         if (args[0]) {
             return Quiz.getQuizXp(message);
         }
         const item = quiz[Math.floor(Math.random() * quiz.length)];
-        //for unkeyed {}s, just [index]
         let QuestionEmbed = new Discord.MessageEmbed()
             .setTitle(`${item.question}`)
             .setDescription(
@@ -26,11 +23,10 @@ module.exports = {
                 'people **HAVE** contributed to this command!',
                 `join [this server](${discord}) to suggest an idea, as well as get the lastest updates, bug fixes and reports.`
             )
-            .setFooter(
-                'This command is unstable and dont expect it to be 100% working'
-            )
             .setColor(cyber);
+
         const filter = (msg) => msg.author.id === `${message.author.id}`;
+
         message.channel.send(QuestionEmbed).then(() => {
             message.channel
                 .awaitMessages(filter, {
@@ -49,7 +45,6 @@ module.exports = {
                             )
                             .setColor(turq);
                         message.channel.send(correctEmbed);
-                        Quiz.addQuizXp(message);
                     } else {
                         let wrongEmbed = new Discord.MessageEmbed()
                             .setTitle('Game over! You got the wrong answer!')

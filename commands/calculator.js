@@ -158,11 +158,15 @@ function helpMessage(message) {
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
         .addField('`wiz!420`, `super!100`', 'INDIVIDUAL COST of tower!upgradeSet (can\'t do just `wiz`)')
         .addField('`wiz#420`, `super#000`', 'TOTAL COST of tower#upgradeSet (can\'t do just `wiz`)')
-        .addField('Operators', '`+`, `-`, `*`, `/`')
+        .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder)')
         .addField(
             'Examples', 
             '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
             '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
+        .addField(
+            'Notes',
+            'For amgiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'
+        )
         .setFooter('No heroes (just plug in the cost yourself), no discounts on towers (apply the cost reduction yourself if possible)')
         .setColor(colours['black'])
 

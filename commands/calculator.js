@@ -1,5 +1,5 @@
 // https://github.com/aaditmshah/lexer
-const Lexer = require('lex')
+const Lexer = require('lex');
 
 const LexicalParser = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round2.json');
@@ -11,7 +11,7 @@ function calc(message, args, json) {
     }
 
     // Use a "lexer" to parse the operator/operand tokens
-    var lexer = new Lexer;
+    var lexer = new Lexer();
 
     lexer.addRule(/\s+/, function () {
         /* skip whitespace */
@@ -28,14 +28,14 @@ function calc(message, args, json) {
     // Set up operators and operator precedence to interpret the parsed tree
     var factor = {
         precedence: 2,
-        associativity: "left"
+        associativity: 'left',
     };
-    
+
     var term = {
         precedence: 1,
-        associativity: "left"
+        associativity: 'left',
     };
-    
+
     var parser = new LexicalParser({
         "+": term,
         "-": term,
@@ -47,14 +47,15 @@ function calc(message, args, json) {
     // Execute the interpretation of the parsed lexical stack
     function parse(input) {
         lexer.setInput(input);
-        var tokens = [], token;
-        while (token = lexer.lex()) tokens.push(token);
+        var tokens = [],
+            token;
+        while ((token = lexer.lex())) tokens.push(token);
         return parser.parse(tokens);
     }
 
     // Get the original command arguments string back (other than the command name)
-    expression = args.join(' ')
-    parsed = parse(expression)
+    expression = args.join(' ');
+    parsed = parse(expression);
 
     var stack = [];
 
@@ -84,14 +85,14 @@ function calc(message, args, json) {
                 stack.push(parseAndValueToken(c, json));
             }
         });
-    } catch(e) {
+    } catch (e) {
         if (e instanceof UnrecognizedTokenError) {
             return message.channel.send(
                 new Discord.MessageEmbed()
                     .setTitle(e.message)
                     .setDescription(`\`${expression}\``)
                     .setColor(colours['red'])
-            )
+            );
         }
     }
 
@@ -103,7 +104,7 @@ function calc(message, args, json) {
             .setTitle(h.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
             .setDescription(`\`${expression}\``)
             .setColor(colours['cyber'])
-    )
+    );
 }
 
 function isTowerUpgradeCrosspath(t) {
@@ -111,14 +112,16 @@ function isTowerUpgradeCrosspath(t) {
 
     let [tower, upgrades] = t.split(/[!#]/)
 
-    return Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) &&
-            Towers.isValidUpgradeSet(upgrades)
+    return (
+        Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) &&
+        Towers.isValidUpgradeSet(upgrades)
+    );
 }
 
 function costOfTowerUpgradeCrosspath(t, json) {
     let [tower, upgrades] = t.split(/[!#]/)
 
-    jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-')
+    jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-');
 
     let mediumCost = null
     if (t.includes('#')) {
@@ -138,13 +141,15 @@ function hard(cost) {
 
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, json) {
-    if (!isNaN(t)) return Number(t)
-    else if (round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round) {
-        return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650
+    if (!isNaN(t)) return Number(t);
+    else if (
+        (round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round)
+    ) {
+        return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (isTowerUpgradeCrosspath(t)) {
-        return costOfTowerUpgradeCrosspath(t, json)
+        return costOfTowerUpgradeCrosspath(t, json);
     } else {
-        throw new UnrecognizedTokenError(`Unrecognized token \`${t}\``)
+        throw new UnrecognizedTokenError(`Unrecognized token \`${t}\``);
     }
 }
 
@@ -154,7 +159,10 @@ function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!calc` HELP')
         .setDescription('**CHIMPS Cost Calculator**')
-        .addField('`r52`,`R100`', 'Cumulative cash earned after specified round (6-100)')
+        .addField(
+            '`r52`,`R100`',
+            'Cumulative cash earned after specified round (6-100)'
+        )
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
         .addField('`wiz!420`, `super!100`', 'INDIVIDUAL COST of tower!upgradeSet (can\'t do just `wiz`)')
         .addField('`wiz#420`, `super#000`', 'TOTAL COST of tower#upgradeSet (can\'t do just `wiz`)')
@@ -179,7 +187,7 @@ module.exports = {
     rawArgs: true,
     dependencies: ['towerJSON'],
     execute(message, args) {
-        calc(message, args, towerJSON)
+        calc(message, args, towerJSON);
     },
     helpMessage,
-}
+};

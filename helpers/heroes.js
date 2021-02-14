@@ -45,77 +45,95 @@ LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     EXPERT: 1.3,
 };
 
-function accumulatedXpCurve(startingRound, mapDifficulty, energizerAcquiredRound) {
+function accumulatedXpCurve(
+    startingRound,
+    mapDifficulty,
+    energizerAcquiredRound
+) {
     mapSpecificLevelingMultiplier =
-        LEVELING_MAP_DIFFICULTY_MODIFIERS[
-            mapDifficulty.toUpperCase()
-        ]
+        LEVELING_MAP_DIFFICULTY_MODIFIERS[mapDifficulty.toUpperCase()];
 
-    xpGains = []
+    xpGains = [];
     for (round = 0; round < 100; round++) {
         if (round == 0) {
-            baseXpGainGain = 0
+            baseXpGainGain = 0;
         } else if (round == 1) {
-            baseXpGainGain += 40
+            baseXpGainGain += 40;
         } else if (round <= 20) {
-            baseXpGainGain += 20
+            baseXpGainGain += 20;
         } else if (round <= 50) {
-            baseXpGainGain += 40
+            baseXpGainGain += 40;
         } else {
-            baseXpGainGain += 90
+            baseXpGainGain += 90;
         }
 
-        energizerFactor = round >= energizerAcquiredRound ? 1.5 : 1
+        energizerFactor = round >= energizerAcquiredRound ? 1.5 : 1;
 
         if (round == startingRound - 1) {
-            xpGains.push(0)
+            xpGains.push(0);
         } else if (round < startingRound) {
-            xpGains.push(null)
+            xpGains.push(null);
         } else {
             xpGains.push(
                 baseXpGainGain * mapSpecificLevelingMultiplier * energizerFactor
-            )
+            );
         }
     }
 
-    acc = 0
-    return xpGains.map(xpGain => xpGain == null ? null : acc = acc + xpGain)
+    acc = 0;
+    return xpGains.map((xpGain) =>
+        xpGain == null ? null : (acc = acc + xpGain)
+    );
 }
 
 function heroLevelXpRequirements(hero) {
-    heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()]
-    acc = 0
-    return BASE_XP_TO_GET_LEVEL.map(bxp => {
-        return bxp == null ? 
-                null : 
-                acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier)
-    })
+    heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()];
+    acc = 0;
+    return BASE_XP_TO_GET_LEVEL.map((bxp) => {
+        return bxp == null
+            ? null
+            : (acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier));
+    });
 }
 
 function levelingChart(hero, startingRound, mapDifficulty) {
-    heroXpGains = heroLevelXpRequirements(hero)
-    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty)
+    heroXpGains = heroLevelXpRequirements(hero);
+    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty);
 
-    return [null].concat(accumulatedXp.map(axp => {
-        if (axp == null) return null
+    return [null].concat(
+        accumulatedXp.map((axp) => {
+            if (axp == null) return null;
 
-        return heroXpGains.map(txp => txp == null ? null : txp - axp)
-    }))
+            return heroXpGains.map((txp) => (txp == null ? null : txp - axp));
+        })
+    );
 }
 
-function levelingCurve(hero, startingRound, mapDifficulty, energizerAcquiredRound=Infinity) {
-    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty, energizerAcquiredRound)
+function levelingCurve(
+    hero,
+    startingRound,
+    mapDifficulty,
+    energizerAcquiredRound = Infinity
+) {
+    accumulatedXp = accumulatedXpCurve(
+        startingRound,
+        mapDifficulty,
+        energizerAcquiredRound
+    );
 
-    return heroLevelXpRequirements(hero).map(txp => {
-        if (txp == null) return null
+    return heroLevelXpRequirements(hero).map((txp) => {
+        if (txp == null) return null;
 
-        acquiredRound = accumulatedXp.findIndex(axp => {
-            return axp == null ? false : axp - txp >= 0
-        }) + 1
+        acquiredRound =
+            accumulatedXp.findIndex((axp) => {
+                return axp == null ? false : axp - txp >= 0;
+            }) + 1;
 
         // findIndex returns -1 if not found, so +1 is 0, which is falsy
-        return acquiredRound ? acquiredRound : h.numberAsCost(txp - accumulatedXp[99])
-    })
+        return acquiredRound
+            ? acquiredRound
+            : gHelper.numberAsCost(txp - accumulatedXp[99]);
+    });
 }
 
 module.exports = {

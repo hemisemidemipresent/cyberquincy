@@ -1,7 +1,6 @@
 const { cyber } = require('../jsons/colours.json');
 
 const OptionalParser = require('../parser/optional-parser');
-
 const UpgradeSetParser = require('../parser/upgrade-set-parser');
 
 const aliases = [
@@ -93,6 +92,12 @@ const aliases = [
         'engie',
     ],
 ];
+
+const links = [
+    'https://sites.google.com/view/bloonology/cq/dart-monkey-cq?authuser=0',
+    'https://sites.google.com/view/bloonology/cq/boomerang-monkey-cq?authuser=0',
+    'https://sites.google.com/view/bloonology/cq/bomb-shooter-cq?authuser=0',
+];
 module.exports = {
     name: '<tower>',
     dependencies: ['towerJSON'],
@@ -100,6 +105,8 @@ module.exports = {
     aliases: aliases.flat(),
 
     execute(message, args, commandName) {
+        message.channel.send('this command will be under construction');
+
         let name = findName(commandName);
 
         parsed = CommandParser.parse(
@@ -115,8 +122,8 @@ module.exports = {
             let embed = baseTower(name);
             return message.channel.send(embed);
         }
+        JSON.stringify(parsed, null, 1);
 
-        const embed = anyOtherTower(towerJSON, name, parsed.upgrade_set);
         return message.channel.send(embed);
     },
 };
@@ -166,60 +173,13 @@ function provideHelpMsg(message, name) {
 function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;
 }
-function baseTower(name) {
-    let object = towerJSON[`${name}`];
-    const embed = new Discord.MessageEmbed()
-        .setColor(cyber)
-        .setTitle(object.name)
-        .addField(
-            'cost',
-            `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`
-        )
-        .addField('notes', object.notes, true)
-        .setFooter(
-            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
-        );
-    return embed;
-}
-
-function anyOtherTower(json, name, upgradeSet) {
-    const totalCost = Towers.totalTowerUpgradeCrosspathCost(json, name, upgradeSet);
-
-    const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
-    let object = json[`${name}`].upgrades[path - 1][tier - 1];
-
-    let alternateCase = object.name.replace(/ +/g, ''); // removes all spaces from the upgrade name
-
-    let link = `https://github.com/hemisemidemipresent/cq-imgs/blob/main/tower/${alternateCase}UpgradeIcon.png?raw=true`;
-    // note: for identical upgrade names, AAAAAAAAAAAAAAAA (will be excluded in the future)
-    const embed = new Discord.MessageEmbed()
-        .setColor(cyber)
-        .setTitle(`${object.name} (${upgradeSet.split('').join('-')})`)
-        .addField(
-            'Cost',
-            `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`,
-            true
-        )
-        .addField(
-            'Total cost',
-            `${hard(totalCost)} (hard), ${totalCost} (medium)`,
-            true
-        )
-        .addField('Notes', object.notes)
-        .addField('XP Needed:', `${object.xp}`, true)
-        .setFooter(
-            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
-        )
-        .setThumbnail(link);
-    return embed;
-}
 
 function findName(commandName) {
     for (let i = 0; i < aliases.length; i++) {
         let towerAliasSet = aliases[i];
         for (let j = 0; j < towerAliasSet.length; j++) {
             if (commandName == towerAliasSet[j]) {
-                return towerAliasSet[0];
+                return links[i];
             }
         }
     }

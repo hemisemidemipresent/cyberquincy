@@ -21,27 +21,52 @@
     },
     {
         "question": "What fruit explodes?",
-        "optns": ["Pineapples", "Oranges", "Guavas", "Bananas"],
+        "optns": [
+            "Pineapples",
+            "Oranges",
+            "Guavas",
+            "Bananas"
+        ],
         "answers": "a"
     },
     {
         "question": "In Bloons TD 4, what is the name of the upgrade that allows Ice towers to pop Bloons?",
-        "optns": ["Snap Freeze", "Sharp Shards", "Permafrost", "Spikey Ice"],
+        "optns": [
+            "Snap Freeze",
+            "Sharp Shards",
+            "Permafrost",
+            "Spikey Ice"
+        ],
         "answers": "a"
     },
     {
         "question": "How many base tower types are there in Bloons TD 2?",
-        "optns": ["6", "8", "7", "5"],
+        "optns": [
+            "6",
+            "8",
+            "7",
+            "5"
+        ],
         "answers": "a"
     },
     {
         "question": "What is the cheapest tower in Bloons TD 4?",
-        "optns": ["Dart Monkey", "Super Monkey", "Monkey Ace", "Tack Tower"],
+        "optns": [
+            "Dart Monkey",
+            "Super Monkey",
+            "Monkey Ace",
+            "Tack Tower"
+        ],
         "answers": "a"
     },
     {
         "question": "White Bloons are immune to what effect?",
-        "optns": ["Freezing", "Piercing", "Wind", "Bombs"],
+        "optns": [
+            "Freezing",
+            "Piercing",
+            "Wind",
+            "Bombs"
+        ],
         "answers": "a"
     },
     {
@@ -56,32 +81,62 @@
     },
     {
         "question": "Roses are red, Violets are blue. What colour is a Tack Shooter?",
-        "optns": ["Purple", "Green", "Brown", "Pink"],
+        "optns": [
+            "Purple",
+            "Green",
+            "Brown",
+            "Pink"
+        ],
         "answers": "d"
     },
     {
         "question": "Which of the following basic towers can pop lead Bloons?",
-        "optns": ["Ice Tower", "Dart Monkey", "Bomb Tower", "Tack Tower"],
+        "optns": [
+            "Ice Tower",
+            "Dart Monkey",
+            "Bomb Tower",
+            "Tack Tower"
+        ],
         "answers": "c"
     },
     {
         "question": "How many Ceramic Bloons does an MOAB contain?",
-        "optns": ["8", "4", "2", "6"],
+        "optns": [
+            "8",
+            "4",
+            "2",
+            "6"
+        ],
         "answers": "b"
     },
     {
         "question": "Bloons Tower Defense for iPhone and iPod touch was a port of which version of the web games?",
-        "optns": ["Bloons TD 2", "Bloons TD 4", "Bloons TD 3", "Bloons TD"],
+        "optns": [
+            "Bloons TD 2",
+            "Bloons TD 4",
+            "Bloons TD 3",
+            "Bloons TD"
+        ],
         "answers": "c"
     },
     {
         "question": "In Bloons TD 2, each tower had 2 upgrades. In Bloons TD 3 there were 4. How many upgrades for each tower are there in Bloons TD 4?",
-        "optns": ["4", "3", "5", "2"],
+        "optns": [
+            "4",
+            "3",
+            "5",
+            "2"
+        ],
         "answers": "a"
     },
     {
         "question": "What upgrade to the Monkey Apprentice is able to send Bloons back down the path?",
-        "optns": ["Summon Tornado", "Fireball", "Reverso", "Bloon Control"],
+        "optns": [
+            "Summon Tornado",
+            "Fireball",
+            "Reverso",
+            "Bloon Control"
+        ],
         "answers": "a"
     },
     {
@@ -96,27 +151,52 @@
     },
     {
         "question": "Bloons come in all colours of the rainbow. In the original Bloons Tower Defense, which colour of the rainbow is missing?",
-        "optns": ["Green", "Orange", "Blue", "Red"],
+        "optns": [
+            "Green",
+            "Orange",
+            "Blue",
+            "Red"
+        ],
         "answers": "b"
     },
     {
         "question": "Black Bloons are immune to what effect?",
-        "optns": ["Bombs", "Freezing", "Plasma", "Glue"],
+        "optns": [
+            "Bombs",
+            "Freezing",
+            "Plasma",
+            "Glue"
+        ],
         "answers": "a"
     },
     {
         "question": "How much money do you start a game of Bloons TD with?",
-        "optns": ["650", "500", "900", "750"],
+        "optns": [
+            "650",
+            "500",
+            "900",
+            "750"
+        ],
         "answers": "a"
     },
     {
         "question": "On easy mode in Bloons TD 2, how many tracks can you choose from?",
-        "optns": ["12", "1", "8", "3"],
+        "optns": [
+            "12",
+            "1",
+            "8",
+            "3"
+        ],
         "answers": "b"
     },
     {
         "question": "Which version of Bloons Tower Defense introduced the Super Monkey?",
-        "optns": ["Bloons TD 2", "Bloons TD 4", "Bloons TD ", "Bloons TD 3"],
+        "optns": [
+            "Bloons TD 2",
+            "Bloons TD 4",
+            "Bloons TD ",
+            "Bloons TD 3"
+        ],
         "answers": "c"
     },
     {
@@ -131,7 +211,12 @@
     },
     {
         "question": "How many waves were there in hard mode in Bloons TD 2?",
-        "optns": ["50", "75", "40", "60"],
+        "optns": [
+            "50",
+            "75",
+            "40",
+            "60"
+        ],
         "answers": "a"
     },
     {
@@ -146,12 +231,22 @@
     },
     {
         "question": "Which version of Bloons TD introduced road spikes?",
-        "optns": ["Bloons TD 3", "Bloons TD", "Bloons TD 2", "Bloons TD 4"],
+        "optns": [
+            "Bloons TD 3",
+            "Bloons TD",
+            "Bloons TD 2",
+            "Bloons TD 4"
+        ],
         "answers": "c"
     },
     {
         "question": "How many different Bloon types were there in the original Bloons Tower Defense?",
-        "optns": ["6", "5", "4", "8"],
+        "optns": [
+            "6",
+            "5",
+            "4",
+            "8"
+        ],
         "answers": "a"
     },
     {
@@ -196,12 +291,22 @@
     },
     {
         "question": "Ceramic Bloons were first introduced in Bloons TD 3. What attack has a reduced effect against them?",
-        "optns": ["Glue", "Tacks", "Lollipops", "Water"],
+        "optns": [
+            "Glue",
+            "Tacks",
+            "Lollipops",
+            "Water"
+        ],
         "answers": "a"
     },
     {
         "question": "What year was the original Bloons Tower Defense launched?",
-        "optns": ["2005", "2006", "2007", "2008"],
+        "optns": [
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+        ],
         "answers": "c"
     },
     {
@@ -216,7 +321,12 @@
     },
     {
         "question": "What is the most expensive upgrade?",
-        "optns": ["Sun God", "Tempest Tornado", "Battleship", "Arctic Wind"],
+        "optns": [
+            "Sun God",
+            "Tempest Tornado",
+            "Battleship",
+            "Arctic Wind"
+        ],
         "answers": "a"
     },
     {
@@ -241,7 +351,12 @@
     },
     {
         "question": "How many Basic tracks were in BTD4?",
-        "optns": ["16", "11", "6", "9"],
+        "optns": [
+            "16",
+            "11",
+            "6",
+            "9"
+        ],
         "answers": "d"
     },
     {
@@ -256,22 +371,42 @@
     },
     {
         "question": "How much did the Cannon Tower cost in the original BTD?",
-        "optns": ["740", "1100", "900", "650"],
+        "optns": [
+            "740",
+            "1100",
+            "900",
+            "650"
+        ],
         "answers": "c"
     },
     {
         "question": "How many Rounds were as of easy in BTD4?",
-        "optns": ["50", "55", "75", "40"],
+        "optns": [
+            "50",
+            "55",
+            "75",
+            "40"
+        ],
         "answers": "a"
     },
     {
         "question": "How much did the Boomerang thrower cost in BTD3?",
-        "optns": ["525", "395", "240", "100"],
+        "optns": [
+            "525",
+            "395",
+            "240",
+            "100"
+        ],
         "answers": "a"
     },
     {
         "question": "Towers costs are pricy in Impoppable BTD6, How much does a Sniper tower cost on Impoppable?",
-        "optns": ["210", "360", "420", "415"],
+        "optns": [
+            "210",
+            "360",
+            "420",
+            "415"
+        ],
         "answers": "c"
     },
     {
@@ -286,17 +421,32 @@
     },
     {
         "question": "The B.A.D was added into BTD6, How many blimps does it contain from inside?",
-        "optns": ["4 ZOMG", "2 ZOMG 3 DDT", "10 ZOMG 1 DDT", "3 ZOMG 2 DDT"],
+        "optns": [
+            "4 ZOMG",
+            "2 ZOMG 3 DDT",
+            "10 ZOMG 1 DDT",
+            "3 ZOMG 2 DDT"
+        ],
         "answers": "b"
     },
     {
         "question": "How much does the Trade Empire upgrade produce per round?",
-        "optns": ["500", "800", "220", "820"],
+        "optns": [
+            "500",
+            "800",
+            "220",
+            "820"
+        ],
         "answers": "b"
     },
     {
         "question": "How many Ceramic Damage does Crossbow Master deal without Crit?",
-        "optns": ["7", "50", "14", "5"],
+        "optns": [
+            "7",
+            "50",
+            "14",
+            "5"
+        ],
         "answers": "d"
     },
     {
@@ -311,27 +461,52 @@
     },
     {
         "question": "Fortified Leads would drain you alot of lives, How many Lives would 45 Fortified Leads drain?",
-        "optns": ["1170", "66", "180", "1800"],
+        "optns": [
+            "1170",
+            "66",
+            "180",
+            "1800"
+        ],
         "answers": "a"
     },
     {
         "question": "The Engineer got added into BTD6, What version was it added?",
-        "optns": ["14.0", "12.0", "6.0", "16.1"],
+        "optns": [
+            "14.0",
+            "12.0",
+            "6.0",
+            "16.1"
+        ],
         "answers": "b"
     },
     {
         "question": "There are Hero Skins in BTD6, How many of them are there?",
-        "optns": ["10", "9", "19", "7"],
+        "optns": [
+            "10",
+            "9",
+            "19",
+            "7"
+        ],
         "answers": "a"
     },
     {
         "question": "Monkey Knowledge is an Additive Feature, What was the first game to add it?",
-        "optns": ["BTD5 Mobile", "BMC", "BTD6", "Bloons TD Adventure time"],
+        "optns": [
+            "BTD5 Mobile",
+            "BMC",
+            "BTD6",
+            "Bloons TD Adventure time"
+        ],
         "answers": "b"
     },
     {
         "question": "BTD6 Was released in 2018 , When was its Initial Release?",
-        "optns": ["June 12", "May 29", "June 18", "May 30"],
+        "optns": [
+            "June 12",
+            "May 29",
+            "June 18",
+            "May 30"
+        ],
         "answers": "d"
     },
     {
@@ -356,7 +531,12 @@
     },
     {
         "question": "What year was BTD3 Released?",
-        "optns": ["2008", "2011", "2009", "2013"],
+        "optns": [
+            "2008",
+            "2011",
+            "2009",
+            "2013"
+        ],
         "answers": "c"
     },
     {
@@ -371,7 +551,12 @@
     },
     {
         "question": "How many damage does any monkey deal to a Cripple MOAB Stunned bloon?",
-        "optns": ["5", "12", "2", "7"],
+        "optns": [
+            "5",
+            "12",
+            "2",
+            "7"
+        ],
         "answers": "a"
     },
     {
@@ -386,22 +571,42 @@
     },
     {
         "question": "What was the monkey that's only exclusive to BTD Battles?",
-        "optns": ["Alchemist", "Submarine", "Cobra", "Monkey Beacon"],
+        "optns": [
+            "Alchemist",
+            "Submarine",
+            "Cobra",
+            "Monkey Beacon"
+        ],
         "answers": "c"
     },
     {
         "question": "How many difficulties did BTD3 Have?",
-        "optns": ["4", "3", "7", "0"],
+        "optns": [
+            "4",
+            "3",
+            "7",
+            "0"
+        ],
         "answers": "b"
     },
     {
         "question": "Which bloon is a Mighty Zeppelin?",
-        "optns": ["BFB", "Ceramic", "Fortified Bloons", "ZOMG"],
+        "optns": [
+            "BFB",
+            "Ceramic",
+            "Fortified Bloons",
+            "ZOMG"
+        ],
         "answers": "d"
     },
     {
         "question": "What's the slowest ever Bloon?",
-        "optns": ["Bloonarius the Inflator", "Dreadbloon", "B.A.D", "Z.O.M.G"],
+        "optns": [
+            "Bloonarius the Inflator",
+            "Dreadbloon",
+            "B.A.D",
+            "Z.O.M.G"
+        ],
         "answers": "a"
     },
     {
@@ -426,12 +631,22 @@
     },
     {
         "question": "How many Core/Arm Upgrades were in Bloons supermonkey 2?",
-        "optns": ["4", "14", "7", "6"],
+        "optns": [
+            "4",
+            "14",
+            "7",
+            "6"
+        ],
         "answers": "c"
     },
     {
         "question": "When was Peninsula released in BTD6?",
-        "optns": ["1.0", "13.0", "15.1", "7.0"],
+        "optns": [
+            "1.0",
+            "13.0",
+            "15.1",
+            "7.0"
+        ],
         "answers": "d"
     },
     {
@@ -446,17 +661,32 @@
     },
     {
         "question": "How many Core/Arm Upgrades were in Bloons supermonkey 2?",
-        "optns": ["4", "14", "7", "6"],
+        "optns": [
+            "4",
+            "14",
+            "7",
+            "6"
+        ],
         "answers": "c"
     },
     {
         "question": "When was Peninsula released in BTD6?",
-        "optns": ["1.0", "13.0", "15.1", "7.0"],
+        "optns": [
+            "1.0",
+            "13.0",
+            "15.1",
+            "7.0"
+        ],
         "answers": "d"
     },
     {
         "question": "Which out of those can pop Camo Regrowth Purple?",
-        "optns": ["Dartling Gun", "Ninja Monkey", "Wall of Fire Wizard", ""],
+        "optns": [
+            "Dartling Gun",
+            "Ninja Monkey",
+            "Wall of Fire Wizard",
+            ""
+        ],
         "answers": "b"
     },
     {
@@ -481,7 +711,12 @@
     },
     {
         "question": "How much XP does it cost to unlock Support Chinook in BTD6?",
-        "optns": ["2300", "14000", "9325", "15000"],
+        "optns": [
+            "2300",
+            "14000",
+            "9325",
+            "15000"
+        ],
         "answers": "d"
     },
     {
@@ -506,7 +741,12 @@
     },
     {
         "question": "How much did it cost to upgrade from Watermelon Spitter to Watermelon Spitter Pro",
-        "optns": ["5000 MM", "3345", "2500", "500"],
+        "optns": [
+            "5000 MM",
+            "3345",
+            "2500",
+            "500"
+        ],
         "answers": "a"
     },
     {
@@ -540,8 +780,63 @@
         "answers": "b"
     },
     {
-        "question": "How many communtity races are there",
-        "optns": ["5", "6", "7", "8"],
+        "question": "How many community races are there",
+        "optns": [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
         "answers": "a"
+    },
+    {
+        "question": "Which map that won the map contest was implemented first",
+        "optns": [
+            "Bazaar",
+            "Geared",
+            "Slons",
+            "Quincy's eyebrow"
+        ],
+        "answers": "b"
+    },
+    {
+        "question": "Which map that won the map contest was implemented first",
+        "optns": [
+            "Bazaar",
+            "Geared",
+            "Slons",
+            "Quincy's eyebrow"
+        ],
+        "answers": "b"
+    },
+    {
+        "question": "When did cyber quincy implement q!minesweeper",
+        "optns": [
+            "30 Nov",
+            "29 Nov",
+            "1 Dec",
+            "29 Nov"
+        ],
+        "answers": "a"
+    },
+    {
+        "question": "What is Monkey Meadow map called in the btd6 code",
+        "optns": [
+            "Tutorial",
+            "MonkeyMeadow",
+            "monkey_meadow",
+            "Quincy's eyebrow"
+        ],
+        "answers": "a"
+    },
+    {
+        "question": "Congrats you found an easter egg",
+        "optns": [
+            "a",
+            "b",
+            "c",
+            "d"
+        ],
+        "answers": "d"
     }
 ]

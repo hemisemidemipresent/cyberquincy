@@ -2,7 +2,7 @@ module.exports = {
     name: 'setting',
     aliases: ['set', 'settings', 'options', 'o'],
 
-    async execute(message, args) {
+    async execute(message) {
         user = message.author;
 
         let tag = await Tags.findOne({

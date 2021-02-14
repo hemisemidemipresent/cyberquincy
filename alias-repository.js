@@ -98,7 +98,8 @@ class AliasRepository extends Array {
     addAliasGroup(ag) {
         try {
             // If adora's_temple is an alias, include adoras_temple as well
-            ag.aliases = [ag.aliases].flat()
+            ag.aliases = [ag.aliases]
+                .flat()
                 .concat(ag.canonical)
                 .map((al) => this.permuteRemovalForgettableCharacters(al))
                 .flat();
@@ -261,7 +262,7 @@ class AliasRepository extends Array {
         let ag = this.getAliasGroup(aliasMember);
         let result = this.filter(
             (otherAliasGroup) => otherAliasGroup.sourcefile === ag.sourcefile
-        )
+        );
         return result;
     }
 
@@ -269,11 +270,13 @@ class AliasRepository extends Array {
         aliasMember = aliasMember.toLowerCase();
         let ag = this.getAliasGroup(aliasMember);
         let result = this.filter(function (otherAliasGroup) {
-            let agPathTokens = ag.sourcefile.split('/')
-            let otherAgPathTokens = otherAliasGroup.sourcefile.split('/')
-            return agPathTokens[agPathTokens.length - 2] == 
-                    otherAgPathTokens[otherAgPathTokens.length - 2]
-        })
+            let agPathTokens = ag.sourcefile.split('/');
+            let otherAgPathTokens = otherAliasGroup.sourcefile.split('/');
+            return (
+                agPathTokens[agPathTokens.length - 2] ==
+                otherAgPathTokens[otherAgPathTokens.length - 2]
+            );
+        });
         return result;
     }
 
@@ -351,9 +354,9 @@ class AliasRepository extends Array {
 
         return modes.map((ag) => ag.canonical);
     }
-    
+
     isHero(candidate) {
-        return this.allHeroes().includes(candidate.toLowerCase())
+        return this.allHeroes().includes(candidate.toLowerCase());
     }
 
     allHeroes() {
@@ -385,7 +388,7 @@ class AliasRepository extends Array {
     toIndexNormalForm(canonical) {
         return canonical
             .split('_')
-            .map((tk) => h.toTitleCase(tk))
+            .map((tk) => gHelper.toTitleCase(tk))
             .join(' ');
     }
 

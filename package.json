@@ -6,13 +6,12 @@
     "scripts": {
         "start": "node server.js",
         "push": "git push heroku master",
-        "copy": "del /f database.sqlite && heroku ps:copy database.sqlite",
         "commit": "git add . && git commit -m p",
-        "everything": "npm run copy && npm run commit && npm run push",
+        "everything": "npm run commit && npm run push",
         "refresh": "del /f package-lock.json && npm install",
         "logout": "heroku logout",
         "login": "heroku login -i",
-        "connect": "heroku git:remote -a jajajosh"
+        "connect": "heroku git:remote -a cyberquincy"
     },
     "repository": {
         "type": "git",

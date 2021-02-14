@@ -51,7 +51,7 @@ async function handleCommand(message) {
 
         // exception: check with they inputted a path as the commandName
         if (Towers.isValidUpgradeSet(commandName)) {
-            return message.channel.send(`its q!${args[0]} $`);
+            return message.channel.send(`its q!${args[0]} <path>`);
         }
         // Search through command names taking into account their aliases
         let command =
@@ -78,9 +78,10 @@ async function handleCommand(message) {
 
         // doesnt lowerCase the arguments
         if (command.casedArgs) {
-            let dummy = message.content.slice(PREFIX.length);
+            let content = message.content.slice(PREFIX.length);
+            dummy = content.split(/ +/);
             dummy.shift();
-            args = dummy.split(/ +/);
+            args = dummy;
         }
 
         // rawArgs => no getting arg-alias-parsed
@@ -122,9 +123,10 @@ async function handleCommand(message) {
         command.execute(message, canonicalArgs, commandName, lang);
 
         // Don't want the user gaining xp from metacommands
+        /*
         if (!XPCOMMANDS.includes(command.name) && xpEnabled) {
             Xp.addCommandXp(message);
-        }
+        }*/
         // post information to statcord
         const botposting = require('./1/config.json')['botposting'];
 
@@ -141,7 +143,7 @@ async function handleCommand(message) {
 
         // May or may not embed an advertisement message in addition to the command output
 
-        Advertisements.spin(message);
+        //Advertisements.spin(message);
 
         /* let GLOBAL_COOLDOWN_REGEX = /gcd ?= ?(\d+)/;
         regex_match = message.channel.topic.match(GLOBAL_COOLDOWN_REGEX);

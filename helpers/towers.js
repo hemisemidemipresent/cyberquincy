@@ -192,13 +192,13 @@ function formatTower(tower) {
     } else if (isTowerPath(tower)) {
         [towerName, path] = tower.split('#');
         return (
-            `${h.toTitleCase(path.split('-').join(' '))} ` +
+            `${gHelper.toTitleCase(path.split('-').join(' '))} ` +
             `${towerUpgradeToIndexNormalForm(towerName)}`
         );
     } else if (isTowerUpgrade(tower)) {
         return `${towerUpgradeToIndexNormalForm(tower)}`;
     } else if (Aliases.isHero(tower)) {
-        return `${h.toTitleCase(tower)}`;
+        return `${gHelper.toTitleCase(tower)}`;
     } else {
         throw `Tower ${tower} is not within allotted tower/hero category`;
     }
@@ -228,7 +228,8 @@ function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
     let crossPathCost = 0;
     for (var subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
         crossPathCost += parseInt(
-            json[`${jsonTowerName}`].upgrades[crossPath - 1][subCrossTier - 1].cost
+            json[`${jsonTowerName}`].upgrades[crossPath - 1][subCrossTier - 1]
+                .cost
         );
     }
     return baseCost + pathCost + crossPathCost;

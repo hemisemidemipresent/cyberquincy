@@ -16,7 +16,7 @@ class StringSetValuesParser {
 
         // values must be strings because they're matched against string args
         for (let i = 0; i < values.length; i++) {
-            if (!h.is_str(values[i])) {
+            if (!gHelper.is_str(values[i])) {
                 throw new DeveloperCommandError(`${values[i]} is not a string`);
             }
         }

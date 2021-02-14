@@ -197,7 +197,7 @@ async function display2MPOG(message, tower) {
 
     for (field in values) {
         challengeEmbed.addField(
-            h.toTitleCase(field.replace('_', ' ')),
+            gHelper.toTitleCase(field.replace('_', ' ')),
             values[field],
             true
         );
@@ -212,8 +212,8 @@ async function display2MPOG(message, tower) {
 async function display2MPAlt(message, tower, map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
-    mapFormatted = h.toTitleCase(map.split('_').join(' '));
-    towerFormatted = h.toTitleCase(tower.split('_').join(' '));
+    mapFormatted = gHelper.toTitleCase(map.split('_').join(' '));
+    towerFormatted = gHelper.toTitleCase(tower.split('_').join(' '));
 
     entryRow = await rowFromTower(tower);
 
@@ -357,7 +357,7 @@ async function display2MPFilterAll(
     // Display the non-excluded columns
     for (columnHeader in columns) {
         challengeEmbed.addField(
-            h.toTitleCase(columnHeader),
+            gHelper.toTitleCase(columnHeader),
             columns[columnHeader].join('\n'),
             true
         );
@@ -370,7 +370,7 @@ async function display2MPFilterAll(
 function embedPages(message, title, columns) {
     columnChunks = {};
     for (columnHeader in columns) {
-        columnChunks[columnHeader] = h.chunk(
+        columnChunks[columnHeader] = gHelper.chunk(
             columns[columnHeader],
             MAX_VALUES_LIST_LENGTH_2MP
         );
@@ -430,18 +430,26 @@ function embedPages(message, title, columns) {
 
         if (msg) {
             try {
-                await msg.reactions.cache.get('⬅️').users.remove(message.author.id)
-                await msg.reactions.cache.get('➡️').users.remove(message.author.id)
-            } catch(e) {
-                if (e.code === Discord.Constants.APIErrors.MISSING_PERMISSIONS) {
-                    return message.channel.send(challengeEmbed).then(m => reactLoop(m));
+                await msg.reactions.cache
+                    .get('⬅️')
+                    .users.remove(message.author.id);
+                await msg.reactions.cache
+                    .get('➡️')
+                    .users.remove(message.author.id);
+            } catch (e) {
+                if (
+                    e.code === Discord.Constants.APIErrors.MISSING_PERMISSIONS
+                ) {
+                    return message.channel
+                        .send(challengeEmbed)
+                        .then((m) => reactLoop(m));
                 } else {
-                    throw e
+                    throw e;
                 }
             }
-            msg.edit(challengeEmbed).then(msg => reactLoop(msg))
-        }
-        else message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
+            msg.edit(challengeEmbed).then((msg) => reactLoop(msg));
+        } else
+            message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
     }
 
     displayCurrentPage();
@@ -451,8 +459,8 @@ function embedPages(message, title, columns) {
 async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
-    mapDifficultyFormatted = h.toTitleCase(mapDifficulty);
-    towerFormatted = h.toTitleCase(tower.split('_').join(' '));
+    mapDifficultyFormatted = gHelper.toTitleCase(mapDifficulty);
+    towerFormatted = gHelper.toTitleCase(tower.split('_').join(' '));
 
     entryRow = await rowFromTower(tower);
 
@@ -495,9 +503,13 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
 
         // Check if tower is water tower
         impossibleMaps = [];
-        if (Towers.allWaterTowers().includes(
-                Aliases.isHero(tower) ? tower : Towers.towerUpgradeToTower(tower)
-        )) {
+        if (
+            Towers.allWaterTowers().includes(
+                Aliases.isHero(tower)
+                    ? tower
+                    : Towers.towerUpgradeToTower(tower)
+            )
+        ) {
             // Calculate impossible maps (those that do not contain any water)
             nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
                 Aliases.mapToIndexAbbreviation(m)
@@ -608,7 +620,8 @@ async function rowFromTower(tower) {
 
         // input is "in_the_loop" but needs to be compared to "In The Loop"
         if (
-            Aliases.toIndexNormalForm(tower) === h.toTitleCase(towerCandidate)
+            Aliases.toIndexNormalForm(tower) ===
+            gHelper.toTitleCase(towerCandidate)
         ) {
             entryRow = row;
             break;

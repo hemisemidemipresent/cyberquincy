@@ -37,11 +37,11 @@ function calc(message, args, json) {
     };
 
     var parser = new LexicalParser({
-        "+": term,
-        "-": term,
-        "*": factor,
-        "/": factor,
-        "%": factor,
+        '+': term,
+        '-': term,
+        '*': factor,
+        '/': factor,
+        '%': factor,
     });
 
     // Execute the interpretation of the parsed lexical stack

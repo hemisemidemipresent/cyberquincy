@@ -17,11 +17,11 @@ function calc(message, args, json) {
         /* skip whitespace */
     });
 
-    lexer.addRule(/[a-zA-Z#0-9]+/, function (lexeme) {
+    lexer.addRule(/[a-zA-Z#!0-9\.]+/, function (lexeme) {
         return lexeme; // symbols
     });
 
-    lexer.addRule(/[\(\+\-\*\/\)]/, function (lexeme) {
+    lexer.addRule(/[\(\+\-\*\/%\)]/, function (lexeme) {
         return lexeme; // punctuation (i.e. "(", "+", "-", "*", "/", ")")
     });
 
@@ -41,6 +41,7 @@ function calc(message, args, json) {
         '-': term,
         '*': factor,
         '/': factor,
+        '%': factor,
     });
 
     // Execute the interpretation of the parsed lexical stack
@@ -72,6 +73,9 @@ function calc(message, args, json) {
         '/': function (a, b) {
             return a / b;
         },
+        "%": function (a, b) { 
+            return a % b; 
+        },
     };
 
     try {
@@ -81,6 +85,7 @@ function calc(message, args, json) {
                 case '-':
                 case '*':
                 case '/':
+                case '%':
                     var b = +stack.pop();
                     var a = +stack.pop();
                     stack.push(operator[c](a, b));
@@ -106,16 +111,16 @@ function calc(message, args, json) {
 
     return message.channel.send(
         new Discord.MessageEmbed()
-            .setTitle(gHelper.numberAsCost(output.toFixed(1)))
+            .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
             .setDescription(`\`${expression}\``)
             .setColor(colours['cyber'])
     );
 }
 
 function isTowerUpgradeCrosspath(t) {
-    if (!/[a-z]+#\d{3}/.test(t)) return false;
+    if (!/[a-z]+[#!]\d{3}/.test(t)) return false;
 
-    let [tower, upgrades] = t.split('#');
+    let [tower, upgrades] = t.split(/[!#]/)
 
     return (
         Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) &&
@@ -124,13 +129,20 @@ function isTowerUpgradeCrosspath(t) {
 }
 
 function costOfTowerUpgradeCrosspath(t, json) {
-    let [tower, upgrades] = t.split('#');
+    let [tower, upgrades] = t.split(/[!#]/)
 
     jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-');
 
-    return hard(
-        Towers.totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgrades)
-    );
+    let mediumCost = null
+    if (t.includes('#')) {
+        mediumCost = Towers.totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgrades)
+    } else if (t.includes("!")) {
+        let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
+        mediumCost = json[`${jsonTowerName}`].upgrades[path - 1][tier - 1].cost
+    } else {
+        throw 'No # or ! found in tower cost calc'
+    }
+    return hard(mediumCost)
 }
 
 function hard(cost) {
@@ -163,19 +175,24 @@ function helpMessage(message) {
         )
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
         .addField(
-            '`wiz#420`, `super#000`',
-            "TOTAL COST of tower#upgradeSet (can't do just `wiz`)"
+            '`wiz!420`, `super!100`', 
+            'INDIVIDUAL COST of tower!upgradeSet (can\'t do just `wiz`)'
         )
-        .addField('Operators', '`+`, `-`, `*`, `/`')
         .addField(
-            'Examples',
-            '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' +
-                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)'
+            '`wiz#420`, `super#000`', 
+            'TOTAL COST of tower#upgradeSet (can\'t do just `wiz`)'
         )
-        .setFooter(
-            'No heroes (just plug in the cost yourself), no discounts on towers (apply the cost reduction yourself if possible)'
+        .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder)')
+        .addField(
+            'Examples', 
+            '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
+                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
+        .addField(
+            'Notes',
+            'For amgiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'
         )
-        .setColor(colours['black']);
+        .setFooter('No heroes (just plug in the cost yourself), no discounts on towers (apply the cost reduction yourself if possible)')
+        .setColor(colours['black'])
 
     return message.channel.send(helpEmbed);
 }

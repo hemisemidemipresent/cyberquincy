@@ -118,7 +118,7 @@ function calc(message, args, json) {
 }
 
 function isTowerUpgradeCrosspath(t) {
-    if (!/[a-z]+[#!]\d{3}/.test(t)) return false
+    if (!/[a-z]+[#!]\d{3}/.test(t)) return false;
 
     let [tower, upgrades] = t.split(/[!#]/)
 
@@ -174,8 +174,14 @@ function helpMessage(message) {
             'Cumulative cash earned after specified round (6-100)'
         )
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
-        .addField('`wiz!420`, `super!100`', 'INDIVIDUAL COST of tower!upgradeSet (can\'t do just `wiz`)')
-        .addField('`wiz#420`, `super#000`', 'TOTAL COST of tower#upgradeSet (can\'t do just `wiz`)')
+        .addField(
+            '`wiz!420`, `super!100`', 
+            'INDIVIDUAL COST of tower!upgradeSet (can\'t do just `wiz`)'
+        )
+        .addField(
+            '`wiz#420`, `super#000`', 
+            'TOTAL COST of tower#upgradeSet (can\'t do just `wiz`)'
+        )
         .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder)')
         .addField(
             'Examples', 

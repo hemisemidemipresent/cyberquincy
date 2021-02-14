@@ -61,11 +61,21 @@ function calc(message, args, json) {
 
     // Evaluate the interpreted expression
     var operator = {
-        "+": function (a, b) { return a + b; },
-        "-": function (a, b) { return a - b; },
-        "*": function (a, b) { return a * b; },
-        "/": function (a, b) { return a / b; },
-        "%": function (a, b) { return a % b; },
+        '+': function (a, b) {
+            return a + b;
+        },
+        '-': function (a, b) {
+            return a - b;
+        },
+        '*': function (a, b) {
+            return a * b;
+        },
+        '/': function (a, b) {
+            return a / b;
+        },
+        "%": function (a, b) { 
+            return a % b; 
+        },
     };
 
     try {
@@ -101,7 +111,7 @@ function calc(message, args, json) {
 
     return message.channel.send(
         new Discord.MessageEmbed()
-            .setTitle(h.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
+            .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
             .setDescription(`\`${expression}\``)
             .setColor(colours['cyber'])
     );
@@ -170,7 +180,7 @@ function helpMessage(message) {
         .addField(
             'Examples', 
             '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
-            '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
+                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
         .addField(
             'Notes',
             'For amgiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'

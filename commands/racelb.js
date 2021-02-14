@@ -7,14 +7,14 @@ const OrParser = require('../parser/or-parser.js');
 const AnythingParser = require('../parser/anything-parser');
 const { red } = require('../jsons/colours.json');
 
-let raceID = 'kkq76y9o';
-
 module.exports = {
     name: 'raceleaderboard',
     aliases: ['leaderboard', 'lb', 't100'],
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
+        let raceID = 'RoyalFlush_kl0byvjc';
+
         const parsed = CommandParser.parse(
             args,
 

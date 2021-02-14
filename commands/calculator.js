@@ -81,18 +81,18 @@ function calc(message, args, json) {
     try {
         parsed.forEach(function (c) {
             switch (c) {
-            case "+":
-            case "-":
-            case "*":
-            case "/":
-            case "%":
-                var b =+ stack.pop();
-                var a =+ stack.pop();
-                stack.push(operator[c](a, b));
-                break;
-            default:
-                // Convert symbolic terms to bloons-ingame-monetary values
-                stack.push(parseAndValueToken(c, json));
+                case "+":
+                case "-":
+                case "*":
+                case "/":
+                case "%":
+                    var b =+ stack.pop();
+                    var a =+ stack.pop();
+                    stack.push(operator[c](a, b));
+                    break;
+                default:
+                    // Convert symbolic terms to bloons-ingame-monetary values
+                    stack.push(parseAndValueToken(c, json));
             }
         });
     } catch (e) {

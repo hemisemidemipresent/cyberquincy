@@ -81,11 +81,11 @@ function calc(message, args, json) {
     try {
         parsed.forEach(function (c) {
             switch (c) {
-                case "+":
-                case "-":
-                case "*":
-                case "/":
-                case "%":
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '%':
                     var b =+ stack.pop();
                     var a =+ stack.pop();
                     stack.push(operator[c](a, b));

@@ -86,8 +86,8 @@ function calc(message, args, json) {
                 case '*':
                 case '/':
                 case '%':
-                    var b =+ stack.pop();
-                    var a =+ stack.pop();
+                    var b = +stack.pop();
+                    var a = +stack.pop();
                     stack.push(operator[c](a, b));
                     break;
                 default:

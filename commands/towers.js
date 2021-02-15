@@ -1,7 +1,9 @@
-const { cyber } = require('../jsons/colours.json');
+const { red } = require('../jsons/colours.json');
+const request = require('request');
 
 const OptionalParser = require('../parser/optional-parser');
 const UpgradeSetParser = require('../parser/upgrade-set-parser');
+const Discord = require('discord.js');
 
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
@@ -94,9 +96,28 @@ const aliases = [
 ];
 
 const links = [
-    'https://sites.google.com/view/bloonology/cq/dart-monkey-cq?authuser=0',
-    'https://sites.google.com/view/bloonology/cq/boomerang-monkey-cq?authuser=0',
-    'https://sites.google.com/view/bloonology/cq/bomb-shooter-cq?authuser=0',
+    'https://pastebin.com/raw/FK4a9ZSi',
+    'https://pastebin.com/raw/W2x9dvPs',
+    'https://pastebin.com/raw/XaR4JafN',
+    'https://pastebin.com/raw/ywGCyWdT',
+    'https://pastebin.com/raw/3VKx3upE',
+    'https://pastebin.com/raw/cg8af3pj',
+    'https://pastebin.com/raw/8uQuKygM',
+    'https://pastebin.com/raw/F9i5vPX9',
+    'https://pastebin.com/raw/EuiGUBWs',
+    'https://pastebin.com/raw/hACdmBFa',
+    'https://pastebin.com/raw/dfwcqzDT',
+    'https://pastebin.com/raw/64s0RqaZ',
+    'https://pastebin.com/raw/DDkmKP6n',
+    'https://pastebin.com/raw/4MsYDjFx',
+    'https://pastebin.com/raw/SUxZg6Dk',
+    'https://pastebin.com/raw/kPAF2hqw',
+    'https://pastebin.com/raw/76m7ATYF',
+    'https://pastebin.com/raw/4egsjcpa',
+    'https://pastebin.com/raw/Es0nVqt1',
+    'https://pastebin.com/raw/tTHZWiSi',
+    'https://pastebin.com/raw/e2QHaQSD',
+    'https://pastebin.com/raw/rTHT0L21',
 ];
 module.exports = {
     name: '<tower>',
@@ -104,10 +125,10 @@ module.exports = {
 
     aliases: aliases.flat(),
 
-    execute(message, args, commandName) {
-        message.channel.send('this command will be under construction');
+    async execute(message, args, commandName) {
+        message.channel.send('this command is under major reworks'); // for warning
 
-        let name = findName(commandName);
+        let link = findName(commandName);
 
         parsed = CommandParser.parse(
             args,
@@ -115,16 +136,22 @@ module.exports = {
         );
 
         if (parsed.hasErrors()) {
-            return provideHelpMsg(message, name);
+            errorMessage(message, parsed.errors);
         }
 
-        if (parsed.upgrade_set == '000') {
-            let embed = baseTower(name);
-            return message.channel.send(embed);
-        }
-        JSON.stringify(parsed, null, 1);
+        process(parsed.upgrade_set, link, message);
+    },
+    errorMessage(message, errors) {
+        let errorEmbed = new Discord.MessageEmbed()
+            .setTitle(`${errors.join('\n')}`)
+            .addField(
+                '**q!lb [startingPlacement] [endingPlacement]**',
+                'both `startingPlacement` and `endingPlacement` are optional - they default to 1 and 50 respectively'
+            )
 
-        return message.channel.send(embed);
+            .setColor(red);
+
+        message.channel.send(errorEmbed);
     },
 };
 function provideHelpMsg(message, name) {
@@ -184,4 +211,28 @@ function findName(commandName) {
         }
     }
     return;
+}
+
+function process(upgrade, link, message) {
+    request(link, (err, res, body) => {
+        if (err) {
+            module.exports.errorMessage(message, ['info could not be fetched']);
+        }
+
+        let upgrades = body.split('\r\n\r\n');
+        for (let i = 0; i < upgrades.length; i++) {
+            if (upgrades[i].substr(0, 3) == upgrade) {
+                let info = upgrades[i]
+                    .toString()
+                    .replace(/\n/g, '')
+                    .replace(/\r \t/g, '\n')
+                    .replace(/ \t-/g, '-    '); //glhf with using ' -', for some reason thats not how embeds work
+                let embed = new Discord.MessageEmbed().setDescription(info);
+                return message.channel.send(embed);
+            }
+        }
+        module.exports.errorMessage(message, [
+            'upgrade path could not be found',
+        ]);
+    });
 }

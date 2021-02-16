@@ -150,6 +150,9 @@ function costOfTowerUpgradeCrosspath(t, json) {
     let [tower, upgrades] = t.split(/[!#]/)
 
     jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-');
+    if (jsonTowerName === 'druid-monkey') jsonTowerName = 'druid'
+    if (jsonTowerName === 'dartling-gunner') throw new UnrecognizedTokenError('Dartling not yet supported')
+    if (jsonTowerName === 'engineer') jsonTowerName = 'engineer-monkey'
 
     let mediumCost = null
     if (t.includes('#')) {
@@ -215,11 +218,11 @@ function helpMessage(message) {
         )
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
         .addField(
-            '`wiz!420`, `super!100`, `dart`, `wlp`, `gz`, `legend_of_the_night`', 
+            '`wiz!420`, `super!100`, `dart` (same as `dart!000`), `wlp` (same as `wiz!050`)', 
             'INDIVIDUAL COST of tower!upgradeSet'
         )
         .addField(
-            '`wiz#420`, `super#000`, `dart`', 
+            '`wiz#420`, `super#000`', 
             'TOTAL COST of tower#upgradeSet'
         )
         .addField(
@@ -231,10 +234,10 @@ function helpMessage(message) {
             'Examples', 
             '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
                 '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)\n' +
-                '`q!calc vil#002 + (vill#302 + vill#020)*0.85 + vill!400 (camo-mentoring double discount village setup)')
+                '`q!calc vil#002 + (vill#302 + vill#020)*0.85 + vill!400` (camo-mentoring double discount village setup)')
         .addField(
             'Notes',
-            'For amgiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'
+            ' • For ambiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'
         )
         .setColor(colours['black'])
 

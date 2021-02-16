@@ -68,14 +68,7 @@ function calc(message, args, json) {
                     .setColor(colours['red'])
                     .setFooter(footer)
             );
-        } else {
-            return message.channel.send(
-                new Discord.MessageEmbed()
-                    .setTitle(`Unexpected error`)
-                    .setDescription(`Report the bug by typing \`q!server\` and following the invite. Be sure to include the _exact_ q!calc command you typed.`)
-                    .setColor(colours['red'])
-            );
-        }
+        } else throw e;
     }
 
     var stack = [];
@@ -124,7 +117,7 @@ function calc(message, args, json) {
                     .setDescription(`\`${expression}\``)
                     .setColor(colours['red'])
             );
-        }
+        } else throw e;
     }
 
     // The single item left in the stack is the evaluated result
@@ -150,6 +143,10 @@ function isTowerUpgradeCrosspath(t) {
 }
 
 function costOfTowerUpgradeCrosspath(t, json) {
+    if (!["!", "#"].some(sep => t.includes(sep))) {
+        t = Aliases.getCanonicalForm(t).replace("#", "!")
+    }
+
     let [tower, upgrades] = t.split(/[!#]/)
 
     jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-');
@@ -193,11 +190,13 @@ function parseAndValueToken(t, json) {
         (round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round)
     ) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
+    } else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(t))) {
+        return costOfTowerUpgradeCrosspath(t, json);
     } else if (isTowerUpgradeCrosspath(t)) {
         return costOfTowerUpgradeCrosspath(t, json);
-    } else if (Towers.allTowers().includes(Aliases.getCanonicalForm(t))) {
+    } else if (Towers.isTower(Aliases.getCanonicalForm(t))) {
         return costOfTowerUpgradeCrosspath(`${t}#000`, json);
-    } else if (Aliases.allHeroes().includes(Aliases.getCanonicalForm(t))) {
+    } else if (Aliases.isHero(Aliases.getCanonicalForm(t))) {
         return costOfHero(t);
     } else {
         throw new UnrecognizedTokenError(`Unrecognized token \`${t}\``);
@@ -216,11 +215,11 @@ function helpMessage(message) {
         )
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
         .addField(
-            '`wiz!420`, `super!100`, dart', 
+            '`wiz!420`, `super!100`, `dart`, `wlp`, `gz`, `legend_of_the_night`', 
             'INDIVIDUAL COST of tower!upgradeSet'
         )
         .addField(
-            '`wiz#420`, `super#000`, dart', 
+            '`wiz#420`, `super#000`, `dart`', 
             'TOTAL COST of tower#upgradeSet'
         )
         .addField(
@@ -231,7 +230,8 @@ function helpMessage(message) {
         .addField(
             'Examples', 
             '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
-                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
+                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)\n' +
+                '`q!calc vil#002 + (vill#302 + vill#020)*0.85 + vill!400 (camo-mentoring double discount village setup)')
         .addField(
             'Notes',
             'For amgiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'

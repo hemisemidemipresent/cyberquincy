@@ -55,7 +55,28 @@ function calc(message, args, json) {
 
     // Get the original command arguments string back (other than the command name)
     expression = args.join(' ');
-    parsed = parse(expression);
+    try {
+        parsed = parse(expression);
+    } catch (e) {
+        if (c = e.message.match(/Unexpected character at index \d+: (.)/)[1]) {
+            footer = ''
+            if (c == '<') footer = "Did you try to tag another discord user? That's definitely now allowed here."
+            return message.channel.send(
+                new Discord.MessageEmbed()
+                    .setTitle(`Unexpected character "${c}"`)
+                    .setDescription(`"${c}" is not a valid character in the \`q!calc\` expression. Type \`q!calc\` for help.`)
+                    .setColor(colours['red'])
+                    .setFooter(footer)
+            );
+        } else {
+            return message.channel.send(
+                new Discord.MessageEmbed()
+                    .setTitle(`Unexpected error`)
+                    .setDescription(`Report the bug by typing \`q!server\` and following the invite.`)
+                    .setColor(colours['red'])
+            );
+        }
+    }
 
     var stack = [];
 
@@ -158,6 +179,8 @@ function parseAndValueToken(t, json) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (isTowerUpgradeCrosspath(t)) {
         return costOfTowerUpgradeCrosspath(t, json);
+    } else if (Towers.allTowers().includes(Aliases.getCanonicalForm(t))) {
+        return costOfTowerUpgradeCrosspath(`${t}#000`, json);
     } else {
         throw new UnrecognizedTokenError(`Unrecognized token \`${t}\``);
     }

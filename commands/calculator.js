@@ -72,7 +72,7 @@ function calc(message, args, json) {
             return message.channel.send(
                 new Discord.MessageEmbed()
                     .setTitle(`Unexpected error`)
-                    .setDescription(`Report the bug by typing \`q!server\` and following the invite.`)
+                    .setDescription(`Report the bug by typing \`q!server\` and following the invite. Be sure to include the _exact_ q!calc command you typed.`)
                     .setColor(colours['red'])
             );
         }
@@ -198,12 +198,12 @@ function helpMessage(message) {
         )
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
         .addField(
-            '`wiz!420`, `super!100`', 
-            'INDIVIDUAL COST of tower!upgradeSet (can\'t do just `wiz`)'
+            '`wiz!420`, `super!100`, dart', 
+            'INDIVIDUAL COST of tower!upgradeSet'
         )
         .addField(
-            '`wiz#420`, `super#000`', 
-            'TOTAL COST of tower#upgradeSet (can\'t do just `wiz`)'
+            '`wiz#420`, `super#000`, dart', 
+            'TOTAL COST of tower#upgradeSet'
         )
         .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder)')
         .addField(

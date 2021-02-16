@@ -170,6 +170,22 @@ function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;
 }
 
+function costOfHero(hero) {
+    switch (Aliases.getCanonicalForm(hero)) {
+        case 'adora': return 1080
+        case 'benjamin': return 1295
+        case 'brickell': return 810
+        case 'churchill': return 2160
+        case 'etienne': return 920
+        case 'ezili': return 650
+        case 'gwen': return 970
+        case 'jones': return 810
+        case 'obyn': return 700
+        case 'pat': return 865
+        case 'quincy': return 585
+    }
+}
+
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, json) {
     if (!isNaN(t)) return Number(t);
@@ -181,6 +197,8 @@ function parseAndValueToken(t, json) {
         return costOfTowerUpgradeCrosspath(t, json);
     } else if (Towers.allTowers().includes(Aliases.getCanonicalForm(t))) {
         return costOfTowerUpgradeCrosspath(`${t}#000`, json);
+    } else if (Aliases.allHeroes().includes(Aliases.getCanonicalForm(t))) {
+        return costOfHero(t);
     } else {
         throw new UnrecognizedTokenError(`Unrecognized token \`${t}\``);
     }
@@ -205,6 +223,10 @@ function helpMessage(message) {
             '`wiz#420`, `super#000`, dart', 
             'TOTAL COST of tower#upgradeSet'
         )
+        .addField(
+            '`adora`, `brick`',
+            'Base cost of hero (no leveling cost calculations included)'
+        )
         .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder)')
         .addField(
             'Examples', 
@@ -214,7 +236,6 @@ function helpMessage(message) {
             'Notes',
             'For amgiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'
         )
-        .setFooter('No heroes (just plug in the cost yourself), no discounts on towers (apply the cost reduction yourself if possible)')
         .setColor(colours['black'])
 
     return message.channel.send(helpEmbed);

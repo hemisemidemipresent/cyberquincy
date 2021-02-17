@@ -58,9 +58,10 @@ function calc(message, args, json) {
     try {
         parsed = parse(expression);
     } catch (e) { // Catches bad character inputs
-        if (c = e.message.match(/Unexpected character at index \d+: (.)/)[1]) {
+        c = e.message.match(/Unexpected character at index \d+: (.)/)[1]
+        if (c) {
             footer = ''
-            if (c == '<') footer = "Did you try to tag another discord user? That's definitely not allowed here."
+            if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here."
             return message.channel.send(
                 new Discord.MessageEmbed()
                     .setTitle(`Unexpected character "${c}"`)

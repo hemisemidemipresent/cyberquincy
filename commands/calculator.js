@@ -154,7 +154,7 @@ function calc(message, args, json) {
 
 // wiz!300 or wiz#300 e.g.
 function isTowerUpgradeCrosspath(t) {
-    if (!/[a-z]+[#!]\d{3}/.test(t)) return false;
+    if (!/[a-z]+[#!]\d{3}/.test(t)) return false;    
 
     let [tower, upgrades] = t.split(/[!#]/)
 
@@ -179,7 +179,7 @@ function costOfTowerUpgradeCrosspath(t, json) {
     if (jsonTowerName === 'engineer') jsonTowerName = 'engineer-monkey'
 
     let mediumCost = null
-    if (t.includes('#')) {
+    if (t.includes('#') || upgrades == '000') {
         // Total cost
         mediumCost = Towers.totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgrades)
     } else if (t.includes("!")) {

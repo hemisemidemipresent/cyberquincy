@@ -356,6 +356,7 @@ class AliasRepository extends Array {
     }
 
     isHero(candidate) {
+        if (!candidate || !gHelper.is_str(candidate)) return false;
         return this.allHeroes().includes(candidate.toLowerCase());
     }
 

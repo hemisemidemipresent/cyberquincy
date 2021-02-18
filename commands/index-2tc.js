@@ -96,7 +96,7 @@ async function execute(message, args) {
     }
 }
 
-function displayCombos(message, combos, parsed) {
+async function displayCombos(message, combos, parsed) {
     if (combos.length == 0) {
         return message.channel.send(
             new Discord.MessageEmbed()
@@ -105,11 +105,11 @@ function displayCombos(message, combos, parsed) {
         );
     }
 
-    let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(embedTitle(parsed, combos))
-        .setColor(colours['cyber']);
-
     if (combos.length == 1) {
+        let challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(embedTitle(parsed, combos))
+            .setColor(colours['cyber']);
+        
         combo = flattenCombo(combos[0]);
         combo = stripCombo(combo, parsed);
         combo = orderCombo(combo);
@@ -121,6 +121,8 @@ function displayCombos(message, combos, parsed) {
                 true
             );
         }
+
+        return message.channel.send(challengeEmbed);
     } else {
         fieldHeaders = getDisplayCols(parsed);
 
@@ -155,28 +157,44 @@ function displayCombos(message, combos, parsed) {
             }
         }
 
-        numRows = colData[Object.keys(colData)[0]].length;
-        MAX_NUM_ROWS = 10;
+        MAX_NUM_ROWS = 15;
+        let maxNumRowsDisplayed = MAX_NUM_ROWS;
 
-        challengeEmbed.addField('#Combos', numRows);
+        // The number of rows to be displayed is variable depending on the characters in each link
+        // Try 15 and decrement every time it doesn't work.
+        for(maxNumRowsDisplayed = MAX_NUM_ROWS; maxNumRowsDisplayed > 0; maxNumRowsDisplayed--) {
+            let challengeEmbed = new Discord.MessageEmbed()
+                .setTitle(embedTitle(parsed, combos))
+                .setColor(colours['cyber']);
 
-        for (header in colData) {
-            data =
-                numRows <= MAX_NUM_ROWS
-                    ? colData[header]
-                    : colData[header].slice(0, MAX_NUM_ROWS).concat('...');
+            numRows = colData[Object.keys(colData)[0]].length;
 
             challengeEmbed.addField(
-                gHelper.toTitleCase(header.split('_').join(' ')),
-                data.join('\n'),
-                true
+                '# Combos', 
+                `**1**-**${Math.min(maxNumRowsDisplayed, numRows)}** of ${numRows}`
             );
-        }
 
-        if (numRows > MAX_NUM_ROWS)
-            challengeEmbed.setFooter('Too many combos to display all at once');
+            for (header in colData) {
+                data =
+                    numRows <= maxNumRowsDisplayed
+                        ? colData[header]
+                        : colData[header].slice(0, maxNumRowsDisplayed).concat('...');
+
+                challengeEmbed.addField(
+                    gHelper.toTitleCase(header.split('_').join(' ')),
+                    data.join('\n'),
+                    true
+                );
+            }
+
+            if (numRows > maxNumRowsDisplayed)
+                challengeEmbed.setFooter('Too many combos to display all at once');
+            
+            try {
+                return await message.channel.send(challengeEmbed);
+            } catch (e) {} // Retry by decrementing maxNumRowsDisplayed
+        }
     }
-    return message.channel.send(challengeEmbed);
 }
 
 function getDisplayCols(parsed) {
@@ -584,6 +602,7 @@ async function getOG2TCFromPreloadedRow(row) {
     // Recapture link to format properly
     const linkCell = sheet.getCellByA1(`${OG_COLS.LINK}${row}`);
     values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+    values.VERSION = values.VERSION.toString();
 
     // Replace checkmark that doesn't display in embedded with one that does
     if (values.CURRENT === HEAVY_CHECK_MARK) {

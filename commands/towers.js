@@ -1,4 +1,4 @@
-const { red } = require('../jsons/colours.json');
+const { red, cyber } = require('../jsons/colours.json');
 const request = require('request');
 
 const OptionalParser = require('../parser/optional-parser');
@@ -31,6 +31,7 @@ const aliases = [
     ['monkey-ace', 'ace', 'pilot', 'plane'],
     ['heli-pilot', 'heli', 'helicopter', 'helipilot'],
     ['mortar-monkey', 'mortar', 'mor'],
+    ['dartling-gunner', 'dartling', 'dartl', 'gatling', 'dl'],
     ['wizard-monkey', 'wizard', 'apprentice', 'wiz'],
     ['super-monkey', 'super', 'supermonkey'],
     ['ninja-monkey', 'ninja', 'n', 'ninj', 'shuriken'],
@@ -121,7 +122,6 @@ const links = [
 ];
 module.exports = {
     name: '<tower>',
-    dependencies: ['towerJSON'],
 
     aliases: aliases.flat(),
 
@@ -130,10 +130,7 @@ module.exports = {
 
         let link = findName(commandName);
 
-        parsed = CommandParser.parse(
-            args,
-            new OptionalParser(new UpgradeSetParser(), '000')
-        );
+        parsed = CommandParser.parse(args, new UpgradeSetParser());
 
         if (parsed.hasErrors()) {
             errorMessage(message, parsed.errors);
@@ -226,8 +223,14 @@ function process(upgrade, link, message) {
                     .toString()
                     .replace(/\n/g, '')
                     .replace(/\r \t/g, '\n')
-                    .replace(/ \t-/g, '-    '); //glhf with using ' -', for some reason thats not how embeds work
-                let embed = new Discord.MessageEmbed().setDescription(info);
+                    .replace(/ \t-/g, '-    ')
+                    .replace(/\r/g, '\n');
+                let embed = new Discord.MessageEmbed()
+                    .setDescription(info)
+                    .setFooter(
+                        'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|q!ap for help and elaboration'
+                    )
+                    .setColor(cyber);
                 return message.channel.send(embed);
             }
         }

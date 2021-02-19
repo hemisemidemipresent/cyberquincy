@@ -1,8 +1,4 @@
 node_modules
-database.sqlite
-migrations
-config
-models
 2
 3
 4
@@ -22,5 +18,4 @@ models
 18
 19
 20
-node_modules
 21

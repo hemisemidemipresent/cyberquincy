@@ -55,7 +55,22 @@ function calc(message, args, json) {
 
     // Get the original command arguments string back (other than the command name)
     expression = args.join(' ');
-    parsed = parse(expression);
+    try {
+        parsed = parse(expression);
+    } catch (e) { // Catches bad character inputs
+        c = e.message.match(/Unexpected character at index \d+: (.)/)[1]
+        if (c) {
+            footer = ''
+            if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here."
+            return message.channel.send(
+                new Discord.MessageEmbed()
+                    .setTitle(`Unexpected character "${c}"`)
+                    .setDescription(`"${c}" is not a valid character in the \`q!calc\` expression. Type \`q!calc\` for help.`)
+                    .setColor(colours['red'])
+                    .setFooter(footer)
+            );
+        } else throw e;
+    }
 
     var stack = [];
 
@@ -96,29 +111,50 @@ function calc(message, args, json) {
             }
         });
     } catch (e) {
-        if (e instanceof UnrecognizedTokenError) {
+        if (e instanceof UnrecognizedTokenError) { // Catches non-sensical tokens
             return message.channel.send(
                 new Discord.MessageEmbed()
                     .setTitle(e.message)
                     .setDescription(`\`${expression}\``)
                     .setColor(colours['red'])
             );
-        }
+        } else throw e;
     }
+
+
 
     // The single item left in the stack is the evaluated result
     var output = stack.pop();
 
-    return message.channel.send(
-        new Discord.MessageEmbed()
-            .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
-            .setDescription(`\`${expression}\``)
-            .setColor(colours['cyber'])
-    );
+    if (isNaN(output)) {
+        return message.channel.send(
+            new Discord.MessageEmbed()
+                .setTitle('Error processing expression. Did you add an extra operator?')
+                .setDescription(`\`${expression}\``)
+                .setColor(colours['red'])
+                .setFooter('Enter `q!calc` for help')
+        );
+    } else if (stack.length > 0) {
+        return message.channel.send(
+            new Discord.MessageEmbed()
+                .setTitle('Error processing expression. Did you leave out an operator?')
+                .setDescription(`\`${expression}\``)
+                .setColor(colours['red'])
+                .setFooter('Enter `q!calc` for help')
+        );
+    } else { // G2g!
+        return message.channel.send(
+            new Discord.MessageEmbed()
+                .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
+                .setDescription(`\`${expression}\``)
+                .setColor(colours['cyber'])
+        );
+    }
 }
 
+// wiz!300 or wiz#300 e.g.
 function isTowerUpgradeCrosspath(t) {
-    if (!/[a-z]+[#!]\d{3}/.test(t)) return false;
+    if (!/[a-z]+[#!]\d{3}/.test(t)) return false;    
 
     let [tower, upgrades] = t.split(/[!#]/)
 
@@ -129,14 +165,25 @@ function isTowerUpgradeCrosspath(t) {
 }
 
 function costOfTowerUpgradeCrosspath(t, json) {
+    // Checking for tower aliases of the form wlp, gz, etc.
+    if (!["!", "#"].some(sep => t.includes(sep))) {
+        // Alias tokens like wlp as wiz!050
+        t = Aliases.getCanonicalForm(t).replace("#", "!")
+    }
+
     let [tower, upgrades] = t.split(/[!#]/)
 
     jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-');
+    if (jsonTowerName === 'druid-monkey') jsonTowerName = 'druid'
+    if (jsonTowerName === 'dartling-gunner') throw new UnrecognizedTokenError('Dartling not yet supported')
+    if (jsonTowerName === 'engineer') jsonTowerName = 'engineer-monkey'
 
     let mediumCost = null
-    if (t.includes('#')) {
+    if (t.includes('#') || upgrades == '000') {
+        // Total cost
         mediumCost = Towers.totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgrades)
     } else if (t.includes("!")) {
+        // Individual upgrade cost
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
         mediumCost = json[`${jsonTowerName}`].upgrades[path - 1][tier - 1].cost
     } else {
@@ -149,6 +196,23 @@ function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;
 }
 
+// TODO: Use hero json
+function costOfHero(hero) {
+    switch (Aliases.getCanonicalForm(hero)) {
+        case 'adora': return 1080
+        case 'benjamin': return 1295
+        case 'brickell': return 810
+        case 'churchill': return 2160
+        case 'etienne': return 920
+        case 'ezili': return 650
+        case 'gwen': return 970
+        case 'jones': return 810
+        case 'obyn': return 700
+        case 'pat': return 865
+        case 'quincy': return 585
+    }
+}
+
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, json) {
     if (!isNaN(t)) return Number(t);
@@ -156,8 +220,14 @@ function parseAndValueToken(t, json) {
         (round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round)
     ) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
-    } else if (isTowerUpgradeCrosspath(t)) {
+    } else if (isTowerUpgradeCrosspath(t)) { // Catches tower upgrades with crosspaths like wiz#401
         return costOfTowerUpgradeCrosspath(t, json);
+    } else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(t))) { // Catches all other tower ugprades
+        return costOfTowerUpgradeCrosspath(t, json);
+    } else if (Towers.isTower(Aliases.getCanonicalForm(t))) { // Catches base tower names/aliases
+        return costOfTowerUpgradeCrosspath(`${t}#000`, json);
+    } else if (Aliases.isHero(Aliases.getCanonicalForm(t))) {
+        return costOfHero(t);
     } else {
         throw new UnrecognizedTokenError(`Unrecognized token \`${t}\``);
     }
@@ -175,23 +245,27 @@ function helpMessage(message) {
         )
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
         .addField(
-            '`wiz!420`, `super!100`', 
-            'INDIVIDUAL COST of tower!upgradeSet (can\'t do just `wiz`)'
+            '`wiz!420`, `super!100`, `dart` (same as `dart!000`), `wlp` (same as `wiz!050`)', 
+            'INDIVIDUAL COST of tower!upgradeSet'
         )
         .addField(
             '`wiz#420`, `super#000`', 
-            'TOTAL COST of tower#upgradeSet (can\'t do just `wiz`)'
+            'TOTAL COST of tower#upgradeSet'
+        )
+        .addField(
+            '`adora`, `brick`',
+            'Base cost of hero (no leveling cost calculations included)'
         )
         .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder)')
         .addField(
             'Examples', 
             '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
-                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
+                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)\n' +
+                '`q!calc vil#002 + (vill#302 + vill#020)*0.85 + vill!400` (camo-mentoring double discount village setup)')
         .addField(
             'Notes',
-            'For amgiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'
+            ' • For ambiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'
         )
-        .setFooter('No heroes (just plug in the cost yourself), no discounts on towers (apply the cost reduction yourself if possible)')
         .setColor(colours['black'])
 
     return message.channel.send(helpEmbed);

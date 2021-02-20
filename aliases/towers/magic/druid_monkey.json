@@ -2,14 +2,14 @@
     "xyz": ["druid", "drood", "dru"],
 
     "300": ["druid_of_the_storm", "dots"],
-    "400": ["ball_lightning", "blightning", "ball", "balll"],
-    "500": ["superstorm"],
+    "400": ["ball_lightning", "blightning", "ball", "balll", "ball_light"],
+    "500": ["superstorm", "super_storm"],
 
     "030": ["druid_of_the_jungle", "jungle", "dotj"],
     "040": ["jungle's_bounty", "bounty", "jbounty", "jb"],
     "050": ["spirit_of_the_forest", "spirit", "sotf"],
 
-    "003": ["druid_of_wrath", "dow"],
+    "003": ["druid_of_wrath", "dow", "wrath"],
     "004": ["poplust", "lust", "pop", "popl"],
     "005": ["avatar_of_wrath", "aow"]
 }

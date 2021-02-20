@@ -10,6 +10,6 @@
     "050": ["perma_charge", "pcharge", "pc", "pch"],
     
     "003": ["kylie_boomerang", "kylie", "kyle", "kyl"],
-    "004": ["moab_press", "press"],
-    "005": ["moab_domination", "moabdom", "mdom", "domination"]
+    "004": ["moab_press", "press", "m_press"],
+    "005": ["moab_domination", "moab_dom", "m_dom", "domination", "dom"]
 }

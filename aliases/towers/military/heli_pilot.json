@@ -11,5 +11,5 @@
 
     "003": ["moab_shove", "shove"],
     "004": ["comanche_defense", "cdef", "comdef"],
-    "005": ["comanche_commander", "comcom", "commcomm"]
+    "005": ["comanche_commander", "commanche_commander","comcom", "commcomm"]
 }

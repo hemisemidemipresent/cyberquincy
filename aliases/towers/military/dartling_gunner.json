@@ -2,7 +2,7 @@
     "xyz": ["dartling", "gun", "gunner", "ling"],
 
     "300": ["laser_cannon", "lcan"],
-    "400": ["plasma_accelerator", "accelerator", "acc", "accel", "accelerate", "paccel"],
+    "400": ["plasma_accelerator", "accelerator", "acc", "accel", "accelerate", "paccel", "plasmacc"],
     "500": ["ray_of_doom", "rod"],
 
     "030": ["hydra_rocket_pods", "hydra", "pods", "hrp", "hrps", "hyde", "hyd", "hy"],

@@ -10,6 +10,6 @@
     "050": ["elite_sniper", "es", "esniper", "elitesniper"],
     
     "003": ["semi_automatic", "semi", "semiauto"],
-    "004": ["fully_automatic", "fullauto", "fullyauto"],
-    "005": ["elite_defender", "ed"]
+    "004": ["fully_automatic", "full_auto", "fully_auto"],
+    "005": ["elite_defender", "ed", "edef"]
 }

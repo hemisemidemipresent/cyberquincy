@@ -3,7 +3,7 @@
 
     "300": ["laser_cannon", "lcan"],
     "400": ["plasma_accelerator", "accelerator", "acc", "accel", "accelerate", "paccel", "plasmacc"],
-    "500": ["ray_of_doom", "rod"],
+    "500": ["ray_of_doom", "rod", "ray"],
 
     "030": ["hydra_rocket_pods", "hydra", "pods", "hrp", "hrps", "hyde", "hyd", "hy"],
     "040": ["rocket_storm", "rs", "rstorm"],

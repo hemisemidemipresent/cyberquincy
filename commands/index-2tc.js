@@ -451,8 +451,55 @@ function towerMatch(combo, tower) {
 function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!2tc` HELP')
-        .setDescription('Use ctrl+f to see what other people are doing')
-        .setColor(colours['black']);
+        .setDescription('**2TC Combo Finder**')
+        .addField(
+            '`1`,`42`, `101`',
+            'Find the nth combo'
+        )
+        .addField(
+            '`u#case_insensitive_username`', 
+            'Search combos by username; replace all spaces with underscores; keep all symbols'
+        )
+        .addField(
+            '`wiz`, `spact`', 
+            'Search combos by base tower name'
+        )
+        .addField(
+            '`wiz#top`, `spact#bot`', 
+            'Search combos by tower path'
+        )
+        .addField(
+            '`aspike`, `spact#005`', 
+            'Seach combos by upgrade; if you write out the upgrade itself, do not crosspath'
+        )
+        .addField(
+            '`obyn`, `eti`',
+            'Search combos by hero'
+        )
+        .addField(
+            '`logs`, `ck`, `moon-landing`', 
+            'Search combos by map completed on'
+        )
+        .addField(
+            '`v23`, `v10.2`', 
+            'Limit results to version completed in'
+        )
+        .addField(
+            'Examples', 
+            '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
+                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
+        .addField(
+            'Notes',
+            ' • You may include the above arguments in the `q!2tc` command in nearly any combination, except in ways outlined by the following rules:\n' +
+                ' • You may only search a max of two tower-like arguments at a time. Searching for two towers finds combos with A _AND_ B, not A _OR_ B\n' +
+                ' • For every other field listed, you may only search one per command. For example, searching two usernames will not work.\n' +
+                ' • You may not search version and map at the same time. This is because alt map completions don\'t specify version completed.\n' +
+                ' • Including the version number will exclude alt map completions for the above reason.\n' +
+                ' • There is currently no way to see all maps that a 2TC was completed on :/\n' +
+                ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n' +
+                ' • There is currently no way to scroll through multi-page results. Just make the command more specific.\n'
+        )
+        .setColor(colours['black'])
 
     return message.channel.send(helpEmbed);
 }

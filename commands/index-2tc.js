@@ -96,7 +96,7 @@ async function execute(message, args) {
     }
 }
 
-function displayCombos(message, combos, parsed) {
+async function displayCombos(message, combos, parsed) {
     if (combos.length == 0) {
         return message.channel.send(
             new Discord.MessageEmbed()
@@ -105,11 +105,11 @@ function displayCombos(message, combos, parsed) {
         );
     }
 
-    let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(embedTitle(parsed, combos))
-        .setColor(colours['cyber']);
-
     if (combos.length == 1) {
+        let challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(embedTitle(parsed, combos))
+            .setColor(colours['cyber']);
+        
         combo = flattenCombo(combos[0]);
         combo = stripCombo(combo, parsed);
         combo = orderCombo(combo);
@@ -121,6 +121,8 @@ function displayCombos(message, combos, parsed) {
                 true
             );
         }
+
+        return message.channel.send(challengeEmbed);
     } else {
         fieldHeaders = getDisplayCols(parsed);
 
@@ -155,28 +157,44 @@ function displayCombos(message, combos, parsed) {
             }
         }
 
-        numRows = colData[Object.keys(colData)[0]].length;
-        MAX_NUM_ROWS = 10;
+        MAX_NUM_ROWS = 15;
+        let maxNumRowsDisplayed = MAX_NUM_ROWS;
 
-        challengeEmbed.addField('#Combos', numRows);
+        // The number of rows to be displayed is variable depending on the characters in each link
+        // Try 15 and decrement every time it doesn't work.
+        for(maxNumRowsDisplayed = MAX_NUM_ROWS; maxNumRowsDisplayed > 0; maxNumRowsDisplayed--) {
+            let challengeEmbed = new Discord.MessageEmbed()
+                .setTitle(embedTitle(parsed, combos))
+                .setColor(colours['cyber']);
 
-        for (header in colData) {
-            data =
-                numRows <= MAX_NUM_ROWS
-                    ? colData[header]
-                    : colData[header].slice(0, MAX_NUM_ROWS).concat('...');
+            numRows = colData[Object.keys(colData)[0]].length;
 
             challengeEmbed.addField(
-                gHelper.toTitleCase(header.split('_').join(' ')),
-                data.join('\n'),
-                true
+                '# Combos', 
+                `**1**-**${Math.min(maxNumRowsDisplayed, numRows)}** of ${numRows}`
             );
-        }
 
-        if (numRows > MAX_NUM_ROWS)
-            challengeEmbed.setFooter('Too many combos to display all at once');
+            for (header in colData) {
+                data =
+                    numRows <= maxNumRowsDisplayed
+                        ? colData[header]
+                        : colData[header].slice(0, maxNumRowsDisplayed).concat('...');
+
+                challengeEmbed.addField(
+                    gHelper.toTitleCase(header.split('_').join(' ')),
+                    data.join('\n'),
+                    true
+                );
+            }
+
+            if (numRows > maxNumRowsDisplayed)
+                challengeEmbed.setFooter('Too many combos to display all at once');
+            
+            try {
+                return await message.channel.send(challengeEmbed);
+            } catch (e) {} // Retry by decrementing maxNumRowsDisplayed
+        }
     }
-    return message.channel.send(challengeEmbed);
 }
 
 function getDisplayCols(parsed) {
@@ -433,8 +451,55 @@ function towerMatch(combo, tower) {
 function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!2tc` HELP')
-        .setDescription('Use ctrl+f to see what other people are doing')
-        .setColor(colours['black']);
+        .setDescription('**2TC Combo Finder**')
+        .addField(
+            '`1`,`42`, `101`',
+            'Find the nth combo'
+        )
+        .addField(
+            '`u#case_insensitive_username`', 
+            'Search combos by username; replace all spaces with underscores; keep all symbols'
+        )
+        .addField(
+            '`wiz`, `spact`', 
+            'Search combos by base tower name'
+        )
+        .addField(
+            '`wiz#top`, `spact#bot`', 
+            'Search combos by tower path'
+        )
+        .addField(
+            '`aspike`, `spact#005`', 
+            'Seach combos by upgrade; if you write out the upgrade itself, do not crosspath'
+        )
+        .addField(
+            '`obyn`, `eti`',
+            'Search combos by hero'
+        )
+        .addField(
+            '`logs`, `ck`, `moon-landing`', 
+            'Search combos by map completed on'
+        )
+        .addField(
+            '`v23`, `v10.2`', 
+            'Limit results to version completed in'
+        )
+        .addField(
+            'Examples', 
+            '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' + 
+                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)')
+        .addField(
+            'Notes',
+            ' • You may include the above arguments in the `q!2tc` command in nearly any combination, except in ways outlined by the following rules:\n' +
+                ' • You may only search a max of two tower-like arguments at a time. Searching for two towers finds combos with A _AND_ B, not A _OR_ B\n' +
+                ' • For every other field listed, you may only search one per command. For example, searching two usernames will not work.\n' +
+                ' • You may not search version and map at the same time. This is because alt map completions don\'t specify version completed.\n' +
+                ' • Including the version number will exclude alt map completions for the above reason.\n' +
+                ' • There is currently no way to see all maps that a 2TC was completed on :/\n' +
+                ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n' +
+                ' • There is currently no way to scroll through multi-page results. Just make the command more specific.\n'
+        )
+        .setColor(colours['black'])
 
     return message.channel.send(helpEmbed);
 }
@@ -584,6 +649,7 @@ async function getOG2TCFromPreloadedRow(row) {
     // Recapture link to format properly
     const linkCell = sheet.getCellByA1(`${OG_COLS.LINK}${row}`);
     values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+    values.VERSION = values.VERSION.toString();
 
     // Replace checkmark that doesn't display in embedded with one that does
     if (values.CURRENT === HEAVY_CHECK_MARK) {

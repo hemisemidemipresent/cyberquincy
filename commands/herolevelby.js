@@ -12,6 +12,8 @@ const SingleTextParser = require('../helpers/reactor/single_text_parser');
 
 const Heroes = require('../helpers/heroes');
 
+const gHelper = require('../helpers/general.js');
+
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
         return message.channel.send(

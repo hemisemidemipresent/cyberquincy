@@ -1,4 +1,5 @@
 pluralize = require('pluralize');
+const gHelper = require('../helpers/general.js');
 
 // Simply an extension of an object with the added property
 // where if a property is supplied, a plural form of the key is consequently updated.

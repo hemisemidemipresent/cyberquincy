@@ -1,5 +1,6 @@
 xpCurve = require('../jsons/discord-user-xp.json');
 const { discord } = require('../aliases/misc.json');
+const gHelper = require('../helpers/general.js');
 
 async function addCommandXp(message) {
     user = message.author;

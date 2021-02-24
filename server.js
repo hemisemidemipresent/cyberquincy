@@ -33,9 +33,8 @@ function pingHeroku() {
 
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
-    global.gHelper = require('./helpers/general.js');
     global.b = require('./helpers/bloons-general');
-    global.Towers = require('./helpers/towers');
+    global.Towers = require('./helpers/towers.js');
     global.Files = require('./helpers/files.js');
     global.AliasRepository = require('./alias-repository.js');
 
@@ -50,10 +49,10 @@ function globalRequirements() {
     global.UserCommandError = require('./exceptions/user-command-error.js');
     global.DeveloperCommandError = require('./exceptions/developer-command-error.js');
 
-    global.Xp = require('./helpers/xp.js');
-    global.DiscordUsers = require('./helpers/discord-users.js');
+    //global.Xp = require('./helpers/xp.js');
+    //global.DiscordUsers = require('./helpers/discord-users.js');
 
-    global.xpEnabled = true;
+    //global.xpEnabled = true;
 }
 
 function consoleBootup() {

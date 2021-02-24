@@ -1,3 +1,5 @@
+const gHelper = require('../helpers/general.js');
+
 function towerUpgradeToTower(towerUpgrade) {
     return Aliases.getCanonicalForm(towerUpgrade).slice(0, -4);
 }
@@ -164,8 +166,13 @@ function pathTierFromUpgradeSet(upgradeSet) {
 function crossPathTierFromUpgradeSet(upgradeSet) {
     upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
-    const crossTier = sortedUpgrades[1];
-    const crossPath = upgrades.findIndex((u) => u == crossTier) + 1;
+    let crossTier = sortedUpgrades[1];
+    let crossPath = upgrades.findIndex((u) => u == crossTier) + 1;
+    if (sortedUpgrades[1] == sortedUpgrades[2]) {
+        upgrades[crossPath - 1] = 0;
+        crossPath = upgrades.findIndex((u) => u == crossTier) + 1;
+    }
+
     return [crossPath, crossTier];
 }
 
@@ -208,22 +215,20 @@ function formatTower(tower) {
 }
 
 function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
-    const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
-    const [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(
-        upgradeSet
-    );
+    let [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
+    let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgradeSet);
 
     const baseCost = parseInt(json[`${jsonTowerName}`].cost);
 
     let pathCost = 0;
-    for (var subTier = 1; subTier <= tier; subTier++) {
+    for (let subTier = 1; subTier <= tier; subTier++) {
         pathCost += parseInt(
             json[`${jsonTowerName}`].upgrades[path - 1][subTier - 1].cost
         );
     }
 
     let crossPathCost = 0;
-    for (var subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
+    for (let subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
         crossPathCost += parseInt(
             json[`${jsonTowerName}`].upgrades[crossPath - 1][subCrossTier - 1]
                 .cost
@@ -231,7 +236,34 @@ function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
     }
     return baseCost + pathCost + crossPathCost;
 }
+function totalTowerUpgradeCrosspathCostNew(json, towerName, upgrade) {
+    // uses different json format found in ../jsons/costs.json
 
+    let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
+    let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgrade);
+    let tower = json[`${towerName}`];
+
+    let totalCost = tower.cost; // base cost of tower
+
+    for (let i = 1; i <= tier; i++) {
+        // main path of tower
+        totalCost += tower.upgrades[`${path}`][tier - 1];
+    }
+
+    for (let i = 1; i <= crossTier; i++) {
+        // cross path of tower
+        totalCost += tower.upgrades[`${crossPath}`][crossTier - 1];
+    }
+
+    return totalCost;
+}
+function upgradeCost(tower, path, tier) {
+    let totalCost = 0;
+    for (let i = 1; i <= tier; i++) {
+        totalCost += tower.upgrades[`${path}`][tier - 1];
+    }
+    return totalCost;
+}
 module.exports = {
     towerUpgradeToTower,
     allTowerUpgrades,
@@ -248,4 +280,6 @@ module.exports = {
     isValidUpgradeSet,
     formatTower,
     totalTowerUpgradeCrosspathCost,
+    totalTowerUpgradeCrosspathCostNew,
+    upgradeCost,
 };

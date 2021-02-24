@@ -5,6 +5,8 @@ const UserCommandError = require('../exceptions/user-command-error.js');
 
 StringSetValuesParser = require('./string-set-values-parser.js');
 
+const gHelper = require('../helpers/general.js');
+
 class LimitedStringSetValuesParser {
     type() {
         return 'limited_string_set_value';

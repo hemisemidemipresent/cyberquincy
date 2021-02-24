@@ -3,6 +3,7 @@ const OptionalParser = require('./optional-parser.js');
 const OrParser = require('./or-parser.js');
 const EmptyParser = require('./empty-parser.js');
 const AnyOrderParser = require('./any-order-parser.js');
+const gHelper = require('../helpers/general.js');
 
 isAbstractParser = function (parser) {
     return ABSTRACT_PARSERS.map((ap) => ap.parser).includes(parser.constructor);

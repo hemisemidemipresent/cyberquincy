@@ -5,6 +5,9 @@ const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
 const RoundParser = require('../parser/round-parser');
 const AnyOrderParser = require('../parser/any-order-parser');
+
+const gHelper = require('../helpers/general.js');
+
 module.exports = {
     name: 'income',
     aliases: ['chincome'],

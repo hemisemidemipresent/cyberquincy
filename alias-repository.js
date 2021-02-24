@@ -1,5 +1,6 @@
 const filepath = require('filepath');
 const AliasError = require('./exceptions/alias-error.js');
+const gHelper = require('./helpers/general.js');
 
 class AliasRepository extends Array {
     ////////////////////////////////////////////////////

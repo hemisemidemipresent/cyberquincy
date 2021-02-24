@@ -1,4 +1,5 @@
 const RegexParser = require('./regex-parser.js');
+const gHelper = require('../helpers/general.js');
 
 // Takes a list of values in the constructor
 // If the arg equals any one of the provided values

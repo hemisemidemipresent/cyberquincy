@@ -5,6 +5,8 @@ const ExactStringParser = require('../parser/exact-string-parser');
 const EmptyParser = require('../parser/empty-parser');
 const GoogleSheetsHelper = require('../helpers/google-sheets');
 
+const gHelper = require('../helpers/general.js');
+
 const MIN_ROW = 1;
 const MAX_ROW = 100;
 

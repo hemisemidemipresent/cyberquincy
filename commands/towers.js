@@ -1,6 +1,7 @@
 const { red, cyber } = require('../jsons/colours.json');
 const request = require('request');
-
+const costs = require('../jsons/costs.json');
+const Towers = require('../helpers/towers.js');
 const OptionalParser = require('../parser/optional-parser');
 const UpgradeSetParser = require('../parser/upgrade-set-parser');
 const Discord = require('discord.js');
@@ -126,25 +127,18 @@ module.exports = {
     aliases: aliases.flat(),
 
     async execute(message, args, commandName) {
-        message.channel.send('this command is under major reworks'); // for warning
-
-        let link = findName(commandName);
-
         parsed = CommandParser.parse(args, new UpgradeSetParser());
 
         if (parsed.hasErrors()) {
             errorMessage(message, parsed.errors);
         }
 
-        process(parsed.upgrade_set, link, message);
+        process(parsed.upgrade_set, commandName, message);
     },
     errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle(`${errors.join('\n')}`)
-            .addField(
-                '**q!lb [startingPlacement] [endingPlacement]**',
-                'both `startingPlacement` and `endingPlacement` are optional - they default to 1 and 50 respectively'
-            )
+            .addField('**q!<tower> <path>**', 'example: q!bomb 130')
 
             .setColor(red);
 
@@ -198,7 +192,7 @@ function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;
 }
 
-function findName(commandName) {
+function findLink(commandName) {
     for (let i = 0; i < aliases.length; i++) {
         let towerAliasSet = aliases[i];
         for (let j = 0; j < towerAliasSet.length; j++) {
@@ -209,24 +203,59 @@ function findName(commandName) {
     }
     return;
 }
+function findName(commandName) {
+    for (let i = 0; i < aliases.length; i++) {
+        let towerAliasSet = aliases[i];
+        for (let j = 0; j < towerAliasSet.length; j++) {
+            if (commandName == towerAliasSet[j]) {
+                return towerAliasSet[0];
+            }
+        }
+    }
+    return;
+}
 
-function process(upgrade, link, message) {
+function process(upgrade, commandName, message) {
+    let link = findLink(commandName);
     request(link, (err, res, body) => {
         if (err) {
             module.exports.errorMessage(message, ['info could not be fetched']);
         }
 
-        let upgrades = body.split('\r\n\r\n');
+        let towerName = findName(commandName);
+        let tower = costs[`${towerName}`];
+        let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
+        let cost = Towers.upgradeCost(tower, path, tier);
+        let totalCost = Towers.totalTowerUpgradeCrosspathCostNew(
+            costs,
+            towerName,
+            upgrade
+        );
+
+        let upgrades = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+
         for (let i = 0; i < upgrades.length; i++) {
             if (upgrades[i].substr(0, 3) == upgrade) {
+                // background info: there are 2 newlines present in the string: \n and \r. \n is preferred
                 let info = upgrades[i]
                     .toString()
-                    .replace(/\n/g, '')
-                    .replace(/\r \t/g, '\n')
-                    .replace(/ \t-/g, '-    ')
-                    .replace(/\r/g, '\n');
+                    .replace(/\n/g, '') // removes all newlines \n
+                    .replace(/\r \t/g, '\n') // removes all \r + tab
+                    .replace(/ \t-/g, '-    ') // removes remaining tabs
+                    .replace(/\r/g, '\n'); // switches back all remaining \r with \n
+
                 let embed = new Discord.MessageEmbed()
                     .setDescription(info)
+                    .addField(
+                        'cost',
+                        `${cost} - medium\n${hard(cost)} - hard`,
+                        true
+                    )
+                    .addField(
+                        'total cost',
+                        `${totalCost} - medium\n${hard(totalCost)} - hard`,
+                        true
+                    )
                     .setFooter(
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|q!ap for help and elaboration|data is from extreme bloonology, by The Line'
                     )

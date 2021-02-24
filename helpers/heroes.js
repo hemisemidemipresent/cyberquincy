@@ -1,5 +1,7 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
+const gHelper = require('../helpers/general.js');
+
 BASE_XP_TO_GET_LEVEL = [
     null, // Slot for non-existent level-0
     0,

@@ -228,7 +228,7 @@ function process(upgrade, link, message) {
                 let embed = new Discord.MessageEmbed()
                     .setDescription(info)
                     .setFooter(
-                        'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|q!ap for help and elaboration'
+                        'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|q!ap for help and elaboration|data is from extreme bloonology, by The Line'
                     )
                     .setColor(cyber);
                 return message.channel.send(embed);

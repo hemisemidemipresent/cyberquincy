@@ -8,10 +8,10 @@
         "push": "git push heroku master",
         "commit": "git add . && git commit -m p",
         "everything": "npm run commit && npm run push",
-        "refresh": "del /f package-lock.json && npm install",
         "logout": "heroku logout",
         "login": "heroku login -i",
-        "connect": "heroku git:remote -a cyberquincy"
+        "connect": "heroku git:remote -a jajajosh",
+        "refresh": "del /f package-lock.json && npm install"
     },
     "repository": {
         "type": "git",

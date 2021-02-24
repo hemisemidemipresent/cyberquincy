@@ -21,6 +21,7 @@
     ],
     "500": [
         "ultra-juggernaut",
+        "ultra_jugg",
         "ultra",
         "ujug",
         "uj",
@@ -35,7 +36,9 @@
     ],
     "040": [
         "super_monkey_fan_club",
-        "smfc"
+        "smfc",
+        "super_funky_man_club",
+        "sfmc"
     ],
     "050": [
         "plasma_monkey_fan_club",
@@ -54,6 +57,7 @@
     ],
     "005": [
         "crossbow_master",
+        "xbow_master",
         "xbm"
     ]
 }

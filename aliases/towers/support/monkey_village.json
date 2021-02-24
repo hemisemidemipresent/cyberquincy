@@ -3,7 +3,7 @@
 
     "300": ["primary_training", "ptraining", "ptrain"],
     "400": ["primary_mentoring", "pment", "pmentoring"],
-    "500": ["primary_expertise", "pe", "primex"],
+    "500": ["primary_expertise", "pe", "primex", "expertise"],
 
     "030": ["monkey_intelligence_bureau", "mib"],
     "040": ["call_to_arms", "cta"],

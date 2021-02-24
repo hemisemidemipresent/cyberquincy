@@ -9,7 +9,7 @@
     "040": ["ground_zero", "gz"],
     "050": ["tsar_bomba", "tb", "tsar", "bomba", "bombagang"],
     
-    "003": ["neva-miss_targeting", "nevamiss", "neva", "nm"],
-    "004": ["spectre", "spect"],
+    "003": ["neva-miss_targeting", "neva_miss", "neva", "nm"],
+    "004": ["spectre", "specter", "spect"],
     "005": ["flying_fortress", "ff", "big_plane"]
 }

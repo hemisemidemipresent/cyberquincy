@@ -6,7 +6,7 @@
     "500": ["the_biggest_one", "tb1"],
 
     "030": ["heavy_shells", "heavy"],
-    "040": ["artillery_battery", "art", "artillery"],
+    "040": ["artillery_battery", "art", "artillery", "battery"],
     "050": ["pop_and_awe", "paa"],
 
     "003": ["signal_flare", "signal", "flare"],

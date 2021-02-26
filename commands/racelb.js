@@ -5,7 +5,7 @@ const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const OptionalParser = require('../parser/optional-parser.js');
 const OrParser = require('../parser/or-parser.js');
 const AnythingParser = require('../parser/anything-parser');
-const { red } = require('../jsons/colours.json');
+const { red, cyber } = require('../jsons/colours.json');
 
 module.exports = {
     name: 'raceleaderboard',
@@ -13,7 +13,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'kl7av0t3';
+        let raceID = 'YouSnoozeYouLose_kllq7159';
         const parsed = CommandParser.parse(
             args,
 
@@ -74,7 +74,12 @@ module.exports = {
                     'too many characters',
                 ]);
             }
-            message.channel.send('```' + output + '```');
+            let embed = new Discord.MessageEmbed()
+                .setTitle(`ID: ${data.leaderboardID}`)
+                .setDescription('```' + output + '```')
+                .setColor(cyber)
+                .setTimestamp();
+            message.channel.send(embed);
         });
     },
     errorMessage(message, errors) {

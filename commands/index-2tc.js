@@ -264,7 +264,6 @@ function getDisplayCols(parsed) {
 }
 
 function stripCombo(combo, parsed) {
-    combo = combo;
     wellDefinedTowers = []
         .concat(parsed.tower_upgrades)
         .concat(parsed.heroes)
@@ -288,7 +287,6 @@ function stripCombo(combo, parsed) {
 }
 
 function orderCombo(combo) {
-    combo = combo;
     ordering = Object.keys(OG_COLS).filter((v) => v !== 'UPGRADES');
     newCombo = {};
     ordering.forEach((key) => {

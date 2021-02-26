@@ -43,6 +43,7 @@
         "hastebin-gen": "^2.0.5",
         "imgur": "^0.3.1",
         "lex": "^1.7.9",
+        "lodash.clonedeep": "^4.5.0",
         "node-dgdata": "^1.0.2",
         "node-fetch": "^2.6.1",
         "pluralize": "^8.0.0",
@@ -53,6 +54,5 @@
         "statcord.js": "^3.1.1",
         "utf-8-validate": "^5.0.2",
         "zlib": "^1.0.5"
-    },
-    "devDependencies": {}
+    }
 }

@@ -17,6 +17,8 @@ const VersionParser = require('../parser/version-parser');
 
 const UserCommandError = require('../exceptions/user-command-error.js');
 
+const clonedeep = require('lodash.clonedeep');
+
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
@@ -82,9 +84,9 @@ async function execute(message, args) {
     try {
         allCombos = await scrapeAllCombos();
 
-        filteredCombos = filterCombos(allCombos, parsed);
+        filteredCombos = filterCombos(clonedeep(allCombos), parsed);
 
-        displayCombos(message, filteredCombos, parsed);
+        displayCombos(message, filteredCombos, parsed, allCombos);
     } catch (e) {
         if (e instanceof UserCommandError) {
             message.channel.send(
@@ -98,7 +100,7 @@ async function execute(message, args) {
     }
 }
 
-async function displayCombos(message, combos, parsed) {
+async function displayCombos(message, combos, parsed, allCombos) {
     if (combos.length == 0) {
         return message.channel.send(
             new Discord.MessageEmbed()
@@ -111,10 +113,10 @@ async function displayCombos(message, combos, parsed) {
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos))
             .setColor(colours['cyber']);
-
-        combo = flattenCombo(combos[0]);
-        combo = stripCombo(combo, parsed);
-        combo = orderCombo(combo);
+        
+        flatCombo = flattenCombo(clonedeep(combos[0]));
+        strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
+        combo = orderCombo(clonedeep(strippedCombo));
 
         for (field in combo) {
             challengeEmbed.addField(
@@ -122,6 +124,34 @@ async function displayCombos(message, combos, parsed) {
                 combo[field],
                 true
             );
+        }
+
+        challengeEmbed.addField('OG?', flatCombo.OG ? 'OG' : 'ALT', true);
+
+        if (flatCombo.OG && !(parsed.map || parsed.version || parsed.person)) {
+            allCompletedMaps = Object.keys(allCombos.find(c => c.NUMBER === flatCombo.NUMBER).MAPS);
+            altMaps = allCompletedMaps.filter(map => map != combo.MAP);
+            altMaps = altMaps.map(properMapName => properMapName.split(' ').join('_').toLowerCase());
+            altMaps = altMaps.map(properMapName => Aliases.mapToIndexAbbreviation(properMapName));
+
+            mapGroups = [Aliases.beginnerMaps(), Aliases.intermediateMaps(), Aliases.advancedMaps(), Aliases.expertMaps()]
+            mapGroups = mapGroups.map(aliases => aliases.map(alias => Aliases.mapToIndexAbbreviation(alias)));
+            
+            altMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => altMaps.includes(map)));
+
+            if (altMapGroups.some(group => group.length > 0)) {
+                altMapsString = ""
+                altMapsString += `\n${altMapGroups[0].join(', ')}`;
+                altMapsString += `\n${altMapGroups[1].join(', ')}`;
+                altMapsString += `\n${altMapGroups[2].join(', ')}`;
+                altMapsString += `\n${altMapGroups[3].join(', ')}`;
+                challengeEmbed.addField(
+                    "**Alt Maps**",
+                    altMapsString
+                )
+            } else {
+                challengeEmbed.addField("**Alt Maps**", "None");
+            }
         }
 
         return message.channel.send(challengeEmbed);
@@ -136,7 +166,7 @@ async function displayCombos(message, combos, parsed) {
 
         for (var i = 0; i < combos.length; i++) {
             for (map in combos[i].MAPS) {
-                combo = flattenCombo(combos[i], map);
+                combo = flattenCombo(clonedeep(combos[i]), map);
 
                 for (
                     var colIndex = 0;
@@ -234,6 +264,7 @@ function getDisplayCols(parsed) {
 }
 
 function stripCombo(combo, parsed) {
+    combo = combo;
     wellDefinedTowers = []
         .concat(parsed.tower_upgrades)
         .concat(parsed.heroes)
@@ -257,6 +288,7 @@ function stripCombo(combo, parsed) {
 }
 
 function orderCombo(combo) {
+    combo = combo;
     ordering = Object.keys(OG_COLS).filter((v) => v !== 'UPGRADES');
     newCombo = {};
     ordering.forEach((key) => {
@@ -269,7 +301,7 @@ function flattenCombo(combo, map) {
     if (!map) map = Object.keys(combo.MAPS)[0];
     subcombo = combo.MAPS[map];
 
-    flattenedCombo = { ...combo };
+    flattenedCombo = combo;
 
     flattenedCombo.MAP = map;
     flattenedCombo.PERSON = subcombo.PERSON;

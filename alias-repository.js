@@ -373,6 +373,7 @@ class AliasRepository extends Array {
     }
 
     mapToIndexAbbreviation(map) {
+        if (!map) return null;
         return this.getAliasSet(map)[1].toUpperCase();
     }
 

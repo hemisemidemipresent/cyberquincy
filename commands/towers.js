@@ -225,7 +225,7 @@ function process(upgrade, commandName, message) {
         let towerName = findName(commandName);
         let tower = costs[`${towerName}`];
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
-        let cost = Towers.upgradeCost(tower, path, tier);
+        let cost = tower.upgrades[`${path}`][tier - 1];
         let totalCost = Towers.totalTowerUpgradeCrosspathCostNew(
             costs,
             towerName,

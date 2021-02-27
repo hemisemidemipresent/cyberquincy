@@ -218,10 +218,11 @@ async function display2MPOG(message, tower) {
     unCompletedAltMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => !altMaps.concat(ogMap).includes(map)));
 
     displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map(i => {
+        mapDifficulty = ["BEG", "INT", "ADV", "EXP"][i]
         if (unCompletedAltMapGroups[i] == 0) {
-            return "All";
+            return `All ${mapDifficulty}`;
         } else if (unCompletedAltMapGroups[i].length < 3) {
-            return `All - {${unCompletedAltMapGroups[i].join(', ')}}`;
+            return `All ${mapDifficulty} - {${unCompletedAltMapGroups[i].join(', ')}}`;
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {

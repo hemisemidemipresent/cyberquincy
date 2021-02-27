@@ -222,6 +222,8 @@ async function display2MPOG(message, tower) {
             return "All";
         } else if (unCompletedAltMapGroups[i].length < 3) {
             return `All - {${unCompletedAltMapGroups[i].join(', ')}}`;
+        } else if (altMapGroups[i].length == 0) {
+            return '';
         } else {
             return `{${altMapGroups[i].join(', ')}}`;
         }

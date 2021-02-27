@@ -212,17 +212,25 @@ async function display2MPOG(message, tower) {
     ogMap = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(values.OG_MAP));
 
     mapGroups = [Aliases.beginnerMaps(), Aliases.intermediateMaps(), Aliases.advancedMaps(), Aliases.expertMaps()]
+    if (Towers.isWaterTowerUpgrade(tower)) {
+        mapGroups = mapGroups.map(aliases => aliases.filter(map => Aliases.allWaterMaps().includes(map)))
+    }
     mapGroups = mapGroups.map(aliases => aliases.map(alias => Aliases.mapToIndexAbbreviation(alias)));
     
     altMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => altMaps.includes(map)));
     unCompletedAltMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => !altMaps.concat(ogMap).includes(map)));
 
+    wordAllIncluded = false;
+
     displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map(i => {
-        mapDifficulty = ["BEG", "INT", "ADV", "EXP"][i]
+        mapDifficulty = ["BEG", "INT", "ADV", "EXP"][i];
+        waterTowerAsterisk = Towers.isWaterTowerUpgrade(tower) ? '*' : '';
         if (unCompletedAltMapGroups[i] == 0) {
-            return `All ${mapDifficulty}`;
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk}`;
         } else if (unCompletedAltMapGroups[i].length < 3) {
-            return `All ${mapDifficulty} - {${unCompletedAltMapGroups[i].join(', ')}}`;
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {
@@ -242,6 +250,10 @@ async function display2MPOG(message, tower) {
         )
     } else {
         challengeEmbed.addField("**Alt Maps**", "None");
+    }
+
+    if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
+        challengeEmbed.setFooter("*with water")
     }
 
     return message.channel.send(challengeEmbed);
@@ -546,13 +558,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
 
         // Check if tower is water tower
         impossibleMaps = [];
-        if (
-            Towers.allWaterTowers().includes(
-                Aliases.isHero(tower)
-                    ? tower
-                    : Towers.towerUpgradeToTower(tower)
-            )
-        ) {
+        if (Towers.isWaterTowerUpgrade(tower)) {
             // Calculate impossible maps (those that do not contain any water)
             nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
                 Aliases.mapToIndexAbbreviation(m)

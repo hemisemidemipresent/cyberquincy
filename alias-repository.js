@@ -292,7 +292,7 @@ class AliasRepository extends Array {
     }
 
     allWaterMaps() {
-        return this.allMaps().filter((m) => this.allNonWaterMaps().includes(m));
+        return this.allMaps().filter((m) => !this.allNonWaterMaps().includes(m));
     }
 
     // TODO: rewrite this involving the q!map command results rather than hardcoding it

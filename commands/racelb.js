@@ -6,7 +6,8 @@ const OptionalParser = require('../parser/optional-parser.js');
 const OrParser = require('../parser/or-parser.js');
 const AnythingParser = require('../parser/anything-parser');
 const { red, cyber } = require('../jsons/colours.json');
-
+const raceImg =
+    'https://static.wikia.nocookie.net/b__/images/4/40/EventRaceIcon.png/revision/latest/scale-to-width-down/340?cb=20200616225307&path-prefix=bloons';
 module.exports = {
     name: 'raceleaderboard',
     aliases: ['leaderboard', 'lb', 't100'],
@@ -42,9 +43,7 @@ module.exports = {
             end = nums[1];
         }
 
-        let url =
-            //'https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_Decrypting_kijmo8pe.json';
-            `https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_${raceID}.json`;
+        let url = `https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_${raceID}.json`;
         console.log(url);
         request(url, (err, res, body) => {
             if (err) {

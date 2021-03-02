@@ -205,7 +205,56 @@ async function display2MPOG(message, tower) {
         );
     }
 
-    challengeEmbed.setFooter('~~~~~~~~~~~~~~~  OG Map  ~~~~~~~~~~~~~~~~~~~');
+    challengeEmbed.addField("OG?", "OG", true);
+
+    mapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
+    altMaps = Object.keys(parseMapNotes(mapCell.note));
+    ogMap = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(values.OG_MAP));
+
+    mapGroups = [Aliases.beginnerMaps(), Aliases.intermediateMaps(), Aliases.advancedMaps(), Aliases.expertMaps()]
+    if (Towers.isWaterTowerUpgrade(tower)) {
+        mapGroups = mapGroups.map(aliases => aliases.filter(map => Aliases.allWaterMaps().includes(map)))
+    }
+    mapGroups = mapGroups.map(aliases => aliases.map(alias => Aliases.mapToIndexAbbreviation(alias)));
+    
+    altMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => altMaps.includes(map)));
+    unCompletedAltMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => !altMaps.concat(ogMap).includes(map)));
+
+    wordAllIncluded = false;
+
+    displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map(i => {
+        mapDifficulty = ["BEG", "INT", "ADV", "EXP"][i];
+        waterTowerAsterisk = Towers.isWaterTowerUpgrade(tower) ? '*' : '';
+        if (unCompletedAltMapGroups[i] == 0) {
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk}`;
+        } else if (unCompletedAltMapGroups[i].length < 3) {
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
+        } else if (altMapGroups[i].length == 0) {
+            return '';
+        } else {
+            return `{${altMapGroups[i].join(', ')}}`;
+        }
+    })
+
+    if (altMapGroups.some(group => group.length > 0)) {
+        altMapsString = ""
+        altMapsString += `\n${displayedMapGroups[0]}`;
+        altMapsString += `\n${displayedMapGroups[1]}`;
+        altMapsString += `\n${displayedMapGroups[2]}`;
+        altMapsString += `\n${displayedMapGroups[3]}`;
+        challengeEmbed.addField(
+            "**Alt Maps**",
+            altMapsString
+        )
+    } else {
+        challengeEmbed.addField("**Alt Maps**", "None");
+    }
+
+    if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
+        challengeEmbed.setFooter("*with water")
+    }
 
     return message.channel.send(challengeEmbed);
 }
@@ -270,6 +319,10 @@ async function display2MPPerson(message, person) {
 async function display2MPMap(message, map) {
     mapFormatted = Aliases.toIndexNormalForm(map);
     mapAbbr = Aliases.mapToIndexAbbreviation(map);
+
+    if (map == 'logs') {
+        return message.channel.send("Sorry, `q!map logs` is broken right now b/c the links are so long it reaches the character limit of even a strict pagination")
+    }
 
     return await display2MPFilterAll(
         message,
@@ -505,13 +558,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
 
         // Check if tower is water tower
         impossibleMaps = [];
-        if (
-            Towers.allWaterTowers().includes(
-                Aliases.isHero(tower)
-                    ? tower
-                    : Towers.towerUpgradeToTower(tower)
-            )
-        ) {
+        if (Towers.isWaterTowerUpgrade(tower)) {
             // Calculate impossible maps (those that do not contain any water)
             nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
                 Aliases.mapToIndexAbbreviation(m)

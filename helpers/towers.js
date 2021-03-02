@@ -101,6 +101,14 @@ function allWaterTowers() {
     return ['sub', 'bucc', 'brick'].map((t) => Aliases.getCanonicalForm(t));
 }
 
+function isWaterTowerUpgrade(towerUpgrade) {
+    return allWaterTowers().includes(
+        Aliases.isHero(towerUpgrade)
+            ? towerUpgrade
+            : Towers.towerUpgradeToTower(towerUpgrade)
+    )
+}
+
 function towerUpgradeToIndexNormalForm(upgrade) {
     const indexNormalUnformatted = Aliases.getAliasSet(upgrade)[1];
     return Aliases.toIndexNormalForm(indexNormalUnformatted);
@@ -273,6 +281,7 @@ module.exports = {
     isTower,
     isTowerPath,
     allWaterTowers,
+    isWaterTowerUpgrade,
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,
     pathTierFromUpgradeSet,

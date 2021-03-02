@@ -4,7 +4,6 @@ function main() {
     pingHeroku();
     globalRequirements();
     consoleBootup();
-    dbSetup();
     googleSheetsInitialization();
     towerJSONinit();
     configureAliases();
@@ -27,6 +26,7 @@ function pingHeroku() {
         d.toString();
         console.log(`[PING] at ${d}`);
         response.sendStatus(200);
+        console.log(process.env.PORT);
     });
     app.listen(process.env.PORT);
 }
@@ -102,38 +102,6 @@ function consoleBootup() {
         // Make available globally
         global.statcord = statcord;
     });
-}
-
-function dbSetup() {
-    const { Sequelize, Model, DataTypes } = require('sequelize');
-    global.sequelize = new Sequelize('database', 'user', 'password', {
-        host: 'localhost',
-        dialect: 'sqlite',
-        logging: false,
-        storage: 'database.sqlite',
-    });
-
-    global.Tags = sequelize.define('tags', {
-        name: {
-            type: Sequelize.INTEGER,
-            unique: true,
-            primaryKey: true,
-        },
-        xp: Sequelize.INTEGER,
-        showAds: {
-            type: Sequelize.BOOLEAN,
-            allowNull: true,
-        },
-        xpFreezed: {
-            type: Sequelize.BOOLEAN,
-            allowNull: true,
-        },
-        showLevelUpMsg: {
-            type: Sequelize.BOOLEAN,
-            allowNull: true,
-        },
-    });
-    Tags.sync();
 }
 
 async function googleSheetsInitialization() {

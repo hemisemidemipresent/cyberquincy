@@ -53,6 +53,7 @@ module.exports = {
             let scores = data.scores.equal;
 
             let output = '';
+            let t50;
             for (let i = start - 1; i < end; i++) {
                 if (!scores[i]) break;
                 let time = 1000000000 - scores[i].score;
@@ -75,9 +76,11 @@ module.exports = {
             }
             let embed = new Discord.MessageEmbed()
                 .setTitle(`ID: ${data.leaderboardID}`)
+                .setURL(url)
                 .setDescription('```' + output + '```')
                 .setColor(cyber)
-                .setTimestamp();
+                .setTimestamp()
+                .setThumbnail(raceImg);
             message.channel.send(embed);
         });
     },

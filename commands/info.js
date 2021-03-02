@@ -24,7 +24,6 @@ module.exports = {
             .addField('ping:', `Response time: ${responseTime}ms`, true)
 
             .addField('time since last restart:', `${uptime}`, true)
-            .addField('XP gain enabled?', xpEnabled)
             .addField(
                 'more data',
                 '[full bot statistics](https://statcord.com/bot/591922988832653313) - note users are inaccurate and servers might be inaccurate',

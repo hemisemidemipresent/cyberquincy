@@ -1,15 +1,13 @@
 const quiz = require('../jsons/quiz.json');
 const { cyber, orange, turq, magenta } = require('../jsons/colours.json');
-const Quiz = require('../helpers/quizxp.js');
 const { discord } = require('../aliases/misc.json');
+const Quiz = require('../helpers/quiz.js');
+let item;
 
 module.exports = {
     name: 'quiz',
-    execute(message, args) {
-        if (args[0]) {
-            return Quiz.getQuizXp(message);
-        }
-        const item = quiz[Math.floor(Math.random() * quiz.length)];
+    execute(message) {
+        item = quiz[Math.floor(Math.random() * quiz.length)];
         let QuestionEmbed = new Discord.MessageEmbed()
             .setTitle(`${item.question}`)
             .setDescription(
@@ -35,29 +33,46 @@ module.exports = {
                     errors: ['time'],
                 })
                 .then((collected) => {
-                    if (
-                        item.answers.toLowerCase() ===
-                        collected.first().content.toLowerCase()
-                    ) {
-                        let correctEmbed = new Discord.MessageEmbed()
-                            .setTitle(
-                                'Congratulations! You got the correct answer!'
-                            )
-                            .setColor(turq);
-                        message.channel.send(correctEmbed);
-                    } else {
-                        let wrongEmbed = new Discord.MessageEmbed()
-                            .setTitle('Game over! You got the wrong answer!')
-                            .setColor(orange);
-                        message.channel.send(wrongEmbed);
-                    }
+                    let embed = process(collected, message.author.id);
+                    message.channel.send(embed);
                 })
-                .catch((collected) => {
+                .catch((err) => {
                     let errorEmbed = new Discord.MessageEmbed()
                         .setTitle(`Game over! You took too long.`)
                         .setColor(magenta);
                     message.channel.send(errorEmbed);
+                    console.log(err);
                 });
         });
     },
 };
+function process(collected, userID) {
+    if (
+        item.answers.toLowerCase() === collected.first().content.toLowerCase()
+    ) {
+        Quiz.answerCorrect(userID);
+        let streak = Quiz.getStreak(userID);
+        let correctEmbed = new Discord.MessageEmbed()
+            .setTitle('Congratulations! You got the correct answer!')
+            .setDescription(streak)
+            .setColor(turq)
+            .setFooter(
+                'streak will not be carried over when the bot restarts and that might happen randomly.'
+            );
+
+        return correctEmbed;
+    } else {
+        Quiz.answerWrong(userID);
+        let streak = Quiz.getStreak(userID);
+
+        let wrongEmbed = new Discord.MessageEmbed()
+            .setTitle('Game over! You got the wrong answer!')
+            .setDescription(streak)
+            .setColor(orange)
+            .setFooter(
+                'streak will not be carried over when the bot restarts and that might happen randomly.'
+            );
+
+        return wrongEmbed;
+    }
+}

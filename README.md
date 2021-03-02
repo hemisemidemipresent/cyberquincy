@@ -27,14 +27,12 @@ Cyber Quincy is a BTD6 Discord bot.
     - [add bot to statcord](https://statcord.com/add), and copy the key into `./1/config.json` as `statcord`
     - [add bot to discordbotlist](https://discordbotlist.com), and copy the auth token into `./1/config.json` as `discordbotlist`
 
-4. to run type `node server` (this sets up a `database.sqlite` file).
+4. to run type `node server`
 
 # npm dependencies
 
 -   `discord.js` what makes this bot work
 -   `node-fetch` for accessing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
--   `sequelize` DB
--   `sqlite3` DB dialect
 -   `pluralize` used in parser
 -   `filepath` used in alias reopsitory
 

@@ -87,7 +87,8 @@ function helpMessage() {
                 .setDescription('**Generate a submission in `#submissions`**')
                 .addField('`q!isub <image_link/attachment> <text>`', 'Uploads to imgur and submit with <text>')
                 .addField('`q!isub <link> <text>`', 'Submits a link with text')
-                .addField('`q!isub <CHALLENGE_CODE> <text>`', 'Submits a challenge code wiht text')
+                .addField('`q!isub <CHALLENGE_CODE> <text>`', 'Submits a challenge code with text')
+                .addField('Note:', 'If you are _linking_ an image (rather than attaching it), you must make it the first argument to the command in order to imgur-ize it.')
                 .setColor(colours['black']);
 }
 
@@ -96,7 +97,7 @@ module.exports = {
     rawArgs: true,
     aliases: ['isubmit', 'isub'],
     execute(message, args) {
-        if (message.attachments.length < 1 && !args[0] || args[0] == 'help') {
+        if (message.attachments.size < 1 && (!args[0] || args[0] == 'help')) {
             return message.channel.send(helpMessage())
         }
         submit(message, args);

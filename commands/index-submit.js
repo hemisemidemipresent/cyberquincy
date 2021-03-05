@@ -9,10 +9,16 @@ const PREVIEW_REACTIONS = [WHITE_HEAVY_CHECK_MARK, RED_X]
 
 const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL = '702089126706544661';
 // Fill this in when you want to test this in your own server
-const TEST_SUBMISSIONS_CHANNEL = null;
+// Change this to a channel in your test guild when testing
+const TEST_SUBMISSIONS_CHANNEL = '737445888602931252';
+const IS_TESTING = require('../1/config.json')['testing'];
+const SUBMISSIONS_CHANNEL = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
 
 async function submit(message, args) {
-    const liveMode = message.channel.guild.id == Guilds.BTD6_INDEX || TEST_SUBMISSIONS_CHANNEL != null
+    // Determines whether to follow up a submission preview with reaction collection and submission to another channel
+    const liveMode = message.channel.guild.id == Guilds.BTD6_INDEX || IS_TESTING
+
+    // If image is attached or linked, extract info to combine as imgur
     let imgurJson = null;
     let imgurText = null;
     try {
@@ -20,12 +26,13 @@ async function submit(message, args) {
         imgurJson = await imgur.uploadUrl(image);
         imgurText = text;
     } catch(e) {
+        // Continue past failure to extract image; try link/challenge code next
         if (!(e instanceof ImgurHelper.ImgurAttachmentError)) {
             throw e;
         }
     }
 
-    submission = null;
+    let submission = null;
     if (imgurJson) {
         submission = new Discord.MessageEmbed()
                             .setTimestamp()
@@ -34,17 +41,17 @@ async function submit(message, args) {
                             .setColor(colours['cyber'])
                             .setImage(`${imgurJson.data.link}`);
     } else {
-        submission = args.join(' ') + `\n——————————————————————————————\n_Sent by ${message.author}_`
+        submission = args.join(' ') + `\n——————————————————————\n_Sent by ${message.author.tag}_`
     }
 
     pretextMessage = "Submission Preview";
     pretextMessage += liveMode ? '' : " (you may only submit from within the BTD6 Index Channel)";
     pretextMessage += ":";
 
-    pretext = await message.channel.send(pretextMessage);
-    preview = await message.channel.send(submission);
+    const pretext = await message.channel.send(pretextMessage);
+    const preview = await message.channel.send(submission);
 
-    // If the current user is NOT in the BTD6 Index server
+    // If the current user is NOT in the BTD6 Index server (and dev is not testing)
     if (!liveMode) return;
 
     PREVIEW_REACTIONS.forEach(previewReaction => {
@@ -61,13 +68,14 @@ async function submit(message, args) {
         pretext.delete();
         preview.delete();
 
+        // Submit to BTD6 Index channel if checkmark is reacted
+        // (or to the test channel if dev is testing)
         if (reaction.emoji.name == WHITE_HEAVY_CHECK_MARK) {
             (async () => {
-                const SUBMISSIONS_CHANNEL = message.channel.guild.channels.cache.get(
-                    TEST_SUBMISSIONS_CHANNEL || BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL
-                );
-                submissionMessage = await SUBMISSIONS_CHANNEL.send(submission);
-                message.channel.send(`Submitted: https://discord.com/channels/${Guilds.BTD6_INDEX}/${BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL}/${submissionMessage.id}`)
+                const SUBMISSIONS_CHANNEL_OBJ = message.channel.guild.channels.cache.get(SUBMISSIONS_CHANNEL);
+                const submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(submission);
+                const submittedLink = `https://discord.com/channels/${message.channel.guild.id}/${SUBMISSIONS_CHANNEL}/${submissionMessage.id}`
+                message.channel.send(`Submitted: ${submittedLink}`)
             })();
         }
     })

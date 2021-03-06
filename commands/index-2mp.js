@@ -164,8 +164,12 @@ function errorMessage(message, parsingErrors) {
 }
 
 function err(e, message) {
+    // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
     if (e instanceof UserCommandError) {
-        return module.exports.errorMessage(message, [e.message]);
+        let noComboEmbed = new Discord.MessageEmbed()
+                .setTitle(e.message)
+                .setColor(CHALLENGE_COLOR);
+        return message.channel.send(noComboEmbed);
     } else {
         throw e;
     }

@@ -44,9 +44,7 @@ async function submit(message, args) {
         submission = args.join(' ') + `\n——————————————————————\n_Sent by ${message.author.tag}_`
     }
 
-    pretextMessage = "Submission Preview";
-    pretextMessage += liveMode ? '' : " (you may only submit from within the BTD6 Index Channel)";
-    pretextMessage += ":";
+    pretextMessage = liveMode ? 'Do you wish to submit?' : "Submission Preview (you may only submit from within the BTD6 Index Channel)";
 
     const pretext = await message.channel.send(pretextMessage);
     const preview = await message.channel.send(submission);

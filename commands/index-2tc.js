@@ -24,6 +24,8 @@ WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 const gHelper = require('../helpers/general.js');
 
+const CHALLENGE_COLOR = '#e06666'
+
 const OG_COLS = {
     NUMBER: 'B',
     TOWER_1: 'C',
@@ -105,14 +107,14 @@ async function displayCombos(message, combos, parsed, allCombos) {
         return message.channel.send(
             new Discord.MessageEmbed()
                 .setTitle(`No combos found`)
-                .setColor(colours['yellow'])
+                .setColor(CHALLENGE_COLOR)
         );
     }
 
     if (combos.length == 1) {
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos))
-            .setColor(colours['cyber']);
+            .setColor(CHALLENGE_COLOR);
         
         flatCombo = flattenCombo(clonedeep(combos[0]));
         strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
@@ -201,7 +203,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
         ) {
             let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(embedTitle(parsed, combos))
-                .setColor(colours['cyber']);
+                .setColor(CHALLENGE_COLOR);
 
             numRows = colData[Object.keys(colData)[0]].length;
 
@@ -535,7 +537,7 @@ function helpMessage(message) {
 
 function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
-        .setTitle('ERROR')
+        .setTitle('Input Error')
         .addField(
             'Likely Cause(s)',
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')

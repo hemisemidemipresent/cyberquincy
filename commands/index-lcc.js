@@ -18,6 +18,8 @@ const COLS = {
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
+const CHALLENGE_COLOR = '#ffd966';
+
 module.exports = {
     name: 'lcc',
     dependencies: ['btd6index'],
@@ -98,7 +100,7 @@ async function displayLCC(message, btd6_map) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`${values.MAP} LCC Combo`)
-        .setColor(colours['cyber']);
+        .setColor(CHALLENGE_COLOR);
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
@@ -129,7 +131,7 @@ function helpMessage(message) {
 
 function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
-        .setTitle('ERROR')
+        .setTitle('Input Error')
         .addField(
             'Likely Cause(s)',
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')

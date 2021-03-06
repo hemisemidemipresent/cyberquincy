@@ -10,6 +10,8 @@ const gHelper = require('../helpers/general.js');
 const MIN_ROW = 1;
 const MAX_ROW = 100;
 
+const CHALLENGE_COLOR = '#93c47d';
+
 const COLS = {
     TWO: {
         MAP: 'B',
@@ -119,7 +121,7 @@ function helpMessage(message) {
 
 function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
-        .setTitle('ERROR')
+        .setTitle('Input Error')
         .addField(
             'Likely Cause(s)',
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
@@ -218,7 +220,7 @@ async function getRowStandardData(message, entryRow, colset) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`${values.MAP} LTC Combo`)
-        .setColor(colours['cyber']);
+        .setColor(CHALLENGE_COLOR);
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
@@ -245,7 +247,7 @@ async function getRowAltData(message, entryRow, qualifier, colset) {
         .setTitle(
             `${gHelper.toTitleCase(qualifier)} ${mapCell.value} LTC Combo`
         )
-        .setColor(colours['cyber'])
+        .setColor(CHALLENGE_COLOR)
         .addField('Person', notes[qualifier].PERSON, true)
         .addField('Link', notes[qualifier].LINK, true);
 

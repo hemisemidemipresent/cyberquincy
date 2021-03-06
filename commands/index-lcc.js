@@ -124,7 +124,8 @@ function helpMessage(message) {
             'Valid `<map>` values',
             '`logs`, `cubism`, `pen`, `#ouch`, ...'
         )
-        .addField('Example', '`q!lcc bloodles`');
+        .addField('Example', '`q!lcc bloodles`')
+        .setColor(CHALLENGE_COLOR);
 
     return message.channel.send(helpEmbed);
 }

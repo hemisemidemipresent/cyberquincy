@@ -516,8 +516,12 @@ function helpMessage(message) {
         .addField('`v23`, `v10.2`', 'Limit results to version completed in')
         .addField(
             'Examples',
-            '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' +
-                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)'
+            '`q!2tc ice`\n' +
+                '`q!2tc churchill v21`\n' +
+                '`q!2tc dart ace`\n' +
+                '`q!2tc 11`\n' +
+                '`q!2tc moonlanding`\n' +
+                '`q!2tc obyn cube`'
         )
         .addField(
             'Notes',
@@ -530,7 +534,7 @@ function helpMessage(message) {
                 ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n' +
                 ' • There is currently no way to scroll through multi-page results. Just make the command more specific.\n'
         )
-        .setColor(colours['black']);
+        .setColor(CHALLENGE_COLOR);
 
     return message.channel.send(helpEmbed);
 }

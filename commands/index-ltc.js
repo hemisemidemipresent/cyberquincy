@@ -114,7 +114,8 @@ function helpMessage(message) {
         .addField(
             '`q!ltc <map> og`',
             'The BTD6 Index Least Tower CHIMPS originally completed entry for the queried map (Needs to match tower amount of current LTC).\n`q!2mp og dc`'
-        );
+        )
+        .setColor(CHALLENGE_COLOR);
 
     return message.channel.send(helpEmbed);
 }

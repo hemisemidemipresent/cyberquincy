@@ -145,7 +145,8 @@ function helpMessage(message) {
             '`q!2mp dartship another_brick`\n' +
                 '`q!2mp prime expert`\n' +
                 '`q!2mp sav dc`'
-        );
+        )
+        .setColor(CHALLENGE_COLOR);
 
     return message.channel.send(helpEmbed);
 }

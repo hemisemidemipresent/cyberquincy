@@ -37,7 +37,7 @@ async function unsubmit(message, url) {
 
     if (submission = messages.get(message_id)) {
         if (submission.author.id != CYBER_QUINCY_USER_ID) {
-            return message.channel.send(`That isn't a \`q!index-submit\` submission. ${message.author.username} wrote that.`)
+            return message.channel.send(`That isn't a \`q!index-submit\` submission. ${submission.author.username} wrote that.`)
         }
         let submitterTag;
         if (submission.content == '') { // It's an imgur embedded submission

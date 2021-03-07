@@ -16,6 +16,13 @@ commands are using node.js `module.exports`, and each command is a file in `./co
 
 [How to use the parser](https://github.com/hemisemidemipresent/cyberquincy/tree/master/parser)
 
+# Data
+
+data are from:
+- google sheets (see below)
+- extreme bloonology - [real site](https://sites.google.com/view/bloonology) vs [where we actually get the data](./commands/towers.js)
+- local data - `./jsons file`
+
 # Google Sheets
 
 when the bot is first started up, the btd6 index google sheets `doc` object is "saved" or "cached". this is mainly only done in `./helpers/google-sheets.js`

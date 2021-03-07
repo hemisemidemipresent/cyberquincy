@@ -24,7 +24,7 @@ WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 const gHelper = require('../helpers/general.js');
 
-const CHALLENGE_COLOR = '#e06666'
+const colours = require('../jsons/colours.json');
 
 const OG_COLS = {
     NUMBER: 'B',
@@ -107,14 +107,14 @@ async function displayCombos(message, combos, parsed, allCombos) {
         return message.channel.send(
             new Discord.MessageEmbed()
                 .setTitle(`No combos found`)
-                .setColor(CHALLENGE_COLOR)
+                .setColor(colours["index-2tc"])
         );
     }
 
     if (combos.length == 1) {
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos))
-            .setColor(CHALLENGE_COLOR);
+            .setColor(colours["index-2tc"]);
         
         flatCombo = flattenCombo(clonedeep(combos[0]));
         strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
@@ -203,7 +203,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
         ) {
             let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(embedTitle(parsed, combos))
-                .setColor(CHALLENGE_COLOR);
+                .setColor(colours["index-2tc"]);
 
             numRows = colData[Object.keys(colData)[0]].length;
 
@@ -534,7 +534,7 @@ function helpMessage(message) {
                 ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n' +
                 ' • There is currently no way to scroll through multi-page results. Just make the command more specific.\n'
         )
-        .setColor(CHALLENGE_COLOR);
+        .setColor(colours["index-2tc"]);
 
     return message.channel.send(helpEmbed);
 }

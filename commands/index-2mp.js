@@ -17,7 +17,7 @@ const PersonParser = require('../parser/person-parser.js');
 
 const gHelper = require('../helpers/general.js');
 
-const CHALLENGE_COLOR = '#6d9eeb';
+const colours = require('../jsons/colours.json');
 
 const COLS = {
     NUMBER: 'B',
@@ -146,7 +146,7 @@ function helpMessage(message) {
                 '`q!2mp prime expert`\n' +
                 '`q!2mp sav dc`'
         )
-        .setColor(CHALLENGE_COLOR);
+        .setColor(colours["index-2mp"]);
 
     return message.channel.send(helpEmbed);
 }
@@ -169,7 +169,7 @@ function err(e, message) {
     if (e instanceof UserCommandError) {
         let noComboEmbed = new Discord.MessageEmbed()
                 .setTitle(e.message)
-                .setColor(CHALLENGE_COLOR);
+                .setColor(colours["index-2mp"]);
         return message.channel.send(noComboEmbed);
     } else {
         throw e;
@@ -202,7 +202,7 @@ async function display2MPOG(message, tower) {
     // Embed and send the message
     let challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`${values.TOWER} 2MPC Combo`)
-        .setColor(CHALLENGE_COLOR);
+        .setColor(colours["index-2mp"]);
 
     for (field in values) {
         challengeEmbed.addField(
@@ -295,7 +295,7 @@ async function display2MPAlt(message, tower, map) {
         // Embed and send the message
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(`${towerFormatted} 2MPC Combo on ${mapFormatted}`)
-            .setColor(CHALLENGE_COLOR)
+            .setColor(colours["index-2mp"])
             .addField('Person', altCompletion.PERSON, true)
             .addField('Link', altCompletion.LINK, true);
 
@@ -414,7 +414,7 @@ async function display2MPFilterAll(
     let challengeEmbed = new Discord.MessageEmbed()
         .setTitle(title)
         .addField('#Combos', columns.LINK.length)
-        .setColor(CHALLENGE_COLOR);
+        .setColor(colours["index-2mp"]);
 
     // Display the non-excluded columns
     for (columnHeader in columns) {
@@ -478,7 +478,7 @@ function embedPages(message, title, columns) {
     async function displayCurrentPage(msg) {
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
-            .setColor(CHALLENGE_COLOR)
+            .setColor(colours["index-2mp"])
             .addField('#Combos', columns.LINK.length)
             .setFooter(`${pg + 1}/${numPages}`);
 
@@ -580,7 +580,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
             .setTitle(
                 `${towerFormatted} 2MPCs on ${mapDifficultyFormatted} Maps`
             )
-            .setColor(CHALLENGE_COLOR);
+            .setColor(colours["index-2mp"]);
 
         numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
         if (mapsLeft.length > 0) {
@@ -762,7 +762,7 @@ async function display2MPTowerStatistics(message, tower) {
 
     let challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
-        .setColor(CHALLENGE_COLOR)
+        .setColor(colours["index-2mp"])
         .addField('\u200b', '\u200b', true) // Left column placeholder
         .addField('Base Tower', baseTowerCompletionMarking, true) // Base tower
         .addField('\u200b', '\u200b', true); // Right column placeholder

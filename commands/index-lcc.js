@@ -18,7 +18,7 @@ const COLS = {
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
-const CHALLENGE_COLOR = '#ffd966';
+const colours = require('../jsons/colours.json');
 
 module.exports = {
     name: 'lcc',
@@ -100,7 +100,7 @@ async function displayLCC(message, btd6_map) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`${values.MAP} LCC Combo`)
-        .setColor(CHALLENGE_COLOR);
+        .setColor(colours["index-lcc"]);
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
@@ -125,7 +125,7 @@ function helpMessage(message) {
             '`logs`, `cubism`, `pen`, `#ouch`, ...'
         )
         .addField('Example', '`q!lcc bloodles`')
-        .setColor(CHALLENGE_COLOR);
+        .setColor(colours["index-lcc"]);
 
     return message.channel.send(helpEmbed);
 }

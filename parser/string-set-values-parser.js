@@ -27,7 +27,7 @@ class StringSetValuesParser {
 
         // Construct a delegate parser for the list of permitted values
         // by ORing them together into a regular expression
-        let regex = new RegExp('^(' + values.join('|') + ')$', 'i');
+        let regex = new RegExp('^(?:' + values.join('|') + ')$', 'i');
         this.delegateParser = new RegexParser(regex);
     }
 

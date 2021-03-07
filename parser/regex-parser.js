@@ -21,7 +21,7 @@ class RegexParser {
 
         // Test the match
         if (match) {
-            return match[1];
+            return match[0];
         } else {
             throw new UserCommandError(
                 `"${arg}" does not match against the regular expression "${this.regex}"`

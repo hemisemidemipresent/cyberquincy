@@ -25,7 +25,6 @@ module.exports = {
                 new OptionalParser(new AnythingParser())
             )
         );
-        console.log(JSON.stringify(parsed));
 
         if (parsed.anything) {
             raceID = parsed.anything;
@@ -44,7 +43,6 @@ module.exports = {
         }
 
         let url = `https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_${raceID}.json`;
-        console.log(url);
         request(url, (err, res, body) => {
             if (err) {
                 reject('req');
@@ -53,7 +51,18 @@ module.exports = {
             let scores = data.scores.equal;
 
             let output = '';
-            let t50;
+
+            // get max length of names, there is probably a more efficient way but heh
+            let maxLength = 0;
+
+            for (let i = start - 1; i < end; i++) {
+                if (!scores[i]) break;
+                let md = scores[i].metadata.split(',');
+                let username = md[0];
+                if (username.length > maxLength) {
+                    maxLength = username.length;
+                }
+            }
             for (let i = start - 1; i < end; i++) {
                 if (!scores[i]) break;
                 let time = 1000000000 - scores[i].score;
@@ -63,7 +72,7 @@ module.exports = {
                 let username = md[0];
                 let row = '';
                 row += addSpaces(i + 1, 2) + '|';
-                row += addSpaces(username, 20);
+                row += addSpaces(username, maxLength);
                 row += '|';
                 row += time;
                 row += '\n';
@@ -106,9 +115,7 @@ function addSpaces(str, max) {
 
     try {
         str += ' '.repeat(diff);
-    } catch {
-        console.log(str);
-    }
+    } catch {}
 
     return str;
 }

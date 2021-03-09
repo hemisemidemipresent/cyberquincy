@@ -1,3 +1,28 @@
+const links = [
+    'https://pastebin.com/raw/FK4a9ZSi',
+    'https://pastebin.com/raw/W2x9dvPs',
+    'https://pastebin.com/raw/XaR4JafN',
+    'https://pastebin.com/raw/ywGCyWdT',
+    'https://pastebin.com/raw/3VKx3upE',
+    'https://pastebin.com/raw/cg8af3pj',
+    'https://pastebin.com/raw/8uQuKygM',
+    'https://pastebin.com/raw/F9i5vPX9',
+    'https://pastebin.com/raw/EuiGUBWs',
+    'https://pastebin.com/raw/hACdmBFa',
+    'https://pastebin.com/raw/dfwcqzDT',
+    'https://pastebin.com/raw/64s0RqaZ',
+    'https://pastebin.com/raw/DDkmKP6n',
+    'https://pastebin.com/raw/4MsYDjFx',
+    'https://pastebin.com/raw/SUxZg6Dk',
+    'https://pastebin.com/raw/kPAF2hqw',
+    'https://pastebin.com/raw/76m7ATYF',
+    'https://pastebin.com/raw/4egsjcpa',
+    'https://pastebin.com/raw/Es0nVqt1',
+    'https://pastebin.com/raw/tTHZWiSi',
+    'https://pastebin.com/raw/e2QHaQSD',
+    'https://pastebin.com/raw/rTHT0L21',
+];
+
 const { red, cyber } = require('../jsons/colours.json');
 const request = require('request');
 const costs = require('../jsons/costs.json');
@@ -97,30 +122,6 @@ const aliases = [
     ],
 ];
 
-const links = [
-    'https://pastebin.com/raw/FK4a9ZSi',
-    'https://pastebin.com/raw/W2x9dvPs',
-    'https://pastebin.com/raw/XaR4JafN',
-    'https://pastebin.com/raw/ywGCyWdT',
-    'https://pastebin.com/raw/3VKx3upE',
-    'https://pastebin.com/raw/cg8af3pj',
-    'https://pastebin.com/raw/8uQuKygM',
-    'https://pastebin.com/raw/F9i5vPX9',
-    'https://pastebin.com/raw/EuiGUBWs',
-    'https://pastebin.com/raw/hACdmBFa',
-    'https://pastebin.com/raw/dfwcqzDT',
-    'https://pastebin.com/raw/64s0RqaZ',
-    'https://pastebin.com/raw/DDkmKP6n',
-    'https://pastebin.com/raw/4MsYDjFx',
-    'https://pastebin.com/raw/SUxZg6Dk',
-    'https://pastebin.com/raw/kPAF2hqw',
-    'https://pastebin.com/raw/76m7ATYF',
-    'https://pastebin.com/raw/4egsjcpa',
-    'https://pastebin.com/raw/Es0nVqt1',
-    'https://pastebin.com/raw/tTHZWiSi',
-    'https://pastebin.com/raw/e2QHaQSD',
-    'https://pastebin.com/raw/rTHT0L21',
-];
 module.exports = {
     name: '<tower>',
 

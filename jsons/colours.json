@@ -9,14 +9,14 @@
     "cyber": "#00E6BB",
     "blue": "#0069ff",
     "blurple": "#7289DA",
-    "dark-blue": "#0000ff",
+    "dark_blue": "#0000ff",
     "purple": "#6900ff",
     "magenta": "#ff0069",
     "grey": "#696969",
     "lightgrey": "#969696",
 
-    "index-2tc-red": "#e06666",
-    "index-lcc-yellow": "#ffd966",
-    "index-ltc-green": "93c47d",
-    "index-2mp-blue": "6d9eeb"
+    "index_2tc_red": "#e06666",
+    "index_lcc_yellow": "#ffd966",
+    "index_ltc_green": "93c47d",
+    "index_2mp_blue": "6d9eeb"
 }

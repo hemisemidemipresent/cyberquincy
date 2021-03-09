@@ -24,7 +24,7 @@ WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 const gHelper = require('../helpers/general.js');
 
-const colours = require('../jsons/colours.json');
+const { orange, index_2tc_red } = require('../jsons/colours.json');
 
 const OG_COLS = {
     NUMBER: 'B',
@@ -94,7 +94,7 @@ async function execute(message, args) {
             message.channel.send(
                 new Discord.MessageEmbed()
                     .setTitle(e.message)
-                    .setColor(colours['orange'])
+                    .setColor(orange)
             );
         } else {
             throw e;
@@ -107,14 +107,14 @@ async function displayCombos(message, combos, parsed, allCombos) {
         return message.channel.send(
             new Discord.MessageEmbed()
                 .setTitle(`No combos found`)
-                .setColor(colours["index-2tc-red"])
+                .setColor(index_2tc_red)
         );
     }
 
     if (combos.length == 1) {
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos))
-            .setColor(colours["index-2tc-red"]);
+            .setColor(index_2tc_red);
         
         flatCombo = flattenCombo(clonedeep(combos[0]));
         strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
@@ -203,7 +203,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
         ) {
             let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(embedTitle(parsed, combos))
-                .setColor(colours["index-2tc-red"]);
+                .setColor(index_2tc_red);
 
             numRows = colData[Object.keys(colData)[0]].length;
 
@@ -534,7 +534,7 @@ function helpMessage(message) {
                 ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n' +
                 ' • There is currently no way to scroll through multi-page results. Just make the command more specific.\n'
         )
-        .setColor(colours["index-2tc-red"]);
+        .setColor(index_2tc_red);
 
     return message.channel.send(helpEmbed);
 }
@@ -547,7 +547,7 @@ function errorMessage(message, parsingErrors) {
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
         )
         .addField('Type `q!2tc` for help', '\u200b')
-        .setColor(colours['orange']);
+        .setColor(orange);
 
     return message.channel.send(errorEmbed);
 }

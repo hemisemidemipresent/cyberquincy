@@ -15,8 +15,8 @@
     "grey": "#696969",
     "lightgrey": "#969696",
 
-    "index-2tc": "#e06666",
-    "index-lcc": "#ffd966",
-    "index-ltc": "93c47d",
-    "index-2mp": "6d9eeb"
+    "index-2tc-red": "#e06666",
+    "index-lcc-yellow": "#ffd966",
+    "index-ltc-green": "93c47d",
+    "index-2mp-blue": "6d9eeb"
 }

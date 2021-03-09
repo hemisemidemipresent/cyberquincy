@@ -100,7 +100,7 @@ async function displayLCC(message, btd6_map) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`${values.MAP} LCC Combo`)
-        .setColor(colours["index-lcc"]);
+        .setColor(colours["index-lcc-yellow"]);
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
@@ -125,7 +125,7 @@ function helpMessage(message) {
             '`logs`, `cubism`, `pen`, `#ouch`, ...'
         )
         .addField('Example', '`q!lcc bloodles`')
-        .setColor(colours["index-lcc"]);
+        .setColor(colours["index-lcc-yellow"]);
 
     return message.channel.send(helpEmbed);
 }

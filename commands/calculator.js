@@ -161,6 +161,7 @@ function calc(message, args, json) {
                     )
                 ) // At MOST 1 decimal place
                 .setDescription(`\`${expression}\``)
+                .setFooter('NOTE: q!calc uses topper prices, which are still stuck on v21. Fix coming at some point.')
                 .setColor(colours['cyber'])
         );
     }
@@ -295,7 +296,8 @@ function helpMessage(message) {
         )
         .addField(
             'Notes',
-            ' • For ambiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.'
+            ' • For ambiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.\n' +
+                ' • `q!calc` uses topper prices, which are still stuck on v21. Fix coming at some point.'
         )
         .setColor(colours['black']);
 

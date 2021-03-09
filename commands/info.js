@@ -1,6 +1,6 @@
 const { cyber } = require('../jsons/colours.json');
 const { discord } = require('../aliases/misc.json');
-
+const { dyno } = require('../1/config.json');
 module.exports = {
     name: 'info',
     description: 'shows info',
@@ -34,6 +34,7 @@ module.exports = {
                 `${discord}`,
                 true
             )
+            .addField('using', dyno)
             .setFooter('thank you for using it! Please share!');
         message.channel.send(infoEmbed);
     },

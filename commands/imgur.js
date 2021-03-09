@@ -6,7 +6,7 @@ function uploadImgur(message, args) {
     let image, text;
     try {
         [image, text] = ImgurHelper.extractImageInfo(message.attachments, args);
-    } catch(e) {
+    } catch (e) {
         if (e instanceof ImgurHelper.ImgurAttachmentError) {
             return message.channel.send(e.message);
         } else {
@@ -18,18 +18,25 @@ function uploadImgur(message, args) {
     imgur
         .uploadUrl(image)
         .then((json) => {
+            console.log(JSON.stringify(json, null, 1));
+
             const Embed = new Discord.MessageEmbed()
                 .setTimestamp()
-                .setDescription(`${json.data.link}\n${text}`)
+                .setDescription(`${json.link}\n${text}`)
                 .setFooter(footer)
                 .setColor(cyber)
-                .setImage(`${json.data.link}`);
+                .setImage(`${json.link}`);
             message.channel.send(Embed);
             message.delete();
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e);
-            return message.channel.send(e.message.message.replace('File type invalid (1)', `Imgur failed to identify file type as :ok_hand: ${image}`));
+            return message.channel.send(
+                e.message.message.replace(
+                    'File type invalid (1)',
+                    `Imgur failed to identify file type as :ok_hand: ${image}`
+                )
+            );
         });
 }
 

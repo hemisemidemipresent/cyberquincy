@@ -18,6 +18,8 @@ const COLS = {
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
+const { orange, index_lcc_yellow } = require('../jsons/colours.json');
+
 module.exports = {
     name: 'lcc',
     dependencies: ['btd6index'],
@@ -98,7 +100,7 @@ async function displayLCC(message, btd6_map) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`${values.MAP} LCC Combo`)
-        .setColor(colours['cyber']);
+        .setColor(index_lcc_yellow);
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
@@ -122,20 +124,21 @@ function helpMessage(message) {
             'Valid `<map>` values',
             '`logs`, `cubism`, `pen`, `#ouch`, ...'
         )
-        .addField('Example', '`q!lcc bloodles`');
+        .addField('Example', '`q!lcc bloodles`')
+        .setColor(index_lcc_yellow);
 
     return message.channel.send(helpEmbed);
 }
 
 function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
-        .setTitle('ERROR')
+        .setTitle('Input Error')
         .addField(
             'Likely Cause(s)',
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
         )
         .addField('Type `q!lcc` for help', '\u200b')
-        .setColor(colours['orange']);
+        .setColor(orange);
 
     return message.channel.send(errorEmbed);
 }

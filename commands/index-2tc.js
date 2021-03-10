@@ -24,6 +24,8 @@ WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 const gHelper = require('../helpers/general.js');
 
+const { orange, index_2tc_red } = require('../jsons/colours.json');
+
 const OG_COLS = {
     NUMBER: 'B',
     TOWER_1: 'C',
@@ -92,7 +94,7 @@ async function execute(message, args) {
             message.channel.send(
                 new Discord.MessageEmbed()
                     .setTitle(e.message)
-                    .setColor(colours['orange'])
+                    .setColor(orange)
             );
         } else {
             throw e;
@@ -105,14 +107,14 @@ async function displayCombos(message, combos, parsed, allCombos) {
         return message.channel.send(
             new Discord.MessageEmbed()
                 .setTitle(`No combos found`)
-                .setColor(colours['yellow'])
+                .setColor(index_2tc_red)
         );
     }
 
     if (combos.length == 1) {
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos))
-            .setColor(colours['cyber']);
+            .setColor(index_2tc_red);
         
         flatCombo = flattenCombo(clonedeep(combos[0]));
         strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
@@ -201,7 +203,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
         ) {
             let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(embedTitle(parsed, combos))
-                .setColor(colours['cyber']);
+                .setColor(index_2tc_red);
 
             numRows = colData[Object.keys(colData)[0]].length;
 
@@ -514,8 +516,12 @@ function helpMessage(message) {
         .addField('`v23`, `v10.2`', 'Limit results to version completed in')
         .addField(
             'Examples',
-            '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' +
-                '`q!calc ninja#502 + ninja#030 * 20 * 0.85` (GMN + single-discounted shinobi army)'
+            '`q!2tc ice`\n' +
+                '`q!2tc churchill v21`\n' +
+                '`q!2tc dart ace`\n' +
+                '`q!2tc 11`\n' +
+                '`q!2tc moonlanding`\n' +
+                '`q!2tc obyn cube`'
         )
         .addField(
             'Notes',
@@ -528,20 +534,20 @@ function helpMessage(message) {
                 ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n' +
                 ' • There is currently no way to scroll through multi-page results. Just make the command more specific.\n'
         )
-        .setColor(colours['black']);
+        .setColor(index_2tc_red);
 
     return message.channel.send(helpEmbed);
 }
 
 function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
-        .setTitle('ERROR')
+        .setTitle('Input Error')
         .addField(
             'Likely Cause(s)',
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
         )
         .addField('Type `q!2tc` for help', '\u200b')
-        .setColor(colours['orange']);
+        .setColor(orange);
 
     return message.channel.send(errorEmbed);
 }

@@ -14,9 +14,8 @@
     "magenta": "#ff0069",
     "grey": "#696969",
     "lightgrey": "#969696",
-
-    "index_2tc_red": "#e06666",
-    "index_lcc_yellow": "#ffd966",
-    "index_ltc_green": "93c47d",
-    "index_2mp_blue": "6d9eeb"
+    "palered": "#e06666",
+    "paleyellow": "#ffd966",
+    "palegreen": "#93c47d",
+    "paleblue": "#6d9eeb"
 }

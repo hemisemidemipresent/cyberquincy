@@ -17,7 +17,7 @@ const PersonParser = require('../parser/person-parser.js');
 
 const gHelper = require('../helpers/general.js');
 
-const { orange, index_2mp_blue } = require('../jsons/colours.json');
+const { orange, paleblue } = require('../jsons/colours.json');
 
 const COLS = {
     NUMBER: 'B',
@@ -146,7 +146,7 @@ function helpMessage(message) {
                 '`q!2mp prime expert`\n' +
                 '`q!2mp sav dc`'
         )
-        .setColor(index_2mp_blue);
+        .setColor(paleblue);
 
     return message.channel.send(helpEmbed);
 }
@@ -168,8 +168,8 @@ function err(e, message) {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
     if (e instanceof UserCommandError) {
         let noComboEmbed = new Discord.MessageEmbed()
-                .setTitle(e.message)
-                .setColor(index_2mp_blue);
+            .setTitle(e.message)
+            .setColor(paleblue);
         return message.channel.send(noComboEmbed);
     } else {
         throw e;
@@ -202,7 +202,7 @@ async function display2MPOG(message, tower) {
     // Embed and send the message
     let challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`${values.TOWER} 2MPC Combo`)
-        .setColor(index_2mp_blue);
+        .setColor(paleblue);
 
     for (field in values) {
         challengeEmbed.addField(
@@ -212,55 +212,69 @@ async function display2MPOG(message, tower) {
         );
     }
 
-    challengeEmbed.addField("OG?", "OG", true);
+    challengeEmbed.addField('OG?', 'OG', true);
 
     mapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
     altMaps = Object.keys(parseMapNotes(mapCell.note));
-    ogMap = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(values.OG_MAP));
+    ogMap = Aliases.mapToIndexAbbreviation(
+        Aliases.toAliasNormalForm(values.OG_MAP)
+    );
 
-    mapGroups = [Aliases.beginnerMaps(), Aliases.intermediateMaps(), Aliases.advancedMaps(), Aliases.expertMaps()]
+    mapGroups = [
+        Aliases.beginnerMaps(),
+        Aliases.intermediateMaps(),
+        Aliases.advancedMaps(),
+        Aliases.expertMaps(),
+    ];
     if (Towers.isWaterTowerUpgrade(tower)) {
-        mapGroups = mapGroups.map(aliases => aliases.filter(map => Aliases.allWaterMaps().includes(map)))
+        mapGroups = mapGroups.map((aliases) =>
+            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
+        );
     }
-    mapGroups = mapGroups.map(aliases => aliases.map(alias => Aliases.mapToIndexAbbreviation(alias)));
-    
-    altMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => altMaps.includes(map)));
-    unCompletedAltMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => !altMaps.concat(ogMap).includes(map)));
+    mapGroups = mapGroups.map((aliases) =>
+        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+    );
+
+    altMapGroups = mapGroups.map((mapGroup) =>
+        mapGroup.filter((map) => altMaps.includes(map))
+    );
+    unCompletedAltMapGroups = mapGroups.map((mapGroup) =>
+        mapGroup.filter((map) => !altMaps.concat(ogMap).includes(map))
+    );
 
     wordAllIncluded = false;
 
-    displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map(i => {
-        mapDifficulty = ["BEG", "INT", "ADV", "EXP"][i];
+    displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
+        mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
         waterTowerAsterisk = Towers.isWaterTowerUpgrade(tower) ? '*' : '';
         if (unCompletedAltMapGroups[i] == 0) {
             wordAllIncluded = true;
             return `All ${mapDifficulty}${waterTowerAsterisk}`;
         } else if (unCompletedAltMapGroups[i].length < 3) {
             wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
+            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[
+                i
+            ].join(', ')}}`;
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {
             return `{${altMapGroups[i].join(', ')}}`;
         }
-    })
+    });
 
-    if (altMapGroups.some(group => group.length > 0)) {
-        altMapsString = ""
+    if (altMapGroups.some((group) => group.length > 0)) {
+        altMapsString = '';
         altMapsString += `\n${displayedMapGroups[0]}`;
         altMapsString += `\n${displayedMapGroups[1]}`;
         altMapsString += `\n${displayedMapGroups[2]}`;
         altMapsString += `\n${displayedMapGroups[3]}`;
-        challengeEmbed.addField(
-            "**Alt Maps**",
-            altMapsString
-        )
+        challengeEmbed.addField('**Alt Maps**', altMapsString);
     } else {
-        challengeEmbed.addField("**Alt Maps**", "None");
+        challengeEmbed.addField('**Alt Maps**', 'None');
     }
 
     if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
-        challengeEmbed.setFooter("*with water")
+        challengeEmbed.setFooter('*with water');
     }
 
     return message.channel.send(challengeEmbed);
@@ -295,7 +309,7 @@ async function display2MPAlt(message, tower, map) {
         // Embed and send the message
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(`${towerFormatted} 2MPC Combo on ${mapFormatted}`)
-            .setColor(index_2mp_blue)
+            .setColor(paleblue)
             .addField('Person', altCompletion.PERSON, true)
             .addField('Link', altCompletion.LINK, true);
 
@@ -328,7 +342,9 @@ async function display2MPMap(message, map) {
     mapAbbr = Aliases.mapToIndexAbbreviation(map);
 
     if (map == 'logs') {
-        return message.channel.send("Sorry, `q!map logs` is broken right now b/c the links are so long it reaches the character limit of even a strict pagination")
+        return message.channel.send(
+            'Sorry, `q!map logs` is broken right now b/c the links are so long it reaches the character limit of even a strict pagination'
+        );
     }
 
     return await display2MPFilterAll(
@@ -414,7 +430,7 @@ async function display2MPFilterAll(
     let challengeEmbed = new Discord.MessageEmbed()
         .setTitle(title)
         .addField('#Combos', columns.LINK.length)
-        .setColor(index_2mp_blue);
+        .setColor(paleblue);
 
     // Display the non-excluded columns
     for (columnHeader in columns) {
@@ -478,7 +494,7 @@ function embedPages(message, title, columns) {
     async function displayCurrentPage(msg) {
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
-            .setColor(index_2mp_blue)
+            .setColor(paleblue)
             .addField('#Combos', columns.LINK.length)
             .setFooter(`${pg + 1}/${numPages}`);
 
@@ -580,7 +596,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
             .setTitle(
                 `${towerFormatted} 2MPCs on ${mapDifficultyFormatted} Maps`
             )
-            .setColor(index_2mp_blue);
+            .setColor(paleblue);
 
         numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
         if (mapsLeft.length > 0) {
@@ -762,7 +778,7 @@ async function display2MPTowerStatistics(message, tower) {
 
     let challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
-        .setColor(index_2mp_blue)
+        .setColor(paleblue)
         .addField('\u200b', '\u200b', true) // Left column placeholder
         .addField('Base Tower', baseTowerCompletionMarking, true) // Base tower
         .addField('\u200b', '\u200b', true); // Right column placeholder

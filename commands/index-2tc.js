@@ -24,7 +24,7 @@ WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 const gHelper = require('../helpers/general.js');
 
-const { orange, index_2tc_red } = require('../jsons/colours.json');
+const { orange, palered } = require('../jsons/colours.json');
 
 const OG_COLS = {
     NUMBER: 'B',
@@ -92,9 +92,7 @@ async function execute(message, args) {
     } catch (e) {
         if (e instanceof UserCommandError) {
             message.channel.send(
-                new Discord.MessageEmbed()
-                    .setTitle(e.message)
-                    .setColor(orange)
+                new Discord.MessageEmbed().setTitle(e.message).setColor(orange)
             );
         } else {
             throw e;
@@ -107,15 +105,15 @@ async function displayCombos(message, combos, parsed, allCombos) {
         return message.channel.send(
             new Discord.MessageEmbed()
                 .setTitle(`No combos found`)
-                .setColor(index_2tc_red)
+                .setColor(palered)
         );
     }
 
     if (combos.length == 1) {
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos))
-            .setColor(index_2tc_red);
-        
+            .setColor(palered);
+
         flatCombo = flattenCombo(clonedeep(combos[0]));
         strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
         combo = orderCombo(clonedeep(strippedCombo));
@@ -131,28 +129,40 @@ async function displayCombos(message, combos, parsed, allCombos) {
         challengeEmbed.addField('OG?', flatCombo.OG ? 'OG' : 'ALT', true);
 
         if (flatCombo.OG && !(parsed.map || parsed.version || parsed.person)) {
-            allCompletedMaps = Object.keys(allCombos.find(c => c.NUMBER === flatCombo.NUMBER).MAPS);
-            altMaps = allCompletedMaps.filter(map => map != combo.MAP);
-            altMaps = altMaps.map(properMapName => properMapName.split(' ').join('_').toLowerCase());
-            altMaps = altMaps.map(properMapName => Aliases.mapToIndexAbbreviation(properMapName));
+            allCompletedMaps = Object.keys(
+                allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS
+            );
+            altMaps = allCompletedMaps.filter((map) => map != combo.MAP);
+            altMaps = altMaps.map((properMapName) =>
+                properMapName.split(' ').join('_').toLowerCase()
+            );
+            altMaps = altMaps.map((properMapName) =>
+                Aliases.mapToIndexAbbreviation(properMapName)
+            );
 
-            mapGroups = [Aliases.beginnerMaps(), Aliases.intermediateMaps(), Aliases.advancedMaps(), Aliases.expertMaps()]
-            mapGroups = mapGroups.map(aliases => aliases.map(alias => Aliases.mapToIndexAbbreviation(alias)));
-            
-            altMapGroups = mapGroups.map(mapGroup => mapGroup.filter(map => altMaps.includes(map)));
+            mapGroups = [
+                Aliases.beginnerMaps(),
+                Aliases.intermediateMaps(),
+                Aliases.advancedMaps(),
+                Aliases.expertMaps(),
+            ];
+            mapGroups = mapGroups.map((aliases) =>
+                aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+            );
 
-            if (altMapGroups.some(group => group.length > 0)) {
-                altMapsString = ""
+            altMapGroups = mapGroups.map((mapGroup) =>
+                mapGroup.filter((map) => altMaps.includes(map))
+            );
+
+            if (altMapGroups.some((group) => group.length > 0)) {
+                altMapsString = '';
                 altMapsString += `\n${altMapGroups[0].join(', ')}`;
                 altMapsString += `\n${altMapGroups[1].join(', ')}`;
                 altMapsString += `\n${altMapGroups[2].join(', ')}`;
                 altMapsString += `\n${altMapGroups[3].join(', ')}`;
-                challengeEmbed.addField(
-                    "**Alt Maps**",
-                    altMapsString
-                )
+                challengeEmbed.addField('**Alt Maps**', altMapsString);
             } else {
-                challengeEmbed.addField("**Alt Maps**", "None");
+                challengeEmbed.addField('**Alt Maps**', 'None');
             }
         }
 
@@ -203,7 +213,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
         ) {
             let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(embedTitle(parsed, combos))
-                .setColor(index_2tc_red);
+                .setColor(palered);
 
             numRows = colData[Object.keys(colData)[0]].length;
 
@@ -534,7 +544,7 @@ function helpMessage(message) {
                 ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n' +
                 ' • There is currently no way to scroll through multi-page results. Just make the command more specific.\n'
         )
-        .setColor(index_2tc_red);
+        .setColor(palered);
 
     return message.channel.send(helpEmbed);
 }

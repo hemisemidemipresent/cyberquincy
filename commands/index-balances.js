@@ -10,7 +10,7 @@ const TowerUpgradeParser = require('../parser/tower-upgrade-parser');
 const HeroParser = require('../parser/hero-parser');
 
 const VersionParser = require('../parser/version-parser');
-
+const { yellow, darkgreen, orange } = require('../jsons/colours.json');
 module.exports = {
     name: 'balance',
     dependencies: ['btd6index'],
@@ -28,7 +28,7 @@ async function execute(message, args) {
         new TowerParser(),
         new TowerPathParser(),
         new TowerUpgradeParser(),
-        new HeroParser(),
+        new HeroParser()
     );
 
     const parsed = CommandParser.parse(
@@ -55,7 +55,7 @@ async function execute(message, args) {
 }
 
 async function loadEntityBuffNerfsTableCells(parsed) {
-    let sheet = getSheet(parsed)
+    let sheet = getSheet(parsed);
     const currentVersion = await parseCurrentVersion(parsed);
 
     // Load from C23 to {end_column}{C+version}
@@ -81,7 +81,9 @@ async function locateSpecifiedEntityColumnIndex(parsed) {
         towerHeader = sheet.getCell(headerRow(parsed) - 1, colIndex).value;
 
         if (!towerHeader)
-            throw `Something went wrong; ${parsedEntity(parsed)} couldn't be found in the headers`;
+            throw `Something went wrong; ${parsedEntity(
+                parsed
+            )} couldn't be found in the headers`;
 
         canonicalHeader = Aliases.getCanonicalForm(towerHeader);
         if (parsed.tower && parsed.tower == canonicalHeader) {
@@ -103,7 +105,7 @@ async function locateSpecifiedEntityColumnIndex(parsed) {
 }
 
 function headerRow(parsed) {
-    return parsed.hero ? 18 : 23
+    return parsed.hero ? 18 : 23;
 }
 
 VERSION_COLUMN = 'C';
@@ -122,20 +124,20 @@ function heroesSheet() {
 }
 
 function parsedEntity(parsed) {
-    if (parsed.hero) return parsed.hero
-    else if (parsed.tower) return parsed.tower
-    else if (parsed.tower_upgrade) return parsed.tower_upgrade
-    else if (parsed.tower_path) return parsed.tower_path
+    if (parsed.hero) return parsed.hero;
+    else if (parsed.tower) return parsed.tower;
+    else if (parsed.tower_upgrade) return parsed.tower_upgrade;
+    else if (parsed.tower_path) return parsed.tower_path;
 }
 
 async function parseCurrentVersion(parsed) {
-    let sheet = getSheet(parsed)
+    let sheet = getSheet(parsed);
 
     // Get version number from J3
     await sheet.loadCells(`J3`);
     const lastUpdatedAsOf = sheet.getCellByA1(`J3`).value;
     const lastUpdatedAsOfTokens = lastUpdatedAsOf.split(' ');
-    version = lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1]
+    version = lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1];
     return Math.floor(new Number(version));
 }
 
@@ -252,13 +254,13 @@ async function formatAndDisplayBalanceChanges(message, parsed, balances) {
                 .setTitle(
                     `No patch notes found for ${formattedTower}${versionText}`
                 )
-                .setColor(colours['yellow'])
+                .setColor(yellow)
         );
     }
 
     let embed = new Discord.MessageEmbed()
         .setTitle(`Buffs and Nerfs for ${formattedTower}`)
-        .setColor(colours['darkgreen']);
+        .setColor(darkgreen);
 
     for (const version in balances) {
         embed.addField(`v. ${version}`, balances[version] + '\n\u200b');
@@ -281,7 +283,7 @@ function errorMessage(message, parsingErrors) {
             parsingErrors.map((msg) => ` • ${msg}`).join('\n')
         )
         .addField('Type `q!balance` for help', '\u200b')
-        .setColor(colours['orange'])
+        .setColor(orange)
         .setFooter(
             'Currently t1 and t2 towers are not searchable on their own. Fix coming'
         );

@@ -10,7 +10,7 @@ const gHelper = require('../helpers/general.js');
 const MIN_ROW = 1;
 const MAX_ROW = 100;
 
-const { orange, index_ltc_green } = require('../jsons/colours.json');
+const { orange, palegreen } = require('../jsons/colours.json');
 
 const COLS = {
     TWO: {
@@ -115,7 +115,7 @@ function helpMessage(message) {
             '`q!ltc <map> og`',
             'The BTD6 Index Least Tower CHIMPS originally completed entry for the queried map (Needs to match tower amount of current LTC).\n`q!2mp og dc`'
         )
-        .setColor(index_ltc_green);
+        .setColor(palegreen);
 
     return message.channel.send(helpEmbed);
 }
@@ -221,7 +221,7 @@ async function getRowStandardData(message, entryRow, colset) {
     // Embed and send the message
     var challengeEmbed = new Discord.MessageEmbed()
         .setTitle(`${values.MAP} LTC Combo`)
-        .setColor(index_ltc_green);
+        .setColor(palegreen);
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
@@ -248,7 +248,7 @@ async function getRowAltData(message, entryRow, qualifier, colset) {
         .setTitle(
             `${gHelper.toTitleCase(qualifier)} ${mapCell.value} LTC Combo`
         )
-        .setColor(index_ltc_green)
+        .setColor(palegreen)
         .addField('Person', notes[qualifier].PERSON, true)
         .addField('Link', notes[qualifier].LINK, true);
 

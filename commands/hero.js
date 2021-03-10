@@ -1,45 +1,20 @@
 const { cyber, red } = require('../jsons/colours.json');
-const fetch = require('node-fetch');
-const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
-const settings = { method: 'Get' };
+const request = require('request');
 const aliases = [
     [
-        'adora',
-        'ad',
-        'ador',
-        'ado',
-        'dora',
-        'priestess',
-        'high',
-        'highpriestess',
+        'quincy',
+        'q',
+        'cyberquincy',
+        'quincey',
+        'quinc',
+        'quonc',
+        'quonce',
+        'quoncy',
+        'cyber',
+        'furry',
+        'cq',
     ],
-    [
-        'benjamin',
-        'b',
-        'dj',
-        'ben',
-        'benny',
-        'boi',
-        'best',
-        'benjammin',
-        "benjammin'",
-        'yeet',
-        'boy',
-    ],
-    ['admiral-brickell', 'brick', 'brickell', 'brickel'],
-    [
-        'captain-churchill',
-        'churchill',
-        'c',
-        'ch',
-        'chirch',
-        'church',
-        'captain',
-        'tank',
-        'winston',
-        'hill',
-    ],
-    ['ezili', 'e', 'ez', 'voodo', 'vm', 'ezi', 'ezil', 'voodoo'],
+
     [
         'gwendolin',
         'g',
@@ -56,6 +31,32 @@ const aliases = [
     ['striker-jones', 'sj', 'striker', 'bones', 'jones', 'biker', 'who'],
     ['obyn-greenfoot', 'obyn', 'greenfoot', 'o', 'ocyn'],
     [
+        'captain-churchill',
+        'churchill',
+        'c',
+        'ch',
+        'chirch',
+        'church',
+        'captain',
+        'tank',
+        'winston',
+        'hill',
+    ],
+    [
+        'benjamin',
+        'b',
+        'dj',
+        'ben',
+        'benny',
+        'boi',
+        'best',
+        'benjammin',
+        "benjammin'",
+        'yeet',
+        'boy',
+    ],
+    ['ezili', 'e', 'ez', 'voodo', 'vm', 'ezi', 'ezil', 'voodoo'],
+    [
         'pat-fusty',
         'p',
         'pat',
@@ -69,18 +70,16 @@ const aliases = [
         'thicc',
     ],
     [
-        'quincy',
-        'q',
-        'cyberquincy',
-        'quincey',
-        'quinc',
-        'quonc',
-        'quonce',
-        'quoncy',
-        'cyber',
-        'furry',
-        'cq',
+        'adora',
+        'ad',
+        'ador',
+        'ado',
+        'dora',
+        'priestess',
+        'high',
+        'highpriestess',
     ],
+    ['admiral-brickell', 'brick', 'brickell', 'brickel'],
     [
         'etienne',
         'etiene',
@@ -93,57 +92,54 @@ const aliases = [
         'drone',
     ],
 ];
-
+const links = [
+    'https://pastebin.com/raw/ASpHNduS',
+    'https://pastebin.com/raw/rZYjbEhX',
+    'https://pastebin.com/raw/hrH8q0bd',
+    'https://pastebin.com/raw/x2WiKEWi',
+    'https://pastebin.com/raw/cqaHnhgB',
+    'https://pastebin.com/raw/j6X3mazy',
+    'https://pastebin.com/raw/dYu1B9bp',
+    'https://pastebin.com/raw/2YRMFjPG',
+    'https://pastebin.com/raw/WnsgkWRc',
+    'https://pastebin.com/raw/amw39T29',
+    'https://pastebin.com/raw/UxN2Wx1F',
+];
 module.exports = {
     name: '<hero>',
     aliases: aliases.flat(),
-    dependencies: ['towerJSON'],
-    execute(message, args, commandName, lang) {
-        let name = findName(commandName, lang);
-        if (!args) {
-            let errorEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription(
-                    `Please specify a level for the hero\ne.g. ${message.content} 20`
-                );
-            return message.channel.send(errorEmbed);
-        }
-        let base = towerJSON[`${name}`];
+    async execute(message, args, commandName) {
+        let name = findName(commandName);
+        if (!name) this.errorMessage('invalid hero name');
+        if (!args) this.errorMessage('Please specify a level for the hero');
+        let link = findLink(commandName);
 
-        if (args[0] == '-all') {
-            let embed = new Discord.MessageEmbed()
-                .setTitle(`${name}`)
-                .setColor(cyber);
-            let desc = '';
-            for (i = 0; i < 20; i++) {
-                embed.addField(`${i + 1}`, `${base.upgrades[i].notes}`);
-            }
-            return message.channel.send(embed);
-        }
         let level = parseInt(args[0]);
-
-        let object = base.upgrades[level - 1];
-        if (!object) {
-            let errorEmbed = new Discord.MessageEmbed()
-                .setColor(red)
-                .setDescription(
-                    `Please specify a level for the hero\ne.g. **q!${name} 20**`
+        request(link, (err, res, body) => {
+            if (err)
+                this.errorMessage(
+                    'something went wrong while fetching the data'
                 );
-            return message.channel.send(errorEmbed);
-        }
-        let skins = base.skins.toString();
-        if (!skins) skins = 'none';
-        const embed = new Discord.MessageEmbed()
-            .setTitle(`${name} level ${level}`)
-            .addField('cost (xp)', `${object.xp}`, true)
-            .addField('desc', `${object.notes}`, true)
-            .addField('xp modifier', `${base['xp-mod']}`, true)
-            .addField('skins', `${skins}`)
-            .setColor(cyber)
-            .setFooter(
-                'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
-            );
-        message.channel.send(embed).then((msg) => {
+
+            let cleaned = body.replace(/\t/g, '').replace(/\r/g, '');
+            let sentences = cleaned.split(/\n\n/);
+
+            if (args[0] == '-all') {
+                let embed = new Discord.MessageEmbed();
+                embed
+                    .setColor(cyber)
+                    .setFooter(
+                        'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
+                    );
+                for (let i = 0; i < 20; i++) {
+                    embed.addField(i + 1, sentences[i], true);
+                }
+                return message.channel.send(embed);
+            }
+
+            return message.channel.send(oneUpgrade(sentences, level));
+        });
+        /*.then((msg) => {
             msg.react('❌');
             let filter = (reaction, user) => {
                 return (
@@ -158,24 +154,44 @@ module.exports = {
             collector.on('collect', () => {
                 msg.delete();
             });
-        });
+        });*/
+    },
+    errorMessage(err) {
+        return new Discord.MessageEmbed()
+            .setColor(red)
+            .addField('error', err)
+            .setDescription('*usage*:\n`q!<hero> <level>` - q!quincy 13');
     },
 };
-function findName(commandName, lang) {
-    let aliasArr;
-    if (lang == 'ru') {
-        aliasArr = aliases; // temp
-    } else {
-        aliasArr = aliases;
-    }
-    for (let i = 0; i < aliasArr.length; i++) {
-        let heroAliasSet = aliasArr[i];
 
-        for (let j = 0; j < heroAliasSet.length; j++) {
-            if (commandName == heroAliasSet[j]) {
-                return heroAliasSet[0];
+function findLink(commandName) {
+    for (let i = 0; i < aliases.length; i++) {
+        let towerAliasSet = aliases[i];
+        for (let j = 0; j < towerAliasSet.length; j++) {
+            if (commandName == towerAliasSet[j]) {
+                return links[i];
             }
         }
     }
     return;
+}
+function findName(commandName) {
+    for (let i = 0; i < aliases.length; i++) {
+        let towerAliasSet = aliases[i];
+        for (let j = 0; j < towerAliasSet.length; j++) {
+            if (commandName == towerAliasSet[j]) {
+                return towerAliasSet[0];
+            }
+        }
+    }
+    return;
+}
+
+function oneUpgrade(sentences, level) {
+    return new Discord.MessageEmbed()
+        .setDescription(sentences[level - 1])
+        .setColor(cyber)
+        .setFooter(
+            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
+        );
 }

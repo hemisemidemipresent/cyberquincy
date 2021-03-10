@@ -90,7 +90,22 @@ module.exports = {
                 .setColor(cyber)
                 .setTimestamp()
                 .setThumbnail(raceImg);
-            message.channel.send(embed);
+            message.channel.send(embed).then((msg) => {
+                msg.react('❌');
+                let filter = (reaction, user) => {
+                    return (
+                        reaction.emoji.name === '❌' &&
+                        user.id === message.author.id
+                    );
+                };
+                const collector = msg.createReactionCollector(filter, {
+                    time: 20000,
+                });
+
+                collector.on('collect', () => {
+                    msg.delete();
+                });
+            });
         });
     },
     errorMessage(message, errors) {

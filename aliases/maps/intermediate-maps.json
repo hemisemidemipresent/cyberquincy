@@ -66,5 +66,10 @@
         "en",
         "secret",
         "locked"
+    ],
+    "balance": [
+        "ba",
+        "balanced",
+        "bal"
     ]
 }

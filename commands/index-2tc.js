@@ -256,7 +256,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colDa
     }
 
     // Gets the reaction to the pagination message by the command author
-    // and respond appropriate action (turning page or deleting message)
+    // and respond by turning the page in the correction direction
     function reactLoop(botMessage) {
         // Lays out predefined reactions
         for (var i = 0; i < REACTIONS.length; i++) {

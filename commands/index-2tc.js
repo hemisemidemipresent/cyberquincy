@@ -201,9 +201,18 @@ async function displayCombos(message, combos, parsed, allCombos) {
             }
         }
 
-        MAX_NUM_ROWS = 15;
-        let maxNumRowsDisplayed = MAX_NUM_ROWS;
+        return await displayOneOrMultiplePages(message, parsed, combos, colData);
+    }
+}
 
+async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colData) {
+    REACTIONS = ['⬅️', '➡️'];
+    MAX_NUM_ROWS = 15;
+    const numRows = colData[Object.keys(colData)[0]].length;
+    let leftIndex = 0;
+    let rightIndex = Math.min(MAX_NUM_ROWS - 1, numRows - 1);
+
+    async function displayPages(direction = 1) {
         // The number of rows to be displayed is variable depending on the characters in each link
         // Try 15 and decrement every time it doesn't work.
         for (
@@ -215,23 +224,16 @@ async function displayCombos(message, combos, parsed, allCombos) {
                 .setTitle(embedTitle(parsed, combos))
                 .setColor(palered);
 
-            numRows = colData[Object.keys(colData)[0]].length;
-
             challengeEmbed.addField(
                 '# Combos',
-                `**1**-**${Math.min(
-                    maxNumRowsDisplayed,
-                    numRows
-                )}** of ${numRows}`
+                `**${leftIndex+1}**-**${rightIndex+1}** of ${numRows}`
             );
 
             for (header in colData) {
                 data =
                     numRows <= maxNumRowsDisplayed
                         ? colData[header]
-                        : colData[header]
-                              .slice(0, maxNumRowsDisplayed)
-                              .concat('...');
+                        : colData[header].slice(leftIndex, rightIndex + 1)
 
                 challengeEmbed.addField(
                     gHelper.toTitleCase(header.split('_').join(' ')),
@@ -240,16 +242,54 @@ async function displayCombos(message, combos, parsed, allCombos) {
                 );
             }
 
-            if (numRows > maxNumRowsDisplayed)
-                challengeEmbed.setFooter(
-                    'Too many combos to display all at once'
-                );
-
             try {
-                return await message.channel.send(challengeEmbed);
+                let msg = await userQueryMessage.channel.send(challengeEmbed);
+                if (maxNumRowsDisplayed < numRows) {
+                    return reactLoop(msg);
+                }
+                return msg;
             } catch (e) {} // Retry by decrementing maxNumRowsDisplayed
+
+            if (direction > 0) rightIndex--;
+            if (direction < 0) leftIndex++;
         }
     }
+    let maxNumRowsDisplayed = MAX_NUM_ROWS;
+
+
+    // Gets the reaction to the pagination message by the command author
+    // and respond appropriate action (turning page or deleting message)
+    function reactLoop(botMessage) {
+        // Lays out predefined reactions
+        for (var i = 0; i < REACTIONS.length; i++) {
+            botMessage.react(REACTIONS[i]);
+        }
+    
+        // Read author reaction (time limit specified below in milliseconds)
+        // and respond with appropriate action
+        botMessage.createReactionCollector(
+            (reaction, user) =>
+                user.id === userQueryMessage.author.id &&
+                REACTIONS.includes(reaction.emoji.name),
+            { time: 20000 }
+        ).once('collect', (reaction) => {
+            switch (reaction.emoji.name) {
+                case '⬅️':
+                    rightIndex = (leftIndex - 1 + numRows) % numRows;
+                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                    if (leftIndex < 0) leftIndex = 0;
+                    displayPages(-1);
+                    break;
+                case '➡️':
+                    leftIndex = (rightIndex + 1) % numRows;
+                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                    if (rightIndex >= numRows) rightIndex = numRows - 1;
+                    displayPages(1);
+                    break;
+            }
+        });
+    }
+    displayPages(1)
 }
 
 function getDisplayCols(parsed) {

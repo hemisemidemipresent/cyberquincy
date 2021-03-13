@@ -254,8 +254,6 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colDa
             if (direction < 0) leftIndex++;
         }
     }
-    let maxNumRowsDisplayed = MAX_NUM_ROWS;
-
 
     // Gets the reaction to the pagination message by the command author
     // and respond appropriate action (turning page or deleting message)

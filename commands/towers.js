@@ -30,6 +30,7 @@ const Towers = require('../helpers/towers.js');
 const OptionalParser = require('../parser/optional-parser');
 const UpgradeSetParser = require('../parser/upgrade-set-parser');
 const Discord = require('discord.js');
+const gHelper = require('../helpers/general.js');
 
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
@@ -128,13 +129,16 @@ module.exports = {
     aliases: aliases.flat(),
 
     async execute(message, args, commandName) {
-        parsed = CommandParser.parse(args, new UpgradeSetParser());
+        parsed = CommandParser.parse(
+            args, 
+            new OptionalParser(new UpgradeSetParser())
+        );
 
         if (parsed.hasErrors()) {
-            errorMessage(message, parsed.errors);
+            module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
-        process(parsed.upgrade_set, commandName, message);
+        process(parsed.upgrade_set || '000', commandName, message);
     },
     errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()
@@ -226,12 +230,14 @@ function process(upgrade, commandName, message) {
         let towerName = findName(commandName);
         let tower = costs[`${towerName}`];
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
-        let cost = tower.upgrades[`${path}`][tier - 1];
         let totalCost = Towers.totalTowerUpgradeCrosspathCostNew(
             costs,
             towerName,
             upgrade
         );
+        let cost = upgrade == '000' ?
+                        totalCost : 
+                        tower.upgrades[`${path}`][tier - 1];
 
         let upgrades = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
@@ -246,6 +252,7 @@ function process(upgrade, commandName, message) {
                     .replace(/\r/g, '\n'); // switches back all remaining \r with \n
 
                 let embed = new Discord.MessageEmbed()
+                    .setTitle(gHelper.toTitleCase(towerName))
                     .setDescription(info)
                     .addField(
                         'cost',

@@ -578,9 +578,7 @@ function helpMessage(message) {
                 ' • For every other field listed, you may only search one per command. For example, searching two usernames will not work.\n' +
                 " • You may not search version and map at the same time. This is because alt map completions don't specify version completed.\n" +
                 ' • Including the version number will exclude alt map completions for the above reason.\n' +
-                ' • There is currently no way to see all maps that a 2TC was completed on :/\n' +
-                ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n' +
-                ' • There is currently no way to scroll through multi-page results. Just make the command more specific.\n'
+                ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n'
         )
         .setColor(palered);
 

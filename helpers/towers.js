@@ -1,7 +1,10 @@
 const gHelper = require('../helpers/general.js');
 
 function towerUpgradeToTower(towerUpgrade) {
-    return Aliases.getCanonicalForm(towerUpgrade).slice(0, -4);
+    if (!towerUpgrade) return null;
+    canonical = Aliases.getCanonicalForm(towerUpgrade)
+    if (!canonical) return null;
+    return canonical.slice(0, -4);
 }
 
 function allTowerUpgrades() {

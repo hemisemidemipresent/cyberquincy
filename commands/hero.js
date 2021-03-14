@@ -91,6 +91,7 @@ const aliases = [
         'eti',
         'drone',
     ],
+    ['sauda', 'saud', 'sau']
 ];
 const links = [
     'https://pastebin.com/raw/ASpHNduS',
@@ -104,11 +105,13 @@ const links = [
     'https://pastebin.com/raw/WnsgkWRc',
     'https://pastebin.com/raw/amw39T29',
     'https://pastebin.com/raw/UxN2Wx1F',
+    'https://pastebin.com/raw/8E2TSndk',
 ];
 module.exports = {
     name: '<hero>',
     aliases: aliases.flat(),
     async execute(message, args, commandName) {
+        if (args.length == 0 || args[0] == 'help') return message.channel.send('`q!<hero> <level>`')
         let name = findName(commandName);
         if (!name) this.errorMessage('invalid hero name');
         if (!args) this.errorMessage('Please specify a level for the hero');
@@ -139,22 +142,6 @@ module.exports = {
 
             return message.channel.send(oneUpgrade(sentences, level));
         });
-        /*.then((msg) => {
-            msg.react('❌');
-            let filter = (reaction, user) => {
-                return (
-                    reaction.emoji.name === '❌' &&
-                    user.id === message.author.id
-                );
-            };
-            const collector = msg.createReactionCollector(filter, {
-                time: 20000,
-            });
-
-            collector.on('collect', () => {
-                msg.delete();
-            });
-        });*/
     },
     errorMessage(err) {
         return new Discord.MessageEmbed()

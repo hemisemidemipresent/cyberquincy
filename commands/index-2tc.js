@@ -176,6 +176,8 @@ async function displayCombos(message, combos, parsed, allCombos) {
             })
         );
 
+        let numOGCompletions = 0;
+
         for (var i = 0; i < combos.length; i++) {
             for (map in combos[i].MAPS) {
                 combo = flattenCombo(clonedeep(combos[i]), map);
@@ -196,16 +198,20 @@ async function displayCombos(message, combos, parsed, allCombos) {
                         key = `TOWER_${otherTowerNum}`;
                     }
 
-                    colData[fieldHeader].push(combo[key]);
+                    bold = combo.OG && !excludeOG(parsed) ? '**' : '';
+
+                    colData[fieldHeader].push(`${bold}${combo[key]}${bold}`);
                 }
+
+                if (combo.OG) numOGCompletions += 1;
             }
         }
 
-        return await displayOneOrMultiplePages(message, parsed, combos, colData);
+        return await displayOneOrMultiplePages(message, parsed, combos, colData, numOGCompletions);
     }
 }
 
-async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colData) {
+async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colData, numOGCompletions) {
     REACTIONS = ['⬅️', '➡️'];
     MAX_NUM_ROWS = 15;
     const numRows = colData[Object.keys(colData)[0]].length;
@@ -240,6 +246,15 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colDa
                     data.join('\n'),
                     true
                 );
+            }
+
+            if (!excludeOG(parsed)) {
+                if (numOGCompletions == 1) {
+                    challengeEmbed.setFooter(`---\nOG completion bolded`);
+                }
+                if (numOGCompletions > 1) {
+                    challengeEmbed.setFooter(`---\n${numOGCompletions} OG completions bolded`);
+                }
             }
 
             try {
@@ -450,13 +465,17 @@ function filterCombos(filteredCombos, parsed) {
     }
 
     // Unless searching by map or person, the command user wants OG completions and not alt map spam
-    if (parsed.version || (!parsed.person && !parsed.map)) {
+    if (excludeOG(parsed)) {
         function ogFilter(_, completion) {
             return completion.OG;
         }
         filteredCombos = filterByCompletion(ogFilter, filteredCombos);
     }
     return filteredCombos;
+}
+
+function excludeOG(parsed) {
+    return parsed.version || (!parsed.person && !parsed.map)
 }
 
 function parseProvidedDefinedTowers(parsed) {

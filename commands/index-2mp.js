@@ -505,7 +505,11 @@ function embedPages(message, title, columns, numOGCompletions) {
 
     async function displayCurrentPage(msg) {
         const startCombo = pg * MAX_VALUES_LIST_LENGTH_2MP + 1;
-        const endCombo = (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP
+        const endCombo = Math.min(
+            (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP, 
+            columns[Object.keys(columns)[0]].length
+        );
+
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
             .setColor(paleblue)

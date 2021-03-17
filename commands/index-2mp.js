@@ -380,6 +380,8 @@ async function display2MPFilterAll(
     linkColumn = [];
     mapColumn = [];
 
+    let numOGCompletions = 0;
+
     // Retrieve og- and alt-map notes from each tower row
     for (var row = startRow; row <= endRow; row++) {
         towerCell = sheet.getCellByA1(`${COLS.TOWER}${row}`);
@@ -395,10 +397,13 @@ async function display2MPFilterAll(
                 continue;
             }
 
-            towerColumn.push(towerCell.value);
-            mapColumn.push(note.MAP);
-            linkColumn.push(note.LINK);
-            personColumn.push(note.PERSON);
+            bold = note.OG ? '**' : '';
+            if (note.OG) numOGCompletions += 1;
+
+            towerColumn.push(`${bold}${towerCell.value}${bold}`);
+            mapColumn.push(`${bold}${note.MAP}${bold}`);
+            linkColumn.push(`${bold}${note.LINK}${bold}`);
+            personColumn.push(`${bold}${note.PERSON}${bold}`);
         }
     }
 
@@ -424,7 +429,7 @@ async function display2MPFilterAll(
 
     // Paginate if there are too many combos to display at once
     if (columns.TOWER.length > MAX_VALUES_LIST_LENGTH_2MP) {
-        return embedPages(message, title, columns);
+        return embedPages(message, title, columns, numOGCompletions);
     }
 
     let challengeEmbed = new Discord.MessageEmbed()
@@ -441,11 +446,18 @@ async function display2MPFilterAll(
         );
     }
 
+    if (numOGCompletions == 1) {
+        challengeEmbed.setFooter(`---\nOG completion bolded`);
+    }
+    if (numOGCompletions > 1) {
+        challengeEmbed.setFooter(`---\n${numOGCompletions} OG completions bolded`);
+    }
+
     return message.channel.send(challengeEmbed);
 }
 
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
-function embedPages(message, title, columns) {
+function embedPages(message, title, columns, numOGCompletions) {
     columnChunks = {};
     for (columnHeader in columns) {
         columnChunks[columnHeader] = gHelper.chunk(
@@ -492,11 +504,16 @@ function embedPages(message, title, columns) {
     }
 
     async function displayCurrentPage(msg) {
+        const startCombo = pg * MAX_VALUES_LIST_LENGTH_2MP + 1;
+        const endCombo = Math.min(
+            (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP, 
+            columns[Object.keys(columns)[0]].length
+        );
+
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
             .setColor(paleblue)
-            .addField('#Combos', columns.LINK.length)
-            .setFooter(`${pg + 1}/${numPages}`);
+            .addField('Combos', `**${startCombo}-${endCombo}** of ${columns.LINK.length}`)
 
         for (columnHeader in columnChunks) {
             challengeEmbed.addField(
@@ -504,6 +521,13 @@ function embedPages(message, title, columns) {
                 columnChunks[columnHeader][pg].join('\n'),
                 true
             );
+        }
+
+        if (numOGCompletions == 1) {
+            challengeEmbed.setFooter(`---\nOG completion bolded`);
+        }
+        if (numOGCompletions > 1) {
+            challengeEmbed.setFooter(`---\n${numOGCompletions} total OG completions bolded`);
         }
 
         if (msg) {
@@ -559,7 +583,8 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
             return relevantNote;
         }, {});
 
-    numCombosCompleted = Object.keys(relevantNotes).length;
+    const numCombosCompleted = Object.keys(relevantNotes).length;
+    const ogCompletionPresent = Object.values(relevantNotes).some(v => v.OG)
 
     if (numCombosCompleted > 0) {
         // Format 3 columns: map, person, link
@@ -567,9 +592,11 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         personColumn = [];
         linkColumn = [];
         for (const mapAbbr in relevantNotes) {
-            mapColumn.push(Aliases.indexAbbreviationToMap(mapAbbr));
-            personColumn.push(relevantNotes[mapAbbr].PERSON);
-            linkColumn.push(relevantNotes[mapAbbr].LINK);
+            bold = relevantNotes[mapAbbr].OG ? '**' : '';
+
+            mapColumn.push(`${bold}${Aliases.indexAbbreviationToMap(mapAbbr)}${bold}`);
+            personColumn.push(`${bold}${relevantNotes[mapAbbr].PERSON}${bold}`);
+            linkColumn.push(`${bold}${relevantNotes[mapAbbr].LINK}${bold}`);
         }
         mapColumn = mapColumn.join('\n');
         personColumn = personColumn.join('\n');
@@ -629,6 +656,9 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         if (mapsLeft.length > 0) {
             challengeEmbed.addField('Maps Left', mapsLeft.join(', '));
         }
+
+        if (ogCompletionPresent)
+            challengeEmbed.setFooter('----\nOG completion bolded')
 
         return message.channel.send(challengeEmbed);
     } else {
@@ -727,6 +757,7 @@ function parsePreloadedMapNotesWithOG(row) {
     notes[ogMapAbbr] = {
         PERSON: ogPerson,
         LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
+        OG: true
     };
     // Add rest of maps found in notes
     return {

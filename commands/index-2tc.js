@@ -104,7 +104,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
     if (combos.length == 0) {
         return message.channel.send(
             new Discord.MessageEmbed()
-                .setTitle(`No combos found`)
+                .setTitle(embedTitleNoCombos(parsed))
                 .setColor(palered)
         );
     }
@@ -395,6 +395,22 @@ function embedTitle(parsed, combos) {
     else title += multipleCombos ? 'All Combos ' : 'Only Combo ';
     if (parsed.person) title += `by ${sampleCombo.MAPS[map].PERSON} `;
     if (parsed.map) title += `on ${map} `;
+    for (var i = 0; i < towers.length; i++) {
+        tower = towers[i];
+        if (i == 0) title += 'with ';
+        else title += 'and ';
+        title += `${Towers.formatTower(tower)} `;
+    }
+    if (parsed.version) title += `in v${parsed.version} `;
+    return title.slice(0, title.length - 1);
+}
+
+function embedTitleNoCombos(parsed) {
+    towers = parsedProvidedTowers(parsed);
+
+    title = 'No Combos found ';
+    if (parsed.person) title += `by "${parsed.person}" `;
+    if (parsed.map) title += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
     for (var i = 0; i < towers.length; i++) {
         tower = towers[i];
         if (i == 0) title += 'with ';

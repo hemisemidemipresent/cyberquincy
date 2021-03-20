@@ -16,6 +16,8 @@ const SUBMISSIONS_CHANNEL = IS_TESTING
     ? TEST_SUBMISSIONS_CHANNEL
     : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
 
+const emojis = require('../jsons/emojis.json');
+
 async function submit(message, args) {
     // Determines whether to follow up a submission preview with reaction collection and submission to another channel
     const liveMode =
@@ -86,7 +88,17 @@ async function submit(message, args) {
                 );
                 const submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(
                     submission
-                );
+                ).then((msg) => {
+                    let random = Math.floor(Math.random() * 250);
+                    if (random % 10 == 0) {
+                        msg.react('🥛');
+                    } else if (random == 0) {
+                        let goldmilk = client.guilds.cache
+                            .get(614111055890612225)
+                            .emojis.cache.get(821676576525647882);
+                        msg.react(goldmilk);
+                    }
+                });
                 const submittedLink = `https://discord.com/channels/${message.channel.guild.id}/${SUBMISSIONS_CHANNEL}/${submissionMessage.id}`;
                 message.channel.send(`Submitted: ${submittedLink}`);
             })();

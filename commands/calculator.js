@@ -161,7 +161,9 @@ function calc(message, args, json) {
                     )
                 ) // At MOST 1 decimal place
                 .setDescription(`\`${expression}\``)
-                .setFooter('NOTE: q!calc uses topper prices, which are still stuck on v21. Fix coming at some point.')
+                .setFooter(
+                    'NOTE: q!calc uses topper prices, which are still stuck on v21. Fix coming at some point.'
+                )
                 .setColor(colours['cyber'])
         );
     }

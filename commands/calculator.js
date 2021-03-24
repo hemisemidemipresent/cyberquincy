@@ -6,7 +6,9 @@ const LexicalParser = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round2.json');
 const RoundParser = require('../parser/round-parser');
 
-function calc(message, args, json) {
+const costs = require('../jsons/costs.json');
+
+function calc(message, args) {
     if (args.length == 0 || args.includes('help')) {
         return helpMessage(message);
     }
@@ -113,7 +115,7 @@ function calc(message, args, json) {
                     break;
                 default:
                     // Convert symbolic terms to bloons-ingame-monetary values
-                    stack.push(parseAndValueToken(c, json));
+                    stack.push(parseAndValueToken(c));
             }
         });
     } catch (e) {
@@ -161,9 +163,6 @@ function calc(message, args, json) {
                     )
                 ) // At MOST 1 decimal place
                 .setDescription(`\`${expression}\``)
-                .setFooter(
-                    'NOTE: q!calc uses topper prices, which are still stuck on v21. Fix coming at some point.'
-                )
                 .setColor(colours['cyber'])
         );
     }
@@ -181,7 +180,7 @@ function isTowerUpgradeCrosspath(t) {
     );
 }
 
-function costOfTowerUpgradeCrosspath(t, json) {
+function costOfTowerUpgradeCrosspath(t) {
     // Checking for tower aliases of the form wlp, gz, etc.
     if (!['!', '#'].some((sep) => t.includes(sep))) {
         // Alias tokens like wlp as wiz!050
@@ -192,22 +191,20 @@ function costOfTowerUpgradeCrosspath(t, json) {
 
     jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-');
     if (jsonTowerName === 'druid-monkey') jsonTowerName = 'druid';
-    if (jsonTowerName === 'dartling-gunner')
-        throw new UnrecognizedTokenError('Dartling not yet supported');
     if (jsonTowerName === 'engineer') jsonTowerName = 'engineer-monkey';
 
     let mediumCost = null;
     if (t.includes('#') || upgrades == '000') {
         // Total cost
-        mediumCost = Towers.totalTowerUpgradeCrosspathCost(
-            json,
+        mediumCost = Towers.totalTowerUpgradeCrosspathCostNew(
+            costs,
             jsonTowerName,
             upgrades
         );
     } else if (t.includes('!')) {
         // Individual upgrade cost
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
-        mediumCost = json[`${jsonTowerName}`].upgrades[path - 1][tier - 1].cost;
+        mediumCost = costs[jsonTowerName].upgrades[`${path}`][tier - 1];
     } else {
         throw 'No # or ! found in tower cost calc';
     }
@@ -243,11 +240,13 @@ function costOfHero(hero) {
             return 865;
         case 'quincy':
             return 585;
+        case 'sauda':
+            return 650;
     }
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
-function parseAndValueToken(t, json) {
+function parseAndValueToken(t) {
     if (!isNaN(t)) return Number(t);
     else if (
         (round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round)
@@ -255,13 +254,13 @@ function parseAndValueToken(t, json) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (isTowerUpgradeCrosspath(t)) {
         // Catches tower upgrades with crosspaths like wiz#401
-        return costOfTowerUpgradeCrosspath(t, json);
+        return costOfTowerUpgradeCrosspath(t);
     } else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(t))) {
         // Catches all other tower ugprades
-        return costOfTowerUpgradeCrosspath(t, json);
+        return costOfTowerUpgradeCrosspath(t);
     } else if (Towers.isTower(Aliases.getCanonicalForm(t))) {
         // Catches base tower names/aliases
-        return costOfTowerUpgradeCrosspath(`${t}#000`, json);
+        return costOfTowerUpgradeCrosspath(`${t}#000`);
     } else if (Aliases.isHero(Aliases.getCanonicalForm(t))) {
         return costOfHero(t);
     } else {
@@ -310,9 +309,8 @@ module.exports = {
     name: 'calculator',
     aliases: ['calc', 'cash-calc', 'cc'],
     rawArgs: true,
-    dependencies: ['towerJSON'],
     execute(message, args) {
-        calc(message, args, towerJSON);
+        calc(message, args);
     },
     helpMessage,
 };

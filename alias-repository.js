@@ -312,6 +312,21 @@ class AliasRepository extends Array {
         ].map((m) => this.getCanonicalForm(m.toLowerCase()));
     }
 
+    allMapsFromMapDifficulty(mapDifficulty) {
+        switch(mapDifficulty) {
+            case 'beginner':
+                return this.beginnerMaps();
+            case 'intermediate':
+                return this.intermediateMaps();
+            case 'advanced':
+                return this.advancedMaps();
+            case 'expert':
+                return this.expertMaps();
+            default:
+                throw `${mapDifficulty} is not a map difficulty`
+        }
+    }
+
     beginnerMaps() {
         return this.getAliasGroupsFromSameFileAs('LOGS').map(
             (ag) => ag.canonical

@@ -2,6 +2,7 @@
     "logs": {
         "ver": 1,
         "len": 53.1,
+        "lenStr": 53.1,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "2%",
@@ -12,6 +13,7 @@
     "cubism": {
         "ver": 1,
         "len": 43.3,
+        "lenStr": 43.3,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "9%",
@@ -21,7 +23,8 @@
     },
     "candy_falls": {
         "ver": 17,
-        "len": "42.4",
+        "len": 42.4,
+        "lenStr": "42.4",
         "obj": 0,
         "Cos": "0",
         "wa%": "13%",
@@ -32,6 +35,7 @@
     "carved": {
         "ver": 13,
         "len": 39.3,
+        "lenStr": 39.3,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "3%",
@@ -42,6 +46,7 @@
     "in_the_loop": {
         "ver": 1,
         "len": 39.1,
+        "lenStr": 39.1,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "2%",
@@ -52,6 +57,7 @@
     "tree_stump": {
         "ver": 1,
         "len": 38.9,
+        "lenStr": 38.9,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
@@ -62,6 +68,7 @@
     "hedge": {
         "ver": 1,
         "len": 38.5,
+        "lenStr": 38.5,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
@@ -72,6 +79,7 @@
     "four_circles": {
         "ver": 1,
         "len": 36.4,
+        "lenStr": 36.4,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "3%",
@@ -82,6 +90,7 @@
     "winter_park": {
         "ver": 14,
         "len": 36.1,
+        "lenStr": 36.1,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "2%",
@@ -92,6 +101,7 @@
     "frozen_over": {
         "ver": 5,
         "len": 35.5,
+        "lenStr": 35.5,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "7%",
@@ -102,6 +112,7 @@
     "park_path": {
         "ver": 11,
         "len": 35.4,
+        "lenStr": 35.4,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "5%",
@@ -111,7 +122,8 @@
     },
     "lotus_island": {
         "ver": 19,
-        "len": "32.3",
+        "len": 32.3,
+        "lenStr": "32.3",
         "obj": 0,
         "Cos": "0",
         "wa%": "41%",
@@ -122,6 +134,7 @@
     "alpine_run": {
         "ver": 7,
         "len": 32.2,
+        "lenStr": 32.2,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
@@ -132,6 +145,7 @@
     "town_center": {
         "ver": 1,
         "len": 30.5,
+        "lenStr": 30.5,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "7%",
@@ -142,6 +156,7 @@
     "monkey_meadow": {
         "ver": 1,
         "len": 29.2,
+        "lenStr": 29.2,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
@@ -152,6 +167,7 @@
     "end_of_the_road": {
         "ver": 1,
         "len": 26.5,
+        "lenStr": 26.5,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "3%",
@@ -162,6 +178,7 @@
     "moon_landing": {
         "ver": 6,
         "len": 35.5,
+        "lenStr": 35.5,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
@@ -172,6 +189,7 @@
     "cracked": {
         "ver": 1,
         "len": 33.2,
+        "lenStr": 33.2,
         "obj": 1,
         "Cos": "1000",
         "wa%": "0/2%",
@@ -182,6 +200,7 @@
     "kartsndarts": {
         "ver": 8,
         "len": 32.7,
+        "lenStr": 32.7,
         "obj": 2,
         "Cos": "1000",
         "wa%": "-",
@@ -191,7 +210,8 @@
     },
     "firing_range": {
         "ver": 2,
-        "len": "29.9 Left\n29.7 Right",
+        "len": [29.9, 29.7],
+        "lenStr": "29.9 Left\n29.7 Right",
         "obj": 1,
         "Cos": "1000",
         "wa%": "2%",
@@ -201,7 +221,8 @@
     },
     "adora's_temple": {
         "ver": 14,
-        "len": "30.2 Horizontal\n27.8 Vertical",
+        "len": [30.2, 27.8],
+        "lenStr": "30.2 Horizontal\n27.8 Vertical",
         "obj": 0,
         "Cos": "N/A",
         "wa%": "4%",
@@ -212,6 +233,7 @@
     "downstream": {
         "ver": 4,
         "len": 26.4,
+        "lenStr": 26.4,
         "obj": 2,
         "Cos": "700",
         "wa%": "12%",
@@ -222,6 +244,7 @@
     "streambed": {
         "ver": 1,
         "len": 27.1,
+        "lenStr": 27.1,
         "obj": 1,
         "Cos": "1000",
         "wa%": "6%",
@@ -231,7 +254,8 @@
     },
     "spring_spring": {
         "ver": 10,
-        "len": "24.8 Top\n24.7 Bottom",
+        "len": [24.8, 24.7],
+        "lenStr": "24.8 Top\n24.7 Bottom",
         "obj": 0,
         "Cos": "N/A",
         "wa%": "45%",
@@ -242,6 +266,7 @@
     "spice_islands": {
         "ver": 1,
         "len": 23.8,
+        "lenStr": 23.8,
         "obj": 1,
         "Cos": "1000",
         "wa%": "77%",
@@ -251,7 +276,8 @@
     },
     "bazaar": {
         "ver": 18,
-        "len": "20.4",
+        "len": 20.4,
+        "lenStr": "20.4",
         "obj": 4,
         "Cos": "2000",
         "wa%": "12%",
@@ -262,6 +288,7 @@
     "haunted": {
         "ver": 5,
         "len": 19.7,
+        "lenStr": 19.7,
         "obj": 2,
         "Cos": "1000",
         "wa%": "4%",
@@ -271,7 +298,8 @@
     },
     "chutes": {
         "ver": 1,
-        "len": "16.2 Left\n16.1 Right",
+        "len": [16.2, 16.1],
+        "lenStr": "16.2 Left\n16.1 Right",
         "obj": 2,
         "Cos": "700",
         "wa%": "4%",
@@ -281,7 +309,8 @@
     },
     "rake": {
         "ver": 1,
-        "len": "15.7 Left\n16.2 Top",
+        "len": [15.7, 16.2],
+        "lenStr": "15.7 Left\n16.2 Top",
         "obj": 1,
         "Cos": "1000",
         "wa%": "4%",
@@ -292,6 +321,7 @@
     "cornfield": {
         "ver": 1,
         "len": 24.2,
+        "lenStr": 24.2,
         "obj": 13,
         "Cos": "9300",
         "wa%": "-",
@@ -301,7 +331,8 @@
     },
     "spillway": {
         "ver": 12,
-        "len": "22.3 Top Left\n23.6 Top Right\n23.6 Bottom Left\n22.5 Bottom Right",
+        "len": [22.3, 23.6, 23.6, 22.5],
+        "lenStr": "22.3 Top Left\n23.6 Top Right\n23.6 Bottom Left\n22.5 Bottom Right",
         "obj": 4,
         "Cos": "8000",
         "wa%": "6%",
@@ -311,7 +342,8 @@
     },
     "high_finance": {
         "ver": 3,
-        "len": "27.6 S-Shape\n15.6 U-Shape",
+        "len": [27.6, 15.6],
+        "lenStr": "27.6 S-Shape\n15.6 U-Shape",
         "obj": 15,
         "Cos": "12550",
         "wa%": "2%",
@@ -322,6 +354,7 @@
     "another_brick": {
         "ver": 1,
         "len": 19.6,
+        "lenStr": 19.6,
         "obj": 2,
         "Cos": "2000",
         "wa%": "5%",
@@ -332,6 +365,7 @@
     "off_the_coast": {
         "ver": 1,
         "len": 19.3,
+        "lenStr": 19.3,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "37%",
@@ -342,6 +376,7 @@
     "peninsula": {
         "ver": 7,
         "len": 14.2,
+        "lenStr": 14.2,
         "obj": 3,
         "Cos": "1500",
         "wa%": "52%",
@@ -351,7 +386,8 @@
     },
     "pat's_pond": {
         "ver": 9,
-        "len": "13.8 Left\n14.4 Right",
+        "len": [13.8, 14.4],
+        "lenStr": "13.8 Left\n14.4 Right",
         "obj": 4,
         "Cos": "2000",
         "wa%": "32% / 38%",
@@ -361,7 +397,8 @@
     },
     "geared": {
         "ver": 16,
-        "len": "13.9",
+        "len": 13.9,
+        "lenStr": "13.9",
         "obj": 0,
         "Cos": "0",
         "wa%": "N/A",
@@ -372,6 +409,7 @@
     "underground": {
         "ver": 1,
         "len": 13,
+        "lenStr": 13,
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
@@ -381,7 +419,8 @@
     },
     "cargo": {
         "ver": 11,
-        "len": "13.9 Bloon Path\n11.7 Blimp Path",
+        "len": [13.9, 11.7],
+        "lenStr": "13.9 Bloon Path\n11.7 Blimp Path",
         "obj": 2,
         "Cos": "1000",
         "wa%": "36%",
@@ -391,7 +430,8 @@
     },
     "mesa": {
         "ver": 20,
-        "len": "14.5 Left\n11.1 Right",
+        "len": [14.5, 11.1],
+        "lenStr": "14.5 Left\n11.1 Right",
         "obj": 3,
         "Cos": "1500",
         "wa%": "N/A",
@@ -401,7 +441,8 @@
     },
     "infernal": {
         "ver": 15,
-        "len": "19.6 Top\n19.1 Bottom",
+        "len": [19.6, 19.1],
+        "lenStr": "19.6 Top\n19.1 Bottom",
         "obj": 0,
         "Cos": "0",
         "wa%": "2%",
@@ -411,7 +452,8 @@
     },
     "workshop": {
         "ver": 12,
-        "len": "Bloon Path:6.8\n10.2 with motor\n18.4 with extensions\n27.7 with motor and extensions\nMoab Path:5.7\n8.5 with motor\n11.6 with extensions\n17.3 with motor and extensions",
+        "len": [6.8, 5.7],
+        "lenStr": "Bloon Path:6.8\n10.2 with motor\n18.4 with extensions\n27.7 with motor and extensions\nMoab Path:5.7\n8.5 with motor\n11.6 with extensions\n17.3 with motor and extensions",
         "obj": 2,
         "Cos": "$0 - $?",
         "wa%": "-",
@@ -421,7 +463,8 @@
     },
     "quad": {
         "ver": 6,
-        "len": "Top:\n9.2 with both overhangs\n10.1 with first overhang\n10.4 with second overhang\n11.3 without overhangs\n\nBottom:\n9.2 with both overhangs\n10.3 with first overhang\n10.1 with second overhang\n11.3 without overhangs\n\nLeft:\n9.3 with both overhangs\n10.8 with first overhang\n10.7 with second overhang\n12.1 without overhangs\n\nRight:\n9.7 with both overhangs\n10.9 with first overhang\n11.1 with second overhang\n12.3 without overhangs",
+        "len": [9.2, 9.2, 9.3, 9.7],
+        "lenStr": "Top:\n9.2 with both overhangs\n10.1 with first overhang\n10.4 with second overhang\n11.3 without overhangs\n\nBottom:\n9.2 with both overhangs\n10.3 with first overhang\n10.1 with second overhang\n11.3 without overhangs\n\nLeft:\n9.3 with both overhangs\n10.8 with first overhang\n10.7 with second overhang\n12.1 without overhangs\n\nRight:\n9.7 with both overhangs\n10.9 with first overhang\n11.1 with second overhang\n12.3 without overhangs",
         "obj": 4,
         "Cos": "6000",
         "wa%": "5%",
@@ -431,7 +474,8 @@
     },
     "muddy_puddles": {
         "ver": 1,
-        "len": "9.7 Left, Left Middle, Right Middle\n9.8 Right",
+        "len": [9.7, 9.7, 9.7, 9.8],
+        "lenStr": "9.7 Left, Left Middle, Right Middle\n9.8 Right",
         "obj": 0,
         "Cos": "N/A",
         "wa%": "7%",
@@ -441,7 +485,8 @@
     },
     "#ouch": {
         "ver": 1,
-        "len": "8.0 Vertical\n10.2 Horizontal",
+        "len": [8.0, 10.2],
+        "lenStr": "8.0 Vertical\n10.2 Horizontal",
         "obj": 1,
         "Cos": "1000",
         "wa%": "4% / 0%\n",
@@ -452,6 +497,7 @@
     "bloody_puddles": {
         "ver": 13,
         "len": 9.1,
+        "lenStr": 9.1,
         "obj": 2,
         "Cos": "1500",
         "wa%": "8%",
@@ -461,7 +507,8 @@
     },
     "dark_castle": {
         "ver": 5,
-        "len": "Top:\n7.5 with trees\n10 without trees\n\nMiddle (x2):\n7.1 with trees\n9.1 without trees\n\nBottom:\n7.2 with trees",
+        "len": [7.5, 7.1, 7.1, 7.2],
+        "lenStr": "Top:\n7.5 with trees\n10 without trees\n\nMiddle (x2):\n7.1 with trees\n9.1 without trees\n\nBottom:\n7.2 with trees",
         "obj": 4,
         "Cos": "4000",
         "wa%": "11%",
@@ -471,7 +518,8 @@
     },
     "flooded_valley": {
         "ver": 18,
-        "len": "8.9",
+        "len": 8.9,
+        "lenStr": "8.9",
         "obj": 1,
         "Cos": "5000",
         "wa%": "39%",
@@ -481,7 +529,8 @@
     },
     "encrypted": {
         "ver": 21,
-        "len": "28.8",
+        "len": 28.8,
+        "lenStr": "28.8",
         "obj": 4,
         "Cos": "1000",
         "wa%": "2%",
@@ -491,7 +540,8 @@
     },
     "x_factor": {
         "ver": 22,
-        "len": "18.1",
+        "len": 18.1,
+        "lenStr": "18.1",
         "obj": 1,
         "Cos": "2000",
         "wa%": "2%",
@@ -501,7 +551,8 @@
     },
     "skates": {
         "ver": 22,
-        "len": "37.9",
+        "len": 37.9,
+        "lenStr": "37.9",
         "obj": 1,
         "Cos": "500",
         "wa%": "11% / 14%",

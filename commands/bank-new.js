@@ -3,16 +3,19 @@ const ReactionChain = require('../helpers/reactor/reaction_chain');
 const SingleTextParser = require('../helpers/reactor/single_text_parser');
 const LimitedStringSetValuesParser = require('../parser/limited-string-set-values-parser');
 const NaturalNumberParser = require('../parser/natural-number-parser');
+const NumberParser = require('../parser/number-parser');
 module.exports = {
     name: 'bank2',
     execute(message, args) {
         ReactionChain.process(
             message,
-            (message, results) => log(message, results),
+            (message, results) => main(message, results),
 
             new SingleTextParser(
-                new NaturalNumberParser(3, 5),
-                'second path upgrade (3/4/5)'
+                new NumberParser(3, 5),
+                'middlePath',
+                undefined,
+                'Please type the second path upgrade (3/4/5) number in the chat'
             ),
             new SingleTextParser(
                 new LimitedStringSetValuesParser(
@@ -20,7 +23,9 @@ module.exports = {
                     ['true', 'false'],
                     ['true', 'false']
                 ),
-                'whether you have Flat Pack Buildings monkey knowledge (true/false)'
+                'flatPackBuildings',
+                undefined,
+                'Please type the whether you have Flat Pack Buildings monkey knowledge (true/false).'
             ),
             new SingleTextParser(
                 new LimitedStringSetValuesParser(
@@ -28,11 +33,27 @@ module.exports = {
                     ['true', 'false'],
                     ['true', 'false']
                 ),
-                'whether you have Bigger Banks monkey knowledge (true/false)'
+                'biggerBanks',
+                undefined,
+                'Please type the whether you have Bigger Banks monkey knowledge (true/false).'
             ),
             new SingleTextParser(
-                new NaturalNumberParser(0, 20),
-                'Benjamin level'
+                new NumberParser(0, 20),
+                'benjaminLevel',
+                undefined,
+                'Please type the Benjamin level number in the chat'
+            ),
+            new SingleTextParser(
+                new NumberParser(0, 2),
+                'crosspath',
+                undefined,
+                'Please select the crosspath by typing the number:\n0 - 03+x farm\n1 - 13+0 farm\n2 - 23+0 farm'
+            ),
+            new SingleTextParser(
+                new NumberParser(1, 5),
+                'difficulty',
+                undefined,
+                'Please type the corresponding number to select the difficulty\n1 - easy\n2 - medium\n3 - hard\n4 - impoppable\n5 - half cash'
             )
         );
     },
@@ -40,14 +61,40 @@ module.exports = {
 function tookTooLong(message) {
     return message.channel.send(`You took too long to answer!`);
 }
-function isValidHack(hackPercent) {
-    if (hackPercent == 0 || hackPercent == 5 || hackPercent == 12) {
-        return true;
+
+function main(message, res) {
+    /**
+     example of res:
+     {
+        middlePath_number: 3,
+        flatPackBuildings_limited_string_set_value: 'true',
+        biggerBanks_limited_string_set_value: 'true',
+        benjaminLevel_number: undefined,
+        crosspath_number: undefined,
+        difficulty_number: 5
     }
+    undefined = 0
+     */
+    console.log(res);
+    let embed = calculate(
+        res.middlePath_number,
+        parseBool(res.flatPackBuildings_limited_string_set_value),
+        parseBool(res.biggerBanks_limited_string_set_value),
+        getBenjaminBankHack(res),
+        res.crosspath_number,
+        res.difficulty_number
+    );
+    message.channel.send(embed);
+}
+function parseBool(str) {
+    if (str == 'true') return true;
     return false;
 }
-function log(message, res) {
-    console.log(res);
+function getBenjaminBankHack(level) {
+    if (!level) return 0;
+    if (level < 5) return 0;
+    if (level < 9) return 5;
+    return 12;
 }
 function calculate(
     bankTier,
@@ -57,6 +104,8 @@ function calculate(
     crosspathNum,
     difficultyId
 ) {
+    if (!crosspathNum) crosspathNum = 0;
+    hackPercent = hackPercent / 100;
     let maxCapacity = 0;
     if (bankTier == 3) {
         maxCapacity += 7000;
@@ -75,8 +124,8 @@ function calculate(
         [96175, 112650, 122205, 135780, 122205],
     ];
 
-    let onexx = [425, 500, 540, 625, 540];
-    let twoxx = [510, 1100, 1190, 1345, 1190];
+    let onexx = [425, 500, 540, 625, 540]; // costs of 1xx farm
+    let twoxx = [510, 1100, 1190, 1345, 1190]; // costs of 2xx farm
     if (flatPackBuilding) {
         buildingCost -= fpb[difficultyId - 1];
     }
@@ -88,6 +137,7 @@ function calculate(
         buildingCost += twoxx[difficultyId - 1];
     }
     //time to actually calculate this crap lol
+    console.log(230 + 40 * parseInt(crosspathNum), 1 + parseInt(hackPercent));
     let incomePerRound =
         (230 + 40 * parseInt(crosspathNum)) * (1 + parseInt(hackPercent));
     let arr = [incomePerRound * (1.15 + hackPercent)];

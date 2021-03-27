@@ -1,10 +1,12 @@
 const { cyber } = require('../jsons/colours.json');
+const gHelper = require('../helpers/general.js');
 const map = require('../jsons/map.json');
+const OrParser = require('../parser/or-parser')
 const MapParser = require('../parser/map-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser');
 const { discord } = require('../aliases/misc.json');
 
-function displayMapInfo(name) {
+function displayMapInfo(message, name) {
     let m = map[`${name}`];
     let thum = m.thu;
     if (!thum) {
@@ -33,9 +35,33 @@ function displayMapInfo(name) {
     message.channel.send(mapEmbed);
 }
 
-function displayMapDifficultyRBS(mapDifficulty) {
+function displayMapDifficultyRBS(message, mapDifficulty) {
     const maps = Aliases.allMapsFromMapDifficulty(mapDifficulty);
+    const mapsLengths = maps.map(m => {
+        // Get all 1 or more path lengths into a flat array
+        const mapLengths = [map[m].len].flat()
+        // Return the average of the path lengths
+        return mapLengths.reduce((a,b) => a + b, 0) / mapLengths.length;
+    });
+
+    mapToRbsSorted = gHelper.zip([maps, mapsLengths]).sort(function(a, b) {
+        return b[1] - a[1];
+    })
+
+    let infoEmbed = new Discord.MessageEmbed()
+        .setTitle(`${gHelper.toTitleCase(mapDifficulty)} Maps Info`)
+        .setAuthor('Cyber Quincy');
     
+    mapToRbsSorted.forEach(([map, mapLength]) => {
+        infoEmbed.addField(
+            Aliases.toIndexNormalForm(map), 
+            mapLength.toFixed(1)
+        );
+    })
+
+    infoEmbed.setFooter('average of all paths with no obstacles removed and no map mechanics')
+
+    return message.channel.send(infoEmbed)
 }
 
 function errorMessage(message, parsingErrors) {
@@ -68,9 +94,9 @@ module.exports = {
             return errorMessage(message, parsed.parsingErrors);
         }
         if(parsed.map) {
-            return displayMapInfo(parsed.map);
+            return displayMapInfo(message, parsed.map);
         } else if(parsed.map_difficulty) {
-            return displayMapDifficultyRBS(parsed.map_difficulty);
+            return displayMapDifficultyRBS(message, parsed.map_difficulty);
         }
     },
 };

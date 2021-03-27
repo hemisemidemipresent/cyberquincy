@@ -50,7 +50,8 @@ function displayMapDifficultyRBS(message, mapDifficulty) {
 
     let infoEmbed = new Discord.MessageEmbed()
         .setTitle(`${gHelper.toTitleCase(mapDifficulty)} Maps Info`)
-        .setAuthor('Cyber Quincy');
+        .setAuthor('Cyber Quincy')
+        .setColor(cyber);
     
     mapToRbsSorted.forEach(([map, mapLength]) => {
         infoEmbed.addField(
@@ -62,6 +63,22 @@ function displayMapDifficultyRBS(message, mapDifficulty) {
     infoEmbed.setFooter('average of all paths with no obstacles removed and no map mechanics')
 
     return message.channel.send(infoEmbed)
+}
+
+function helpMessage(message) {
+    let helpEmbed = new Discord.MessageEmbed()
+        .setTitle('`q!map` HELP')
+        .addField(
+            '`q!map <map>`',
+            'Map Info'
+        )
+        .addField(
+            '`q!map <map_difficulty>`',
+            'RBSs (sorted) of all maps of the given map difficulty'
+        )
+        .setColor(cyber);
+    
+    return message.channel.send(helpEmbed)
 }
 
 function errorMessage(message, parsingErrors) {
@@ -82,6 +99,9 @@ module.exports = {
     aliases: ['m'],
     errorMessage,
     execute(message, args) {
+        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+            return helpMessage(message);
+        }
         let arr = [args[0]];
         const parsed = CommandParser.parse(
             arr, 

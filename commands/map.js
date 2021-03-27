@@ -19,7 +19,7 @@ function displayMapInfo(message, name) {
         .setAuthor('Cyber Quincy')
         .setDescription(`Here is your info for ${name}`)
         .setThumbnail(`${thum}`)
-        .addField('Map length(RBS)', `${m.len}`, true)
+        .addField('Map length(RBS)', `${m.lenStr}`, true)
         .addField('Object count:', `${m.obj}`, true)
         .addField('Total $ to clear out all the objects', `$${m.Cos}`, true)
         .addField('Version added:', `${m.ver}`, true)

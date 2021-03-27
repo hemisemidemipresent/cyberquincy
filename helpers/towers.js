@@ -2,7 +2,7 @@ const gHelper = require('../helpers/general.js');
 
 function towerUpgradeToTower(towerUpgrade) {
     if (!towerUpgrade) return null;
-    canonical = Aliases.getCanonicalForm(towerUpgrade)
+    canonical = Aliases.getCanonicalForm(towerUpgrade);
     if (!canonical) return null;
     return canonical.slice(0, -4);
 }
@@ -109,7 +109,7 @@ function isWaterTowerUpgrade(towerUpgrade) {
         Aliases.isHero(towerUpgrade)
             ? towerUpgrade
             : Towers.towerUpgradeToTower(towerUpgrade)
-    )
+    );
 }
 
 function towerUpgradeToIndexNormalForm(upgrade) {
@@ -247,6 +247,7 @@ function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
     }
     return baseCost + pathCost + crossPathCost;
 }
+
 function totalTowerUpgradeCrosspathCostNew(json, towerName, upgrade) {
     // uses different json format found in ../jsons/costs.json
 

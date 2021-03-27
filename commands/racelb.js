@@ -14,7 +14,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'B_B_B_Boat_kmfnqeev';
+        let raceID = 'kmpqiykw';
         const parsed = CommandParser.parse(
             args,
 

@@ -559,5 +559,16 @@
         "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/770094137713885204/786122872242438174/Screenshot_1410.png",
         "e": "1/1"
+    },
+    "balance":{
+        "ver": 24,
+        "len": 24.5,
+        "lenStr": "24.9",
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "?%",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/699781597515481159/825371040040747068/Screenshot_20210327_220919.jpg",
+        "e": "2/2"
     }
 }

@@ -838,5 +838,15 @@
             "d"
         ],
         "answers": "d"
+    },
+    {
+        "question": "What is adora?",
+        "optns": [
+            "the most op thing in the game",
+            "a very powerful hero",
+            "one who everyone loves",
+            "flaming hot trash"
+        ],
+        "answers": "d"
     }
 ]

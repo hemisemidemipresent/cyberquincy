@@ -91,7 +91,7 @@ const aliases = [
         'eti',
         'drone',
     ],
-    ['sauda', 'saud', 'sau']
+    ['sauda', 'saud', 'sau', '🥛']
 ];
 const links = [
     'https://pastebin.com/raw/ASpHNduS',

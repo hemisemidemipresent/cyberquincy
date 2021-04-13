@@ -107,12 +107,7 @@ async function handleCommand(message) {
                     return message.channel.send('This command is disabled');
                 }
             }
-            if (command.dependencies.includes('towerJSON')) {
-                let towerJSON = require('./1/config.json')['towerJSON'];
-                if (!towerJSON) {
-                    return message.channel.send('This command is disabled');
-                }
-            }
+
             if (command.dependencies.includes('reddit')) {
                 let reddit = require('./1/config.json')['reddit'];
                 if (!reddit) {

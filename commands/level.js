@@ -4,7 +4,7 @@ module.exports = {
     aliases: ['xp', 'rank', 'getxp'],
 
     async execute(message, args) {
-        return message.channel.send('Work In progress');
+        return message.channel.send('Temporarily abandoned');
         if (!args[0]) {
             const user = DiscordUsers.getDiscordUserFromId(message.author.id);
             return module.exports.displayStats(user, message);

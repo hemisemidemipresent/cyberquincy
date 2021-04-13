@@ -130,7 +130,7 @@ module.exports = {
 
     async execute(message, args, commandName) {
         parsed = CommandParser.parse(
-            args, 
+            args,
             new OptionalParser(new UpgradeSetParser())
         );
 
@@ -235,9 +235,13 @@ function process(upgrade, commandName, message) {
             towerName,
             upgrade
         );
-        let cost = upgrade == '000' ?
-                        totalCost : 
-                        tower.upgrades[`${path}`][tier - 1];
+        let hardTotalCost = Towers.totalTowerUpgradeCrosspathCostNewHard(
+            costs,
+            towerName,
+            upgrade
+        );
+        let cost =
+            upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
 
         let upgrades = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 

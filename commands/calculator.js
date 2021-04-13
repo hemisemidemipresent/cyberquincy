@@ -102,7 +102,9 @@ function calc(message, args) {
     };
 
     try {
+        i = 0;
         parsed.forEach(function (c) {
+            i++;
             switch (c) {
                 case '+':
                 case '-':
@@ -115,7 +117,7 @@ function calc(message, args) {
                     break;
                 default:
                     // Convert symbolic terms to bloons-ingame-monetary values
-                    stack.push(parseAndValueToken(c));
+                    stack.push(parseAndValueToken(c, i));
             }
         });
     } catch (e) {
@@ -124,7 +126,6 @@ function calc(message, args) {
             return message.channel.send(
                 new Discord.MessageEmbed()
                     .setTitle(e.message)
-                    .setDescription(`\`${expression}\``)
                     .setColor(colours['red'])
             );
         } else throw e;
@@ -246,7 +247,7 @@ function costOfHero(hero) {
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
-function parseAndValueToken(t) {
+function parseAndValueToken(t, i) {
     if (!isNaN(t)) return Number(t);
     else if (
         (round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round)
@@ -264,7 +265,9 @@ function parseAndValueToken(t) {
     } else if (Aliases.isHero(Aliases.getCanonicalForm(t))) {
         return costOfHero(t);
     } else {
-        throw new UnrecognizedTokenError(`Unrecognized token \`${t}\``);
+        throw new UnrecognizedTokenError(
+            `Unrecognized token of length ${t.length} at position ${i}`
+        );
     }
 }
 

@@ -224,7 +224,7 @@ function formatTower(tower) {
         throw `Tower ${tower} is not within allotted tower/hero category`;
     }
 }
-
+/*
 function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
     let [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
     let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgradeSet);
@@ -246,7 +246,7 @@ function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
         );
     }
     return baseCost + pathCost + crossPathCost;
-}
+}*/
 
 function totalTowerUpgradeCrosspathCostNew(json, towerName, upgrade) {
     // uses different json format found in ../jsons/costs.json
@@ -267,6 +267,25 @@ function totalTowerUpgradeCrosspathCostNew(json, towerName, upgrade) {
         totalCost += tower.upgrades[`${crossPath}`][i];
     }
     return totalCost;
+}
+function totalTowerUpgradeCrosspathCostNewHard(json, towerName, upgrade) {
+    // uses different json format found in ../jsons/costs.json
+
+    let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
+    let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgrade);
+    let tower = json[`${towerName}`];
+
+    let totalCost = tower.cost; // base cost of tower
+
+    for (let i = 0; i < tier; i++) {
+        // main path of tower
+        totalCost += Math.round(tower.upgrades[`${path}`][i] * 1.08);
+    }
+
+    for (let i = 0; i < crossTier; i++) {
+        // cross path of tower
+        totalCost += Math.round(tower.upgrades[`${crossPath}`][i] * 1.08);
+    }
 }
 function upgradeCost(tower, path, tier) {
     let totalCost = 0;
@@ -292,7 +311,7 @@ module.exports = {
     crossPathTierFromUpgradeSet,
     isValidUpgradeSet,
     formatTower,
-    totalTowerUpgradeCrosspathCost,
     totalTowerUpgradeCrosspathCostNew,
+    totalTowerUpgradeCrosspathCostNewHard,
     upgradeCost,
 };

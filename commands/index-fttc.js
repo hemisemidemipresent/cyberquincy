@@ -99,9 +99,38 @@ async function execute(message, args) {
         return errorMessage(message, parsed.parsingErrors);
     }
 
-    results = await parseFTTC();
-    
+    let allResults = await parseFTTC();
+    let filteredResults = filterResults(allResults, parsed); 
+    displayResults(message, filteredResults);
     return true;
+}
+
+function displayResults(message, filteredResults) {
+    console.log(filteredResults)
+}
+
+function filterResults(allCombos, parsed) {
+    results = allCombos
+
+     if (parsed.map) {
+         results = results.filter(combo => combo.MAP == parsed.map)
+     } else if (parsed.natural_number) {
+        results = results.filter(combo => combo.TOWERS.length === parsed.natural_number)
+    }
+
+    if (parsed.person) {
+        results = results.filter(combo => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person)
+    }
+
+    if (parsed.tower) {
+        results = results.filter(combo => combo.TOWERS.includes(parsed.tower))
+    }
+
+    if (parsed.natural_number && !parsed.person) {
+        results = results.filter(combo => combo.OG)
+    }
+
+    return results;
 }
 
 function helpMessage(message) {
@@ -176,7 +205,9 @@ async function getRowStandardData(entryRow, colset) {
 
     for (var i = 0; i < colset['TOWERS'].length; i++) {
         values.TOWERS.push(
-            sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
+            Aliases.getCanonicalForm(
+                sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
+            )
         );
     }
 
@@ -184,6 +215,8 @@ async function getRowStandardData(entryRow, colset) {
         if (key == 'TOWERS') continue;
         values[key] = sheet.getCellByA1(`${colset[key]}${entryRow}`).value;
     }
+
+    values.MAP = values.MAP.toLowerCase();
 
     // Special formatting for date (get formattedValue instead)
     dateCell = sheet.getCellByA1(`${colset.DATE}${entryRow}`);
@@ -221,9 +254,10 @@ async function getRowAltData(entryRow, colset) {
                     .map((t) => t.replace(/ /g, ''));
                 
                 return {
-                    TOWERS: towers.split(','),
+                    TOWERS: towers.split(',').map(t => Aliases.getCanonicalForm(t)),
                     PERSON: person,
                     LINK: `[${bitly}](http://${bitly})`,
+                    MAP: mapCell.value.toLowerCase(),
                     OG: false,
                 };
             })

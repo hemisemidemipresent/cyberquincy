@@ -53,6 +53,15 @@ const COLS = {
         LINK: 'P',
         CURRENT: 'Q',
     },
+    FIVE: {
+        MAP: 'B',
+        TOWERS: ['D', 'F', 'H', 'J', 'L'],
+        VERSION: 'N',
+        DATE: 'O',
+        PERSON: 'P',
+        LINK: 'R',
+        CURRENT: 'S',
+    }
 };
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
@@ -91,7 +100,7 @@ async function execute(message, args) {
     }
 
     results = await parseFTTC();
-    console.log(results)
+    
     return true;
 }
 
@@ -132,7 +141,7 @@ async function parseFTTC() {
     );
 
     let colset;
-    let combos = {};
+    let combos = [];
 
     // Search for the row in all "possible" rows
     for (let row = MIN_ROW; row <= Math.min(MAX_ROW, sheet.rowCount); row++) {
@@ -147,11 +156,10 @@ async function parseFTTC() {
         var mapCandidate = sheet.getCellByA1(`${colset.MAP}${row}`).value;
         if (!mapCandidate) continue;
         
-        combos = {
-            ...combos,
-            ...await getRowData(row, colset)
-        }
+        combos = combos.concat(await getRowData(row, colset))
     }
+
+    return combos;
 }
 
 async function getRowData(entryRow, colset) {
@@ -193,8 +201,6 @@ async function getRowStandardData(entryRow, colset) {
         values.CURRENT = WHITE_HEAVY_CHECK_MARK;
     }
 
-    console.log(values)
-
     return values;
 }
 
@@ -224,7 +230,6 @@ async function getRowAltData(entryRow, colset) {
 }
 
 function sectionHeader(mapRow, sheet) {
-    console.log(mapRow)
     // Looks for "One|Two|...|Five Towers" in the closest-above header cell
     headerRegex = new RegExp(
         `(${Object.keys(COLS).join('|')}) Tower Types?`,
@@ -239,8 +244,6 @@ function sectionHeader(mapRow, sheet) {
     // Header rows take up 2 rows. If you check the bottom row, the data value is null.
     if (candidateHeaderCell.value) {
         const match = candidateHeaderCell.value.match(headerRegex);
-
-        console.log(match)
 
         // Get the column set from the number of towers string in the header cell
         if (match) {

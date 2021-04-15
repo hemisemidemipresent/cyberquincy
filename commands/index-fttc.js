@@ -20,47 +20,47 @@ const COLS = {
     ONE: {
         MAP: 'B',
         TOWERS: ['D'],
+        VERSION: 'E',
+        DATE: 'F',
+        PERSON: 'G',
+        LINK: 'I',
+        CURRENT: 'J',
+    },
+    TWO: {
+        MAP: 'B',
+        TOWERS: ['D', 'E'],
         VERSION: 'F',
         DATE: 'G',
         PERSON: 'H',
         LINK: 'J',
         CURRENT: 'K',
     },
-    TWO: {
+    THREE: {
         MAP: 'B',
-        TOWERS: ['D', 'F'],
+        TOWERS: ['D', 'E', 'F'],
+        VERSION: 'G',
+        DATE: 'H',
+        PERSON: 'I',
+        LINK: 'K',
+        CURRENT: 'L',
+    },
+    FOUR: {
+        MAP: 'B',
+        TOWERS: ['D', 'E', 'F', 'G'],
         VERSION: 'H',
         DATE: 'I',
         PERSON: 'J',
         LINK: 'L',
         CURRENT: 'M',
     },
-    THREE: {
-        MAP: 'B',
-        TOWERS: ['D', 'F', 'H'],
-        VERSION: 'J',
-        DATE: 'K',
-        PERSON: 'L',
-        LINK: 'N',
-        CURRENT: 'O',
-    },
-    FOUR: {
-        MAP: 'B',
-        TOWERS: ['D', 'F', 'H', 'J'],
-        VERSION: 'L',
-        DATE: 'M',
-        PERSON: 'N',
-        LINK: 'P',
-        CURRENT: 'Q',
-    },
     FIVE: {
         MAP: 'B',
-        TOWERS: ['D', 'F', 'H', 'J', 'L'],
-        VERSION: 'N',
-        DATE: 'O',
-        PERSON: 'P',
-        LINK: 'R',
-        CURRENT: 'S',
+        TOWERS: ['D', 'E', 'F', 'G', 'H'],
+        VERSION: 'I',
+        DATE: 'J',
+        PERSON: 'K',
+        LINK: 'M',
+        CURRENT: 'N',
     }
 };
 
@@ -101,11 +101,12 @@ async function execute(message, args) {
 
     let allResults = await parseFTTC();
     let filteredResults = filterResults(allResults, parsed); 
-    displayResults(message, filteredResults);
+    displayResults(message, parsed, filteredResults);
     return true;
 }
 
-function displayResults(message, filteredResults) {
+function displayResults(message, parsed, filteredResults) {
+
     console.log(filteredResults)
 }
 

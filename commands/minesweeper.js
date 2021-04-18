@@ -7,9 +7,9 @@ module.exports = {
 
     execute(message, args) {
         let minesweeper = new Minesweeper({
-            rows: 5,
+            rows: 6,
             columns: 10,
-            mines: 10,
+            mines: 8,
             revealFirstCell: true,
         });
 

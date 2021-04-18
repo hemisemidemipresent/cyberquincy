@@ -127,6 +127,9 @@ function calc(message, args) {
                 new Discord.MessageEmbed()
                     .setTitle(e.message)
                     .setColor(colours['red'])
+                    .setFooter(
+                        'due to manipulation, your full input will not be shown'
+                    )
             );
         } else throw e;
     }
@@ -265,8 +268,16 @@ function parseAndValueToken(t, i) {
     } else if (Aliases.isHero(Aliases.getCanonicalForm(t))) {
         return costOfHero(t);
     } else {
+        s = '';
+        if (t.length == 1) {
+            s = t;
+        } else if (t.length == 2) {
+            s = t.charAt(0) + t.charAt(1);
+        } else {
+            s = t.charAt(0) + t.charAt(1) + '...';
+        }
         throw new UnrecognizedTokenError(
-            `Unrecognized token of length ${t.length} at position ${i}`
+            `at input ${i}: Unrecognized token "${s}" of length ${t.length}`
         );
     }
 }

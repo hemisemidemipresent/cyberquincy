@@ -626,5 +626,16 @@
         "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/705588555929616484/719546639194259476/310.png",
         "e": "2/2"
+    },
+    "ravine": {
+        "ver": 23,
+        "len": 10.6,
+        "lenStr": "23",
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "?%",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/699781597515481159/833343569778835477/1000.png",
+        "e": "2/4"
     }
 }

@@ -5,6 +5,7 @@ module.exports = {
     name: 'mk',
     rawArgs: true,
     execute(message, args) {
+        return console.log('Abandoned');
         /*
             In the game, there are KnowledgeSetModels (primary, military, etc...) which are an array of KnowledgeTierModels (investmentRequired is constant) which are an array of KnowledgeLevelModels (monkeymoney cost is constant and the level they are positioned is also constant) which are an array of KnowledgeModels
         */

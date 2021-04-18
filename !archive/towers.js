@@ -1,3 +1,8 @@
+/**
+ * NOTE: THIS IS OUTDATED AND DEF DOESNT WORK.
+ * THIS IS ONLY FOR COPY PASTING CODE
+ */
+
 const { cyber } = require('../jsons/colours.json');
 
 const OptionalParser = require('../parser/optional-parser');

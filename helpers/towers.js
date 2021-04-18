@@ -268,24 +268,28 @@ function totalTowerUpgradeCrosspathCostNew(json, towerName, upgrade) {
     }
     return totalCost;
 }
+function hard(cost) {
+    return Math.round((cost * 1.08) / 5) * 5;
+}
 function totalTowerUpgradeCrosspathCostNewHard(json, towerName, upgrade) {
     // uses different json format found in ../jsons/costs.json
 
     let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
     let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgrade);
     let tower = json[`${towerName}`];
-
-    let totalCost = tower.cost; // base cost of tower
+    console.log(path, tier);
+    let totalCost = hard(tower.cost); // base cost of tower
 
     for (let i = 0; i < tier; i++) {
         // main path of tower
-        totalCost += Math.round(tower.upgrades[`${path}`][i] * 1.08);
+        totalCost += hard(tower.upgrades[`${path}`][i]);
     }
 
     for (let i = 0; i < crossTier; i++) {
         // cross path of tower
-        totalCost += Math.round(tower.upgrades[`${crossPath}`][i] * 1.08);
+        totalCost += hard(tower.upgrades[`${crossPath}`][i]);
     }
+    return totalCost;
 }
 function upgradeCost(tower, path, tier) {
     let totalCost = 0;

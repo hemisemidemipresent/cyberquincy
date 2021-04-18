@@ -265,7 +265,7 @@ function process(upgrade, commandName, message) {
                     )
                     .addField(
                         'total cost',
-                        `${totalCost} - medium\n${hard(totalCost)} - hard`,
+                        `${totalCost} - medium\n${hardTotalCost} - hard`,
                         true
                     )
                     .setFooter(

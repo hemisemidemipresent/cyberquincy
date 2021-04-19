@@ -91,9 +91,15 @@ async function execute(message, args) {
                 )
             ),
             new OptionalParser(new PersonParser()),
-            new OptionalParser(new TowerParser())
+            // Search up to 2 towers at a time
+            new OptionalParser(new TowerParser()),
+            new OptionalParser(new TowerParser()),  
         )
     );
+
+    if (parsed.towers.length > parsed.natural_number) {
+        parsed.addError(`You searched more towers (${parsed.towers.length}) than the number of towers you specified (${parsed.natural_number})`);
+    }
 
     if (parsed.hasErrors()) {
         return errorMessage(message, parsed.parsingErrors);
@@ -130,6 +136,7 @@ const TOWER_ABBREVIATIONS = {
 }
 
 function displayResults(message, parsed, filteredResults) {
+    let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK']
 
     console.log(filteredResults)
 }

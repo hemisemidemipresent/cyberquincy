@@ -105,6 +105,30 @@ async function execute(message, args) {
     return true;
 }
 
+const TOWER_ABBREVIATIONS = {
+    dart_monkey: 'drt',
+    boomerang_monkey: 'boo',
+    bomb_shooter: 'bmb',
+    tack_shooter: 'tck',
+    ice_monkey: 'ice',
+    glue_gunner: 'glu',
+    sniper_monkey: 'sni',
+    monkey_sub: 'sub',
+    monkey_buccaneer: 'buc',
+    monkey_ace: 'ace',
+    heli_pilot: 'hel',
+    mortar_monkey: 'mor',
+    dartling_gunner: 'dlg',
+    wizard_monkey: 'wiz',
+    super_monkey: 'sup',
+    ninja_monkey: 'nin',
+    alchemist: 'alc',
+    druid_monkey: 'dru',
+    spike_factory: 'spk',
+    monkey_village: 'vil',
+    engineer: 'eng',
+}
+
 function displayResults(message, parsed, filteredResults) {
 
     console.log(filteredResults)

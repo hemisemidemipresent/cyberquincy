@@ -97,7 +97,7 @@ async function execute(message, args) {
         )
     );
 
-    if (parsed.towers.length > parsed.natural_number) {
+    if (parsed.towers && parsed.towers.length > parsed.natural_number) {
         parsed.addError(`You searched more towers (${parsed.towers.length}) than the number of towers you specified (${parsed.natural_number})`);
     }
 
@@ -138,7 +138,51 @@ const TOWER_ABBREVIATIONS = {
 function displayResults(message, parsed, filteredResults) {
     let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK']
 
+    if (parsed.person) {
+        displayCols = displayCols.filter(col => col != 'PERSON')
+    }
+
+    if (parsed.map) {
+        displayCols = displayCols.filter(col => col != 'MAP')
+    }
+    
+    if (displayCols.length === 4) {
+        displayCols = displayCols.filter(col => col != 'PERSON')
+    }
+
+    displayValues = displayCols.map(col => {
+        if (col == 'TOWERS') {
+            const boldedAbbreviatedTowers = filteredResults.map(combo => combo[col].map(tower => {
+                const towerCanonical = Aliases.getCanonicalForm(tower);
+                const towerAbbreviation = TOWER_ABBREVIATIONS[towerCanonical].toUpperCase()
+                return parsed.towers && parsed.towers.includes(towerCanonical) ? 
+                    `**${towerAbbreviation}**` : 
+                    towerAbbreviation;
+            }))
+            return boldedAbbreviatedTowers.map(comboTowers => comboTowers.join(" | ")).join("\n")
+        } else {
+            return filteredResults.map(combo => combo[col]).join("\n");
+        }
+    })
+
+    
+    console.log(displayValues);
+
     console.log(filteredResults)
+
+    let challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(`Title`)
+            .setColor(paleorange);
+    
+    for (var c = 0; c < displayCols.length; c++) {
+        challengeEmbed.addField(
+            gHelper.toTitleCase(displayCols[c]),
+            displayValues[c],
+            true
+        )
+    }
+
+    return message.channel.send(challengeEmbed);
 }
 
 function filterResults(allCombos, parsed) {
@@ -154,8 +198,9 @@ function filterResults(allCombos, parsed) {
         results = results.filter(combo => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person)
     }
 
-    if (parsed.tower) {
-        results = results.filter(combo => combo.TOWERS.includes(parsed.tower))
+    if (parsed.towers) {
+        console.log(results);
+        results = results.filter(combo => parsed.towers.every(specifiedTower => combo.TOWERS.includes(specifiedTower)))
     }
 
     if (parsed.natural_number && !parsed.person) {
@@ -167,15 +212,33 @@ function filterResults(allCombos, parsed) {
 
 function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
-        .setTitle('`q!fttc` HELP')
+        .setTitle('`q!fttc` HELP — The BTD6 Index Fewest Tower Type CHIMPS')
         .addField(
             '`q!fttc <map>`',
-            'The BTD6 Index Fewest Tower Type CHIMPS entry for the queried map\n`q!fttc fo`'
+            'All FTTCs for the queried map' + 
+                '\n`q!fttc frozenover`'
         )
         .addField(
             '`q!fttc <n>`',
-            'All FTTCs with <n> towers'
+            'All FTTCs with _n_ towers' +
+                '\n`q!fttc 3`'
         )
+        .addField(
+            '`q!fttc <tower_1> {tower_2}`',
+            'All FTTCs with (all) specified tower(s)' +
+                '\n`q!fttc ace ninja`'
+        )
+        .addField(
+            '`q!fttc <person>`',
+            'All FTTCs by a given person' +
+                '\n`q!fttc u#usernamegoeshere`'
+        )
+        .addField(
+            'Notes',
+            ' • You can combine query fields in any combination, except you may only search `<n>` OR `<map>` in a given command\n' +
+            ' • Towers are abbreviated so they should fit in the column even if there are 5\n'
+        )
+
         .setColor(paleorange);
 
     return message.channel.send(helpEmbed);
@@ -228,7 +291,7 @@ async function getRowData(entryRow, colset) {
         await getRowStandardData(entryRow, colset)
     ).concat(
         await getRowAltData(entryRow, colset)
-    );
+    ).filter(e => e);
 }
 
 async function getRowStandardData(entryRow, colset) {
@@ -274,7 +337,7 @@ async function getRowAltData(entryRow, colset) {
     mapCell = sheet.getCellByA1(`${colset.MAP}${entryRow}`);
 
     notes = mapCell.note
-    if (!notes) return {};
+    if (!notes) return null;
 
     return notes
             .trim()

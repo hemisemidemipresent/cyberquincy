@@ -113,8 +113,16 @@ async function execute(message, args) {
     }
 
     let allResults = await parseFTTC();
-    let filteredResults = filterResults(allResults, parsed); 
-    displayOneOrMultiplePages(message, parsed, filteredResults);
+    let filteredResults = filterResults(allResults, parsed);
+    if (filteredResults.length == 0) {
+        const noCombosEmbed = new Discord.MessageEmbed()
+            .setTitle(titleNoCombos(parsed))
+            .setColor(paleorange)
+                                
+        return message.channel.send(noCombosEmbed);
+    } else {
+        displayOneOrMultiplePages(message, parsed, filteredResults);
+    }
     return true;
 }
 
@@ -284,6 +292,16 @@ function title(parsed, combos) {
     if (parsed.person) t += `by ${combos[0].PERSON} `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `
     if (parsed.map) t += `on ${combos[0].MAP} `
+    if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `
+    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `
+    return t.slice(0, t.length - 1);
+}
+
+function titleNoCombos(parsed) {
+    t = 'No FTTC Combos Found '
+    if (parsed.person) t += `by "${parsed.person}" `;
+    if (parsed.natural_number) t += `with ${parsed.natural_number} towers `
+    if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `
     if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `
     if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `
     return t.slice(0, t.length - 1);

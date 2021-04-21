@@ -1,5 +1,5 @@
 {
-    "xyz": ["heli", "heli-pilot", "helicopter", "helipilot"],
+    "xyz": ["heli", "heli-pilot", "helicopter", "helipilot", "hel"],
 
     "300": ["razor_rotors", "rr"],
     "400": ["apache_dartship", "adart", "dartship", "dship"],

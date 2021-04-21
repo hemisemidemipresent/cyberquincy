@@ -61,7 +61,17 @@ const COLS = {
         PERSON: 'K',
         LINK: 'M',
         CURRENT: 'N',
-    }
+    },
+    'SIX+': {
+        MAP: 'B',
+        '#': 'D',
+        TOWERS: 'E',
+        VERSION: 'J',
+        DATE: 'K',
+        PERSON: 'L',
+        LINK: 'N',
+        CURRENT: 'O',
+    } 
 };
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
@@ -115,7 +125,7 @@ const TOWER_ABBREVIATIONS = {
     dart_monkey: 'drt',
     boomerang_monkey: 'boo',
     bomb_shooter: 'bmb',
-    tack_shooter: 'tck',
+    tack_shooter: 'tac',
     ice_monkey: 'ice',
     glue_gunner: 'glu',
     sniper_monkey: 'sni',
@@ -171,7 +181,7 @@ function displayResults(message, parsed, filteredResults) {
     console.log(filteredResults)
 
     let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(`Title`)
+            .setTitle(title(parsed, filteredResults))
             .setColor(paleorange);
     
     for (var c = 0; c < displayCols.length; c++) {
@@ -183,6 +193,16 @@ function displayResults(message, parsed, filteredResults) {
     }
 
     return message.channel.send(challengeEmbed);
+}
+
+function title(parsed, combos) {
+    t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo '
+    if (parsed.person) t += `by ${combos[0].PERSON} `;
+    if (parsed.natural_number) t += `with ${parsed.natural_number} towers `
+    if (parsed.map) t += `on ${combos[0].MAP} `
+    if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `
+    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `
+    return t.slice(0, t.length - 1);
 }
 
 function filterResults(allCombos, parsed) {
@@ -261,7 +281,7 @@ async function parseFTTC() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
 
     await sheet.loadCells(
-        `${COLS['FOUR'].MAP}${MIN_ROW}:${COLS['FOUR'].CURRENT}${MAX_ROW}`
+        `${COLS['SIX+'].MAP}${MIN_ROW}:${COLS['SIX+'].CURRENT}${MAX_ROW}`
     );
 
     let colset;
@@ -298,12 +318,22 @@ async function getRowStandardData(entryRow, colset) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
     let values = {TOWERS: []}
 
-    for (var i = 0; i < colset['TOWERS'].length; i++) {
-        values.TOWERS.push(
-            Aliases.getCanonicalForm(
-                sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
-            )
-        );
+    // Six+
+    console.log(Object.keys(colset), entryRow)
+    if (Object.keys(colset).includes('#')) {
+        values.TOWERS = sheet
+            .getCellByA1(`**${colset['TOWERS']}${entryRow}**`)
+            .value.split(",").map(tower => {
+                return Aliases.getCanonicalForm(tower.trim())
+            })
+    } else {
+        for (var i = 0; i < colset['TOWERS'].length; i++) {
+            values.TOWERS.push(
+                Aliases.getCanonicalForm(
+                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
+                )
+            );
+        }
     }
 
     for (key in colset) {
@@ -349,7 +379,7 @@ async function getRowAltData(entryRow, colset) {
                     .map((t) => t.replace(/ /g, ''));
                 
                 return {
-                    TOWERS: towers.split(',').map(t => Aliases.getCanonicalForm(t)),
+                    TOWERS: towers.split(',').map(t => Aliases.getCanonicalForm(t.trim())),
                     PERSON: person,
                     LINK: `[${bitly}](http://${bitly})`,
                     MAP: mapCell.value.toLowerCase(),
@@ -359,9 +389,9 @@ async function getRowAltData(entryRow, colset) {
 }
 
 function sectionHeader(mapRow, sheet) {
-    // Looks for "One|Two|...|Five Towers" in the closest-above header cell
+    // Looks for "One|Two|...|Five|Six+ Towers" in the closest-above header cell
     headerRegex = new RegExp(
-        `(${Object.keys(COLS).join('|')}) Tower Types?`,
+        `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`,
         'i'
     );
 

@@ -226,9 +226,21 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
                     `**${towerAbbreviation}**` : 
                     towerAbbreviation;
             }))
-            return boldedAbbreviatedTowers.map(comboTowers => comboTowers.join(" | "))
+            return boldedAbbreviatedTowers.map((comboTowers, i) => {
+                let value = comboTowers.join(" | ")
+                if (combos[i].OG && !shouldExcludeOG(parsed)) {
+                    value = `**${value}**`
+                }
+                return value;
+            })
         } else {
-            return combos.map(combo => combo[col])
+            return combos.map(combo => {
+                value = combo[col]
+                if (combo.OG && !shouldExcludeOG(parsed)) {
+                    value = `**${value}**`
+                }
+                return value;
+            })
         }
     })
 

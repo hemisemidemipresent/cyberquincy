@@ -117,7 +117,7 @@ async function execute(message, args) {
 
     let allResults = await parseFTTC();
     let filteredResults = filterResults(allResults, parsed); 
-    displayResults(message, parsed, filteredResults);
+    displayOneOrMultiplePages(message, parsed, filteredResults);
     return true;
 }
 
@@ -196,6 +196,128 @@ function displayResults(message, parsed, filteredResults) {
     return message.channel.send(challengeEmbed);
 }
 
+async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
+    REACTIONS = ['⬅️', '➡️'];
+    MAX_NUM_ROWS = 15;
+    const numRows = combos.length;
+    let leftIndex = 0;
+    let rightIndex = Math.min(MAX_NUM_ROWS, numRows) - 1;
+
+    let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK']
+
+    if (parsed.person) {
+        displayCols = displayCols.filter(col => col != 'PERSON')
+    }
+
+    if (parsed.map) {
+        displayCols = displayCols.filter(col => col != 'MAP')
+    }
+    
+    if (displayCols.length === 4) {
+        displayCols = displayCols.filter(col => col != 'PERSON')
+    }
+
+    const displayValues = displayCols.map(col => {
+        if (col == 'TOWERS') {
+            const boldedAbbreviatedTowers = combos.map(combo => combo[col].map(tower => {
+                const towerCanonical = Aliases.getCanonicalForm(tower);
+                const towerAbbreviation = TOWER_ABBREVIATIONS[towerCanonical].toUpperCase()
+                return parsed.towers && parsed.towers.includes(towerCanonical) ? 
+                    `**${towerAbbreviation}**` : 
+                    towerAbbreviation;
+            }))
+            return boldedAbbreviatedTowers.map(comboTowers => comboTowers.join(" | "))
+        } else {
+            return combos.map(combo => combo[col])
+        }
+    })
+
+    const numOGCompletions = combos.filter(combo => combo.OG).length;
+
+    async function displayPages(direction = 1) {
+        // The number of rows to be displayed is variable depending on the characters in each link
+        // Try 15 and decrement every time it doesn't work.
+        for (
+            maxNumRowsDisplayed = MAX_NUM_ROWS;
+            maxNumRowsDisplayed > 0;
+            maxNumRowsDisplayed--
+        ) {
+            let challengeEmbed = new Discord.MessageEmbed()
+                .setTitle(title(parsed, combos))
+                .setColor(paleorange)
+
+            challengeEmbed.addField(
+                '# Combos',
+                `**${leftIndex+1}**-**${rightIndex+1}** of ${numRows}`
+            );
+
+            for (var c = 0; c < displayCols.length; c++) {
+                challengeEmbed.addField(
+                    gHelper.toTitleCase(displayCols[c]),
+                    displayValues[c].slice(leftIndex, rightIndex + 1).join('\n'),
+                    true
+                )
+            }
+
+            if (shouldExcludeOG(parsed)) {
+                challengeEmbed.setFooter(`---\nNon-OG completions excluded`)
+            } else {
+                if (numOGCompletions == 1) {
+                    challengeEmbed.setFooter(`---\nOG completion bolded`);
+                }
+                if (numOGCompletions > 1) {
+                    challengeEmbed.setFooter(`---\n${numOGCompletions} OG completions bolded`);
+                }
+            }
+
+            try {
+                let msg = await userQueryMessage.channel.send(challengeEmbed);
+                if (maxNumRowsDisplayed < numRows) {
+                    return reactLoop(msg);
+                }
+                return msg;
+            } catch (e) {} // Retry by decrementing maxNumRowsDisplayed
+
+            if (direction > 0) rightIndex--;
+            if (direction < 0) leftIndex++;
+        }
+    }
+
+    // Gets the reaction to the pagination message by the command author
+    // and respond by turning the page in the correction direction
+    function reactLoop(botMessage) {
+        // Lays out predefined reactions
+        for (var i = 0; i < REACTIONS.length; i++) {
+            botMessage.react(REACTIONS[i]);
+        }
+    
+        // Read author reaction (time limit specified below in milliseconds)
+        // and respond with appropriate action
+        botMessage.createReactionCollector(
+            (reaction, user) =>
+                user.id === userQueryMessage.author.id &&
+                REACTIONS.includes(reaction.emoji.name),
+            { time: 20000 }
+        ).once('collect', (reaction) => {
+            switch (reaction.emoji.name) {
+                case '⬅️':
+                    rightIndex = (leftIndex - 1 + numRows) % numRows;
+                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                    if (leftIndex < 0) leftIndex = 0;
+                    displayPages(-1);
+                    break;
+                case '➡️':
+                    leftIndex = (rightIndex + 1) % numRows;
+                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                    if (rightIndex >= numRows) rightIndex = numRows - 1;
+                    displayPages(1);
+                    break;
+            }
+        });
+    }
+    displayPages(1)
+}
+
 function title(parsed, combos) {
     t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo '
     if (parsed.person) t += `by ${combos[0].PERSON} `;
@@ -224,11 +346,15 @@ function filterResults(allCombos, parsed) {
         results = results.filter(combo => parsed.towers.every(specifiedTower => combo.TOWERS.includes(specifiedTower)))
     }
 
-    if (parsed.natural_number && !parsed.person) {
+    if (shouldExcludeOG(parsed)) {
         results = results.filter(combo => combo.OG)
     }
 
     return results;
+}
+
+function shouldExcludeOG(parsed) {
+    return parsed.natural_number && !parsed.person
 }
 
 function helpMessage(message) {

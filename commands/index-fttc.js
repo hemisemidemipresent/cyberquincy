@@ -209,7 +209,7 @@ function filterResults(allCombos, parsed) {
     results = allCombos
 
      if (parsed.map) {
-         results = results.filter(combo => combo.MAP == parsed.map)
+         results = results.filter(combo => Aliases.toAliasNormalForm(combo.MAP) == parsed.map)
      } else if (parsed.natural_number) {
         results = results.filter(combo => combo.TOWERS.length === parsed.natural_number)
     }
@@ -341,7 +341,7 @@ async function getRowStandardData(entryRow, colset) {
         values[key] = sheet.getCellByA1(`${colset[key]}${entryRow}`).value;
     }
 
-    values.MAP = values.MAP.toLowerCase();
+    values.MAP = values.MAP;
 
     // Special formatting for date (get formattedValue instead)
     dateCell = sheet.getCellByA1(`${colset.DATE}${entryRow}`);
@@ -382,7 +382,7 @@ async function getRowAltData(entryRow, colset) {
                     TOWERS: towers.split(',').map(t => Aliases.getCanonicalForm(t.trim())),
                     PERSON: person,
                     LINK: `[${bitly}](http://${bitly})`,
-                    MAP: mapCell.value.toLowerCase(),
+                    MAP: mapCell.value,
                     OG: false,
                 };
             })

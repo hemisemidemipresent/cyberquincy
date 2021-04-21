@@ -182,7 +182,8 @@ function displayResults(message, parsed, filteredResults) {
 
     let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title(parsed, filteredResults))
-            .setColor(paleorange);
+            .setColor(paleorange)
+            .addField("# Combos", `**1-${filteredResults.length}** of ${filteredResults.length}`);
     
     for (var c = 0; c < displayCols.length; c++) {
         challengeEmbed.addField(

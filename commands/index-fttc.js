@@ -143,12 +143,7 @@ const TOWER_ABBREVIATIONS = {
 }
 
 async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
-    REACTIONS = ['⬅️', '➡️'];
-    MAX_NUM_ROWS = 15;
-    const numRows = combos.length;
-    let leftIndex = 0;
-    let rightIndex = Math.min(MAX_NUM_ROWS, numRows) - 1;
-
+    // Setup / Data consolidation
     let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK']
 
     if (parsed.person) {
@@ -191,6 +186,14 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
     })
 
     const numOGCompletions = combos.filter(combo => combo.OG).length;
+
+
+    // Begin React-Loop
+    REACTIONS = ['⬅️', '➡️'];
+    MAX_NUM_ROWS = 15;
+    const numRows = combos.length;
+    let leftIndex = 0;
+    let rightIndex = Math.min(MAX_NUM_ROWS, numRows) - 1;
 
     async function displayPages(direction = 1) {
         // The number of rows to be displayed is variable depending on the characters in each link

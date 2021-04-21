@@ -1,5 +1,12 @@
 {
-    "adora": ["ad", "ador", "ado", "dora", "priestess", "highpriestess"],
+    "adora": [
+        "ad",
+        "ador",
+        "ado",
+        "dora",
+        "priestess",
+        "highpriestess"
+    ],
     "benjamin": [
         "dj",
         "ben",
@@ -10,7 +17,10 @@
         "yeet",
         "boy"
     ],
-    "brickell": ["brick", "bri"],
+    "brickell": [
+        "brick",
+        "bri"
+    ],
     "churchill": [
         "captain-churchill",
         "captain_churchill",
@@ -22,8 +32,17 @@
         "hill",
         "cap"
     ],
-    "etienne": ["et", "eti"],
-    "ezili": ["voodo", "vm", "ezi", "ezil", "voodoo"],
+    "etienne": [
+        "et",
+        "eti"
+    ],
+    "ezili": [
+        "voodo",
+        "vm",
+        "ezi",
+        "ezil",
+        "voodoo"
+    ],
     "gwen": [
         "gwendolin",
         "gwendolyn",
@@ -33,9 +52,30 @@
         "gwendo",
         "fire"
     ],
-    "jones": ["striker_jones", "striker-jones", "SJ", "sj", "striker", "bones", "biker"],
-    "obyn": ["obyn-greenfoot", "obiwan", "obi", "oby"],
-    "pat": ["pat-fusty", "pf", "fu", "patfu", "pat_fu", "fro", "snowman"],
+    "jones": [
+        "striker_jones",
+        "striker-jones",
+        "SJ",
+        "sj",
+        "striker",
+        "bones",
+        "biker"
+    ],
+    "obyn": [
+        "obyn-greenfoot",
+        "obiwan",
+        "obi",
+        "oby"
+    ],
+    "pat": [
+        "pat-fusty",
+        "pf",
+        "fu",
+        "patfu",
+        "pat_fu",
+        "fro",
+        "snowman"
+    ],
     "quincy": [
         "q",
         "quin",
@@ -46,7 +86,11 @@
         "quonce",
         "quoncy",
         "cyber",
-        "cq"
+        "cq",
+        "uincy"
     ],
-    "sauda": ["saud", "sau"]
+    "sauda": [
+        "saud",
+        "sau"
+    ]
 }

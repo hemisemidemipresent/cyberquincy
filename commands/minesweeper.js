@@ -1,20 +1,34 @@
 const Minesweeper = require('discord.js-minesweeper');
 const Discord = require('discord.js');
 const { green } = require('../jsons/colours.json');
+const NaturalNumberParser = require('../parser/natural-number-parser');
+const OptionalParser = require('../parser/optional-parser');
 module.exports = {
     name: 'minesweeper',
     aliases: ['mine', 'ms', 'sweeper'],
 
     execute(message, args) {
+        const parsed = CommandParser.parse(
+            args,
+            new OptionalParser(new NaturalNumberParser(8, 20))
+        );
+        let mines = 8;
+        if (parsed.hasErrors()) {
+            let mebed = new Discord.MessageEmbed().addField(
+                'usage',
+                'q!minesweeper - default 8 mines\nq!minesweeper <mine count> `e.g. q!minesweeper 20`'
+            );
+            return message.channel.send(mebed);
+        }
+        if (parsed.natural_number) mines = parsed.natural_number;
         let minesweeper = new Minesweeper({
-            rows: 5,
+            rows: 6,
             columns: 10,
-            mines: 10,
+            mines: mines,
             revealFirstCell: true,
         });
 
         let str = minesweeper.start();
-        console.log(str);
         let res = str
             .replace(/ :zero: /g, '<:PopIcon:755016023333404743>')
             .replace(/ :one: /g, '<:Red:782880667398307850>')

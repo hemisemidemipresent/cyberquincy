@@ -19,7 +19,7 @@ args/commandName: all the arguments/inputs: `q!commandName args[0] args[1] args[
 
 ## optional
 
-`depencies`: an array for whether you need toppers's towerJSON and/or btd6index
+`depencies`: an array for whether you need btd6index (and previously topper's data)
 e.g.:
 
 ```js

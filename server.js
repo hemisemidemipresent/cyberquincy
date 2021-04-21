@@ -5,7 +5,6 @@ function main() {
     globalRequirements();
     consoleBootup();
     googleSheetsInitialization();
-    towerJSONinit();
     configureAliases();
     commandCenter = configureCommands();
     generateListeners(commandCenter);
@@ -78,9 +77,6 @@ function consoleBootup() {
         const statcord = new Statcord.Client({
             client,
             key: statcordKey,
-            postCpuStatistics: false /* Whether to post memory statistics or not, defaults to true */,
-            postMemStatistics: false /* Whether to post memory statistics or not, defaults to true */,
-            postNetworkStatistics: false /* Whether to post memory statistics or not, defaults to true */,
         });
         statcord.autopost();
         statcord.on('autopost-start', () => {
@@ -114,25 +110,6 @@ async function googleSheetsInitialization() {
         GoogleSheetsHelper.BTD6_INDEX_KEY
     );
     console.log('<INITIATE> Btd6 Index has been loaded');
-}
-
-async function towerJSONinit() {
-    let bool = require('./1/config.json')['towerJSON'];
-    if (!bool) return;
-    const fetch = require('node-fetch');
-    const url = 'http://topper64.co.uk/nk/btd6/dat/towers.json';
-    const settings = { method: 'Get' };
-    fetch(url, settings)
-        .then((res) => res.json())
-        .then((json) => {
-            global.towerJSON = json;
-            console.log("<Eradicate Bloons> Topper's JSON is loaded");
-        })
-        .catch(() => {
-            console.log(
-                "[ERROR] Something is wrong with fetching topper's json"
-            );
-        });
 }
 
 function configureAliases() {

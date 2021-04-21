@@ -389,7 +389,9 @@ class AliasRepository extends Array {
 
     mapToIndexAbbreviation(map) {
         if (!map) return null;
-        return this.getAliasSet(map)[1].toUpperCase();
+        const mapAliases = this.getAliasSet(map)
+        if (!mapAliases) return null;
+        return mapAliases[1].toUpperCase();
     }
 
     indexAbbreviationToMap(mapAbbr) {

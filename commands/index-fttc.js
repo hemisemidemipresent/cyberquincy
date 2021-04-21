@@ -9,9 +9,6 @@ const GoogleSheetsHelper = require('../helpers/google-sheets');
 
 const gHelper = require('../helpers/general.js');
 
-const MIN_ROW = 1;
-const MAX_ROW = 200;
-
 const { orange, paleorange } = require('../jsons/colours.json');
 
 const SHEET_NAME = 'Empty';
@@ -143,57 +140,6 @@ const TOWER_ABBREVIATIONS = {
     spike_factory: 'spk',
     monkey_village: 'vil',
     engineer: 'eng',
-}
-
-function displayResults(message, parsed, filteredResults) {
-    let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK']
-
-    if (parsed.person) {
-        displayCols = displayCols.filter(col => col != 'PERSON')
-    }
-
-    if (parsed.map) {
-        displayCols = displayCols.filter(col => col != 'MAP')
-    }
-    
-    if (displayCols.length === 4) {
-        displayCols = displayCols.filter(col => col != 'PERSON')
-    }
-
-    displayValues = displayCols.map(col => {
-        if (col == 'TOWERS') {
-            const boldedAbbreviatedTowers = filteredResults.map(combo => combo[col].map(tower => {
-                const towerCanonical = Aliases.getCanonicalForm(tower);
-                const towerAbbreviation = TOWER_ABBREVIATIONS[towerCanonical].toUpperCase()
-                return parsed.towers && parsed.towers.includes(towerCanonical) ? 
-                    `**${towerAbbreviation}**` : 
-                    towerAbbreviation;
-            }))
-            return boldedAbbreviatedTowers.map(comboTowers => comboTowers.join(" | ")).join("\n")
-        } else {
-            return filteredResults.map(combo => combo[col]).join("\n");
-        }
-    })
-
-    
-    console.log(displayValues);
-
-    console.log(filteredResults)
-
-    let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(title(parsed, filteredResults))
-            .setColor(paleorange)
-            .addField("# Combos", `**1-${filteredResults.length}** of ${filteredResults.length}`);
-    
-    for (var c = 0; c < displayCols.length; c++) {
-        challengeEmbed.addField(
-            gHelper.toTitleCase(displayCols[c]),
-            displayValues[c],
-            true
-        )
-    }
-
-    return message.channel.send(challengeEmbed);
 }
 
 async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
@@ -354,7 +300,6 @@ function filterResults(allCombos, parsed) {
     }
 
     if (parsed.towers) {
-        console.log(results);
         results = results.filter(combo => parsed.towers.every(specifiedTower => combo.TOWERS.includes(specifiedTower)))
     }
 
@@ -420,14 +365,14 @@ async function parseFTTC() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
 
     await sheet.loadCells(
-        `${COLS['SIX+'].MAP}${MIN_ROW}:${COLS['SIX+'].CURRENT}${MAX_ROW}`
+        `${COLS['SIX+'].MAP}${1}:${COLS['SIX+'].CURRENT}${sheet.rowCount}`
     );
 
     let colset;
     let combos = [];
 
     // Search for the row in all "possible" rows
-    for (let row = MIN_ROW; row <= Math.min(MAX_ROW, sheet.rowCount); row++) {
+    for (let row = 1; row <= sheet.rowCount; row++) {
         parsedHeader = sectionHeader(row, sheet);
         if (parsedHeader) {
             colset = COLS[parsedHeader]
@@ -458,7 +403,6 @@ async function getRowStandardData(entryRow, colset) {
     let values = {TOWERS: []}
 
     // Six+
-    console.log(Object.keys(colset), entryRow)
     if (Object.keys(colset).includes('#')) {
         values.TOWERS = sheet
             .getCellByA1(`**${colset['TOWERS']}${entryRow}**`)
@@ -479,8 +423,6 @@ async function getRowStandardData(entryRow, colset) {
         if (key == 'TOWERS') continue;
         values[key] = sheet.getCellByA1(`${colset[key]}${entryRow}`).value;
     }
-
-    values.MAP = values.MAP;
 
     // Special formatting for date (get formattedValue instead)
     dateCell = sheet.getCellByA1(`${colset.DATE}${entryRow}`);

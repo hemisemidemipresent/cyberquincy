@@ -336,7 +336,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
             }))
             return boldedAbbreviatedTowers.map((comboTowers, i) => {
                 let value = comboTowers.join(" | ")
-                if (combos[i].OG && !shouldExcludeOG(parsed)) {
+                if (combos[i].OG && !shouldExcludeOG(parsed) && !parsed.towers) {
                     value = `**${value}**`
                 }
                 return value;

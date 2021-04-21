@@ -259,7 +259,7 @@ async function getRowAltData(entryRow, colset) {
 }
 
 function sectionHeader(mapRow, sheet) {
-    // Looks for "One|Two|...|Five|Six+ Towers" in the closest-above header cell
+    // Looks for "One|Two|...|Five|Six+ Towers"
     headerRegex = new RegExp(
         `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`,
         'i'

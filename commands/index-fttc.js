@@ -150,6 +150,165 @@ const TOWER_ABBREVIATIONS = {
     engineer: 'eng',
 }
 
+async function parseFTTC() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
+
+    await sheet.loadCells(
+        `${COLS['SIX+'].MAP}${1}:${COLS['SIX+'].CURRENT}${sheet.rowCount}`
+    );
+
+    let colset;
+    let combos = [];
+
+    // Search for the row in all "possible" rows
+    for (let row = 1; row <= sheet.rowCount; row++) {
+        parsedHeader = sectionHeader(row, sheet);
+        if (parsedHeader) {
+            colset = COLS[parsedHeader]
+            row += 2;
+            continue;
+        }
+        if (!colset) continue;
+        
+        var mapCandidate = sheet.getCellByA1(`${colset.MAP}${row}`).value;
+        if (!mapCandidate) continue;
+        
+        combos = combos.concat(await getRowData(row, colset))
+    }
+
+    return combos;
+}
+
+async function getRowData(entryRow, colset) {
+    return [].concat(
+        await getRowStandardData(entryRow, colset)
+    ).concat(
+        await getRowAltData(entryRow, colset)
+    ).filter(e => e);
+}
+
+async function getRowStandardData(entryRow, colset) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
+    let values = {TOWERS: []}
+
+    // Six+
+    if (Object.keys(colset).includes('#')) {
+        values.TOWERS = sheet
+            .getCellByA1(`**${colset['TOWERS']}${entryRow}**`)
+            .value.split(",").map(tower => {
+                return Aliases.getCanonicalForm(tower.trim())
+            })
+    } else {
+        for (var i = 0; i < colset['TOWERS'].length; i++) {
+            values.TOWERS.push(
+                Aliases.getCanonicalForm(
+                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
+                )
+            );
+        }
+    }
+
+    for (key in colset) {
+        if (key == 'TOWERS') continue;
+        values[key] = sheet.getCellByA1(`${colset[key]}${entryRow}`).value;
+    }
+
+    // Special formatting for date (get formattedValue instead)
+    dateCell = sheet.getCellByA1(`${colset.DATE}${entryRow}`);
+    values.DATE = dateCell.formattedValue;
+
+    // Special handling for link (use hyperlink to cleverly embed in discord)
+    linkCell = sheet.getCellByA1(`${colset.LINK}${entryRow}`);
+    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+
+    values.OG = true;
+
+    // Special handling for current
+    // (heavy checkmark doesn't format, use white heavy checkmark instead)
+    if (values.CURRENT === HEAVY_CHECK_MARK) {
+        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+    }
+
+    return values;
+}
+
+async function getRowAltData(entryRow, colset) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
+    mapCell = sheet.getCellByA1(`${colset.MAP}${entryRow}`);
+
+    notes = mapCell.note
+    if (!notes) return null;
+
+    return notes
+            .trim()
+            .split('\n')
+            .map((entry) => {
+                let towers, person, bitly;
+                [towers, person, bitly] = entry
+                    .split('|')
+                    .map((t) => t.replace(/ /g, ''));
+                
+                return {
+                    TOWERS: towers.split(',').map(t => Aliases.getCanonicalForm(t.trim())),
+                    PERSON: person,
+                    LINK: `[${bitly}](http://${bitly})`,
+                    MAP: mapCell.value,
+                    OG: false,
+                };
+            })
+}
+
+function sectionHeader(mapRow, sheet) {
+    // Looks for "One|Two|...|Five|Six+ Towers" in the closest-above header cell
+    headerRegex = new RegExp(
+        `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`,
+        'i'
+    );
+
+    // Check cell to see if it's a header indicating the number of towers
+    let candidateHeaderCell = sheet.getCellByA1(
+        `${COLS['ONE'].MAP}${mapRow}`
+    );
+
+    // Header rows take up 2 rows. If you check the bottom row, the data value is null.
+    if (candidateHeaderCell.value) {
+        const match = candidateHeaderCell.value.match(headerRegex);
+
+        // Get the column set from the number of towers string in the header cell
+        if (match) {
+            return match[1].toUpperCase();
+        }
+    }
+}
+
+function filterResults(allCombos, parsed) {
+    results = allCombos
+
+     if (parsed.map) {
+         results = results.filter(combo => Aliases.toAliasNormalForm(combo.MAP) == parsed.map)
+     } else if (parsed.natural_number) {
+        results = results.filter(combo => combo.TOWERS.length === parsed.natural_number)
+    }
+
+    if (parsed.person) {
+        results = results.filter(combo => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person)
+    }
+
+    if (parsed.towers) {
+        results = results.filter(combo => parsed.towers.every(specifiedTower => combo.TOWERS.includes(specifiedTower)))
+    }
+
+    if (shouldExcludeOG(parsed)) {
+        results = results.filter(combo => combo.OG)
+    }
+
+    return results;
+}
+
+function shouldExcludeOG(parsed) {
+    return parsed.natural_number && !parsed.person
+}
+
 async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
     // Setup / Data consolidation
     let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK']
@@ -307,34 +466,6 @@ function titleNoCombos(parsed) {
     return t.slice(0, t.length - 1);
 }
 
-function filterResults(allCombos, parsed) {
-    results = allCombos
-
-     if (parsed.map) {
-         results = results.filter(combo => Aliases.toAliasNormalForm(combo.MAP) == parsed.map)
-     } else if (parsed.natural_number) {
-        results = results.filter(combo => combo.TOWERS.length === parsed.natural_number)
-    }
-
-    if (parsed.person) {
-        results = results.filter(combo => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person)
-    }
-
-    if (parsed.towers) {
-        results = results.filter(combo => parsed.towers.every(specifiedTower => combo.TOWERS.includes(specifiedTower)))
-    }
-
-    if (shouldExcludeOG(parsed)) {
-        results = results.filter(combo => combo.OG)
-    }
-
-    return results;
-}
-
-function shouldExcludeOG(parsed) {
-    return parsed.natural_number && !parsed.person
-}
-
 function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!fttc` HELP — The BTD6 Index Fewest Tower Type CHIMPS')
@@ -380,135 +511,4 @@ function errorMessage(message, parsingErrors) {
         .setColor(orange);
 
     return message.channel.send(errorEmbed);
-}
-
-async function parseFTTC() {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
-
-    await sheet.loadCells(
-        `${COLS['SIX+'].MAP}${1}:${COLS['SIX+'].CURRENT}${sheet.rowCount}`
-    );
-
-    let colset;
-    let combos = [];
-
-    // Search for the row in all "possible" rows
-    for (let row = 1; row <= sheet.rowCount; row++) {
-        parsedHeader = sectionHeader(row, sheet);
-        if (parsedHeader) {
-            colset = COLS[parsedHeader]
-            row += 2;
-            continue;
-        }
-        if (!colset) continue;
-        
-        var mapCandidate = sheet.getCellByA1(`${colset.MAP}${row}`).value;
-        if (!mapCandidate) continue;
-        
-        combos = combos.concat(await getRowData(row, colset))
-    }
-
-    return combos;
-}
-
-async function getRowData(entryRow, colset) {
-    return [].concat(
-        await getRowStandardData(entryRow, colset)
-    ).concat(
-        await getRowAltData(entryRow, colset)
-    ).filter(e => e);
-}
-
-async function getRowStandardData(entryRow, colset) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
-    let values = {TOWERS: []}
-
-    // Six+
-    if (Object.keys(colset).includes('#')) {
-        values.TOWERS = sheet
-            .getCellByA1(`**${colset['TOWERS']}${entryRow}**`)
-            .value.split(",").map(tower => {
-                return Aliases.getCanonicalForm(tower.trim())
-            })
-    } else {
-        for (var i = 0; i < colset['TOWERS'].length; i++) {
-            values.TOWERS.push(
-                Aliases.getCanonicalForm(
-                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
-                )
-            );
-        }
-    }
-
-    for (key in colset) {
-        if (key == 'TOWERS') continue;
-        values[key] = sheet.getCellByA1(`${colset[key]}${entryRow}`).value;
-    }
-
-    // Special formatting for date (get formattedValue instead)
-    dateCell = sheet.getCellByA1(`${colset.DATE}${entryRow}`);
-    values.DATE = dateCell.formattedValue;
-
-    // Special handling for link (use hyperlink to cleverly embed in discord)
-    linkCell = sheet.getCellByA1(`${colset.LINK}${entryRow}`);
-    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
-
-    values.OG = true;
-
-    // Special handling for current
-    // (heavy checkmark doesn't format, use white heavy checkmark instead)
-    if (values.CURRENT === HEAVY_CHECK_MARK) {
-        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
-    }
-
-    return values;
-}
-
-async function getRowAltData(entryRow, colset) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
-    mapCell = sheet.getCellByA1(`${colset.MAP}${entryRow}`);
-
-    notes = mapCell.note
-    if (!notes) return null;
-
-    return notes
-            .trim()
-            .split('\n')
-            .map((entry) => {
-                let towers, person, bitly;
-                [towers, person, bitly] = entry
-                    .split('|')
-                    .map((t) => t.replace(/ /g, ''));
-                
-                return {
-                    TOWERS: towers.split(',').map(t => Aliases.getCanonicalForm(t.trim())),
-                    PERSON: person,
-                    LINK: `[${bitly}](http://${bitly})`,
-                    MAP: mapCell.value,
-                    OG: false,
-                };
-            })
-}
-
-function sectionHeader(mapRow, sheet) {
-    // Looks for "One|Two|...|Five|Six+ Towers" in the closest-above header cell
-    headerRegex = new RegExp(
-        `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`,
-        'i'
-    );
-
-    // Check cell to see if it's a header indicating the number of towers
-    let candidateHeaderCell = sheet.getCellByA1(
-        `${COLS['ONE'].MAP}${mapRow}`
-    );
-
-    // Header rows take up 2 rows. If you check the bottom row, the data value is null.
-    if (candidateHeaderCell.value) {
-        const match = candidateHeaderCell.value.match(headerRegex);
-
-        // Get the column set from the number of towers string in the header cell
-        if (match) {
-            return match[1].toUpperCase();
-        }
-    }
 }

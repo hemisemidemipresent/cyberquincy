@@ -391,8 +391,8 @@ function embedTitle(parsed, combos) {
     map = Object.keys(sampleCombo.MAPS)[0];
 
     title = '';
-    if (parsed.natural_number) title += `${sampleCombo.NUMBER} Combo `;
-    else title += multipleCombos ? 'All Combos ' : 'Only Combo ';
+    if (parsed.natural_number) title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
+    else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
     if (parsed.person) title += `by ${sampleCombo.MAPS[map].PERSON} `;
     if (parsed.map) title += `on ${map} `;
     for (var i = 0; i < towers.length; i++) {

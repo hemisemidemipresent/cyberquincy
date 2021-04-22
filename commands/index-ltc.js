@@ -105,15 +105,15 @@ function helpMessage(message) {
         .setTitle('`q!ltc` HELP')
         .addField(
             '`q!ltc <map>`',
-            'The BTD6 Index Least Tower CHIMPS entry for the queried map\n`q!2mp fo`'
+            'The BTD6 Index Least Tower CHIMPS entry for the queried map\n`q!ltc fo`'
         )
         .addField(
             '`q!ltc <map> chp`',
-            'The BTD6 Index Least Tower CHIMPS cheapest entry for the queried map\n`q!2mp eotr cheapest`'
+            'The BTD6 Index Least Tower CHIMPS cheapest entry for the queried map\n`q!ltc eotr cheapest`'
         )
         .addField(
             '`q!ltc <map> og`',
-            'The BTD6 Index Least Tower CHIMPS originally completed entry for the queried map (Needs to match tower amount of current LTC).\n`q!2mp og dc`'
+            'The BTD6 Index Least Tower CHIMPS originally completed entry for the queried map (Needs to match tower amount of current LTC).\n`q!ltc og dc`'
         )
         .setColor(palegreen);
 

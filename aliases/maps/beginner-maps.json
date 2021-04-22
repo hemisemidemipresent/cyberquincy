@@ -3,6 +3,11 @@
         "l",
         "log"
     ],
+    "resort": [
+        "rs",
+        "res",
+        "reso"
+    ],
     "cubism": [
         "c",
         "cub",
@@ -37,6 +42,11 @@
         "h",
         "hdg",
         "hej"
+    ],
+    "skates": [
+        "s",
+        "skate",
+        "sk"
     ],
     "four_circles": [
         "fc",
@@ -90,14 +100,5 @@
         "end",
         "road",
         "eotr"
-    ],
-    "skates": [
-        "s",
-        "skate",
-        "sk"
-    ],
-    "resort": [
-        "res",
-        "reso"
     ]
 }

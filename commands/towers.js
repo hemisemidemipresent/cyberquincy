@@ -31,6 +31,7 @@ const OptionalParser = require('../parser/optional-parser');
 const UpgradeSetParser = require('../parser/upgrade-set-parser');
 const Discord = require('discord.js');
 const gHelper = require('../helpers/general.js');
+const { discord } = require('../aliases/misc.json');
 
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
@@ -136,9 +137,7 @@ module.exports = {
 
         if (parsed.hasErrors()) {
             module.exports.errorMessage(message, parsed.parsingErrors);
-        }
-
-        process(parsed.upgrade_set || '000', commandName, message);
+        } else process(parsed.upgrade_set || '000', commandName, message);
     },
     errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()
@@ -150,49 +149,7 @@ module.exports = {
         message.channel.send(errorEmbed);
     },
 };
-function provideHelpMsg(message, name) {
-    let str = `Please use the number in \`\`codeblocks\`\` to specify the upgrade.\nFor example, **q!${name} 030**`;
-    const pathsArr = [
-        '100',
-        '200',
-        '300',
-        '400',
-        '500',
-        '010',
-        '020',
-        '030',
-        '040',
-        '050',
-        '001',
-        '002',
-        '003',
-        '004',
-        '005',
-    ];
-    for (let i = 0; i < 15; i++) {
-        let path;
-        let tier = 0;
-        if (parseInt(pathsArr[i]) % 100 == 0) {
-            path = 1;
-            tier = parseInt(pathsArr[i]) / 100;
-        } else if (parseInt(pathsArr[i]) % 10 == 0) {
-            path = 2;
-            tier = parseInt(pathsArr[i]) / 10;
-        } else {
-            path = 3;
-            tier = parseInt(pathsArr[i]);
-        }
-        const object = towerJSON[`${name}`].upgrades[path - 1][tier - 1];
-        if (i % 5 == 0) {
-            str += '\n';
-        } else {
-            str += ',   ';
-        }
-        str += `__${object.name}__   \`\`${pathsArr[i]}\`\``;
-    }
 
-    return message.channel.send(str);
-}
 function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;
 }
@@ -224,12 +181,15 @@ function process(upgrade, commandName, message) {
     let link = findLink(commandName);
     request(link, (err, res, body) => {
         if (err) {
-            module.exports.errorMessage(message, ['info could not be fetched']);
+            return module.exports.errorMessage(message, [
+                'info could not be fetched',
+            ]);
         }
 
         let towerName = findName(commandName);
         let tower = costs[`${towerName}`];
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
+
         let totalCost = Towers.totalTowerUpgradeCrosspathCostNew(
             costs,
             towerName,
@@ -268,6 +228,12 @@ function process(upgrade, commandName, message) {
                         `${totalCost} - medium\n${hardTotalCost} - hard`,
                         true
                     )
+                    .addField(
+                        'Bug reporting',
+                        `report [here](${discord})`,
+                        true
+                    )
+
                     .setFooter(
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|q!ap for help and elaboration|data is from extreme bloonology, by The Line'
                     )

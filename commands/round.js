@@ -8,6 +8,7 @@ const ModeParser = require('../parser/mode-parser');
 const AnyOrderParser = require('../parser/any-order-parser');
 const json = require('../jsons/rounds_topper.json');
 const gHelper = require('../helpers/general.js');
+const { discord } = require('../aliases/misc.json');
 
 function execute(message, args, originalCommandName) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
@@ -50,17 +51,15 @@ function execute(message, args, originalCommandName) {
         } else {
             roundCash = 'ABR cash data not available for R1/R2';
         }
+    } else if (parsed.round > 100) {
+        roundCash = `unknown, tell us [here](${discord})`;
     } else {
         roundCash = rounds2[parsed.round].cashThisRound;
     }
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${parsed.round}` + (parsed.mode == 'abr' ? ' ABR' : ''))
         .setDescription(`${roundContents}`)
-        .addField(
-            'Round Length (seconds)',
-            `${Math.round(roundLength * 100) / 100}`,
-            true
-        )
+        .addField('Round Length (seconds)', roundLength, true)
         .addField('RBE', `${gHelper.numberWithCommas(roundRBE)}`, true)
         .addField(
             `XP Earned on R${parsed.round}`,
@@ -107,6 +106,10 @@ function calculateXps(round) {
 }
 
 function getLength(round, roundInfo) {
+    if (round > 100) {
+        // TO FIX
+        return `unknown, tells us [here](${discord}) `;
+    }
     let roundArray = roundInfo[round];
     let longest = 0;
     let end = 0;
@@ -116,7 +119,8 @@ function getLength(round, roundInfo) {
             longest = end;
         }
     }
-    return longest / 60; //btd6 is 60fps game
+    longest /= 60; //btd6 is 60fps game
+    return Math.round(longest * 100) / 100;
 }
 
 function helpMessage(message) {

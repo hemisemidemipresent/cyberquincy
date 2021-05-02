@@ -11,6 +11,8 @@ const HeroParser = require('../parser/hero-parser');
 
 const VersionParser = require('../parser/version-parser');
 const { yellow, darkgreen, orange } = require('../jsons/colours.json');
+const isEqual = require('lodash.isequal');
+
 module.exports = {
     name: 'balance',
     dependencies: ['btd6index'],
@@ -46,10 +48,11 @@ async function execute(message, args) {
 
     await loadEntityBuffNerfsTableCells(parsed);
     colIndex = await locateSpecifiedEntityColumnIndex(parsed);
-    balanceChanges = await parseBalanceChanges(parsed, colIndex);
+    let [versionAdded, balanceChanges] = await parseBalanceChanges(parsed, colIndex);
     return await formatAndDisplayBalanceChanges(
         message,
         parsed,
+        versionAdded,
         balanceChanges
     );
 }
@@ -145,6 +148,8 @@ async function parseBalanceChanges(parsed, entryColIndex) {
     const sheet = getSheet(parsed);
     const currentVersion = await parseCurrentVersion(parsed);
 
+    let versionAdded = null;
+
     let balances = {};
     // Iterate for currentVersion - 1 rows since there's no row for v1.0
     for (
@@ -163,6 +168,16 @@ async function parseBalanceChanges(parsed, entryColIndex) {
         let nerf = sheet.getCell(rowIndex, entryColIndex + 1).note;
         nerf = filterChangeNotes(nerf, v, parsed);
 
+        // The version added is the first non-greyed out row for the column
+        if (
+            !versionAdded && (
+                sheet.getCell(rowIndex, entryColIndex).effectiveFormat &&
+                !isEqual(sheet.getCell(rowIndex, entryColIndex).effectiveFormat.backgroundColor, {red: 0.6, green: 0.6, blue: 0.6})
+            )
+        ) {
+            versionAdded = v;
+        }
+
         if (buff) {
             buff = buff.replace(/✔️/g, '✅');
             balances[v] = buff;
@@ -173,7 +188,9 @@ async function parseBalanceChanges(parsed, entryColIndex) {
         }
     }
 
-    return balances;
+    if (versionAdded === '2.0') versionAdded = '1.0'
+
+    return [versionAdded, balances]
 }
 
 function filterChangeNotes(noteSet, v, parsed) {
@@ -234,7 +251,7 @@ function handleIrregularNote(note, parsed) {
     return false;
 }
 
-async function formatAndDisplayBalanceChanges(message, parsed, balances) {
+async function formatAndDisplayBalanceChanges(message, parsed, versionAdded, balances) {
     formattedTower = Towers.formatTower(
         parsed.tower || parsed.tower_upgrade || parsed.tower_path || parsed.hero
     );
@@ -258,8 +275,13 @@ async function formatAndDisplayBalanceChanges(message, parsed, balances) {
         );
     }
 
+    let addedText = `**Added in ${versionAdded}**`
+
+    if (parsed.tower_upgrade == 'wizard_monkey#005') addedText = `Reworked from Soulbind in 2.0`
+
     let embed = new Discord.MessageEmbed()
         .setTitle(`Buffs and Nerfs for ${formattedTower}`)
+        .setDescription(addedText)
         .setColor(darkgreen);
 
     for (const version in balances) {

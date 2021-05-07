@@ -298,15 +298,15 @@ function filterResults(allCombos, parsed) {
         results = results.filter(combo => parsed.towers.every(specifiedTower => combo.TOWERS.includes(specifiedTower)))
     }
 
-    if (shouldExcludeOG(parsed)) {
+    if (keepOnlyOG(parsed)) {
         results = results.filter(combo => combo.OG)
     }
 
     return results;
 }
 
-function shouldExcludeOG(parsed) {
-    return parsed.natural_number && !parsed.person
+function keepOnlyOG(parsed) {
+    return parsed.natural_number && !parsed.person && !parsed.tower
 }
 
 async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
@@ -336,7 +336,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
             }))
             return boldedAbbreviatedTowers.map((comboTowers, i) => {
                 let value = comboTowers.join(" | ")
-                if (combos[i].OG && !shouldExcludeOG(parsed) && !parsed.towers) {
+                if (combos[i].OG && !keepOnlyOG(parsed) && !parsed.towers) {
                     value = `**${value}**`
                 }
                 return value;
@@ -344,7 +344,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
         } else {
             return combos.map(combo => {
                 value = combo[col]
-                if (combo.OG && !shouldExcludeOG(parsed)) {
+                if (combo.OG && !keepOnlyOG(parsed)) {
                     value = `**${value}**`
                 }
                 return value;
@@ -387,7 +387,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
                 )
             }
 
-            if (shouldExcludeOG(parsed)) {
+            if (keepOnlyOG(parsed)) {
                 challengeEmbed.setFooter(`---\nNon-OG completions excluded`)
             } else {
                 if (numOGCompletions == 1) {

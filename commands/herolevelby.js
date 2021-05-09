@@ -140,6 +140,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
     function reactLoop(botMessage) {
         // Lays out predefined reactions
         for (var i = 0; i < REACTIONS.length; i++) {
+            if (i < Math.floor(heroPlacementRound / 10)) continue;
             botMessage.react(REACTIONS[i]);
         }
 
@@ -157,7 +158,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
 
             let leftRound = tensPlace * 10 + 1;
             if (leftRound < 6) leftRound = 6;
-            if (leftRound < heroPlacementRound) leftRound = heroPlacementRound;
+            if (leftRound <= heroPlacementRound) leftRound = heroPlacementRound + 1;
             let rightRound = (tensPlace + 1) * 10;
             if (rightRound > results.goal_round) rightRound = results.goal_round;
             startingRounds = gHelper.range(leftRound, rightRound);

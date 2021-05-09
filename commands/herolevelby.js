@@ -119,6 +119,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
             .setDescription(description)
             .addField('Place on round', rounds.join('\n'), true)
             .addField(`Pay on r${results.goal_round}`, costs.join('\n'), true)
+            .setFooter(`Click an emoji to see more starting rounds: 0=(6—>10), 1=(11—>20), ... , 9=(91—>100)`)
             .setColor(colours['cyber']);
     
         if (heroPlacementRound == -Infinity) {

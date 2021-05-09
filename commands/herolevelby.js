@@ -73,55 +73,100 @@ function errorMessage(message, parsingErrors) {
     return message.channel.send(errorEmbed);
 }
 
-function displayHeroPlacementRounds(message, results) {
-    heroPlacementRound = calculateHeroPlacementRound(
+function displayHeroPlacementRounds(userQueryMessage, results) {
+    const heroPlacementRound = calculateHeroPlacementRound(
         results.hero,
         results.goal_round,
         results.desired_hero_level,
         results.map_difficulty
     );
 
-    laterPlacementRounds = calculateLaterPlacementRounds(
-        results.hero,
-        heroPlacementRound,
-        results.goal_round,
-        results.desired_hero_level,
-        results.map_difficulty
-    );
+    let startingRounds = []
+    if (heroPlacementRound == -Infinity)
+        startingRounds = [6, 10, 13, 21, 30, 40];
+    else
+        startingRounds = gHelper
+            .range(1, 8)
+            .map((addend) => heroPlacementRound + addend)
+            .filter((r) => r <= results.goal_round);
 
-    rounds = [];
-    costs = [];
-    for (const round in laterPlacementRounds) {
-        rounds.push(round);
-        costs.push(
-            gHelper.numberAsCost(Math.ceil(laterPlacementRounds[round]))
+    REACTIONS = ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣'];
+
+    async function displayHeroLevels() {
+        const laterPlacementRounds = calculateLaterPlacementRounds(
+            results.hero,
+            startingRounds,
+            results.goal_round,
+            results.desired_hero_level,
+            results.map_difficulty
         );
+
+        let rounds = [];
+        let costs = [];
+        for (const round in laterPlacementRounds) {
+            rounds.push(round);
+            costs.push(
+                gHelper.numberAsCost(Math.ceil(laterPlacementRounds[round]))
+            );
+        }
+    
+        let description = '';
+        description += `to reach **lvl-${results.desired_hero_level}** `;
+        description += `by **r${results.goal_round}** `;
+        description += `on **${results.map_difficulty}** maps.`;
+    
+        const embed = new Discord.MessageEmbed()
+            .setDescription(description)
+            .addField('Place on round', rounds.join('\n'), true)
+            .addField(`Pay on r${results.goal_round}`, costs.join('\n'), true)
+            .setColor(colours['cyber']);
+    
+        if (heroPlacementRound == -Infinity) {
+            embed.setTitle(
+                `Can't place ${gHelper.toTitleCase(results.hero)} early enough`
+            );
+        } else {
+            embed.setTitle(
+                `Place ${gHelper.toTitleCase(
+                    results.hero
+                )} on R${heroPlacementRound}`
+            );
+        }
+    
+        let botMessage = await userQueryMessage.channel.send(embed);
+        return reactLoop(botMessage);
     }
 
-    description = '';
-    description += `to reach **lvl-${results.desired_hero_level}** `;
-    description += `by **r${results.goal_round}** `;
-    description += `on **${results.map_difficulty}** maps.`;
+    function reactLoop(botMessage) {
+        // Lays out predefined reactions
+        for (var i = 0; i < REACTIONS.length; i++) {
+            botMessage.react(REACTIONS[i]);
+        }
 
-    const embed = new Discord.MessageEmbed()
-        .setDescription(description)
-        .addField('Place on round', rounds.join('\n'), true)
-        .addField(`Pay on r${results.goal_round}`, costs.join('\n'), true)
-        .setColor(colours['cyber']);
+        // Read author reaction (time limit specified below in milliseconds)
+        // and respond with appropriate action
+        botMessage.createReactionCollector(
+            (reaction, user) =>
+                user.id === userQueryMessage.author.id &&
+                REACTIONS.includes(reaction.emoji.name),
+            { time: 20000 }
+        ).once('collect', (reaction) => {
+            if (!REACTIONS.includes(reaction.emoji.name)) return;
 
-    if (heroPlacementRound == -Infinity) {
-        embed.setTitle(
-            `Can't place ${gHelper.toTitleCase(results.hero)} early enough`
-        );
-    } else {
-        embed.setTitle(
-            `Place ${gHelper.toTitleCase(
-                results.hero
-            )} on R${heroPlacementRound}`
-        );
+            const tensPlace = parseInt(reaction.emoji.name.charAt(0));
+
+            let leftRound = tensPlace * 10 + 1;
+            if (leftRound < 6) leftRound = 6;
+            if (leftRound < heroPlacementRound) leftRound = heroPlacementRound;
+            let rightRound = (tensPlace + 1) * 10;
+            if (rightRound > results.goal_round) rightRound = results.goal_round;
+            startingRounds = gHelper.range(leftRound, rightRound);
+
+            displayHeroLevels();
+        });
     }
 
-    message.channel.send(embed);
+    displayHeroLevels();
 }
 
 function calculateHeroPlacementRound(
@@ -151,19 +196,11 @@ function calculateHeroPlacementRound(
 
 function calculateLaterPlacementRounds(
     hero,
-    freePlacementRound,
+    startingRounds,
     goalRound,
     desiredHeroLevel,
     mapDifficulty
 ) {
-    if (freePlacementRound == -Infinity)
-        startingRounds = [6, 10, 13, 21, 30, 40];
-    else
-        startingRounds = gHelper
-            .range(1, 8)
-            .map((addend) => freePlacementRound + addend)
-            .filter((r) => r <= goalRound);
-
     placementRounds = {};
     for (var i = 0; i < startingRounds.length; i++) {
         placementRounds[startingRounds[i]] = costToUpgrade(

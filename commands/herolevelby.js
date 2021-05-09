@@ -142,6 +142,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
         // Lays out predefined reactions
         for (var i = 0; i < REACTIONS.length; i++) {
             if (i < Math.floor(heroPlacementRound / 10)) continue;
+            if (i > Math.floor(results.goal_round / 10)) continue;
             botMessage.react(REACTIONS[i]);
         }
 

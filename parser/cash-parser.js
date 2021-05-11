@@ -9,7 +9,7 @@ class CashParser {
         return 'cash';
     }
 
-    constructor(low=0, high=Infinity) {
+    constructor(low = 0, high = Infinity) {
         this.delegateParser = new NumberParser(low, high);
     }
 
@@ -23,9 +23,18 @@ class CashParser {
     transformArgument(arg) {
         if (arg[0] == '$') {
             return arg.slice(1);
-        } else if(/\d|\./.test(arg[0])) {
-            return arg;
-        } else {
+        } else if (arg.includes('-')) {
+            // 40000 - 30012
+            let stuff = arg.split('-');
+            if (/\d|\./.test(stuff[0]) && /\d|\./.test(stuff[0])) {
+                return (stuff[0] - stuff[1]).toString();
+            } else
+                throw new UserCommandError(
+                    `Cash must be of form \`15\` or \`$15\` (Got \`${arg}\` instead)`
+                );
+        } else if (/\d|\./.test(arg[0])) return arg;
+        // one argument
+        else {
             throw new UserCommandError(
                 `Cash must be of form \`15\` or \`$15\` (Got \`${arg}\` instead)`
             );

@@ -97,23 +97,23 @@ module.exports = {
                                         let level;
                                         if (cash < 0) {
                                             level = -1;
-                                        } else if (cash < 300) {
+                                        } else if (cash <= 300) {
                                             level = 0;
-                                        } else if (cash < 1000) {
+                                        } else if (cash <= 1000) {
                                             level = 1;
-                                        } else if (cash < 2000) {
+                                        } else if (cash <= 2000) {
                                             level = 2;
-                                        } else if (cash < 4000) {
+                                        } else if (cash <= 4000) {
                                             level = 3;
-                                        } else if (cash < 7500) {
+                                        } else if (cash <= 7500) {
                                             level = 4;
-                                        } else if (cash < 10000) {
+                                        } else if (cash <= 10000) {
                                             level = 5;
-                                        } else if (cash < 15000) {
+                                        } else if (cash <= 15000) {
                                             level = 6;
-                                        } else if (cash < 25000) {
+                                        } else if (cash <= 25000) {
                                             level = 7;
-                                        } else if (cash < 50000) {
+                                        } else if (cash <= 50000) {
                                             level = 8;
                                         } else {
                                             level = 9;

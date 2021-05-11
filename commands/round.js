@@ -51,8 +51,8 @@ function execute(message, args, originalCommandName) {
         } else {
             roundCash = 'ABR cash data not available for R1/R2';
         }
-    } else if (parsed.round > 100) {
-        roundCash = `unknown, tell us [here](${discord})`;
+    } else if (parsed.round > 120 || (isAbr && parsed.round > 100)) {
+        //freeplay
     } else {
         roundCash = rounds2[parsed.round].cashThisRound;
     }
@@ -108,7 +108,7 @@ function calculateXps(round) {
 function getLength(round, roundInfo) {
     if (round > 100) {
         // TO FIX
-        return `unknown, tells us [here](${discord}) `;
+        return `unknown, tell us [here](${discord}) `;
     }
     let roundArray = roundInfo[round];
     let longest = 0;

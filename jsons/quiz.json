@@ -848,5 +848,25 @@
             "flaming hot trash"
         ],
         "answers": "d"
+    },
+    {
+        "question": "What is the first 2 Tower Chimps that was made possible in Alternate Bloon Rounds?",
+        "optns": [
+            "Sauda + Archmage",
+            "Wizard Lord Phoenix + Apache Prime",
+            "Sauda + Wizard Lord Phoenix",
+            "Sauda + Dark Champion"
+        ],
+        "answers": "d"
+    },
+    {
+        "question": "Which tower combination was the first ever 2 Tower CHIMPS?",
+        "optns": [
+            "Obyn + Dark Champion",
+            "Archmage + Apache Prime",
+            "Energizer + Anti-Bloon",
+            "Wizard Lord Phoenix + Apache Prime"
+        ],
+        "answers": "c"
     }
 ]

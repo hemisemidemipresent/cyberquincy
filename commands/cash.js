@@ -1,5 +1,5 @@
-const r = require('../jsons/round2.json');
-const abr = require('../jsons/abrincome.json'); // array containing arrays, nth index is nth round, in the returned array 0th value is new cash, 1st value is total cash
+const round2 = require('../jsons/round2.json');
+const abrincome = require('../jsons/abrincome.json'); // array containing arrays, nth index is nth round, in the returned array 0th value is new cash, 1st value is total cash
 const { cyber, orange } = require('../jsons/colours.json');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
@@ -10,6 +10,8 @@ module.exports = {
     name: 'cash',
     aliases: ['ca', 'k', 'cost'],
     execute(message, args) {
+        const r = round2.map((x) => x.cashThisRound);
+        const abr = abrincome.map((x) => x[0]);
         let parsed = CommandParser.parse(
             args,
             new AnyOrderParser(
@@ -28,72 +30,15 @@ module.exports = {
 
         let cashNeeded = parsed.cash;
         let startRound = parsed.round;
-        let cashSoFar = 0;
-        let addToTotal = 0;
+        let embed;
         if (parsed.mode == 'abr') {
-            while (cashSoFar <= cashNeeded) {
-                addToTotal = parseInt(abr[startRound][0]);
-                cashSoFar += addToTotal;
-                addToTotal = 0;
-                startRound++;
-                if (startRound > 100) {
-                    return module.exports.freePlayMsg(
-                        message,
-                        cashNeeded,
-                        parsed.round
-                    );
-                }
-            }
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `You should get $${cashNeeded} by round ${startRound}`
-                )
-                .setColor(cyber)
-                .setFooter(`in ABR, from round ${parsed.round}`);
-            return message.channel.send(embed);
+            embed = this.calculate(cashNeeded, startRound, abr, 100, 1);
         } else if (parsed.mode == 'halfcash') {
-            while (cashSoFar <= cashNeeded) {
-                addToTotal = parseInt(r[startRound].cashThisRound);
-                cashSoFar += addToTotal / 2; // only difference
-                addToTotal = 0;
-                startRound++;
-                if (startRound > 100) {
-                    return module.exports.freePlayMsg(
-                        message,
-                        cashNeeded,
-                        parsed.round
-                    );
-                }
-            }
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `You should get $${cashNeeded} by round ${startRound}`
-                )
-                .setColor(cyber)
-                .setFooter(`in half cash, from round ${parsed.round}`);
-            return message.channel.send(embed);
+            embed = this.calculate(cashNeeded, startRound, r, 100, 0.5);
         } else {
-            while (cashSoFar <= cashNeeded) {
-                addToTotal = parseInt(r[startRound].cashThisRound);
-                cashSoFar += addToTotal;
-                addToTotal = 0;
-                startRound++;
-                if (startRound > 100) {
-                    return module.exports.freePlayMsg(
-                        message,
-                        cashNeeded,
-                        parsed.round
-                    );
-                }
-            }
-            let embed = new Discord.MessageEmbed()
-                .setTitle(
-                    `You should get $${cashNeeded} by round ${startRound}`
-                )
-                .setColor(cyber)
-                .setFooter(`from round ${parsed.round}`);
-            return message.channel.send(embed);
+            embed = this.calculate(cashNeeded, startRound, r, 100, 1);
         }
+        message.channel.send(embed);
     },
     errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
@@ -103,13 +48,34 @@ module.exports = {
 
         return message.channel.send(errorEmbed);
     },
-    freePlayMsg(message, cashNeeded, round) {
+    freePlayMsg(cashNeeded, round) {
         let embed = new Discord.MessageEmbed()
             .setTitle(
-                `You cant get $${cashNeeded} from popping bloons from round ${round} before freeplay`
+                `You cant get $${cashNeeded} from popping bloons from round ${round} before random freeplay`
             )
-            .setFooter('freeplay is random, hence cash is random')
+            .setFooter('freeplay rounds are random, hence cash is random')
             .setColor(orange);
-        return message.channel.send(embed);
+        return embed;
+    },
+    calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
+        let cashSoFar = 0;
+        let originalRound = round;
+
+        while (cashSoFar <= cashNeeded) {
+            addToTotal = parseInt(r[round]);
+            cashSoFar += addToTotal * incomeMultiplier;
+            addToTotal = 0;
+            round++;
+            if (round > roundLimit) {
+                return module.exports.freePlayMsg(cashNeeded, originalRound);
+            }
+        }
+
+        let embed = new Discord.MessageEmbed()
+            .setTitle(
+                `You should get $${cashNeeded} before round ${round} starting at ${originalRound}`
+            )
+            .setColor(cyber);
+        return embed;
     },
 };

@@ -3,7 +3,6 @@ const AnyOrderParser = require('../parser/any-order-parser.js');
 
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const OptionalParser = require('../parser/optional-parser.js');
-const OrParser = require('../parser/or-parser.js');
 const AnythingParser = require('../parser/anything-parser');
 const { red, cyber } = require('../jsons/colours.json');
 const raceImg =
@@ -14,7 +13,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'This_is_my_last_resort_knttxn1d';
+        let raceID = 'Thin_Ice_kodre2s1';
         const parsed = CommandParser.parse(
             args,
 
@@ -144,3 +143,10 @@ function parsetime(ms) {
     milliseconds = milliseconds < 100 ? '0' + milliseconds : milliseconds;
     return minutes + ':' + seconds + '.' + milliseconds;
 }
+const getLB = (url) => {
+    return new Promise((res, rej) => {
+        fetch(url);
+        let data = JSON.parse(JSON.parse(body).data);
+        resolve(data);
+    });
+};

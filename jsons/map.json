@@ -51,7 +51,7 @@
         "Cos": "N/A",
         "wa%": "yes",
         "los": "yes",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920748082331648/InTheLoopBTD6.png",
+        "thu": "https://cdn.discordapp.com/attachments/699781597515481159/841568943440265246/1000.png",
         "e": "1/1"
     },
     "in_the_loop": {
@@ -648,5 +648,16 @@
         "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/699781597515481159/833343569778835477/1000.png",
         "e": "2/4"
+    },
+    "blons": {
+        "ver": 24,
+        "len": 3.5,
+        "lenStr": "3.5",
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "yes",
+        "los": "no",
+        "thu": "https://cdn.discordapp.com/attachments/699781597515481159/841569553381195826/1000.png",
+        "e": "1/1"
     }
 }

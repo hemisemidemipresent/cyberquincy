@@ -1,6 +1,14 @@
 {
-    "cornfield": ["cf", "corn", "field"],
-    "spillway": ["sw", "spill", "way"],
+    "cornfield": [
+        "cf",
+        "corn",
+        "field"
+    ],
+    "spillway": [
+        "sw",
+        "spill",
+        "way"
+    ],
     "high_finance": [
         "hf",
         "hifi",
@@ -9,9 +17,23 @@
         "fin",
         "high"
     ],
-    "another_brick": ["ab", "abrick", "another"],
-    "off_the_coast": ["of", "off", "otc", "coast"],
-    "peninsula": ["pn", "peni", "penis", "pen", "penin"],
+    "another_brick": [
+        "ab",
+        "abrick",
+        "another"
+    ],
+    "off_the_coast": [
+        "of",
+        "off",
+        "otc",
+        "coast"
+    ],
+    "peninsula": [
+        "pn",
+        "peni",
+        "pen",
+        "penin"
+    ],
     "pat's_pond": [
         "pp",
         "pond",
@@ -20,9 +42,29 @@
         "patspond",
         "pat's"
     ],
-    "geared": ["gd", "gear", "grd", "geard"],
-    "underground": ["ug", "under", "ground"],
-    "cargo": ["cg", "cgo", "car", "go"],
-    "mesa": ["ms"],
-    "x_factor": ["xf", "x", "factor"]
+    "geared": [
+        "gd",
+        "gear",
+        "grd",
+        "geard"
+    ],
+    "underground": [
+        "ug",
+        "under",
+        "ground"
+    ],
+    "cargo": [
+        "cg",
+        "cgo",
+        "car",
+        "go"
+    ],
+    "mesa": [
+        "ms"
+    ],
+    "x_factor": [
+        "xf",
+        "x",
+        "factor"
+    ]
 }

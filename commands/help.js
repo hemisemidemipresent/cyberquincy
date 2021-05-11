@@ -26,7 +26,7 @@ module.exports = {
             )
             .addField(
                 'List of commands',
-                '[commands page](https://cq.netlify.app/docs/#/)'
+                '[commands page](https://docs-cq.netlify.com/docs/intro)'
             )
             .addField(
                 'Invite the bot',

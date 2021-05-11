@@ -13,6 +13,7 @@ const aliases = [
         'cyber',
         'furry',
         'cq',
+        'uincy',
     ],
 
     [
@@ -91,7 +92,7 @@ const aliases = [
         'eti',
         'drone',
     ],
-    ['sauda', 'saud', 'sau', '🥛']
+    ['sauda', 'saud', 'sau', '🥛', 'sawdust'],
 ];
 const links = [
     'https://pastebin.com/raw/ASpHNduS',
@@ -111,7 +112,8 @@ module.exports = {
     name: '<hero>',
     aliases: aliases.flat(),
     async execute(message, args, commandName) {
-        if (args.length == 0 || args[0] == 'help') return message.channel.send('`q!<hero> <level>`')
+        if (args.length == 0 || args[0] == 'help')
+            return message.channel.send('`q!<hero> <level>`');
         let name = findName(commandName);
         if (!name) this.errorMessage('invalid hero name');
         if (!args) this.errorMessage('Please specify a level for the hero');

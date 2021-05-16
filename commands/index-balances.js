@@ -195,7 +195,6 @@ async function parseBalanceChanges(parsed, entryColIndex) {
 
         if (!parsed.hero) {
             const changesRowIndex = rowIndex + towerChangesOffset;
-            console.log(rowIndex, changesRowIndex)
 
             fix = sheet.getCell(changesRowIndex, entryColIndex).note;
             fix = filterChangeNotes(fix, v, parsed);

@@ -62,7 +62,6 @@ async function loadEntityBuffNerfsTableCells(parsed) {
     let sheet = getSheet(parsed);
     const currentVersion = await parseCurrentVersion(parsed);
 
-    // Load from C23 to {end_column}{C+version}
     bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(
         headerRow(parsed) + currentVersion - 1,
         sheet.columnCount
@@ -78,7 +77,6 @@ async function loadTowerChangesTableCells(parsed) {
 
     const hrow = await towerChangesHeaderRow(parsed);
 
-    // Load from C23 to {end_column}{C+version}
     bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(
         hrow + currentVersion - 1,
         sheet.columnCount

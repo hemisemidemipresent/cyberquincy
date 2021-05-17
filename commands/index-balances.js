@@ -47,6 +47,7 @@ async function execute(message, args) {
     }
 
     await loadEntityBuffNerfsTableCells(parsed);
+    if (!parsed.hero) await loadTowerChangesTableCells(parsed);
     colIndex = await locateSpecifiedEntityColumnIndex(parsed);
     let [versionAdded, balanceChanges] = await parseBalanceChanges(parsed, colIndex);
     return await formatAndDisplayBalanceChanges(
@@ -61,13 +62,27 @@ async function loadEntityBuffNerfsTableCells(parsed) {
     let sheet = getSheet(parsed);
     const currentVersion = await parseCurrentVersion(parsed);
 
-    // Load from C23 to {end_column}{C+version}
     bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(
         headerRow(parsed) + currentVersion - 1,
         sheet.columnCount
     );
     await sheet.loadCells(
         `${VERSION_COLUMN}${headerRow(parsed)}:${bottomRightCellToBeLoaded}`
+    );
+}
+
+async function loadTowerChangesTableCells(parsed) {
+    let sheet = getSheet(parsed);
+    const currentVersion = await parseCurrentVersion(parsed);
+
+    const hrow = await towerChangesHeaderRow(parsed);
+
+    bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(
+        hrow + currentVersion - 1,
+        sheet.columnCount
+    );
+    await sheet.loadCells(
+        `${VERSION_COLUMN}${hrow}:${bottomRightCellToBeLoaded}`
     );
 }
 
@@ -111,6 +126,10 @@ function headerRow(parsed) {
     return parsed.hero ? 18 : 23;
 }
 
+async function towerChangesHeaderRow(parsed) {
+    return await parseCurrentVersion(parsed) + headerRow(parsed) + 2;
+}
+
 VERSION_COLUMN = 'C';
 
 function getSheet(parsed) {
@@ -150,6 +169,10 @@ async function parseBalanceChanges(parsed, entryColIndex) {
 
     let versionAdded = null;
 
+    let towerChangesOffset;
+    if (!parsed.hero)
+        towerChangesOffset = await towerChangesHeaderRow(parsed) - headerRow(parsed);
+
     let balances = {};
     // Iterate for currentVersion - 1 rows since there's no row for v1.0
     for (
@@ -168,6 +191,18 @@ async function parseBalanceChanges(parsed, entryColIndex) {
         let nerf = sheet.getCell(rowIndex, entryColIndex + 1).note;
         nerf = filterChangeNotes(nerf, v, parsed);
 
+        let fix, change;
+
+        if (!parsed.hero) {
+            const changesRowIndex = rowIndex + towerChangesOffset;
+
+            fix = sheet.getCell(changesRowIndex, entryColIndex).note;
+            fix = filterChangeNotes(fix, v, parsed);
+
+            change = sheet.getCell(changesRowIndex, entryColIndex + 1).note;
+            change = filterChangeNotes(change, v, parsed);
+        }
+
         // The version added is the first non-greyed out row for the column
         if (
             !versionAdded && (
@@ -185,6 +220,14 @@ async function parseBalanceChanges(parsed, entryColIndex) {
         if (nerf) {
             balances[v] = balances[v] ? balances[v] + '\n\n' : '';
             balances[v] += nerf;
+        }
+        if (fix) {
+            balances[v] = balances[v] ? balances[v] + '\n\n' : '';
+            balances[v] += fix;
+        }
+        if (change) {
+            balances[v] = balances[v] ? balances[v] + '\n\n' : '';
+            balances[v] += change;
         }
     }
 
@@ -210,8 +253,6 @@ function filterChangeNotes(noteSet, v, parsed) {
 
     // TODOS:
     // - 4+xx format
-    // - xxx
-    // - Ask index maintainers to prepend ALL patch notes with {symbol} XYZ
     const notes = noteSet.split('\n\n').filter((note) => {
         if (parsed.tower) return true;
         else if (parsed.hero) return true;

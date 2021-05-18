@@ -3,6 +3,7 @@ const HARD_ROUNDS = [3, 80];
 const MEDIUM_ROUNDS = [1, 60];
 const EASY_ROUNDS = [1, 40];
 const PREDET_ROUNDS = [1, 120]; // predetermined rounds
+const PREDET_CHIMPS_ROUNDS = [6, 120];
 const ALL_ROUNDS = [1, 1288555]; // will explain later
 
 module.exports = {
@@ -11,5 +12,6 @@ module.exports = {
     MEDIUM_ROUNDS,
     EASY_ROUNDS,
     PREDET_ROUNDS,
+    PREDET_CHIMPS_ROUNDS,
     ALL_ROUNDS,
 };

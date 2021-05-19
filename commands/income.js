@@ -200,14 +200,22 @@ chincomeMessage = function (mode, round) {
             `R${round}`,
             `${incomes.rincome}`
         )
-        .addField(
-            `Start -> R${round - 1}`,
+    
+    if (incomes.chincomeExclusive) {
+        incomeEmbed.addField(
+            `Start -> End R${round - 1}`,
             `${incomes.chincomeExclusive}`
         )
-        .addField(
-            `Start -> R${round}`,
-            `${incomes.chincomeInclusive}`
-        );
+    }
+        
+    incomeEmbed.addField(
+        `Start -> End R${round}`,
+        `${incomes.chincomeInclusive}`
+    );
+
+
+    
+    // if (incomes)
     
     return incomeEmbed;
 };
@@ -238,7 +246,9 @@ calculateIncomes = function (mode, round) {
         index = round;
 
         incomes.rincome = r[index].cashThisRound;
-        incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
+        if (round > 6) {
+            incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
+        }
         incomes.chincomeInclusive = r[index].cumulativeCash - r[5].cumulativeCash + 650;
         if (round < 100) {
             incomes.lincomeInclusive = r[100].cumulativeCash - r[index - 1].cumulativeCash;

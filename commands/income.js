@@ -213,9 +213,40 @@ chincomeMessage = function (mode, round) {
         `${incomes.chincomeInclusive}`
     );
 
-
-    
-    // if (incomes)
+    if (round < 100) {
+        incomeEmbed.addField(
+            `Start R${round} -> End R100`,
+            incomes.lincomeInclusive
+        )
+    }
+    if (round < 99) {
+        incomeEmbed.addField(
+            `Start R${round + 1} -> End R100`,
+            incomes.lincomeExclusive
+        )
+    }
+    if (round > 101) {
+        incomeEmbed.addField(
+            `Start R101 -> End R${round - 1}`,
+            incomes.superChincomeExclusive
+        )
+    }
+    if (round > 100) {
+        incomeEmbed.addField(
+            `Start R101 -> End R${round}`,
+            incomes.superChincomeInclusive
+        )
+    }
+    incomeEmbed.addField(
+        `Start R${round} -> End R120`,
+        incomes.superLincomeInclusive
+    )
+    if (round < 120) {
+        incomeEmbed.addField(
+            `Start R${round + 1} -> End R120`,
+            incomes.superLincomeExclusive
+        )
+    }
     
     return incomeEmbed;
 };

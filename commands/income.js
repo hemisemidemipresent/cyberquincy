@@ -180,21 +180,21 @@ module.exports = {
 chincomeMessage = function (mode, round) {
     incomes = calculateIncomes(mode, round);
 
-    console.log(incomes);
-
-    let mode_str_iden = (function (mode) {
+    const modeTitled = (function (mode) {
         switch (mode) {
-            case 'HALFCASH':
+            case 'halfcash':
                 return 'Half Cash';
-            case 'CHIMPS':
+            case 'chimps':
                 return 'Standard';
             default:
                 return mode.toUpperCase();
         }
     })(mode);
 
+    const asteriskMaybe = round == 6 ? '*' : '';
+
     incomeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${mode_str_iden} CHIMPS Incomes (R${round})`)
+        .setTitle(`${modeTitled} CHIMPS Incomes (R${round})`)
         .setColor(colours['cyber'])
         .addField(
             `R${round}`,
@@ -215,7 +215,7 @@ chincomeMessage = function (mode, round) {
 
     if (round < 100) {
         incomeEmbed.addField(
-            `Start R${round} -> End R100`,
+            `Start R${round}${asteriskMaybe} -> End R100`,
             incomes.lincomeInclusive
         )
     }
@@ -225,27 +225,27 @@ chincomeMessage = function (mode, round) {
             incomes.lincomeExclusive
         )
     }
-    if (round > 101) {
-        incomeEmbed.addField(
-            `Start R101 -> End R${round - 1}`,
-            incomes.superChincomeExclusive
-        )
-    }
     if (round > 100) {
         incomeEmbed.addField(
             `Start R101 -> End R${round}`,
             incomes.superChincomeInclusive
         )
     }
-    incomeEmbed.addField(
-        `Start R${round} -> End R120`,
-        incomes.superLincomeInclusive
-    )
-    if (round < 120) {
+    if (mode !== 'abr') {
+        incomeEmbed.addField(
+            `Start R${round}${asteriskMaybe} -> End R120`,
+            incomes.superLincomeInclusive
+        )
+    }
+    if (round < 120  && mode !== 'abr') {
         incomeEmbed.addField(
             `Start R${round + 1} -> End R120`,
             incomes.superLincomeExclusive
         )
+    }
+
+    if (round === 6) {
+        incomeEmbed.setFooter("*Doesn't include starting cash");
     }
     
     return incomeEmbed;
@@ -261,7 +261,6 @@ calculateIncomes = function (mode, round) {
         chincomeInclusive: null,
         lincomeExclusive: null,
         lincomeInclusive: null,
-        superChincomeExclusive: null,
         superChincomeInclusive: null,
         superLincomeInclusive: null,
         superLincomeExclusive: null,
@@ -270,9 +269,17 @@ calculateIncomes = function (mode, round) {
     if (mode == 'abr') {
         index = round - 2;
 
-        chincome = abr[index][1] - abr[3][1] + 650;
-        rincome = abr[index][0];
-        lincome = abr[98][1] - abr[index - 1][1];
+        incomes.rincome = abr[index][0];
+        if (round > 6) {
+            incomes.chincomeExclusive = abr[index - 1][1] - abr[3][1] + 650;
+        }
+        incomes.chincomeInclusive = abr[index][1] - abr[3][1] + 650;
+        if (round < 100) {
+            incomes.lincomeInclusive = abr[98][1] - abr[index - 1][1];
+        }
+        if (round < 99) {
+            incomes.lincomeExclusive = abr[98][1] - abr[index][1];
+        }
     } else {
         index = round;
 
@@ -287,11 +294,8 @@ calculateIncomes = function (mode, round) {
         if (round < 99) {
             incomes.lincomeExclusive = r[100].cumulativeCash - r[index].cumulativeCash;
         }
-        if (round > 101) {
-            incomes.superChincomeExclusive = r[index - 1].cumulativeCash - r[101].cumulativeCash;
-        }
         if (round > 100) {
-            incomes.superChincomeInclusive = r[index].cumulativeCash - r[101].cumulativeCash;
+            incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash;
         }
         incomes.superLincomeInclusive = r[120].cumulativeCash - r[index - 1].cumulativeCash;
         if (round < 120) {

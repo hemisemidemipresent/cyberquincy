@@ -21,7 +21,7 @@ module.exports = {
                     new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
                     'CHIMPS' // default if not provided
                 ),
-                new RoundParser('PREDET')
+                new RoundParser('ALL')
             )
         );
 

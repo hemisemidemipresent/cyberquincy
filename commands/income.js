@@ -257,6 +257,7 @@ chincomeMessage = function (mode, round) {
 // rincome = round income
 // chincome = cumulative income (CHIMPS with modifier specified by `mode`)
 // lincome = left income (income left over i.e. cash from start of round to end of R100)
+// super = rounds greater than 100
 calculateIncomes = function (mode, round) {
     let incomes = {
         rincome: null,

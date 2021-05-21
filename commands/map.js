@@ -14,16 +14,14 @@ function displayMapInfo(message, name) {
             'https://vignette.wikia.nocookie.net/b__/images/0/0c/QuincyCyberPortraitLvl20.png/revision/latest/scale-to-width-down/179?cb=20190612022025&path-prefix=bloons';
     }
     const mapEmbed = new Discord.MessageEmbed()
-        //.setColor(cyber)
         .setTitle('Map info')
-        .setAuthor('Cyber Quincy')
         .setDescription(`Here is your info for ${name}`)
         .setThumbnail(`${thum}`)
         .addField('Map length(RBS)', `${m.lenStr}`, true)
         .addField('Object count:', `${m.obj}`, true)
         .addField('Total $ to clear out all the objects', `$${m.Cos}`, true)
         .addField('Version added:', `${m.ver}`, true)
-        .addField('Water body percentage', `${m['wa%']}`, true)
+        .addField('Water body percentage/Has water?', `${m['wa%']}`, true)
         .addField('Entrances/Exits', `${m.e}`, true)
         //.addField('Line of sight obstructions', `${m.los}`, true)
         .addField('Bug reporting', `report [here](${discord})`, true)
@@ -78,6 +76,8 @@ function helpMessage(message) {
 
 function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
+        .setAuthor(`Sent by ${message.author.tag}`)
+
         .setTitle('ERROR')
         .addField(
             'Likely Cause(s)',

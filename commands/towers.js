@@ -141,6 +141,8 @@ module.exports = {
     },
     errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()
+            .setAuthor(`sent by ${message.author.tag}`)
+
             .setTitle(`${errors.join('\n')}`)
             .addField('**q!<tower> <path>**', 'example: q!bomb 130')
 

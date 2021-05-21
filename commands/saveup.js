@@ -35,19 +35,16 @@ module.exports = {
         if (parsed.mode == 'abr') {
             if (round > 100) {
                 embed = this.freePlayMsg(cashNeeded, round);
-            }
-            embed = module.exports.calculate(abr, round, cashNeeded, 1);
+            } else embed = module.exports.calculate(abr, round, cashNeeded, 1);
         } else if (parsed.mode == 'halfcash') {
             if (round > 120) {
                 embed = this.freePlayMsg(cashNeeded, round);
-            }
-            embed = module.exports.calculate(r, round, cashNeeded, 0.5);
+            } else embed = module.exports.calculate(r, round, cashNeeded, 0.5);
             return message.channel.send(embed);
         } else {
             if (round > 120) {
                 embed = this.freePlayMsg(cashNeeded, round);
-            }
-            embed = module.exports.calculate(r, round, cashNeeded, 1);
+            } else embed = module.exports.calculate(r, round, cashNeeded, 1);
         }
         message.channel.send(embed);
     },

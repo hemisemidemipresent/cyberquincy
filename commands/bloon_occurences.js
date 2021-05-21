@@ -33,7 +33,7 @@ module.exports = {
 
         function getOccurences(bloon, arrayOfRounds) {
             let occurences = [];
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 120; i++) {
                 roundArray = arrayOfRounds[`${i + 1}`];
                 roundRes = [i + 1];
 
@@ -77,7 +77,7 @@ module.exports = {
                 .setDescription(output)
                 .addField(
                     '"abbreviations"',
-                    'cred - camo red; rred - regrow red; fmoab - fortified moab; crred - camo regrow red'
+                    'c-red - camo red; r-red - regrow red; f-moab - fortified moab; cr-red - camo regrow red'
                 )
                 .setFooter(
                     'each space represents a different set of bloons. For more info use q!round <round>'

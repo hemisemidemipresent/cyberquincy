@@ -65,6 +65,9 @@ module.exports = {
                     chocbox = i + 1;
                 }
             }
+            scores.reduce((acc, obj) => {
+                return acc;
+            });
             start = Math.min(randy, chocbox);
             end = Math.max(randy, chocbox);
             for (let i = start - 1; i < end; i++) {

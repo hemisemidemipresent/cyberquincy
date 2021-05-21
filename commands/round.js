@@ -8,14 +8,13 @@ const ModeParser = require('../parser/mode-parser');
 const AnyOrderParser = require('../parser/any-order-parser');
 const json = require('../jsons/rounds_topper.json');
 const gHelper = require('../helpers/general.js');
-const { discord } = require('../aliases/misc.json');
+const FBG = require('../jsons/freeplay.json');
 
 function execute(message, args, originalCommandName) {
-    if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+    if (args.length == 0 || args[0] == 'help')
         return module.exports.helpMessage(message);
-    }
 
-    let parsed = null;
+    let parsed;
     if (originalCommandName.includes('abr')) {
         parsed = CommandParser.parse(args, new RoundParser('ALL'));
         parsed.addField('mode', 'abr');
@@ -52,7 +51,7 @@ function execute(message, args, originalCommandName) {
             roundCash = 'ABR cash data not available for R1/R2';
         }
     } else if (parsed.round > 120 || (isAbr && parsed.round > 100)) {
-        //freeplay
+        let ramp = freeplay(parsed.round);
     } else {
         roundCash = rounds2[parsed.round].cashThisRound;
     }
@@ -106,10 +105,6 @@ function calculateXps(round) {
 }
 
 function getLength(round, roundInfo) {
-    if (round > 100) {
-        // TO FIX
-        return `unknown, tell us [here](${discord}) `;
-    }
     let roundArray = roundInfo[round];
     let longest = 0;
     let end = 0;
@@ -140,7 +135,39 @@ function errorMessage(message, parsingErrors) {
         .setColor(colours['red']);
     return message.channel.send(errorEmbed);
 }
+function freeplay(round) {
+    let ramping = getRamping(round);
+    let bloonSets = getBloonSets(round);
+    console.log(ramping, bloonSets);
+}
+function getRamping(round) {
+    let ramp = 40;
+    if (round < 125) return (ramp += (round - 100) * 5);
+    ramp += 120;
+    if (round < 152) return (ramp += (round - 124) * 20);
+    ramp += 540;
+    return (ramp += (round - 151) * 50);
+}
+function getBloonSets(round) {
+    let bloonSets = [];
+    for (let i = 0; i < FBG.length; i++) {
+        let bloonGroup = FBG[i];
 
+        let obj = { bounds: [] };
+
+        let bounds = bloonGroup.bounds;
+
+        if (bounds[0].upperBounds < 100) continue; // removes useless stuff
+        let bound = bounds[i];
+        let boundset = [bound.lowerBounds, bound.upperBounds];
+        obj.bounds.push(boundset);
+        let bloonEmissions_ = bloonGroup.bloonEmissions_;
+        if (bloonEmissions_.length > 1) {
+            obj.spacing = bloonEmissions_[1].time - bloonEmissions_[0].time;
+        }
+        bloonSets.push(obj);
+    }
+}
 module.exports = {
     name: 'round',
     description: 'tells you about the rounds (below 100)',

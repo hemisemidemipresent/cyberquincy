@@ -126,7 +126,8 @@ module.exports = {
             endroundObject.cumulativeCash - startroundObject.cumulativeCash;
         return new Discord.MessageEmbed()
             .setTitle(
-                `$${Math.trunc(income * 100) / 100
+                `$${
+                    Math.trunc(income * 100) / 100
                 } was made from popping round ${startround} to popping round ${endround}`
             )
             .setColor(magenta)

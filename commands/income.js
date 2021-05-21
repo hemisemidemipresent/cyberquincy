@@ -80,9 +80,9 @@ module.exports = {
             .addField(
                 '`q!income <round> {gamemode}` (Order doesnt matter)',
                 'In specified gamemode or standard as default:' +
-                '  • Cash generated during round <round>\n' +
-                '  • Cash generated from start of round 6 through end of round <round>\n' +
-                '  • Cash generated from start of round <round> through end of round 100'
+                    '  • Cash generated during round <round>\n' +
+                    '  • Cash generated from start of round 6 through end of round <round>\n' +
+                    '  • Cash generated from start of round <round> through end of round 100'
             )
             .addField('Ex. #1', '`q!income 8 64`')
             .addField('Ex. #2', '`q!income 69 94 halfcash`')

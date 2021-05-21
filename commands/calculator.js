@@ -197,10 +197,10 @@ function costOfTowerUpgradeCrosspath(t) {
     if (jsonTowerName === 'druid-monkey') jsonTowerName = 'druid';
     if (jsonTowerName === 'engineer') jsonTowerName = 'engineer-monkey';
 
-    let mediumCost = null;
+    let cost = null; // hardcost
     if (t.includes('#') || upgrades == '000') {
         // Total cost
-        mediumCost = Towers.totalTowerUpgradeCrosspathCostNew(
+        cost = Towers.totalTowerUpgradeCrosspathCostNewHard(
             costs,
             jsonTowerName,
             upgrades
@@ -208,11 +208,11 @@ function costOfTowerUpgradeCrosspath(t) {
     } else if (t.includes('!')) {
         // Individual upgrade cost
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
-        mediumCost = costs[jsonTowerName].upgrades[`${path}`][tier - 1];
+        mediumCost = hard(costs[jsonTowerName].upgrades[`${path}`][tier - 1]);
     } else {
         throw 'No # or ! found in tower cost calc';
     }
-    return hard(mediumCost);
+    return cost;
 }
 
 function hard(cost) {

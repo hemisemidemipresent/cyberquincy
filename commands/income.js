@@ -141,7 +141,8 @@ module.exports = {
             2;
         return new Discord.MessageEmbed()
             .setTitle(
-                `$${Math.trunc(income * 100) / 100
+                `$${
+                    Math.trunc(income * 100) / 100
                 } was made from popping round ${startround} to popping round ${endround}`
             )
             .setColor(magenta)
@@ -152,7 +153,8 @@ module.exports = {
         let income = abr[endround - 2][1] - abr[startround - 3][1];
         return new Discord.MessageEmbed()
             .setTitle(
-                `$${Math.trunc(income * 100) / 100
+                `$${
+                    Math.trunc(income * 100) / 100
                 } was made from popping round ${startround} to popping round ${endround}`
             )
             .setColor(yellow)

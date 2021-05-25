@@ -4,8 +4,6 @@ module.exports = {
     aliases: ['foot'],
 
     execute(message) {
-        return message.channel.send(
-            'https://www.youtube.com/watch?v=gSF0z44_eJk'
-        );
+        return message.channel.send('https://youtu.be/1eWau3-z9mo');
     },
 };

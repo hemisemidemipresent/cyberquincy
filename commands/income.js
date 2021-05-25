@@ -18,8 +18,8 @@ module.exports = {
         let parsed = CommandParser.parse(
             args,
             new AnyOrderParser(
-                new RoundParser('ALL'),
-                new OptionalParser(new RoundParser('ALL')),
+                new RoundParser('PREDET'),
+                new OptionalParser(new RoundParser('PREDET')),
                 new OptionalParser(
                     new ModeParser(),
                     'CHIMPS' // default if not provided
@@ -49,13 +49,17 @@ module.exports = {
                 embed = module.exports.apop();
                 break;
             default:
+                if ((startround > 100 || endround > 100) && mode == 'abr') {
+                    return module.exports.errorMessage(message, [
+                        '<round> cannot be greater than 100 if mode is abr'
+                    ]) 
+                }
+
                 if (endround) {
                     embed = module.exports.income(startround, endround, mode);
                 } else {
                     if (startround >= 6) {
-                        embed = message.channel.send(
-                            chincomeMessage(mode, startround)
-                        );
+                        embed = chincomeMessage(mode, startround)
                     } else {
                         return module.exports.errorMessage(message, [
                             '<round> must be at least 6 if only one round is specified',
@@ -75,10 +79,7 @@ module.exports = {
             )
             .addField(
                 '`q!income <round> {gamemode}` (Order doesnt matter)',
-                'In specified gamemode or standard as default:' +
-                    '  • Cash generated during round <round>\n' +
-                    '  • Cash generated from start of round 6 through end of round <round>\n' +
-                    '  • Cash generated from start of round <round> through end of round 100'
+                'Provides a whole host of incomes revolving around the queried round and gamemode'
             )
             .addField('Ex. #1', '`q!income 8 64`')
             .addField('Ex. #2', '`q!income 69 94 halfcash`')
@@ -179,64 +180,140 @@ module.exports = {
 chincomeMessage = function (mode, round) {
     incomes = calculateIncomes(mode, round);
 
-    let mode_str_iden = (function (mode) {
+    const modeTitled = (function (mode) {
         switch (mode) {
-            case 'HALFCASH':
+            case 'halfcash':
                 return 'Half Cash';
-            case 'CHIMPS':
+            case 'chimps':
                 return 'Standard';
             default:
                 return mode.toUpperCase();
         }
     })(mode);
 
-    return new Discord.MessageEmbed()
-        .setTitle(`${mode_str_iden} CHIMPS Income (R${round})`)
+    const asteriskMaybe = round == 6 ? '*' : '';
+
+    incomeEmbed = new Discord.MessageEmbed()
+        .setTitle(`${modeTitled} CHIMPS Incomes (R${round})`)
+        .setColor(colours['cyber'])
         .addField(
-            `Income gained from just round ${round} itself`,
-            `$${gHelper.numberWithCommas(incomes.rincome)}`
+            `R${round}`,
+            `${incomes.rincome}`
         )
-        .addField(
-            `Total cash gained through the end of round ${round}`,
-            `$${gHelper.numberWithCommas(incomes.chincome)}`
+    
+    if (incomes.chincomeExclusive) {
+        incomeEmbed.addField(
+            `Start -> End R${round - 1}`,
+            `${incomes.chincomeExclusive}`
         )
-        .addField(
-            `Income gained from start of round ${round} to end of R100`,
-            `$${gHelper.numberWithCommas(incomes.lincome)}`
+    }
+        
+    incomeEmbed.addField(
+        `Start -> End R${round}`,
+        `${incomes.chincomeInclusive}`
+    );
+
+    if (round < 100) {
+        incomeEmbed.addField(
+            `Start R${round}${asteriskMaybe} -> End R100`,
+            incomes.lincomeInclusive
         )
-        .setColor(colours['cyber']);
+    }
+    if (round < 99) {
+        incomeEmbed.addField(
+            `Start R${round + 1} -> End R100`,
+            incomes.lincomeExclusive
+        )
+    }
+    if (round > 100) {
+        incomeEmbed.addField(
+            `Start R101 -> End R${round}`,
+            incomes.superChincomeInclusive
+        )
+    }
+    if (mode !== 'abr') {
+        incomeEmbed.addField(
+            `Start R${round}${asteriskMaybe} -> End R120`,
+            incomes.superLincomeInclusive
+        )
+    }
+    if (round < 120  && mode !== 'abr') {
+        incomeEmbed.addField(
+            `Start R${round + 1} -> End R120`,
+            incomes.superLincomeExclusive
+        )
+    }
+
+    if (round === 6) {
+        incomeEmbed.setFooter("*Doesn't include starting cash");
+    }
+    
+    return incomeEmbed;
 };
 
 // rincome = round income
 // chincome = cumulative income (CHIMPS with modifier specified by `mode`)
 // lincome = left income (income left over i.e. cash from start of round to end of R100)
+// super = rounds greater than 100
 calculateIncomes = function (mode, round) {
-    chincome = null;
-    rincome = null;
+    let incomes = {
+        rincome: null,
+        chincomeExclusive: null,
+        chincomeInclusive: null,
+        lincomeExclusive: null,
+        lincomeInclusive: null,
+        superChincomeInclusive: null,
+        superLincomeInclusive: null,
+        superLincomeExclusive: null,
+    }
 
     if (mode == 'abr') {
         index = round - 2;
 
-        chincome = abr[index][1] - abr[3][1] + 650;
-        rincome = abr[index][0];
-        lincome = abr[98][1] - abr[index - 1][1];
+        incomes.rincome = abr[index][0];
+        if (round > 6) {
+            incomes.chincomeExclusive = abr[index - 1][1] - abr[3][1] + 650;
+        }
+        incomes.chincomeInclusive = abr[index][1] - abr[3][1] + 650;
+        if (round < 100) {
+            incomes.lincomeInclusive = abr[98][1] - abr[index - 1][1];
+        }
+        if (round < 99) {
+            incomes.lincomeExclusive = abr[98][1] - abr[index][1];
+        }
     } else {
         index = round;
 
-        chincome = r[index].cumulativeCash - r[5].cumulativeCash + 650;
-        rincome = r[index].cashThisRound;
-        lincome = r[100].cumulativeCash - r[index - 1].cumulativeCash;
+        incomes.rincome = r[index].cashThisRound;
+        if (round > 6) {
+            incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
+        }
+        incomes.chincomeInclusive = r[index].cumulativeCash - r[5].cumulativeCash + 650;
+        if (round < 100) {
+            incomes.lincomeInclusive = r[100].cumulativeCash - r[index - 1].cumulativeCash;
+        }
+        if (round < 99) {
+            incomes.lincomeExclusive = r[100].cumulativeCash - r[index].cumulativeCash;
+        }
+        if (round > 100) {
+            incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash;
+        }
+        incomes.superLincomeInclusive = r[120].cumulativeCash - r[index - 1].cumulativeCash;
+        if (round < 120) {
+            incomes.superLincomeExclusive = r[120].cumulativeCash - r[index].cumulativeCash;
+        }
 
         if (mode == 'halfcash') {
-            chincome /= 2;
-            rincome /= 2;
-            lincome /= 2;
+            for (incomeType in incomes) {
+                incomes[incomeType] /= 2;
+            }
         }
     }
 
-    return {
-        rincome: rincome.toFixed(1),
-        chincome: chincome.toFixed(1),
-        lincome: lincome.toFixed(1),
-    };
+    for (incomeType in incomes) {
+        if (incomes[incomeType]) {
+            incomes[incomeType] = gHelper.numberAsCost(incomes[incomeType].toFixed(1));
+        }
+    }
+    return incomes;
 };

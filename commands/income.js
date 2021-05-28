@@ -22,7 +22,7 @@ module.exports = {
                 new OptionalParser(new RoundParser('PREDET')),
                 new OptionalParser(
                     new ModeParser(),
-                    'CHIMPS' // default if not provided
+                    'chimps' // default if not provided
                 )
             )
         );

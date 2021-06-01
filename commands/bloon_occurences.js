@@ -85,8 +85,10 @@ module.exports = {
                 .setColor(turq);
             return embed;
         }
+
         let occurences = getOccurences(parsed.bloon.toString(), object);
         let output = format(occurences);
+
         message.channel.send(output);
     },
     errorMessage(message, parsingErrors) {

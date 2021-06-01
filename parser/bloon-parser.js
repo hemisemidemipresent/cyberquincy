@@ -40,7 +40,7 @@ class BloonParser {
                         let isRegrow = !!j;
                         let isFortified = !!k;
 
-                        if (
+                        let isFortifiable =
                             (bloon == 'moab' ||
                                 bloon == 'bfb' ||
                                 bloon == 'zomg' ||
@@ -48,26 +48,30 @@ class BloonParser {
                                 bloon == 'ceramic' ||
                                 bloon == 'lead' ||
                                 bloon == 'ddt') &&
-                            isFortified
-                        ) {
-                            bloon = 'f' + bloon;
-                        }
-                        if (
+                            isFortified;
+                        let isRegrowable =
                             !(
                                 bloon == 'moab' ||
                                 bloon == 'bfb' ||
                                 bloon == 'zomg' ||
                                 bloon == 'bad' ||
                                 bloon == 'ddt'
-                            ) &&
-                            isRegrow
-                        ) {
+                            ) && isRegrow;
+                        if (isCamo || isRegrowable || isFortifiable) {
+                            // add a dash before the prefixes
+                            bloon = '-' + bloon;
+                        }
+                        if (isFortifiable) {
+                            bloon = 'f' + bloon;
+                        }
+                        if (isRegrowable) {
                             bloon = 'r' + bloon;
                         }
-                        if (bloon != 'ddt' && isCamo) {
+                        if (isCamo) {
                             bloon = 'c' + bloon;
                         }
-                        // if(bloon == bloons[l])
+
+                        console.log(bloon);
                         moddedBloons.push(bloon);
                     }
                 }

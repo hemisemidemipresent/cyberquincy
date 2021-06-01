@@ -3,6 +3,7 @@ const secrets_config = require('./1/config.json');
 const Advertisements = require('./helpers/advertisements.js');
 
 const PREFIX = secrets_config['prefix'];
+const cyberquincyServer = '598768024761139240';
 const XPCOMMANDS = ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'];
 
 const { discord } = require('./aliases/misc.json');
@@ -62,17 +63,6 @@ async function handleCommand(message) {
                 (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
             );
 
-        let lang = 'en';
-
-        // russian
-        if (
-            message.channel.topic &&
-            message.channel.topic.toLowerCase().includes('<ru>') &&
-            command.languages.includes('ru')
-        ) {
-            lang = 'ru';
-        }
-
         if (!command) {
             return;
         }
@@ -117,13 +107,14 @@ async function handleCommand(message) {
                 }
             }
         }
-        command.execute(message, canonicalArgs, commandName, lang);
 
-        // Don't want the user gaining xp from metacommands
-        /*
-        if (!XPCOMMANDS.includes(command.name) && xpEnabled) {
-            Xp.addCommandXp(message);
-        }*/
+        if (command.beta && message.channel.guild.id != cyberquincyServer) {
+            return message.channel.send(
+                'This command is in beta, join https://discord.gg/VMX5hZA to beta test the command'
+            );
+        }
+        command.execute(message, canonicalArgs, commandName);
+
         // post information to statcord
         const botposting = require('./1/config.json')['botposting'];
 

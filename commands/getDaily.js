@@ -3,7 +3,7 @@ const request = require('request');
 const dgdata = require('node-dgdata');
 module.exports = {
     name: 'daily',
-
+    beta: true,
     execute(message, args) {
         function meat(num) {
             let promise = new Promise((resolve, reject) => {

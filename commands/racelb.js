@@ -13,7 +13,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'koxurryx';
+        let raceID = 'kp7qjbga';
         const parsed = CommandParser.parse(
             args,
 
@@ -68,7 +68,23 @@ module.exports = {
 
                 time = parsetime(time);
                 let md = scores[i].metadata.split(',');
-                let username = md[0];
+                let username;
+                if (
+                    message.author.id == '279126808455151628' ||
+                    message.author.id == '217726724752932864'
+                ) {
+                    let userid = scores[i].userID;
+                    if (
+                        userid == '5b7f82e318c7cbe32fa01e4e' ||
+                        userid == '5b2845abfcd0f8d9745e6cfe'
+                    ) {
+                        username = md[0];
+                    } else {
+                        username = '???';
+                    }
+                } else {
+                    username = md[0];
+                }
                 let row = '';
                 row += addSpaces(i + 1, 2) + '|';
                 row += addSpaces(username, maxLength);

@@ -35,7 +35,11 @@ function execute(message, args, originalCommandName) {
     }
 
     isAbr = parsed.mode == 'abr';
-
+    // freeplay has its own serperate shit going on
+    if (parsed.round > 140 || (isAbr && parsed.round > 100)) {
+        let ramp = freeplay(parsed.round);
+        return message.channel.send(ramp);
+    }
     [xp, totalxp] = calculateXps(parsed.round);
     let roundInfo = isAbr ? json.alt : json.reg;
     let roundLength = getLength(parsed.round, roundInfo);
@@ -50,8 +54,6 @@ function execute(message, args, originalCommandName) {
         } else {
             roundCash = 'ABR cash data not available for R1/R2';
         }
-    } else if (parsed.round > 120 || (isAbr && parsed.round > 100)) {
-        let ramp = freeplay(parsed.round);
     } else {
         roundCash = rounds2[parsed.round].cashThisRound;
     }
@@ -76,7 +78,7 @@ function execute(message, args, originalCommandName) {
         )
         .addField(
             '**Note:**',
-            ' • If you are in freeplay, the xp value is 0.1 of what is displayed\n' +
+            ' • If you are in freeplay (e.g. round 41 on easy mode), the xp value is 0.1 of what is displayed\n' +
                 ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
         )
         .setFooter(
@@ -136,9 +138,36 @@ function errorMessage(message, parsingErrors) {
     return message.channel.send(errorEmbed);
 }
 function freeplay(round) {
+    [xp, totalxp] = calculateXps(parsed.round);
+
     let ramping = getRamping(round);
     let bloonSets = getBloonSets(round);
-    console.log(ramping, bloonSets);
+    const roundEmbed = new Discord.MessageEmbed()
+        .setTitle(`R${parsed.round}` + (parsed.mode == 'abr' ? ' ABR' : ''))
+        .addField('health and speed ramping', `+${ramping}%`)
+        .setDescription(`all **POSSIBLE** bloon sets\n${bloonSets.join('\n')}`)
+        .addField(
+            `XP Earned on R${parsed.round}`,
+            `${gHelper.numberWithCommas(
+                xp * 0.1
+            )} (note this takes into the account freeplay xp reduction)`,
+            true
+        )
+        .addField(
+            'Total XP if You Started on R1',
+            `${gHelper.numberWithCommas(
+                totalxp * 0.1
+            )} (note this takes into the account freeplay xp reduction)`,
+            true
+        )
+        .addField(
+            '**Note:**',
+
+            ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
+        )
+
+        .setColor(colours['cyber']);
+    return roundEmbed;
 }
 function getRamping(round) {
     let ramp = 40;
@@ -153,21 +182,18 @@ function getBloonSets(round) {
     for (let i = 0; i < FBG.length; i++) {
         let bloonGroup = FBG[i];
 
-        let obj = { bounds: [] };
-
-        let bounds = bloonGroup.bounds;
-
-        if (bounds[0].upperBounds < 100) continue; // removes useless stuff
-        let bound = bounds[i];
-        let boundset = [bound.lowerBounds, bound.upperBounds];
-        obj.bounds.push(boundset);
-        let bloonEmissions_ = bloonGroup.bloonEmissions_;
-        if (bloonEmissions_.length > 1) {
-            obj.spacing = bloonEmissions_[1].time - bloonEmissions_[0].time;
+        for (let i = 0; i < bloonGroup.bounds.length; i++) {
+            let bounds = bloonGroup.bounds[i];
+            if (bounds[0] <= round && bounds[1] >= round) {
+                let res = `${bloonGroup.number} ${bloonGroup.bloon}`;
+                bloonSets.push(res);
+                break;
+            }
         }
-        bloonSets.push(obj);
     }
+    return bloonSets;
 }
+
 module.exports = {
     name: 'round',
     description: 'tells you about the rounds (below 100)',

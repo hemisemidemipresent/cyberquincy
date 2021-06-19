@@ -610,120 +610,240 @@
         "rbe": 20020,
         "cashThisRound": 225.2,
         "cumulativeRBE": 2062933,
-        "cumulativeCash": 179869.6
+        "cumulativeCash": 180070.6
     },
     {
         "rbe": 199826,
         "cashThisRound": 899.6,
         "cumulativeRBE": 2262759,
-        "cumulativeCash": 189769.2
+        "cumulativeCash": 181172.3
     },
     {
         "rbe": 507908,
         "cashThisRound": 2386.9,
         "cumulativeRBE": 2770667,
-        "cumulativeCash": 183156.1
+        "cumulativeCash": 183762.2
     },
     {
-        "rbe": 372516,
+        "rbe": 372672,
         "cashThisRound": 2764.5,
-        "cumulativeRBE": 3143183,
-        "cumulativeCash": 185920.6
+        "cumulativeRBE": 3143393,
+        "cumulativeCash": 186730.7
     },
     {
         "rbe": 152340,
         "cashThisRound": 1678.5,
-        "cumulativeRBE": 3295523,
-        "cumulativeCash": 187599.1
+        "cumulativeRBE": 3295679,
+        "cumulativeCash": 188614.2
     },
     {
         "rbe": 113376,
         "cashThisRound": 708.6,
-        "cumulativeRBE": 3408899,
-        "cumulativeCash": 188307.7
+        "cumulativeRBE": 3409055,
+        "cumulativeCash": 189528.9
     },
     {
         "rbe": 447384,
         "cashThisRound": 1463.4,
-        "cumulativeRBE": 385283,
-        "cumulativeCash": 189771.1
+        "cumulativeRBE": 3856439,
+        "cumulativeCash": 191199.4
     },
     {
         "rbe": 554704,
         "cashThisRound": 2074.3,
-        "cumulativeRBE": 4410987,
-        "cumulativeCash": 191845.4
+        "cumulativeRBE": 4411143,
+        "cumulativeCash": 193481.7
     },
     {
         "rbe": 552345,
         "cashThisRound": 2975.7,
-        "cumulativeRBE": 4963332,
-        "cumulativeCash": 194821.1
+        "cumulativeRBE": 4963488,
+        "cumulativeCash": 196666.4
     },
     {
         "rbe": 141410,
-        "cashThisRound": 991,
-        "cumulativeRBE": 5104742,
-        "cumulativeCash": 195812.1
+        "cashThisRound": 991.1,
+        "cumulativeRBE": 5104898,
+        "cumulativeCash": 197867.5
     },
     {
         "rbe": 830212,
         "cashThisRound": 3172.5,
-        "cumulativeRBE": 5934954,
-        "cumulativeCash": 199731.7
+        "cumulativeRBE": 5935110,
+        "cumulativeCash": 201251
     },
     {
         "rbe": 198976,
         "cashThisRound": 747.1,
-        "cumulativeRBE": 6133930,
-        "cumulativeCash": 200478.8
+        "cumulativeRBE": 6134086,
+        "cumulativeCash": 202210.2
     },
     {
         "rbe": 156812,
         "cashThisRound": 845.6,
-        "cumulativeRBE": 6290742,
-        "cumulativeCash": 201324.4
+        "cumulativeRBE": 6290898,
+        "cumulativeCash": 203268.8
     },
     {
-        "rbe": 483176,
+        "rbe": 483416,
         "cashThisRound": 2157.6,
-        "cumulativeRBE": 6773918,
-        "cumulativeCash": 203482
+        "cumulativeRBE": 6774314,
+        "cumulativeCash": 205640.5
     },
     {
         "rbe": 492396,
         "cashThisRound": 2157.6,
-        "cumulativeRBE": 7266314,
-        "cumulativeCash": 205639.6
+        "cumulativeRBE": 7266710,
+        "cumulativeCash": 208013.1
     },
     {
         "rbe": 575600,
         "cashThisRound": 1573.1,
-        "cumulativeRBE": 7841914,
-        "cumulativeCash": 207212.7
+        "cumulativeRBE": 7842310,
+        "cumulativeCash": 209802.3
     },
     {
         "rbe": 75010,
         "cashThisRound": 377.9,
-        "cumulativeRBE": 7916924,
-        "cumulativeCash": 207590.6
+        "cumulativeRBE": 7917320,
+        "cumulativeCash": 210397.2
     },
     {
         "rbe": 344080,
         "cashThisRound": 1448.8,
-        "cumulativeRBE": 8261004,
-        "cumulativeCash": 209039.4
+        "cumulativeRBE": 8261400,
+        "cumulativeCash": 212064
     },
     {
-        "rbe": 212594,
+        "rbe": 212680,
         "cashThisRound": 533.8,
-        "cumulativeRBE": 8473598,
-        "cumulativeCash": 209573.2
+        "cumulativeRBE": 8474080,
+        "cumulativeCash": 212816.8
     },
     {
-        "rbe": 287872,
-        "cashThisRound": 1342,
-        "cumulativeRBE": 8761470,
-        "cumulativeCash": 210915.2
+        "rbe": 431808,
+        "cashThisRound": 2013.1,
+        "cumulativeRBE": 8905888,
+        "cumulativeCash": 215049.9
+    },
+    {
+        "rbe": 516500,
+        "cashThisRound": 1372.5,
+        "cumulativeRBE": 9422388,
+        "cumulativeCash": 216643.4
+    },
+    {
+        "rbe": 386730,
+        "cashThisRound": 1861.5,
+        "cumulativeRBE": 9809118,
+        "cumulativeCash": 218726.9
+    },
+    {
+        "rbe": 629936,
+        "cashThisRound": 2500.2,
+        "cumulativeRBE": 10439054,
+        "cumulativeCash": 221450.1
+    },
+    {
+        "rbe": 738600,
+        "cashThisRound": 2287.5,
+        "cumulativeRBE": 11177654,
+        "cumulativeCash": 223961.6
+    },
+    {
+        "rbe": 953904,
+        "cashThisRound": 4323.5,
+        "cumulativeRBE": 12131558,
+        "cumulativeCash": 228510.1
+    },
+    {
+        "rbe": 145738,
+        "cashThisRound": 754.5,
+        "cumulativeRBE": 12277296,
+        "cumulativeCash": 229490.6
+    },
+    {
+        "rbe": 185088,
+        "cashThisRound": 1097.8,
+        "cumulativeRBE": 12462384,
+        "cumulativeCash": 230815.3
+    },
+    {
+        "rbe": 337288,
+        "cashThisRound": 1592.2,
+        "cumulativeRBE": 12799672,
+        "cumulativeCash": 232635.5
+    },
+    {
+        "rbe": 881092,
+        "cashThisRound": 2011.8,
+        "cumulativeRBE": 13680764,
+        "cumulativeCash": 234876.3
+    },
+    {
+        "rbe": 328128,
+        "cashThisRound": 1554.5,
+        "cumulativeRBE": 14008892,
+        "cumulativeCash": 236660.8
+    },
+    {
+        "rbe": 1587456,
+        "cashThisRound": 2196.4,
+        "cumulativeRBE": 15596348,
+        "cumulativeCash": 239088.1
+    },
+    {
+        "rbe": 1388688,
+        "cashThisRound": 2952.5,
+        "cumulativeRBE": 16985036,
+        "cumulativeCash": 242272.6
+    },
+    {
+        "rbe": 1268856,
+        "cashThisRound": 3072.9,
+        "cumulativeRBE": 18253892,
+        "cumulativeCash": 245578.5
+    },
+    {
+        "rbe": 413840,
+        "cashThisRound": 1220,
+        "cumulativeRBE": 18667732,
+        "cumulativeCash": 247032.5
+    },
+    {
+        "rbe": 1550080,
+        "cashThisRound": 1868.3,
+        "cumulativeRBE": 20217812,
+        "cumulativeCash": 249135.8
+    },
+    {
+        "rbe": 447264,
+        "cashThisRound": 1463.5,
+        "cumulativeRBE": 20665076,
+        "cumulativeCash": 250835.4
+    },
+    {
+        "rbe": 1290624,
+        "cashThisRound": 3294.1,
+        "cumulativeRBE": 21955700,
+        "cumulativeCash": 254366.5
+    },
+    {
+        "rbe": 500832,
+        "cashThisRound": 960.1,
+        "cumulativeRBE": 22456532,
+        "cumulativeCash": 255564.6
+    },
+    {
+        "rbe": 450096,
+        "cashThisRound": 1927.9,
+        "cumulativeRBE": 22906628,
+        "cumulativeCash": 257731.5
+    },
+    {
+        "rbe": 744320,
+        "cashThisRound": 533.8,
+        "cumulativeRBE": 23650948,
+        "cumulativeCash": 258505.3
     }
 ]

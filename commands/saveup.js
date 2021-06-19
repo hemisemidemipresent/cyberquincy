@@ -37,12 +37,12 @@ module.exports = {
                 embed = this.freePlayMsg(cashNeeded, round);
             } else embed = module.exports.calculate(abr, round, cashNeeded, 1);
         } else if (parsed.mode == 'halfcash') {
-            if (round > 120) {
+            if (round > 140) {
                 embed = this.freePlayMsg(cashNeeded, round);
             } else embed = module.exports.calculate(r, round, cashNeeded, 0.5);
             return message.channel.send(embed);
         } else {
-            if (round > 120) {
+            if (round > 140) {
                 embed = this.freePlayMsg(cashNeeded, round);
             } else embed = module.exports.calculate(r, round, cashNeeded, 1);
         }

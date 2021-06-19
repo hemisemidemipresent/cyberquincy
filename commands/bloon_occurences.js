@@ -33,7 +33,7 @@ module.exports = {
 
         function getOccurences(bloon, arrayOfRounds) {
             let occurences = [];
-            for (let i = 0; i < 120; i++) {
+            for (let i = 0; i < 140; i++) {
                 roundArray = arrayOfRounds[`${i + 1}`];
                 roundRes = [i + 1];
 

@@ -624,7 +624,7 @@
         "Cos": "4000",
         "wa%": "11%",
         "los": "yes",
-        "thu": "https://cdn.discordapp.com/attachments/594348433922457610/634031789324763175/Screenshot_20191016_221549.jpg",
+        "thu": "https://cdn.discordapp.com/attachments/770247322633633792/851659208302788618/Screenshot_202.png",
         "e": "4/1"
     },
     "flooded_valley": {
@@ -659,5 +659,16 @@
         "los": "no",
         "thu": "https://cdn.discordapp.com/attachments/699781597515481159/841569553381195826/1000.png",
         "e": "1/1"
+    },
+    "sanctuary": {
+        "ver": 26,
+        "len": 11.8,
+        "lenStr": "10.8 - Inside exits\n12.8 - Outside exits",
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "no",
+        "los": "no",
+        "thu": "https://cdn.discordapp.com/attachments/770247322633633792/851658653336731678/Screenshot_200.png",
+        "e": "2/4"
     }
 }

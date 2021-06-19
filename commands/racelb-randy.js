@@ -12,7 +12,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'kp7qjbga';
+        let raceID = 'Who_wants_to_be_a_millionaire_kprhx8qn';
         const parsed = CommandParser.parse(
             args,
 
@@ -55,6 +55,7 @@ module.exports = {
 
             let randy,
                 chocbox = 0;
+
             for (let i = 0; i < 50; i++) {
                 let userID = scores[i].userID;
 
@@ -65,9 +66,6 @@ module.exports = {
                     chocbox = i + 1;
                 }
             }
-            scores.reduce((acc, obj) => {
-                return acc;
-            });
             start = Math.min(randy, chocbox);
             end = Math.max(randy, chocbox);
             for (let i = start - 1; i < end; i++) {
@@ -85,12 +83,10 @@ module.exports = {
                 time = parsetime(time);
                 let md = scores[i].metadata.split(',');
                 let username = md[0];
-                let row = '';
-                row += addSpaces(i + 1, 2) + '|';
-                row += addSpaces(username, maxLength);
-                row += '|';
-                row += time;
-                row += '\n';
+                let row = `${addSpaces(i + 1, 2)}|${addSpaces(
+                    username,
+                    maxLength
+                )}|${time}\n`;
                 output += row;
             }
             if (output.length > 2000) {

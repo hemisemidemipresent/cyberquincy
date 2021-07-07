@@ -24,11 +24,16 @@ function calc(message, args) {
         return lexeme; // symbols
     });
 
-    lexer.addRule(/[\(\+\-\*\/%\)]/, function (lexeme) {
+    lexer.addRule(/[\(\+\-\*\/%\^\)]/, function (lexeme) {
         return lexeme; // punctuation (i.e. "(", "+", "-", "*", "/", ")")
     });
 
     // Set up operators and operator precedence to interpret the parsed tree
+    var power = {
+        precedence: 3,
+        associativity: 'left',
+    }
+
     var factor = {
         precedence: 2,
         associativity: 'left',
@@ -45,6 +50,7 @@ function calc(message, args) {
         '*': factor,
         '/': factor,
         '%': factor,
+        '^': power,
     });
 
     // Execute the interpretation of the parsed lexical stack
@@ -99,6 +105,9 @@ function calc(message, args) {
         '%': function (a, b) {
             return a % b;
         },
+        '^': function (a, b) {
+            return a ** b;
+        },
     };
 
     try {
@@ -111,6 +120,7 @@ function calc(message, args) {
                 case '*':
                 case '/':
                 case '%':
+                case '^':
                     var b = +stack.pop();
                     var a = +stack.pop();
                     stack.push(operator[c](a, b));
@@ -303,7 +313,7 @@ function helpMessage(message) {
             '`adora`, `brick`',
             'Base cost of hero (no leveling cost calculations included)'
         )
-        .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder)')
+        .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power)')
         .addField(
             'Examples',
             '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' +
@@ -312,8 +322,8 @@ function helpMessage(message) {
         )
         .addField(
             'Notes',
-            ' • For ambiguous tokens like `wiz!220` and `super!101`, the upgrade is assumed to be the leftmost non-zero digit.\n' +
-                ' • `q!calc` uses topper prices, which are still stuck on v21. Fix coming at some point.'
+            ' • For ambiguous tokens like `wiz!220` and `super!101` (there is no path/crosspath), the upgrade is assumed to be the leftmost non-zero digit\n' +
+            ' • You can use this calculator for non-cash-related calculations as well. Just ignore the dollar sign in the result.'
         )
         .setColor(colours['black']);
 

@@ -25,7 +25,7 @@ function calc(message, args) {
     });
 
     lexer.addRule(/[\(\+\-\*\/%\^\)]/, function (lexeme) {
-        return lexeme; // punctuation (i.e. "(", "+", "-", "*", "/", ")")
+        return lexeme; // punctuation and operators
     });
 
     // Set up operators and operator precedence to interpret the parsed tree

@@ -17,7 +17,12 @@ module.exports = {
             new AnyOrderParser(
                 new CashParser(),
                 new OptionalParser(
-                    new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
+                    new ModeParser(
+                        'CHIMPS',
+                        'ABR',
+                        'HALFCASH',
+                        'PREDET_CHIMPS'
+                    ),
                     'CHIMPS' // default if not provided
                 ),
                 new RoundParser('ALL')

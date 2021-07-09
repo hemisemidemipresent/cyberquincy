@@ -134,7 +134,8 @@ function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('ERROR')
         .addField('Likely Cause(s)', parsingErrors.join('\n'))
-        .setColor(colours['red']);
+        .setColor(colours['red'])
+        .setFooter(`message sent by ${message.author.tag}`);
     return message.channel.send(errorEmbed);
 }
 function freeplay(round) {

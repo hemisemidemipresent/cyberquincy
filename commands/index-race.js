@@ -99,7 +99,7 @@ async function findRaceByNum(number, message) {
         .addField('Date', `${dates.value}`)
         .addField(
             'Top 5',
-            `\`\`\`fix\n${firstPlaceNick} ${firstPlaceName} ${firstPlaceTime.value}\n${secondPlaceNick} ${secondPlaceName} ${secondPlaceTime.value}\n${thirdPlaceNick} ${thirdPlaceName} ${thirdPlaceTime.value}\n${fourthPlaceNick} ${fourthPlaceName} ${fourthPlaceTime.value}\n${fifthPlaceNick} ${fifthPlaceName} ${fifthPlaceTime.value}\`\`\``
+            `${firstPlaceNick} ${firstPlaceName} ${firstPlaceTime.value}\n${secondPlaceNick} ${secondPlaceName} ${secondPlaceTime.value}\n${thirdPlaceNick} ${thirdPlaceName} ${thirdPlaceTime.value}\n${fourthPlaceNick} ${fourthPlaceName} ${fourthPlaceTime.value}\n${fifthPlaceNick} ${fifthPlaceName} ${fifthPlaceTime.value}`
         )
         .addField('Links', `${output}`)
         .addField('Players', `${players.value}`);

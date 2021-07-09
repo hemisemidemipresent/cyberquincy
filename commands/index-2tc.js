@@ -207,11 +207,23 @@ async function displayCombos(message, combos, parsed, allCombos) {
             }
         }
 
-        return await displayOneOrMultiplePages(message, parsed, combos, colData, numOGCompletions);
+        return await displayOneOrMultiplePages(
+            message,
+            parsed,
+            combos,
+            colData,
+            numOGCompletions
+        );
     }
 }
 
-async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colData, numOGCompletions) {
+async function displayOneOrMultiplePages(
+    userQueryMessage,
+    parsed,
+    combos,
+    colData,
+    numOGCompletions
+) {
     REACTIONS = ['⬅️', '➡️'];
     MAX_NUM_ROWS = 15;
     const numRows = colData[Object.keys(colData)[0]].length;
@@ -232,14 +244,14 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colDa
 
             challengeEmbed.addField(
                 '# Combos',
-                `**${leftIndex+1}**-**${rightIndex+1}** of ${numRows}`
+                `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
             );
 
             for (header in colData) {
                 data =
                     numRows <= maxNumRowsDisplayed
                         ? colData[header]
-                        : colData[header].slice(leftIndex, rightIndex + 1)
+                        : colData[header].slice(leftIndex, rightIndex + 1);
 
                 challengeEmbed.addField(
                     gHelper.toTitleCase(header.split('_').join(' ')),
@@ -253,7 +265,9 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colDa
                     challengeEmbed.setFooter(`---\nOG completion bolded`);
                 }
                 if (numOGCompletions > 1) {
-                    challengeEmbed.setFooter(`---\n${numOGCompletions} OG completions bolded`);
+                    challengeEmbed.setFooter(
+                        `---\n${numOGCompletions} OG completions bolded`
+                    );
                 }
             }
 
@@ -277,32 +291,34 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos, colDa
         for (var i = 0; i < REACTIONS.length; i++) {
             botMessage.react(REACTIONS[i]);
         }
-    
+
         // Read author reaction (time limit specified below in milliseconds)
         // and respond with appropriate action
-        botMessage.createReactionCollector(
-            (reaction, user) =>
-                user.id === userQueryMessage.author.id &&
-                REACTIONS.includes(reaction.emoji.name),
-            { time: 20000 }
-        ).once('collect', (reaction) => {
-            switch (reaction.emoji.name) {
-                case '⬅️':
-                    rightIndex = (leftIndex - 1 + numRows) % numRows;
-                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                    if (leftIndex < 0) leftIndex = 0;
-                    displayPages(-1);
-                    break;
-                case '➡️':
-                    leftIndex = (rightIndex + 1) % numRows;
-                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                    if (rightIndex >= numRows) rightIndex = numRows - 1;
-                    displayPages(1);
-                    break;
-            }
-        });
+        botMessage
+            .createReactionCollector(
+                (reaction, user) =>
+                    user.id === userQueryMessage.author.id &&
+                    REACTIONS.includes(reaction.emoji.name),
+                { time: 20000 }
+            )
+            .once('collect', (reaction) => {
+                switch (reaction.emoji.name) {
+                    case '⬅️':
+                        rightIndex = (leftIndex - 1 + numRows) % numRows;
+                        leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                        if (leftIndex < 0) leftIndex = 0;
+                        displayPages(-1);
+                        break;
+                    case '➡️':
+                        leftIndex = (rightIndex + 1) % numRows;
+                        rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                        if (rightIndex >= numRows) rightIndex = numRows - 1;
+                        displayPages(1);
+                        break;
+                }
+            });
     }
-    displayPages(1)
+    displayPages(1);
 }
 
 function getDisplayCols(parsed) {
@@ -391,7 +407,8 @@ function embedTitle(parsed, combos) {
     map = Object.keys(sampleCombo.MAPS)[0];
 
     title = '';
-    if (parsed.natural_number) title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
+    if (parsed.natural_number)
+        title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
     else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
     if (parsed.person) title += `by ${sampleCombo.MAPS[map].PERSON} `;
     if (parsed.map) title += `on ${map} `;
@@ -468,7 +485,7 @@ function filterCombos(filteredCombos, parsed) {
 
     if (parsed.person) {
         function personFilter(_, completion) {
-            return completion.PERSON.toLowerCase() == parsed.person;
+            return completion.PERSON.toString().toLowerCase() == parsed.person;
         }
         filteredCombos = filterByCompletion(personFilter, filteredCombos);
     }
@@ -491,7 +508,7 @@ function filterCombos(filteredCombos, parsed) {
 }
 
 function excludeOG(parsed) {
-    return parsed.version || (!parsed.person && !parsed.map)
+    return parsed.version || (!parsed.person && !parsed.map);
 }
 
 function parseProvidedDefinedTowers(parsed) {

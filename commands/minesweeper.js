@@ -10,7 +10,7 @@ module.exports = {
     execute(message, args) {
         const parsed = CommandParser.parse(
             args,
-            new OptionalParser(new NaturalNumberParser(8, 20))
+            new OptionalParser(new NaturalNumberParser(1, 20))
         );
         let mines = 8;
         if (parsed.hasErrors()) {

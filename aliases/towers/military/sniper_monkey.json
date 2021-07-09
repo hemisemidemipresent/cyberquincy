@@ -5,7 +5,7 @@
     "400": ["maim_moab", "maim", "maimoab", "maimmoab", "mainmoan"],
     "500": ["cripple_moab", "cripple", "cripplemoab"],
 
-    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb"],
+    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb","bbullet"],
     "040": ["supply_drop", "supplydrop", "supply", "sd"],
     "050": ["elite_sniper", "es", "esniper", "elitesniper"],
     

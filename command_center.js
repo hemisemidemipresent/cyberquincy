@@ -129,9 +129,11 @@ async function handleCommand(message) {
                 });
         }
 
-        // May or may not embed an advertisement message in addition to the command output
+        // secret
 
-        //Advertisements.spin(message);
+        if (Math.random() * 420 < 1) {
+            message.channel.send('vrej');
+        }
 
         /* let GLOBAL_COOLDOWN_REGEX = /gcd ?= ?(\d+)/;
         regex_match = message.channel.topic.match(GLOBAL_COOLDOWN_REGEX);

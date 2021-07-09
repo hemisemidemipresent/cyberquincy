@@ -93,6 +93,7 @@ const aliases = [
         'drone',
     ],
     ['sauda', 'saud', 'sau', '🥛', 'sawdust'],
+    ['psi', 'psy', 'Ψ', 'sigh'],
 ];
 const links = [
     'https://pastebin.com/raw/ASpHNduS',
@@ -107,6 +108,7 @@ const links = [
     'https://pastebin.com/raw/amw39T29',
     'https://pastebin.com/raw/UxN2Wx1F',
     'https://pastebin.com/raw/8E2TSndk',
+    'https://pastebin.com/raw/9h9aAPUm',
 ];
 module.exports = {
     name: '<hero>',

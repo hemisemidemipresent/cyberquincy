@@ -13,7 +13,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'Who_wants_to_be_a_millionaire_kprhx8qn';
+        let raceID = 'Captain_Spice_kqlp06t0';
         const parsed = CommandParser.parse(
             args,
 
@@ -46,7 +46,14 @@ module.exports = {
             if (err) {
                 reject('req');
             }
-            let data = JSON.parse(JSON.parse(body).data);
+            let data;
+            try {
+                data = JSON.parse(JSON.parse(body).data);
+            } catch {
+                return message.channel.send(
+                    'invalid race id. To see all race ids join the discord server by running `q!server`'
+                );
+            }
             let scores = data.scores.equal;
 
             let output = '';

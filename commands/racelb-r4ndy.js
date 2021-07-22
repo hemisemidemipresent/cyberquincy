@@ -1,45 +1,15 @@
 const request = require('request');
-const AnyOrderParser = require('../parser/any-order-parser.js');
-const NaturalNumberParser = require('../parser/natural-number-parser.js');
-const OptionalParser = require('../parser/optional-parser.js');
-const AnythingParser = require('../parser/anything-parser');
 const { red, cyber } = require('../jsons/colours.json');
 const raceImg =
     'https://static.wikia.nocookie.net/b__/images/4/40/EventRaceIcon.png/revision/latest/scale-to-width-down/340?cb=20200616225307&path-prefix=bloons';
 module.exports = {
-    name: 'randy',
-    aliases: ['chocbox'],
+    name: 'r4ndy',
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
         let raceID = 'The_Land_Befour_Time_kqvuwiu4';
-        const parsed = CommandParser.parse(
-            args,
-
-            new AnyOrderParser(
-                new OptionalParser(new NaturalNumberParser(1, 99)),
-
-                new OptionalParser(new NaturalNumberParser(1, 99)),
-                new OptionalParser(new AnythingParser())
-            )
-        );
-
-        if (parsed.anything) {
-            raceID = parsed.anything;
-        }
-        let nums = [];
-        if (parsed.natural_numbers !== undefined) {
-            nums = parsed.natural_numbers.sort();
-        }
         let start = 1;
         let end = 50;
-        if (nums.length == 1) {
-            end = nums[0];
-        } else if (nums.length == 2) {
-            start = nums[0];
-            end = nums[1];
-        }
-
         let url = `https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_${raceID}.json`;
         request(url, (err, res, body) => {
             if (err) {
@@ -60,21 +30,6 @@ module.exports = {
             // get max length of names, there is probably a more efficient way but heh
             let maxLength = 0;
 
-            let randy,
-                chocbox = 0;
-
-            for (let i = 0; i < 50; i++) {
-                let userID = scores[i].userID;
-
-                if (userID == '5b7f82e318c7cbe32fa01e4e') {
-                    randy = i + 1;
-                }
-                if (userID == '5b2845abfcd0f8d9745e6cfe') {
-                    chocbox = i + 1;
-                }
-            }
-            start = Math.min(randy, chocbox);
-            end = Math.max(randy, chocbox);
             for (let i = start - 1; i < end; i++) {
                 if (!scores[i]) break;
                 let md = scores[i].metadata.split(',');
@@ -89,11 +44,30 @@ module.exports = {
 
                 time = parsetime(time);
                 let md = scores[i].metadata.split(',');
-                let username = md[0];
-                let row = `${addSpaces(i + 1, 2)}|${addSpaces(
-                    username,
-                    maxLength
-                )}|${time}\n`;
+                let username;
+                if (
+                    message.author.id == '279126808455151628' ||
+                    message.author.id == '217726724752932864'
+                ) {
+                    let userid = scores[i].userID;
+                    if (
+                        userid == '5b7f82e318c7cbe32fa01e4e' ||
+                        userid == '5b2845abfcd0f8d9745e6cfe'
+                    ) {
+                        username = md[0];
+                    } else {
+                        username = '???';
+                    }
+                } else {
+                    if (i == 0) username = 'RandyZ524';
+                    else username = md[0];
+                }
+                let row = '';
+                row += addSpaces(i + 1, 2) + '|';
+                row += addSpaces(username, maxLength);
+                row += '|';
+                row += time;
+                row += '\n';
                 output += row;
             }
             if (output.length > 2000) {
@@ -162,3 +136,10 @@ function parsetime(ms) {
     milliseconds = milliseconds < 100 ? '0' + milliseconds : milliseconds;
     return minutes + ':' + seconds + '.' + milliseconds;
 }
+const getLB = (url) => {
+    return new Promise((res, rej) => {
+        fetch(url);
+        let data = JSON.parse(JSON.parse(body).data);
+        resolve(data);
+    });
+};

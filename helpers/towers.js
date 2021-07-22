@@ -31,7 +31,21 @@ function allTowerPaths() {
         })
         .flat();
 }
-
+function allTempleSets() {
+    let all = [];
+    // holy shit go outside
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            for (let k = 0; k < 3; k++) {
+                for (let l = 0; l < 3; l++) {
+                    let path = '' + i + j + k + l;
+                    if (this.isValidTempleSet(path)) all.push(path); // holy shit this is stupid ~ the very person who wrote this
+                }
+            }
+        }
+    }
+    return all;
+}
 function isTowerUpgrade(candidate) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     return allTowerUpgrades().includes(candidate.toLowerCase());
@@ -173,7 +187,12 @@ function pathTierFromUpgradeSet(upgradeSet) {
     const path = upgrades.findIndex((u) => u == tier) + 1;
     return [path, tier];
 }
-
+function sacsFromTempleSet(temple) {
+    if (temple.contains('/')) temple.replace(/\//g, '');
+    return temple.split('').map((e) => {
+        e = parseInt(e);
+    });
+}
 function crossPathTierFromUpgradeSet(upgradeSet) {
     upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
@@ -206,7 +225,27 @@ function isValidUpgradeSet(u) {
 
     return true;
 }
-
+function isValidTempleSet(str) {
+    if (!gHelper.is_str) return false;
+    let upgrades = [];
+    if (str.includes('/')) {
+        if (str.length !== 7) return false;
+        upgrades = str.split('/');
+    } else if (str.length !== 4) return false;
+    else upgrades = str.split('');
+    upgrades = upgrades.map(function (x) {
+        return parseInt(x);
+    }); // converts arr of string to arr of ints
+    let sum = 0;
+    upgrades.forEach((element) => {
+        sum += element;
+    }); // finds sum of elements
+    if (isNaN(sum)) return false; // all strings will be yeeted out here, since the sum will be a NaN
+    if (sum > 7) return false; // stuff like 2222 gets thrown out
+    upgrades.sort();
+    if (upgrades[3] > 2) return false; // stuff like 3300 gets thrown out
+    return true;
+}
 function formatTower(tower) {
     if (isTower(tower)) {
         return `${towerUpgradeToIndexNormalForm(tower)}`;
@@ -302,6 +341,7 @@ module.exports = {
     allTowerUpgrades,
     allTowers,
     allTowerPaths,
+    allTempleSets,
     isTowerUpgrade,
     isTower,
     isTowerPath,
@@ -312,6 +352,7 @@ module.exports = {
     pathTierFromUpgradeSet,
     crossPathTierFromUpgradeSet,
     isValidUpgradeSet,
+    isValidTempleSet,
     formatTower,
     totalTowerUpgradeCrosspathCostNew,
     totalTowerUpgradeCrosspathCostNewHard,

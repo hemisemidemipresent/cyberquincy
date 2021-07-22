@@ -17,10 +17,11 @@ class Parsed extends Object {
         if (!value) return;
 
         let types = pluralize(type);
-
+        if (types == 'cash') types = 'cashs';
         // If this is the second+ of the type (<round>/<difficulty>/etc.) being parsed
         if (this[type]) {
             // Add it to the list for the given type
+
             this[types].push(value);
         }
         // If this is the first of the type being parsed

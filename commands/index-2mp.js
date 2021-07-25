@@ -34,6 +34,7 @@ const TOWER_COLS = {
     TOWER: 'O',
     BASE: 'P',
     LAST: 'Y',
+    PARAGON: 'Z',
 };
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
@@ -804,6 +805,7 @@ async function display2MPTowerStatistics(message, tower) {
 
     // Check or X
     baseTowerCompletionMarking = await getCompletionMarking(entryRow, null, 2);
+    paragonCompletionMarking = await getCompletionMarking(entryRow, null, 6);
 
     const towerFormatted = Aliases.toIndexNormalForm(tower);
 
@@ -812,7 +814,7 @@ async function display2MPTowerStatistics(message, tower) {
         .setColor(paleblue)
         .addField('\u200b', '\u200b', true) // Left column placeholder
         .addField('Base Tower', baseTowerCompletionMarking, true) // Base tower
-        .addField('\u200b', '\u200b', true); // Right column placeholder
+        .addField('Paragon', paragonCompletionMarking, true); // Paragon tower
 
     for (var tier = 3; tier <= 5; tier++) {
         for (var path = 1; path <= 3; path++) {
@@ -846,6 +848,8 @@ async function getCompletionMarking(entryRow, path, tier) {
 
     if (tier == 2) {
         upgradeCol = TOWER_COLS.BASE;
+    } else if (tier == 6) {
+        upgradeCOL = TOWER_COLS.PARAGON;
     } else {
         upgradeCol = String.fromCharCode(
             TOWER_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2

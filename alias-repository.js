@@ -81,7 +81,7 @@ class AliasRepository extends Array {
             };
             this.addAliasGroup(nextAliasGroup);
 
-            // Hack to add appropriate base tower entry
+            // Hack to add appropriate base tower and paragon monkey entries
             if (upgrade == 'xyz') {
                 const baseTowerAliasGroup = {
                     canonical: `${baseName}#222`,
@@ -91,6 +91,15 @@ class AliasRepository extends Array {
                     sourcefile: f,
                 };
                 this.addAliasGroup(baseTowerAliasGroup);
+
+                const paragonTowerAliasGroup = {
+                    canonical: `${baseName}#555`,
+                    aliases: towerUpgrades['xyz']
+                        .concat(baseName)
+                        .map((al) => `${al}_paragon`),
+                    sourcefile: f,
+                }
+                this.addAliasGroup(paragonTowerAliasGroup);
             }
         }
     }

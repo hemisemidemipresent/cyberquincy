@@ -15,7 +15,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'The_Land_Befour_Time_kqvuwiu4';
+        let raceID = 'krfl1to5';
         const parsed = CommandParser.parse(
             args,
             new OrParser(

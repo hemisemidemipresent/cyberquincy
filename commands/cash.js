@@ -39,9 +39,9 @@ module.exports = {
         if (parsed.mode == 'abr') {
             embed = this.calculate(cashNeeded, startRound, abr, 100, 1);
         } else if (parsed.mode == 'halfcash') {
-            embed = this.calculate(cashNeeded, startRound, r, 100, 0.5);
+            embed = this.calculate(cashNeeded, startRound, r, 140, 0.5);
         } else {
-            embed = this.calculate(cashNeeded, startRound, r, 100, 1);
+            embed = this.calculate(cashNeeded, startRound, r, 140, 1);
         }
         message.channel.send(embed);
     },

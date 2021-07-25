@@ -1,6 +1,6 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 
-class TowerPathParser {
+class TempleSetParser {
     type() {
         return 'temple_set';
     }
@@ -19,4 +19,4 @@ class TowerPathParser {
     }
 }
 
-module.exports = TowerPathParser;
+module.exports = TempleSetParser;

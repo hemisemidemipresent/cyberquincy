@@ -91,9 +91,13 @@ async function execute(message, args) {
         displayCombos(message, filteredCombos, parsed, allCombos);
     } catch (e) {
         if (e instanceof UserCommandError) {
-            message.channel.send(
-                new Discord.MessageEmbed().setTitle(e.message).setColor(orange)
-            );
+            message.channel.send({
+                embeds: [
+                    new Discord.MessageEmbed()
+                        .setTitle(e.message)
+                        .setColor(orange),
+                ],
+            });
         } else {
             throw e;
         }
@@ -102,11 +106,13 @@ async function execute(message, args) {
 
 async function displayCombos(message, combos, parsed, allCombos) {
     if (combos.length == 0) {
-        return message.channel.send(
-            new Discord.MessageEmbed()
-                .setTitle(embedTitleNoCombos(parsed))
-                .setColor(palered)
-        );
+        return message.channel.send({
+            embeds: [
+                new Discord.MessageEmbed()
+                    .setTitle(embedTitleNoCombos(parsed))
+                    .setColor(palered),
+            ],
+        });
     }
 
     if (combos.length == 1) {
@@ -166,7 +172,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
             }
         }
 
-        return message.channel.send(challengeEmbed);
+        return message.channel.send({ embeds: [challengeEmbed] });
     } else {
         fieldHeaders = getDisplayCols(parsed);
 
@@ -294,13 +300,14 @@ async function displayOneOrMultiplePages(
 
         // Read author reaction (time limit specified below in milliseconds)
         // and respond with appropriate action
+        const filter = (reaction, user) =>
+            user.id === userQueryMessage.author.id &&
+            REACTIONS.includes(reaction.emoji.name);
         botMessage
-            .createReactionCollector(
-                (reaction, user) =>
-                    user.id === userQueryMessage.author.id &&
-                    REACTIONS.includes(reaction.emoji.name),
-                { time: 20000 }
-            )
+            .createReactionCollector({
+                filter,
+                time: 20000,
+            })
             .once('collect', (reaction) => {
                 switch (reaction.emoji.name) {
                     case '⬅️':
@@ -634,7 +641,7 @@ function helpMessage(message) {
         )
         .setColor(palered);
 
-    return message.channel.send(helpEmbed);
+    return message.channel.send({ embeds: [helpEmbed] });
 }
 
 function errorMessage(message, parsingErrors) {
@@ -647,7 +654,7 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!2tc` for help', '\u200b')
         .setColor(orange);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }
 
 function sheet2TC() {

@@ -60,7 +60,7 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!herolevel help` for help', '\u200b')
         .setColor(colours['orange']);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }
 
 function displayHeroLevels(message, results) {
@@ -80,7 +80,7 @@ function displayHeroLevels(message, results) {
         .addField('\u200b', `${res}`)
         .setColor(colours['cyber']);
 
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
 }
 
 module.exports = {

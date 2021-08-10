@@ -96,7 +96,7 @@ module.exports = {
                 )}|${time}\n`;
                 output += row;
             }
-            if (output.length > 2000) {
+            if (output.length > 4000) {
                 return module.exports.errorMessage(message, [
                     'too many characters',
                 ]);
@@ -108,7 +108,7 @@ module.exports = {
                 .setColor(cyber)
                 .setTimestamp()
                 .setThumbnail(raceImg);
-            message.channel.send(embed).then((msg) => {
+            message.channel.send({ embeds: [embed] }).then((msg) => {
                 msg.react('❌');
                 let filter = (reaction, user) => {
                     return (
@@ -116,7 +116,8 @@ module.exports = {
                         user.id === message.author.id
                     );
                 };
-                const collector = msg.createReactionCollector(filter, {
+                const collector = msg.createReactionCollector({
+                    filter,
                     time: 20000,
                 });
 

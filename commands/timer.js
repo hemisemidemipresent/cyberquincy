@@ -15,7 +15,7 @@ module.exports = {
             .addField('Time until next race starts', resultArr[1])
             .addField('Time until race ends', resultArr[0])
             .setColor(green);
-        return message.channel.send(embed);
+        return message.channel.send({ embeds: [embed] });
     },
 };
 function parseTime(time) {

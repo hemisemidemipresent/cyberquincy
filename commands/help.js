@@ -36,6 +36,6 @@ module.exports = {
                 'Upvote the bot',
                 '[top.gg](https://top.gg/bot/591922988832653313)\n[discordbotlist](https://discordbotlist.com/bots/cyber-quincy)'
             );
-        message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
     },
 };

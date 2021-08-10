@@ -44,11 +44,11 @@ class EmojiReactor {
             }
 
             // Set-up collector that'll read the user emoji response
+            const filter = (reaction, user) =>
+                user.id === message.author.id &&
+                Object.values(emojis).includes(reaction.emoji.id);
             let collector = reactMessage.createReactionCollector(
-                (reaction, user) =>
-                    user.id === message.author.id &&
-                    Object.values(emojis).includes(reaction.emoji.id),
-                { time: 20000 } // might turn into function to check later
+                { filter, time: 20000 } // might turn into function to check later
             );
 
             collector.once('collect', (reaction) => {

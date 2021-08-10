@@ -47,6 +47,6 @@ module.exports = {
             )
 
             .setColor(green);
-        message.channel.send(embed);
+        return message.channel.send({ embeds: [embed] });
     },
 };

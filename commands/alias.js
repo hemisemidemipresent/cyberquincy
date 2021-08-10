@@ -89,7 +89,7 @@ module.exports = {
             .setFooter('"alias" = "synonym"; "argument" = "input"')
             .setColor(colours['cyber']);
 
-        return message.channel.send(messageEmbed);
+        return message.channel.send({ embeds: [messageEmbed] });
     },
 
     errorMessage(message, errorMessages) {
@@ -99,6 +99,6 @@ module.exports = {
             .addField('Type `q!alias` for help', '\u200b')
             .setColor(colours['orange']);
 
-        return message.channel.send(errorEmbed);
+        return message.channel.send({ embeds: [errorEmbed] });
     },
 };

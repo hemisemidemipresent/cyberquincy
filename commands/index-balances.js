@@ -49,7 +49,10 @@ async function execute(message, args) {
     await loadEntityBuffNerfsTableCells(parsed);
     if (!parsed.hero) await loadTowerChangesTableCells(parsed);
     colIndex = await locateSpecifiedEntityColumnIndex(parsed);
-    let [versionAdded, balanceChanges] = await parseBalanceChanges(parsed, colIndex);
+    let [versionAdded, balanceChanges] = await parseBalanceChanges(
+        parsed,
+        colIndex
+    );
     return await formatAndDisplayBalanceChanges(
         message,
         parsed,
@@ -127,7 +130,7 @@ function headerRow(parsed) {
 }
 
 async function towerChangesHeaderRow(parsed) {
-    return await parseCurrentVersion(parsed) + headerRow(parsed) + 2;
+    return (await parseCurrentVersion(parsed)) + headerRow(parsed) + 2;
 }
 
 VERSION_COLUMN = 'C';
@@ -171,7 +174,8 @@ async function parseBalanceChanges(parsed, entryColIndex) {
 
     let towerChangesOffset;
     if (!parsed.hero)
-        towerChangesOffset = await towerChangesHeaderRow(parsed) - headerRow(parsed);
+        towerChangesOffset =
+            (await towerChangesHeaderRow(parsed)) - headerRow(parsed);
 
     let balances = {};
     // Iterate for currentVersion - 1 rows since there's no row for v1.0
@@ -205,9 +209,12 @@ async function parseBalanceChanges(parsed, entryColIndex) {
 
         // The version added is the first non-greyed out row for the column
         if (
-            !versionAdded && (
-                sheet.getCell(rowIndex, entryColIndex).effectiveFormat &&
-                !isEqual(sheet.getCell(rowIndex, entryColIndex).effectiveFormat.backgroundColor, {red: 0.6, green: 0.6, blue: 0.6})
+            !versionAdded &&
+            sheet.getCell(rowIndex, entryColIndex).effectiveFormat &&
+            !isEqual(
+                sheet.getCell(rowIndex, entryColIndex).effectiveFormat
+                    .backgroundColor,
+                { red: 0.6, green: 0.6, blue: 0.6 }
             )
         ) {
             versionAdded = v;
@@ -231,9 +238,9 @@ async function parseBalanceChanges(parsed, entryColIndex) {
         }
     }
 
-    if (versionAdded === '2.0') versionAdded = '1.0'
+    if (versionAdded === '2.0') versionAdded = '1.0';
 
-    return [versionAdded, balances]
+    return [versionAdded, balances];
 }
 
 function filterChangeNotes(noteSet, v, parsed) {
@@ -276,9 +283,8 @@ function filterChangeNotes(noteSet, v, parsed) {
                 );
             } else if (parsed.tower_upgrade) {
                 const parsedUpgradeSet = parsed.tower_upgrade.split('#')[1];
-                const [parsedPath, parsedTier] = Towers.pathTierFromUpgradeSet(
-                    parsedUpgradeSet
-                );
+                const [parsedPath, parsedTier] =
+                    Towers.pathTierFromUpgradeSet(parsedUpgradeSet);
                 return parsedPath == path && parsedTier == tier;
             }
         }
@@ -292,7 +298,12 @@ function handleIrregularNote(note, parsed) {
     return false;
 }
 
-async function formatAndDisplayBalanceChanges(message, parsed, versionAdded, balances) {
+async function formatAndDisplayBalanceChanges(
+    message,
+    parsed,
+    versionAdded,
+    balances
+) {
     formattedTower = Towers.formatTower(
         parsed.tower || parsed.tower_upgrade || parsed.tower_path || parsed.hero
     );
@@ -316,9 +327,10 @@ async function formatAndDisplayBalanceChanges(message, parsed, versionAdded, bal
         );
     }
 
-    let addedText = `**Added in ${versionAdded}**`
+    let addedText = `**Added in ${versionAdded}**`;
 
-    if (parsed.tower_upgrade == 'wizard_monkey#005') addedText = `Reworked from Soulbind in 2.0`
+    if (parsed.tower_upgrade == 'wizard_monkey#005')
+        addedText = `Reworked from Soulbind in 2.0`;
 
     let embed = new Discord.MessageEmbed()
         .setTitle(`Buffs and Nerfs for ${formattedTower}`)
@@ -330,7 +342,7 @@ async function formatAndDisplayBalanceChanges(message, parsed, versionAdded, bal
     }
 
     try {
-        await message.channel.send(embed);
+        await message.channel.send({ embeds: [embed] });
     } catch (e) {
         return message.channel.send(
             `Too many balance changes for ${formattedTower}; Try a more narrow search. Type \`q!balance\` for details.`
@@ -351,7 +363,7 @@ function errorMessage(message, parsingErrors) {
             'Currently t1 and t2 towers are not searchable on their own. Fix coming'
         );
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }
 
 function helpMessage(message) {
@@ -370,5 +382,5 @@ function helpMessage(message) {
             'Currently t1 and t2 towers are not searchable on their own. Fix coming'
         );
 
-    return message.channel.send(helpEmbed);
+    return message.channel.send({ embeds: [helpEmbed] });
 }

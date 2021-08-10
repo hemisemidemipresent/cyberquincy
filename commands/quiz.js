@@ -27,14 +27,15 @@ module.exports = {
 
         message.channel.send(QuestionEmbed).then(() => {
             message.channel
-                .awaitMessages(filter, {
+                .awaitMessages({
+                    filter,
                     max: 1,
                     time: 10000,
                     errors: ['time'],
                 })
                 .then((collected) => {
                     let embed = process(collected, message.author.id);
-                    message.channel.send(embed);
+                    message.channel.send({ embeds: [embed] });
                 })
                 .catch((err) => {
                     let errorEmbed = new Discord.MessageEmbed()

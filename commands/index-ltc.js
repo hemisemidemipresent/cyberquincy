@@ -80,7 +80,11 @@ function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
         return helpMessage(message);
     }
-
+    if (args.length == 0 || (args.length == 1 && args[0] == 'resort')) {
+        return message.channel.send(
+            'we get it tooprood you are a god thank you'
+        );
+    }
     const parseModifier = new OrParser(
         new ExactStringParser('OG'),
         new ExactStringParser('CHEAPEST'),
@@ -117,7 +121,7 @@ function helpMessage(message) {
         )
         .setColor(palegreen);
 
-    return message.channel.send(helpEmbed);
+    return message.channel.send({ embeds: [helpEmbed] });
 }
 
 function errorMessage(message, parsingErrors) {
@@ -130,7 +134,7 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!ltc` for help', '\u200b')
         .setColor(orange);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }
 
 async function displayLTC(message, btd6_map, modifier) {

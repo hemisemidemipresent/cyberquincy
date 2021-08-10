@@ -68,7 +68,7 @@ module.exports = {
                 }
         }
 
-        message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
     },
     helpMessage(message) {
         let errorEmbed = new Discord.MessageEmbed()
@@ -89,7 +89,7 @@ module.exports = {
                 'Currently only supports hard difficulty.\nAlso, q!chincome has been combined into q!income.'
             );
 
-        return message.channel.send(errorEmbed);
+        return message.channel.send({ embeds: [errorEmbed] });
     },
     errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()

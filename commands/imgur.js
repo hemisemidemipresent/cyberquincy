@@ -18,15 +18,13 @@ function uploadImgur(message, args) {
     imgur
         .uploadUrl(image)
         .then((json) => {
-            console.log(JSON.stringify(json, null, 1));
-
-            const Embed = new Discord.MessageEmbed()
+            const embed = new Discord.MessageEmbed()
                 .setTimestamp()
                 .setDescription(`${json.link}\n${text}`)
                 .setFooter(footer)
                 .setColor(cyber)
                 .setImage(`${json.link}`);
-            message.channel.send(Embed);
+            message.channel.send({ embeds: [embed] });
             message.delete();
         })
         .catch((e) => {

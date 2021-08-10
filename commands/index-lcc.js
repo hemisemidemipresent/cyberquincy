@@ -127,7 +127,7 @@ function helpMessage(message) {
         .addField('Example', '`q!lcc bloodles`')
         .setColor(paleyellow);
 
-    return message.channel.send(helpEmbed);
+    return message.channel.send({ embeds: [helpEmbed] });
 }
 
 function errorMessage(message, parsingErrors) {
@@ -140,5 +140,5 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!lcc` for help', '\u200b')
         .setColor(orange);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }

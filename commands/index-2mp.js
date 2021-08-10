@@ -148,7 +148,7 @@ function helpMessage(message) {
         )
         .setColor(paleblue);
 
-    return message.channel.send(helpEmbed);
+    return message.channel.send({ embeds: [helpEmbed] });
 }
 
 function errorMessage(message, parsingErrors) {
@@ -161,7 +161,7 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!2mp` for help', '\u200b')
         .setColor(orange);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }
 
 function err(e, message) {
@@ -170,7 +170,7 @@ function err(e, message) {
         let noComboEmbed = new Discord.MessageEmbed()
             .setTitle(e.message)
             .setColor(paleblue);
-        return message.channel.send(noComboEmbed);
+        return message.channel.send({ embeds: [noComboEmbed] });
     } else {
         throw e;
     }
@@ -277,7 +277,7 @@ async function display2MPOG(message, tower) {
         challengeEmbed.setFooter('*with water');
     }
 
-    return message.channel.send(challengeEmbed);
+    return message.channel.send({ embeds: [challengeEmbed] });
 }
 
 // Displays a 2MPC completion on the specified map
@@ -313,7 +313,7 @@ async function display2MPAlt(message, tower, map) {
             .addField('Person', altCompletion.PERSON, true)
             .addField('Link', altCompletion.LINK, true);
 
-        message.channel.send(challengeEmbed);
+        message.channel.send({ embeds: [challengeEmbed] });
     } else {
         throw new UserCommandError(
             `Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``
@@ -417,7 +417,7 @@ async function display2MPFilterAll(
 
     // If no combos were found after filtering
     if (towerColumn.length == 0) {
-        return message.channel.send(noCombosMessage);
+        return message.channel.send({ embeds: [noCombosMessage] });
     }
 
     // Exclude columns from data output based on function input
@@ -450,10 +450,12 @@ async function display2MPFilterAll(
         challengeEmbed.setFooter(`---\nOG completion bolded`);
     }
     if (numOGCompletions > 1) {
-        challengeEmbed.setFooter(`---\n${numOGCompletions} OG completions bolded`);
+        challengeEmbed.setFooter(
+            `---\n${numOGCompletions} OG completions bolded`
+        );
     }
 
-    return message.channel.send(challengeEmbed);
+    return message.channel.send({ embeds: [challengeEmbed] });
 }
 
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
@@ -481,39 +483,43 @@ function embedPages(message, title, columns, numOGCompletions) {
 
         // Read author reaction (time limit specified below in milliseconds)
         // and respond with appropriate action
-        msg.createReactionCollector(
-            (reaction, user) =>
-                user.id === message.author.id &&
-                REACTIONS.includes(reaction.emoji.name),
-            { time: 20000 }
-        ).once('collect', (reaction) => {
-            switch (reaction.emoji.name) {
-                case '⬅️':
-                    pg--;
-                    break;
-                case '➡️':
-                    pg++;
-                    break;
-                default:
-                    return msg.delete();
+        const filter = (reaction, user) =>
+            user.id === message.author.id &&
+            REACTIONS.includes(reaction.emoji.name);
+        msg.createReactionCollector({ filter, time: 20000 }).once(
+            'collect',
+            (reaction) => {
+                switch (reaction.emoji.name) {
+                    case '⬅️':
+                        pg--;
+                        break;
+                    case '➡️':
+                        pg++;
+                        break;
+                    default:
+                        return msg.delete();
+                }
+                pg += numPages; // Avoid negative numbers
+                pg %= numPages; // Avoid page numbers greater than max page number
+                displayCurrentPage(msg);
             }
-            pg += numPages; // Avoid negative numbers
-            pg %= numPages; // Avoid page numbers greater than max page number
-            displayCurrentPage(msg);
-        });
+        );
     }
 
     async function displayCurrentPage(msg) {
         const startCombo = pg * MAX_VALUES_LIST_LENGTH_2MP + 1;
         const endCombo = Math.min(
-            (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP, 
+            (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP,
             columns[Object.keys(columns)[0]].length
         );
 
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
             .setColor(paleblue)
-            .addField('Combos', `**${startCombo}-${endCombo}** of ${columns.LINK.length}`)
+            .addField(
+                'Combos',
+                `**${startCombo}-${endCombo}** of ${columns.LINK.length}`
+            );
 
         for (columnHeader in columnChunks) {
             challengeEmbed.addField(
@@ -527,7 +533,9 @@ function embedPages(message, title, columns, numOGCompletions) {
             challengeEmbed.setFooter(`---\nOG completion bolded`);
         }
         if (numOGCompletions > 1) {
-            challengeEmbed.setFooter(`---\n${numOGCompletions} total OG completions bolded`);
+            challengeEmbed.setFooter(
+                `---\n${numOGCompletions} total OG completions bolded`
+            );
         }
 
         if (msg) {
@@ -551,7 +559,9 @@ function embedPages(message, title, columns, numOGCompletions) {
             }
             msg.edit(challengeEmbed).then((msg) => reactLoop(msg));
         } else
-            message.channel.send(challengeEmbed).then((msg) => reactLoop(msg));
+            message.channel
+                .send({ embeds: [challengeEmbed] })
+                .then((msg) => reactLoop(msg));
     }
 
     displayCurrentPage();
@@ -584,7 +594,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         }, {});
 
     const numCombosCompleted = Object.keys(relevantNotes).length;
-    const ogCompletionPresent = Object.values(relevantNotes).some(v => v.OG)
+    const ogCompletionPresent = Object.values(relevantNotes).some((v) => v.OG);
 
     if (numCombosCompleted > 0) {
         // Format 3 columns: map, person, link
@@ -594,7 +604,9 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         for (const mapAbbr in relevantNotes) {
             bold = relevantNotes[mapAbbr].OG ? '**' : '';
 
-            mapColumn.push(`${bold}${Aliases.indexAbbreviationToMap(mapAbbr)}${bold}`);
+            mapColumn.push(
+                `${bold}${Aliases.indexAbbreviationToMap(mapAbbr)}${bold}`
+            );
             personColumn.push(`${bold}${relevantNotes[mapAbbr].PERSON}${bold}`);
             linkColumn.push(`${bold}${relevantNotes[mapAbbr].LINK}${bold}`);
         }
@@ -658,9 +670,9 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         }
 
         if (ogCompletionPresent)
-            challengeEmbed.setFooter('----\nOG completion bolded')
+            challengeEmbed.setFooter('----\nOG completion bolded');
 
-        return message.channel.send(challengeEmbed);
+        return message.channel.send({ embeds: [challengeEmbed] });
     } else {
         throw new UserCommandError(
             `Tower \`${towerFormatted}\` has not yet been completed on any \`${mapDifficulty}\` maps`
@@ -757,7 +769,7 @@ function parsePreloadedMapNotesWithOG(row) {
     notes[ogMapAbbr] = {
         PERSON: ogPerson,
         LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
-        OG: true
+        OG: true,
     };
     // Add rest of maps found in notes
     return {
@@ -834,7 +846,7 @@ async function display2MPTowerStatistics(message, tower) {
         }
     }
 
-    message.channel.send(challengeEmbed);
+    message.channel.send({ embeds: [challengeEmbed] });
 }
 
 // Converts the Index's marking of whether a tower's path/tier has been completed
@@ -873,8 +885,9 @@ async function findTowerRow(tower) {
 
     // Search for the row in all "possible" rows
     for (let row = 1; row <= sheet.rowCount; row++) {
-        let towerCandidate = sheet.getCellByA1(`${TOWER_COLS.TOWER}${row}`)
-            .value;
+        let towerCandidate = sheet.getCellByA1(
+            `${TOWER_COLS.TOWER}${row}`
+        ).value;
 
         if (!towerCandidate) continue;
 

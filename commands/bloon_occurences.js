@@ -96,6 +96,6 @@ module.exports = {
             .setTitle('ERROR')
             .addField('Likely Cause(s)', parsingErrors.join('\n'))
             .setColor(cyber);
-        return message.channel.send(errorEmbed);
+        return message.channel.send({ embeds: [errorEmbed] });
     },
 };

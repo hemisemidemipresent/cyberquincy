@@ -29,13 +29,13 @@
         "url": "https://github.com/hemisemidemipresent/cyberquincy/issues"
     },
     "engines": {
-        "node": "12.x"
+        "node": "16.x"
     },
     "homepage": "https://github.com/hemisemidemipresent/cyberquincy#readme",
     "dependencies": {
         "atob": "^2.1.2",
         "bufferutil": "^4.0.2",
-        "discord.js": "^12.4.1",
+        "discord.js": "^13.0.1",
         "discord.js-minesweeper": "^1.0.6",
         "express": "^4.17.1",
         "filepath": "^1.1.0",

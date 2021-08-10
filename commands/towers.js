@@ -130,6 +130,9 @@ module.exports = {
     aliases: aliases.flat(),
 
     async execute(message, args, commandName) {
+        if (args.includes('paragon') || args.includes('600')) {
+            return message.channel.send('use q!paragon <tower> [degree]');
+        }
         parsed = CommandParser.parse(
             args,
             new OptionalParser(new UpgradeSetParser())
@@ -240,7 +243,7 @@ function process(upgrade, commandName, message) {
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|q!ap for help and elaboration|data is from extreme bloonology, by The Line'
                     )
                     .setColor(cyber);
-                return message.channel.send(embed);
+                return message.channel.send({ embeds: [embed] });
             }
         }
         module.exports.errorMessage(message, [

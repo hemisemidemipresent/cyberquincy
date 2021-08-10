@@ -5,7 +5,15 @@ module.exports = {
     name: 'info',
     description: 'shows info',
     aliases: ['i'],
-    execute(message) {
+    execute(message, args) {
+        /*if (args[0] == 'renmari') {
+            let res = '';
+            client.guilds.cache.map((g) => (res += g.name + '\n'));
+            let arr = res.match(/.{1,3999}/g);
+            for (let i = 0; i < arr.length; i++) {
+                message.channel.send(arr[i]);
+            }
+        }*/
         const responseTime = Math.round(Date.now() - message.createdTimestamp);
         let totalSeconds = client.uptime / 1000;
         const days = Math.floor(totalSeconds / 86400);

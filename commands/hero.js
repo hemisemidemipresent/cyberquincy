@@ -141,10 +141,10 @@ module.exports = {
                 for (let i = 0; i < 20; i++) {
                     embed.addField(i + 1, sentences[i], true);
                 }
-                return message.channel.send(embed);
+                return message.channel.send({ embeds: [embed] });
             }
-
-            return message.channel.send(oneUpgrade(sentences, level));
+            let embed = oneUpgrade(sentences, level);
+            return message.channel.send({ embeds: [embed] });
         });
     },
     errorMessage(err) {

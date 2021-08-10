@@ -15,7 +15,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'krfl1to5';
+        let raceID = 'Giving_110_percent_krmwt3bz';
         const parsed = CommandParser.parse(
             args,
             new OrParser(
@@ -96,7 +96,7 @@ module.exports = {
                 }
             }
 
-            if (output.length > 2000) {
+            if (output.length > 4096) {
                 return module.exports.errorMessage(message, [
                     'too many characters',
                 ]);
@@ -108,7 +108,7 @@ module.exports = {
                 .setColor(cyber)
                 .setTimestamp()
                 .setThumbnail(raceImg);
-            message.channel.send(embed).then((msg) => {
+            message.channel.send({ embeds: [embed] }).then((msg) => {
                 msg.react('❌');
                 let filter = (reaction, user) => {
                     return (
@@ -116,7 +116,8 @@ module.exports = {
                         user.id === message.author.id
                     );
                 };
-                const collector = msg.createReactionCollector(filter, {
+                const collector = msg.createReactionCollector({
+                    filter,
                     time: 20000,
                 });
 

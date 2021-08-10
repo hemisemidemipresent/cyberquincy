@@ -65,13 +65,10 @@ async function submit(message, args) {
     PREVIEW_REACTIONS.forEach((previewReaction) => {
         preview.react(previewReaction);
     });
-
-    let collector = preview.createReactionCollector(
-        (reaction, user) =>
-            user.id == message.author.id &&
-            PREVIEW_REACTIONS.includes(reaction.emoji.name),
-        { time: 20000 }
-    );
+    const filter = (reaction, user) =>
+        user.id == message.author.id &&
+        PREVIEW_REACTIONS.includes(reaction.emoji.name);
+    let collector = preview.createReactionCollector({ filter, time: 20000 });
 
     collector.once('collect', (reaction) => {
         pretext.delete();
@@ -81,11 +78,14 @@ async function submit(message, args) {
         // (or to the test channel if dev is testing)
         if (reaction.emoji.name == WHITE_HEAVY_CHECK_MARK) {
             (async () => {
-                const SUBMISSIONS_CHANNEL_OBJ = message.channel.guild.channels.cache.get(
-                    SUBMISSIONS_CHANNEL
+                const SUBMISSIONS_CHANNEL_OBJ =
+                    message.channel.guild.channels.cache.get(
+                        SUBMISSIONS_CHANNEL
+                    );
+                const submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(
+                    submission
                 );
-                const submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(submission)
-                
+
                 let random = Math.floor(Math.random() * 250);
                 if (random % 10 == 0) {
                     submissionMessage.react('🥛');

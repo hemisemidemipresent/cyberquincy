@@ -108,7 +108,12 @@ async function handleCommand(message) {
             }
         }
 
-        if (command.beta && message.channel.guild.id != cyberquincyServer) {
+        if (
+            command.beta &&
+            ((message.channel.type == 'text' &&
+                message.channel.guild.id != cyberquincyServer) ||
+                message.channel.type != 'text')
+        ) {
             return message.channel.send(
                 'This command is in beta, join https://discord.gg/VMX5hZA to beta test the command'
             );
@@ -150,7 +155,7 @@ async function handleCommand(message) {
                 '~~I got bonked by a DDT again~~',
                 `Please [report the bug](${discord})`
             );
-        return message.channel.send(errorEmbed);
+        return message.channel.send({ embeds: [errorEmbed] });
     }
 }
 

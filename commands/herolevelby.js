@@ -14,6 +14,8 @@ const Heroes = require('../helpers/heroes');
 
 const gHelper = require('../helpers/general.js');
 
+const { MessageEmbed } = require('discord.js');
+
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
         return message.channel.send(
@@ -70,7 +72,7 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!herolevelby help` for help', '\u200b')
         .setColor(colours['orange']);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }
 
 function displayHeroPlacementRounds(userQueryMessage, results) {
@@ -81,7 +83,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
         results.map_difficulty
     );
 
-    let startingRounds = []
+    let startingRounds = [];
     if (heroPlacementRound == -Infinity)
         startingRounds = [6, 10, 13, 21, 30, 40];
     else
@@ -90,7 +92,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
             .map((addend) => heroPlacementRound + addend)
             .filter((r) => r <= results.goal_round);
 
-    REACTIONS = ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣'];
+    REACTIONS = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
 
     async function displayHeroLevels() {
         const laterPlacementRounds = calculateLaterPlacementRounds(
@@ -109,19 +111,21 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
                 gHelper.numberAsCost(Math.ceil(laterPlacementRounds[round]))
             );
         }
-    
+
         let description = '';
         description += `to reach **lvl-${results.desired_hero_level}** `;
         description += `by **r${results.goal_round}** `;
         description += `on **${results.map_difficulty}** maps.`;
-    
-        const embed = new Discord.MessageEmbed()
+
+        let embed = new MessageEmbed()
             .setDescription(description)
             .addField('Place on round', rounds.join('\n'), true)
             .addField(`Pay on r${results.goal_round}`, costs.join('\n'), true)
-            .setFooter(`Click an emoji to see more starting rounds: 0=(6—>10), 1=(11—>20), ... , 9=(91—>100)`)
+            .setFooter(
+                `Click an emoji to see more starting rounds: 0=(6—>10), 1=(11—>20), ... , 9=(91—>100)`
+            )
             .setColor(colours['cyber']);
-    
+
         if (heroPlacementRound == -Infinity) {
             embed.setTitle(
                 `Can't place ${gHelper.toTitleCase(results.hero)} early enough`
@@ -133,8 +137,9 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
                 )} on R${heroPlacementRound}`
             );
         }
-    
-        let botMessage = await userQueryMessage.channel.send(embed);
+        let botMessage = await userQueryMessage.channel.send({
+            embeds: [embed],
+        });
         return reactLoop(botMessage);
     }
 
@@ -148,25 +153,31 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
 
         // Read author reaction (time limit specified below in milliseconds)
         // and respond with appropriate action
-        botMessage.createReactionCollector(
-            (reaction, user) =>
-                user.id === userQueryMessage.author.id &&
-                REACTIONS.includes(reaction.emoji.name),
-            { time: 20000 }
-        ).once('collect', (reaction) => {
-            if (!REACTIONS.includes(reaction.emoji.name)) return;
+        function filter(reaction, user) {
+            user.id === userQueryMessage.author.id &&
+                REACTIONS.includes(reaction.emoji.name);
+        }
+        botMessage
+            .createReactionCollector({
+                filter,
+                time: 20000,
+            })
+            .once('collect', (reaction) => {
+                if (!REACTIONS.includes(reaction.emoji.name)) return;
 
-            const tensPlace = parseInt(reaction.emoji.name.charAt(0));
+                const tensPlace = parseInt(reaction.emoji.name.charAt(0));
 
-            let leftRound = tensPlace * 10 + 1;
-            if (leftRound < 6) leftRound = 6;
-            if (leftRound <= heroPlacementRound) leftRound = heroPlacementRound + 1;
-            let rightRound = (tensPlace + 1) * 10;
-            if (rightRound > results.goal_round) rightRound = results.goal_round;
-            startingRounds = gHelper.range(leftRound, rightRound);
+                let leftRound = tensPlace * 10 + 1;
+                if (leftRound < 6) leftRound = 6;
+                if (leftRound <= heroPlacementRound)
+                    leftRound = heroPlacementRound + 1;
+                let rightRound = (tensPlace + 1) * 10;
+                if (rightRound > results.goal_round)
+                    rightRound = results.goal_round;
+                startingRounds = gHelper.range(leftRound, rightRound);
 
-            displayHeroLevels();
-        });
+                displayHeroLevels();
+            });
     }
 
     displayHeroLevels();

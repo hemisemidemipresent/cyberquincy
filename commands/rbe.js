@@ -35,7 +35,7 @@ module.exports = {
                 '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes deflation, half cash, abr, apop is random)'
             )
             .setColor(red);
-        return message.channel.send(errorEmbed);
+        return message.channel.send({ embeds: [errorEmbed] });
     },
     oneRound(startround, channel) {
         return channel.send(

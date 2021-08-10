@@ -87,6 +87,10 @@ function execute(message, args, originalCommandName) {
             } <round>\``
         )
         .setColor(colours['cyber']);
+    if (parsed.round > 80) {
+        let ramping = getRamping(parsed.round);
+        roundEmbed.addField('health and speed ramping', `+${ramping}%`);
+    }
     message.channel.send(roundEmbed);
 }
 
@@ -127,7 +131,7 @@ function helpMessage(message) {
         .addField('`q!round <R> abr`', 'Learn about round R in ABR mode')
         .setColor(colours['black']);
 
-    return message.channel.send(helpEmbed);
+    return message.channel.send({ embeds: [helpEmbed] });
 }
 
 function errorMessage(message, parsingErrors) {
@@ -136,7 +140,7 @@ function errorMessage(message, parsingErrors) {
         .addField('Likely Cause(s)', parsingErrors.join('\n'))
         .setColor(colours['red'])
         .setFooter(`message sent by ${message.author.tag}`);
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }
 function freeplay(round) {
     [xp, totalxp] = calculateXps(parsed.round);
@@ -171,12 +175,14 @@ function freeplay(round) {
     return roundEmbed;
 }
 function getRamping(round) {
-    let ramp = 40;
+    let ramp = 0;
+    if (round < 101) return (ramp += (round - 80) * 2);
+    ramp += 40;
     if (round < 125) return (ramp += (round - 100) * 5);
     ramp += 120;
-    if (round < 152) return (ramp += (round - 124) * 20);
+    if (round < 152) return (ramp += (round - 124) * 15);
     ramp += 540;
-    return (ramp += (round - 151) * 50);
+    return (ramp += (round - 151) * 35);
 }
 function getBloonSets(round) {
     let bloonSets = [];

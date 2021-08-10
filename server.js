@@ -1,4 +1,5 @@
 const botInfoHelper = require('./helpers/botinfo');
+const { Client, Intents } = require('discord.js');
 
 function main() {
     pingHeroku();
@@ -29,7 +30,6 @@ function pingHeroku() {
     });
     app.listen(process.env.PORT);
 }
-
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.b = require('./helpers/bloons-general');
@@ -38,7 +38,16 @@ function globalRequirements() {
     global.AliasRepository = require('./alias-repository.js');
 
     global.Discord = require('discord.js');
-    global.client = new Discord.Client();
+    global.client = new Client({
+        intents: [
+            Intents.FLAGS.GUILD_MESSAGES,
+            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+            Intents.FLAGS.GUILDS,
+            Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+            Intents.FLAGS.DIRECT_MESSAGES,
+            Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+        ],
+    });
 
     global.prefix = require('./1/config.json')['prefix'];
 
@@ -136,7 +145,7 @@ function generateListeners(commandCenter) {
     client.on('guildMemberRemove', async (member) => {
         return Guilds.removeMember(member);
     });
-    client.on('message', async (message) => {
+    client.on('messageCreate', async (message) => {
         commandCenter.handleCommand(message);
     });
 }

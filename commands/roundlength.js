@@ -22,7 +22,7 @@ module.exports = {
 
         if (parsed.rounds.length == 1) {
             let embed = oneRoundData(parsed);
-            return message.channel.send(embed);
+            return message.channel.send({ embeds: [embed] });
         } else {
             let startRound = parsed.rounds[0];
             let endRound = parsed.rounds[1];
@@ -41,7 +41,7 @@ module.exports = {
                     }s long`
                 )
                 .setColor(grey);
-            message.channel.send(embed);
+            message.channel.send({ embeds: [embed] });
         }
     },
 };
@@ -77,5 +77,5 @@ function errorMessage(message, parsingErrors) {
         )
         .setColor(red);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }

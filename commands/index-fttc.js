@@ -68,7 +68,7 @@ const COLS = {
         PERSON: 'L',
         LINK: 'N',
         CURRENT: 'O',
-    } 
+    },
 };
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
@@ -92,20 +92,19 @@ async function execute(message, args) {
         args,
         new AnyOrderParser(
             new OptionalParser(
-                new OrParser(
-                    new MapParser(),
-                    new NaturalNumberParser()
-                )
+                new OrParser(new MapParser(), new NaturalNumberParser())
             ),
             new OptionalParser(new PersonParser()),
             // Search up to 2 towers at a time
             new OptionalParser(new TowerParser()),
-            new OptionalParser(new TowerParser()),  
+            new OptionalParser(new TowerParser())
         )
     );
 
     if (parsed.towers && parsed.towers.length > parsed.natural_number) {
-        parsed.addError(`You searched more towers (${parsed.towers.length}) than the number of towers you specified (${parsed.natural_number})`);
+        parsed.addError(
+            `You searched more towers (${parsed.towers.length}) than the number of towers you specified (${parsed.natural_number})`
+        );
     }
 
     if (parsed.hasErrors()) {
@@ -117,9 +116,9 @@ async function execute(message, args) {
     if (filteredResults.length == 0) {
         const noCombosEmbed = new Discord.MessageEmbed()
             .setTitle(titleNoCombos(parsed))
-            .setColor(paleorange)
-                                
-        return message.channel.send(noCombosEmbed);
+            .setColor(paleorange);
+
+        return message.channel.send({ embeds: [noCombosEmbed] });
     } else {
         displayOneOrMultiplePages(message, parsed, filteredResults);
     }
@@ -148,7 +147,7 @@ const TOWER_ABBREVIATIONS = {
     spike_factory: 'spk',
     monkey_village: 'vil',
     engineer: 'eng',
-}
+};
 
 async function parseFTTC() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
@@ -164,45 +163,46 @@ async function parseFTTC() {
     for (let row = 1; row <= sheet.rowCount; row++) {
         parsedHeader = sectionHeader(row, sheet);
         if (parsedHeader) {
-            colset = COLS[parsedHeader]
+            colset = COLS[parsedHeader];
             row += 2;
             continue;
         }
         if (!colset) continue;
-        
+
         var mapCandidate = sheet.getCellByA1(`${colset.MAP}${row}`).value;
         if (!mapCandidate) continue;
-        
-        combos = combos.concat(await getRowData(row, colset))
+
+        combos = combos.concat(await getRowData(row, colset));
     }
 
     return combos;
 }
 
 async function getRowData(entryRow, colset) {
-    return [].concat(
-        await getRowStandardData(entryRow, colset)
-    ).concat(
-        await getRowAltData(entryRow, colset)
-    ).filter(e => e);
+    return []
+        .concat(await getRowStandardData(entryRow, colset))
+        .concat(await getRowAltData(entryRow, colset))
+        .filter((e) => e);
 }
 
 async function getRowStandardData(entryRow, colset) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
-    let values = {TOWERS: []}
+    let values = { TOWERS: [] };
 
     // Six+
     if (Object.keys(colset).includes('#')) {
         values.TOWERS = sheet
             .getCellByA1(`**${colset['TOWERS']}${entryRow}**`)
-            .value.split(",").map(tower => {
-                return Aliases.getCanonicalForm(tower.trim())
-            })
+            .value.split(',')
+            .map((tower) => {
+                return Aliases.getCanonicalForm(tower.trim());
+            });
     } else {
         for (var i = 0; i < colset['TOWERS'].length; i++) {
             values.TOWERS.push(
                 Aliases.getCanonicalForm(
-                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
+                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`)
+                        .value
                 )
             );
         }
@@ -236,26 +236,28 @@ async function getRowAltData(entryRow, colset) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
     mapCell = sheet.getCellByA1(`${colset.MAP}${entryRow}`);
 
-    notes = mapCell.note
+    notes = mapCell.note;
     if (!notes) return null;
 
     return notes
-            .trim()
-            .split('\n')
-            .map((entry) => {
-                let towers, person, bitly;
-                [towers, person, bitly] = entry
-                    .split('|')
-                    .map((t) => t.replace(/ /g, ''));
-                
-                return {
-                    TOWERS: towers.split(',').map(t => Aliases.getCanonicalForm(t.trim())),
-                    PERSON: person,
-                    LINK: `[${bitly}](http://${bitly})`,
-                    MAP: mapCell.value,
-                    OG: false,
-                };
-            })
+        .trim()
+        .split('\n')
+        .map((entry) => {
+            let towers, person, bitly;
+            [towers, person, bitly] = entry
+                .split('|')
+                .map((t) => t.replace(/ /g, ''));
+
+            return {
+                TOWERS: towers
+                    .split(',')
+                    .map((t) => Aliases.getCanonicalForm(t.trim())),
+                PERSON: person,
+                LINK: `[${bitly}](http://${bitly})`,
+                MAP: mapCell.value,
+                OG: false,
+            };
+        });
 }
 
 function sectionHeader(mapRow, sheet) {
@@ -266,9 +268,7 @@ function sectionHeader(mapRow, sheet) {
     );
 
     // Check cell to see if it's a header indicating the number of towers
-    let candidateHeaderCell = sheet.getCellByA1(
-        `${COLS['ONE'].MAP}${mapRow}`
-    );
+    let candidateHeaderCell = sheet.getCellByA1(`${COLS['ONE'].MAP}${mapRow}`);
 
     // Header rows take up 2 rows. If you check the bottom row, the data value is null.
     if (candidateHeaderCell.value) {
@@ -282,78 +282,93 @@ function sectionHeader(mapRow, sheet) {
 }
 
 function filterResults(allCombos, parsed) {
-    results = allCombos
+    results = allCombos;
 
-     if (parsed.map) {
-         results = results.filter(combo => Aliases.toAliasNormalForm(combo.MAP) == parsed.map)
-     } else if (parsed.natural_number) {
-        results = results.filter(combo => combo.TOWERS.length === parsed.natural_number)
+    if (parsed.map) {
+        results = results.filter(
+            (combo) => Aliases.toAliasNormalForm(combo.MAP) == parsed.map
+        );
+    } else if (parsed.natural_number) {
+        results = results.filter(
+            (combo) => combo.TOWERS.length === parsed.natural_number
+        );
     }
 
     if (parsed.person) {
-        results = results.filter(combo => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person)
+        results = results.filter(
+            (combo) =>
+                combo.PERSON.toLowerCase().split(' ').join('_') ===
+                parsed.person
+        );
     }
 
     if (parsed.towers) {
-        results = results.filter(combo => parsed.towers.every(specifiedTower => combo.TOWERS.includes(specifiedTower)))
+        results = results.filter((combo) =>
+            parsed.towers.every((specifiedTower) =>
+                combo.TOWERS.includes(specifiedTower)
+            )
+        );
     }
 
     if (keepOnlyOG(parsed)) {
-        results = results.filter(combo => combo.OG)
+        results = results.filter((combo) => combo.OG);
     }
 
     return results;
 }
 
 function keepOnlyOG(parsed) {
-    return parsed.natural_number && !parsed.person && !parsed.tower
+    return parsed.natural_number && !parsed.person && !parsed.tower;
 }
 
 async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
     // Setup / Data consolidation
-    let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK']
+    let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK'];
 
     if (parsed.person) {
-        displayCols = displayCols.filter(col => col != 'PERSON')
+        displayCols = displayCols.filter((col) => col != 'PERSON');
     }
 
     if (parsed.map) {
-        displayCols = displayCols.filter(col => col != 'MAP')
+        displayCols = displayCols.filter((col) => col != 'MAP');
     }
-    
+
     if (displayCols.length === 4) {
-        displayCols = displayCols.filter(col => col != 'PERSON')
+        displayCols = displayCols.filter((col) => col != 'PERSON');
     }
 
-    const displayValues = displayCols.map(col => {
+    const displayValues = displayCols.map((col) => {
         if (col == 'TOWERS') {
-            const boldedAbbreviatedTowers = combos.map(combo => combo[col].map(tower => {
-                const towerCanonical = Aliases.getCanonicalForm(tower);
-                const towerAbbreviation = TOWER_ABBREVIATIONS[towerCanonical].toUpperCase()
-                return parsed.towers && parsed.towers.includes(towerCanonical) ? 
-                    `**${towerAbbreviation}**` : 
-                    towerAbbreviation;
-            }))
+            const boldedAbbreviatedTowers = combos.map((combo) =>
+                combo[col].map((tower) => {
+                    const towerCanonical = Aliases.getCanonicalForm(tower);
+                    const towerAbbreviation =
+                        TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
+                    return parsed.towers &&
+                        parsed.towers.includes(towerCanonical)
+                        ? `**${towerAbbreviation}**`
+                        : towerAbbreviation;
+                })
+            );
             return boldedAbbreviatedTowers.map((comboTowers, i) => {
-                let value = comboTowers.join(" | ")
+                let value = comboTowers.join(' | ');
                 if (combos[i].OG && !keepOnlyOG(parsed) && !parsed.towers) {
-                    value = `**${value}**`
+                    value = `**${value}**`;
                 }
                 return value;
-            })
+            });
         } else {
-            return combos.map(combo => {
-                value = combo[col]
+            return combos.map((combo) => {
+                value = combo[col];
                 if (combo.OG && !keepOnlyOG(parsed)) {
-                    value = `**${value}**`
+                    value = `**${value}**`;
                 }
                 return value;
-            })
+            });
         }
-    })
+    });
 
-    const numOGCompletions = combos.filter(combo => combo.OG).length;
-
+    const numOGCompletions = combos.filter((combo) => combo.OG).length;
 
     // Begin React-Loop
     REACTIONS = ['⬅️', '➡️'];
@@ -372,29 +387,33 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
         ) {
             let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(title(parsed, combos))
-                .setColor(paleorange)
+                .setColor(paleorange);
 
             challengeEmbed.addField(
                 '# Combos',
-                `**${leftIndex+1}**-**${rightIndex+1}** of ${numRows}`
+                `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
             );
 
             for (var c = 0; c < displayCols.length; c++) {
                 challengeEmbed.addField(
                     gHelper.toTitleCase(displayCols[c]),
-                    displayValues[c].slice(leftIndex, rightIndex + 1).join('\n'),
+                    displayValues[c]
+                        .slice(leftIndex, rightIndex + 1)
+                        .join('\n'),
                     true
-                )
+                );
             }
 
             if (keepOnlyOG(parsed)) {
-                challengeEmbed.setFooter(`---\nNon-OG completions excluded`)
+                challengeEmbed.setFooter(`---\nNon-OG completions excluded`);
             } else {
                 if (numOGCompletions == 1) {
                     challengeEmbed.setFooter(`---\nOG completion bolded`);
                 }
                 if (numOGCompletions > 1) {
-                    challengeEmbed.setFooter(`---\n${numOGCompletions} OG completions bolded`);
+                    challengeEmbed.setFooter(
+                        `---\n${numOGCompletions} OG completions bolded`
+                    );
                 }
             }
 
@@ -418,51 +437,62 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
         for (var i = 0; i < REACTIONS.length; i++) {
             botMessage.react(REACTIONS[i]);
         }
-    
+
         // Read author reaction (time limit specified below in milliseconds)
         // and respond with appropriate action
-        botMessage.createReactionCollector(
-            (reaction, user) =>
-                user.id === userQueryMessage.author.id &&
-                REACTIONS.includes(reaction.emoji.name),
-            { time: 20000 }
-        ).once('collect', (reaction) => {
-            switch (reaction.emoji.name) {
-                case '⬅️':
-                    rightIndex = (leftIndex - 1 + numRows) % numRows;
-                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                    if (leftIndex < 0) leftIndex = 0;
-                    displayPages(-1);
-                    break;
-                case '➡️':
-                    leftIndex = (rightIndex + 1) % numRows;
-                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                    if (rightIndex >= numRows) rightIndex = numRows - 1;
-                    displayPages(1);
-                    break;
-            }
-        });
+        const filter = (reaction, user) =>
+            user.id === userQueryMessage.author.id &&
+            REACTIONS.includes(reaction.emoji.name);
+        botMessage
+            .createReactionCollector({
+                filter,
+                time: 20000,
+            })
+            .once('collect', (reaction) => {
+                switch (reaction.emoji.name) {
+                    case '⬅️':
+                        rightIndex = (leftIndex - 1 + numRows) % numRows;
+                        leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                        if (leftIndex < 0) leftIndex = 0;
+                        displayPages(-1);
+                        break;
+                    case '➡️':
+                        leftIndex = (rightIndex + 1) % numRows;
+                        rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                        if (rightIndex >= numRows) rightIndex = numRows - 1;
+                        displayPages(1);
+                        break;
+                }
+            });
     }
-    displayPages(1)
+    displayPages(1);
 }
 
 function title(parsed, combos) {
-    t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo '
+    t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';
     if (parsed.person) t += `by ${combos[0].PERSON} `;
-    if (parsed.natural_number) t += `with ${parsed.natural_number} towers `
-    if (parsed.map) t += `on ${combos[0].MAP} `
-    if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `
-    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `
+    if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
+    if (parsed.map) t += `on ${combos[0].MAP} `;
+    if (parsed.towers)
+        t += `including ${Towers.towerUpgradeToIndexNormalForm(
+            parsed.towers[0]
+        )} `;
+    if (parsed.towers && parsed.towers[1])
+        t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 
 function titleNoCombos(parsed) {
-    t = 'No FTTC Combos Found '
+    t = 'No FTTC Combos Found ';
     if (parsed.person) t += `by "${parsed.person}" `;
-    if (parsed.natural_number) t += `with ${parsed.natural_number} towers `
-    if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `
-    if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `
-    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `
+    if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
+    if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
+    if (parsed.towers)
+        t += `including ${Towers.towerUpgradeToIndexNormalForm(
+            parsed.towers[0]
+        )} `;
+    if (parsed.towers && parsed.towers[1])
+        t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 
@@ -471,33 +501,26 @@ function helpMessage(message) {
         .setTitle('`q!fttc` HELP — The BTD6 Index Fewest Tower Type CHIMPS')
         .addField(
             '`q!fttc <map>`',
-            'All FTTCs for the queried map' + 
-                '\n`q!fttc frozenover`'
+            'All FTTCs for the queried map' + '\n`q!fttc frozenover`'
         )
-        .addField(
-            '`q!fttc <n>`',
-            'All FTTCs with _n_ towers' +
-                '\n`q!fttc 3`'
-        )
+        .addField('`q!fttc <n>`', 'All FTTCs with _n_ towers' + '\n`q!fttc 3`')
         .addField(
             '`q!fttc <tower_1> {tower_2}`',
-            'All FTTCs with (all) specified tower(s)' +
-                '\n`q!fttc ace ninja`'
+            'All FTTCs with (all) specified tower(s)' + '\n`q!fttc ace ninja`'
         )
         .addField(
             '`q!fttc <person>`',
-            'All FTTCs by a given person' +
-                '\n`q!fttc u#usernamegoeshere`'
+            'All FTTCs by a given person' + '\n`q!fttc u#usernamegoeshere`'
         )
         .addField(
             'Notes',
             ' • You can combine query fields in any combination, except you may only search `<n>` OR `<map>` in a given command\n' +
-            ' • Towers are abbreviated so they should fit in the column even if there are 5\n'
+                ' • Towers are abbreviated so they should fit in the column even if there are 5\n'
         )
 
         .setColor(paleorange);
 
-    return message.channel.send(helpEmbed);
+    return message.channel.send({ embeds: [helpEmbed] });
 }
 
 function errorMessage(message, parsingErrors) {
@@ -510,5 +533,5 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!fttc` for help', '\u200b')
         .setColor(orange);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }

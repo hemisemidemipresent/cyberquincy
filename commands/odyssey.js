@@ -66,7 +66,7 @@ module.exports = {
                 .setFooter(
                     'Unfortunately we only have data for hard mode odysseys'
                 );
-            message.channel.send(embed);
+            message.channel.send({ embeds: [embed] });
         }
         try {
             display(parseInt(args[0]));

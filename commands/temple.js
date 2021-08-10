@@ -15,6 +15,9 @@ module.exports = {
     name: 'temple',
     aliases: ['t', 'tsg', 'sg', 'monkeygod', 'god', 'totmg', 'vtsg'],
     execute(message, args) {
+        if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
+            return module.exports.helpMessage(message);
+        }
         parsed = CommandParser.parse(
             args,
             new OrParser(
@@ -27,6 +30,9 @@ module.exports = {
                 )
             )
         );
+        if (parsed.hasErrors()) {
+            return message.ch;
+        }
         // fill the parsed.cashs array with undefined so it works with the reactor
         if (!parsed.cashs)
             parsed.cashs = [undefined, undefined, undefined, undefined];
@@ -64,6 +70,26 @@ module.exports = {
             );
         } else displayTempleStatsBySet(message, parsed.temple_set);
     },
+    errorMessage(message, errorMessages) {
+        let errorEmbed = new Discord.MessageEmbed()
+            .setTitle('ERROR')
+            .addField('Cause(s)', errorMessages.join('\n'))
+            .addField('Type `q!alias` for help', '\u200b')
+            .setColor(colours['orange']);
+
+        return message.channel.send({ embeds: [errorEmbed] });
+    },
+    helpMessage(message) {
+        let messageEmbed = new Discord.MessageEmbed()
+            .setTitle('q!temple')
+            .addField('Use', 'Get temple statistics')
+            .addField(
+                'Example: `q!temple 2221`; `q!temple 50001 50001 0 42069`',
+                'For the second type, it is `<primary> <military> <magic> <support>`. If a certain value is omitted I will prompt you for a value.'
+            )
+            .addField('vtsg', 'use q!vtsg');
+        return message.channel.send({ embeds: [messageEmbed] });
+    },
 };
 function displayTempleStatsBySet(message, temple_set) {
     temple_set = temple_set.split('').map(function (x) {
@@ -87,7 +113,7 @@ function displayTempleStatsBySet(message, temple_set) {
         'Support sacrifice',
         `${t[3][0]}\n${t[3][9]}\n**TSG**:\n${t2[3]}`
     );
-    return message.channel.send(embed);
+    return message.channel.send({ embeds: [embed] });
 }
 function displayTempleStatsByCash(message, results) {
     console.log(results);
@@ -119,7 +145,7 @@ function displayTempleStatsByCash(message, results) {
             '\n' +
             levelToString(cashToLevel(results.sacrificed_military_cash), 3)
     );
-    return message.channel.send(embed);
+    return message.channel.send({ embeds: [embed] });
 }
 /**
  * input cash, returns a number from 0 - 9 about the temple's sacrifice level.

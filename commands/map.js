@@ -71,7 +71,7 @@ function helpMessage(message) {
         )
         .setColor(cyber);
 
-    return message.channel.send(helpEmbed);
+    return message.channel.send({ embeds: [helpEmbed] });
 }
 
 function errorMessage(message, parsingErrors) {
@@ -85,7 +85,7 @@ function errorMessage(message, parsingErrors) {
         )
         .setColor(cyber);
 
-    return message.channel.send(errorEmbed);
+    return message.channel.send({ embeds: [errorEmbed] });
 }
 
 module.exports = {

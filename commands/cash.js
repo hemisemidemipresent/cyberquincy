@@ -43,7 +43,7 @@ module.exports = {
         } else {
             embed = this.calculate(cashNeeded, startRound, r, 140, 1);
         }
-        message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
     },
     errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
@@ -51,7 +51,7 @@ module.exports = {
             .addField('Likely Cause(s)', parsingErrors.join('\n'))
             .setColor(cyber);
 
-        return message.channel.send(errorEmbed);
+        return message.channel.send({ embeds: [errorEmbed] });
     },
     freePlayMsg(cashNeeded, round) {
         let embed = new Discord.MessageEmbed()

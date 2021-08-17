@@ -127,7 +127,7 @@ async function handleCommand(message) {
             statcord
                 .postCommand(command.name, message.author.id)
                 .then(() => {
-                    console.log(`[POST] q!${command.name} to statcord,`);
+                    //console.log(`[POST] q!${command.name} to statcord,`);
                 })
                 .catch((err) => {
                     console.log(`[ERROR] q!${command.name} failed to post`);

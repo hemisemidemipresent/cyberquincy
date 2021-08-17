@@ -25,7 +25,6 @@ function uploadImgur(message, args) {
                 .setColor(cyber)
                 .setImage(`${json.link}`);
             message.channel.send({ embeds: [embed] });
-            message.delete();
         })
         .catch((e) => {
             console.log(e);

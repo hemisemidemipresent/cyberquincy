@@ -89,7 +89,7 @@ module.exports = {
         let occurences = getOccurences(parsed.bloon.toString(), object);
         let output = format(occurences);
 
-        message.channel.send(output);
+        message.channel.send({ embeds: [output] });
     },
     errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()

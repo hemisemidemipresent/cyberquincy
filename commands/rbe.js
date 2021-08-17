@@ -50,6 +50,6 @@ module.exports = {
             .setDescription(`from round ${startround} to ${endround}`)
             .setFooter('note: towers may count pops differently due to bugs')
             .setColor(magenta);
-        channel.send(dataEmbed);
+        channel.send({ embeds: [dataEmbed] });
     },
 };

@@ -25,7 +25,7 @@ module.exports = {
 
         const filter = (msg) => msg.author.id === `${message.author.id}`;
 
-        message.channel.send(QuestionEmbed).then(() => {
+        message.channel.send({ embeds: [QuestionEmbed] }).then(() => {
             message.channel
                 .awaitMessages({
                     filter,
@@ -41,7 +41,7 @@ module.exports = {
                     let errorEmbed = new Discord.MessageEmbed()
                         .setTitle(`Game over! You took too long.`)
                         .setColor(magenta);
-                    message.channel.send(errorEmbed);
+                    message.channel.send({ embeds: [errorEmbed] });
                     console.log(err);
                 });
         });

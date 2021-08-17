@@ -80,7 +80,7 @@ module.exports = {
             .addField('usage', 'q!odyssey <number>')
             .addField('example', '``q!odyssey 5 shows`` odyssey number 5')
             .setColor(red);
-        channel.send(embed);
+        channel.send({ embeds: [embed] });
     },
     errorMessage(channel) {
         let embed = new Discord.MessageEmbed()
@@ -92,6 +92,6 @@ module.exports = {
                 'if this is an actual issue',
                 `[report this bug](${discord})`
             );
-        channel.send(embed);
+        channel.send({ embeds: [embed] });
     },
 };

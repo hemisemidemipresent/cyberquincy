@@ -105,12 +105,12 @@ async function displayLCC(message, btd6_map) {
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
             gHelper.toTitleCase(field),
-            values[field],
+            values[field].toString(),
             true
         );
     }
 
-    message.channel.send(challengeEmbed);
+    message.channel.send({ embeds: [challengeEmbed] });
 }
 
 function helpMessage(message) {

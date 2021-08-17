@@ -49,16 +49,20 @@ async function execute(message, args) {
     await loadEntityBuffNerfsTableCells(parsed);
     if (!parsed.hero) await loadTowerChangesTableCells(parsed);
     colIndex = await locateSpecifiedEntityColumnIndex(parsed);
-    let [versionAdded, balanceChanges] = await parseBalanceChanges(
-        parsed,
-        colIndex
-    );
-    return await formatAndDisplayBalanceChanges(
-        message,
-        parsed,
-        versionAdded,
-        balanceChanges
-    );
+    try {
+        let [versionAdded, balanceChanges] = await parseBalanceChanges(
+            parsed,
+            colIndex
+        );
+        return await formatAndDisplayBalanceChanges(
+            message,
+            parsed,
+            versionAdded,
+            balanceChanges
+        );
+    } catch {
+        return message.channel.send('something went wrong');
+    }
 }
 
 async function loadEntityBuffNerfsTableCells(parsed) {
@@ -318,13 +322,15 @@ async function formatAndDisplayBalanceChanges(
         } else if (parsed.versions) {
             versionText = ` in v${parsed.version}`;
         }
-        return message.channel.send(
-            new Discord.MessageEmbed()
-                .setTitle(
-                    `No patch notes found for ${formattedTower}${versionText}`
-                )
-                .setColor(yellow)
-        );
+        return message.channel.send({
+            embeds: [
+                new Discord.MessageEmbed()
+                    .setTitle(
+                        `No patch notes found for ${formattedTower}${versionText}`
+                    )
+                    .setColor(yellow),
+            ],
+        });
     }
 
     let addedText = `**Added in ${versionAdded}**`;

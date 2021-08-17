@@ -74,15 +74,17 @@ function calc(message, args) {
             if (c === '<')
                 footer =
                     "Did you try to tag another discord user? That's definitely not allowed here.";
-            return message.channel.send(
-                new Discord.MessageEmbed()
-                    .setTitle(`Unexpected character "${c}"`)
-                    .setDescription(
-                        `"${c}" is not a valid character in the \`q!calc\` expression. Type \`q!calc\` for help.`
-                    )
-                    .setColor(colours['red'])
-                    .setFooter(footer)
-            );
+            return message.reply({
+                embeds: [
+                    new Discord.MessageEmbed()
+                        .setTitle(`Unexpected character "${c}"`)
+                        .setDescription(
+                            `"${c}" is not a valid character in the \`q!calc\` expression. Type \`q!calc\` for help.`
+                        )
+                        .setColor(colours['red'])
+                        .setFooter(footer),
+                ],
+            });
         } else throw e;
     }
 
@@ -132,15 +134,17 @@ function calc(message, args) {
         });
     } catch (e) {
         if (e instanceof UnrecognizedTokenError) {
-            // Catches non-sensical tokens
-            return message.channel.send(
-                new Discord.MessageEmbed()
-                    .setTitle(e.message)
-                    .setColor(colours['red'])
-                    .setFooter(
-                        'due to manipulation, your full input will not be shown'
-                    )
-            );
+            // Catches nonsensical tokens
+            return message.reply({
+                embeds: [
+                    new Discord.MessageEmbed()
+                        .setTitle(e.message)
+                        .setColor(colours['red'])
+                        .setFooter(
+                            'due to manipulation, your full input will not be shown'
+                        ),
+                ],
+            });
         } else throw e;
     }
 
@@ -148,37 +152,45 @@ function calc(message, args) {
     var output = stack.pop();
 
     if (isNaN(output)) {
-        return message.channel.send(
-            new Discord.MessageEmbed()
-                .setTitle(
-                    'Error processing expression. Did you add an extra operator?'
-                )
-                .setDescription(`\`${expression}\``)
-                .setColor(colours['red'])
-                .setFooter('Enter `q!calc` for help')
-        );
+        return message.reply({
+            embeds: [
+                new Discord.MessageEmbed()
+                    .setTitle(
+                        'Error processing expression. Did you add an extra operator?'
+                    )
+                    .setDescription(`\`${expression}\``)
+                    .setColor(colours['red'])
+                    .setFooter('Enter `q!calc` for help'),
+            ],
+        });
     } else if (stack.length > 0) {
-        return message.channel.send(
-            new Discord.MessageEmbed()
-                .setTitle(
-                    'Error processing expression. Did you leave out an operator?'
-                )
-                .setDescription(`\`${expression}\``)
-                .setColor(colours['red'])
-                .setFooter('Enter `q!calc` for help')
-        );
+        return message.reply({
+            embeds: [
+                new Discord.MessageEmbed()
+                    .setTitle(
+                        'Error processing expression. Did you leave out an operator?'
+                    )
+                    .setDescription(`\`${expression}\``)
+                    .setColor(colours['red'])
+                    .setFooter('Enter `q!calc` for help'),
+            ],
+        });
     } else {
         // G2g!
-        return message.channel.send(
-            new Discord.MessageEmbed()
-                .setTitle(
-                    gHelper.numberAsCost(
-                        Number.isInteger(output) ? output : output.toFixed(1)
-                    )
-                ) // At MOST 1 decimal place
-                .setDescription(`\`${expression}\``)
-                .setColor(colours['cyber'])
-        );
+        return message.reply({
+            embeds: [
+                new Discord.MessageEmbed()
+                    .setTitle(
+                        gHelper.numberAsCost(
+                            Number.isInteger(output)
+                                ? output
+                                : output.toFixed(1)
+                        )
+                    ) // At MOST 1 decimal place
+                    .setDescription(`\`${expression}\``)
+                    .setColor(colours['cyber']),
+            ],
+        });
     }
 }
 
@@ -257,6 +269,8 @@ function costOfHero(hero) {
             return 585;
         case 'sauda':
             return 650;
+        case 'psi':
+            return 865;
     }
 }
 
@@ -330,7 +344,7 @@ function helpMessage(message) {
         )
         .setColor(colours['black']);
 
-    return message.channel.send({ embeds: [helpEmbed] });
+    return message.reply({ embeds: [helpEmbed] });
 }
 
 module.exports = {

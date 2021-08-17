@@ -104,5 +104,5 @@ async function findRaceByNum(number, message) {
         .addField('Links', `${output}`)
         .addField('Players', `${players.value}`);
 
-    return message.channel.send(RaceEmbed);
+    return message.channel.send({ embeds: [RaceEmbed] });
 }

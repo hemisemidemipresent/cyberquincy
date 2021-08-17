@@ -18,7 +18,7 @@ module.exports = {
                 'usage',
                 'q!minesweeper - default 8 mines\nq!minesweeper <mine count> `e.g. q!minesweeper 20`'
             );
-            return message.channel.send(mebed);
+            return message.channel.send({ embeds: [mebed] });
         }
         if (parsed.natural_number) mines = parsed.natural_number;
         let minesweeper = new Minesweeper({

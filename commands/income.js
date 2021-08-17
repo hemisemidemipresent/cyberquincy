@@ -104,7 +104,7 @@ module.exports = {
             )
             .setColor(red);
 
-        message.channel.send(errorEmbed);
+        message.channel.send({ embeds: [errorEmbed] });
     },
     income(startround, endround, mode) {
         switch (mode) {

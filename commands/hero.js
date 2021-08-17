@@ -27,7 +27,6 @@ const aliases = [
         'gwend',
         'gwendo',
         'fire',
-        'isabgirl',
     ],
     ['striker-jones', 'sj', 'striker', 'bones', 'jones', 'biker', 'who'],
     ['obyn-greenfoot', 'obyn', 'greenfoot', 'o', 'ocyn'],
@@ -92,7 +91,7 @@ const aliases = [
         'eti',
         'drone',
     ],
-    ['sauda', 'saud', 'sau', '🥛', 'sawdust'],
+    ['sauda', 'saud', 'sau', '🥛', 'sawdust', 'isabgirl'],
     ['psi', 'psy', 'Ψ', 'sigh'],
 ];
 const links = [

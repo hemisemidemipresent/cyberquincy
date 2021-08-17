@@ -32,8 +32,9 @@ module.exports = {
                         `\nprojectiles can rehit target` +
                         `\nmini juggernaut - identical to juggernaut`
                 )
-                .setFooter('this is beta, the stats are probably wrong');
-
+                .setFooter(
+                    'bd - additional dmg done to boss bloons|ed - additional dmg done to elite boss bloons (not including base bd)'
+                );
             return message.channel.send({ embeds: [messageEmbed] });
         } else if (parsed.tower == 'boomerang_monkey') {
             let paragon = paragonStats.boomerang_monkey;

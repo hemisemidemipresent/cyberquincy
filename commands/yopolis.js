@@ -30,7 +30,7 @@ module.exports = {
             .addField('Money produced in a round', `${money}`, true)
             .addField('cost of upgrade', `${price}`, true)
             .addField('rounds until breaking even', `${even}`, true);
-        message.channel.send(mpembed);
+        message.channel.send({ embeds: [mpembed] });
     },
     errorMessage(channel, parsingErrors) {
         const errorEmbed = new Discord.MessageEmbed()
@@ -47,6 +47,6 @@ module.exports = {
             )
             .addField('example', 'q!yopolis 50000 2', true)
             .setColor(red);
-        channel.send(errorEmbed);
+        channel.send({ embeds: [errorEmbed] });
     },
 };

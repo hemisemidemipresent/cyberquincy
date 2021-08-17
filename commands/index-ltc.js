@@ -235,7 +235,7 @@ async function getRowStandardData(message, entryRow, colset) {
         );
     }
 
-    return message.channel.send(challengeEmbed);
+    return message.channel.send({ embeds: [challengeEmbed] });
 }
 
 async function getRowAltData(message, entryRow, qualifier, colset) {
@@ -256,7 +256,7 @@ async function getRowAltData(message, entryRow, qualifier, colset) {
         .addField('Person', notes[qualifier].PERSON, true)
         .addField('Link', notes[qualifier].LINK, true);
 
-    return message.channel.send(challengeEmbed);
+    return message.channel.send({ embeds: [challengeEmbed] });
 }
 
 function parseMapNotes(notes) {

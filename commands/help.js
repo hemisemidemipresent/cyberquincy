@@ -25,8 +25,8 @@ module.exports = {
                 `discord server: ${discord} stay up-to-date and talk to the devs`
             )
             .addField(
-                'List of commands',
-                '[commands page](https://docs-cq.netlify.com/docs/intro)'
+                '**Documentation/Tutorial**',
+                '[What is Cyber Quincy](https://docs-cq.netlify.com/docs/intro)\n[Getting started](https://docs-cq.netlify.app/docs/Introduction/getting-started)\n[FAQ](https://docs-cq.netlify.app/docs/Introduction/faq)'
             )
             .addField(
                 'Invite the bot',
@@ -36,6 +36,6 @@ module.exports = {
                 'Upvote the bot',
                 '[top.gg](https://top.gg/bot/591922988832653313)\n[discordbotlist](https://discordbotlist.com/bots/cyber-quincy)'
             );
-        message.channel.send({ embeds: [embed] });
+        message.reply({ embeds: [embed] });
     },
 };

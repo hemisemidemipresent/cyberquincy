@@ -32,7 +32,7 @@ function botOffline(message) {
             'use q!toggle ad to turn this off | Leaving this on is the least you can do to help'
         );
 
-    message.channel.send(serverEmbed);
+    message.channel.send({ embeds: [serverEmbed] });
 }
 
 function ownServer(message) {

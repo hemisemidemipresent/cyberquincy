@@ -21,7 +21,7 @@ module.exports = {
                 )
                 .addField('q!ap 3', 'i dont understand buffs')
                 .setColor(cyber);
-            return message.channel.send(choosemebed);
+            return message.channel.send({ embeds: [choosemebed] });
         }
         if (args[0] == 1) {
             if (args[1] == 'd') {
@@ -35,7 +35,7 @@ module.exports = {
                         '"Layers" is sometimes used in in-game descriptions to mean damage. This is misleading, as most people would consider eg a ceramic to have 1 more layer than a rainbow, but it requires 10 damage to remove this layer.'
                     )
                     .setColor(cyber);
-                message.channel.send(damageembed);
+                message.channel.send({ embeds: [damageembed] });
             } else if (args[1] == 'md' || args[1] == 'cd' || args[1] == 'fd') {
                 const additionaldamageEmbed = new Discord.MessageEmbed()
                     .setTitle(
@@ -45,7 +45,7 @@ module.exports = {
                         'These will be indicated by cd, md, and fd respectively, and the total damage will be written in parentheses for convenience, eg "2d, 1md (3)". Other bonuses are possible, but will not be abbreviated due to how uncommon they are.'
                     )
                     .setColor(cyber);
-                message.channel.send(additionaldamageEmbed);
+                message.channel.send({ embeds: [additionaldamageEmbed] });
             } else if (args[1] == 'p') {
                 const pierceembed = new Discord.MessageEmbed()
                     .setTitle('Pierce')
@@ -75,7 +75,7 @@ module.exports = {
                         '"Popping power" is a vague term and is best avoided entirely. Despite this, in-game descriptions continually use it to mean pierce.'
                     )
                     .setColor(cyber);
-                message.channel.send(pierceembed);
+                message.channel.send({ embeds: [pierceembed] });
             } else if (args[1] == 'r') {
                 const rangeembed = new Discord.MessageEmbed()
                     .setTitle('Range (r)')
@@ -83,7 +83,7 @@ module.exports = {
                         'Range (r) is the radius of the range circle, given in arbitrary "units", because pixel values depend entirely on the resolution of the device running the game. While it is hard to imagine what a "unit" is, providing these numbers does allow for very useful comparisons between towers.'
                     )
                     .setColor(cyber);
-                message.channel.send(rangeembed);
+                message.channel.send({ embeds: [rangeembed] });
             } else if (args[1] == 's') {
                 const sembed = new Discord.MessageEmbed()
                     .setTitle('Seconds per attack (s)')
@@ -95,7 +95,7 @@ module.exports = {
                         'they are only accurate to the nearest frame (1/60th of a second). Times less than 0.1s are accurate on average - towers will release multiple projectiles on the same frame as necessary to maintain this average.'
                     )
                     .setColor(cyber);
-                message.channel.send(sembed);
+                message.channel.send({ embeds: [sembed] });
             } else if (args[1] == 'j') {
                 const jembed = new Discord.MessageEmbed()
                     .setTitle('Projectile count (j)')
@@ -103,7 +103,7 @@ module.exports = {
                         'Projectile count is quite simply the number of projectiles emitted at once. If the count is not 1, it will be stated with the abbreviation **j**. No attempt will be made to describe how spread out the projectiles are (compare tack shooter to triple darts).'
                     )
                     .setColor(cyber);
-                message.channel.send(jembed);
+                message.channel.send({ embeds: [jembed] });
             } else {
                 const mainpropembed = new Discord.MessageEmbed()
                     .setTitle(
@@ -127,7 +127,7 @@ module.exports = {
                     )
                     .addField('**j**', 'projectile count', true)
                     .setColor(cyber);
-                message.channel.send(mainpropembed);
+                message.channel.send({ embeds: [mainpropembed] });
             }
         } else if (args[0] == 2) {
             const typembed = new Discord.MessageEmbed()
@@ -154,7 +154,7 @@ module.exports = {
                     'This is not enough to fully describe all attacks! There are many special cases that simply need more words.'
                 )
                 .setColor(cyber);
-            message.channel.send(typembed);
+            message.channel.send({ embeds: [typembed] });
         } else if (args[0] == 3) {
             const buffembed = new Discord.MessageEmbed()
                 .setTitle(
@@ -183,7 +183,7 @@ module.exports = {
                     'If an upgrade adds or replaces an attack, the new attack will not be affected by buffs from earlier in the same path.'
                 )
                 .setColor(cyber);
-            message.channel.send(buffembed);
+            message.channel.send({ embeds: [buffembed] });
         } else {
             message.channel.send('I cant understand what you are saying!');
         }

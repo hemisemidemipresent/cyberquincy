@@ -278,7 +278,9 @@ async function displayOneOrMultiplePages(
             }
 
             try {
-                let msg = await userQueryMessage.channel.send(challengeEmbed);
+                let msg = await userQueryMessage.channel.send({
+                    embeds: [challengeEmbed],
+                });
                 if (maxNumRowsDisplayed < numRows) {
                     return reactLoop(msg);
                 }

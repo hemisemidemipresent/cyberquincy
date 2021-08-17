@@ -38,7 +38,7 @@ function execute(message, args, originalCommandName) {
     // freeplay has its own serperate shit going on
     if (parsed.round > 140 || (isAbr && parsed.round > 100)) {
         let ramp = freeplay(parsed.round);
-        return message.channel.send(ramp);
+        return message.channel.send({ embeds: [ramp] });
     }
     [xp, totalxp] = calculateXps(parsed.round);
     let roundInfo = isAbr ? json.alt : json.reg;
@@ -47,20 +47,18 @@ function execute(message, args, originalCommandName) {
         .split(',')
         .join('\n');
     let roundRBE = isAbr ? 'Not available in ABR' : rounds2[parsed.round].rbe;
-    let roundCash = null;
+    let roundCash = rounds2[parsed.round].cashThisRound;
     if (isAbr) {
         if (parsed.round > 2) {
             roundCash = cashAbr[parsed.round - 2][0];
         } else {
             roundCash = 'ABR cash data not available for R1/R2';
         }
-    } else {
-        roundCash = rounds2[parsed.round].cashThisRound;
     }
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${parsed.round}` + (parsed.mode == 'abr' ? ' ABR' : ''))
         .setDescription(`${roundContents}`)
-        .addField('Round Length (seconds)', roundLength, true)
+        .addField('Round Length (seconds)', roundLength.toString(), true)
         .addField('RBE', `${gHelper.numberWithCommas(roundRBE)}`, true)
         .addField(
             `XP Earned on R${parsed.round}`,
@@ -91,7 +89,7 @@ function execute(message, args, originalCommandName) {
         let ramping = getRamping(parsed.round);
         roundEmbed.addField('health and speed ramping', `+${ramping}%`);
     }
-    message.channel.send(roundEmbed);
+    message.channel.send({ embeds: [roundEmbed] });
 }
 
 function calculateXps(round) {

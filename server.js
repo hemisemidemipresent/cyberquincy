@@ -96,8 +96,9 @@ function consoleBootup() {
         statcord.on('post', (status) => {
             // status = false if the post was successful
             // status = "Error message" or status = Error if there was an error
-            if (!status) console.log('[POST] successful Statcord post');
-            else console.error(status);
+            if (!status) {
+                //console.log('[POST] successful Statcord post');
+            } else console.error(status);
         });
         statcord.autopost().catch((error) => {
             console.log(error);

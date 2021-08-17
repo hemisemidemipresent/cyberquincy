@@ -15,7 +15,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'Giving_110_percent_krmwt3bz';
+        let raceID = 'Unlucky_ks9t6px3';
         const parsed = CommandParser.parse(
             args,
             new OrParser(
@@ -108,23 +108,7 @@ module.exports = {
                 .setColor(cyber)
                 .setTimestamp()
                 .setThumbnail(raceImg);
-            message.channel.send({ embeds: [embed] }).then((msg) => {
-                msg.react('❌');
-                let filter = (reaction, user) => {
-                    return (
-                        reaction.emoji.name === '❌' &&
-                        user.id === message.author.id
-                    );
-                };
-                const collector = msg.createReactionCollector({
-                    filter,
-                    time: 20000,
-                });
-
-                collector.on('collect', () => {
-                    msg.delete();
-                });
-            });
+            message.channel.send({ embeds: [embed] });
         });
     },
     errorMessage(message, errors) {
@@ -137,7 +121,7 @@ module.exports = {
 
             .setColor(red);
 
-        message.channel.send(errorEmbed);
+        message.channel.send({ embeds: [errorEmbed] });
     },
 };
 function addSpaces(str, max) {

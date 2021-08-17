@@ -151,7 +151,7 @@ module.exports = {
 
             .setColor(red);
 
-        message.channel.send(errorEmbed);
+        message.channel.send({ embeds: [errorEmbed] });
     },
 };
 
@@ -225,7 +225,9 @@ function process(upgrade, commandName, message) {
                     .setDescription(info)
                     .addField(
                         'cost',
-                        `${cost} - medium\n${hard(cost)} - hard`,
+                        `${cost} - medium\n${hard(
+                            cost
+                        )} - hard\nif this is wrong [yell at hemi here](https://discord.gg/VMX5hZA)`,
                         true
                     )
                     .addField(

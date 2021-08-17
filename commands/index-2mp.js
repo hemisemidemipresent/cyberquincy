@@ -434,7 +434,7 @@ async function display2MPFilterAll(
 
     let challengeEmbed = new Discord.MessageEmbed()
         .setTitle(title)
-        .addField('#Combos', columns.LINK.length)
+        .addField('#Combos', columns.LINK.length.toString())
         .setColor(paleblue);
 
     // Display the non-excluded columns
@@ -551,7 +551,7 @@ function embedPages(message, title, columns, numOGCompletions) {
                     e.code === Discord.Constants.APIErrors.MISSING_PERMISSIONS
                 ) {
                     return message.channel
-                        .send(challengeEmbed)
+                        .send({ embeds: [challengeEmbed] })
                         .then((m) => reactLoop(m));
                 } else {
                     throw e;

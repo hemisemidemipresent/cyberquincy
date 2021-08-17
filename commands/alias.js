@@ -68,7 +68,7 @@ module.exports = {
                 'NOTE: FOR q!<tower> AND q!<hero>, THE ARGUMENTS WILL SHOW EVERYTHING THAT TRIGGERS q!<tower> and q!<hero> respectively'
             );
 
-        return message.channel.send(aliasEmbed);
+        return message.channel.send({ embeds: [aliasEmbed] });
     },
 
     helpMessage(message) {

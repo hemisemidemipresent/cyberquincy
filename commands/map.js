@@ -26,7 +26,7 @@ function displayMapInfo(message, name) {
         //.addField('Line of sight obstructions', `${m.los}`, true)
         .addField('Bug reporting', `report [here](${discord})`, true)
         .setColor(cyber);
-    message.channel.send(mapEmbed);
+    message.channel.send({ embeds: [mapEmbed] });
 }
 
 function displayMapDifficultyRBS(message, mapDifficulty) {
@@ -58,7 +58,7 @@ function displayMapDifficultyRBS(message, mapDifficulty) {
         'average of all paths with no obstacles removed and no map mechanics'
     );
 
-    return message.channel.send(infoEmbed);
+    return message.channel.send({ embeds: [infoEmbed] });
 }
 
 function helpMessage(message) {

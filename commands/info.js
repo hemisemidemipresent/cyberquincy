@@ -44,6 +44,6 @@ module.exports = {
             )
             .addField('using', dyno)
             .setFooter('thank you for using it! Please share!');
-        message.channel.send(infoEmbed);
+        message.channel.send({ embeds: [infoEmbed] });
     },
 };

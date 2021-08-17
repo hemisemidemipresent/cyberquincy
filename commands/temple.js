@@ -96,7 +96,7 @@ function displayTempleStatsBySet(message, temple_set) {
         return parseInt(x);
     });
     let embed = new Discord.MessageEmbed().setColor(yellow);
-    embed.setTitle(temple_set);
+    embed.setTitle(temple_set.join(''));
     embed.addField(
         'Primary sacrifice',
         `${t[0][0]}\n${t[0][9]}\n**TSG**:\n${t2[0]}`

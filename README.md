@@ -25,7 +25,7 @@ Cyber Quincy is a BTD6 Discord bot.
 3. Optional:
 
     - [add bot to statcord](https://statcord.com/add), and copy the key into `./1/config.json` as `statcord`
-    - [add bot to discordbotlist](https://discordbotlist.com), and copy the auth token into `./1/config.json` as `discordbotlist`
+    - ~~[add bot to discordbotlist](https://discordbotlist.com), and copy the auth token into `./1/config.json` as `discordbotlist`~~
 
 4. to run type `node server`
 

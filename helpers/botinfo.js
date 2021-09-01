@@ -38,40 +38,6 @@ function statcord() {
     }
 }
 
-function discordbotlist() {
-    const key = require('../1/config.json')['discordbotlist'];
-    if (!key || key === 'no') {
-        console.log('[INFO] discordbotlist is not configured');
-        return;
-    }
-
-    const fetch = require('node-fetch');
-
-    let users = client.users.cache.size;
-    let guilds = client.guilds.cache.size;
-
-    const body = {
-        users: users,
-        guilds: guilds,
-    };
-    fetch(`https://discordbotlist.com/api/v1/bots/591922988832653313/stats`, {
-        method: 'post',
-        body: JSON.stringify(body),
-        headers: {
-            Authorization: key,
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((res) => {
-            res.json();
-            console.log('[POST] Posted to discordbotlist');
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
-
 module.exports = {
     statcord,
-    discordbotlist,
 };

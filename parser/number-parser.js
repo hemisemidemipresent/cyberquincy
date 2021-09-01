@@ -1,6 +1,6 @@
 class NumberParser {
     type() {
-        return "number";
+        return 'number';
     }
 
     // Takes in a lower and upper bound
@@ -8,7 +8,7 @@ class NumberParser {
         this.low = low;
         this.high = high;
 
-        this.validateValues()
+        this.validateValues();
     }
 
     validateValues() {
@@ -23,11 +23,15 @@ class NumberParser {
 
         // Validate bounds
         if (isNaN(this.low)) {
-            throw new DeveloperCommandError(`\`<low>\` must be a number but was instead given "${low}"`)
+            throw new DeveloperCommandError(
+                `\`<low>\` must be a number but was instead given "${low}"`
+            );
         }
 
         if (isNaN(this.high)) {
-            throw new DeveloperCommandError(`\`<high>\` must be a number but was instead given "${low}"`)
+            throw new DeveloperCommandError(
+                `\`<high>\` must be a number but was instead given "${low}"`
+            );
         }
     }
 
@@ -41,7 +45,9 @@ class NumberParser {
 
         // Ensure arg is within bounds
         if (n < this.low || n > this.high) {
-            throw new UserCommandError(`\`${n}\` must be between ${this.low} and ${this.high} inclusive`);
+            throw new UserCommandError(
+                `\`${n}\` must be between ${this.low} and ${this.high} inclusive`
+            );
         }
 
         return n;

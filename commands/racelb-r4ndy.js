@@ -7,7 +7,7 @@ module.exports = {
     casedArgs: true,
     rawArgs: true,
     async execute(message, args) {
-        let raceID = 'Unlucky_ks9t6px3';
+        let raceID = 'Tappity_Tap_Tap_kstryaji';
         let start = 1;
         let end = 50;
         let url = `https://priority-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/Race_${raceID}.json`;

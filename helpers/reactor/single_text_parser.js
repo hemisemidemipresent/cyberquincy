@@ -25,7 +25,7 @@ class SingleTextParser {
             ? `${this.fieldName}_${this.parser.type()}`
             : this.parser.type();
         // Continue to the next interaction if default is provided
-        if (this.default) {
+        if (this.default || this.default == 0) {
             results[key] = this.default;
             chain.shift()(message, chain, results);
             return;

@@ -32,9 +32,9 @@ class CashParser {
                 throw new UserCommandError(
                     `Cash must be of form \`15\` or \`$15\` (Got \`${arg}\` instead)`
                 );
-        } else if (/\d|\./.test(arg[0])) return arg;
-        // one argument
-        else {
+        } else if (/\d|\./.test(arg[0])) {
+            return arg;
+        } else {
             throw new UserCommandError(
                 `Cash must be of form \`15\` or \`$15\` (Got \`${arg}\` instead)`
             );

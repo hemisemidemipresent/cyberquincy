@@ -9,6 +9,13 @@ const ReactionChain = require('../helpers/reactor/reaction_chain');
 const t = require('../jsons/temple.json');
 const t2 = require('../jsons/temple2.json'); // TSG variants
 
+const titles = [
+    'Primary sacrifice',
+    'Military sacrifice',
+    'Magic sacrifice',
+    'Support sacrifice',
+];
+
 const { yellow } = require('../jsons/colours.json');
 
 module.exports = {
@@ -30,6 +37,8 @@ module.exports = {
                 )
             )
         );
+        console.log(parsed);
+
         if (parsed.hasErrors()) {
             return message.ch;
         }
@@ -41,7 +50,6 @@ module.exports = {
                 parsed.cashs.push(undefined);
             }
         }
-
         if (!parsed.temple_set) {
             ReactionChain.process(
                 message,
@@ -50,7 +58,7 @@ module.exports = {
                 new SingleTextParser(
                     new CashParser(),
                     'sacrificed_primary',
-                    parsed.cash
+                    parsed.cashs[0]
                 ),
                 new SingleTextParser(
                     new CashParser(),
@@ -97,23 +105,22 @@ function displayTempleStatsBySet(message, temple_set) {
     });
     let embed = new Discord.MessageEmbed().setColor(yellow);
     embed.setTitle(temple_set.join(''));
-    embed.addField(
-        'Primary sacrifice',
-        `${t[0][0]}\n${t[0][9]}\n**TSG**:\n${t2[0]}`
-    );
-    embed.addField(
-        'Military sacrifice',
-        `${t[1][0]}\n${t[1][9]}\n**TSG**:\n${t2[1]}`
-    );
-    embed.addField(
-        'Magic sacrifice',
-        `${t[2][0]}\n${t[2][9]}\n**TSG**:\n${t2[2]}`
-    );
-    embed.addField(
-        'Support sacrifice',
-        `${t[3][0]}\n${t[3][9]}\n**TSG**:\n${t2[3]}`
-    );
+    for (let i = 0; i < 4; i++) {
+        addSacrificeStats(embed, temple_set[i], i);
+    }
     return message.channel.send({ embeds: [embed] });
+}
+function addSacrificeStats(embed, num, i) {
+    if (num == 0) return;
+    if (num == 1) {
+        return embed.addField(titles[i], `${t[i][0]}\n${t[i][9]}`);
+    }
+    if (num == 2) {
+        return embed.addField(
+            titles[i],
+            `${t[i][0]}\n${t[i][9]}\n**TSG**:\n${t2[i]}`
+        );
+    }
 }
 function displayTempleStatsByCash(message, results) {
     console.log(results);

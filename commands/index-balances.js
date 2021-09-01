@@ -49,20 +49,17 @@ async function execute(message, args) {
     await loadEntityBuffNerfsTableCells(parsed);
     if (!parsed.hero) await loadTowerChangesTableCells(parsed);
     colIndex = await locateSpecifiedEntityColumnIndex(parsed);
-    try {
-        let [versionAdded, balanceChanges] = await parseBalanceChanges(
-            parsed,
-            colIndex
-        );
-        return await formatAndDisplayBalanceChanges(
-            message,
-            parsed,
-            versionAdded,
-            balanceChanges
-        );
-    } catch {
-        return message.channel.send('something went wrong');
-    }
+
+    let [versionAdded, balanceChanges] = await parseBalanceChanges(
+        parsed,
+        colIndex
+    );
+    return await formatAndDisplayBalanceChanges(
+        message,
+        parsed,
+        versionAdded,
+        balanceChanges
+    );
 }
 
 async function loadEntityBuffNerfsTableCells(parsed) {
@@ -206,7 +203,6 @@ async function parseBalanceChanges(parsed, entryColIndex) {
 
             fix = sheet.getCell(changesRowIndex, entryColIndex).note;
             fix = filterChangeNotes(fix, v, parsed);
-
             change = sheet.getCell(changesRowIndex, entryColIndex + 1).note;
             change = filterChangeNotes(change, v, parsed);
         }

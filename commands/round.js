@@ -76,7 +76,7 @@ function execute(message, args, originalCommandName) {
         )
         .addField(
             '**Note:**',
-            ' • If you are in freeplay (e.g. round 41 on easy mode), the xp value is 0.1 of what is displayed\n' +
+            ' • If you are in freeplay (e.g. round 41 on easy mode), the xp value is 0.3 of what is displayed\n' +
                 ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
         )
         .setFooter(

@@ -153,7 +153,6 @@ function generateListeners(commandCenter) {
 
 function botStats() {
     statcord();
-    botInfoHelper.discordbotlist();
 }
 
 function login() {

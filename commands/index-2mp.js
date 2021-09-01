@@ -417,7 +417,11 @@ async function display2MPFilterAll(
 
     // If no combos were found after filtering
     if (towerColumn.length == 0) {
-        return message.channel.send({ embeds: [noCombosMessage] });
+        try {
+            return message.channel.send(noCombosMessage);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     // Exclude columns from data output based on function input

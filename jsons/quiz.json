@@ -270,16 +270,6 @@
         "answers": "a"
     },
     {
-        "question": "There is a tower that allows you to summon a wave of supermonkeys to destroy everything. Name the tower that offers this upgrade.",
-        "optns": [
-            "Monkey Beacon",
-            "Monkey Storm",
-            "Super Monkey",
-            "Dart Monkey"
-        ],
-        "answers": ""
-    },
-    {
         "question": "In Bloons TD 2, Dart Monkeys had an upgrade that allowed them to pop 3 Bloons. In Bloons TD 4 this was replaced by what upgrade?",
         "optns": [
             "Razor Darts",
@@ -440,16 +430,6 @@
         "answers": "b"
     },
     {
-        "question": "How many Ceramic Damage does Crossbow Master deal without Crit?",
-        "optns": [
-            "7",
-            "50",
-            "14",
-            "5"
-        ],
-        "answers": "d"
-    },
-    {
         "question": "Adora was added in BTD6 14.0, Who is she?",
         "optns": [
             "Supermonkey Copycat",
@@ -478,16 +458,6 @@
             "16.1"
         ],
         "answers": "b"
-    },
-    {
-        "question": "There are Hero Skins in BTD6, How many of them are there?",
-        "optns": [
-            "10",
-            "9",
-            "19",
-            "7"
-        ],
-        "answers": "a"
     },
     {
         "question": "Monkey Knowledge is an Additive Feature, What was the first game to add it?",
@@ -620,16 +590,6 @@
         "answers": "b"
     },
     {
-        "question": "What Game is the Calamari Blimp in?",
-        "optns": [
-            "Bloons monkey City",
-            "BTD4",
-            "Bloons TD Battles Mobile",
-            "Bloons Super Monkey 2"
-        ],
-        "answers": "d"
-    },
-    {
         "question": "How many Core/Arm Upgrades were in Bloons supermonkey 2?",
         "optns": [
             "4",
@@ -656,26 +616,6 @@
             "BTD4",
             "Bloons TD Battles Mobile",
             "Bloons Super Monkey 2"
-        ],
-        "answers": "d"
-    },
-    {
-        "question": "How many Core/Arm Upgrades were in Bloons supermonkey 2?",
-        "optns": [
-            "4",
-            "14",
-            "7",
-            "6"
-        ],
-        "answers": "c"
-    },
-    {
-        "question": "When was Peninsula released in BTD6?",
-        "optns": [
-            "1.0",
-            "13.0",
-            "15.1",
-            "7.0"
         ],
         "answers": "d"
     },
@@ -788,16 +728,6 @@
             "8"
         ],
         "answers": "a"
-    },
-    {
-        "question": "Which map that won the map contest was implemented first",
-        "optns": [
-            "Bazaar",
-            "Geared",
-            "Slons",
-            "Quincy's eyebrow"
-        ],
-        "answers": "b"
     },
     {
         "question": "Which map that won the map contest was implemented first",

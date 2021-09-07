@@ -6,13 +6,13 @@ const LexicalParser = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round2.json');
 const RoundParser = require('../parser/round-parser');
 
+const { MessageActionRow, MessageSelectMenu } = require('discord.js');
+
+const { red, magenta } = require('../jsons/colours.json');
+
 const costs = require('../jsons/costs.json');
 
-function calc(message, args) {
-    if (args.length == 0 || args.includes('help')) {
-        return helpMessage(message);
-    }
-
+function calc(message, args, interaction) {
     // Use a "lexer" to parse the operator/operand tokens
     var lexer = new Lexer();
 
@@ -74,18 +74,20 @@ function calc(message, args) {
             if (c === '<')
                 footer =
                     "Did you try to tag another discord user? That's definitely not allowed here.";
-            return message.reply({
+            return interaction.update({
+                content: '\u200b',
                 embeds: [
                     new Discord.MessageEmbed()
                         .setTitle(`Unexpected character "${c}"`)
                         .setDescription(
                             `"${c}" is not a valid character in the \`q!calc\` expression. Type \`q!calc\` for help.`
                         )
-                        .setColor(colours['red'])
+                        .setColor(red)
                         .setFooter(footer),
                 ],
+                components: [],
             });
-        } else throw e;
+        } else console.log(e);
     }
 
     var stack = [];
@@ -135,49 +137,56 @@ function calc(message, args) {
     } catch (e) {
         if (e instanceof UnrecognizedTokenError) {
             // Catches nonsensical tokens
-            return message.reply({
+            return interaction.update({
+                content: '\u200b',
                 embeds: [
                     new Discord.MessageEmbed()
                         .setTitle(e.message)
-                        .setColor(colours['red'])
+                        .setColor(red)
                         .setFooter(
                             'due to manipulation, your full input will not be shown'
                         ),
                 ],
+                components: [],
             });
-        } else throw e;
+        } else console.log(e);
     }
 
     // The single item left in the stack is the evaluated result
     var output = stack.pop();
 
     if (isNaN(output)) {
-        return message.reply({
+        return interaction.update({
+            content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(
                         'Error processing expression. Did you add an extra operator?'
                     )
                     .setDescription(`\`${expression}\``)
-                    .setColor(colours['red'])
+                    .setColor(red)
                     .setFooter('Enter `q!calc` for help'),
             ],
+            components: [],
         });
     } else if (stack.length > 0) {
-        return message.reply({
+        return interaction.update({
+            content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(
                         'Error processing expression. Did you leave out an operator?'
                     )
                     .setDescription(`\`${expression}\``)
-                    .setColor(colours['red'])
+                    .setColor(red)
                     .setFooter('Enter `q!calc` for help'),
             ],
+            components: [],
         });
     } else {
         // G2g!
-        return message.reply({
+        return interaction.update({
+            content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(
@@ -190,6 +199,7 @@ function calc(message, args) {
                     .setDescription(`\`${expression}\``)
                     .setColor(colours['cyber']),
             ],
+            components: [],
         });
     }
 }
@@ -207,6 +217,8 @@ function isTowerUpgradeCrosspath(t) {
 }
 
 function costOfTowerUpgradeCrosspath(t) {
+    let priceMult = module.exports.priceMult;
+
     // Checking for tower aliases of the form wlp, gz, etc.
     if (!['!', '#'].some((sep) => t.includes(sep))) {
         // Alias tokens like wlp as wiz!050
@@ -219,27 +231,27 @@ function costOfTowerUpgradeCrosspath(t) {
     if (jsonTowerName === 'druid-monkey') jsonTowerName = 'druid';
     if (jsonTowerName === 'engineer') jsonTowerName = 'engineer-monkey';
 
-    let hardCost = null;
+    let cost = 0;
     if (t.includes('#') || upgrades == '000') {
         // Total cost
-        hardCost = Towers.totalTowerUpgradeCrosspathCostNewHard(
+        cost = Towers.totalTowerUpgradeCrosspathCostMult(
             costs,
             jsonTowerName,
-            upgrades
+            upgrades,
+            priceMult
         );
     } else if (t.includes('!')) {
         // Individual upgrade cost
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
         const mediumCost = costs[jsonTowerName].upgrades[`${path}`][tier - 1];
-        hardCost = hard(mediumCost);
+        cost = mult(mediumCost, priceMult);
     } else {
         throw 'No # or ! found in tower cost calc';
     }
-    return hardCost;
+    return cost;
 }
-
-function hard(cost) {
-    return Math.round((cost * 1.08) / 5) * 5;
+function mult(cost, priceMult) {
+    return Math.round((cost * priceMult) / 5) * 5;
 }
 
 // TODO: Use hero json
@@ -351,8 +363,62 @@ module.exports = {
     name: 'calculator',
     aliases: ['calc', 'cash-calc', 'cc'],
     rawArgs: true,
+    priceMult: 1,
     execute(message, args) {
-        calc(message, args);
+        if (args.length == 0 || args.includes('help')) {
+            return helpMessage(message);
+        }
+        const row = new MessageActionRow().addComponents(
+            new MessageSelectMenu()
+                .setCustomId('mode')
+                .setPlaceholder('Nothing selected')
+                .addOptions([
+                    {
+                        label: 'Easy',
+                        description: 'Primary only, Deflation',
+                        value: '0.85',
+                    },
+                    {
+                        label: 'Medium',
+                        description: 'Military only, Reverse, Apopalypse',
+                        value: '1',
+                    },
+                    {
+                        label: 'Hard',
+                        description:
+                            'Magic only, Double HP MOABs, Half Cash, C.H.I.M.P.S.',
+                        value: '1.08',
+                    },
+                    {
+                        label: 'Impoppable',
+                        value: '1.2',
+                    },
+                ])
+        );
+        message.reply({
+            content: 'Select the mode to calculate prices',
+            components: [row],
+        });
+        const filter = (interaction) =>
+            interaction.customId === 'mode' &&
+            interaction.user.id == message.author.id; //  nothing basically
+        const collector = message.channel.createMessageComponentCollector({
+            filter,
+            time: 20000,
+        });
+        collector.on('collect', (i) => {
+            module.exports.priceMult = parseFloat(i.values[0]);
+            calc(message, args, i);
+            collector.stop();
+        });
+        collector.on('end', (collected) => {
+            if (!collected.first()) {
+                let errorEmbed = new Discord.MessageEmbed()
+                    .setTitle(`You took too long to select a mode`)
+                    .setColor(magenta);
+                return message.channel.send({ embeds: [errorEmbed] });
+            }
+        });
     },
     helpMessage,
 };

@@ -100,13 +100,13 @@ module.exports = {
     },
 };
 function displayTempleStatsBySet(message, temple_set) {
-    temple_set = temple_set.split('').map(function (x) {
+    templeSet = temple_set.split('').map(function (x) {
         return parseInt(x);
     });
     let embed = new Discord.MessageEmbed().setColor(yellow);
-    embed.setTitle(temple_set.join(''));
+    embed.setTitle(temple_set);
     for (let i = 0; i < 4; i++) {
-        addSacrificeStats(embed, temple_set[i], i);
+        addSacrificeStats(embed, templeSet[i], i);
     }
     return message.channel.send({ embeds: [embed] });
 }

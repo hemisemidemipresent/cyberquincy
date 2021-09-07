@@ -6,12 +6,109 @@ const RoundParser = require('../parser/round-parser');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 
 const ReactionChain = require('../helpers/reactor/reaction_chain');
-const EmojiReactor = require('../helpers/reactor/emoji_reactor');
 const SingleTextParser = require('../helpers/reactor/single_text_parser');
+const MenuReactor = require('../helpers/reactor/menu_reactor');
 
 const Heroes = require('../helpers/heroes');
 
 const gHelper = require('../helpers/general.js');
+
+const mapDifficultyMenu = new MessageSelectMenu()
+    .setCustomId('map_difficulty')
+    .setPlaceholder('Nothing selected')
+    .addOptions([
+        {
+            label: 'Beginner',
+            description: '1x levelling',
+            value: 'beginner',
+        },
+        {
+            label: 'Intermediate',
+            description: '1.1x levelling',
+            value: 'intermediate',
+        },
+        {
+            label: 'Advanced',
+            description: '1.2x levelling',
+            value: 'advanced',
+        },
+        {
+            label: 'Expert',
+            description: '1.3x levelling',
+            value: 'expert',
+        },
+    ]);
+
+const heroMenu = new MessageSelectMenu()
+    .setCustomId('hero')
+    .setPlaceholder('Nothing selected')
+    .addOptions([
+        {
+            label: 'Adora',
+            description: 'High priestess',
+            value: 'adora',
+        },
+        {
+            label: 'Benjamin',
+            description: 'Code Monkey',
+            value: 'benjamin',
+        },
+        {
+            label: 'Admiral Brickell',
+            description: 'Naval Commander',
+            value: 'brickell',
+        },
+        {
+            label: 'Captain Churchill',
+            description: 'Tank',
+            value: 'churchill',
+        },
+        {
+            label: 'Etienne',
+            description: 'Drone Operator',
+            value: 'etienne',
+        },
+        {
+            label: 'Ezili',
+            description: 'Voodoo Monkey',
+            value: 'ezili',
+        },
+        {
+            label: 'Gwendolin',
+            description: 'Pyromaniac',
+            value: 'gweb',
+        },
+        {
+            label: 'Strike Jones',
+            description: 'Artillery Commander',
+            value: 'jones',
+        },
+        {
+            label: 'Obyn',
+            description: 'Forest Guardian',
+            value: 'obyn',
+        },
+        {
+            label: 'Pat Fusty',
+            description: 'Giant Monkey',
+            value: 'pat',
+        },
+        {
+            label: 'Psi',
+            description: 'Psionic Monkey',
+            value: 'psi',
+        },
+        {
+            label: 'Quincy',
+            description: 'me',
+            value: 'quincy',
+        },
+        {
+            label: 'Sauda',
+            description: 'Swordmaster',
+            value: 'sauda',
+        },
+    ]);
 
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
@@ -50,11 +147,11 @@ function execute(message, args) {
     ReactionChain.process(
         message,
         (message, results) => displayHeroLevels(message, results),
-        new EmojiReactor('hero', Guilds.EMOJIS_SERVER, parsed.hero),
+        new MenuReactor('hero', heroMenu, parsed.hero),
         new SingleTextParser(new RoundParser('ALL'), 'starting', startingRound),
-        new EmojiReactor(
+        new MenuReactor(
             'map_difficulty',
-            Guilds.EMOJIS_SERVER,
+            mapDifficultyMenu,
             parsed.map_difficulty
         ),
         new SingleTextParser(

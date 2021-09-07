@@ -7,14 +7,117 @@ const MapDifficultyParser = require('../parser/map-difficulty-parser');
 const HeroLevelParser = require('../parser/hero-level-parser');
 
 const ReactionChain = require('../helpers/reactor/reaction_chain');
-const EmojiReactor = require('../helpers/reactor/emoji_reactor');
 const SingleTextParser = require('../helpers/reactor/single_text_parser');
+const MenuReactor = require('../helpers/reactor/menu_reactor');
+const EmojiReactor = require('../helpers/reactor/emoji_reactor');
 
 const Heroes = require('../helpers/heroes');
 
 const gHelper = require('../helpers/general.js');
 
-const { MessageEmbed } = require('discord.js');
+const {
+    MessageEmbed,
+    MessageActionRow,
+    MessageButton,
+    MessageSelectMenu,
+} = require('discord.js');
+
+const mapDifficultyMenu = new MessageSelectMenu()
+    .setCustomId('map_difficulty')
+    .setPlaceholder('Nothing selected')
+    .addOptions([
+        {
+            label: 'Beginner',
+            description: '1x levelling',
+            value: 'beginner',
+        },
+        {
+            label: 'Intermediate',
+            description: '1.1x levelling',
+            value: 'intermediate',
+        },
+        {
+            label: 'Advanced',
+            description: '1.2x levelling',
+            value: 'advanced',
+        },
+        {
+            label: 'Expert',
+            description: '1.3x levelling',
+            value: 'expert',
+        },
+    ]);
+
+const heroMenu = new MessageSelectMenu()
+    .setCustomId('hero')
+    .setPlaceholder('Nothing selected')
+    .addOptions([
+        {
+            label: 'Adora',
+            description: 'High priestess',
+            value: 'adora',
+        },
+        {
+            label: 'Benjamin',
+            description: 'Code Monkey',
+            value: 'benjamin',
+        },
+        {
+            label: 'Admiral Brickell',
+            description: 'Naval Commander',
+            value: 'brickell',
+        },
+        {
+            label: 'Captain Churchill',
+            description: 'Tank',
+            value: 'churchill',
+        },
+        {
+            label: 'Etienne',
+            description: 'Drone Operator',
+            value: 'etienne',
+        },
+        {
+            label: 'Ezili',
+            description: 'Voodoo Monkey',
+            value: 'ezili',
+        },
+        {
+            label: 'Gwendolin',
+            description: 'Pyromaniac',
+            value: 'gweb',
+        },
+        {
+            label: 'Strike Jones',
+            description: 'Artillery Commander',
+            value: 'jones',
+        },
+        {
+            label: 'Obyn',
+            description: 'Forest Guardian',
+            value: 'obyn',
+        },
+        {
+            label: 'Pat Fusty',
+            description: 'Giant Monkey',
+            value: 'pat',
+        },
+        {
+            label: 'Psi',
+            description: 'Psionic Monkey',
+            value: 'psi',
+        },
+        {
+            label: 'Quincy',
+            description: 'me',
+            value: 'quincy',
+        },
+        {
+            label: 'Sauda',
+            description: 'Swordmaster',
+            value: 'sauda',
+        },
+    ]);
 
 function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
@@ -40,10 +143,11 @@ function execute(message, args) {
     }
 
     // Start react loop to collect the data that the user didn't provide at command-time
+
     ReactionChain.process(
         message,
         (message, results) => displayHeroPlacementRounds(message, results),
-        new EmojiReactor('hero', Guilds.EMOJIS_SERVER, parsed.hero),
+        new MenuReactor('hero', heroMenu, parsed.hero),
         new SingleTextParser(
             new RoundParser('IMPOPPABLE'),
             'goal',
@@ -54,9 +158,9 @@ function execute(message, args) {
             'desired',
             parsed.hero_level
         ),
-        new EmojiReactor(
+        new MenuReactor(
             'map_difficulty',
-            Guilds.EMOJIS_SERVER,
+            mapDifficultyMenu,
             parsed.map_difficulty
         )
     );
@@ -92,9 +196,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
             .map((addend) => heroPlacementRound + addend)
             .filter((r) => r <= results.goal_round);
 
-    REACTIONS = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
-
-    async function displayHeroLevels() {
+    async function displayHeroLevels(interaction) {
         const laterPlacementRounds = calculateLaterPlacementRounds(
             results.hero,
             startingRounds,
@@ -121,9 +223,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
             .setDescription(description)
             .addField('Place on round', rounds.join('\n'), true)
             .addField(`Pay on r${results.goal_round}`, costs.join('\n'), true)
-            .setFooter(
-                `Click an emoji to see more starting rounds: 0=(6—>10), 1=(11—>20), ... , 9=(91—>100)`
-            )
+            .setFooter(`Click a button below to see more starting rounds`)
             .setColor(colours['cyber']);
 
         if (heroPlacementRound == -Infinity) {
@@ -137,50 +237,59 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
                 )} on R${heroPlacementRound}`
             );
         }
-        let botMessage = await userQueryMessage.channel.send({
-            embeds: [embed],
-        });
-        return reactLoop(botMessage);
-    }
 
-    function reactLoop(botMessage) {
-        // Lays out predefined reactions
-        for (var i = 0; i < REACTIONS.length; i++) {
+        const buttons = new MessageActionRow();
+
+        for (let i = 0; i < 10; i++) {
             if (i < Math.floor(heroPlacementRound / 10)) continue;
             if (i > Math.floor(results.goal_round / 10)) continue;
-            botMessage.react(REACTIONS[i]);
+            let label = '';
+            if (i == 0) label = 'r6—>10';
+            else label = `r${10 * i + 1}—>${10 * (i + 1)}`;
+            buttons.addComponents(
+                new MessageButton()
+                    .setLabel(label)
+                    .setStyle('PRIMARY')
+                    .setCustomId(i.toString())
+            );
+        }
+        if (!interaction) {
+            await userQueryMessage.channel.send({
+                embeds: [embed],
+                components: [buttons],
+            });
+        } else {
+            await interaction.update({
+                embeds: [embed],
+                components: [buttons],
+            });
         }
 
-        // Read author reaction (time limit specified below in milliseconds)
-        // and respond with appropriate action
-        function filter(reaction, user) {
-            user.id === userQueryMessage.author.id &&
-                REACTIONS.includes(reaction.emoji.name);
-        }
-        botMessage
-            .createReactionCollector({
+        const filter = (i) => i.user.id == userQueryMessage.author.id;
+
+        const collector =
+            userQueryMessage.channel.createMessageComponentCollector({
                 filter,
                 time: 20000,
-            })
-            .once('collect', (reaction) => {
-                if (!REACTIONS.includes(reaction.emoji.name)) return;
-
-                const tensPlace = parseInt(reaction.emoji.name.charAt(0));
-
-                let leftRound = tensPlace * 10 + 1;
-                if (leftRound < 6) leftRound = 6;
-                if (leftRound <= heroPlacementRound)
-                    leftRound = heroPlacementRound + 1;
-                let rightRound = (tensPlace + 1) * 10;
-                if (rightRound > results.goal_round)
-                    rightRound = results.goal_round;
-                startingRounds = gHelper.range(leftRound, rightRound);
-
-                displayHeroLevels();
             });
+        collector.on('collect', (i) => {
+            let tensPlace = parseInt(i.customId);
+
+            let leftRound = tensPlace * 10 + 1;
+            if (leftRound < 6) leftRound = 6;
+            if (leftRound <= heroPlacementRound)
+                leftRound = heroPlacementRound + 1;
+
+            let rightRound = (tensPlace + 1) * 10;
+            if (rightRound > results.goal_round)
+                rightRound = results.goal_round;
+            startingRounds = gHelper.range(leftRound, rightRound);
+            collector.stop();
+            displayHeroLevels(i);
+        });
     }
 
-    displayHeroLevels();
+    displayHeroLevels(undefined);
 }
 
 function calculateHeroPlacementRound(

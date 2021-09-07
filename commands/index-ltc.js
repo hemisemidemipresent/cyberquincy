@@ -230,7 +230,7 @@ async function getRowStandardData(message, entryRow, colset) {
     for (field in values) {
         challengeEmbed = challengeEmbed.addField(
             gHelper.toTitleCase(field),
-            values[field],
+            values[field].toString(),
             true
         );
     }

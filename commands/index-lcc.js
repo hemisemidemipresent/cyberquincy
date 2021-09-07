@@ -103,11 +103,12 @@ async function displayLCC(message, btd6_map) {
         .setColor(paleyellow);
 
     for (field in values) {
-        challengeEmbed = challengeEmbed.addField(
-            gHelper.toTitleCase(field),
-            values[field].toString(),
-            true
-        );
+        if (values[field])
+            challengeEmbed = challengeEmbed.addField(
+                gHelper.toTitleCase(field),
+                values[field].toString(),
+                true
+            );
     }
 
     message.channel.send({ embeds: [challengeEmbed] });

@@ -9,7 +9,6 @@ function main() {
     configureAliases();
     commandCenter = configureCommands();
     generateListeners(commandCenter);
-    botStats();
     login();
 }
 
@@ -151,10 +150,6 @@ function generateListeners(commandCenter) {
     });
 }
 
-function botStats() {
-    statcord();
-}
-
 function login() {
     let isTesting = require('./1/config.json')['testing'];
     let token = '';
@@ -167,5 +162,3 @@ function login() {
 }
 
 main();
-
-function statcord() {}

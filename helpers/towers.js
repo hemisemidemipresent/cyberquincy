@@ -287,7 +287,7 @@ function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
     return baseCost + pathCost + crossPathCost;
 }*/
 
-function totalTowerUpgradeCrosspathCostNew(json, towerName, upgrade) {
+function totalTowerUpgradeCrosspathCost(json, towerName, upgrade) {
     // uses different json format found in ../jsons/costs.json
 
     let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
@@ -307,10 +307,49 @@ function totalTowerUpgradeCrosspathCostNew(json, towerName, upgrade) {
     }
     return totalCost;
 }
+
+function totalTowerUpgradeCrosspathCostMult(
+    json,
+    towerName,
+    upgrade,
+    priceMult
+) {
+    // uses different json format found in ../jsons/costs.json
+
+    let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
+    let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgrade);
+    let tower = json[`${towerName}`];
+    let totalCost = mult(tower.cost, priceMult); // base cost of tower
+
+    for (let i = 0; i < tier; i++) {
+        // main path of tower
+        totalCost += mult(tower.upgrades[`${path}`][i], priceMult);
+    }
+
+    for (let i = 0; i < crossTier; i++) {
+        // cross path of tower
+        totalCost += mult(tower.upgrades[`${crossPath}`][i], priceMult);
+    }
+    return totalCost;
+}
+function upgradeCost(tower, path, tier) {
+    let totalCost = 0;
+    for (let i = 1; i <= tier; i++) {
+        totalCost += tower.upgrades[`${path}`][tier - 1];
+    }
+    return totalCost;
+}
+
+function mult(cost, priceMult) {
+    return Math.round((cost * priceMult) / 5) * 5;
+}
+
+// legacy
 function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;
 }
-function totalTowerUpgradeCrosspathCostNewHard(json, towerName, upgrade) {
+
+function totalTowerUpgradeCrosspathCostHard(json, towerName, upgrade) {
     // uses different json format found in ../jsons/costs.json
 
     let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
@@ -326,13 +365,6 @@ function totalTowerUpgradeCrosspathCostNewHard(json, towerName, upgrade) {
     for (let i = 0; i < crossTier; i++) {
         // cross path of tower
         totalCost += hard(tower.upgrades[`${crossPath}`][i]);
-    }
-    return totalCost;
-}
-function upgradeCost(tower, path, tier) {
-    let totalCost = 0;
-    for (let i = 1; i <= tier; i++) {
-        totalCost += tower.upgrades[`${path}`][tier - 1];
     }
     return totalCost;
 }
@@ -354,7 +386,8 @@ module.exports = {
     isValidUpgradeSet,
     isValidTempleSet,
     formatTower,
-    totalTowerUpgradeCrosspathCostNew,
-    totalTowerUpgradeCrosspathCostNewHard,
+    totalTowerUpgradeCrosspathCost,
+    totalTowerUpgradeCrosspathCostHard,
+    totalTowerUpgradeCrosspathCostMult,
     upgradeCost,
 };

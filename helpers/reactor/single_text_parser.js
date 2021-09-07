@@ -59,11 +59,21 @@ class SingleTextParser {
                 let parsed = CommandParser.parse([value], this.parser);
 
                 if (parsed.hasErrors()) {
-                    return message.channel.send(
-                        new Discord.MessageEmbed()
-                            .setTitle(parsed.parsingErrors[0])
-                            .setColor(colours['red'])
-                    );
+                    if (parsed.parsingErrors[0] instanceof String)
+                        return message.channel.send({
+                            embeds: [
+                                new Discord.MessageEmbed()
+                                    .setTitle(parsed.parsingErrors[0])
+                                    .setColor(colours['red']),
+                            ],
+                        });
+                    return message.channel.send({
+                        embeds: [
+                            new Discord.MessageEmbed()
+                                .setTitle(parsed.parsingErrors[0].message)
+                                .setColor(colours['red']),
+                        ],
+                    });
                 }
 
                 // Add result

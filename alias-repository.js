@@ -124,7 +124,7 @@ class AliasRepository extends Array {
             if (e instanceof AliasError) {
                 console.log(e.message);
             } else {
-                throw e;
+                console.log(e);
             }
         }
         this.push(ag);
@@ -292,7 +292,9 @@ class AliasRepository extends Array {
     }
 
     allWaterMaps() {
-        return this.allMaps().filter((m) => !this.allNonWaterMaps().includes(m));
+        return this.allMaps().filter(
+            (m) => !this.allNonWaterMaps().includes(m)
+        );
     }
 
     // TODO: rewrite this involving the q!map command results rather than hardcoding it
@@ -314,7 +316,7 @@ class AliasRepository extends Array {
     }
 
     allMapsFromMapDifficulty(mapDifficulty) {
-        switch(mapDifficulty) {
+        switch (mapDifficulty) {
             case 'beginner':
                 return this.beginnerMaps();
             case 'intermediate':
@@ -324,7 +326,7 @@ class AliasRepository extends Array {
             case 'expert':
                 return this.expertMaps();
             default:
-                throw `${mapDifficulty} is not a map difficulty`
+                throw `${mapDifficulty} is not a map difficulty`;
         }
     }
 
@@ -353,9 +355,8 @@ class AliasRepository extends Array {
     }
 
     allMapDifficulties() {
-        const map_difficulties = this.getAliasGroupsFromSameFileAs(
-            'INTERMEDIATE'
-        );
+        const map_difficulties =
+            this.getAliasGroupsFromSameFileAs('INTERMEDIATE');
 
         return map_difficulties.map((ag) => ag.canonical);
     }
@@ -390,7 +391,7 @@ class AliasRepository extends Array {
 
     mapToIndexAbbreviation(map) {
         if (!map) return null;
-        const mapAliases = this.getAliasSet(map)
+        const mapAliases = this.getAliasSet(map);
         if (!mapAliases) return null;
         return mapAliases[1].toUpperCase();
     }

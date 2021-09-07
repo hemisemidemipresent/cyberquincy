@@ -37,9 +37,9 @@ LEVELING_MODIFIERS = {
     JONES: 1,
     OBYN: 1,
     PAT: 1.425,
+    PSI: 1.5,
     QUINCY: 1,
     SAUDA: 1.425,
-    PSI: 1.5,
 };
 
 LEVELING_MAP_DIFFICULTY_MODIFIERS = {

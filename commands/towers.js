@@ -195,12 +195,12 @@ function process(upgrade, commandName, message) {
         let tower = costs[`${towerName}`];
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
-        let totalCost = Towers.totalTowerUpgradeCrosspathCostNew(
+        let totalCost = Towers.totalTowerUpgradeCrosspathCost(
             costs,
             towerName,
             upgrade
         );
-        let hardTotalCost = Towers.totalTowerUpgradeCrosspathCostNewHard(
+        let hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(
             costs,
             towerName,
             upgrade

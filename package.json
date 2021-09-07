@@ -11,7 +11,8 @@
         "logout": "heroku logout",
         "login": "heroku login -i",
         "connect": "heroku git:remote -a jajajosh",
-        "refresh": "del /f package-lock.json && npm install"
+        "refresh": "del /f package-lock.json && npm install",
+        "hlog:": "heroku logs --tail"
     },
     "repository": {
         "type": "git",

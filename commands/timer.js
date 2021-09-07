@@ -49,9 +49,9 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setTitle('Event timers ⌛')
             
-            .addField("Race event",`_New one starts_ in ${getDiff(date, raceStart)}\b_Ends_ in ${getDiff(date, raceEnd)}`)
-            .addField("Odyssey event",`_New one starts_ in ${getDiff(date, odysseyStart)}\b_Ends_ in ${getDiff(date, odysseyEnd)}`)
-            .addField("Boss event",`_New one starts_ in ${getDiff(date, bossStart)}\b_Ends_ in ${getDiff(date, bossEnd)}`)
+            .addField("Race event",`_New one starts_ in ${getDiff(date, raceStart)}\n_Ends_ in ${getDiff(date, raceEnd)}`)
+            .addField("Odyssey event",`_New one starts_ in ${getDiff(date, odysseyStart)}\n_Ends_ in ${getDiff(date, odysseyEnd)}`)
+            .addField("Boss event",`_New one starts_ in ${getDiff(date, bossStart)}\n_Ends_ in ${getDiff(date, bossEnd)}`)
             .addField(
                 'Hiking Potato Standard Time',
                 convertTZ(new Date(), 'America/Los_Angeles')

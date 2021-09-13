@@ -29,8 +29,9 @@ async function handleCommand(message) {
         if (message.author.bot) return;
 
         // "Normalize" message
-        let c = message.content.toLowerCase();
+        let C = message.content;
 
+        let c = C.toLowerCase();
         // Queries must begin with q!
         if (!c.startsWith(PREFIX)) return;
 
@@ -84,9 +85,12 @@ async function handleCommand(message) {
             // Each item in [args] either looks like `arg` or `argp1#argp2`
             // This converts each arg part to its canonical form.
             // `spact#025` gets converted to `spike_factory#025` for example.
-            canonicalArgs = args.map((arg) =>
-                Aliases.canonicizeArg(arg.toLowerCase())
-            );
+            if (command.casedArgs) {
+                canonicalArgs = args.map((arg) => Aliases.canonicizeArg(arg));
+            } else
+                canonicalArgs = args.map((arg) =>
+                    Aliases.canonicizeArg(arg.toLowerCase())
+                );
         }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
@@ -118,8 +122,11 @@ async function handleCommand(message) {
                 'This command is in beta, join https://discord.gg/VMX5hZA to beta test the command'
             );
         }
-        command.execute(message, canonicalArgs, commandName);
-
+        try {
+            await command.execute(message, canonicalArgs, commandName);
+        } catch (e) {
+            console.log(e.message);
+        }
         // post information to statcord
         const botposting = require('./1/config.json')['botposting'];
 
@@ -134,12 +141,6 @@ async function handleCommand(message) {
                 });
         }
 
-        // secret
-
-        if (Math.random() * 420 < 1) {
-            message.channel.send('vrej');
-        }
-
         /* let GLOBAL_COOLDOWN_REGEX = /gcd ?= ?(\d+)/;
         regex_match = message.channel.topic.match(GLOBAL_COOLDOWN_REGEX);
         if (regex_match) {
@@ -147,15 +148,20 @@ async function handleCommand(message) {
         }*/
     } catch (error) {
         // in case of command failures
-        console.error(error);
-        const errorEmbed = new Discord.MessageEmbed()
-            .setColor(colours['red'])
-            .setDescription('Oh no! Something went wrong!')
-            .addField(
-                '~~I got bonked by a DDT again~~',
-                `Please [report the bug](${discord})`
-            );
-        return message.channel.send({ embeds: [errorEmbed] });
+        try {
+            console.log(error);
+
+            const errorEmbed = new Discord.MessageEmbed()
+                .setColor(colours['red'])
+                .setDescription('Oh no! Something went wrong!')
+                .addField(
+                    '~~I got bonked by a DDT again~~',
+                    `Please [report the bug](${discord})`
+                );
+            return message.channel.send({ embeds: [errorEmbed] });
+        } catch {
+            // missing perms, probably
+        }
     }
 }
 

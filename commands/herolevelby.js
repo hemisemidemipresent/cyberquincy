@@ -9,7 +9,6 @@ const HeroLevelParser = require('../parser/hero-level-parser');
 const ReactionChain = require('../helpers/reactor/reaction_chain');
 const SingleTextParser = require('../helpers/reactor/single_text_parser');
 const MenuReactor = require('../helpers/reactor/menu_reactor');
-const EmojiReactor = require('../helpers/reactor/emoji_reactor');
 
 const Heroes = require('../helpers/heroes');
 
@@ -85,7 +84,7 @@ const heroMenu = new MessageSelectMenu()
         {
             label: 'Gwendolin',
             description: 'Pyromaniac',
-            value: 'gweb',
+            value: 'gwen',
         },
         {
             label: 'Strike Jones',
@@ -119,9 +118,9 @@ const heroMenu = new MessageSelectMenu()
         },
     ]);
 
-function execute(message, args) {
+async function execute(message, args) {
     if (args.length == 1 && args[0] == 'help') {
-        return message.channel.send(
+        return await message.channel.send(
             'Type `q!herolevelby` and follow the instructions (you may also want to try `q!herolevel` or `q!herolevelengergizer`)'
         );
     }
@@ -166,7 +165,7 @@ function execute(message, args) {
     );
 }
 
-function errorMessage(message, parsingErrors) {
+async function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('ERROR')
         .addField(
@@ -176,7 +175,7 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!herolevelby help` for help', '\u200b')
         .setColor(colours['orange']);
 
-    return message.channel.send({ embeds: [errorEmbed] });
+    return await message.channel.send({ embeds: [errorEmbed] });
 }
 
 function displayHeroPlacementRounds(userQueryMessage, results) {
@@ -196,7 +195,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
             .map((addend) => heroPlacementRound + addend)
             .filter((r) => r <= results.goal_round);
 
-    async function displayHeroLevels(interaction) {
+    async function displayHeroLevels() {
         const laterPlacementRounds = calculateLaterPlacementRounds(
             results.hero,
             startingRounds,
@@ -219,7 +218,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
         description += `by **r${results.goal_round}** `;
         description += `on **${results.map_difficulty}** maps.`;
 
-        let embed = new MessageEmbed()
+        const embed = new MessageEmbed()
             .setDescription(description)
             .addField('Place on round', rounds.join('\n'), true)
             .addField(`Pay on r${results.goal_round}`, costs.join('\n'), true)
@@ -243,6 +242,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
         for (let i = 0; i < 10; i++) {
             if (i < Math.floor(heroPlacementRound / 10)) continue;
             if (i > Math.floor(results.goal_round / 10)) continue;
+            if (buttons.components.length >= 5) continue;
             let label = '';
             if (i == 0) label = 'r6—>10';
             else label = `r${10 * i + 1}—>${10 * (i + 1)}`;
@@ -253,26 +253,32 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
                     .setCustomId(i.toString())
             );
         }
-        if (!interaction) {
-            await userQueryMessage.channel.send({
+        if (!module.exports.interaction) {
+            module.exports.botMessage = await userQueryMessage.channel.send({
                 embeds: [embed],
                 components: [buttons],
             });
         } else {
-            await interaction.update({
-                embeds: [embed],
-                components: [buttons],
-            });
+            try {
+                await module.exports.interaction.update({
+                    embeds: [embed],
+                    components: [buttons],
+                });
+            } catch (E) {
+                console.log(E);
+            }
         }
 
         const filter = (i) => i.user.id == userQueryMessage.author.id;
 
         const collector =
-            userQueryMessage.channel.createMessageComponentCollector({
+            await module.exports.botMessage.createMessageComponentCollector({
                 filter,
                 time: 20000,
             });
         collector.on('collect', (i) => {
+            collector.stop();
+            module.exports.interaction = i;
             let tensPlace = parseInt(i.customId);
 
             let leftRound = tensPlace * 10 + 1;
@@ -284,8 +290,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
             if (rightRound > results.goal_round)
                 rightRound = results.goal_round;
             startingRounds = gHelper.range(leftRound, rightRound);
-            collector.stop();
-            displayHeroLevels(i);
+            displayHeroLevels();
         });
     }
 
@@ -326,13 +331,14 @@ function calculateLaterPlacementRounds(
 ) {
     placementRounds = {};
     for (var i = 0; i < startingRounds.length; i++) {
-        placementRounds[startingRounds[i]] = costToUpgrade(
-            hero,
-            startingRounds[i],
-            goalRound,
-            desiredHeroLevel,
-            mapDifficulty
-        );
+        if (startingRounds[i] < goalRound)
+            placementRounds[startingRounds[i]] = costToUpgrade(
+                hero,
+                startingRounds[i],
+                goalRound,
+                desiredHeroLevel,
+                mapDifficulty
+            );
     }
 
     return placementRounds;
@@ -348,6 +354,13 @@ function costToUpgrade(
     desiredHeroLevel,
     mapDifficulty
 ) {
+    console.log(
+        hero,
+        startingRound,
+        mapDifficulty,
+        goalRound,
+        desiredHeroLevel
+    );
     heroLevelingChart = Heroes.levelingChart(
         hero,
         startingRound,
@@ -360,4 +373,6 @@ module.exports = {
     name: 'herolevelby',
     aliases: ['hlby', 'heroby', 'herby', 'hlvlby'],
     execute,
+    botMessage: undefined,
+    interaction: undefined,
 };

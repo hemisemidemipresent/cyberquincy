@@ -25,6 +25,7 @@ WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 const gHelper = require('../helpers/general.js');
 
 const { orange, palered } = require('../jsons/colours.json');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 const OG_COLS = {
     NUMBER: 'B',
@@ -46,6 +47,11 @@ const ALT_COLS = {
     LINK: 'W',
 };
 
+const buttons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY')
+);
+
 module.exports = {
     name: '2tc',
     execute,
@@ -56,7 +62,7 @@ module.exports = {
 
 async function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
-        return module.exports.helpMessage(message);
+        return await module.exports.helpMessage(message);
     }
 
     towerOrHeroParser = new OrParser(
@@ -80,7 +86,7 @@ async function execute(message, args) {
     const parsed = CommandParser.parse(args, new AnyOrderParser(...parsers));
 
     if (parsed.hasErrors()) {
-        return module.exports.errorMessage(message, parsed.parsingErrors);
+        return await module.exports.errorMessage(message, parsed.parsingErrors);
     }
 
     try {
@@ -91,7 +97,7 @@ async function execute(message, args) {
         displayCombos(message, filteredCombos, parsed, allCombos);
     } catch (e) {
         if (e instanceof UserCommandError) {
-            message.channel.send({
+            await message.channel.send({
                 embeds: [
                     new Discord.MessageEmbed()
                         .setTitle(e.message)
@@ -106,7 +112,7 @@ async function execute(message, args) {
 
 async function displayCombos(message, combos, parsed, allCombos) {
     if (combos.length == 0) {
-        return message.channel.send({
+        return await message.channel.send({
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(embedTitleNoCombos(parsed))
@@ -172,7 +178,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
             }
         }
 
-        return message.channel.send({ embeds: [challengeEmbed] });
+        return await message.channel.send({ embeds: [challengeEmbed] });
     } else {
         fieldHeaders = getDisplayCols(parsed);
 
@@ -230,13 +236,19 @@ async function displayOneOrMultiplePages(
     colData,
     numOGCompletions
 ) {
-    REACTIONS = ['⬅️', '➡️'];
+    let interaction = undefined;
+    let botMessage = undefined;
     MAX_NUM_ROWS = 15;
     const numRows = colData[Object.keys(colData)[0]].length;
     let leftIndex = 0;
     let rightIndex = Math.min(MAX_NUM_ROWS - 1, numRows - 1);
 
-    async function displayPages(direction = 1) {
+    /**
+     * creates embed for next page
+     * @param {int} direction
+     * @returns {MessageEmbed}
+     */
+    async function createPage(direction = 1) {
         // The number of rows to be displayed is variable depending on the characters in each link
         // Try 15 and decrement every time it doesn't work.
         for (
@@ -277,57 +289,87 @@ async function displayOneOrMultiplePages(
                 }
             }
 
-            try {
-                let msg = await userQueryMessage.channel.send({
-                    embeds: [challengeEmbed],
-                });
-                if (maxNumRowsDisplayed < numRows) {
-                    return reactLoop(msg);
-                }
-                return msg;
-            } catch (e) {} // Retry by decrementing maxNumRowsDisplayed
+            for (let i = 0; i < 3; i++) {
+                if (isValidFormBody(challengeEmbed)) return challengeEmbed;
+            }
 
             if (direction > 0) rightIndex--;
             if (direction < 0) leftIndex++;
         }
     }
 
+    async function displayPages(direction = 1) {
+        let embed = await createPage(direction);
+        try {
+            if (!interaction) {
+                botMessage = await userQueryMessage.channel.send({
+                    embeds: [embed],
+                    components: [buttons],
+                });
+            } else {
+                await interaction.update({
+                    embeds: [embed],
+                    components: [buttons],
+                });
+            }
+        } catch (e) {
+            console.log(e.message);
+        }
+
+        const filter = (i) => i.user.id == userQueryMessage.author.id;
+
+        const collector = botMessage.createMessageComponentCollector({
+            filter,
+            time: 20000,
+        });
+        collector.on('collect', async (i) => {
+            collector.stop();
+            interaction = i;
+            switch (parseInt(i.customId)) {
+                case -1:
+                    rightIndex = (leftIndex - 1 + numRows) % numRows;
+                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                    if (leftIndex < 0) leftIndex = 0;
+                    displayPages(-1);
+                    break;
+                case 1:
+                    leftIndex = (rightIndex + 1) % numRows;
+                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                    if (rightIndex >= numRows) rightIndex = numRows - 1;
+                    displayPages(1);
+                    break;
+            }
+        });
+    }
+
     // Gets the reaction to the pagination message by the command author
     // and respond by turning the page in the correction direction
     function reactLoop(botMessage) {
         // Lays out predefined reactions
-        for (var i = 0; i < REACTIONS.length; i++) {
-            botMessage.react(REACTIONS[i]);
-        }
 
-        // Read author reaction (time limit specified below in milliseconds)
-        // and respond with appropriate action
-        const filter = (reaction, user) =>
-            user.id === userQueryMessage.author.id &&
-            REACTIONS.includes(reaction.emoji.name);
-        botMessage
-            .createReactionCollector({
-                filter,
-                time: 20000,
-            })
-            .once('collect', (reaction) => {
-                switch (reaction.emoji.name) {
-                    case '⬅️':
-                        rightIndex = (leftIndex - 1 + numRows) % numRows;
-                        leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                        if (leftIndex < 0) leftIndex = 0;
-                        displayPages(-1);
-                        break;
-                    case '➡️':
-                        leftIndex = (rightIndex + 1) % numRows;
-                        rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                        if (rightIndex >= numRows) rightIndex = numRows - 1;
-                        displayPages(1);
-                        break;
-                }
-            });
+        switch ('') {
+            case '⬅️':
+                rightIndex = (leftIndex - 1 + numRows) % numRows;
+                leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                if (leftIndex < 0) leftIndex = 0;
+                displayPages(-1);
+                break;
+            case '➡️':
+                leftIndex = (rightIndex + 1) % numRows;
+                rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                if (rightIndex >= numRows) rightIndex = numRows - 1;
+                displayPages(1);
+                break;
+        }
     }
     displayPages(1);
+}
+
+function isValidFormBody(embed) {
+    for (let i = 0; i < embed.fields.length; i++) {
+        if (embed.fields[i].value.length > 1024) return false;
+    }
+    return true;
 }
 
 function getDisplayCols(parsed) {
@@ -602,7 +644,7 @@ function towerMatch(combo, tower) {
     }
 }
 
-function helpMessage(message) {
+async function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!2tc` HELP')
         .setDescription('**2TC Combo Finder**')
@@ -643,10 +685,10 @@ function helpMessage(message) {
         )
         .setColor(palered);
 
-    return message.channel.send({ embeds: [helpEmbed] });
+    return await message.channel.send({ embeds: [helpEmbed] });
 }
 
-function errorMessage(message, parsingErrors) {
+async function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('Input Error')
         .addField(
@@ -656,7 +698,7 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!2tc` for help', '\u200b')
         .setColor(orange);
 
-    return message.channel.send({ embeds: [errorEmbed] });
+    return await message.channel.send({ embeds: [errorEmbed] });
 }
 
 function sheet2TC() {

@@ -25,6 +25,8 @@ const links = [
 
 const { red, cyber } = require('../jsons/colours.json');
 const request = require('request');
+const axios = require('axios').default;
+
 const costs = require('../jsons/costs.json');
 const Towers = require('../helpers/towers.js');
 const OptionalParser = require('../parser/optional-parser');
@@ -182,15 +184,11 @@ function findName(commandName) {
     return;
 }
 
-function process(upgrade, commandName, message) {
+async function process(upgrade, commandName, message) {
     let link = findLink(commandName);
-    request(link, (err, res, body) => {
-        if (err) {
-            return module.exports.errorMessage(message, [
-                'info could not be fetched',
-            ]);
-        }
-
+    try {
+        let res = await axios.get(link);
+        let body = res.data;
         let towerName = findName(commandName);
         let tower = costs[`${towerName}`];
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
@@ -248,6 +246,14 @@ function process(upgrade, commandName, message) {
                 return message.channel.send({ embeds: [embed] });
             }
         }
+    } catch {}
+    request(link, (err, res, body) => {
+        if (err) {
+            return module.exports.errorMessage(message, [
+                'info could not be fetched',
+            ]);
+        }
+
         module.exports.errorMessage(message, [
             'upgrade path could not be found',
         ]);

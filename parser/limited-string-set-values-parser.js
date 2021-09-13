@@ -69,7 +69,7 @@ class LimitedStringSetValuesParser {
     }
 
     errorMessage(badValue) {
-        const NUM_EXAMPLE_VALUES = 5;
+        const NUM_EXAMPLE_VALUES = 3;
 
         const acceptedValues = gHelper.shuffle(this.permittedValues);
 

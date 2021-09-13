@@ -28,13 +28,17 @@ class CashParser {
             let stuff = arg.split('-');
             if (/\d|\./.test(stuff[0]) && /\d|\./.test(stuff[0])) {
                 return (stuff[0] - stuff[1]).toString();
-            } else
+            } else {
+                if (arg.length > 100) arg = arg.substring(0, 100) + '...';
                 throw new UserCommandError(
                     `Cash must be of form \`15\` or \`$15\` (Got \`${arg}\` instead)`
                 );
+            }
         } else if (/\d|\./.test(arg[0])) {
             return arg;
         } else {
+            if (arg.length > 100) arg = arg.substring(0, 100) + '...';
+
             throw new UserCommandError(
                 `Cash must be of form \`15\` or \`$15\` (Got \`${arg}\` instead)`
             );

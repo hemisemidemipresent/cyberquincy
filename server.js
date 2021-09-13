@@ -15,17 +15,16 @@ function main() {
 function pingHeroku() {
     let isTesting = require('./1/config.json')['testing'];
     if (isTesting) return;
+
     const express = require('express');
 
     // this part is to keep the project going
     const app = express();
-    app.use(express.static('public'));
+    //    app.use(express.static('public'));
     app.get('/', (request, response) => {
         let d = new Date(Date.now());
         d.toString();
-        console.log(`[PING] at ${d}`);
         response.sendStatus(200);
-        console.log(process.env.PORT);
     });
     app.listen(process.env.PORT);
 }

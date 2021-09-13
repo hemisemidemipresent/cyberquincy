@@ -96,7 +96,8 @@ function heroLevelXpRequirements(hero) {
     return BASE_XP_TO_GET_LEVEL.map((bxp) => {
         return bxp == null
             ? null
-            : (acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier));
+            : (acc = acc + Math.round(bxp * heroSpecificLevelingMultiplier));
+        //: (acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier));
     });
 }
 

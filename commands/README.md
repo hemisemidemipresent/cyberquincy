@@ -5,8 +5,7 @@
 ## required
 
 `name`: the main name of the tower. A string
-`aliases`: array of strings that are alternatives to running the command
-`execute()`: the main function. Has 3 inputs:
+`async execute()`: the main function. Has 3 inputs:
 
 ```js
 execute(message, args, commandName);
@@ -18,6 +17,8 @@ args/commandName: all the arguments/inputs: `q!commandName args[0] args[1] args[
 > NOTE: the args will be automatically converted to the argument alias in `./aliases` disable with `rawArgs`
 
 ## optional
+
+`aliases`: array of strings that are alternatives to running the command
 
 `depencies`: an array for whether you need btd6index (and previously topper's data)
 e.g.:

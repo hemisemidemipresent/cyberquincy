@@ -18,6 +18,7 @@ const PersonParser = require('../parser/person-parser.js');
 const gHelper = require('../helpers/general.js');
 
 const { orange, paleblue } = require('../jsons/colours.json');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 const COLS = {
     NUMBER: 'B',
@@ -39,6 +40,11 @@ const TOWER_COLS = {
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 RED_X = String.fromCharCode(10060);
+
+const buttons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY')
+);
 
 function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
@@ -464,6 +470,8 @@ async function display2MPFilterAll(
 
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
 function embedPages(message, title, columns, numOGCompletions) {
+    let interaction = undefined;
+    let botMessage = undefined;
     columnChunks = {};
     for (columnHeader in columns) {
         columnChunks[columnHeader] = gHelper.chunk(

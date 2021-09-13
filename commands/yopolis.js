@@ -6,13 +6,13 @@ const AnyOrderParser = require('../parser/any-order-parser');
 module.exports = {
     name: 'monkeyopolis',
     aliases: ['mp', 'yopolis', '005'],
-    execute(message, args) {
+    async execute(message, args) {
         let parsed = CommandParser.parse(
             args,
             new AnyOrderParser(new CashParser(), new NaturalNumberParser(1, 69))
         );
         if (parsed.hasErrors()) {
-            return module.exports.errorMessage(
+            return await module.exports.errorMessage(
                 message.channel,
                 parsed.parsingErrors
             );
@@ -30,9 +30,9 @@ module.exports = {
             .addField('Money produced in a round', `${money}`, true)
             .addField('cost of upgrade', `${price}`, true)
             .addField('rounds until breaking even', `${even}`, true);
-        message.channel.send({ embeds: [mpembed] });
+        await message.channel.send({ embeds: [mpembed] });
     },
-    errorMessage(channel, parsingErrors) {
+    async errorMessage(channel, parsingErrors) {
         const errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
             .addField(
@@ -47,6 +47,6 @@ module.exports = {
             )
             .addField('example', 'q!yopolis 50000 2', true)
             .setColor(red);
-        channel.send({ embeds: [errorEmbed] });
+        await channel.send({ embeds: [errorEmbed] });
     },
 };

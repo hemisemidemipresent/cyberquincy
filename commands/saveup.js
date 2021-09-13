@@ -9,7 +9,7 @@ const AnyOrderParser = require('../parser/any-order-parser');
 module.exports = {
     name: 'saveup',
     aliases: ['|', 'save'],
-    execute(message, args) {
+    async execute(message, args) {
         // standardization
         const r = round2.map((x) => x.cashThisRound);
         const abr = abrincome.map((x) => x[0]);
@@ -46,7 +46,7 @@ module.exports = {
                 embed = this.freePlayMsg(cashNeeded, round);
             } else embed = module.exports.calculate(r, round, cashNeeded, 1);
         }
-        message.channel.send({ embeds: [embed] });
+        await message.channel.send({ embeds: [embed] });
     },
     errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()

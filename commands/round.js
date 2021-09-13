@@ -10,7 +10,7 @@ const json = require('../jsons/rounds_topper.json');
 const gHelper = require('../helpers/general.js');
 const FBG = require('../jsons/freeplay.json');
 
-function execute(message, args, originalCommandName) {
+async function execute(message, args, originalCommandName) {
     if (args.length == 0 || args[0] == 'help')
         return module.exports.helpMessage(message);
 
@@ -38,7 +38,7 @@ function execute(message, args, originalCommandName) {
     // freeplay has its own serperate shit going on
     if (parsed.round > 140 || (isAbr && parsed.round > 100)) {
         let ramp = freeplay(parsed.round);
-        return message.channel.send({ embeds: [ramp] });
+        return await message.channel.send({ embeds: [ramp] });
     }
     [xp, totalxp] = calculateXps(parsed.round);
     let roundInfo = isAbr ? json.alt : json.reg;
@@ -89,7 +89,7 @@ function execute(message, args, originalCommandName) {
         let ramping = getRamping(parsed.round);
         roundEmbed.addField('health and speed ramping', `+${ramping}%`);
     }
-    message.channel.send({ embeds: [roundEmbed] });
+    await message.channel.send({ embeds: [roundEmbed] });
 }
 
 function calculateXps(round) {
@@ -122,23 +122,23 @@ function getLength(round, roundInfo) {
     return Math.round(longest * 100) / 100;
 }
 
-function helpMessage(message) {
+async function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!round` HELP')
         .addField('`q!round <R>`', 'Learn about round R')
         .addField('`q!round <R> abr`', 'Learn about round R in ABR mode')
         .setColor(colours['black']);
 
-    return message.channel.send({ embeds: [helpEmbed] });
+    return await message.channel.send({ embeds: [helpEmbed] });
 }
 
-function errorMessage(message, parsingErrors) {
+async function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('ERROR')
         .addField('Likely Cause(s)', parsingErrors.join('\n'))
         .setColor(colours['red'])
         .setFooter(`message sent by ${message.author.tag}`);
-    return message.channel.send({ embeds: [errorEmbed] });
+    return await message.channel.send({ embeds: [errorEmbed] });
 }
 function freeplay(round) {
     [xp, totalxp] = calculateXps(parsed.round);

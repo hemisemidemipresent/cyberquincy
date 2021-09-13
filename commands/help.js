@@ -18,7 +18,7 @@ module.exports = {
         'all',
     ],
     cooldown: 5,
-    execute(message) {
+    async execute(message) {
         let embed = new Discord.MessageEmbed()
             .setTitle('Need help?')
             .setDescription(
@@ -36,6 +36,7 @@ module.exports = {
                 'Upvote the bot',
                 '[top.gg](https://top.gg/bot/591922988832653313)\n[discordbotlist](https://discordbotlist.com/bots/cyber-quincy)'
             );
-        message.reply({ embeds: [embed] });
+
+        await message.reply({ embeds: [embed] });
     },
 };

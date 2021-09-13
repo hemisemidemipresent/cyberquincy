@@ -6,7 +6,7 @@ const EmptyParser = require('../parser/empty-parser');
 module.exports = {
     name: 'pop',
     aliases: ['rbe', 'popcount', 'pops'],
-    execute(message, args) {
+    async execute(message, args) {
         let parsed = CommandParser.parse(
             args,
             new RoundParser('ALL'),
@@ -23,7 +23,7 @@ module.exports = {
         let endround = rounds[1];
         return module.exports.showData(startround, endround, message.channel);
     },
-    errorMessage(message, errors) {
+    async errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle(`${errors.join('\n')}`)
             .addField(
@@ -35,14 +35,14 @@ module.exports = {
                 '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes deflation, half cash, abr, apop is random)'
             )
             .setColor(red);
-        return message.channel.send({ embeds: [errorEmbed] });
+        return await message.channel.send({ embeds: [errorEmbed] });
     },
-    oneRound(startround, channel) {
-        return channel.send(
+    async oneRound(startround, channel) {
+        return await channel.send(
             `Round ${startround} has a rbe(pop count) of ${r[startround].rbe}`
         );
     },
-    showData(startround, endround, channel) {
+    async showData(startround, endround, channel) {
         let totalpopcount =
             r[endround].cumulativeRBE - r[startround - 1].cumulativeRBE;
         const dataEmbed = new Discord.MessageEmbed()
@@ -50,6 +50,6 @@ module.exports = {
             .setDescription(`from round ${startround} to ${endround}`)
             .setFooter('note: towers may count pops differently due to bugs')
             .setColor(magenta);
-        channel.send({ embeds: [dataEmbed] });
+        await channel.send({ embeds: [dataEmbed] });
     },
 };

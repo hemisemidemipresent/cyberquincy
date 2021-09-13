@@ -65,7 +65,7 @@ function oneRoundData(parsed) {
  * @param {message} message
  * @param {parsingErrors} parsingErrors
  */
-function errorMessage(message, parsingErrors) {
+async function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('ERROR')
         .setDescription(
@@ -77,5 +77,5 @@ function errorMessage(message, parsingErrors) {
         )
         .setColor(red);
 
-    return message.channel.send({ embeds: [errorEmbed] });
+    return await message.channel.send({ embeds: [errorEmbed] });
 }

@@ -21,7 +21,7 @@ const { yellow } = require('../jsons/colours.json');
 module.exports = {
     name: 'temple',
     aliases: ['t', 'tsg', 'sg', 'monkeygod', 'god', 'totmg', 'vtsg'],
-    execute(message, args) {
+    async execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);
         }
@@ -76,18 +76,18 @@ module.exports = {
                     parsed.cashs[3]
                 )
             );
-        } else displayTempleStatsBySet(message, parsed.temple_set);
+        } else await displayTempleStatsBySet(message, parsed.temple_set);
     },
-    errorMessage(message, errorMessages) {
+    async errorMessage(message, errorMessages) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
             .addField('Cause(s)', errorMessages.join('\n'))
             .addField('Type `q!alias` for help', '\u200b')
             .setColor(colours['orange']);
 
-        return message.channel.send({ embeds: [errorEmbed] });
+        return await message.channel.send({ embeds: [errorEmbed] });
     },
-    helpMessage(message) {
+    async helpMessage(message) {
         let messageEmbed = new Discord.MessageEmbed()
             .setTitle('q!temple')
             .addField('Use', 'Get temple statistics')
@@ -96,10 +96,10 @@ module.exports = {
                 'For the second type, it is `<primary> <military> <magic> <support>`. If a certain value is omitted I will prompt you for a value.'
             )
             .addField('vtsg', 'use q!vtsg');
-        return message.channel.send({ embeds: [messageEmbed] });
+        return await message.channel.send({ embeds: [messageEmbed] });
     },
 };
-function displayTempleStatsBySet(message, temple_set) {
+async function displayTempleStatsBySet(message, temple_set) {
     templeSet = temple_set.split('').map(function (x) {
         return parseInt(x);
     });
@@ -108,7 +108,7 @@ function displayTempleStatsBySet(message, temple_set) {
     for (let i = 0; i < 4; i++) {
         addSacrificeStats(embed, templeSet[i], i);
     }
-    return message.channel.send({ embeds: [embed] });
+    return await message.channel.send({ embeds: [embed] });
 }
 function addSacrificeStats(embed, num, i) {
     if (num == 0) return;
@@ -122,7 +122,7 @@ function addSacrificeStats(embed, num, i) {
         );
     }
 }
-function displayTempleStatsByCash(message, results) {
+async function displayTempleStatsByCash(message, results) {
     console.log(results);
     let embed = new Discord.MessageEmbed();
     embed.setTitle('Temple stats');
@@ -152,7 +152,7 @@ function displayTempleStatsByCash(message, results) {
             '\n' +
             levelToString(cashToLevel(results.sacrificed_military_cash), 3)
     );
-    return message.channel.send({ embeds: [embed] });
+    return await message.channel.send({ embeds: [embed] });
 }
 /**
  * input cash, returns a number from 0 - 9 about the temple's sacrifice level.

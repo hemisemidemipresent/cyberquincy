@@ -77,7 +77,7 @@ const heroMenu = new MessageSelectMenu()
         {
             label: 'Gwendolin',
             description: 'Pyromaniac',
-            value: 'gweb',
+            value: 'gwen',
         },
         {
             label: 'Strike Jones',
@@ -162,7 +162,6 @@ function errorMessage(message, parsingErrors) {
 }
 
 function displayHeroLevels(message, results) {
-    console.log(results);
     heroLevels = Heroes.levelingCurve(
         results.hero,
         results.starting_round,

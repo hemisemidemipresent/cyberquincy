@@ -71,7 +71,6 @@ class BloonParser {
                             bloon = 'c' + bloon;
                         }
 
-                        console.log(bloon);
                         moddedBloons.push(bloon);
                     }
                 }

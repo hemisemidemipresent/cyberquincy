@@ -49,9 +49,15 @@ class MenuReactor {
 
             collector.once('collect', (interaction) => {
                 // Add the result
-                results[this.group] = interaction.values[0];
+                let value = interaction.values[0];
+                results[this.group] = value;
 
-                interaction.update({ content: '\u200b', components: [] });
+                interaction.update({
+                    content: `Selected ${this.group
+                        .split('_')
+                        .join(' ')}: **${value}**`,
+                    components: [],
+                });
                 collector.stop();
 
                 // Invoke first method in chain and remove it from the array

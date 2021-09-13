@@ -9,6 +9,12 @@ const ReactionChain = require('../helpers/reactor/reaction_chain');
 const SingleTextParser = require('../helpers/reactor/single_text_parser');
 const MenuReactor = require('../helpers/reactor/menu_reactor');
 
+const {
+    MessageSelectMenu,
+    MessageEmbed,
+    MessageActionRow,
+} = require('discord.js');
+
 const Heroes = require('../helpers/heroes');
 
 const gHelper = require('../helpers/general.js');
@@ -76,7 +82,7 @@ const heroMenu = new MessageSelectMenu()
         {
             label: 'Gwendolin',
             description: 'Pyromaniac',
-            value: 'gweb',
+            value: 'gwen',
         },
         {
             label: 'Strike Jones',

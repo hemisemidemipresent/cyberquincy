@@ -312,7 +312,7 @@
         }
     },
     "dartling-gunner": {
-        "cost": 1000,
+        "cost": 850,
         "upgrades": {
             "1": [
                 300,

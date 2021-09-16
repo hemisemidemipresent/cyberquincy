@@ -25,7 +25,10 @@ module.exports = {
                     ),
                     'CHIMPS' // default if not provided
                 ),
-                new RoundParser('ALL')
+                new OptionalParser (
+                    new RoundParser('ALL'),
+                    6 //lol make this default
+                )
             )
         );
 

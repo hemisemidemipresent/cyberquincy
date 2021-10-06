@@ -94,7 +94,7 @@ async function findRaceByNum(number, message) {
 
     const RaceEmbed = new Discord.MessageEmbed()
         .setTitle(`Race ${number}`)
-        .setTitle(name.value)
+        .setTitle(name.value.toString())
         .setDescription(`${info1.value}\n${info2.value}\n${info3.value}`)
         .addField('Date', `${dates.value}`)
         .addField(

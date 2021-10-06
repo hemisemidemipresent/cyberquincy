@@ -76,6 +76,6 @@ module.exports = {
         const hembed = new Discord.MessageEmbed()
             .setTitle('`q!setxp <xp> (<mention>)` Help')
             .setDescription('Can only be used by maintainers\nXp must be >0');
-        return message.channel.send(hembed);
+        return message.channel.send({ embeds: [hembed] });
     },
 };

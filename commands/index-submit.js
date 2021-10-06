@@ -1,4 +1,4 @@
-const colours = require('../jsons/colours.json');
+const { cyber, black } = require('../jsons/colours.json');
 const imgur = require('imgur');
 const ImgurHelper = require('../helpers/imgur');
 
@@ -37,27 +37,27 @@ async function submit(message, args) {
             throw e;
         }
     }
-
-    let submission = null;
-    if (imgurJson) {
-        submission = new Discord.MessageEmbed()
-            .setTimestamp()
-            .setDescription(`${imgurJson.link}\n${imgurText}`)
-            .setFooter(`sent by ${message.author.tag}`)
-            .setColor(colours['cyber'])
-            .setImage(`${imgurJson.link}`);
-    } else {
-        submission =
-            args.join(' ') +
-            `\n——————————————————————\n_Sent by ${message.author.tag}_`;
-    }
-
     pretextMessage = liveMode
         ? 'Do you wish to submit?'
         : 'Submission Preview (you may only submit from within the BTD6 Index Channel)';
 
     const pretext = await message.channel.send(pretextMessage);
-    const preview = await message.channel.send(submission);
+    let preview = undefined;
+    let submission = undefined;
+    if (imgurJson) {
+        submission = new Discord.MessageEmbed()
+            .setTimestamp()
+            .setDescription(`${imgurJson.link}\n${imgurText}`)
+            .setFooter(`sent by ${message.author.tag}`)
+            //.setColor(cyber)
+            .setImage(`${imgurJson.link}`);
+        preview = await message.channel.send({ embeds: [submission] });
+    } else {
+        submission =
+            args.join(' ') +
+            `\n——————————————————————\n_Sent by ${message.author.tag}_`;
+        preview = await message.channel.send(submission);
+    }
 
     // If the current user is NOT in the BTD6 Index server (and dev is not testing)
     if (!liveMode) return;
@@ -79,13 +79,18 @@ async function submit(message, args) {
         if (reaction.emoji.name == WHITE_HEAVY_CHECK_MARK) {
             (async () => {
                 const SUBMISSIONS_CHANNEL_OBJ =
-                    message.channel.guild.channels.cache.get(
+                    await message.channel.guild.channels.cache.get(
                         SUBMISSIONS_CHANNEL
                     );
-                const submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(
-                    submission
-                );
-
+                let submissionMessage = undefined;
+                if (submission instanceof String)
+                    submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(
+                        submission
+                    );
+                else
+                    submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send({
+                        embeds: [submission],
+                    });
                 let random = Math.floor(Math.random() * 250);
                 if (random % 10 == 0) {
                     submissionMessage.react('🥛');
@@ -119,8 +124,8 @@ function helpMessage() {
         .addField(
             'Note:',
             'If you are _linking_ an image (rather than attaching it), you must make it the first argument to the command in order to imgur-ize it.'
-        )
-        .setColor(colours['black']);
+        );
+    //.setColor(black);
 }
 
 module.exports = {
@@ -128,10 +133,11 @@ module.exports = {
     rawArgs: true,
     casedArgs: true,
     aliases: ['isubmit', 'isub'],
-    execute(message, args) {
+    async execute(message, args) {
+        return message.channel.send('we is big dumb');
         if (message.attachments.size < 1 && (!args[0] || args[0] == 'help')) {
-            return message.channel.send(helpMessage());
+            return await message.channel.send(helpMessage());
         }
-        submit(message, args);
+        await submit(message, args);
     },
 };

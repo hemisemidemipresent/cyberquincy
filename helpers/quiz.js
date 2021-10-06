@@ -8,7 +8,6 @@ module.exports = {
         } else {
             startStreak(userID);
         }
-        console.log(collection);
     },
     answerWrong(userID) {
         if (checkIfStreak) {
@@ -18,15 +17,11 @@ module.exports = {
     getStreak(userID) {
         if (collection.has(userID)) {
             let streak = collection.get(userID);
-            console.log(userID, streak);
 
             return `Streak: ${streak}`;
         } else {
             return 'No Streak Currently';
         }
-    },
-    log() {
-        console.log(collection);
     },
 };
 function checkIfStreak(userID) {

@@ -22,7 +22,7 @@ module.exports = {
             let embed = new Discord.MessageEmbed()
                 .setTitle('Here you go')
                 .setURL(links[int]);
-            return message.channel.send(embed);
+            return message.channel.send({ embeds: [embed] });
         }
     },
 };

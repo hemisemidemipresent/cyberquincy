@@ -19,9 +19,9 @@ module.exports = {
                         console.log('err happened');
                     }
                     let object = JSON.parse(buffer.toString('utf8'));
-                    console.log(JSON.stringify(object, null, 4));
+
                     let embed = format(object);
-                    message.channel.send(embed);
+                    message.channel.send({ embeds: [embed] });
                 });
             }
         );

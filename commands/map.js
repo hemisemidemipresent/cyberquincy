@@ -6,7 +6,7 @@ const MapParser = require('../parser/map-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser');
 const { discord } = require('../aliases/misc.json');
 
-function displayMapInfo(message, name) {
+async function displayMapInfo(message, name) {
     let m = map[`${name}`];
     let thum = m.thu;
     if (!thum) {
@@ -26,10 +26,10 @@ function displayMapInfo(message, name) {
         //.addField('Line of sight obstructions', `${m.los}`, true)
         .addField('Bug reporting', `report [here](${discord})`, true)
         .setColor(cyber);
-    message.channel.send({ embeds: [mapEmbed] });
+    await message.channel.send({ embeds: [mapEmbed] });
 }
 
-function displayMapDifficultyRBS(message, mapDifficulty) {
+async function displayMapDifficultyRBS(message, mapDifficulty) {
     const maps = Aliases.allMapsFromMapDifficulty(mapDifficulty);
     const mapsLengths = maps.map((m) => {
         // Get all 1 or more path lengths into a flat array
@@ -58,10 +58,10 @@ function displayMapDifficultyRBS(message, mapDifficulty) {
         'average of all paths with no obstacles removed and no map mechanics'
     );
 
-    return message.channel.send({ embeds: [infoEmbed] });
+    return await message.channel.send({ embeds: [infoEmbed] });
 }
 
-function helpMessage(message) {
+async function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!map` HELP')
         .addField('`q!map <map>`', 'Map Info')
@@ -71,10 +71,10 @@ function helpMessage(message) {
         )
         .setColor(cyber);
 
-    return message.channel.send({ embeds: [helpEmbed] });
+    return await message.channel.send({ embeds: [helpEmbed] });
 }
 
-function errorMessage(message, parsingErrors) {
+async function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setAuthor(`Sent by ${message.author.tag}`)
 
@@ -85,7 +85,7 @@ function errorMessage(message, parsingErrors) {
         )
         .setColor(cyber);
 
-    return message.channel.send({ embeds: [errorEmbed] });
+    return await message.channel.send({ embeds: [errorEmbed] });
 }
 
 module.exports = {
@@ -93,7 +93,7 @@ module.exports = {
     description: 'info about maps',
     aliases: ['m'],
     errorMessage,
-    execute(message, args) {
+    async execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return helpMessage(message);
         }
@@ -103,12 +103,15 @@ module.exports = {
             new OrParser(new MapParser(), new MapDifficultyParser())
         );
         if (parsed.hasErrors()) {
-            return errorMessage(message, parsed.parsingErrors);
+            return await errorMessage(message, parsed.parsingErrors);
         }
         if (parsed.map) {
-            return displayMapInfo(message, parsed.map);
+            return await displayMapInfo(message, parsed.map);
         } else if (parsed.map_difficulty) {
-            return displayMapDifficultyRBS(message, parsed.map_difficulty);
+            return await displayMapDifficultyRBS(
+                message,
+                parsed.map_difficulty
+            );
         }
     },
 };

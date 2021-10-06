@@ -272,7 +272,7 @@
     "balance": {
         "ver": 24,
         "len": 24.5,
-        "lenStr": "24.9",
+        "lenStr": "Left top orange: 25.2\nRight top orange: 24.8\nLeft bottom orange: 24\nRight bottom orange: 24\nLeft top blue: 24.9\nRight top blue: 25.0\nLeft bottom blue: 24\nRight bottom blue: 24",
         "obj": 0,
         "Cos": "N/A",
         "wa%": "yes",

@@ -24,6 +24,7 @@ function configureCommands(client) {
 }
 
 async function handleCommand(message) {
+    if (message.channel.type != 'GUILD_TEXT') return;
     try {
         //checks for bots
         if (message.author.bot) return;
@@ -112,21 +113,13 @@ async function handleCommand(message) {
             }
         }
 
-        if (
-            command.beta &&
-            ((message.channel.type == 'text' &&
-                message.channel.guild.id != cyberquincyServer) ||
-                message.channel.type != 'text')
-        ) {
+        if (command.beta && message.channel.guild.id != cyberquincyServer) {
             return message.channel.send(
                 'This command is in beta, join https://discord.gg/VMX5hZA to beta test the command'
             );
         }
-        try {
-            await command.execute(message, canonicalArgs, commandName);
-        } catch (e) {
-            console.log(e.message);
-        }
+        await command.execute(message, canonicalArgs, commandName);
+
         // post information to statcord
         const botposting = require('./1/config.json')['botposting'];
 
@@ -148,9 +141,9 @@ async function handleCommand(message) {
         }*/
     } catch (error) {
         // in case of command failures
+        if (error.message.includes('Missing Permissions')) return;
         try {
             console.log(error);
-
             const errorEmbed = new Discord.MessageEmbed()
                 .setColor(colours['red'])
                 .setDescription('Oh no! Something went wrong!')
@@ -158,7 +151,7 @@ async function handleCommand(message) {
                     '~~I got bonked by a DDT again~~',
                     `Please [report the bug](${discord})`
                 );
-            return message.channel.send({ embeds: [errorEmbed] });
+            return await message.channel.send({ embeds: [errorEmbed] });
         } catch {
             // missing perms, probably
         }

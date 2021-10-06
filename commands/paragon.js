@@ -5,7 +5,7 @@ module.exports = {
     name: 'paragon',
     aliases: ['para'],
 
-    execute(message, args) {
+    async execute(message, args) {
         let parsed = CommandParser.parse(
             args,
             new TowerParser(),
@@ -35,7 +35,7 @@ module.exports = {
                 .setFooter(
                     'bd - additional dmg done to boss bloons|ed - additional dmg done to elite boss bloons (not including base bd)'
                 );
-            return message.channel.send({ embeds: [messageEmbed] });
+            return await message.channel.send({ embeds: [messageEmbed] });
         } else if (parsed.tower == 'boomerang_monkey') {
             let paragon = paragonStats.boomerang_monkey;
             let main = paragon.main;
@@ -66,8 +66,8 @@ module.exports = {
                 .setFooter(
                     'bd - additional dmg done to boss bloons|ed - additional dmg done to elite boss bloons (not including base bd)'
                 );
-            return message.channel.send({ embeds: [messageEmbed] });
+            return await message.channel.send({ embeds: [messageEmbed] });
         }
-        return message.channel.send('only dart and boomer so far');
+        return await message.channel.send('only dart and boomer so far');
     },
 };

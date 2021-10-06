@@ -530,7 +530,7 @@
         "ans": 0
     },
     {
-        "question": "What tier 4 Monkey has no ability?",
+        "question": "What tier 4 Monkey has no ability before 27.0?",
         "optns": [
             "Tech Terror",
             "Turbo Charge",
@@ -745,7 +745,7 @@
             "30 Nov",
             "29 Nov",
             "1 Dec",
-            "29 Nov"
+            "14 May"
         ],
         "ans": 0
     },
@@ -798,5 +798,85 @@
             "Wizard Lord Phoenix + Apache Prime"
         ],
         "ans": 2
+    },
+    {
+        "question": "Which boss bloon does NOT appear in Bloons Supermonkey 2?",
+        "optns": [
+            "Bloonarius the Inflator",
+            "Blastapopulus",
+            "Dreadbloon",
+            "Vortex"
+        ],
+        "ans": 4
+    },
+    {
+        "question": "Which soundtrack is played on only one map?",
+        "optns": [
+            "Tropical Carnival",
+            "Primal One",
+            "Jazz Theme",
+            "BMC Street Party"
+        ],
+        "ans": 3
+    },
+    {
+        "question": "What music track has the most remixes?",
+        "optns": [
+            "Tribes and Tribulations",
+            "Tropical Carnival",
+            "Fiesta Flamenco",
+            "Party Time"
+        ],
+        "ans": 2
+    },
+    {
+        "question": "How many of ice's upgrade icons don't contain a bloon (moab class or otherwise)?",
+        "optns": [
+            "7",
+            "5",
+            "3",
+            "0"
+        ],
+        "ans": 3
+    },
+    {
+        "question": "How many of ice's upgrade icons don't contain a bloon (moab class or otherwise)?",
+        "optns": [
+            "7",
+            "5",
+            "3",
+            "0"
+        ],
+        "ans": 3
+    },
+    {
+        "question": "How many upgrade icons contain a M.O.A.B.?",
+        "optns": [
+            "18",
+            "16",
+            "11",
+            "9"
+        ],
+        "ans": 2
+    },
+    {
+        "question": "Which monkey does **NOT** wear cool glasses?",
+        "optns": [
+            "XXXL Trap",
+            "Icicles",
+            "Unstable Concoction",
+            "IFR"
+        ],
+        "ans": 2
+    },
+    {
+        "question": "Which 2 Monkeys were added to BTD5?",
+        "optns": [
+            "Monkey Apprentice and Glue Gunner",
+            "Banana Farm and Alchemist",
+            "Sniper Monkey and Spike Factory",
+            "Sniper Monkey and Glue Gunner"
+        ],
+        "ans": 4
     }
 ]

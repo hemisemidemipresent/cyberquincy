@@ -42,7 +42,7 @@ class MenuReactor {
                 interaction.customId === this.messageSelectMenu.customId &&
                 interaction.user.id == message.author.id;
 
-            const collector = message.channel.createMessageComponentCollector({
+            const collector = reactMessage.createMessageComponentCollector({
                 filter,
                 time: 20000,
             });

@@ -34,7 +34,7 @@ module.exports = {
                 .addField('version', `${ver.value}`, true)
                 .addField('date', `${date.value}`, true)
                 .addField('person', `${person.value}`, true);
-            message.channel.send(challengeEmbed);
+            message.channel.send({ embeds: [challengeEmbed] });
             if (isNaN(args[0]))
                 return message.channel.send(
                     'Please specify a proper 2 towers chimps combo **number**'

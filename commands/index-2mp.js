@@ -18,7 +18,7 @@ const PersonParser = require('../parser/person-parser.js');
 const gHelper = require('../helpers/general.js');
 
 const { orange, paleblue } = require('../jsons/colours.json');
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageActionRow, MessageButton } = require('discord.js');
 
 const COLS = {
     NUMBER: 'B',

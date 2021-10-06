@@ -354,13 +354,6 @@ function costToUpgrade(
     desiredHeroLevel,
     mapDifficulty
 ) {
-    console.log(
-        hero,
-        startingRound,
-        mapDifficulty,
-        goalRound,
-        desiredHeroLevel
-    );
     heroLevelingChart = Heroes.levelingChart(
         hero,
         startingRound,

@@ -34,6 +34,7 @@ const UpgradeSetParser = require('../parser/upgrade-set-parser');
 const Discord = require('discord.js');
 const gHelper = require('../helpers/general.js');
 const { discord } = require('../aliases/misc.json');
+const { errorMessage } = require('./racelb');
 
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
@@ -140,11 +141,11 @@ module.exports = {
             new OptionalParser(new UpgradeSetParser())
         );
 
-        if (parsed.hasErrors()) {
-            module.exports.errorMessage(message, parsed.parsingErrors);
-        } else process(parsed.upgrade_set || '000', commandName, message);
+        if (parsed.hasErrors())
+            await module.exports.errorMessage(message, parsed.parsingErrors);
+        else await process(parsed.upgrade_set || '000', commandName, message);
     },
-    errorMessage(message, errors) {
+    async errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setAuthor(`sent by ${message.author.tag}`)
 
@@ -153,7 +154,7 @@ module.exports = {
 
             .setColor(red);
 
-        message.channel.send({ embeds: [errorEmbed] });
+        await message.channel.send({ embeds: [errorEmbed] });
     },
 };
 
@@ -223,9 +224,8 @@ async function process(upgrade, commandName, message) {
                     .setDescription(info)
                     .addField(
                         'cost',
-                        `${cost} - medium\n${hard(
-                            cost
-                        )} - hard\nif this is wrong [yell at hemi here](https://discord.gg/VMX5hZA)`,
+                        `${cost} - medium\n${hard(cost)} - hard\n` +
+                            `if this is wrong [yell at hemi here](https://discord.gg/VMX5hZA)`,
                         true
                     )
                     .addField(
@@ -246,16 +246,9 @@ async function process(upgrade, commandName, message) {
                 return message.channel.send({ embeds: [embed] });
             }
         }
-    } catch {}
-    request(link, (err, res, body) => {
-        if (err) {
-            return module.exports.errorMessage(message, [
-                'info could not be fetched',
-            ]);
-        }
-
-        module.exports.errorMessage(message, [
-            'upgrade path could not be found',
+    } catch {
+        await errorMessage(message, [
+            'something went wrong while fetching the tower stats',
         ]);
-    });
+    }
 }

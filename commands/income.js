@@ -230,13 +230,13 @@ chincomeMessage = function (mode, round) {
     }
     if (mode !== 'abr') {
         incomeEmbed.addField(
-            `Start R${round}${asteriskMaybe} -> End R120`,
+            `Start R${round}${asteriskMaybe} -> End R140`,
             incomes.superLincomeInclusive
         );
     }
     if (round < 140 && mode !== 'abr') {
         incomeEmbed.addField(
-            `Start R${round + 1} -> End R120`,
+            `Start R${round + 1} -> End R140`,
             incomes.superLincomeExclusive
         );
     }

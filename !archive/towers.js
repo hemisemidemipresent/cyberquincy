@@ -119,11 +119,11 @@ module.exports = {
 
         if (parsed.upgrade_set == '000') {
             let embed = baseTower(name);
-            return message.channel.send(embed);
+            return message.channel.send({ embeds: [embed] });
         }
 
         const embed = anyOtherTower(towerJSON, name, parsed.upgrade_set);
-        return message.channel.send(embed);
+        return message.channel.send({ embeds: [embed] });
     },
 };
 function provideHelpMsg(message, name) {

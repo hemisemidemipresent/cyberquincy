@@ -37,7 +37,6 @@ module.exports = {
                 )
             )
         );
-        console.log(parsed);
 
         if (parsed.hasErrors()) {
             return message.ch;
@@ -123,7 +122,6 @@ function addSacrificeStats(embed, num, i) {
     }
 }
 async function displayTempleStatsByCash(message, results) {
-    console.log(results);
     let embed = new Discord.MessageEmbed();
     embed.setTitle('Temple stats');
     embed.setColor(yellow);

@@ -38,7 +38,7 @@ let odysseyEnd = {
 module.exports = {
     name: 'timer',
     aliases: ['time', 'events', 'when', '⌛'],
-    execute(message) {
+    async execute(message) {
         let d = new Date();
         let date = {
             day: d.getDay(),
@@ -48,10 +48,27 @@ module.exports = {
         };
         const embed = new Discord.MessageEmbed()
             .setTitle('Event timers ⌛')
-            
-            .addField("Race event",`_New one starts_ in ${getDiff(date, raceStart)}\n_Ends_ in ${getDiff(date, raceEnd)}`)
-            .addField("Odyssey event",`_New one starts_ in ${getDiff(date, odysseyStart)}\n_Ends_ in ${getDiff(date, odysseyEnd)}`)
-            .addField("Boss event",`_New one starts_ in ${getDiff(date, bossStart)}\n_Ends_ in ${getDiff(date, bossEnd)}`)
+            .addField(
+                'Race event',
+                `_New one starts_ in ${getDiff(
+                    date,
+                    raceStart
+                )}\n_Ends_ in ${getDiff(date, raceEnd)}`
+            )
+            .addField(
+                'Odyssey event',
+                `_New one starts_ in ${getDiff(
+                    date,
+                    odysseyStart
+                )}\n_Ends_ in ${getDiff(date, odysseyEnd)}`
+            )
+            .addField(
+                'Boss event',
+                `_New one starts_ in ${getDiff(
+                    date,
+                    bossStart
+                )}\n_Ends_ in ${getDiff(date, bossEnd)}`
+            )
             .addField(
                 'Hiking Potato Standard Time',
                 convertTZ(new Date(), 'America/Los_Angeles')
@@ -59,6 +76,10 @@ module.exports = {
             .addField(
                 'exephur Standard Time',
                 convertTZ(new Date(), 'America/Denver')
+            )
+            .addField(
+                'Tytohbird Standard Time',
+                convertTZ(new Date(), 'America/Chicago')
             )
             .addField(
                 'Lombre Standard Time',
@@ -86,7 +107,7 @@ module.exports = {
                 convertTZ(new Date(), 'Pacific/Auckland')
             )
             .setColor(green);
-        return message.channel.send({ embeds: [embed] });
+        return await message.channel.send({ embeds: [embed] });
     },
 };
 function getDiff(date1, date2) {

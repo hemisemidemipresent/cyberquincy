@@ -12,16 +12,23 @@ module.exports = {
             new RoundParser('ALL'),
             new OrParser(new RoundParser('ALL'), new EmptyParser())
         );
-        if (parsed.hasErrors()) {
-            return module.exports.errorMessage(message, parsed.parsingErrors);
-        }
+        if (parsed.hasErrors())
+            return await module.exports.errorMessage(
+                message,
+                parsed.parsingErrors
+            );
+
         let rounds = parsed.rounds.sort((a, b) => a - b);
         const startround = rounds[0];
         if (rounds.length == 1) {
-            return module.exports.oneRound(startround, message.channel);
+            return await module.exports.oneRound(startround, message.channel);
         }
         let endround = rounds[1];
-        return module.exports.showData(startround, endround, message.channel);
+        return await module.exports.showData(
+            startround,
+            endround,
+            message.channel
+        );
     },
     async errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()

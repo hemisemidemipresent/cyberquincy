@@ -54,6 +54,7 @@ const buttons = new MessageActionRow().addComponents(
 
 module.exports = {
     name: '2tc',
+    cooldown: 10,
     execute,
     helpMessage,
     errorMessage,
@@ -94,7 +95,7 @@ async function execute(message, args) {
 
         filteredCombos = filterCombos(clonedeep(allCombos), parsed);
 
-        displayCombos(message, filteredCombos, parsed, allCombos);
+        await displayCombos(message, filteredCombos, parsed, allCombos);
     } catch (e) {
         if (e instanceof UserCommandError) {
             await message.channel.send({
@@ -330,13 +331,13 @@ async function displayOneOrMultiplePages(
                     rightIndex = (leftIndex - 1 + numRows) % numRows;
                     leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
                     if (leftIndex < 0) leftIndex = 0;
-                    displayPages(-1);
+                    await displayPages(-1);
                     break;
                 case 1:
                     leftIndex = (rightIndex + 1) % numRows;
                     rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
                     if (rightIndex >= numRows) rightIndex = numRows - 1;
-                    displayPages(1);
+                    await displayPages(1);
                     break;
             }
         });
@@ -344,25 +345,12 @@ async function displayOneOrMultiplePages(
 
     // Gets the reaction to the pagination message by the command author
     // and respond by turning the page in the correction direction
-    function reactLoop(botMessage) {
-        // Lays out predefined reactions
 
-        switch ('') {
-            case '⬅️':
-                rightIndex = (leftIndex - 1 + numRows) % numRows;
-                leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                if (leftIndex < 0) leftIndex = 0;
-                displayPages(-1);
-                break;
-            case '➡️':
-                leftIndex = (rightIndex + 1) % numRows;
-                rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                if (rightIndex >= numRows) rightIndex = numRows - 1;
-                displayPages(1);
-                break;
-        }
+    try {
+        await displayPages(1);
+    } catch {
+        await errorMessage(message, ['Missing Permissions?']);
     }
-    displayPages(1);
 }
 
 function isValidFormBody(embed) {

@@ -56,7 +56,7 @@ module.exports = {
                 .setColor(colours['cyber']);
         }
 
-        return message.channel.send(aliasEmbed);
+        return message.channel.send({ embeds: [aliasEmbed] });
     },
 
     helpMessage(message) {
@@ -74,7 +74,7 @@ module.exports = {
             .setFooter("Maybe you're looking for `q!alias` for input aliases")
             .setColor(colours['cyber']);
 
-        return message.channel.send(messageEmbed);
+        return message.channel.send({ embeds: [messageEmbed] });
     },
 
     errorMessage(message, errorMessage) {
@@ -87,6 +87,6 @@ module.exports = {
             )
             .setColor(colours['orange']);
 
-        return message.channel.send(errorEmbed);
+        return message.channel.send({ embeds: [errorEmbed] });
     },
 };

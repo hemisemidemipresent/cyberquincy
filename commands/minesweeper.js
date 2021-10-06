@@ -7,7 +7,7 @@ module.exports = {
     name: 'minesweeper',
     aliases: ['mine', 'ms', 'sweeper'],
 
-    execute(message, args) {
+    async execute(message, args) {
         const parsed = CommandParser.parse(
             args,
             new OptionalParser(new NaturalNumberParser(1, 20))
@@ -47,6 +47,6 @@ module.exports = {
             )
 
             .setColor(green);
-        return message.channel.send({ embeds: [embed] });
+        return await message.channel.send({ embeds: [embed] });
     },
 };

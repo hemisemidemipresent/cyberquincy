@@ -1,5 +1,6 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets');
 const { btd6Version } = require('../1/config.json');
+const { MessageEmbed } = require('discord.js');
 
 const offset = 67;
 
@@ -33,7 +34,14 @@ module.exports = {
             console.log(delta);
             output += delta;
         }
-        message.channel.send(output + '```');
+        message.channel.send(output.substr(0, 1997) + '```');
+        if (output.length > 2000) {
+            message.channel.send(output.substr(1998, 3997));
+        }
+        if (output.length > 4000) {
+            message.channel.send(output.substr(3998, 5997));
+        }
+        message.channel.send(output);
     },
 };
 function addSpaces(str, max) {

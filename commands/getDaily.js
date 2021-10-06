@@ -17,17 +17,24 @@ module.exports = {
                     }
 
                     let g = dgdata.decode(body).toString('utf-8');
-                    let json = JSON.parse(g);
-                    let data = JSON.stringify(json, null, 4);
-                    let embed = format(json);
-                    resolve(embed);
+                    try {
+                        let json = JSON.parse(g);
+                        let embed = format(json);
+                        resolve(embed);
+                    } catch {
+                        resolve(
+                            new Discord.MessageEmbed().setTitle(
+                                'oops something went wrong - use q!daily <number>'
+                            )
+                        );
+                    }
                 });
             });
             return promise;
         }
         meat(args[0])
             .then((result) => {
-                message.channel.send(result);
+                message.channel.send({ embeds: [result] });
             })
             .catch((err) => {
                 console.log(err);

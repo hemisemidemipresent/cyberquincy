@@ -3,25 +3,18 @@ const collection = new Discord.Collection();
 
 module.exports = {
     answerCorrect(userID) {
-        if (checkIfStreak(userID)) {
-            incrementStreak(userID);
-        } else {
-            startStreak(userID);
-        }
+        if (checkIfStreak(userID)) incrementStreak(userID);
+        else startStreak(userID);
     },
     answerWrong(userID) {
-        if (checkIfStreak) {
-            removeStreak(userID);
-        }
+        if (checkIfStreak) removeStreak(userID);
     },
     getStreak(userID) {
         if (collection.has(userID)) {
             let streak = collection.get(userID);
 
             return `Streak: ${streak}`;
-        } else {
-            return 'No Streak Currently';
-        }
+        } else return 'No Streak Currently';
     },
 };
 function checkIfStreak(userID) {

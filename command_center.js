@@ -29,6 +29,9 @@ async function handleCommand(message) {
         //checks for bots
         if (message.author.bot) return;
 
+        // If the channel topic is set to something like no{oooo}c, then commands are blocked
+        if (/no+c/i.test(message.channel.topic)) return;
+
         // "Normalize" message
         let C = message.content;
 
@@ -38,13 +41,10 @@ async function handleCommand(message) {
 
         // ...and have no following space (it's a common mistake)
         if (c.startsWith(PREFIX + ' ')) {
-            return message.channel.send(
-                'There isnt a space between q! and the command name.'
+            return await message.channel.send(
+                'There isnt supposed to be a space between q! and the command name.'
             );
         }
-
-        // If the channel topic is set to something like no{oooo}c, then commands are blocked
-        if (/no+c/i.test(message.channel.topic)) return;
 
         // Command tokens are space-separated tokens starting immediately after the `!`
         let args = c.slice(PREFIX.length).split(/ +/);

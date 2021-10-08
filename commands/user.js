@@ -8,6 +8,11 @@ const {
     MessageAttachment,
     DataResolver,
 } = require('discord.js');
+const { palered } = require('../jsons/colours.json');
+
+const seclateServerID = '543957081183617024';
+const Emojis = require('../jsons/emojis.json');
+const raceEmojis = Emojis[seclateServerID + ''].race;
 
 module.exports = {
     name: 'user',
@@ -27,10 +32,20 @@ module.exports = {
             return await module.exports.helpMessage(message);
         userID = args[0];
         let url = `https://priority-static-api.nkstatic.com/storage/static/11/${userID}/public-stats`;
-
-        let body = await axios.get(url, {
-            headers: { 'User-Agent': 'btd6-windowsplayer-27.3' },
-        });
+        let body;
+        try {
+            body = await axios.get(url, {
+                headers: { 'User-Agent': 'btd6-windowsplayer-27.3' },
+            });
+        } catch {
+            return await message.channel.send({
+                embeds: [
+                    new Discord.MessageEmbed()
+                        .setDescription('invalid user id')
+                        .setColor(palered),
+                ],
+            });
+        }
         let obj = body.data;
         this.obj = obj;
         obj.timeStamp = Date.now().toString();
@@ -151,7 +166,37 @@ function mainPage(obj) {
     let towersPlacedData = JSON.stringify(obj.towersPlacedData, null, 1);
     let spMedals = JSON.stringify(obj.spMedals, null, 1);
     let coopMedals = JSON.stringify(obj.coopMedals, null, 1);
-    let raceMedals = JSON.stringify(obj.raceMedals, null, 1);
+    let medals = obj.raceMedals;
+    first = medals['BlackDiamond'] ?? 0;
+    second = medals['RedDiamond'] ?? 0;
+    third = medals['Diamond'] ?? 0;
+    fifty = medals['GoldDiamond'] ?? 0;
+    one = medals['DoubleGold'] ?? 0;
+    ten = medals['GoldSilver'] ?? 0;
+    twfive = medals['DoubleSilver'] ?? 0;
+    fiftyp = medals['Silver'] ?? 0;
+    seveny = medals['Bronze'] ?? 0;
+    let raceStr =
+        '1st: ' +
+        first +
+        '\n2nd: ' +
+        second +
+        '\n3rd: ' +
+        third +
+        '\ntop 50: ' +
+        fifty +
+        '\ntop 1%: ' +
+        one +
+        '\ntop 10%: ' +
+        ten +
+        '\ntop 25%: ' +
+        twfive +
+        '\ntop 50%: ' +
+        fiftyp +
+        '\ntop 75%: ' +
+        seveny +
+        '\n\nTotal: ' +
+        (first + second + third + fifty + one + ten + twfive + fiftyp + seveny);
     let bossMedals = `normal: ${obj.bossMedals['0']}\nelite: ${obj.bossMedals['1']}`;
     let mainEmbed = new MessageEmbed();
     mainEmbed.setTitle(`${name}'s stats'`);
@@ -162,7 +207,7 @@ function mainPage(obj) {
     mainEmbed.addField('Tower placed stats', towersPlacedData, true);
     mainEmbed.addField('Singleplayer medals', spMedals, true);
     mainEmbed.addField('Coop medals', coopMedals, true);
-    mainEmbed.addField('Race medals', raceMedals, true);
+    mainEmbed.addField('Race medals', raceStr, true);
     mainEmbed.addField('Boss medals', bossMedals, true);
     mainEmbed.addField('Odyssey', ody.join('\n'), true);
     mainEmbed.setFooter(
@@ -248,4 +293,9 @@ function isEmpty(obj) {
         if (obj.hasOwnProperty(key)) return false;
     }
     return true;
+}
+function getEmojiFromId(id) {
+    let guild = client.guilds.cache.get('543957081183617024');
+    let emoji = guild.emojis.cache.get(id);
+    return emoji;
 }

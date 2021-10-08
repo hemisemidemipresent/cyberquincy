@@ -22,7 +22,7 @@ module.exports = {
     aliases: ['leaderboard', 'lb'],
     casedArgs: true,
     async execute(message, args) {
-        let raceID = 'ku7sesrm';
+        let raceID = 'Bubblewrap_in_the_morning_kuhqmi73';
 
         if (args.length == 1 && args[0] === 'help') {
             return await module.exports.helpMessage(message);

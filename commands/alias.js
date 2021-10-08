@@ -36,7 +36,7 @@ module.exports = {
                 (cmd) => cmd.aliases && cmd.aliases.includes(alias)
             );
 
-        if (command) {
+        if (command && command.aliases) {
             commandAliases = command.aliases;
             cmdStr = null;
             suffix = '';

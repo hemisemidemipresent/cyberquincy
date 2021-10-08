@@ -1,6 +1,4 @@
-const round2 = require('../jsons/round2.json');
 const { cyber } = require('../jsons/colours.json');
-const r1 = require('../jsons/rounds.json');
 const round = require('../jsons/rounds_topper.json');
 const BloonParser = require('../parser/bloon-parser');
 const OptionalParser = require('../parser/optional-parser');
@@ -10,7 +8,7 @@ const { turq } = require('../jsons/colours.json');
 module.exports = {
     name: 'bloon',
     aliases: ['bln'],
-    execute(message, args) {
+    async execute(message, args) {
         let parsed = CommandParser.parse(
             args,
             new AnyOrderParser(
@@ -22,14 +20,14 @@ module.exports = {
             )
         );
         if (parsed.hasErrors()) {
-            return module.exports.errorMessage(message, parsed.parsingErrors);
+            return await module.exports.errorMessage(
+                message,
+                parsed.parsingErrors
+            );
         }
         let object;
-        if (parsed.mode == 'CHIMPS') {
-            object = round.reg;
-        } else {
-            object = round.alt;
-        }
+        if (parsed.mode == 'CHIMPS') object = round.reg;
+        else object = round.alt;
 
         function getOccurences(bloon, arrayOfRounds) {
             let occurences = [];
@@ -89,13 +87,13 @@ module.exports = {
         let occurences = getOccurences(parsed.bloon.toString(), object);
         let output = format(occurences);
 
-        message.channel.send({ embeds: [output] });
+        await message.channel.send({ embeds: [output] });
     },
-    errorMessage(message, parsingErrors) {
+    async errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
             .addField('Likely Cause(s)', parsingErrors.join('\n'))
             .setColor(cyber);
-        return message.channel.send({ embeds: [errorEmbed] });
+        return await message.channel.send({ embeds: [errorEmbed] });
     },
 };

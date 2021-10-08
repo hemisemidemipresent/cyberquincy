@@ -11,7 +11,7 @@ const gHelper = require('../helpers/general.js');
 module.exports = {
     name: 'income',
     aliases: ['chincome'],
-    execute(message, args) {
+    async execute(message, args) {
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);
         }
@@ -27,7 +27,10 @@ module.exports = {
             )
         );
         if (parsed.hasErrors()) {
-            return module.exports.errorMessage(message, parsed.parsingErrors);
+            return await module.exports.errorMessage(
+                message,
+                parsed.parsingErrors
+            );
         }
         const [startround, endround] = parsed.rounds.sort((a, b) => a - b);
 
@@ -36,7 +39,7 @@ module.exports = {
         let embed = null;
 
         if (startround < 3 && mode == 'abr') {
-            return module.exports.errorMessage(message, [
+            return await module.exports.errorMessage(message, [
                 'There is no support for rounds 1 and 2 abr income calculation',
             ]);
         }
@@ -50,7 +53,7 @@ module.exports = {
                 break;
             default:
                 if ((startround > 100 || endround > 100) && mode == 'abr') {
-                    return module.exports.errorMessage(message, [
+                    return await module.exports.errorMessage(message, [
                         '<round> cannot be greater than 100 if mode is abr',
                     ]);
                 }
@@ -61,16 +64,16 @@ module.exports = {
                     if (startround >= 6) {
                         embed = chincomeMessage(mode, startround);
                     } else {
-                        return module.exports.errorMessage(message, [
+                        return await module.exports.errorMessage(message, [
                             '<round> must be at least 6 if only one round is specified',
                         ]);
                     }
                 }
         }
 
-        message.channel.send({ embeds: [embed] });
+        await message.channel.send({ embeds: [embed] });
     },
-    helpMessage(message) {
+    async helpMessage(message) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('`q!income` HELP')
             .addField(
@@ -89,9 +92,9 @@ module.exports = {
                 'Currently only supports hard difficulty.\nAlso, q!chincome has been combined into q!income.'
             );
 
-        return message.channel.send({ embeds: [errorEmbed] });
+        return await message.channel.send({ embeds: [errorEmbed] });
     },
-    errorMessage(message, errors) {
+    async errorMessage(message, errors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle(`${errors.join('\n')}`)
             .addField(
@@ -104,9 +107,9 @@ module.exports = {
             )
             .setColor(red);
 
-        message.channel.send({ embeds: [errorEmbed] });
+        await message.channel.send({ embeds: [errorEmbed] });
     },
-    income(startround, endround, mode) {
+    async income(startround, endround, mode) {
         switch (mode) {
             case 'halfcash':
                 return module.exports.halfIncome(startround, endround);

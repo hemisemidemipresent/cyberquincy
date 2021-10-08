@@ -23,23 +23,21 @@ const { orange, paleyellow } = require('../jsons/colours.json');
 module.exports = {
     name: 'lcc',
     dependencies: ['btd6index'],
-
     aliases: ['leastcash', 'lcash'],
-
     execute,
     helpMessage,
     errorMessage,
 };
 
-function execute(message, args) {
+async function execute(message, args) {
     if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
-        return helpMessage(message);
+        return await helpMessage(message);
     }
 
     const parsed = CommandParser.parse(args, new MapParser());
 
     if (parsed.hasErrors()) {
-        return errorMessage(message, parsed.parsingErrors);
+        return await errorMessage(message, parsed.parsingErrors);
     }
 
     return displayLCC(message, parsed.map);
@@ -111,10 +109,10 @@ async function displayLCC(message, btd6_map) {
             );
     }
 
-    message.channel.send({ embeds: [challengeEmbed] });
+    await message.channel.send({ embeds: [challengeEmbed] });
 }
 
-function helpMessage(message) {
+async function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!lcc` HELP')
         .addField(
@@ -128,10 +126,10 @@ function helpMessage(message) {
         .addField('Example', '`q!lcc bloodles`')
         .setColor(paleyellow);
 
-    return message.channel.send({ embeds: [helpEmbed] });
+    return await message.channel.send({ embeds: [helpEmbed] });
 }
 
-function errorMessage(message, parsingErrors) {
+async function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('Input Error')
         .addField(
@@ -141,5 +139,5 @@ function errorMessage(message, parsingErrors) {
         .addField('Type `q!lcc` for help', '\u200b')
         .setColor(orange);
 
-    return message.channel.send({ embeds: [errorEmbed] });
+    return await message.channel.send({ embeds: [errorEmbed] });
 }

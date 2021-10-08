@@ -19,22 +19,25 @@ module.exports = {
         }
         parsed.rounds.sort();
         let time = parseTime(parsed.anything);
-        if (!time) await errorMessage(message, ['invalid time (probably)']);
 
+        if (time == undefined)
+            return await errorMessage(message, ['invalid time (probably)']);
         let ftime = formatTime(time);
         let start = parsed.rounds[0];
         let end = parsed.rounds[1];
         let longest = findLongest(start, end);
-        let sendTime = (end - start) * 0.2 + lengths[longest - 1];
-        console.log(time, sendTime);
+        let sendTime =
+            (longest - start) * 0.2 + lengths[longest - 1] + 0.0167 - 0.2;
         let finalStr = formatTime(time + sendTime);
         let sendStr = formatTime(time - sendTime);
         let str =
             `It takes **${
                 (end - start) * 0.2
             }s** to send **r${start}** - **r${end}**, ` +
-            `and r${longest} lasts **${lengths[longest - 1]}s**\n\n` +
-            `If you fullsended at \`${ftime}\`, you will get a time of \`${finalStr}\`\n`;
+            `and r${longest} lasts **${formatTime(
+                lengths[longest - 1]
+            )}**\n\n` +
+            `If you fullsended at \`${ftime}\`, you will get a time of **\`${finalStr}\`**\n`;
         if (time - sendTime < 0) {
             str += `You **can't** get a time of \`${ftime}\``;
         } else {
@@ -73,6 +76,7 @@ async function errorMessage(message, parsingErrors) {
     return await message.channel.send({ embeds: [errorEmbed] });
 }
 function parseTime(hms) {
+    if (!isNaN(hms)) return parseFloat(hms);
     var a = hms.split(':'); // split it at the colons
     let h = 0;
     let m = 0;

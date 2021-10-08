@@ -12,7 +12,7 @@ const { red, magenta } = require('../jsons/colours.json');
 
 const costs = require('../jsons/costs.json');
 
-function calc(message, args, interaction) {
+async function calc(message, args, interaction) {
     // Use a "lexer" to parse the operator/operand tokens
     var lexer = new Lexer();
 
@@ -74,7 +74,7 @@ function calc(message, args, interaction) {
             if (c === '<')
                 footer =
                     "Did you try to tag another discord user? That's definitely not allowed here.";
-            return interaction.update({
+            return await interaction.update({
                 content: '\u200b',
                 embeds: [
                     new Discord.MessageEmbed()
@@ -137,7 +137,7 @@ function calc(message, args, interaction) {
     } catch (e) {
         if (e instanceof UnrecognizedTokenError) {
             // Catches nonsensical tokens
-            return interaction.update({
+            return await interaction.update({
                 content: '\u200b',
                 embeds: [
                     new Discord.MessageEmbed()
@@ -156,7 +156,7 @@ function calc(message, args, interaction) {
     var output = stack.pop();
 
     if (isNaN(output)) {
-        return interaction.update({
+        return await interaction.update({
             content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
@@ -170,7 +170,7 @@ function calc(message, args, interaction) {
             components: [],
         });
     } else if (stack.length > 0) {
-        return interaction.update({
+        return await interaction.update({
             content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
@@ -185,7 +185,7 @@ function calc(message, args, interaction) {
         });
     } else {
         // G2g!
-        return interaction.update({
+        return await interaction.update({
             content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
@@ -321,7 +321,7 @@ function parseAndValueToken(t, i) {
 
 class UnrecognizedTokenError extends Error {}
 
-function helpMessage(message) {
+async function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!calc` HELP')
         .setDescription('**CHIMPS Cost Calculator**')
@@ -356,7 +356,7 @@ function helpMessage(message) {
         )
         .setColor(colours['black']);
 
-    return message.reply({ embeds: [helpEmbed] });
+    return await message.reply({ embeds: [helpEmbed] });
 }
 
 module.exports = {
@@ -364,9 +364,10 @@ module.exports = {
     aliases: ['calc', 'cash-calc', 'cc'],
     rawArgs: true,
     priceMult: 1,
-    execute(message, args) {
+    cooldown: 5,
+    async execute(message, args) {
         if (args.length == 0 || args.includes('help')) {
-            return helpMessage(message);
+            return await helpMessage(message);
         }
         const row = new MessageActionRow().addComponents(
             new MessageSelectMenu()
@@ -395,28 +396,30 @@ module.exports = {
                     },
                 ])
         );
-        message.reply({
+        await message.reply({
             content: 'Select the mode to calculate prices',
             components: [row],
         });
         const filter = (interaction) =>
             interaction.customId === 'mode' &&
             interaction.user.id == message.author.id; //  nothing basically
-        const collector = message.channel.createMessageComponentCollector({
-            filter,
-            time: 20000,
-        });
-        collector.on('collect', (i) => {
+        const collector = await message.channel.createMessageComponentCollector(
+            {
+                filter,
+                time: 5000,
+            }
+        );
+        collector.on('collect', async (i) => {
             module.exports.priceMult = parseFloat(i.values[0]);
-            calc(message, args, i);
             collector.stop();
+            await calc(message, args, i);
         });
-        collector.on('end', (collected) => {
+        collector.on('end', async (collected) => {
             if (!collected.first()) {
                 let errorEmbed = new Discord.MessageEmbed()
                     .setTitle(`You took too long to select a mode`)
                     .setColor(magenta);
-                return message.channel.send({ embeds: [errorEmbed] });
+                return await message.channel.send({ embeds: [errorEmbed] });
             }
         });
     },

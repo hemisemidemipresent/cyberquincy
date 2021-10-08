@@ -94,7 +94,7 @@ module.exports = {
                     let errorEmbed = new Discord.MessageEmbed()
                         .setTitle(`Game over! You took too long.`)
                         .setColor(magenta);
-
+                    Quiz.answerWrong(message.author.id);
                     return await message.channel.send({
                         embeds: [errorEmbed],
                     });

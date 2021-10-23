@@ -161,4 +161,8 @@ function login() {
     client.login(token);
 }
 
-main();
+try {
+    main();
+} catch (e) {
+    console.log(e);
+}

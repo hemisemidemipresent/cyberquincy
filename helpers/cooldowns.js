@@ -2,7 +2,7 @@ const CHANNEL_TOPIC_COOLDOWN_REGEX = /cooldown ?= ?(\d+)/;
 
 const cooldowns = new Discord.Collection();
 
-function handleCooldown(command, message) {
+async function handleCooldown(command, message) {
     const now = Date.now();
     let timePassed = getTimePassed(command, message.author.id, now);
     let timeNeeded = getTimeNeeded(command, message);
@@ -14,7 +14,7 @@ function handleCooldown(command, message) {
         updateCooldown(command, message.author.id, now);
         return true;
     } else {
-        notifyUser(command, secondsLeft, message);
+        await notifyUser(command, secondsLeft, message);
         return false;
     }
 }
@@ -66,8 +66,8 @@ function updateCooldown(command, user_id, now) {
     timestamps[user_id] = now;
 }
 
-function notifyUser(command, secondsLeft, message) {
-    message.channel.send(
+async function notifyUser(command, secondsLeft, message) {
+    await message.channel.send(
         `Please wait ${secondsLeft} more second(s) before reusing the \`${command.name}\` command.`
     );
 }

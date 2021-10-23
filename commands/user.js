@@ -6,9 +6,9 @@ const {
     MessageActionRow,
     BufferResolvable,
     MessageAttachment,
-    DataResolver,
 } = require('discord.js');
 const { palered } = require('../jsons/colours.json');
+const { UserAgent } = require('../1/config.json');
 
 const seclateServerID = '543957081183617024';
 const Emojis = require('../jsons/emojis.json');
@@ -35,7 +35,7 @@ module.exports = {
         let body;
         try {
             body = await axios.get(url, {
-                headers: { 'User-Agent': 'btd6-windowsplayer-27.3' },
+                headers: { 'User-Agent': UserAgent },
             });
         } catch {
             return await message.channel.send({

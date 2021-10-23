@@ -1,6 +1,5 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets');
 const { btd6Version } = require('../1/config.json');
-const { MessageEmbed } = require('discord.js');
 
 const offset = 67;
 

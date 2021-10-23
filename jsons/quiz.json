@@ -837,17 +837,7 @@
             "3",
             "0"
         ],
-        "ans": 3
-    },
-    {
-        "question": "How many of ice's upgrade icons don't contain a bloon (moab class or otherwise)?",
-        "optns": [
-            "7",
-            "5",
-            "3",
-            "0"
-        ],
-        "ans": 3
+        "ans": 2
     },
     {
         "question": "How many upgrade icons contain a M.O.A.B.?",
@@ -877,6 +867,6 @@
             "Sniper Monkey and Spike Factory",
             "Sniper Monkey and Glue Gunner"
         ],
-        "ans": 4
+        "ans": 3
     }
 ]

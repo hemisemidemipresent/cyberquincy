@@ -11,6 +11,7 @@ class AliasRepository extends Array {
         // {source_directory: handling function}
         const SPECIAL_HANDLING_CASES = {
             './aliases/towers': this.loadTowerAliasFile,
+            './aliases/raceid.json': this.loadRaceAlias,
         };
 
         (async () => {
@@ -95,6 +96,22 @@ class AliasRepository extends Array {
         }
     }
 
+    loadRaceAlias(f) {
+        let raceIDs = require(f);
+        let entries = Object.entries(raceIDs);
+        for (let i = 0; i < Object.entries(raceIDs).length; i++) {
+            let race = entries[i];
+            const aliases = race[1];
+            let canonical = race[0];
+            aliases.push('r#' + i.toString());
+            const nextAliasGroup = {
+                canonical: canonical,
+                aliases: aliases,
+                sourcefile: f,
+            };
+            this.addAliasGroup(nextAliasGroup);
+        }
+    }
     // Ensure that none of the aliases clash before adding it in
     addAliasGroup(ag) {
         try {
@@ -117,7 +134,6 @@ class AliasRepository extends Array {
 
             // Remove duplicates, maintaining alias order
             ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i);
-
             // Make sure that none of these aliases overlap with other alias sets
             this.preventSharedAliases(ag);
         } catch (e) {
@@ -139,15 +155,18 @@ class AliasRepository extends Array {
 
         const tokens = al.split(new RegExp(SEPARATOR_TOKENS.join('|')));
         let aliases = [tokens[0]];
-
-        for (var i = 1; i < tokens.length; i++) {
-            let new_aliases = [];
-            for (var j = 0; j < aliases.length; j++) {
-                for (var k = 0; k < JOIN_TOKENS.length; k++) {
-                    new_aliases.push(aliases[j] + JOIN_TOKENS[k] + tokens[i]);
+        if (tokens.length < 8) {
+            for (var i = 1; i < tokens.length; i++) {
+                let new_aliases = [];
+                for (var j = 0; j < aliases.length; j++) {
+                    for (var k = 0; k < JOIN_TOKENS.length; k++) {
+                        new_aliases.push(
+                            aliases[j] + JOIN_TOKENS[k] + tokens[i]
+                        );
+                    }
                 }
+                aliases = [...new_aliases];
             }
-            aliases = [...new_aliases];
         }
 
         // Move the original alias to the front of the transformed list
@@ -414,10 +433,18 @@ class AliasRepository extends Array {
             .join(' ');
     }
 
+    allRaces() {
+        let arr = this.getAliasGroupsFromSameFileAs('2018-12-13').map(
+            (ag) => ag.canonical
+        );
+        return arr;
+    }
+
     // Arg looks like `arg` or `argp1#argp2`
     // This converts each arg part to its canonical form.
     // `spact#025` gets converted to `spike_factory#025` for example.
     canonicizeArg(arg) {
+        if (arg.includes('r#')) return Aliases.getCanonicalForm(arg) || arg; // for r#100 race args
         return arg
             .split('#')
             .map((t) => Aliases.getCanonicalForm(t) || t)

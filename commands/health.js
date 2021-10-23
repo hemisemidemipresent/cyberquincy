@@ -30,17 +30,8 @@ module.exports = {
             return message.channel.send('please specify a blimp, e.g. ZOMG');
         }
         //percentage increase
-        let percentageIncrease;
-        if (round > 80 && round < 101) {
-            percentageIncrease = 1 + 0.02 * (round - 80);
-        } else if (round > 100 && round < 125) {
-            percentageIncrease = 1.4 + 0.05 * (round - 100);
-        } else if (round > 124 && round < 152) {
-            percentageIncrease = 2.65 + 0.2 * (round - 125);
-        } else if (round > 151) {
-            percentageIncrease = 8.05 + 0.5 * (round - 152);
-        }
-        let bhealth = Math.floor(baseHealth * percentageIncrease);
+
+        let bhealth = Math.floor(baseHealth * (1 + b.getRamping(round) / 100));
 
         if (round > 80) {
             return message.channel.send(

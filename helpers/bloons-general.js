@@ -14,4 +14,19 @@ module.exports = {
     PREDET_ROUNDS,
     PREDET_CHIMPS_ROUNDS,
     ALL_ROUNDS,
+    /**
+     *
+     * @param {int} round
+     * @returns {int} percentage increase
+     */
+    getRamping(round) {
+        if (round < 81) return 0;
+        let r1 = 2,
+            r2 = 5,
+            r3 = 15;
+        if (round < 101) return (round - 80) * r1;
+        if (round < 125) return 20 * r1 + (round - 100) * r2;
+        if (round < 152) return 20 * r1 + 24 * r2 + (round - 124) * r3;
+        return 20 * r1 + 24 * r2 + 27 * r3 + (round - 151) * 35;
+    },
 };

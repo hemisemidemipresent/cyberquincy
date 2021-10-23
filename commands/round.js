@@ -86,7 +86,7 @@ async function execute(message, args, originalCommandName) {
         )
         .setColor(colours['cyber']);
     if (parsed.round > 80) {
-        let ramping = getRamping(parsed.round);
+        let ramping = b.getRamping(parsed.round);
         roundEmbed.addField('health and speed ramping', `+${ramping}%`);
     }
     await message.channel.send({ embeds: [roundEmbed] });
@@ -143,7 +143,7 @@ async function errorMessage(message, parsingErrors) {
 function freeplay(round) {
     [xp, totalxp] = calculateXps(parsed.round);
 
-    let ramping = getRamping(round);
+    let ramping = b.getRamping(round);
     let bloonSets = getBloonSets(round);
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${parsed.round}` + (parsed.mode == 'abr' ? ' ABR' : ''))

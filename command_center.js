@@ -95,7 +95,8 @@ async function handleCommand(message) {
         }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
-        if (!Cooldowns.handleCooldown(command, message)) return;
+        let cd = await Cooldowns.handleCooldown(command, message);
+        if (!cd) return;
 
         if (command.dependencies) {
             if (command.dependencies.includes('btd6index')) {

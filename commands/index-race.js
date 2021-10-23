@@ -10,19 +10,19 @@ module.exports = {
     dependencies: ['btd6index'],
 };
 
-function execute(message, args) {
+async function execute(message, args) {
     if (!args) {
-        return message.channel.send(
+        return await message.channel.send(
             'please specify a race number/name\nexamples:\nq!race 10\nq!race Primary Qualifiers'
         );
     }
     if (isNaN(args[0])) {
         let str = args.join(' ');
-        return findRaceByStr(str, message);
+        return await findRaceByStr(str, message);
     } else if (isNaN(args[0]) || args[0] < 1)
-        return message.channel.send('please specify a valid race number');
+        return await message.channel.send('please specify a valid race number');
     else {
-        findRaceByNum(parseInt(args[0]), message);
+        await findRaceByNum(parseInt(args[0]), message);
     }
 }
 
@@ -39,7 +39,7 @@ async function findRaceByStr(str, message) {
             return findRaceByNum(i, message);
         }
     }
-    return message.channel.send(
+    return await message.channel.send(
         "Race isn't found. try a simpler phrase, you don't have to type the full name"
     );
 }
@@ -89,20 +89,22 @@ async function findRaceByNum(number, message) {
         if (!hyperlink) {
             hyperlink = 'none';
         }
-        output += `${i + 1}:${hyperlink} `;
+        output += `${i + 1}:${hyperlink}\n`;
     }
 
-    const RaceEmbed = new Discord.MessageEmbed()
+    let RaceEmbed = new Discord.MessageEmbed()
         .setTitle(`Race ${number}`)
         .setTitle(name.value.toString())
         .setDescription(`${info1.value}\n${info2.value}\n${info3.value}`)
-        .addField('Date', `${dates.value}`)
-        .addField(
+        .addField('Date', `${dates.value}`, true)
+
+        .addField('Links', `${output}`, true)
+        .addField('Players', `${players.value}`, true);
+    if (number == 143) RaceEmbed.addField('Top 5', 'no');
+    else
+        RaceEmbed.addField(
             'Top 5',
             `${firstPlaceNick} ${firstPlaceName} ${firstPlaceTime.value}\n${secondPlaceNick} ${secondPlaceName} ${secondPlaceTime.value}\n${thirdPlaceNick} ${thirdPlaceName} ${thirdPlaceTime.value}\n${fourthPlaceNick} ${fourthPlaceName} ${fourthPlaceTime.value}\n${fifthPlaceNick} ${fifthPlaceName} ${fifthPlaceTime.value}`
-        )
-        .addField('Links', `${output}`)
-        .addField('Players', `${players.value}`);
-
-    return message.channel.send({ embeds: [RaceEmbed] });
+        );
+    return await message.channel.send({ embeds: [RaceEmbed] });
 }

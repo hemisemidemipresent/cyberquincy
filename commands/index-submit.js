@@ -10,8 +10,9 @@ const PREVIEW_REACTIONS = [WHITE_HEAVY_CHECK_MARK, RED_X];
 const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL = '702089126706544661';
 // Fill this in when you want to test this in your own server
 // Change this to a channel in your test guild when testing
-const TEST_SUBMISSIONS_CHANNEL = '737445888602931252';
+const TEST_SUBMISSIONS_CHANNEL = '897024571801239573'; //'737445888602931252';
 const IS_TESTING = require('../1/config.json')['testing'];
+const { MessageEmbed } = require('discord.js');
 const SUBMISSIONS_CHANNEL = IS_TESTING
     ? TEST_SUBMISSIONS_CHANNEL
     : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
@@ -83,22 +84,28 @@ async function submit(message, args) {
                         SUBMISSIONS_CHANNEL
                     );
                 let submissionMessage = undefined;
-                if (submission instanceof String)
-                    submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(
-                        submission
-                    );
-                else
+                if (submission instanceof MessageEmbed)
                     submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send({
                         embeds: [submission],
                     });
-                let random = Math.floor(Math.random() * 250);
-                if (random % 10 == 0) {
-                    submissionMessage.react('🥛');
-                } else if (random == 0) {
-                    let goldmilk = client.guilds.cache
-                        .get(614111055890612225)
-                        .emojis.cache.get(821676576525647882);
-                    submissionMessage.react(goldmilk);
+                else
+                    submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(
+                        submission
+                    );
+                let random = Math.floor(Math.random() * 1000);
+                let guild = client.guilds.cache.get('614111055890612225');
+
+                if (random == 0) {
+                    let gmilk2 = guild.emojis.cache.get('900218748613562418');
+                    await submissionMessage.react(gmilk2);
+                } else if (random % 250 == 0) {
+                    let goldmilk = guild.emojis.cache.get('821676576525647882');
+                    await submissionMessage.react(goldmilk);
+                } else if (random % 40 == 0) {
+                    let milk2 = guild.emojis.cache.get('897767316496990238');
+                    await submissionMessage.react(milk2);
+                } else if (random % 10 == 0) {
+                    await submissionMessage.react('🥛');
                 }
 
                 const submittedLink = `https://discord.com/channels/${message.channel.guild.id}/${SUBMISSIONS_CHANNEL}/${submissionMessage.id}`;
@@ -134,7 +141,6 @@ module.exports = {
     casedArgs: true,
     aliases: ['isubmit', 'isub'],
     async execute(message, args) {
-        return message.channel.send('we is big dumb');
         if (message.attachments.size < 1 && (!args[0] || args[0] == 'help')) {
             return await message.channel.send(helpMessage());
         }

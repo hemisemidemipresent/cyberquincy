@@ -109,7 +109,7 @@ module.exports = {
 
         await message.channel.send({ embeds: [errorEmbed] });
     },
-    async income(startround, endround, mode) {
+    income(startround, endround, mode) {
         switch (mode) {
             case 'halfcash':
                 return module.exports.halfIncome(startround, endround);

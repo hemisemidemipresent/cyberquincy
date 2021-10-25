@@ -39,7 +39,10 @@ class Player {
             let monthDay = s.substring(5, 11);
             let hms = s.substring(17, 25);
             this.fTimestamp = monthDay + ' ' + hms;
-        } else this.timestamp = '???';
+        } else {
+            this.timestamp = '???????????????';
+            this.fTimestamp = this.timestamp;
+        }
 
         let tokens = metadata.split(',');
         if (tokens.length > 5) {
@@ -54,8 +57,7 @@ class Player {
             row += `${this.addSpaces(this.username, max)}`;
 
         row += this.fTime + ' ';
-
-        if (this.timestamp != '???') row += this.fTimestamp;
+        row += this.fTimestamp;
         // medals
         if (this.username == '??????????????????') {
             row += `${this.formatMedalInline()}`;
@@ -153,7 +155,7 @@ class Player {
     }
 
     formatMedalInline() {
-        let medalNames = ['⓵', '⓶', '⓷', '㊿', '➀', '➉', '㉕', '㉌', '㉎'];
+        let medalNames = ['⑴', '⑵', '⑶', '㊿', '➀', '➉', '㉕', '㉌', '㉎'];
         let j = 0;
         let res = ' ';
         for (let i = 0; i < this.medals.length; i++) {

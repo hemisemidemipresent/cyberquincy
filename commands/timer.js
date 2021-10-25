@@ -69,43 +69,7 @@ module.exports = {
                     bossStart
                 )}\n_Ends_ in ${getDiff(date, bossEnd)}`
             )
-            .addField(
-                'Hiking Potato Standard Time',
-                convertTZ(new Date(), 'America/Los_Angeles')
-            )
-            .addField(
-                'exephur Standard Time',
-                convertTZ(new Date(), 'America/Denver')
-            )
-            .addField(
-                'Tytohbird Standard Time',
-                convertTZ(new Date(), 'America/Chicago')
-            )
-            .addField(
-                'Lombre Standard Time',
-                convertTZ(new Date(), 'America/New_York')
-            )
-            .addField(
-                'jajajosh Standard Time',
-                convertTZ(new Date(), 'Europe/London')
-            )
-            .addField(
-                'Tobi Standard Time',
-                convertTZ(new Date(), 'Europe/Berlin')
-            )
-            .addField('RB Standard Time', convertTZ(new Date(), 'Asia/Bangkok'))
-            .addField(
-                'hemi/tyk Standard Time',
-                convertTZ(new Date(), 'Asia/Singapore')
-            )
-            .addField(
-                'obyn best hero Standard Time',
-                convertTZ(new Date(), 'Asia/Seoul')
-            )
-            .addField(
-                'rohan Standard Time',
-                convertTZ(new Date(), 'Pacific/Auckland')
-            )
+
             .setColor(green);
         return await message.channel.send({ embeds: [embed] });
     },

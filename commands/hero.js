@@ -121,11 +121,18 @@ module.exports = {
         let link = findLink(commandName);
 
         let level = parseInt(args[0]);
-        request(link, (err, res, body) => {
-            if (err)
-                this.errorMessage(
+        if (level < 1 || level > 20) {
+            return message.channel.send({
+                embeds: [this.errorMessage('lvl must be btwn 1-20')],
+            });
+        }
+        request(link, async (err, res, body) => {
+            if (err) {
+                let embed = this.errorMessage(
                     'something went wrong while fetching the data'
                 );
+                await message.channel.send({ embeds: [embed] });
+            }
 
             let cleaned = body.replace(/\t/g, '').replace(/\r/g, '');
             let sentences = cleaned.split(/\n\n/);
@@ -138,12 +145,12 @@ module.exports = {
                         'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
                     );
                 for (let i = 0; i < 20; i++) {
-                    embed.addField(i + 1, sentences[i], true);
+                    embed.addField((i + 1).toString(), sentences[i], true);
                 }
-                return message.channel.send({ embeds: [embed] });
+                return await message.channel.send({ embeds: [embed] });
             }
             let embed = oneUpgrade(sentences, level);
-            return message.channel.send({ embeds: [embed] });
+            return await message.channel.send({ embeds: [embed] });
         });
     },
     errorMessage(err) {

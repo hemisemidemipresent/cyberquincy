@@ -9,10 +9,8 @@ class SecondsParser {
     }
 
     constructor() {
-        var start = -Infinity;
-        var end = Infinity;
         // Ultimately at play is just a number parser
-        this.delegateParser = new NumberParser(start, end);
+        this.delegateParser = new NumberParser(0, Infinity);
     }
 
     parse(arg) {

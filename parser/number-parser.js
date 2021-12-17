@@ -37,7 +37,7 @@ class NumberParser {
 
     parse(arg) {
         // Ignore thousands-place commas (assuming numbers are entered like 1,260.33 as in the United States)
-        const n = Number(arg.replace(/,/g, ''));
+        const n = Number(arg.toString().replace(/,/g, ''));
         // Validate arg
         if (isNaN(n)) {
             throw new UserCommandError(`Expected number but got \`${arg}\``);

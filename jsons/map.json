@@ -197,6 +197,17 @@
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920689085120563/EndofRoadNew.jpg",
         "e": "1/1"
     },
+    "cabin": {
+        "ver": 28,
+        "len": 30.8,
+        "lenStr": "30.8",
+        "obj": 1,
+        "Cos": "500",
+        "wa%": "yes",
+        "los": "",
+        "thu": "https://media.discordapp.net/attachments/770094137713885204/907549000427798578/826.png",
+        "e": "1/1"
+    },
     "moon_landing": {
         "ver": 6,
         "len": 35.5,
@@ -316,7 +327,7 @@
         "Cos": "N/A",
         "wa%": "yes",
         "los": "yes",
-        "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920688183476235/Spring_Spring.png",
+        "thu": "https://media.discordapp.net/attachments/598768319625035776/920954602868842586/unknown.png",
         "e": "1/1"
     },
     "spice_islands": {

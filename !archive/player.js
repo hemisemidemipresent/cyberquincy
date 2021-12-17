@@ -15,11 +15,12 @@
 const axios = require('axios');
 const seclateServerID = '543957081183617024';
 
-const gHelper = require('../general.js');
-const Emojis = require('../../jsons/emojis.json');
-const { UserAgent } = require('../../1/config.json');
+const gHelper = require('../helpers/general.js');
+const Emojis = require('../jsons/emojis.json');
+const { UserAgent } = require('../1/config.json');
 
 const raceEmojis = Emojis[seclateServerID + ''].race;
+const userIDs = require('../jsons/userID.json');
 
 class Player {
     constructor(obj, position) {
@@ -46,25 +47,34 @@ class Player {
 
         let tokens = metadata.split(',');
         if (tokens.length > 5) {
-            this.username = tokens[0];
-        } else this.username = '??????????????????';
+            let username = tokens[0];
+            if (username != 'medals') return (this.username = tokens[0]);
+
+            let user = userIDs.find((user) => {
+                return user.userID == this.userID;
+            });
+            this.username = user?.name;
+            if (this.username) return;
+        }
+        this.username = '??????????????????';
     }
-    async inline(max) {
-        await this.getMedals();
+    async inline() {
         let row = `${this.addSpaces(this.position, 3)}`;
 
-        if (this.username != '??????????????????')
-            row += `${this.addSpaces(this.username, max)}`;
-
-        row += this.fTime + ' ';
-        row += this.fTimestamp;
+        row += this.fTime + '|';
+        row += this.fTimestamp + '|';
         // medals
         if (this.username == '??????????????????') {
+            await this.getMedals();
+
             row += `${this.formatMedalInline()}`;
+        } else {
+            row += this.username;
         }
         return row;
     }
     async individual() {
+        await this.getMedals();
         let medals = await this.formatMedals();
         let output =
             `placement: ${gHelper.toOrdinalSuffix(this.position)}` +
@@ -155,9 +165,9 @@ class Player {
     }
 
     formatMedalInline() {
-        let medalNames = ['⑴', '⑵', '⑶', '㊿', '➀', '➉', '㉕', '㉌', '㉎'];
+        let medalNames = ['1️⃣', '2️⃣', '3️⃣', '㊿', '➀', '➉', '㉕', '㉌', '㉎'];
         let j = 0;
-        let res = ' ';
+        let res = '';
         for (let i = 0; i < this.medals.length; i++) {
             if (j > 2) break;
             let medalCount = this.medals[i];

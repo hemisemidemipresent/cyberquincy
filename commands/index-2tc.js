@@ -314,7 +314,7 @@ async function displayOneOrMultiplePages(
                 });
             }
         } catch (e) {
-            console.log(e.message);
+            console.log(e.name);
         }
 
         const filter = (i) => i.user.id == userQueryMessage.author.id;
@@ -349,7 +349,7 @@ async function displayOneOrMultiplePages(
     try {
         await displayPages(1);
     } catch {
-        await errorMessage(message, ['Missing Permissions?']);
+        await errorMessage(userQueryMessage, ['Missing Permissions?']);
     }
 }
 

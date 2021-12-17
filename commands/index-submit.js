@@ -94,17 +94,26 @@ async function submit(message, args) {
                     );
                 let random = Math.floor(Math.random() * 1000);
                 let guild = client.guilds.cache.get('614111055890612225');
-
                 if (random == 0) {
+                    let shol2 = guild.emojis.cache.get('911077729582071879');
+                    await submissionMessage.react(shol2);
+                } else if (random % 500 == 0) {
+                    let shol = guild.emojis.cache.get('911077559071043585');
+                    await submissionMessage.react(shol);
+                } else if (random % 200 == 0) {
+                    await submissionMessage.react('🌌');
+                } else if (random % 100 == 0) {
+                    await submissionMessage.react('🍼');
+                } else if (random % 50 == 0) {
                     let gmilk2 = guild.emojis.cache.get('900218748613562418');
                     await submissionMessage.react(gmilk2);
-                } else if (random % 250 == 0) {
+                } else if (random % 20 == 0) {
                     let goldmilk = guild.emojis.cache.get('821676576525647882');
                     await submissionMessage.react(goldmilk);
-                } else if (random % 40 == 0) {
+                } else if (random % 10 == 0) {
                     let milk2 = guild.emojis.cache.get('897767316496990238');
                     await submissionMessage.react(milk2);
-                } else if (random % 10 == 0) {
+                } else if (random % 5 == 0) {
                     await submissionMessage.react('🥛');
                 }
 

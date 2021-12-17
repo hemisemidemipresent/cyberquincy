@@ -5,7 +5,6 @@ const EMOJIS_SERVER = '614111055890612225';
 
 const xp = require('../helpers/xp');
 const { discord } = require('../aliases/misc.json');
-
 function enterGuild(guild) {
     let channeltosend = guild.channels.cache.find(
         (channel) => channel.name.includes('general') === true
@@ -76,7 +75,7 @@ async function addMember(member) {
             )
             .addField(
                 'Who am I?',
-                'I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881),[discord server](https://discord.gg/XBhHWh9)'
+                `I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881),[discord server](${discord})`
             )
             .setColor(colours['cyber']);
         member.send(wel);

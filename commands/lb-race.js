@@ -20,18 +20,19 @@ const raceEmojis = Emojis[seclateServerID + ''].race;
 
 const raceImg =
     'https://static.wikia.nocookie.net/b__/images/4/40/EventRaceIcon.png/revision/latest/scale-to-width-down/340?cb=20200616225307&path-prefix=bloons';
-const id = 'kv1sirf5';
+const id = 'Captarn_kwzsz43l';
 
 module.exports = {
     name: 'raceleaderboard',
     aliases: ['leaderboard', 'lb'],
+    casedArgs: true,
     async execute(message, args) {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        let raceID = 'kurtyd0l';
+        let raceID = 'Captarn_kwzsz43l';
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,18 +46,12 @@ module.exports = {
             args,
             new AnyOrderParser(
                 new OptionalParser(new RaceParser()),
-                new OptionalParser(
-                    new OrParser(
-                        new NaturalNumberParser(1, 100),
-                        new AnyOrderParser(
-                            new NaturalNumberParser(1, 100),
-                            new NaturalNumberParser(1, 100)
-                        )
-                    )
-                ),
-                new OptionalParser(new PersonParser())
+                new OptionalParser(new PersonParser()),
+                new OptionalParser(new NaturalNumberParser(1, 100)),
+                new OptionalParser(new NaturalNumberParser(1, 100))
             )
         );
+
         if (parsed.hasErrors()) {
             return await this.errorMessage(message, parsed.parsingErrors);
         }
@@ -64,11 +59,13 @@ module.exports = {
 
         let data;
         try {
-            data = await race.getJSON(raceID);
-        } catch {
+            data = await race.getRaceJSON(raceID);
+        } catch (e) {
+            console.log(e);
             return await this.errorMessage(message, ['invalid race id']);
         }
         let lb = new Leaderboard(data);
+        await lb.init();
         let identifiable = undefined;
 
         if (parsed.person) {
@@ -77,15 +74,12 @@ module.exports = {
             identifiable = parsed.natural_number;
         }
         if (identifiable) {
-            let output = await lb.getPlayer(identifiable); // works for username or position
+            let output = lb.getPlayer(identifiable); // works for username or position
             let embed = new Discord.MessageEmbed()
                 .setTitle(`ID: ${data.leaderboardID}`)
-                .setURL(race.getURL(raceID))
+                .setURL(race.getRaceURL(raceID))
                 .setDescription(output)
-                .addField(
-                    'did you know there is a website for this',
-                    'check out https://btd6racelb.netlify.app/'
-                )
+
                 .addField(
                     'Timestamps are known to be inaccurate for certain versions',
                     'see [this video](https://youtu.be/IGE155tCmss)'
@@ -97,11 +91,11 @@ module.exports = {
         } else {
             let output = '';
             if (parsed.natural_numbers)
-                output = await lb.getWall(
+                output = lb.getWall(
                     parsed.natural_numbers[0],
                     parsed.natural_numbers[1]
                 );
-            else output = await lb.getWall();
+            else output = lb.getWall();
             if (output.length > 4096) {
                 return await module.exports.errorMessage(message, [
                     'too many characters',
@@ -109,12 +103,9 @@ module.exports = {
             }
             let embed = new Discord.MessageEmbed()
                 .setTitle(`ID: ${data.leaderboardID}`)
-                .setURL(race.getURL(raceID))
+                .setURL(race.getRaceURL(raceID))
                 .setDescription(output)
-                .addField(
-                    'did you know there is a website for this',
-                    'check out https://btd6racelb.netlify.app/'
-                )
+
                 .addField(
                     'Timestamps are known to be inaccurate for certain versions',
                     'see [this video](https://youtu.be/IGE155tCmss)'
@@ -137,7 +128,7 @@ module.exports = {
             .setTitle('`q!racelb` HELP')
             .setDescription('BTD6 Race leaderboard loader')
             .addField(
-                'Examples',
+                'Example Usages',
                 '`q!lb 1 50` - shows lb from 1st place to 50th place\n' +
                     `\`q!lb r#100\` - shows lb for given race number\n` +
                     `\`q!lb yinandyang\` - shows lb for given race name (in this case yin and yang) **NOTE: Names MUST NOT have any spaces**\n` +
@@ -157,8 +148,13 @@ module.exports = {
     async errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
-            .setDescription(
-                '`q!rtime <start round> <end round> <time>`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`'
+            .addField(
+                'Example Usages',
+                '`q!lb 1 50` - shows lb from 1st place to 50th place\n' +
+                    `\`q!lb r#100\` - shows lb for given race number\n` +
+                    `\`q!lb yinandyang\` - shows lb for given race name (in this case yin and yang) **NOTE: Names MUST NOT have any spaces**\n` +
+                    `\`q!lb ${id}\` - shows lb for given race ID. For list of race IDs see <#846647839312445451> in [this server](${discord})\n` +
+                    `\`q!lb u#tsp\` - shows user placement`
             )
             .addField(
                 'Likely Cause(s)',

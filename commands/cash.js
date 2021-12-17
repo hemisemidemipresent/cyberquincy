@@ -1,5 +1,5 @@
-const round2 = require('../jsons/round2.json');
-const abrincome = require('../jsons/abrincome.json'); // array containing arrays, nth index is nth round, in the returned array 0th value is new cash, 1st value is total cash
+const income = require('../jsons/income-normal.json');
+const abrincome = require('../jsons/income-abr.json');
 const { cyber, orange } = require('../jsons/colours.json');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
@@ -9,9 +9,7 @@ const AnyOrderParser = require('../parser/any-order-parser');
 module.exports = {
     name: 'cash',
     aliases: ['ca', 'k', 'cost'],
-    execute(message, args) {
-        const r = round2.map((x) => x.cashThisRound);
-        const abr = abrincome.map((x) => x[0]);
+    async execute(message, args) {
         let parsed = CommandParser.parse(
             args,
             new AnyOrderParser(
@@ -37,21 +35,21 @@ module.exports = {
         let startRound = parsed.round;
         let embed;
         if (parsed.mode == 'abr') {
-            embed = this.calculate(cashNeeded, startRound, abr, 100, 1);
+            embed = this.calculate(cashNeeded, startRound, abrincome, 100, 1);
         } else if (parsed.mode == 'halfcash') {
-            embed = this.calculate(cashNeeded, startRound, r, 140, 0.5);
+            embed = this.calculate(cashNeeded, startRound, income, 140, 0.5);
         } else {
-            embed = this.calculate(cashNeeded, startRound, r, 140, 1);
+            embed = this.calculate(cashNeeded, startRound, income, 140, 1);
         }
-        message.reply({ embeds: [embed] });
+        await message.reply({ embeds: [embed] });
     },
-    errorMessage(message, parsingErrors) {
+    async errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
             .addField('Likely Cause(s)', parsingErrors.join('\n'))
             .setColor(cyber);
 
-        return message.reply({ embeds: [errorEmbed] });
+        return await message.reply({ embeds: [errorEmbed] });
     },
     freePlayMsg(cashNeeded, round) {
         let embed = new Discord.MessageEmbed()
@@ -67,7 +65,7 @@ module.exports = {
         let originalRound = round;
 
         while (cashSoFar <= cashNeeded) {
-            addToTotal = parseInt(r[round]);
+            addToTotal = parseInt(r[round].cashThisRound);
             cashSoFar += addToTotal * incomeMultiplier;
             addToTotal = 0;
             round++;
@@ -78,7 +76,7 @@ module.exports = {
 
         let embed = new Discord.MessageEmbed()
             .setTitle(
-                `You should get $${cashNeeded} before round ${round} starting at ${originalRound}`
+                `You should get $${cashNeeded} **before** round ${round} starting popping at ${originalRound}`
             )
             .setColor(cyber);
         return embed;

@@ -185,8 +185,11 @@ function findName(commandName) {
 }
 
 function oneUpgrade(sentences, level) {
+    let desc = sentences[level - 1];
+    if (typeof desc != 'string') desc = 'huh';
+
     return new Discord.MessageEmbed()
-        .setDescription(sentences[level - 1])
+        .setDescription(desc)
         .setColor(cyber)
         .setFooter(
             'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'

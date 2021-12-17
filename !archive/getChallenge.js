@@ -10,7 +10,7 @@ module.exports = {
             { json: true },
             (err, res, body) => {
                 if (err) {
-                    return console.log(err);
+                    return console.log(err.message);
                 }
                 let data = JSON.stringify(body, null, 4);
                 let g = base64ToArrayBuffer(data);

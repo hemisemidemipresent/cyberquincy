@@ -1,4 +1,4 @@
-const lengths = require('../jsons/roundlength.json');
+const roundlength = require('../jsons/roundlength.json');
 
 const { red, lightgrey, grey } = require('../jsons/colours.json');
 
@@ -16,18 +16,15 @@ module.exports = {
             new RoundParser(),
             new OptionalParser(new RoundParser()),
             new OptionalParser(new ExactStringParser('-t')),
-            new OptionalParser(new ModeParser('ABR'))
+            new OptionalParser(new ModeParser('abr'))
         );
         if (parsed.hasErrors()) {
             return await errorMessage(message, parsed.parsingErrors);
         }
-        if (parsed.mode == 'abr') {
-            return await message.channel.send(
-                'Hemi is still finding his data for abr round lengths. In the meantime spam ping hemi with the abr roundlengths nicely in an array thanks.'
-            );
-        }
+        if (!parsed.mode) parsed.mode = 'chimps';
+        let lengths = roundlength[parsed.mode];
         if (parsed.rounds.length == 1) {
-            let embed = oneRoundData(parsed);
+            let embed = oneRoundData(parsed, lengths);
             return await message.channel.send({ embeds: [embed] });
         } else {
             let startRound = parsed.rounds[0];
@@ -56,7 +53,7 @@ module.exports = {
  * @param {object} - parsed arguments
  * @returns {MesssageEmbed} - embed to send
  */
-function oneRoundData(parsed) {
+function oneRoundData(parsed, lengths) {
     let embed = new Discord.MessageEmbed()
         .setDescription(
             `round ${parsed.round} is ${

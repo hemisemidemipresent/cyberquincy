@@ -17,7 +17,7 @@ module.exports = {
     name: 'balance',
     dependencies: ['btd6index'],
 
-    aliases: ['changes', 'balances'],
+    aliases: ['bal'],
     execute,
 };
 

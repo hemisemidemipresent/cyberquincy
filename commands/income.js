@@ -1,5 +1,5 @@
-const r = require('../jsons/round2.json');
-const abr = require('../jsons/abrincome.json');
+const r = require('../jsons/income-normal.json');
+const abr = require('../jsons/income-abr.json');
 const { red, magenta, purple, yellow } = require('../jsons/colours.json');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
@@ -150,7 +150,10 @@ module.exports = {
     },
     abrIncome(startround, endround) {
         // the data works in a way that basically means that its an array of arrays, ordered by round number
-        let income = abr[endround - 2][1] - abr[startround - 3][1];
+        let startroundObject = abr[startround - 3]; // thats just how it works
+        let endroundObject = abr[endround - 2];
+        let income =
+            endroundObject.cumulativeCash - startroundObject.cumulativeCash;
         return new Discord.MessageEmbed()
             .setTitle(
                 `$${
@@ -195,7 +198,6 @@ chincomeMessage = function (mode, round) {
     })(mode);
 
     const asteriskMaybe = round == 6 ? '*' : '';
-
     incomeEmbed = new Discord.MessageEmbed()
         .setTitle(`${modeTitled} CHIMPS Incomes (R${round})`)
         .setColor(colours['cyber'])
@@ -266,59 +268,67 @@ calculateIncomes = function (mode, round) {
         superLincomeInclusive: null,
         superLincomeExclusive: null,
     };
-
     if (mode == 'abr') {
-        index = round - 2;
+        index = round;
 
-        incomes.rincome = abr[index][0];
-        if (round > 6) {
-            incomes.chincomeExclusive = abr[index - 1][1] - abr[3][1] + 650;
-        }
-        incomes.chincomeInclusive = abr[index][1] - abr[3][1] + 650;
-        if (round < 100) {
-            incomes.lincomeInclusive = abr[98][1] - abr[index - 1][1];
-        }
-        if (round < 99) {
-            incomes.lincomeExclusive = abr[98][1] - abr[index][1];
-        }
+        incomes.rincome = r[index].cashThisRound;
+        if (round > 6)
+            incomes.chincomeExclusive =
+                r[index - 1].cumulativeCash - r[2].cumulativeCash + 650;
+
+        incomes.chincomeInclusive =
+            r[index].cumulativeCash - r[2].cumulativeCash + 650;
+        if (round < 100)
+            incomes.lincomeInclusive =
+                r[100].cumulativeCash - r[index - 1].cumulativeCash;
+
+        if (round < 99)
+            incomes.lincomeExclusive =
+                r[100].cumulativeCash - r[index].cumulativeCash;
+
+        if (round > 100)
+            incomes.superChincomeInclusive = 'abr past 100 is random'; // these wont actually be shown in the embed since <round> cannot be greater than 100 if mode is abr
+
+        incomes.superLincomeInclusive = 'abr past 100 is random';
+
+        if (round < 140)
+            incomes.superLincomeExclusive = 'abr past 100 is random';
     } else {
         index = round;
 
         incomes.rincome = r[index].cashThisRound;
-        if (round > 6) {
+        if (round > 6)
             incomes.chincomeExclusive =
                 r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
-        }
+
         incomes.chincomeInclusive =
             r[index].cumulativeCash - r[5].cumulativeCash + 650;
-        if (round < 100) {
+        if (round < 100)
             incomes.lincomeInclusive =
                 r[100].cumulativeCash - r[index - 1].cumulativeCash;
-        }
-        if (round < 99) {
+
+        if (round < 99)
             incomes.lincomeExclusive =
                 r[100].cumulativeCash - r[index].cumulativeCash;
-        }
-        if (round > 100) {
+
+        if (round > 100)
             incomes.superChincomeInclusive =
                 r[index].cumulativeCash - r[100].cumulativeCash;
-        }
+
         incomes.superLincomeInclusive =
             r[140].cumulativeCash - r[index - 1].cumulativeCash;
-        if (round < 140) {
+        if (round < 140)
             incomes.superLincomeExclusive =
                 r[140].cumulativeCash - r[index].cumulativeCash;
-        }
 
-        if (mode == 'halfcash') {
+        if (mode == 'halfcash')
             for (incomeType in incomes) {
                 incomes[incomeType] /= 2;
             }
-        }
     }
 
     for (incomeType in incomes) {
-        if (incomes[incomeType]) {
+        if (incomes[incomeType] && typeof incomes[incomeType] == 'number') {
             incomes[incomeType] = gHelper.numberAsCost(
                 incomes[incomeType].toFixed(1)
             );

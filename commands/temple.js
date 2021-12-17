@@ -49,6 +49,7 @@ module.exports = {
                 parsed.cashs.push(undefined);
             }
         }
+        console.log(parsed);
         if (!parsed.temple_set) {
             ReactionChain.process(
                 message,

@@ -11,7 +11,10 @@ function numberWithCommas(x) {
 }
 
 function numberAsCost(x) {
-    return '$' + numberWithCommas(x);
+    let commas = numberWithCommas(x);
+    if (x.toString().startsWith('$')) return commas;
+
+    return '$' + commas;
 }
 
 function randomIntegerFromInclusiveRange(low, high) {
@@ -158,6 +161,24 @@ function binaryLambdaSearch(low, high, f) {
         else return binaryLambdaSearch(low, mid, f);
     }
 }
+function longestStrLength(arr) {
+    var max = arr[0].length;
+    arr.map((v) => (max = Math.max(max, v.length)));
+    return max;
+}
+function addSpaces(str, max) {
+    if (str == null || !str) {
+        str = ' '.repeat(max);
+        return str;
+    }
+    let diff = max - str.toString().length;
+
+    try {
+        str += ' '.repeat(diff);
+    } catch {}
+
+    return str;
+}
 
 module.exports = {
     is_str,
@@ -176,4 +197,6 @@ module.exports = {
     chunk,
     arraysEqual,
     binaryLambdaSearch,
+    longestStrLength,
+    addSpaces,
 };

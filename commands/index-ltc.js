@@ -235,7 +235,7 @@ async function getRowStandardData(message, entryRow, colset) {
         );
     }
 
-    return message.channel.send({ embeds: [challengeEmbed] });
+    return await message.channel.send({ embeds: [challengeEmbed] });
 }
 
 async function getRowAltData(message, entryRow, qualifier, colset) {

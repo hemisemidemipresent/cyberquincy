@@ -265,7 +265,7 @@ function displayHeroPlacementRounds(userQueryMessage, results) {
                     components: [buttons],
                 });
             } catch (E) {
-                console.log(E);
+                console.log(E.name);
             }
         }
 

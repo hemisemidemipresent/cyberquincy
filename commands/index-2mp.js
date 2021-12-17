@@ -43,7 +43,11 @@ RED_X = String.fromCharCode(10060);
 
 const buttons = new MessageActionRow().addComponents(
     new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY')
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
+    new MessageButton()
+        .setCustomId('mobile')
+        .setLabel('📱')
+        .setStyle('SECONDARY')
 );
 
 function execute(message, args) {
@@ -426,7 +430,7 @@ async function display2MPFilterAll(
         try {
             return message.channel.send(noCombosMessage);
         } catch (e) {
-            console.log(e);
+            console.log(e.name);
         }
     }
 
@@ -439,7 +443,7 @@ async function display2MPFilterAll(
 
     // Paginate if there are too many combos to display at once
     if (columns.TOWER.length > MAX_VALUES_LIST_LENGTH_2MP) {
-        return embedPages(message, title, columns, numOGCompletions);
+        return await embedPages(message, title, columns, numOGCompletions);
     }
 
     let challengeEmbed = new Discord.MessageEmbed()
@@ -469,9 +473,10 @@ async function display2MPFilterAll(
 }
 
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
-function embedPages(message, title, columns, numOGCompletions) {
+async function embedPages(message, title, columns, numOGCompletions) {
     let interaction = undefined;
     let botMessage = undefined;
+    let mobile = false;
     columnChunks = {};
     for (columnHeader in columns) {
         columnChunks[columnHeader] = gHelper.chunk(
@@ -484,41 +489,7 @@ function embedPages(message, title, columns, numOGCompletions) {
     numPages = columnChunks.LINK.length;
     pg = 0;
 
-    REACTIONS = ['⬅️', '➡️'];
-    // Gets the reaction to the pagination message by the command author
-    // and respond appropriate action (turning page or deleting message)
-    function reactLoop(msg) {
-        // Lays out predefined reactions
-        for (var i = 0; i < REACTIONS.length; i++) {
-            msg.react(REACTIONS[i]);
-        }
-
-        // Read author reaction (time limit specified below in milliseconds)
-        // and respond with appropriate action
-        const filter = (reaction, user) =>
-            user.id === message.author.id &&
-            REACTIONS.includes(reaction.emoji.name);
-        msg.createReactionCollector({ filter, time: 20000 }).once(
-            'collect',
-            (reaction) => {
-                switch (reaction.emoji.name) {
-                    case '⬅️':
-                        pg--;
-                        break;
-                    case '➡️':
-                        pg++;
-                        break;
-                    default:
-                        return msg.delete();
-                }
-                pg += numPages; // Avoid negative numbers
-                pg %= numPages; // Avoid page numbers greater than max page number
-                displayCurrentPage(msg);
-            }
-        );
-    }
-
-    async function displayCurrentPage(msg) {
+    async function displayCurrentPage() {
         const startCombo = pg * MAX_VALUES_LIST_LENGTH_2MP + 1;
         const endCombo = Math.min(
             (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP,
@@ -532,13 +503,31 @@ function embedPages(message, title, columns, numOGCompletions) {
                 'Combos',
                 `**${startCombo}-${endCombo}** of ${columns.LINK.length}`
             );
+        if (mobile) {
+            let arr = Array(endCombo - startCombo + 1 + 1).fill(''); // first +1 is because 1-12 contains 12 combos, the other +1 is for the titles (TOWER, PERSON, LINK)
 
-        for (columnHeader in columnChunks) {
-            challengeEmbed.addField(
-                columnHeader,
-                columnChunks[columnHeader][pg].join('\n'),
-                true
-            );
+            for (columnHeader in columnChunks) {
+                let obj = columnChunks[columnHeader];
+                let page = obj[pg];
+                page.unshift(columnHeader);
+                let max = gHelper.longestStrLength(page);
+                for (let i = 0; i < page.length; i++) {
+                    if (columnHeader != 'LINK')
+                        arr[i] += '`' + gHelper.addSpaces(page[i], max) + '`|';
+                    else arr[i] += page[i];
+                }
+                page.shift(columnHeader);
+            }
+
+            challengeEmbed.setDescription(arr.join('\n'));
+        } else {
+            for (columnHeader in columnChunks) {
+                challengeEmbed.addField(
+                    columnHeader,
+                    columnChunks[columnHeader][pg].join('\n'),
+                    true
+                );
+            }
         }
 
         if (numOGCompletions == 1) {
@@ -550,30 +539,42 @@ function embedPages(message, title, columns, numOGCompletions) {
             );
         }
 
-        if (msg) {
-            try {
-                await msg.reactions.cache
-                    .get('⬅️')
-                    .users.remove(message.author.id);
-                await msg.reactions.cache
-                    .get('➡️')
-                    .users.remove(message.author.id);
-            } catch (e) {
-                if (
-                    e.code === Discord.Constants.APIErrors.MISSING_PERMISSIONS
-                ) {
-                    return message.channel
-                        .send({ embeds: [challengeEmbed] })
-                        .then((m) => reactLoop(m));
-                } else {
-                    throw e;
+        if (interaction) {
+            await interaction.update({
+                embeds: [challengeEmbed],
+                components: [buttons],
+            });
+        } else {
+            botMessage = await message.channel.send({
+                embeds: [challengeEmbed],
+                components: [buttons],
+            });
+        }
+        const filter = (i) => i.user.id == message.author.id;
+
+        const collector = botMessage.createMessageComponentCollector({
+            filter,
+            time: 20000,
+        });
+        collector.on('collect', async (i) => {
+            collector.stop();
+            interaction = i;
+            if (i.customId == 'mobile') {
+                mobile = !mobile;
+            } else {
+                switch (parseInt(i.customId)) {
+                    case -1:
+                        pg--;
+                        break;
+                    case 1:
+                        pg++;
+                        break;
                 }
+                pg += numPages; // Avoid negative numbers
+                pg %= numPages;
             }
-            msg.edit(challengeEmbed).then((msg) => reactLoop(msg));
-        } else
-            message.channel
-                .send({ embeds: [challengeEmbed] })
-                .then((msg) => reactLoop(msg));
+            await displayCurrentPage();
+        });
     }
 
     displayCurrentPage();

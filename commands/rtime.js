@@ -1,38 +1,47 @@
-const lengths = require('../jsons/roundlength.json');
+const roundlength = require('../jsons/roundlength.json');
 
-const { red, palered, grey } = require('../jsons/colours.json');
+const { red, palered, grey, green } = require('../jsons/colours.json');
 
-const RoundParser = require('../parser/round-parser');
-const AnythingParser = require('../parser/anything-parser');
+const RoundParser = require('../parser/round-parser.js');
+const OptionalParser = require('../parser/optional-parser');
+const ModeParser = require('../parser/mode-parser');
+const TimeParser = require('../parser/time-parser');
+const AnyOrderParser = require('../parser/any-order-parser');
 module.exports = {
     name: 'rtime',
     aliases: ['racetime', 'rt', 'racet'],
     async execute(message, args) {
+        if (args[0] == 'help' || !args) return await helpMessage(message);
         let parsed = CommandParser.parse(
             args,
-            new RoundParser(),
-            new RoundParser(),
-            new AnythingParser()
+            new AnyOrderParser(
+                new RoundParser(),
+                new RoundParser(),
+                new OptionalParser(new ModeParser('ABR'), 'chimps'),
+                new TimeParser()
+            )
         );
         if (parsed.hasErrors()) {
             return await errorMessage(message, parsed.parsingErrors);
         }
-        parsed.rounds.sort();
-        let time = parseTime(parsed.anything);
-
-        if (time == undefined)
-            return await errorMessage(message, ['invalid time (probably)']);
+        let time = parsed.time;
         let ftime = formatTime(time);
+
+        let mode = parsed.mode;
+        let lengths = roundlength[mode];
+        // start, end round
+        parsed.rounds.sort();
         let start = parsed.rounds[0];
         let end = parsed.rounds[1];
-        let longest = findLongest(start, end);
+
+        let longest = findLongest(start, end, lengths);
         let sendTime =
             (longest - start) * 0.2 + lengths[longest - 1] + 0.0167 - 0.2;
         let finalStr = formatTime(time + sendTime);
         let sendStr = formatTime(time - sendTime);
         let str =
             `It takes **${
-                (end - start) * 0.2
+                Math.round((end - start) * 0.2 * 100) / 100
             }s** to send **r${start}** - **r${end}**, ` +
             `and r${longest} lasts **${formatTime(
                 lengths[longest - 1]
@@ -47,7 +56,7 @@ module.exports = {
         let embed = new Discord.MessageEmbed()
             .setTitle(`If you fullsended from **r${start}** to **r${end}**:`)
             .setDescription(str)
-            .setColor(palered);
+            .setColor(green);
         return await message.channel.send({ embeds: [embed] });
     },
 };
@@ -56,7 +65,11 @@ async function helpMessage(message) {
     let embed = new Discord.MessageEmbed()
         .setTitle('q!rtime help')
         .setDescription(
-            '`q!rtime <start round> <end round> <time>`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`'
+            '`q!rtime <start round> <end round> <time> [mode]`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`\nWhat this shows is:\n1. If you starting sending `startround` to `endround` at `time`, what time you will get\n2. If you want to get `time`, at what time should you start sending `start` to `end`'
+        )
+        .addField(
+            'examples',
+            ' • q!rtime 40 49 0:25\n • q!rtime 40 49 25\n • q!rtime 40 49 0:25 abr'
         )
         .setColor(grey);
     return await message.channel.send({ embeds: [embed] });
@@ -65,7 +78,7 @@ async function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('ERROR')
         .setDescription(
-            '`q!rtime <start round> <end round> <time>`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`'
+            '`q!rtime <start round> <end round> <time> [mode]`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`\nWhat this shows is:\n1. If you starting sending `startround` to `endround` at `time`, what time you will get\n2. If you want to get `time`, at what time should you start sending `start` to `end`'
         )
         .addField(
             'Likely Cause(s)',
@@ -76,6 +89,7 @@ async function errorMessage(message, parsingErrors) {
     return await message.channel.send({ embeds: [errorEmbed] });
 }
 function parseTime(hms) {
+    console.log(hms);
     if (!isNaN(hms)) return parseFloat(hms);
     var a = hms.split(':'); // split it at the colons
     let h = 0;
@@ -106,14 +120,14 @@ function parsetime(s) {
     milliseconds = milliseconds < 100 ? '0' + milliseconds : milliseconds;
     return minutes + ':' + seconds + '.' + milliseconds;
 }
-function findLongest(startRound, endRound) {
+function findLongest(startRound, endRound, lengths) {
     let longestRound = 0;
     let longestLength = 0;
     let j = 0;
     for (i = startRound; i <= endRound; i++) {
         if (longestLength < lengths[i] + j * 0.2) {
             longestLength = lengths[i] + j * 0.2;
-            longestRound = i + 1;
+            longestRound = i;
         }
         j++;
     }

@@ -24,7 +24,6 @@ const links = [
 ];
 
 const { red, cyber } = require('../jsons/colours.json');
-const request = require('request');
 const axios = require('axios').default;
 
 const costs = require('../jsons/costs.json');
@@ -34,7 +33,6 @@ const UpgradeSetParser = require('../parser/upgrade-set-parser');
 const Discord = require('discord.js');
 const gHelper = require('../helpers/general.js');
 const { discord } = require('../aliases/misc.json');
-const { errorMessage } = require('./racelb');
 
 const aliases = [
     ['dart-monkey', 'dart', 'dm'],
@@ -62,7 +60,7 @@ const aliases = [
     ['monkey-ace', 'ace', 'pilot', 'plane'],
     ['heli-pilot', 'heli', 'helicopter', 'helipilot'],
     ['mortar-monkey', 'mortar', 'mor'],
-    ['dartling-gunner', 'dartling', 'dartl', 'gatling', 'dl'],
+    ['dartling-gunner', 'dartling', 'gatling', 'dl'],
     ['wizard-monkey', 'wizard', 'apprentice', 'wiz'],
     ['super-monkey', 'super', 'supermonkey'],
     ['ninja-monkey', 'ninja', 'n', 'ninj', 'shuriken'],
@@ -98,7 +96,6 @@ const aliases = [
         'sf',
         'spacc',
         'spikeshooter',
-        'basetrash',
         'spact',
         'spactory',
     ],
@@ -134,13 +131,84 @@ module.exports = {
 
     async execute(message, args, commandName) {
         if (args.includes('paragon') || args.includes('600')) {
-            return message.channel.send('use q!paragon <tower> [degree]');
+            return await message.channel.send('use q!paragon <tower> [degree]');
         }
         parsed = CommandParser.parse(
             args,
             new OptionalParser(new UpgradeSetParser())
         );
-
+        if (commandName == '<tower>') {
+            if (!parsed.upgrade_set) {
+                let upgrades = [
+                    '000',
+                    '010',
+                    '001',
+                    '110',
+                    '101',
+                    '011',
+                    '200',
+                    '020',
+                    '002',
+                    '210',
+                    '220',
+                    '201',
+                    '202',
+                    '120',
+                    '021',
+                    '022',
+                    '102',
+                    '012',
+                    '300',
+                    '310',
+                    '320',
+                    '301',
+                    '302',
+                    '030',
+                    '230',
+                    '031',
+                    '032',
+                    '003',
+                    '103',
+                    '203',
+                    '013',
+                    '023',
+                    '400',
+                    '410',
+                    '420',
+                    '401',
+                    '402',
+                    '040',
+                    '140',
+                    '240',
+                    '041',
+                    '042',
+                    '004',
+                    '104',
+                    '204',
+                    '014',
+                    '024',
+                    '500',
+                    '510',
+                    '520',
+                    '501',
+                    '502',
+                    '050',
+                    '150',
+                    '250',
+                    '051',
+                    '052',
+                    '005',
+                    '105',
+                    '205',
+                    '015',
+                    '025',
+                ];
+                parsed.upgrade_set =
+                    upgrades[Math.floor(Math.random() * upgrades.length)];
+            }
+            commandName =
+                aliases[Math.floor(Math.random() * aliases.length)][0];
+        }
         if (parsed.hasErrors())
             await module.exports.errorMessage(message, parsed.parsingErrors);
         else await process(parsed.upgrade_set || '000', commandName, message);
@@ -225,7 +293,7 @@ async function process(upgrade, commandName, message) {
                     .addField(
                         'cost',
                         `${cost} - medium\n${hard(cost)} - hard\n` +
-                            `if this is wrong [yell at hemi here](https://discord.gg/VMX5hZA)`,
+                            `if this is wrong [yell at hemi here](${discord})`,
                         true
                     )
                     .addField(
@@ -247,7 +315,7 @@ async function process(upgrade, commandName, message) {
             }
         }
     } catch {
-        await errorMessage(message, [
+        await module.exports.errorMessage(message, [
             'something went wrong while fetching the tower stats',
         ]);
     }

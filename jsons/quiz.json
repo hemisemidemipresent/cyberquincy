@@ -868,5 +868,35 @@
             "Sniper Monkey and Glue Gunner"
         ],
         "ans": 3
+    },
+    {
+        "question": "What is the name of the sentry that shoots bombs?",
+        "optns": [
+            "Bomb Sentry",
+            "Boom Sentry",
+            "'Splodey Sentry",
+            "Sentry Bomba"
+        ],
+        "ans": 1
+    },
+    {
+        "question": "What is the (default) hotkey for Banana Farmer?",
+        "optns": [
+            "Shift+3",
+            "Shift+4",
+            "Shift+5",
+            "Shift+6"
+        ],
+        "ans": 2
+    },
+    {
+        "question": "Which detail of elite sniper's _artwork_ is **not** depicted in the _in-game model_?",
+        "optns": [
+            "A naked tail",
+            "A green strip on the scope",
+            "Boots",
+            "Exactly 7 goggle lenses"
+        ],
+        "ans": 2
     }
 ]

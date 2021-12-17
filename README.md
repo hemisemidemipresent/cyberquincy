@@ -2,7 +2,11 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy/badge)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy) [![PRs](https://badgen.net/github/prs/hemisemidemipresent/cyberquincy)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy) [![stars](https://badgen.net/github/stars/hemisemidemipresent/cyberquincy)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy) [![forks](https://badgen.net/github/forks/hemisemidemipresent/cyberquincy)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy)
 
-Cyber Quincy is a BTD6 Discord bot.
+![Cyber Quincy](https://cdn.discordapp.com/attachments/764803099462205451/921251017264353329/unknown.png)
+
+art by [u/Projekt_Knyte](https://www.reddit.com/r/btd6/comments/f8rm5w/so_i_havent_drawn_cyber_quincy_yet/)
+
+Cyber Quincy is the most polished BTD6 discord bot from providing information on towers, hero, rounds, maps, as well as calculating cash from rounds and hero levelling. (and more)
 
 ### Links
 
@@ -11,8 +15,6 @@ Cyber Quincy is a BTD6 Discord bot.
 -   [website](https://cq.netlify.com)
 
 **For help, simply use `q!help`**
-
-> note: the 'Advertisements' you see here and in the code aren't for money, they just "advertise" the discord server and invite link. I can't think of a better name.
 
 # Basic local test guide
 
@@ -34,36 +36,29 @@ Cyber Quincy is a BTD6 Discord bot.
 -   `discord.js` what makes this bot work
 -   `node-fetch` for accessing [popology source](http://topper64.co.uk/nk/btd6/dat/towers.json)
 -   `pluralize` used in parser
+-   `lex` used in `q!calc`
 -   `filepath` used in alias reopsitory
-
-## Used, but technically optional
-
 -   `express` used to receive pings to keep app awake
 -   `google-spreadsheet` to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) and [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
+-   `lodash.clonedeep`,`lodash.isequal`: for `q!2tc` and `q!balance`, respectively
 -   `statcord` used for [bot statistics](https://statcord.com/bot/591922988832653313)
--   `atob`, `zlib` used for fetching challenge data from NK
--   `node-dgdata` custom library for using NK API disguised as a dgdata fetcher
+-   `atob`, `zlib` used for fetching some data from NK
+-   `axios`: used for requests
+-   `request`: also used for requests
+-   `node-dgdata` [custom library](https://github.com/hemisemidemipresent/dgdata) for using NK API disguised as a dgdata fetcher
 -   `discord.js-minesweeper`: used for minesweeper
--   
+-   `imgur`: used for `q!imgur`
+-   `hastebin-gen`: for very specific debugging
+
 ## Optional
 
 -   `bufferutil` for a much faster WebSocket connection
 -   `utf-8-validate` in combination with bufferutil for much faster WebSocket processing
--   `sequelize-cli` if you want to make changes (or migrations or something) to the database, (al)though you shouldn't be preferably, just suggest something instead. If you are interested check [this guide](https://dev.to/nedsoft/add-new-fields-to-existing-sequelize-migration-3527) (this makes a `./migrations` folder)
-
-# Database fields
-
-(I think they are called fields)
-
--   `xp` - user xp
--   `level` - isn't really used since you can reverse-engineer the level from xp
--   `showAds` - setting for turning on/off the ads in `./helpers/advertisments.js`
--   `showLevelUpMsg` - setting for turning on/off level up messages in `./helpers/xp.js`
--   `quiz` - how many q!quiz questions they answered correctly
--   `freezexp` - unused
 
 # Contributing Guidelines
 
 -   try to use camelCase
 -   dont use `var` to define variables. JS is weird enough
--   try not to do too much at once
+-   try not to do too much at once (for pull requests)
+-   util functions/classes/modules _should_ go to `./helpers` (maybe except if they are specific to only one command)
+-   [how the bot generally works](./ARCHITECHTURE.md)

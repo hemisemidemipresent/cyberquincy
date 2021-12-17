@@ -100,7 +100,7 @@ function consoleBootup() {
             } else console.error(status);
         });
         statcord.autopost().catch((error) => {
-            console.log(error);
+            console.log(error.name);
             console.error('[ERROR] Something is wrong with statcord autopost');
         });
 

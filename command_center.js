@@ -46,8 +46,8 @@ async function handleCommand(message) {
             );
         }
 
-        // Command tokens are space-separated tokens starting immediately after the `!`
-        let args = c.slice(PREFIX.length).split(/ +/);
+        // Command tokens are space(or newline)-separated tokens starting immediately after the `!`
+        let args = c.slice(PREFIX.length).split(/[\n\s]+/);
 
         // The command name is the first token; args are the rest
         const commandName = args.shift();
@@ -116,7 +116,7 @@ async function handleCommand(message) {
 
         if (command.beta && message.channel.guild.id != cyberquincyServer) {
             return message.channel.send(
-                'This command is in beta, join https://discord.gg/VMX5hZA to beta test the command'
+                `This command is in beta, join ${discord} to beta test the command`
             );
         }
         await command.execute(message, canonicalArgs, commandName);
@@ -145,6 +145,7 @@ async function handleCommand(message) {
         if (error.message.includes('Missing Permissions')) return;
         try {
             console.log(error);
+            console.log(message.content);
             const errorEmbed = new Discord.MessageEmbed()
                 .setColor(colours['red'])
                 .setDescription('Oh no! Something went wrong!')

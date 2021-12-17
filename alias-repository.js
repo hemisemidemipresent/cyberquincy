@@ -140,7 +140,7 @@ class AliasRepository extends Array {
             if (e instanceof AliasError) {
                 console.log(e.message);
             } else {
-                console.log(e);
+                console.log(e.name);
             }
         }
         this.push(ag);

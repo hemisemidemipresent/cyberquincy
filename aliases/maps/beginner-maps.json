@@ -100,5 +100,12 @@
         "end",
         "road",
         "eotr"
+    ],
+    "cabin": [
+        "cb",
+        "cbt",
+        "cab",
+        "the_cabin",
+        "le_cabin"
     ]
 }

@@ -16,7 +16,8 @@
         "kart",
         "karts",
         "karts_n_darts ",
-        "kartsn"
+        "kartsn",
+        "knd"
     ],
     "firing_range": [
         "fr",
@@ -74,6 +75,7 @@
     ],
     "bloonarius_prime": [
         "blp",
-        "bloonarius"
+        "bloonarius",
+        "bprime"
     ]
 }

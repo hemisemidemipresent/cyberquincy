@@ -69,7 +69,6 @@ const aliases = [
         'sf',
         'spacc',
         'spikeshooter',
-        'basetrash',
         'spact',
         'spactory',
     ],

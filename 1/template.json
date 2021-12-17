@@ -14,11 +14,9 @@
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
     "client_x509_cert_url": "",
     "statcord": "statcord.com-token",
-    "discordbotlist": "..",
     "btd6index": true,
     "botposting": false,
-    "towerJSON": true,
     "reddit": false,
     "testing": true,
-    "btd6Version": 23
+    "btd6Version": 28
 }

@@ -406,7 +406,7 @@ module.exports = {
         const collector = await message.channel.createMessageComponentCollector(
             {
                 filter,
-                time: 5000,
+                time: 10000,
             }
         );
         collector.on('collect', async (i) => {

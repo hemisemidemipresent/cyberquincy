@@ -20,7 +20,7 @@ const raceEmojis = Emojis[seclateServerID + ''].race;
 
 const raceImg =
     'https://static.wikia.nocookie.net/b__/images/4/40/EventRaceIcon.png/revision/latest/scale-to-width-down/340?cb=20200616225307&path-prefix=bloons';
-const id = 'Captarn_kwzsz43l';
+const id = 'Lotus_of_the_jungle_kx8dwx14';
 
 module.exports = {
     name: 'raceleaderboard',
@@ -32,7 +32,7 @@ module.exports = {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        let raceID = 'Captarn_kwzsz43l';
+        let raceID = 'Lotus_of_the_jungle_kx8dwx14';
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,10 +135,7 @@ module.exports = {
                     `\`q!lb ${id}\` - shows lb for given race ID. For list of race IDs see <#846647839312445451> in [this server](${discord})\n` +
                     `\`q!lb u#tsp\` - shows user placement`
             )
-            .addField(
-                'Why are usernames missing?',
-                'for some races player info is just gone. Post-28.0 NK has hidden all usernames behind actual security so they are now inaccessible'
-            )
+
             .setFooter(
                 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins), if you are in t100 the lb you see is more accurate'
             )

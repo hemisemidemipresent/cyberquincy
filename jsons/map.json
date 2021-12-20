@@ -208,6 +208,20 @@
         "thu": "https://media.discordapp.net/attachments/770094137713885204/907549000427798578/826.png",
         "e": "1/1"
     },
+    "quiet_street": {
+        "ver": 6,
+        "len": [
+            24.4,
+            25.2
+        ],
+        "lenStr": "24.4 - normal\n25.2 - moab",
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "yes",
+        "los": "",
+        "thu": "https://media.discordapp.net/attachments/598768319625035776/921259883033157642/826.png",
+        "e": "3/3"
+    },
     "moon_landing": {
         "ver": 6,
         "len": 35.5,

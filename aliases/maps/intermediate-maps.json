@@ -77,5 +77,9 @@
         "blp",
         "bloonarius",
         "bprime"
+    ],
+    "quiet_street": [
+        "qs",
+        "quiet"
     ]
 }

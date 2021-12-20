@@ -113,10 +113,7 @@ module.exports = {
                 '`q!blb 1 50` - shows lb from 1st place to 50th place\n' +
                     `\`q!blb 5\` - shows lb for the 5th boss event\n`
             )
-            .addField(
-                'Why are usernames missing?',
-                'Post-28.0 NK has hidden all usernames behind actual security so they are now inaccessible'
-            )
+
             .setFooter(
                 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins), if you are in t100 the lb you see is more accurate'
             )

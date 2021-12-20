@@ -2,7 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy/badge)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy) [![PRs](https://badgen.net/github/prs/hemisemidemipresent/cyberquincy)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy) [![stars](https://badgen.net/github/stars/hemisemidemipresent/cyberquincy)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy) [![forks](https://badgen.net/github/forks/hemisemidemipresent/cyberquincy)](https://www.codefactor.io/repository/github/hemisemidemipresent/cyberquincy)
 
-![Cyber Quincy](https://cdn.discordapp.com/attachments/764803099462205451/921251017264353329/unknown.png)
+![Cyber Quincy](https://cdn.discordapp.com/attachments/764803099462205451/921251017264353329/unknown.png?size=16)
 
 art by [u/Projekt_Knyte](https://www.reddit.com/r/btd6/comments/f8rm5w/so_i_havent_drawn_cyber_quincy_yet/)
 

@@ -22,7 +22,7 @@ const aliases = [
         'boo',
         'bomer',
         'rangs',
-        'bomerrang',
+        'bomerrang'
     ],
     ['bomb-shooter', 'bs', 'cannon', 'bomb'],
     ['tack-shooter', 'tac', 'tak', 'ta', 'tacc', 'tack'],
@@ -52,7 +52,7 @@ const aliases = [
         'liquor',
         'intoxicant',
         'liquid',
-        'op',
+        'op'
     ],
     ['druid', 'drood', 'd'],
     ['banana-farm', 'farm', 'monkeyfarm'],
@@ -70,7 +70,7 @@ const aliases = [
         'spacc',
         'spikeshooter',
         'spact',
-        'spactory',
+        'spactory'
     ],
     [
         'monkey-village',
@@ -84,17 +84,9 @@ const aliases = [
         'hut',
         'circle',
         'fort',
-        'village',
+        'village'
     ],
-    [
-        'engineer-monkey',
-        'engineer',
-        'engie',
-        'engi',
-        'eng',
-        'overclock',
-        'engie',
-    ],
+    ['engineer-monkey', 'engineer', 'engie', 'engi', 'eng', 'overclock', 'engie']
 ];
 module.exports = {
     name: '<tower>',
@@ -107,10 +99,7 @@ module.exports = {
 
         let name = findName(commandName);
 
-        parsed = CommandParser.parse(
-            args,
-            new OptionalParser(new UpgradeSetParser(), '000')
-        );
+        parsed = CommandParser.parse(args, new OptionalParser(new UpgradeSetParser(), '000'));
 
         if (parsed.hasErrors()) {
             return provideHelpMsg(message, name);
@@ -123,7 +112,7 @@ module.exports = {
 
         const embed = anyOtherTower(towerJSON, name, parsed.upgrade_set);
         return message.channel.send({ embeds: [embed] });
-    },
+    }
 };
 function provideHelpMsg(message, name) {
     let str = `Please use the number in \`\`codeblocks\`\` to specify the upgrade.\nFor example, **q!${name} 030**`;
@@ -142,7 +131,7 @@ function provideHelpMsg(message, name) {
         '002',
         '003',
         '004',
-        '005',
+        '005'
     ];
     for (let i = 0; i < 15; i++) {
         let path;
@@ -176,23 +165,16 @@ function baseTower(name) {
     const embed = new Discord.MessageEmbed()
         .setColor(cyber)
         .setTitle(object.name)
-        .addField(
-            'cost',
-            `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`
-        )
+        .addField('cost', `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`)
         .addField('notes', object.notes, true)
         .setFooter(
-            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
+            'd:dmg md:moab dmg cd:ceram dmg p:pierce r:range s:time btw attacks j:projectile count q!ap for help and elaboration'
         );
     return embed;
 }
 
 function anyOtherTower(json, name, upgradeSet) {
-    const totalCost = Towers.totalTowerUpgradeCrosspathCost(
-        json,
-        name,
-        upgradeSet
-    );
+    const totalCost = Towers.totalTowerUpgradeCrosspathCost(json, name, upgradeSet);
 
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
     let object = json[`${name}`].upgrades[path - 1][tier - 1];
@@ -204,16 +186,8 @@ function anyOtherTower(json, name, upgradeSet) {
     const embed = new Discord.MessageEmbed()
         .setColor(cyber)
         .setTitle(`${object.name} (${upgradeSet.split('').join('-')})`)
-        .addField(
-            'Cost',
-            `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`,
-            true
-        )
-        .addField(
-            'Total cost',
-            `${hard(totalCost)} (hard), ${totalCost} (medium)`,
-            true
-        )
+        .addField('Cost', `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`, true)
+        .addField('Total cost', `${hard(totalCost)} (hard), ${totalCost} (medium)`, true)
         .addField('Notes', object.notes)
         .addField('XP Needed:', `${object.xp}`, true)
         .setFooter(

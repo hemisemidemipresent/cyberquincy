@@ -15,18 +15,19 @@ module.exports = {
     PREDET_CHIMPS_ROUNDS,
     ALL_ROUNDS,
     /**
-     *
+     * @summary returns back the multiplicative factor for health ramping
      * @param {int} round
-     * @returns {int} percentage increase
+     * @returns {int} multiplicative percentage increase
      */
-    getRamping(round) {
-        if (round < 81) return 0;
-        let r1 = 2,
-            r2 = 5,
-            r3 = 15;
-        if (round < 101) return (round - 80) * r1;
-        if (round < 125) return 20 * r1 + (round - 100) * r2;
-        if (round < 152) return 20 * r1 + 24 * r2 + (round - 124) * r3;
-        return 20 * r1 + 24 * r2 + 27 * r3 + (round - 151) * 35;
-    },
+    getRamping(r) {
+        if (r <= 80) return 1;
+        else if (r <= 100) return (r - 30) / 50;
+        else if (r <= 124) return (r - 72) / 20;
+        else if (r <= 150) return (3 * r - 320) / 20;
+        else if (r <= 250) return (7 * r - 920) / 20;
+        else if (r <= 300) return r - 208.5;
+        else if (r <= 400) return (3 * r - 717) / 2;
+        else if (r <= 500) return (5 * r - 1517) / 2;
+        else return 5 * r - 2008.5;
+    }
 };

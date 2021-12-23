@@ -11,8 +11,7 @@ const gHelper = require('../helpers/general.js');
 const FBG = require('../jsons/freeplay.json');
 
 async function execute(message, args, originalCommandName) {
-    if (args.length == 0 || args[0] == 'help')
-        return module.exports.helpMessage(message);
+    if (args.length == 0 || args[0] == 'help') return module.exports.helpMessage(message);
 
     let parsed;
     if (originalCommandName.includes('abr')) {
@@ -43,9 +42,7 @@ async function execute(message, args, originalCommandName) {
     [xp, totalxp] = calculateXps(parsed.round);
     let roundInfo = isAbr ? json.alt : json.reg;
     let roundLength = getLength(parsed.round, roundInfo);
-    let roundContents = rounds[`${isAbr ? 'a' : ''}r${parsed.round}`]
-        .split(',')
-        .join('\n');
+    let roundContents = rounds[`${isAbr ? 'a' : ''}r${parsed.round}`].split(',').join('\n');
     let roundRBE = isAbr ? 'Not available in ABR' : rounds2[parsed.round].rbe;
     let roundCash = rounds2[parsed.round].cashThisRound;
     if (isAbr) {
@@ -60,34 +57,19 @@ async function execute(message, args, originalCommandName) {
         .setDescription(`${roundContents}`)
         .addField('Round Length (seconds)', roundLength.toString(), true)
         .addField('RBE', `${gHelper.numberWithCommas(roundRBE)}`, true)
-        .addField(
-            `XP Earned on R${parsed.round}`,
-            `${gHelper.numberWithCommas(xp)}`,
-            true
-        )
-        .addField(
-            `Cash Earned from R${parsed.round}`,
-            `${gHelper.numberAsCost(roundCash)}`,
-            true
-        )
-        .addField(
-            'Total XP if You Started on R1',
-            `${gHelper.numberWithCommas(totalxp)}`
-        )
+        .addField(`XP Earned on R${parsed.round}`, `${gHelper.numberWithCommas(xp)}`, true)
+        .addField(`Cash Earned from R${parsed.round}`, `${gHelper.numberAsCost(roundCash)}`, true)
+        .addField('Total XP if You Started on R1', `${gHelper.numberWithCommas(totalxp)}`)
         .addField(
             '**Note:**',
             ' • If you are in freeplay (e.g. round 41 on easy mode), the xp value is 0.3 of what is displayed\n' +
                 ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
         )
-        .setFooter(
-            `For more data on round incomes use \`q!income${
-                isAbr ? ' abr' : ''
-            } <round>\``
-        )
+        .setFooter(`For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\``)
         .setColor(colours['cyber']);
     if (parsed.round > 80) {
         let ramping = b.getRamping(parsed.round);
-        roundEmbed.addField('health and speed ramping', `+${ramping}%`);
+        roundEmbed.addField('health and speed ramping', `${ramping}x`);
     }
     await message.channel.send({ embeds: [roundEmbed] });
 }
@@ -147,7 +129,7 @@ function freeplay(round) {
     let bloonSets = getBloonSets(round);
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${parsed.round}` + (parsed.mode == 'abr' ? ' ABR' : ''))
-        .addField('health and speed ramping', `+${ramping}%`)
+        .addField('health ramping', `${ramping}x`)
         .setDescription(`all **POSSIBLE** bloon sets\n${bloonSets.join('\n')}`)
         .addField(
             `XP Earned on R${parsed.round}`,
@@ -172,16 +154,7 @@ function freeplay(round) {
         .setColor(colours['cyber']);
     return roundEmbed;
 }
-function getRamping(round) {
-    let ramp = 0;
-    if (round < 101) return (ramp += (round - 80) * 2);
-    ramp += 40;
-    if (round < 125) return (ramp += (round - 100) * 5);
-    ramp += 120;
-    if (round < 152) return (ramp += (round - 124) * 15);
-    ramp += 540;
-    return (ramp += (round - 151) * 35);
-}
+
 function getBloonSets(round) {
     let bloonSets = [];
     for (let i = 0; i < FBG.length; i++) {
@@ -205,5 +178,5 @@ module.exports = {
     aliases: ['r', 'abr'],
     execute,
     helpMessage,
-    errorMessage,
+    errorMessage
 };

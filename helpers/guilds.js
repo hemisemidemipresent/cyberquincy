@@ -35,8 +35,8 @@ async function addMember(member) {
     if (member.guild.id == CYBER_SUPPORT) {
         let tag = await Tags.findOne({
             where: {
-                name: member.id,
-            },
+                name: member.id
+            }
         });
         // Create db user if it doesn't already exist
         if (!tag) {
@@ -45,7 +45,7 @@ async function addMember(member) {
                 xp: 0,
                 showAds: true,
                 showLevelUpMsg: true,
-                quiz: 0,
+                quiz: 0
             });
         }
         let level = xp.xpToLevel(tag.xp);
@@ -71,7 +71,7 @@ async function addMember(member) {
             )
             .addField(
                 'related links',
-                '[reddit post](https://www.reddit.com/r/btd6/comments/ejuqcj/official_btd6_index_overview/)\n[BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit?usp=sharing)'
+                '[reddit post](https://www.reddit.com/r/btd6/comments/ejuqcj/official_btd6_index_overview/)\n[BTD6 Index](https://docs.google.com/spreadsheets/d/16of-RFUD1FteVchU9S4vAht39nlh1iraeoNA4u3R9cw/edit?usp=sharing)'
             )
             .addField(
                 'Who am I?',
@@ -113,5 +113,5 @@ module.exports = {
     CYBER_SUPPORT,
     BTD6_INDEX,
     RACE_SERVER,
-    EMOJIS_SERVER,
+    EMOJIS_SERVER
 };

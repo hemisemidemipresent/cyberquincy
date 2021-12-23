@@ -15,19 +15,16 @@ module.exports = {
             args,
             new AnyOrderParser(
                 new CashParser(),
+                new RoundParser('ALL'),
                 new OptionalParser(
                     new ModeParser('CHIMPS', 'ABR', 'HALFCASH'),
                     'CHIMPS' // default if not provided
-                ),
-                new RoundParser('ALL')
+                )
             )
         );
 
         if (parsed.hasErrors()) {
-            return await module.exports.errorMessage(
-                message,
-                parsed.parsingErrors
-            );
+            return await module.exports.errorMessage(message, parsed.parsingErrors);
         }
 
         let cashNeeded = parsed.cash;
@@ -55,9 +52,7 @@ module.exports = {
     },
     freePlayMsg(cashNeeded, round) {
         let embed = new Discord.MessageEmbed()
-            .setTitle(
-                `You cant get $${cashNeeded} from popping bloons before round ${round}`
-            )
+            .setTitle(`You cant get $${cashNeeded} from popping bloons by round ${round}`)
             .setFooter('freeplay is random, hence cash is random')
             .setColor(orange);
         return embed;
@@ -74,15 +69,15 @@ module.exports = {
             round--;
 
             if (round < 1) {
-                return this.freePlayMsg(cashNeeded, parsed.round);
+                return this.freePlayMsg(cashNeeded, originalRound);
             }
         }
         round++; // the last round-- is unecessary. There is a better way to do this
         let embed = new Discord.MessageEmbed()
             .setTitle(
-                `You should get $${cashNeeded} **before** round ${originalRound} if you start saving up (popping) at round ${round}`
+                `You should get $${cashNeeded} BEFORE round ${originalRound} if you start saving up (popping) at round ${round}`
             )
             .setColor(cyber);
         return embed;
-    },
+    }
 };

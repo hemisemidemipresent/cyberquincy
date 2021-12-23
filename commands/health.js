@@ -8,9 +8,7 @@ module.exports = {
         //THIS CODE IS A MESS
 
         if (!args[1] || isNaN(args[1])) {
-            return message.channel.send(
-                'the command is q!health <blimp> <round>'
-            );
+            return message.channel.send('the command is q!health <blimp> <round>');
         }
         let bloonName = args[0];
         let round = args[1];
@@ -31,18 +29,16 @@ module.exports = {
         }
         //percentage increase
 
-        let bhealth = Math.floor(baseHealth * (1 + b.getRamping(round) / 100));
+        let bhealth = Math.floor(baseHealth * b.getRamping(round));
 
         if (round > 80) {
             return message.channel.send(
                 `${bhealth} pops are needed to pop this blimp (not including children)`
             );
         } else if (round < 1) {
-            return message.channel.send(
-                'quincy has no experience in these rounds'
-            );
+            return message.channel.send('quincy has no experience in these rounds');
         } else if (round > 0 && round < 81) {
             return message.channel.send(`${baseHealth}`);
         }
-    },
+    }
 };

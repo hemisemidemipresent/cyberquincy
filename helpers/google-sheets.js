@@ -1,4 +1,4 @@
-const BTD6_INDEX_KEY = '1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA';
+const BTD6_INDEX_KEY = '16of-RFUD1FteVchU9S4vAht39nlh1iraeoNA4u3R9cw';
 
 async function load(key) {
     const { GoogleSpreadsheet } = require('google-spreadsheet');
@@ -16,9 +16,7 @@ async function load(key) {
 
 function sheetByName(doc, title) {
     // Filter sheets by the one that matches the given `title`
-    const sheet = doc.sheetsByIndex.find(
-        (s) => s.title.toLowerCase() === title.toLowerCase()
-    );
+    const sheet = doc.sheetsByIndex.find((s) => s.title.toLowerCase() === title.toLowerCase());
 
     if (sheet) {
         return sheet;
@@ -28,31 +26,32 @@ function sheetByName(doc, title) {
 }
 
 function rowColToA1(row, col) {
-    return `${getA1ColumnName(col)}${row}`
+    return `${getA1ColumnName(col)}${row}`;
 }
 
-function getA1ColumnName(col)
-{
+function getA1ColumnName(col) {
     dividend = col;
-    columnName = "";
+    columnName = '';
 
-    while (dividend > 0)
-    {
+    while (dividend > 0) {
         modulo = (dividend - 1) % 26;
         columnName = String.fromCharCode(65 + modulo) + columnName;
         dividend = Math.floor((dividend - modulo) / 26);
-    } 
+    }
 
     return columnName;
 }
 
 function getColumnIndexFromLetter(letter) {
-    var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', i, j, result = 0;
+    var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        i,
+        j,
+        result = 0;
 
     for (i = 0, j = letter.length - 1; i < letter.length; i += 1, j -= 1) {
-      result += Math.pow(base.length, j) * (base.indexOf(letter[i]) + 1);
+        result += Math.pow(base.length, j) * (base.indexOf(letter[i]) + 1);
     }
-  
+
     return result - 1;
 }
 
@@ -62,5 +61,5 @@ module.exports = {
     load,
     sheetByName,
     rowColToA1,
-    getColumnIndexFromLetter,
+    getColumnIndexFromLetter
 };

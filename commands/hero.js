@@ -13,7 +13,7 @@ const aliases = [
         'cyber',
         'furry',
         'cq',
-        'uincy',
+        'uincy'
     ],
 
     [
@@ -26,7 +26,7 @@ const aliases = [
         'gwendolin',
         'gwend',
         'gwendo',
-        'fire',
+        'fire'
     ],
     ['striker-jones', 'sj', 'striker', 'bones', 'jones', 'biker', 'who'],
     ['obyn-greenfoot', 'obyn', 'greenfoot', 'o', 'ocyn'],
@@ -40,7 +40,7 @@ const aliases = [
         'captain',
         'tank',
         'winston',
-        'hill',
+        'hill'
     ],
     [
         'benjamin',
@@ -53,7 +53,7 @@ const aliases = [
         'benjammin',
         "benjammin'",
         'yeet',
-        'boy',
+        'boy'
     ],
     ['ezili', 'e', 'ez', 'voodo', 'vm', 'ezi', 'ezil', 'voodoo'],
     [
@@ -67,32 +67,13 @@ const aliases = [
         'snowman',
         'fusticator',
         'patfrosty',
-        'thicc',
+        'thicc'
     ],
-    [
-        'adora',
-        'ad',
-        'ador',
-        'ado',
-        'dora',
-        'priestess',
-        'high',
-        'highpriestess',
-    ],
+    ['adora', 'ad', 'ador', 'ado', 'dora', 'priestess', 'high', 'highpriestess'],
     ['admiral-brickell', 'brick', 'brickell', 'brickel'],
-    [
-        'etienne',
-        'etiene',
-        'french',
-        'etine',
-        'etinne',
-        'etenne',
-        'et',
-        'eti',
-        'drone',
-    ],
+    ['etienne', 'etiene', 'french', 'etine', 'etinne', 'etenne', 'et', 'eti', 'drone'],
     ['sauda', 'saud', 'sau', '🥛', 'sawdust', 'isabgirl'],
-    ['psi', 'psy', 'Ψ', 'sigh'],
+    ['psi', 'psy', 'Ψ', 'sigh']
 ];
 const links = [
     'https://pastebin.com/raw/ASpHNduS',
@@ -107,7 +88,7 @@ const links = [
     'https://pastebin.com/raw/amw39T29',
     'https://pastebin.com/raw/UxN2Wx1F',
     'https://pastebin.com/raw/8E2TSndk',
-    'https://pastebin.com/raw/9h9aAPUm',
+    'https://pastebin.com/raw/9h9aAPUm'
 ];
 module.exports = {
     name: '<hero>',
@@ -123,14 +104,12 @@ module.exports = {
         let level = parseInt(args[0]);
         if (level < 1 || level > 20) {
             return message.channel.send({
-                embeds: [this.errorMessage('lvl must be btwn 1-20')],
+                embeds: [this.errorMessage('lvl must be btwn 1-20')]
             });
         }
         request(link, async (err, res, body) => {
             if (err) {
-                let embed = this.errorMessage(
-                    'something went wrong while fetching the data'
-                );
+                let embed = this.errorMessage('something went wrong while fetching the data');
                 await message.channel.send({ embeds: [embed] });
             }
 
@@ -142,7 +121,7 @@ module.exports = {
                 embed
                     .setColor(cyber)
                     .setFooter(
-                        'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
+                        'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line'
                     );
                 for (let i = 0; i < 20; i++) {
                     embed.addField((i + 1).toString(), sentences[i], true);
@@ -158,7 +137,7 @@ module.exports = {
             .setColor(red)
             .addField('error', err)
             .setDescription('*usage*:\n`q!<hero> <level>` - q!quincy 13');
-    },
+    }
 };
 
 function findLink(commandName) {
@@ -192,6 +171,6 @@ function oneUpgrade(sentences, level) {
         .setDescription(desc)
         .setColor(cyber)
         .setFooter(
-            'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|\nq!ap for help and elaboration'
+            'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line'
         );
 }

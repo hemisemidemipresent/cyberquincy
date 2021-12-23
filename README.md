@@ -39,7 +39,7 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 -   `lex` used in `q!calc`
 -   `filepath` used in alias reopsitory
 -   `express` used to receive pings to keep app awake
--   `google-spreadsheet` to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/1bK0rJzXrMqT8KuWufjwNrPxsYTsCQpAVhpBt20f1wpA/edit#gid=0) and [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
+-   `google-spreadsheet` to get information from [BTD6 Index](https://docs.google.com/spreadsheets/d/16of-RFUD1FteVchU9S4vAht39nlh1iraeoNA4u3R9cw/edit#gid=0) and [Misc Challenges](https://docs.google.com/spreadsheets/d/1tOcL8DydvslPHvMAuf-FAHL0ik7KV4kp49vgNqK_N8Q/edit#gid=2028069799)
 -   `lodash.clonedeep`,`lodash.isequal`: for `q!2tc` and `q!balance`, respectively
 -   `statcord` used for [bot statistics](https://statcord.com/bot/591922988832653313)
 -   `atob`, `zlib` used for fetching some data from NK

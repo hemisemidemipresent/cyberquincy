@@ -20,7 +20,7 @@ const links = [
     'https://pastebin.com/raw/Es0nVqt1',
     'https://pastebin.com/raw/tTHZWiSi',
     'https://pastebin.com/raw/e2QHaQSD',
-    'https://pastebin.com/raw/rTHT0L21',
+    'https://pastebin.com/raw/rTHT0L21'
 ];
 
 const { red, cyber } = require('../jsons/colours.json');
@@ -48,7 +48,7 @@ const aliases = [
         'boo',
         'bomer',
         'rangs',
-        'bomerrang',
+        'bomerrang'
     ],
     ['bomb-shooter', 'bs', 'cannon', 'bomb'],
     ['tack-shooter', 'tac', 'tak', 'ta', 'tacc', 'tack'],
@@ -79,7 +79,7 @@ const aliases = [
         'liquor',
         'intoxicant',
         'liquid',
-        'op',
+        'op'
     ],
     ['druid', 'drood', 'd'],
     ['banana-farm', 'farm', 'monkeyfarm'],
@@ -97,7 +97,7 @@ const aliases = [
         'spacc',
         'spikeshooter',
         'spact',
-        'spactory',
+        'spactory'
     ],
     [
         'monkey-village',
@@ -111,17 +111,9 @@ const aliases = [
         'hut',
         'circle',
         'fort',
-        'village',
+        'village'
     ],
-    [
-        'engineer-monkey',
-        'engineer',
-        'engie',
-        'engi',
-        'eng',
-        'overclock',
-        'engie',
-    ],
+    ['engineer-monkey', 'engineer', 'engie', 'engi', 'eng', 'overclock', 'engie']
 ];
 
 module.exports = {
@@ -133,10 +125,7 @@ module.exports = {
         if (args.includes('paragon') || args.includes('600')) {
             return await message.channel.send('use q!paragon <tower> [degree]');
         }
-        parsed = CommandParser.parse(
-            args,
-            new OptionalParser(new UpgradeSetParser())
-        );
+        parsed = CommandParser.parse(args, new OptionalParser(new UpgradeSetParser()));
         if (commandName == '<tower>') {
             if (!parsed.upgrade_set) {
                 let upgrades = [
@@ -201,16 +190,13 @@ module.exports = {
                     '105',
                     '205',
                     '015',
-                    '025',
+                    '025'
                 ];
-                parsed.upgrade_set =
-                    upgrades[Math.floor(Math.random() * upgrades.length)];
+                parsed.upgrade_set = upgrades[Math.floor(Math.random() * upgrades.length)];
             }
-            commandName =
-                aliases[Math.floor(Math.random() * aliases.length)][0];
+            commandName = aliases[Math.floor(Math.random() * aliases.length)][0];
         }
-        if (parsed.hasErrors())
-            await module.exports.errorMessage(message, parsed.parsingErrors);
+        if (parsed.hasErrors()) await module.exports.errorMessage(message, parsed.parsingErrors);
         else await process(parsed.upgrade_set || '000', commandName, message);
     },
     async errorMessage(message, errors) {
@@ -223,7 +209,7 @@ module.exports = {
             .setColor(red);
 
         await message.channel.send({ embeds: [errorEmbed] });
-    },
+    }
 };
 
 function hard(cost) {
@@ -262,18 +248,9 @@ async function process(upgrade, commandName, message) {
         let tower = costs[`${towerName}`];
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
-        let totalCost = Towers.totalTowerUpgradeCrosspathCost(
-            costs,
-            towerName,
-            upgrade
-        );
-        let hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(
-            costs,
-            towerName,
-            upgrade
-        );
-        let cost =
-            upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
+        let totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
+        let hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(costs, towerName, upgrade);
+        let cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
 
         let upgrades = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
@@ -296,19 +273,11 @@ async function process(upgrade, commandName, message) {
                             `if this is wrong [yell at hemi here](${discord})`,
                         true
                     )
-                    .addField(
-                        'total cost',
-                        `${totalCost} - medium\n${hardTotalCost} - hard`,
-                        true
-                    )
-                    .addField(
-                        'Bug reporting',
-                        `report [here](${discord})`,
-                        true
-                    )
+                    .addField('total cost', `${totalCost} - medium\n${hardTotalCost} - hard`, true)
+                    .addField('Bug reporting', `report [here](${discord})`, true)
 
                     .setFooter(
-                        'd:dmg|md:moab dmg|cd:ceram dmg|p:pierce|r:range|s:time btw attacks|j:projectile count|q!ap for help and elaboration|data is from extreme bloonology, by The Line'
+                        'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line'
                     )
                     .setColor(cyber);
                 return message.channel.send({ embeds: [embed] });
@@ -316,7 +285,7 @@ async function process(upgrade, commandName, message) {
         }
     } catch {
         await module.exports.errorMessage(message, [
-            'something went wrong while fetching the tower stats',
+            'something went wrong while fetching the tower stats'
         ]);
     }
 }

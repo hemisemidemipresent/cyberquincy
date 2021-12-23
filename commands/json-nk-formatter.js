@@ -18,6 +18,7 @@ module.exports = {
         if (!verify(content)) return await message.channel.send('Invalid JSON');
         let obj = peel(content);
         let res = JSON.stringify(obj, null, 4);
+
         if (res.length > 4000) {
             let file = new MessageAttachment(Buffer.from(res), 'thing.json');
             let url;
@@ -28,15 +29,13 @@ module.exports = {
             }
             return await message.channel.send({
                 content: url,
-                files: [file],
+                files: [file]
             });
         } else {
-            let embed = new MessageEmbed().setDescription(
-                `\`\`\`json\n${res}\`\`\``
-            );
+            let embed = new MessageEmbed().setDescription(`\`\`\`json\n${res}\`\`\``);
             return await message.channel.send({ embeds: [embed] });
         }
-    },
+    }
 };
 function verify(obj) {
     try {

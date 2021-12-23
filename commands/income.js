@@ -27,10 +27,7 @@ module.exports = {
             )
         );
         if (parsed.hasErrors()) {
-            return await module.exports.errorMessage(
-                message,
-                parsed.parsingErrors
-            );
+            return await module.exports.errorMessage(message, parsed.parsingErrors);
         }
         const [startround, endround] = parsed.rounds.sort((a, b) => a - b);
 
@@ -40,7 +37,7 @@ module.exports = {
 
         if (startround < 3 && mode == 'abr') {
             return await module.exports.errorMessage(message, [
-                'There is no support for rounds 1 and 2 abr income calculation',
+                'There is no support for rounds 1 and 2 abr income calculation'
             ]);
         }
 
@@ -54,7 +51,7 @@ module.exports = {
             default:
                 if ((startround > 100 || endround > 100) && mode == 'abr') {
                     return await module.exports.errorMessage(message, [
-                        '<round> cannot be greater than 100 if mode is abr',
+                        '<round> cannot be greater than 100 if mode is abr'
                     ]);
                 }
 
@@ -65,7 +62,7 @@ module.exports = {
                         embed = chincomeMessage(mode, startround);
                     } else {
                         return await module.exports.errorMessage(message, [
-                            '<round> must be at least 6 if only one round is specified',
+                            '<round> must be at least 6 if only one round is specified'
                         ]);
                     }
                 }
@@ -122,8 +119,7 @@ module.exports = {
     normalIncome(startround, endround) {
         let startroundObject = r[startround - 1]; // thats just how it works
         let endroundObject = r[endround];
-        let income =
-            endroundObject.cumulativeCash - startroundObject.cumulativeCash;
+        let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
         return new Discord.MessageEmbed()
             .setTitle(
                 `$${
@@ -136,9 +132,7 @@ module.exports = {
     halfIncome(startround, endround) {
         let startroundObject = r[startround - 1]; // thats just how it works
         let endroundObject = r[endround];
-        let income =
-            (endroundObject.cumulativeCash - startroundObject.cumulativeCash) /
-            2;
+        let income = (endroundObject.cumulativeCash - startroundObject.cumulativeCash) / 2;
         return new Discord.MessageEmbed()
             .setTitle(
                 `$${
@@ -149,11 +143,9 @@ module.exports = {
             .setFooter('not including starting cash');
     },
     abrIncome(startround, endround) {
-        // the data works in a way that basically means that its an array of arrays, ordered by round number
-        let startroundObject = abr[startround - 3]; // thats just how it works
-        let endroundObject = abr[endround - 2];
-        let income =
-            endroundObject.cumulativeCash - startroundObject.cumulativeCash;
+        let startroundObject = abr[startround - 1];
+        let endroundObject = abr[endround];
+        let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
         return new Discord.MessageEmbed()
             .setTitle(
                 `$${
@@ -161,26 +153,20 @@ module.exports = {
                 } was made from popping round ${startround} to popping round ${endround}`
             )
             .setColor(yellow)
-            .setFooter(
-                'in alternate bloon rounds, not including starting cash'
-            );
+            .setFooter('in alternate bloon rounds, not including starting cash');
     },
     deflation() {
         return new Discord.MessageEmbed()
-            .setTitle(
-                'The total amount of cash you have is the same as the start'
-            )
+            .setTitle('The total amount of cash you have is the same as the start')
             .setColor(purple)
             .setFooter('thats deflation for you');
     },
     apop() {
         return new Discord.MessageEmbed()
-            .setTitle(
-                'In apopalypse, the bloons are random, hence the income is random'
-            )
+            .setTitle('In apopalypse, the bloons are random, hence the income is random')
             .setColor(purple)
             .setFooter('thats apop for you');
-    },
+    }
 };
 
 chincomeMessage = function (mode, round) {
@@ -204,16 +190,10 @@ chincomeMessage = function (mode, round) {
         .addField(`R${round}`, `${incomes.rincome}`);
 
     if (incomes.chincomeExclusive) {
-        incomeEmbed.addField(
-            `Start -> End R${round - 1}`,
-            `${incomes.chincomeExclusive}`
-        );
+        incomeEmbed.addField(`Start -> End R${round - 1}`, `${incomes.chincomeExclusive}`);
     }
 
-    incomeEmbed.addField(
-        `Start -> End R${round}`,
-        `${incomes.chincomeInclusive}`
-    );
+    incomeEmbed.addField(`Start -> End R${round}`, `${incomes.chincomeInclusive}`);
 
     if (round < 100) {
         incomeEmbed.addField(
@@ -222,16 +202,10 @@ chincomeMessage = function (mode, round) {
         );
     }
     if (round < 99) {
-        incomeEmbed.addField(
-            `Start R${round + 1} -> End R100`,
-            incomes.lincomeExclusive
-        );
+        incomeEmbed.addField(`Start R${round + 1} -> End R100`, incomes.lincomeExclusive);
     }
     if (round > 100) {
-        incomeEmbed.addField(
-            `Start R101 -> End R${round}`,
-            incomes.superChincomeInclusive
-        );
+        incomeEmbed.addField(`Start R101 -> End R${round}`, incomes.superChincomeInclusive);
     }
     if (mode !== 'abr') {
         incomeEmbed.addField(
@@ -240,13 +214,10 @@ chincomeMessage = function (mode, round) {
         );
     }
     if (round < 140 && mode !== 'abr') {
-        incomeEmbed.addField(
-            `Start R${round + 1} -> End R140`,
-            incomes.superLincomeExclusive
-        );
+        incomeEmbed.addField(`Start R${round + 1} -> End R140`, incomes.superLincomeExclusive);
     }
 
-    if (round === 6) {
+    if (round === 6 && mode !== 'abr') {
         incomeEmbed.setFooter("*Doesn't include starting cash");
     }
 
@@ -266,60 +237,46 @@ calculateIncomes = function (mode, round) {
         lincomeInclusive: null,
         superChincomeInclusive: null,
         superLincomeInclusive: null,
-        superLincomeExclusive: null,
+        superLincomeExclusive: null
     };
+
     if (mode == 'abr') {
         index = round;
+        incomes.rincome = abr[index].cashThisRound;
+        // start is r3
+        incomes.chincomeExclusive = abr[index - 1].cumulativeCash;
 
-        incomes.rincome = r[index].cashThisRound;
-        if (round > 6)
-            incomes.chincomeExclusive =
-                r[index - 1].cumulativeCash - r[2].cumulativeCash + 650;
-
-        incomes.chincomeInclusive =
-            r[index].cumulativeCash - r[2].cumulativeCash + 650;
+        incomes.chincomeInclusive = abr[index].cumulativeCash;
         if (round < 100)
-            incomes.lincomeInclusive =
-                r[100].cumulativeCash - r[index - 1].cumulativeCash;
+            incomes.lincomeInclusive = abr[100].cumulativeCash - abr[index - 1].cumulativeCash;
 
         if (round < 99)
-            incomes.lincomeExclusive =
-                r[100].cumulativeCash - r[index].cumulativeCash;
+            incomes.lincomeExclusive = abr[100].cumulativeCash - abr[index].cumulativeCash;
 
-        if (round > 100)
-            incomes.superChincomeInclusive = 'abr past 100 is random'; // these wont actually be shown in the embed since <round> cannot be greater than 100 if mode is abr
+        if (round > 100) incomes.superChincomeInclusive = 'abr past 100 is random'; // these wont actually be shown in the embed since <round> cannot be greater than 100 if mode is abr
 
         incomes.superLincomeInclusive = 'abr past 100 is random';
 
-        if (round < 140)
-            incomes.superLincomeExclusive = 'abr past 100 is random';
+        if (round < 140) incomes.superLincomeExclusive = 'abr past 100 is random';
     } else {
         index = round;
 
         incomes.rincome = r[index].cashThisRound;
         if (round > 6)
-            incomes.chincomeExclusive =
-                r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
+            incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
 
-        incomes.chincomeInclusive =
-            r[index].cumulativeCash - r[5].cumulativeCash + 650;
+        incomes.chincomeInclusive = r[index].cumulativeCash - r[5].cumulativeCash + 650;
         if (round < 100)
-            incomes.lincomeInclusive =
-                r[100].cumulativeCash - r[index - 1].cumulativeCash;
+            incomes.lincomeInclusive = r[100].cumulativeCash - r[index - 1].cumulativeCash;
 
-        if (round < 99)
-            incomes.lincomeExclusive =
-                r[100].cumulativeCash - r[index].cumulativeCash;
+        if (round < 99) incomes.lincomeExclusive = r[100].cumulativeCash - r[index].cumulativeCash;
 
         if (round > 100)
-            incomes.superChincomeInclusive =
-                r[index].cumulativeCash - r[100].cumulativeCash;
+            incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash;
 
-        incomes.superLincomeInclusive =
-            r[140].cumulativeCash - r[index - 1].cumulativeCash;
+        incomes.superLincomeInclusive = r[140].cumulativeCash - r[index - 1].cumulativeCash;
         if (round < 140)
-            incomes.superLincomeExclusive =
-                r[140].cumulativeCash - r[index].cumulativeCash;
+            incomes.superLincomeExclusive = r[140].cumulativeCash - r[index].cumulativeCash;
 
         if (mode == 'halfcash')
             for (incomeType in incomes) {
@@ -329,9 +286,7 @@ calculateIncomes = function (mode, round) {
 
     for (incomeType in incomes) {
         if (incomes[incomeType] && typeof incomes[incomeType] == 'number') {
-            incomes[incomeType] = gHelper.numberAsCost(
-                incomes[incomeType].toFixed(1)
-            );
+            incomes[incomeType] = gHelper.numberAsCost(incomes[incomeType].toFixed(1));
         }
     }
     return incomes;

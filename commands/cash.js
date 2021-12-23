@@ -15,12 +15,7 @@ module.exports = {
             new AnyOrderParser(
                 new CashParser(),
                 new OptionalParser(
-                    new ModeParser(
-                        'CHIMPS',
-                        'ABR',
-                        'HALFCASH',
-                        'PREDET_CHIMPS'
-                    ),
+                    new ModeParser('CHIMPS', 'ABR', 'HALFCASH', 'PREDET_CHIMPS'),
                     'CHIMPS' // default if not provided
                 ),
                 new RoundParser('ALL')
@@ -63,7 +58,6 @@ module.exports = {
     calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
         let cashSoFar = 0;
         let originalRound = round;
-
         while (cashSoFar <= cashNeeded) {
             addToTotal = parseInt(r[round].cashThisRound);
             cashSoFar += addToTotal * incomeMultiplier;
@@ -76,9 +70,9 @@ module.exports = {
 
         let embed = new Discord.MessageEmbed()
             .setTitle(
-                `You should get $${cashNeeded} **before** round ${round} starting popping at ${originalRound}`
+                `You should get $${cashNeeded} DURING round ${--round} (BEFORE round ${++round})\nstarting popping at ${originalRound}`
             )
             .setColor(cyber);
         return embed;
-    },
+    }
 };

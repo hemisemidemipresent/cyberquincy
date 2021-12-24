@@ -21,7 +21,7 @@ const COLS = {
         DATE: 'F',
         PERSON: 'G',
         LINK: 'I',
-        CURRENT: 'J',
+        CURRENT: 'J'
     },
     TWO: {
         MAP: 'B',
@@ -30,7 +30,7 @@ const COLS = {
         DATE: 'G',
         PERSON: 'H',
         LINK: 'J',
-        CURRENT: 'K',
+        CURRENT: 'K'
     },
     THREE: {
         MAP: 'B',
@@ -39,7 +39,7 @@ const COLS = {
         DATE: 'H',
         PERSON: 'I',
         LINK: 'K',
-        CURRENT: 'L',
+        CURRENT: 'L'
     },
     FOUR: {
         MAP: 'B',
@@ -48,7 +48,7 @@ const COLS = {
         DATE: 'I',
         PERSON: 'J',
         LINK: 'L',
-        CURRENT: 'M',
+        CURRENT: 'M'
     },
     FIVE: {
         MAP: 'B',
@@ -57,7 +57,7 @@ const COLS = {
         DATE: 'J',
         PERSON: 'K',
         LINK: 'M',
-        CURRENT: 'N',
+        CURRENT: 'N'
     },
     'SIX+': {
         MAP: 'B',
@@ -67,8 +67,8 @@ const COLS = {
         DATE: 'K',
         PERSON: 'L',
         LINK: 'N',
-        CURRENT: 'O',
-    },
+        CURRENT: 'O'
+    }
 };
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
@@ -80,7 +80,7 @@ module.exports = {
 
     execute,
     helpMessage,
-    errorMessage,
+    errorMessage
 };
 
 async function execute(message, args) {
@@ -91,9 +91,7 @@ async function execute(message, args) {
     const parsed = CommandParser.parse(
         args,
         new AnyOrderParser(
-            new OptionalParser(
-                new OrParser(new MapParser(), new NaturalNumberParser())
-            ),
+            new OptionalParser(new OrParser(new MapParser(), new NaturalNumberParser())),
             new OptionalParser(new PersonParser()),
             // Search up to 2 towers at a time
             new OptionalParser(new TowerParser()),
@@ -146,15 +144,13 @@ const TOWER_ABBREVIATIONS = {
     druid_monkey: 'dru',
     spike_factory: 'spk',
     monkey_village: 'vil',
-    engineer: 'eng',
+    engineer: 'eng'
 };
 
 async function parseFTTC() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
 
-    await sheet.loadCells(
-        `${COLS['SIX+'].MAP}${1}:${COLS['SIX+'].CURRENT}${sheet.rowCount}`
-    );
+    await sheet.loadCells(`${COLS['SIX+'].MAP}${1}:${COLS['SIX+'].CURRENT}${sheet.rowCount}`);
 
     let colset;
     let combos = [];
@@ -201,8 +197,7 @@ async function getRowStandardData(entryRow, colset) {
         for (var i = 0; i < colset['TOWERS'].length; i++) {
             values.TOWERS.push(
                 Aliases.getCanonicalForm(
-                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`)
-                        .value
+                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
                 )
             );
         }
@@ -244,18 +239,13 @@ async function getRowAltData(entryRow, colset) {
         .split('\n')
         .map((entry) => {
             let towers, person, bitly;
-            [towers, person, bitly] = entry
-                .split('|')
-                .map((t) => t.replace(/ /g, ''));
-
+            [towers, person, bitly] = entry.split('|').map((t) => t.replace(/ /g, ''));
             return {
-                TOWERS: towers
-                    .split(',')
-                    .map((t) => Aliases.getCanonicalForm(t.trim())),
+                TOWERS: towers.split(',').map((t) => Aliases.getCanonicalForm(t.trim())),
                 PERSON: person,
                 LINK: `[${bitly}](http://${bitly})`,
                 MAP: mapCell.value,
-                OG: false,
+                OG: false
             };
         });
 }
@@ -285,28 +275,20 @@ function filterResults(allCombos, parsed) {
     results = allCombos;
 
     if (parsed.map) {
-        results = results.filter(
-            (combo) => Aliases.toAliasNormalForm(combo.MAP) == parsed.map
-        );
+        results = results.filter((combo) => Aliases.toAliasNormalForm(combo.MAP) == parsed.map);
     } else if (parsed.natural_number) {
-        results = results.filter(
-            (combo) => combo.TOWERS.length === parsed.natural_number
-        );
+        results = results.filter((combo) => combo.TOWERS.length === parsed.natural_number);
     }
 
     if (parsed.person) {
         results = results.filter(
-            (combo) =>
-                combo.PERSON.toLowerCase().split(' ').join('_') ===
-                parsed.person
+            (combo) => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person
         );
     }
 
     if (parsed.towers) {
         results = results.filter((combo) =>
-            parsed.towers.every((specifiedTower) =>
-                combo.TOWERS.includes(specifiedTower)
-            )
+            parsed.towers.every((specifiedTower) => combo.TOWERS.includes(specifiedTower))
         );
     }
 
@@ -336,18 +318,17 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
     if (displayCols.length === 4) {
         displayCols = displayCols.filter((col) => col != 'PERSON');
     }
-
     const displayValues = displayCols.map((col) => {
         if (col == 'TOWERS') {
             const boldedAbbreviatedTowers = combos.map((combo) =>
                 combo[col].map((tower) => {
-                    const towerCanonical = Aliases.getCanonicalForm(tower);
-                    const towerAbbreviation =
-                        TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
-                    return parsed.towers &&
-                        parsed.towers.includes(towerCanonical)
-                        ? `**${towerAbbreviation}**`
-                        : towerAbbreviation;
+                    if (tower) {
+                        const towerCanonical = Aliases.getCanonicalForm(tower);
+                        const towerAbbreviation = TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
+                        return parsed.towers && parsed.towers.includes(towerCanonical)
+                            ? `**${towerAbbreviation}**`
+                            : towerAbbreviation;
+                    }
                 })
             );
             return boldedAbbreviatedTowers.map((comboTowers, i) => {
@@ -367,7 +348,6 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
             });
         }
     });
-
     const numOGCompletions = combos.filter((combo) => combo.OG).length;
 
     // Begin React-Loop
@@ -380,11 +360,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
     async function displayPages(direction = 1) {
         // The number of rows to be displayed is variable depending on the characters in each link
         // Try 15 and decrement every time it doesn't work.
-        for (
-            maxNumRowsDisplayed = MAX_NUM_ROWS;
-            maxNumRowsDisplayed > 0;
-            maxNumRowsDisplayed--
-        ) {
+        for (maxNumRowsDisplayed = MAX_NUM_ROWS; maxNumRowsDisplayed > 0; maxNumRowsDisplayed--) {
             let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(title(parsed, combos))
                 .setColor(paleorange);
@@ -397,9 +373,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
             for (var c = 0; c < displayCols.length; c++) {
                 challengeEmbed.addField(
                     gHelper.toTitleCase(displayCols[c]),
-                    displayValues[c]
-                        .slice(leftIndex, rightIndex + 1)
-                        .join('\n'),
+                    displayValues[c].slice(leftIndex, rightIndex + 1).join('\n'),
                     true
                 );
             }
@@ -411,15 +385,13 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
                     challengeEmbed.setFooter(`---\nOG completion bolded`);
                 }
                 if (numOGCompletions > 1) {
-                    challengeEmbed.setFooter(
-                        `---\n${numOGCompletions} OG completions bolded`
-                    );
+                    challengeEmbed.setFooter(`---\n${numOGCompletions} OG completions bolded`);
                 }
             }
 
             try {
                 let msg = await userQueryMessage.channel.send({
-                    embeds: [challengeEmbed],
+                    embeds: [challengeEmbed]
                 });
                 if (maxNumRowsDisplayed < numRows) {
                     return reactLoop(msg);
@@ -443,12 +415,11 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
         // Read author reaction (time limit specified below in milliseconds)
         // and respond with appropriate action
         const filter = (reaction, user) =>
-            user.id === userQueryMessage.author.id &&
-            REACTIONS.includes(reaction.emoji.name);
+            user.id === userQueryMessage.author.id && REACTIONS.includes(reaction.emoji.name);
         botMessage
             .createReactionCollector({
                 filter,
-                time: 20000,
+                time: 20000
             })
             .once('collect', (reaction) => {
                 switch (reaction.emoji.name) {
@@ -475,10 +446,7 @@ function title(parsed, combos) {
     if (parsed.person) t += `by ${combos[0].PERSON} `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${combos[0].MAP} `;
-    if (parsed.towers)
-        t += `including ${Towers.towerUpgradeToIndexNormalForm(
-            parsed.towers[0]
-        )} `;
+    if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
     if (parsed.towers && parsed.towers[1])
         t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
@@ -489,10 +457,7 @@ function titleNoCombos(parsed) {
     if (parsed.person) t += `by "${parsed.person}" `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
-    if (parsed.towers)
-        t += `including ${Towers.towerUpgradeToIndexNormalForm(
-            parsed.towers[0]
-        )} `;
+    if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
     if (parsed.towers && parsed.towers[1])
         t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
@@ -501,10 +466,7 @@ function titleNoCombos(parsed) {
 function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!fttc` HELP — The BTD6 Index Fewest Tower Type CHIMPS')
-        .addField(
-            '`q!fttc <map>`',
-            'All FTTCs for the queried map' + '\n`q!fttc frozenover`'
-        )
+        .addField('`q!fttc <map>`', 'All FTTCs for the queried map' + '\n`q!fttc frozenover`')
         .addField('`q!fttc <n>`', 'All FTTCs with _n_ towers' + '\n`q!fttc 3`')
         .addField(
             '`q!fttc <tower_1> {tower_2}`',
@@ -528,10 +490,7 @@ function helpMessage(message) {
 function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('Input Error')
-        .addField(
-            'Likely Cause(s)',
-            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-        )
+        .addField('Likely Cause(s)', parsingErrors.map((msg) => ` • ${msg}`).join('\n'))
         .addField('Type `q!fttc` for help', '\u200b')
         .setColor(orange);
 

@@ -21,7 +21,7 @@ module.exports = {
                 let body = {
                     method: 'nkapiID',
                     keys: arr,
-                    includeOnlineStatus: false,
+                    includeOnlineStatus: false
                 };
                 res(module.exports.request(body));
             });
@@ -29,20 +29,30 @@ module.exports = {
         }
 
         let results = await Promise.all(promises);
-        let usernamesFull = [];
+        let userObjects = [];
+
         for (let res of results) {
             if (!res) continue;
             let data = JSON.parse(res.data.data);
-            let usernames = [];
             for (let j in data.users) {
                 let user = data.users[j];
+                // ensure all objects have correct userName string
                 let username = user.displayName;
                 if (username == 'default') username = user.safeName;
-                usernames.push(username);
+                user.username = username;
+                userObjects.push(user);
             }
-            usernamesFull.push(usernames);
         }
-        return usernamesFull.flat();
+
+        let usernames = [];
+
+        for (let i = 0; i < unknownUsers.length; i++) {
+            let userObj = userObjects.find((user) => {
+                return user.nkapiID == unknownUsers[i];
+            });
+            usernames.push(userObj.username);
+        }
+        return usernames;
     },
     async request(body) {
         let nonce = Math.random() * Math.pow(2, 63) + ''; // or any hentai code, but there are much less hentai than 64-bit integers
@@ -55,32 +65,24 @@ module.exports = {
                 'W/' +
                 length +
                 '/' +
-                hex_md5(
-                    sessionID +
-                        skuSignature +
-                        bodyString.substr(0, length) +
-                        nonce
-                );
+                hex_md5(sessionID + skuSignature + bodyString.substr(0, length) + nonce);
         } else if (sessionID != null) {
             md5 = hex_md5(sessionID + skuSignature + bodyString + nonce);
         } else {
             md5 = hex_md5(skuSignature + bodyString + nonce);
         }
         try {
-            let res = await axios.post(
-                'https://api.ninjakiwi.com/user/search',
-                {
-                    data: bodyString,
-                    auth: {
-                        session: sessionID,
-                        appID: appID,
-                        skuID: skuID,
-                        device: deviceID,
-                    },
-                    sig: md5,
-                    nonce: nonce,
-                }
-            );
+            let res = await axios.post('https://api.ninjakiwi.com/user/search', {
+                data: bodyString,
+                auth: {
+                    session: sessionID,
+                    appID: appID,
+                    skuID: skuID,
+                    device: deviceID
+                },
+                sig: md5,
+                nonce: nonce
+            });
 
             return res;
         } catch (error) {
@@ -107,8 +109,7 @@ module.exports = {
          * Configurable variables. You may need to tweak these to be compatible with
          * the server-side, but the defaults work in most cases.
          */ var hexcase = 0; /* hex output format. 0 - lowercase; 1 - uppercase        */
-        var b64pad =
-            ''; /* base-64 pad character. "=" for strict RFC compliance   */
+        var b64pad = ''; /* base-64 pad character. "=" for strict RFC compliance   */
 
         /*
          * These are the functions you'll usually want to call
@@ -139,8 +140,7 @@ module.exports = {
             var x;
             for (var i = 0; i < input.length; i++) {
                 x = input.charCodeAt(i);
-                output +=
-                    hex_tab.charAt((x >>> 4) & 0x0f) + hex_tab.charAt(x & 0x0f);
+                output += hex_tab.charAt((x >>> 4) & 0x0f) + hex_tab.charAt(x & 0x0f);
             }
             return output;
         }
@@ -166,10 +166,7 @@ module.exports = {
                 /* Encode output as utf-8 */
                 if (x <= 0x7f) output += String.fromCharCode(x);
                 else if (x <= 0x7ff)
-                    output += String.fromCharCode(
-                        0xc0 | ((x >>> 6) & 0x1f),
-                        0x80 | (x & 0x3f)
-                    );
+                    output += String.fromCharCode(0xc0 | ((x >>> 6) & 0x1f), 0x80 | (x & 0x3f));
                 else if (x <= 0xffff)
                     output += String.fromCharCode(
                         0xe0 | ((x >>> 12) & 0x0f),
@@ -205,9 +202,7 @@ module.exports = {
         function binl2rstr(input) {
             var output = '';
             for (var i = 0; i < input.length * 32; i += 8)
-                output += String.fromCharCode(
-                    (input[i >> 5] >>> i % 32) & 0xff
-                );
+                output += String.fromCharCode((input[i >> 5] >>> i % 32) & 0xff);
             return output;
         }
 
@@ -310,10 +305,7 @@ module.exports = {
          * These functions implement the four basic operations the algorithm uses.
          */
         function md5_cmn(q, a, b, x, s, t) {
-            return safe_add(
-                bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s),
-                b
-            );
+            return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
         }
         function md5_ff(a, b, c, d, x, s, t) {
             return md5_cmn((b & c) | (~b & d), a, b, x, s, t);
@@ -344,5 +336,5 @@ module.exports = {
         function bit_rol(num, cnt) {
             return (num << cnt) | (num >>> (32 - cnt));
         }
-    },
+    }
 };

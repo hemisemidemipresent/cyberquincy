@@ -19,11 +19,9 @@ class Leaderboard {
                 position: position,
                 userID: obj.userID,
                 time: 1000000000 - obj.score,
-                isNew: obj.isNew,
+                isNew: obj.isNew
             };
-            playerObj.fTime = new Date(playerObj.time)
-                .toISOString()
-                .substring(14, 23);
+            playerObj.fTime = new Date(playerObj.time).toISOString().substring(14, 23);
 
             let metadata = obj.metadata;
             if (metadata.includes('timestamp')) {
@@ -68,6 +66,7 @@ class Leaderboard {
                 }
             }
         }
+
         let maxLength = 0;
         for (let i = 0; i < this.players.length; i++) {
             if (this.players[i].username?.length > maxLength) {

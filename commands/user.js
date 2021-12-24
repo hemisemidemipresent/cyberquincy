@@ -5,11 +5,11 @@ const {
     MessageSelectMenu,
     MessageActionRow,
     BufferResolvable,
-    MessageAttachment,
+    MessageAttachment
 } = require('discord.js');
 const { palered } = require('../jsons/colours.json');
 const { UserAgent } = require('../1/config.json');
-
+const { getUsernames } = require('../helpers/usernames');
 const seclateServerID = '543957081183617024';
 const Emojis = require('../jsons/emojis.json');
 const raceEmojis = Emojis[seclateServerID + ''].race;
@@ -25,30 +25,26 @@ module.exports = {
     obj: {},
     async execute(message, args) {
         this.message = message;
-        if (
-            args.length == 0 ||
-            (args.length == 1 && args[0].toLowerCase() == 'help')
-        )
+        if (args.length == 0 || (args.length == 1 && args[0].toLowerCase() == 'help'))
             return await module.exports.helpMessage(message);
         userID = args[0];
         let url = `https://priority-static-api.nkstatic.com/storage/static/11/${userID}/public-stats`;
         let body;
         try {
             body = await axios.get(url, {
-                headers: { 'User-Agent': UserAgent },
+                headers: { 'User-Agent': UserAgent }
             });
         } catch {
             return await message.channel.send({
                 embeds: [
-                    new Discord.MessageEmbed()
-                        .setDescription('invalid user id')
-                        .setColor(palered),
-                ],
+                    new Discord.MessageEmbed().setDescription('invalid user id').setColor(palered)
+                ]
             });
         }
         let obj = body.data;
         this.obj = obj;
         obj.timeStamp = Date.now().toString();
+        obj.playerName = await getUsernames([userID]);
         let embed = mainPage(obj);
 
         if (!isEmpty(obj.namedMonkeyStats)) {
@@ -61,21 +57,19 @@ module.exports = {
                     new MessageAttachment(
                         Buffer.from(JSON.stringify(obj, null, 1)),
                         userID + '.json'
-                    ),
-                ],
+                    )
+                ]
             });
             await this.createCollector(message);
         } else
             await message.channel.send({
-                embeds: [embed],
+                embeds: [embed]
             });
     },
     async helpMessage(message) {
         let embed = new MessageEmbed()
             .setTitle('BIG BROTHER IS WATCHING YOU')
-            .setDescription(
-                '`q!user <user id>` e.g. `q!user 5aa98318a0c6fb3a5e30c047` (tarn)'
-            )
+            .setDescription('`q!user <user id>` e.g. `q!user 5aa98318a0c6fb3a5e30c047` (tarn)')
             .addField(
                 'How do I get my user id?',
                 'The easiest way is to get top 100 of the race leaderboard and use `q!lb <placement>` or `q!lb u#username`\notherwise you can check out [this video](https://youtu.be/SJ4Tczw1LyA)'
@@ -89,11 +83,10 @@ module.exports = {
     },
     async createCollector(message) {
         const filter = (i) => i.user.id == message.author.id;
-        const collector =
-            await module.exports.botMessage.createMessageComponentCollector({
-                filter,
-                time: 20000,
-            });
+        const collector = await module.exports.botMessage.createMessageComponentCollector({
+            filter,
+            time: 20000
+        });
         collector.on('collect', async (i) => {
             collector.stop();
             module.exports.interaction = i;
@@ -108,7 +101,7 @@ module.exports = {
 
         await this.interaction.update({ embeds: [embed] });
         await this.createCollector(this.message);
-    },
+    }
 };
 
 function mainPage(obj) {
@@ -143,7 +136,7 @@ function mainPage(obj) {
         `monkey teams wins: ${obj.monkeyTeamsWins}`,
         `daily chests: ${obj.dailyRewards}`,
         `challenges completed: ${obj.challengesCompleted}`,
-        `total trophies: ${obj.totalTrophiesEarned}`,
+        `total trophies: ${obj.totalTrophiesEarned}`
     ];
     let popsInfo = [
         `Total: ${obj.bloonsPopped}`,
@@ -156,11 +149,11 @@ function mainPage(obj) {
         `BFB: ${obj.bfbsPopped}`,
         `ZOMG: ${obj.zomgsPopped}`,
         `DDT: ${obj.ddtsPopped}`,
-        `BAD: ${obj.badsPopped}`,
+        `BAD: ${obj.badsPopped}`
     ];
     let ody = [
         `total odysseys completed: ${obj.totalOdysseysCompleted}`,
-        `total odyssey stars: ${obj.totalOdysseyStars}`,
+        `total odyssey stars: ${obj.totalOdysseyStars}`
     ];
     let heroesPlacedData = JSON.stringify(obj.heroesPlacedData, null, 1);
     let towersPlacedData = JSON.stringify(obj.towersPlacedData, null, 1);
@@ -226,7 +219,7 @@ function showInstaStats(obj, insta) {
         `times placed ${i.timesPlaced}`,
         `abilities used: ${i.abilitiesUsed}`,
         `times upgraded: ${i.timesUpgraded}`,
-        `times sacrificed: ${i.timesSacrificed}`,
+        `times sacrificed: ${i.timesSacrificed}`
     ];
     let popinfo = [
         `total: ${i.totalPopCount}`,
@@ -240,7 +233,7 @@ function showInstaStats(obj, insta) {
         `bfb: ${i.bfbsPopped}`,
         `zomg: ${i.zomgsPopped}`,
         `ddt: ${i.ddtsPopped}`,
-        `bad: ${i.badsPopped}`,
+        `bad: ${i.badsPopped}`
     ];
     embed.setDescription(desc.join('\n'));
     embed.addField('Pops', popinfo.join('\n'));
@@ -270,7 +263,7 @@ function createSelector(obj) {
         'Banana Farm',
         'Spike Factory',
         'Monkey Village',
-        'Engineer Monkey',
+        'Engineer Monkey'
     ];
     let options = [];
     for (let i = 0; i < normalNames.length; i++) {
@@ -278,7 +271,7 @@ function createSelector(obj) {
         let monke = obj.namedMonkeyStats[`${codeName}`];
         option = {
             label: normalNames[i],
-            value: codeName,
+            value: codeName
         };
         if (monke.name) option.description = monke.name;
         options.push(option);

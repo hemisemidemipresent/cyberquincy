@@ -3,7 +3,7 @@
 
     "300": ["ice_shards", "shards", "ishards"],
     "400": ["embrittlement", "brittle", "brit", "brittlement"],
-    "500": ["super_brittle", "sbrit", "sbrittle", "super_brit"],
+    "500": ["super_brittle", "sbrit", "sbrittle", "super_brit", "sbritt"],
 
     "030": ["arctic_wind", "wind", "arctic"],
     "040": ["snowstorm", "snow"],

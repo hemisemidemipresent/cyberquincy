@@ -101,11 +101,11 @@
         "road",
         "eotr"
     ],
-    "cabin": [
+    "the_cabin": [
         "cb",
         "cbt",
         "cab",
-        "the_cabin",
+        "cabin",
         "le_cabin"
     ]
 }

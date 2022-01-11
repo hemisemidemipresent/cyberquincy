@@ -19,7 +19,7 @@ module.exports = {
      * @param {int} round
      * @returns {int} multiplicative percentage increase
      */
-    getRamping(r) {
+    getHealthRamping(r) {
         if (r <= 80) return 1;
         else if (r <= 100) return (r - 30) / 50;
         else if (r <= 124) return (r - 72) / 20;
@@ -29,5 +29,18 @@ module.exports = {
         else if (r <= 400) return (3 * r - 717) / 2;
         else if (r <= 500) return (5 * r - 1517) / 2;
         else return 5 * r - 2008.5;
+    },
+    /**
+     * @summary returns back the multiplicative factor for speed ramping
+     * @param {int} round
+     * @returns {int} multiplicative percentage increase
+     */
+    getSpeedRamping(r) {
+        if (r <= 80) return 1;
+        else if (r <= 100) return 1 + (r - 80) * 0.02;
+        else if (r <= 150) return 1.6 + (r - 101) * 0.02;
+        else if (r <= 200) return 3.0 + (r - 151) * 0.02;
+        else if (r <= 250) return 4.5 + (r - 201) * 0.02;
+        return 6.0 + (r - 252) * 0.02;
     }
 };

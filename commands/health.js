@@ -29,7 +29,7 @@ module.exports = {
         }
         //percentage increase
 
-        let bhealth = Math.floor(baseHealth * b.getRamping(round));
+        let bhealth = Math.floor(baseHealth * b.getHealthRamping(round));
 
         if (round > 80) {
             return message.channel.send(

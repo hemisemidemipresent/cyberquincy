@@ -32,7 +32,7 @@ module.exports = {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        let raceID = 'Lotus_of_the_jungle_kx8dwx14';
+        let raceID = 'Chracetmas_kx8dxktj';
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,15 +91,10 @@ module.exports = {
         } else {
             let output = '';
             if (parsed.natural_numbers)
-                output = lb.getWall(
-                    parsed.natural_numbers[0],
-                    parsed.natural_numbers[1]
-                );
+                output = lb.getWall(parsed.natural_numbers[0], parsed.natural_numbers[1]);
             else output = lb.getWall();
             if (output.length > 4096) {
-                return await module.exports.errorMessage(message, [
-                    'too many characters',
-                ]);
+                return await module.exports.errorMessage(message, ['too many characters']);
             }
             let embed = new Discord.MessageEmbed()
                 .setTitle(`ID: ${data.leaderboardID}`)
@@ -153,66 +148,9 @@ module.exports = {
                     `\`q!lb ${id}\` - shows lb for given race ID. For list of race IDs see <#846647839312445451> in [this server](${discord})\n` +
                     `\`q!lb u#tsp\` - shows user placement`
             )
-            .addField(
-                'Likely Cause(s)',
-                parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-            )
+            .addField('Likely Cause(s)', parsingErrors.map((msg) => ` • ${msg}`).join('\n'))
             .setColor(red);
 
         return await message.channel.send({ embeds: [errorEmbed] });
-    },
+    }
 };
-function addSpaces(str, max) {
-    if (str == null || !str) {
-        str = ' '.repeat(max);
-        return str;
-    }
-    let diff = max - str.toString().length;
-
-    try {
-        str += ' '.repeat(diff);
-    } catch {}
-
-    return str;
-}
-function parsetime(ms) {
-    return new Date(ms).toISOString().substring(14, 23);
-}
-function formatPersan(score, maxLength, i) {
-    let time = 1000000000 - score.score;
-
-    time = parsetime(time);
-    let md = score.metadata.split(',');
-
-    let username;
-    let timestamp = formatTimestamp(md[11]);
-
-    if (md[0]) username = md[0];
-    else username = '???';
-
-    if (time.length == 8) time += ' ';
-    let row = '';
-
-    row += addSpaces(i + 1, 2) + ' ';
-    row += addSpaces(username, maxLength);
-    row += ' ';
-    row += time;
-    if (timestamp) {
-        row += ' ';
-        row += timestamp;
-    }
-    row += '\n';
-    return row;
-}
-function formatTimestamp(timestamp) {
-    try {
-        timestamp = parseInt(timestamp);
-        let s = new Date(timestamp).toGMTString();
-        let monthDay = s.substring(5, 11);
-        let hms = s.substring(17, 29);
-        if (monthDay.includes('id')) return '???';
-        return monthDay + ' ' + hms;
-    } catch {
-        return undefined;
-    }
-}

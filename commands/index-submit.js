@@ -8,6 +8,8 @@ const RED_X = '❌';
 const PREVIEW_REACTIONS = [WHITE_HEAVY_CHECK_MARK, RED_X];
 
 const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL = '702089126706544661';
+const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL_2 = '924830831585939456';
+
 // Fill this in when you want to test this in your own server
 // Change this to a channel in your test guild when testing
 const TEST_SUBMISSIONS_CHANNEL = '897024571801239573'; //'737445888602931252';
@@ -16,20 +18,18 @@ const { MessageEmbed } = require('discord.js');
 const SUBMISSIONS_CHANNEL = IS_TESTING
     ? TEST_SUBMISSIONS_CHANNEL
     : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
-
+const SUBMISSIONS_CHANNEL_2 = IS_TESTING
+    ? TEST_SUBMISSIONS_CHANNEL
+    : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL_2;
 async function submit(message, args) {
     // Determines whether to follow up a submission preview with reaction collection and submission to another channel
-    const liveMode =
-        message.channel.guild.id == Guilds.BTD6_INDEX || IS_TESTING;
+    const liveMode = message.channel.guild.id == Guilds.BTD6_INDEX || IS_TESTING;
 
     // If image is attached or linked, extract info to combine as imgur
     let imgurJson = null;
     let imgurText = null;
     try {
-        let [image, text] = ImgurHelper.extractImageInfo(
-            message.attachments,
-            args
-        );
+        let [image, text] = ImgurHelper.extractImageInfo(message.attachments, args);
         imgurJson = await imgur.uploadUrl(image);
         imgurText = text;
     } catch (e) {
@@ -54,9 +54,7 @@ async function submit(message, args) {
             .setImage(`${imgurJson.link}`);
         preview = await message.channel.send({ embeds: [submission] });
     } else {
-        submission =
-            args.join(' ') +
-            `\n——————————————————————\n_Sent by ${message.author.tag}_`;
+        submission = args.join(' ') + `\n——————————————————————\n_Sent by ${message.author.tag}_`;
         preview = await message.channel.send(submission);
     }
 
@@ -67,8 +65,7 @@ async function submit(message, args) {
         preview.react(previewReaction);
     });
     const filter = (reaction, user) =>
-        user.id == message.author.id &&
-        PREVIEW_REACTIONS.includes(reaction.emoji.name);
+        user.id == message.author.id && PREVIEW_REACTIONS.includes(reaction.emoji.name);
     let collector = preview.createReactionCollector({ filter, time: 20000 });
 
     collector.once('collect', (reaction) => {
@@ -79,19 +76,24 @@ async function submit(message, args) {
         // (or to the test channel if dev is testing)
         if (reaction.emoji.name == WHITE_HEAVY_CHECK_MARK) {
             (async () => {
-                const SUBMISSIONS_CHANNEL_OBJ =
-                    await message.channel.guild.channels.cache.get(
-                        SUBMISSIONS_CHANNEL
-                    );
+                const SUBMISSIONS_CHANNEL_OBJ = await message.channel.guild.channels.cache.get(
+                    SUBMISSIONS_CHANNEL
+                );
+                const SUBMISSIONS_CHANNEL_OBJ_2 = await message.channel.guild.channels.cache.get(
+                    SUBMISSIONS_CHANNEL_2
+                );
                 let submissionMessage = undefined;
-                if (submission instanceof MessageEmbed)
-                    submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send({
-                        embeds: [submission],
+                if (submission instanceof MessageEmbed) {
+                    await SUBMISSIONS_CHANNEL_OBJ.send({
+                        embeds: [submission]
                     });
-                else
-                    submissionMessage = await SUBMISSIONS_CHANNEL_OBJ.send(
-                        submission
-                    );
+                    submissionMessage = await SUBMISSIONS_CHANNEL_OBJ_2.send({
+                        embeds: [submission]
+                    });
+                } else {
+                    await SUBMISSIONS_CHANNEL_OBJ.send(submission);
+                    submissionMessage = await SUBMISSIONS_CHANNEL_OBJ_2.send(submission);
+                }
                 let random = Math.floor(Math.random() * 1000);
                 let guild = client.guilds.cache.get('614111055890612225');
                 if (random == 0) {
@@ -133,10 +135,7 @@ function helpMessage() {
             'Uploads to imgur and submit with <text>'
         )
         .addField('`q!isub <link> <text>`', 'Submits a link with text')
-        .addField(
-            '`q!isub <CHALLENGE_CODE> <text>`',
-            'Submits a challenge code with text'
-        )
+        .addField('`q!isub <CHALLENGE_CODE> <text>`', 'Submits a challenge code with text')
         .addField(
             'Note:',
             'If you are _linking_ an image (rather than attaching it), you must make it the first argument to the command in order to imgur-ize it.'
@@ -154,5 +153,5 @@ module.exports = {
             return await message.channel.send(helpMessage());
         }
         await submit(message, args);
-    },
+    }
 };

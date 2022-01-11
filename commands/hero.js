@@ -121,7 +121,7 @@ module.exports = {
                 embed
                     .setColor(cyber)
                     .setFooter(
-                        'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line'
+                        'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
                     );
                 for (let i = 0; i < 20; i++) {
                     embed.addField((i + 1).toString(), sentences[i], true);
@@ -171,6 +171,6 @@ function oneUpgrade(sentences, level) {
         .setDescription(desc)
         .setColor(cyber)
         .setFooter(
-            'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line'
+            'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
         );
 }

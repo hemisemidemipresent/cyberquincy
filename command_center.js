@@ -12,9 +12,7 @@ function configureCommands(client) {
     client.commands = new Discord.Collection();
 
     // List of command files
-    const commandFiles = fs
-        .readdirSync('./commands')
-        .filter((file) => file.endsWith('.js'));
+    const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
 
     // Register commands
     for (const file of commandFiles) {
@@ -54,16 +52,12 @@ async function handleCommand(message) {
 
         // exception: check with they inputted a path as the commandName
         if (Towers.isValidUpgradeSet(commandName)) {
-            return message.channel.send(
-                `**its q!<tower> <path>**\nexample: \`q!ice 052\``
-            );
+            return message.channel.send(`**its q!<tower> <path>**\nexample: \`q!ice 052\``);
         }
         // Search through command names taking into account their aliases
         let command =
             client.commands.get(commandName) ||
-            client.commands.find(
-                (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
-            );
+            client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 
         if (!command) {
             return;
@@ -88,10 +82,7 @@ async function handleCommand(message) {
             // `spact#025` gets converted to `spike_factory#025` for example.
             if (command.casedArgs) {
                 canonicalArgs = args.map((arg) => Aliases.canonicizeArg(arg));
-            } else
-                canonicalArgs = args.map((arg) =>
-                    Aliases.canonicizeArg(arg.toLowerCase())
-                );
+            } else canonicalArgs = args.map((arg) => Aliases.canonicizeArg(arg.toLowerCase()));
         }
 
         // Keeps track of cooldowns for commands/users and determines if cooldown has expired
@@ -142,17 +133,15 @@ async function handleCommand(message) {
         }*/
     } catch (error) {
         // in case of command failures
-        if (error.message.includes('Missing Permissions')) return;
+        if (!error || !error.message) return;
+        if (error.message.includes('Missing Permissions')) console.log('Missing Permissions');
         try {
             console.log(error);
             console.log(message.content);
             const errorEmbed = new Discord.MessageEmbed()
                 .setColor(colours['red'])
                 .setDescription('Oh no! Something went wrong!')
-                .addField(
-                    '~~I got bonked by a DDT again~~',
-                    `Please [report the bug](${discord})`
-                );
+                .addField('~~I got bonked by a DDT again~~', `Please [report the bug](${discord})`);
             return await message.channel.send({ embeds: [errorEmbed] });
         } catch {
             // missing perms, probably
@@ -162,5 +151,5 @@ async function handleCommand(message) {
 
 module.exports = {
     configureCommands,
-    handleCommand,
+    handleCommand
 };

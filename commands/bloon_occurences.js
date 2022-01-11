@@ -20,21 +20,19 @@ module.exports = {
             )
         );
         if (parsed.hasErrors()) {
-            return await module.exports.errorMessage(
-                message,
-                parsed.parsingErrors
-            );
+            return await module.exports.errorMessage(message, parsed.parsingErrors);
         }
         let object;
         if (parsed.mode == 'CHIMPS') object = round.reg;
         else object = round.alt;
 
-        function getOccurences(bloon, arrayOfRounds) {
+        function getOccurences(bloon, arrayOfRounds, mode) {
             let occurences = [];
-            for (let i = 0; i < 140; i++) {
+            // for (let i = 0; i < mode == 'CHIMPS' ? 140 : 100; i++) {
+            for (let i = 0; i < (mode == 'CHIMPS' ? 140 : 100); i++) {
                 roundArray = arrayOfRounds[`${i + 1}`];
                 roundRes = [i + 1];
-
+                // console.log(roundArray);
                 for (let j = 0; j < roundArray.length; j++) {
                     bloonType = roundArray[j][0].toString();
                     if (bloonType.includes(bloon)) {
@@ -84,7 +82,7 @@ module.exports = {
             return embed;
         }
 
-        let occurences = getOccurences(parsed.bloon.toString(), object);
+        let occurences = getOccurences(parsed.bloon.toString(), object, parsed.mode);
         let output = format(occurences);
 
         await message.channel.send({ embeds: [output] });
@@ -95,5 +93,5 @@ module.exports = {
             .addField('Likely Cause(s)', parsingErrors.join('\n'))
             .setColor(cyber);
         return await message.channel.send({ embeds: [errorEmbed] });
-    },
+    }
 };

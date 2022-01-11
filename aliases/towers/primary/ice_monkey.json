@@ -2,10 +2,10 @@
     "xyz": ["ice", "ice-monkey", "im"],
 
     "300": ["ice_shards", "shards", "ishards"],
-    "400": ["embrittlement", "brittle", "brit", "brittlement"],
-    "500": ["super_brittle", "sbrit", "sbrittle", "super_brit", "sbritt"],
+    "400": ["embrittlement", "brittle", "brit", "brittlement", "britt"],
+    "500": ["super_brittle", "sbrit", "sbrittle", "super_brit", "sbritt", "sbrike"],
 
-    "030": ["arctic_wind", "wind", "arctic"],
+    "030": ["arctic_wind", "wind", "arctic", "awind"],
     "040": ["snowstorm", "snow"],
     "050": ["absolute_zero", "az"],
     

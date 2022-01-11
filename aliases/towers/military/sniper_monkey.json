@@ -1,7 +1,7 @@
 {
-    "xyz": ["sniper", "sniper-monkey", "sn", "sni", "snip", "snooper", "snipermonkey"],
+    "xyz": ["sniper", "sniper-monkey", "sn", "sni", "snip", "snooper", "snipermonkey", "gun"],
 
-    "300": ["deadly_precision", "dprecision", "precision", "deadlyprecision"],
+    "300": ["deadly_precision", "dprecision", "precision"],
     "400": ["maim_moab", "maim", "maimoab", "maimmoab", "mainmoan"],
     "500": ["cripple_moab", "cripple", "cripplemoab"],
 

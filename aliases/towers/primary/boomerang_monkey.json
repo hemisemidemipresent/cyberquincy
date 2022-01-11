@@ -1,7 +1,7 @@
 {
-    "xyz": ["boomer", "boomerang-monkey","boomerang","bm","boom","💥","rang","bomerang","boo","bomer","rangs","bomerrang"],
+    "xyz": ["boomer", "boomerang-monkey","boomerang","bm","rang","bomerang","boo","bomer","rangs","bomerrang"],
 
-    "300": ["glaive_richochet", "richochet", "rich", "rick"],
+    "300": ["glaive_ricochet", "ricochet", "rich", "rick", "ricoshit"],
     "400": ["m.o.a.r_glaives", "moar", "more"],
     "500": ["glaive_lord", "glord", "gl", "glaives"],
 
@@ -11,5 +11,5 @@
     
     "003": ["kylie_boomerang", "kylie", "kyle", "kyl"],
     "004": ["moab_press", "press", "m_press"],
-    "005": ["moab_domination", "moab_dom", "m_dom", "domination", "dom"]
+    "005": ["moab_domination", "moab_dom", "m_dom", "domination", "dom", "domm"]
 }

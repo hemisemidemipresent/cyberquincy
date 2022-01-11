@@ -1,55 +1,12 @@
 {
-    "xyz": [
-        "bucc",
-        "monkey-buccaneer",
-        "boat",
-        "buc",
-        "buccaneer"
-    ],
-    "300": [
-        "destroyer",
-        "dest"
-    ],
-    "400": [
-        "aircraft_carrier",
-        "aircraft",
-        "air"
-    ],
-    "500": [
-        "carrier_flagship",
-        "carrier",
-        "flagship",
-        "flag",
-        "flagshit"
-    ],
-    "030": [
-        "cannon_ship"
-    ],
-    "040": [
-        "monkey_pirates",
-        "mirates",
-        "mpir"
-    ],
-    "050": [
-        "pirate_lord",
-        "plord",
-        "pl"
-    ],
-    "003": [
-        "merchantman",
-        "merchant",
-        "merch"
-    ],
-    "004": [
-        "favored_trades",
-        "flavored",
-        "flavored_trades",
-        "fave"
-    ],
-    "005": [
-        "trade_empire",
-        "empire",
-        "emp",
-        "trempire"
-    ]
+    "xyz": ["bucc","monkey-buccaneer","boat","buc","buccaneer"],
+    "300": ["destroyer","dest"],
+    "400": ["aircraft_carrier","aircraft","air"],
+    "500": ["carrier_flagship","carrier","flagship","flag","flagshit"],
+    "030": ["cannon_ship","cannon"],
+    "040": ["monkey_pirates","mirates","mpir","hook"],
+    "050": ["pirate_lord","plord","pl"],
+    "003": ["merchantman","merchant","merch"],
+    "004": ["favored_trades","flavored","flavored_trades","fave","trades"],
+    "005": ["trade_empire","empire","emp","trempire"]
 }

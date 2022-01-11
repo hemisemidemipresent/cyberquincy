@@ -1,12 +1,12 @@
 {
     "xyz": ["mortar", "mortar-monkey", "mor"],
 
-    "300": ["shell_shock", "sshock"],
+    "300": ["shell_shock", "sshock", "shock"],
     "400": ["the_big_one", "bigone", "big", "tbo", "tb0"],
     "500": ["the_biggest_one", "tb1"],
 
     "030": ["heavy_shells", "heavy"],
-    "040": ["artillery_battery", "art", "artillery", "battery"],
+    "040": ["artillery_battery", "art", "artillery", "battery", "abat","abattery","artbat"],
     "050": ["pop_and_awe", "paa"],
 
     "003": ["signal_flare", "signal", "flare"],

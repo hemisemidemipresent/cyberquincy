@@ -1,15 +1,15 @@
 {
-    "xyz": ["ace", "monkey-ace", "pilot", "plane"],
+	"xyz": ["ace", "monkey-ace", "pilot", "plane", "airplane"],
 
-    "300": ["fighter_plane", "fighter", "fplane"],
-    "400": ["operation:_dart_storm", "ods"],
-    "500": ["sky_shredder", "shredder", "shred", "sshred", "sshredder", "skyshred"],
+	"300": ["fighter_plane", "fighter", "fplane"],
+	"400": ["operation:_dart_storm", "ods", "dartstorm"],
+	"500": ["sky_shredder", "shredder", "shred", "sshred", "sshredder", "skyshred", "shredr"],
 
-    "030": ["bomber_ace", "bomber"],
-    "040": ["ground_zero", "gz"],
-    "050": ["tsar_bomba", "tb", "tsar", "bomba", "bombagang"],
-    
-    "003": ["neva-miss_targeting", "neva_miss", "neva", "nm"],
-    "004": ["spectre", "specter", "spect"],
-    "005": ["flying_fortress", "ff", "big_plane"]
+	"030": ["bomber_ace", "bomber"],
+	"040": ["ground_zero", "gz"],
+	"050": ["tsar_bomba", "tb", "tsar", "bomba", "bombagang"],
+	
+	"003": ["neva-miss_targeting", "neva_miss", "neva", "nm", "miss"],
+	"004": ["spectre", "specter", "spect"],
+	"005": ["flying_fortress", "ff", "big_plane"]
 }

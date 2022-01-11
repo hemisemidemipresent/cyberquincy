@@ -17,7 +17,7 @@
     "400": ["stronger_stimulant", "str_stim", "stronger_stim", "stim", "strim"],
     "500": ["permanent_brew", "permabrew", "pbrew", "pb"],
 
-    "030": ["unstable_concoction", "conc", "unstable"],
+    "030": ["unstable_concoction", "conc", "unstable", "uc", "coc"],
     "040": ["transforming_tonic", "tonic", "tt4", "trans_tonic"],
     "050": ["total_transformation", "totaltrans", "tt5"],
 

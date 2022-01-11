@@ -1,65 +1,12 @@
 {
-    "xyz": [
-        "sub",
-        "monkey-sub",
-        "submarine"
-    ],
-    "300": [
-        "submerge_and_support",
-        "sas",
-        "submerge"
-    ],
-    "400": [
-        "bloontonium_reactor",
-        "react",
-        "reactor"
-    ],
-    "500": [
-        "energizer",
-        "energiser",
-        "engz",
-        "egz",
-        "gizer"
-    ],
-    "030": [
-        "ballistic_missile",
-        "balm",
-        "bmiss",
-        "bmissile"
-    ],
-    "040": [
-        "first_strike_capability",
-        "first_strike",
-        "fs",
-        "fstrike"
-    ],
-    "050": [
-        "pre-emptive_strike",
-        "pre",
-        "preemp",
-        "prestrike",
-        "pstrike",
-        "preemptive"
-    ],
-    "003": [
-        "triple_guns",
-        "triple",
-        "t_guns",
-        "trip_guns"
-    ],
-    "004": [
-        "armor_piercing_darts",
-        "armour_piercing_darts",
-        "ap",
-        "apd",
-        "ad_darts",
-        "apdarts"
-    ],
-    "005": [
-        "sub_commander",
-        "subcom",
-        "sc",
-        "scom",
-        "scomm"
-    ]
+    "xyz": ["sub", "monkey-sub", "submarine", "u-boat"],
+    "300": ["submerge_and_support", "sas", "submerge"],
+    "400": ["bloontonium_reactor", "react", "reactor"],
+    "500": ["energizer", "energiser", "engz", "egz", "gizer"],
+    "030": ["ballistic_missile", "balm", "bmiss", "bmissile"],
+    "040": ["first_strike_capability", "first_strike", "fs", "fstrike", "fsc"],
+    "050": ["pre-emptive_strike", "pre", "preemp", "prestrike", "pstrike", "preemptive"],
+    "003": ["triple_guns", "triple", "t_guns", "trip_guns"],
+    "004": ["armor_piercing_darts", "armour_piercing_darts", "ap", "apd", "ad_darts", "ap_darts"],
+    "005": ["sub_commander", "subcom", "sc", "scom", "scomm"]
 }

@@ -68,8 +68,9 @@ async function execute(message, args, originalCommandName) {
         .setFooter(`For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\``)
         .setColor(colours['cyber']);
     if (parsed.round > 80) {
-        let ramping = b.getRamping(parsed.round);
-        roundEmbed.addField('health and speed ramping', `${ramping}x`);
+        let hRamping = b.getHealthRamping(parsed.round);
+        let sRamping = b.getSpeedRamping(parsed.round);
+        roundEmbed.addField('ramping', `health: ${hRamping}x\nspeed: ${sRamping}x`);
     }
     await message.channel.send({ embeds: [roundEmbed] });
 }
@@ -125,11 +126,12 @@ async function errorMessage(message, parsingErrors) {
 function freeplay(round) {
     [xp, totalxp] = calculateXps(parsed.round);
 
-    let ramping = b.getRamping(round);
+    let hRamping = b.getHealthRamping(parsed.round);
+    let sRamping = b.getSpeedRamping(parsed.round);
     let bloonSets = getBloonSets(round);
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${parsed.round}` + (parsed.mode == 'abr' ? ' ABR' : ''))
-        .addField('health ramping', `${ramping}x`)
+        .addField('ramping', `health: ${hRamping}x\nspeed: ${sRamping}`)
         .setDescription(`all **POSSIBLE** bloon sets\n${bloonSets.join('\n')}`)
         .addField(
             `XP Earned on R${parsed.round}`,

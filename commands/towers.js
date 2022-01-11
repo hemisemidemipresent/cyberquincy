@@ -277,7 +277,7 @@ async function process(upgrade, commandName, message) {
                     .addField('Bug reporting', `report [here](${discord})`, true)
 
                     .setFooter(
-                        'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line'
+                        'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
                     )
                     .setColor(cyber);
                 return message.channel.send({ embeds: [embed] });

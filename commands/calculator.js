@@ -31,17 +31,17 @@ async function calc(message, args, interaction) {
     // Set up operators and operator precedence to interpret the parsed tree
     var power = {
         precedence: 3,
-        associativity: 'left',
+        associativity: 'left'
     };
 
     var factor = {
         precedence: 2,
-        associativity: 'left',
+        associativity: 'left'
     };
 
     var term = {
         precedence: 1,
-        associativity: 'left',
+        associativity: 'left'
     };
 
     var parser = new LexicalParser({
@@ -50,7 +50,7 @@ async function calc(message, args, interaction) {
         '*': factor,
         '/': factor,
         '%': factor,
-        '^': power,
+        '^': power
     });
 
     // Execute the interpretation of the parsed lexical stack
@@ -83,9 +83,9 @@ async function calc(message, args, interaction) {
                             `"${c}" is not a valid character in the \`q!calc\` expression. Type \`q!calc\` for help.`
                         )
                         .setColor(red)
-                        .setFooter(footer),
+                        .setFooter(footer)
                 ],
-                components: [],
+                components: []
             });
         } else console.log(e);
     }
@@ -111,7 +111,7 @@ async function calc(message, args, interaction) {
         },
         '^': function (a, b) {
             return a ** b;
-        },
+        }
     };
 
     try {
@@ -143,11 +143,9 @@ async function calc(message, args, interaction) {
                     new Discord.MessageEmbed()
                         .setTitle(e.message)
                         .setColor(red)
-                        .setFooter(
-                            'due to manipulation, your full input will not be shown'
-                        ),
+                        .setFooter('due to manipulation, your full input will not be shown')
                 ],
-                components: [],
+                components: []
             });
         } else console.log(e);
     }
@@ -160,28 +158,24 @@ async function calc(message, args, interaction) {
             content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
-                    .setTitle(
-                        'Error processing expression. Did you add an extra operator?'
-                    )
+                    .setTitle('Error processing expression. Did you add an extra operator?')
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
-                    .setFooter('Enter `q!calc` for help'),
+                    .setFooter('Enter `q!calc` for help')
             ],
-            components: [],
+            components: []
         });
     } else if (stack.length > 0) {
         return await interaction.update({
             content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
-                    .setTitle(
-                        'Error processing expression. Did you leave out an operator?'
-                    )
+                    .setTitle('Error processing expression. Did you leave out an operator?')
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
-                    .setFooter('Enter `q!calc` for help'),
+                    .setFooter('Enter `q!calc` for help')
             ],
-            components: [],
+            components: []
         });
     } else {
         // G2g!
@@ -190,16 +184,12 @@ async function calc(message, args, interaction) {
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(
-                        gHelper.numberAsCost(
-                            Number.isInteger(output)
-                                ? output
-                                : output.toFixed(1)
-                        )
+                        gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))
                     ) // At MOST 1 decimal place
                     .setDescription(`\`${expression}\``)
-                    .setColor(colours['cyber']),
+                    .setColor(colours['cyber'])
             ],
-            components: [],
+            components: []
         });
     }
 }
@@ -234,12 +224,7 @@ function costOfTowerUpgradeCrosspath(t) {
     let cost = 0;
     if (t.includes('#') || upgrades == '000') {
         // Total cost
-        cost = Towers.totalTowerUpgradeCrosspathCostMult(
-            costs,
-            jsonTowerName,
-            upgrades,
-            priceMult
-        );
+        cost = Towers.totalTowerUpgradeCrosspathCostMult(costs, jsonTowerName, upgrades, priceMult);
     } else if (t.includes('!')) {
         // Individual upgrade cost
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
@@ -256,42 +241,56 @@ function mult(cost, priceMult) {
 
 // TODO: Use hero json
 function costOfHero(hero) {
+    let basecost = 0;
+    let priceMult = module.exports.priceMult;
     switch (Aliases.getCanonicalForm(hero)) {
         case 'adora':
-            return 1080;
+            basecost = 1080;
+            break;
         case 'benjamin':
-            return 1295;
+            basecost = 1295;
+            break;
         case 'brickell':
-            return 810;
+            basecost = 810;
+            break;
         case 'churchill':
-            return 2160;
+            basecost = 2160;
+            break;
         case 'etienne':
-            return 920;
+            basecost = 920;
+            break;
         case 'ezili':
-            return 650;
+            basecost = 650;
+            break;
         case 'gwen':
-            return 970;
+            basecost = 970;
+            break;
         case 'jones':
-            return 810;
+            basecost = 810;
+            break;
         case 'obyn':
-            return 700;
+            basecost = 700;
+            break;
         case 'pat':
-            return 865;
+            basecost = 865;
+            break;
         case 'quincy':
-            return 585;
+            basecost = 585;
+            break;
         case 'sauda':
-            return 650;
+            basecost = 650;
+            break;
         case 'psi':
-            return 865;
+            basecost = 865;
+            break;
     }
+    return mult(basecost, priceMult);
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, i) {
     if (!isNaN(t)) return Number(t);
-    else if (
-        (round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round)
-    ) {
+    else if ((round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (isTowerUpgradeCrosspath(t)) {
         // Catches tower upgrades with crosspaths like wiz#401
@@ -325,24 +324,15 @@ async function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!calc` HELP')
         .setDescription('**CHIMPS Cost Calculator**')
-        .addField(
-            '`r52`,`R100`',
-            'Cumulative cash earned after specified round (6-100)'
-        )
+        .addField('`r52`,`R100`', 'Cumulative cash earned after specified round (6-100)')
         .addField('`33.21`, `69.4201`', 'Literally just numbers work')
         .addField(
             '`wiz!420`, `super!100`, `dart` (same as `dart!000`), `wlp` (same as `wiz!050`)',
             'INDIVIDUAL COST of tower!upgradeSet'
         )
         .addField('`wiz#420`, `super#000`', 'TOTAL COST of tower#upgradeSet')
-        .addField(
-            '`adora`, `brick`',
-            'Base cost of hero (no leveling cost calculations included)'
-        )
-        .addField(
-            'Operators',
-            '`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power)'
-        )
+        .addField('`adora`, `brick`', 'Base cost of hero (no leveling cost calculations included)')
+        .addField('Operators', '`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power)')
         .addField(
             'Examples',
             '`q!calc r99 - wiz#025 - super#052` (2tc test)\n' +
@@ -377,38 +367,34 @@ module.exports = {
                     {
                         label: 'Easy',
                         description: 'Primary only, Deflation',
-                        value: '0.85',
+                        value: '0.85'
                     },
                     {
                         label: 'Medium',
                         description: 'Military only, Reverse, Apopalypse',
-                        value: '1',
+                        value: '1'
                     },
                     {
                         label: 'Hard',
-                        description:
-                            'Magic only, Double HP MOABs, Half Cash, C.H.I.M.P.S.',
-                        value: '1.08',
+                        description: 'Magic only, Double HP MOABs, Half Cash, C.H.I.M.P.S.',
+                        value: '1.08'
                     },
                     {
                         label: 'Impoppable',
-                        value: '1.2',
-                    },
+                        value: '1.2'
+                    }
                 ])
         );
         await message.reply({
             content: 'Select the mode to calculate prices',
-            components: [row],
+            components: [row]
         });
         const filter = (interaction) =>
-            interaction.customId === 'mode' &&
-            interaction.user.id == message.author.id; //  nothing basically
-        const collector = await message.channel.createMessageComponentCollector(
-            {
-                filter,
-                time: 10000,
-            }
-        );
+            interaction.customId === 'mode' && interaction.user.id == message.author.id; //  nothing basically
+        const collector = await message.channel.createMessageComponentCollector({
+            filter,
+            time: 10000
+        });
         collector.on('collect', async (i) => {
             module.exports.priceMult = parseFloat(i.values[0]);
             collector.stop();
@@ -423,5 +409,5 @@ module.exports = {
             }
         });
     },
-    helpMessage,
+    helpMessage
 };

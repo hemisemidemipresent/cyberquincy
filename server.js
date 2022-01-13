@@ -156,7 +156,7 @@ function generateCommandListeners(commandCenter, slashCommandCenter) {
 
     // q! commands
     client.on('messageCreate', async (message) => {
-\        commandCenter.handleCommand(message);
+        commandCenter.handleCommand(message);
     });
 
     // slash commands

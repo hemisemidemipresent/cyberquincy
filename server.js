@@ -1,6 +1,7 @@
 const botInfoHelper = require('./helpers/botinfo');
 const { Client, Intents } = require('discord.js');
 const e = require('express');
+const fs = require('fs');
 
 function main() {
     pingHeroku();
@@ -9,7 +10,8 @@ function main() {
     googleSheetsInitialization();
     configureAliases();
     commandCenter = configureCommands();
-    generateListeners(commandCenter);
+    generateCommandListeners(commandCenter);
+    setupSlashCommandCenter();
     login();
 }
 
@@ -133,7 +135,13 @@ function configureCommands() {
     return commandCenter;
 }
 
-function generateListeners(commandCenter) {
+function setupSlashCommandCenter() {
+    slashCommandCenter = require('./slash_command_center');
+    slashCommandCenter.configureCommands(client);
+    return slashCommandCenter;
+}
+
+function generateCommandListeners(commandCenter) {
     global.Guilds = require('./helpers/guilds.js');
 
     client.on('guildCreate', (guild) => {
@@ -145,20 +153,33 @@ function generateListeners(commandCenter) {
     client.on('guildMemberRemove', async (member) => {
         return Guilds.removeMember(member);
     });
+
+    // q! commands
     client.on('messageCreate', async (message) => {
         commandCenter.handleCommand(message);
+    });
+
+    // slash commands
+    client.on('interactionCreate', async interaction => {
+        if (!interaction.isCommand()) return;
+
+        const command = client.commands.get(interaction.commandName);
+    
+        if (!command) return;
+    
+        try {
+            await command.execute(interaction);
+        } catch (error) {
+            console.error(error);
+            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+        }
     });
 }
 
 function login() {
-    let isTesting = require('./1/config.json')['testing'];
-    let token = '';
-    if (isTesting) {
-        token = require('./1/config.json')['testToken'];
-    } else {
-        token = require('./1/config.json')['token'];
-    }
-    client.login(token);
+    configHelper = require('./helpers/config');
+    const activeToken = configHelper.activeToken();
+    client.login(activeToken);
 }
 
 try {

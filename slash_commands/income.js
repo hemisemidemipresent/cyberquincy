@@ -168,7 +168,7 @@ function chincomeEmbed(mode, round) {
     return embed;
 }
 
-calculateChincomes = function (mode, round) {
+function calculateChincomes(mode, round) {
     let incomes = {
         rincome: null,
         chincomeExclusive: null,

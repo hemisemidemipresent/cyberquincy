@@ -169,6 +169,26 @@ function chincomeEmbed(mode, round) {
 }
 
 function calculateChincomes(mode, round) {
+    let incomes;
+    if (mode == 'abr') {
+        incomes = calculateAbrChincomes(round)
+    } else {
+        incomes = calculateNormalChincomes(round)
+        if (mode == 'halfcash') {
+            for (incomeType in incomes) {
+                incomes[incomeType] /= 2;
+            }
+        }
+    }
+    for (incomeType in incomes) {
+        if (incomes[incomeType] && typeof incomes[incomeType] == 'number') {
+            incomes[incomeType] = gHelper.numberAsCost(incomes[incomeType].toFixed(1));
+        }
+    }
+    return incomes;
+}
+
+function calculateAbrChincomes(round) {
     let incomes = {
         rincome: null,
         chincomeExclusive: null,
@@ -180,57 +200,60 @@ function calculateChincomes(mode, round) {
         superLincomeExclusive: null
     };
 
-    if (mode == 'abr') {
-        index = round;
-        incomes.rincome = abr[index].cashThisRound;
-        // start is r3
-        incomes.chincomeExclusive = abr[index - 1].cumulativeCash;
+    index = round;
+    incomes.rincome = abr[index].cashThisRound;
+    // start is r3
+    incomes.chincomeExclusive = abr[index - 1].cumulativeCash;
 
-        incomes.chincomeInclusive = abr[index].cumulativeCash;
-        if (round < 100)
-            incomes.lincomeInclusive = abr[100].cumulativeCash - abr[index - 1].cumulativeCash;
+    incomes.chincomeInclusive = abr[index].cumulativeCash;
+    if (round < 100)
+        incomes.lincomeInclusive = abr[100].cumulativeCash - abr[index - 1].cumulativeCash;
 
-        if (round < 99)
-            incomes.lincomeExclusive = abr[100].cumulativeCash - abr[index].cumulativeCash;
+    if (round < 99)
+        incomes.lincomeExclusive = abr[100].cumulativeCash - abr[index].cumulativeCash;
 
-        if (round > 100) incomes.superChincomeInclusive = 'abr past 100 is random'; // these wont actually be shown in the embed since <round> cannot be greater than 100 if mode is abr
+    if (round > 100) incomes.superChincomeInclusive = 'abr past 100 is random'; // these wont actually be shown in the embed since <round> cannot be greater than 100 if mode is abr
 
-        incomes.superLincomeInclusive = 'abr past 100 is random';
+    incomes.superLincomeInclusive = 'abr past 100 is random';
 
-        if (round < 140) incomes.superLincomeExclusive = 'abr past 100 is random';
-    } else {
-        index = round;
+    if (round < 140) incomes.superLincomeExclusive = 'abr past 100 is random';
 
-        incomes.rincome = r[index].cashThisRound;
-        if (round > 6)
-            incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
-
-        incomes.chincomeInclusive = r[index].cumulativeCash - r[5].cumulativeCash + 650;
-        if (round < 100)
-            incomes.lincomeInclusive = r[100].cumulativeCash - r[index - 1].cumulativeCash;
-
-        if (round < 99) incomes.lincomeExclusive = r[100].cumulativeCash - r[index].cumulativeCash;
-
-        if (round > 100)
-            incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash;
-
-        incomes.superLincomeInclusive = r[140].cumulativeCash - r[index - 1].cumulativeCash;
-        if (round < 140)
-            incomes.superLincomeExclusive = r[140].cumulativeCash - r[index].cumulativeCash;
-
-        if (mode == 'halfcash')
-            for (incomeType in incomes) {
-                incomes[incomeType] /= 2;
-            }
-    }
-
-    for (incomeType in incomes) {
-        if (incomes[incomeType] && typeof incomes[incomeType] == 'number') {
-            incomes[incomeType] = gHelper.numberAsCost(incomes[incomeType].toFixed(1));
-        }
-    }
     return incomes;
-};
+}
+
+function calculateNormalChincomes(round) {
+    let incomes = {
+        rincome: null,
+        chincomeExclusive: null,
+        chincomeInclusive: null,
+        lincomeExclusive: null,
+        lincomeInclusive: null,
+        superChincomeInclusive: null,
+        superLincomeInclusive: null,
+        superLincomeExclusive: null
+    };
+    
+    index = round;
+
+    incomes.rincome = r[index].cashThisRound;
+    if (round > 6)
+        incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
+
+    incomes.chincomeInclusive = r[index].cumulativeCash - r[5].cumulativeCash + 650;
+    if (round < 100)
+        incomes.lincomeInclusive = r[100].cumulativeCash - r[index - 1].cumulativeCash;
+
+    if (round < 99) incomes.lincomeExclusive = r[100].cumulativeCash - r[index].cumulativeCash;
+
+    if (round > 100)
+        incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash;
+
+    incomes.superLincomeInclusive = r[140].cumulativeCash - r[index - 1].cumulativeCash;
+    if (round < 140)
+        incomes.superLincomeExclusive = r[140].cumulativeCash - r[index].cumulativeCash;
+
+    return incomes;
+}
 
 function execute(interaction) {
     validationFailure = validateInput(interaction);

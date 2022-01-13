@@ -1,6 +1,7 @@
 const botInfoHelper = require('./helpers/botinfo');
 const { Client, Intents } = require('discord.js');
 const e = require('express');
+const fs = require('fs');
 
 function main() {
     pingHeroku();
@@ -9,7 +10,8 @@ function main() {
     googleSheetsInitialization();
     configureAliases();
     commandCenter = configureCommands();
-    generateListeners(commandCenter);
+    slashCommandCenter = setupSlashCommandCenter();
+    generateCommandListeners(commandCenter, slashCommandCenter);
     login();
 }
 
@@ -133,7 +135,13 @@ function configureCommands() {
     return commandCenter;
 }
 
-function generateListeners(commandCenter) {
+function setupSlashCommandCenter() {
+    slashCommandCenter = require('./slash_command_center');
+    slashCommandCenter.configureCommands(client);
+    return slashCommandCenter;
+}
+
+function generateCommandListeners(commandCenter, slashCommandCenter) {
     global.Guilds = require('./helpers/guilds.js');
 
     client.on('guildCreate', (guild) => {
@@ -145,20 +153,24 @@ function generateListeners(commandCenter) {
     client.on('guildMemberRemove', async (member) => {
         return Guilds.removeMember(member);
     });
+
+    // q! commands
     client.on('messageCreate', async (message) => {
         commandCenter.handleCommand(message);
+    });
+
+    // slash commands
+    client.on('interactionCreate', interaction => {
+        if (!interaction.isCommand()) return;
+
+        slashCommandCenter.handleCommand(interaction);
     });
 }
 
 function login() {
-    let isTesting = require('./1/config.json')['testing'];
-    let token = '';
-    if (isTesting) {
-        token = require('./1/config.json')['testToken'];
-    } else {
-        token = require('./1/config.json')['token'];
-    }
-    client.login(token);
+    configHelper = require('./helpers/config');
+    const activeToken = configHelper.activeToken();
+    client.login(activeToken);
 }
 
 try {

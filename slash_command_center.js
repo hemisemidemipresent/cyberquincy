@@ -19,7 +19,6 @@ async function handleCommand(interaction) {
     if (!command) return;
 
     try {
-        console.log(interaction + 'HELLOOO!?!?')
         await command.execute(interaction);
     } catch (error) {
         console.error(error);

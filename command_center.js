@@ -17,7 +17,8 @@ function configureCommands(client) {
     // Register commands
     for (const file of commandFiles) {
         const command = require(`./commands/${file}`);
-        client.commands.set(command.name, command);
+        // Add _old suffix so same-named slash commands don't clash with old written commands
+        client.commands.set(command.name + '_old', command);
     }
 }
 
@@ -56,7 +57,7 @@ async function handleCommand(message) {
         }
         // Search through command names taking into account their aliases
         let command =
-            client.commands.get(commandName) ||
+            client.commands.get(commandName + '_old') ||
             client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 
         if (!command) {

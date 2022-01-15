@@ -7,7 +7,7 @@ const {
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
 
-let heroOption = 
+const heroOption = 
     new SlashCommandStringOption()
         .setName('hero')
         .setDescription('Hero')
@@ -25,7 +25,7 @@ const heroLevelOption =
         .setDescription('Round Hero is Placed')
         .setRequired(true)
 
-let mapDifficultyOption = 
+const mapDifficultyOption = 
     new SlashCommandStringOption()
         .setName('map_difficulty')
         .setDescription('Map Difficulty')
@@ -45,7 +45,11 @@ builder = new SlashCommandBuilder()
     .addStringOption(mapDifficultyOption);
 
     
-function generateHeroLevels(hero, placementRound, mapDifficulty) {
+function generateHeroLevels(interaction) {
+    hero = interaction.options.getString('hero');
+    placementRound = interaction.options.getInteger('placement_round');
+    mapDifficulty = interaction.options.getString('map_difficulty');
+
     heroLevels = Heroes.levelingCurve(
         hero,
         placementRound,
@@ -107,12 +111,8 @@ function execute(interaction) {
         });
     }
 
-    hero = interaction.options.getString('hero');
-    placementRound = interaction.options.getInteger('placement_round');
-    mapDifficulty = interaction.options.getString('map_difficulty');
-
     return interaction.reply({
-        embeds: [generateHeroLevels(hero, placementRound, mapDifficulty)]
+        embeds: [generateHeroLevels(interaction)]
     })
 }
 

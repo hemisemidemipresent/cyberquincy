@@ -37,7 +37,6 @@ Aliases.allMapDifficulties().forEach(difficulty => {
     )
 })
 
-
 builder = new SlashCommandBuilder()
     .setName('herolevel')
     .setDescription('See how heroes level based on your inputted parameters')
@@ -45,6 +44,7 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(heroLevelOption)
     .addStringOption(mapDifficultyOption);
 
+    
 function generateHeroLevels(hero, placementRound, mapDifficulty) {
     heroLevels = Heroes.levelingCurve(
         hero,

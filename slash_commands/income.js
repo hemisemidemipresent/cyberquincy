@@ -31,7 +31,7 @@ function validateInput(interaction) {
 
     // Validations
     if (startround < 1 || endround < 1) {
-        return `Can't enter negative numbers for rounds (${endround < startround ? endround : startround})`
+        return `Can't enter non-positive numbers for rounds (${endround < startround ? endround : startround})`
     }
     if (endround < startround) {
         return `You entered a lower end round than start round`

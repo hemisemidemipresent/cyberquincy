@@ -35,7 +35,6 @@ function globalRequirements() {
     global.colours = require('./jsons/colours.json');
     global.b = require('./helpers/bloons-general');
     global.Towers = require('./helpers/towers.js');
-    global.Files = require('./helpers/files.js');
     global.AliasRepository = require('./alias-repository.js');
 
     global.Discord = require('discord.js');

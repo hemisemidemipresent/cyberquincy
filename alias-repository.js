@@ -1,49 +1,48 @@
 const filepath = require('filepath');
 const AliasError = require('./exceptions/alias-error.js');
 const gHelper = require('./helpers/general.js');
+const filesHelper = require('./helpers/files.js');
 
 class AliasRepository extends Array {
     ////////////////////////////////////////////////////
     // Configuration/Initialization
     ////////////////////////////////////////////////////
 
-    asyncAliasFiles() {
+    async asyncAliasFiles() {
         // {source_directory: handling function}
         const SPECIAL_HANDLING_CASES = {
             './aliases/towers': this.loadTowerAliasFile,
             './aliases/raceid.json': this.loadRaceAlias,
         };
 
-        (async () => {
-            for await (const absolutePath of Files.getFiles('./aliases', [
-                '.json',
-            ])) {
-                let fpath = filepath.create(absolutePath);
-                let tokens = fpath.split();
+        for await (const absolutePath of filesHelper.getFiles('./aliases', [
+            '.json',
+        ])) {
+            let fpath = filepath.create(absolutePath);
+            let tokens = fpath.split();
 
-                let relPath =
-                    './' +
-                    tokens
-                        .slice(tokens.findIndex((i) => i === 'aliases'))
-                        .join('/');
+            let relPath =
+                './' +
+                tokens
+                    .slice(tokens.findIndex((i) => i === 'aliases'))
+                    .join('/');
 
-                // Determine the function that will handle the alias file
+            // Determine the function that will handle the alias file
 
-                // Default
-                let handlingFunction = this.loadAliasFile;
+            // Default
+            let handlingFunction = this.loadAliasFile;
 
-                // See if the file has a special handler
-                for (const specialRelPath in SPECIAL_HANDLING_CASES) {
-                    if (relPath.startsWith(specialRelPath)) {
-                        handlingFunction =
-                            SPECIAL_HANDLING_CASES[specialRelPath];
-                        break;
-                    }
+            // See if the file has a special handler
+            for (const specialRelPath in SPECIAL_HANDLING_CASES) {
+                if (relPath.startsWith(specialRelPath)) {
+                    handlingFunction =
+                        SPECIAL_HANDLING_CASES[specialRelPath];
+                    break;
                 }
-
-                handlingFunction.call(this, relPath);
             }
-        })();
+
+            handlingFunction.call(this, relPath);
+        }
     }
 
     // Default way to load in an alias file

@@ -13,7 +13,6 @@ let heroOption =
         .setDescription('Hero')
         .setRequired(true);
 Aliases.allHeroes().forEach(hero => {
-    console.log(hero)
     heroOption.addChoice(
         gHelper.toTitleCase(hero),
         hero
@@ -32,7 +31,6 @@ let mapDifficultyOption =
         .setDescription('Map Difficulty')
         .setRequired(true);
 Aliases.allMapDifficulties().forEach(difficulty => {
-    console.log(difficulty)
     mapDifficultyOption.addChoice(
         gHelper.toTitleCase(difficulty),
         difficulty

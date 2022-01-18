@@ -427,18 +427,18 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
                         rightIndex = (leftIndex - 1 + numRows) % numRows;
                         leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
                         if (leftIndex < 0) leftIndex = 0;
-                        displayPages(-1);
+                        await displayPages(-1);
                         break;
                     case '➡️':
                         leftIndex = (rightIndex + 1) % numRows;
                         rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
                         if (rightIndex >= numRows) rightIndex = numRows - 1;
-                        displayPages(1);
+                        await displayPages(1);
                         break;
                 }
             });
     }
-    displayPages(1);
+    await displayPages(1);
 }
 
 function title(parsed, combos) {

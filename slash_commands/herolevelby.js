@@ -66,15 +66,18 @@ function displayHeroPlacementRounds(interaction) {
 
     let startingRounds = [];
     if (heroPlacementRound == -Infinity)
-        startingRounds = [6, 10, 13, 21, 30, 40];
+        if (goalRound >= 40)
+            startingRounds = [6, 10, 13, 21, 30, 40];
+        else
+            startingRounds = gHelper
+                .range(6, 13)
+                .filter(r => r <= goalRound)
     else
         startingRounds = gHelper
             .range(1, 8)
             .map((addend) => heroPlacementRound + addend)
             .filter((r) => r <= goalRound);
     
-    activeButtonCollectors = []
-
     async function displayHeroLevels() {
         const laterPlacementRounds = calculateLaterPlacementRounds(
             hero,
@@ -123,8 +126,8 @@ function displayHeroPlacementRounds(interaction) {
             // Show 5 buttons max
             if (buttons.components.length >= 5) break;
 
-            // Don't show the 30s if hero doesn't need to be placed before R42
-            if (leftRound < heroPlacementRound - 10) continue;
+            // Don't show 31-40 if the hero doesn't need to be placed before R41
+            if (leftRound <= heroPlacementRound - 9) continue;
 
             // Don't show the 90s if the hero should be leveled up by round 87
             if (leftRound > goalRound) continue;
@@ -149,37 +152,56 @@ function displayHeroPlacementRounds(interaction) {
         if (interaction.replied) {
             await interaction.editReply({
                 embeds: [embed],
+                components: [buttons],
             })
         } else {
             await interaction.reply({
                 embeds: [embed],
                 components: [buttons],
             });
-            const filter = selection => {
-                selection.deferUpdate();
-                return selection.user.id === interaction.user.id;
-            };
-            const collector =
-                interaction.channel.createMessageComponentCollector({ 
-                    filter,
-                    componentType: 'BUTTON', 
-                    time: 4000 
-                });
-
-            collector.on('collect', selection => {
-                const [leftRound, rightRound] = 
-                    selection.customId.split(/->/).map(r => parseInt(r));
-                startingRounds = gHelper.range(leftRound, rightRound);
-                displayHeroLevels();
+        }
+        
+        const filter = selection => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        };
+        const collector =
+            interaction.channel.createMessageComponentCollector({ 
+                filter,
+                componentType: 'BUTTON', 
+                time: 20000 
             });
+        
+        collector.on('collect', buttonInteraction => {
+            collector.stop();
+            // Reason for including:
+            //   * https://discordjs.guide/popular-topics/collectors.html#basic-message-component-collector
+            // Reason why this goes here and not the filter:
+            //   * https://stackoverflow.com/questions/68841237/discord-js-bot-cant-handle-multiple-buttons-in-the-same-channel-version-13
+            buttonInteraction.deferUpdate();
 
-            collector.on('end', _ => {
+            const [leftRound, rightRound] = 
+                buttonInteraction.customId.split(/->/).map(r => parseInt(r));
+            startingRounds = gHelper.range(leftRound, rightRound);
+            displayHeroLevels();
+        });
+
+        collector.on('end', collected => {
+            if (collected.size == 0) {
                 interaction.editReply({ 
                     embeds: [embed.setFooter('')],
                     components: [],
                 })
-            })
-        }
+            }
+        })
     }
 
     displayHeroLevels();

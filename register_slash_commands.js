@@ -1,7 +1,6 @@
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { discordClientId } = require('./1/config.json');
-const { activeToken } = require('./helpers/config');
+const { activeToken, activeClientID } = require('./helpers/config');
 
 async function loadAliases() {
 	const AliasRepository = require('./alias-repository.js');
@@ -17,7 +16,7 @@ async function registerCommands() {
 
 	const rest = new REST({ version: '9' }).setToken(activeToken());
 
-	rest.put(Routes.applicationCommands(discordClientId), { body: commands })
+	rest.put(Routes.applicationCommands(activeClientID()), { body: commands })
 		.then(() => console.log('Successfully registered application commands.'))
 		.catch(console.error);
 }

@@ -6,8 +6,8 @@ async function spin(message) {
 
     let tag = await Tags.findOne({
         where: {
-            name: user.id,
-        },
+            name: user.id
+        }
     });
     if (!tag.showAds || tag.showAds == false) {
         return;
@@ -40,7 +40,7 @@ function ownServer(message) {
         .setTitle('Want to invite the bot to your own server?')
         .addField(
             'Please spread the word around!',
-            'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881'
+            'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=2147863617) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=2147863617'
         )
         .setColor(colours['turq'])
         .setFooter(
@@ -75,5 +75,5 @@ function upvoteBot(message) {
 }
 
 module.exports = {
-    spin,
+    spin
 };

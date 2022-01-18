@@ -15,22 +15,20 @@ module.exports = {
         'qh',
         'quincyh',
         'everything',
-        'all',
+        'all'
     ],
     cooldown: 5,
     async execute(message) {
         let embed = new Discord.MessageEmbed()
             .setTitle('Need help?')
-            .setDescription(
-                `discord server: ${discord} stay up-to-date and talk to the devs`
-            )
+            .setDescription(`discord server: ${discord} stay up-to-date and talk to the devs`)
             .addField(
                 '**Documentation/Tutorial**',
                 '[What is Cyber Quincy](https://docs-cq.netlify.com/docs/intro)\n[Getting started](https://docs-cq.netlify.app/docs/Introduction/getting-started)\n[FAQ](https://docs-cq.netlify.app/docs/Introduction/faq)'
             )
             .addField(
                 'Invite the bot',
-                '[invite link](https://discord.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=537250881%5Cndiscord)'
+                '[invite link](https://discord.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=2147863617%5Cndiscord)'
             )
             .addField(
                 'Upvote the bot',
@@ -38,5 +36,5 @@ module.exports = {
             );
 
         await message.reply({ embeds: [embed] });
-    },
+    }
 };

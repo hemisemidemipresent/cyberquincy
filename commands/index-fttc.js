@@ -394,7 +394,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
                     embeds: [challengeEmbed]
                 });
                 if (maxNumRowsDisplayed < numRows) {
-                    return reactLoop(msg);
+                    return await reactLoop(msg);
                 }
                 return msg;
             } catch (e) {} // Retry by decrementing maxNumRowsDisplayed
@@ -406,7 +406,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
 
     // Gets the reaction to the pagination message by the command author
     // and respond by turning the page in the correction direction
-    function reactLoop(botMessage) {
+    async function reactLoop(botMessage) {
         // Lays out predefined reactions
         for (var i = 0; i < REACTIONS.length; i++) {
             botMessage.react(REACTIONS[i]);
@@ -421,24 +421,24 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
                 filter,
                 time: 20000
             })
-            .once('collect', (reaction) => {
+            .once('collect', async (reaction) => {
                 switch (reaction.emoji.name) {
                     case '⬅️':
                         rightIndex = (leftIndex - 1 + numRows) % numRows;
                         leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
                         if (leftIndex < 0) leftIndex = 0;
-                        displayPages(-1);
+                        await displayPages(-1);
                         break;
                     case '➡️':
                         leftIndex = (rightIndex + 1) % numRows;
                         rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
                         if (rightIndex >= numRows) rightIndex = numRows - 1;
-                        displayPages(1);
+                        await displayPages(1);
                         break;
                 }
             });
     }
-    displayPages(1);
+    await displayPages(1);
 }
 
 function title(parsed, combos) {

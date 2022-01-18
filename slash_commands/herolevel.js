@@ -17,13 +17,13 @@ Aliases.allHeroes().forEach(hero => {
         gHelper.toTitleCase(hero),
         hero
     )
-})
+});
 
 const heroLevelOption = 
     new SlashCommandIntegerOption()
         .setName('placement_round')
         .setDescription('Round Hero is Placed')
-        .setRequired(true)
+        .setRequired(true);
 
 const mapDifficultyOption = 
     new SlashCommandStringOption()
@@ -35,37 +35,53 @@ Aliases.allMapDifficulties().forEach(difficulty => {
         gHelper.toTitleCase(difficulty),
         difficulty
     )
-})
+});
+
+const energizerRoundOption = 
+    new SlashCommandIntegerOption()
+        .setName('energizer_placement_round')
+        .setDescription('Optional Round Energizer was Placed')
+        .setRequired(false);
 
 builder = new SlashCommandBuilder()
     .setName('herolevel')
-    .setDescription('See how heroes level based on your inputted parameters')
+    .setDescription('See how heroes level based on your inputted parameters (optionally with energizer)')
     .addStringOption(heroOption)
     .addIntegerOption(heroLevelOption)
-    .addStringOption(mapDifficultyOption);
+    .addStringOption(mapDifficultyOption)
+    .addIntegerOption(energizerRoundOption);
 
     
 function generateHeroLevels(interaction) {
     hero = interaction.options.getString('hero');
     placementRound = interaction.options.getInteger('placement_round');
     mapDifficulty = interaction.options.getString('map_difficulty');
+    energizerRound = interaction.options.getInteger('energizer_placement_round');
 
     heroLevels = Heroes.levelingCurve(
         hero,
         placementRound,
-        mapDifficulty
+        mapDifficulty,
+        energizerRound || Infinity
     );
     let res = table(gHelper.range(1, 20), heroLevels.slice(1));
     const embed = new Discord.MessageEmbed()
         .setTitle(`${gHelper.toTitleCase(hero)} Leveling Chart`)
         .setDescription(
-            `Placed: **R${
-                placementRound
-            }**\nMaps: **${gHelper.toTitleCase(mapDifficulty)}**`
+            description(placementRound, mapDifficulty, energizerRound)
         )
         .addField('\u200b', `${res}`)
         .setColor(colours['cyber']);
     return embed;
+}
+
+function description(placementRound, mapDifficulty, energizerRound) {
+    let description = `Placed: **R${placementRound}**`
+    description += `\nMaps: **${gHelper.toTitleCase(mapDifficulty)}**`
+    if (energizerRound) {
+        description += `\nEnergizer: **R${energizerRound}**`
+    }
+    return description;
 }
 
 function addSpaces(str, max) {
@@ -95,10 +111,20 @@ function table(lvl, round) {
 function validateInput(interaction) {
     placementRound = interaction.options.getInteger('placement_round');
     if (placementRound < 1) {
-        return "Can't enter non-positive numbers for rounds"
+        return "Must enter a positive number for round"
     }
     if (placementRound > 100) {
         return "Can't enter starting round > 100"
+    }
+
+    energizerRound = interaction.options.getInteger('energizer_placement_round');
+    if (energizerRound) {
+        if (energizerRound < 1) {
+            return "Must enter a positive number for energizer round"
+        }
+        if (energizerRound > 100) {
+            return "Can't enter energizer round starting round > 100; just don't enter it since the argument is optional"
+        }
     }
 }
 

@@ -6,10 +6,10 @@
     "500": ["super_mines", "swines","smines"],
 
     "030": ["moab_shredr", "moab_shredder"],
-    "040": ["spike_storm"],
+    "040": ["spike_storm", "sporm"],
     "050": ["carpet_of_spikes", "cos", "carpet"],
 
-    "003": ["long_life_spikes", "ll", "lls"],
-    "004": ["deadly_spikes", "deadly", "dspikes"],
+    "003": ["long_life_spikes", "ll", "lls", "llspike", "llspikes"],
+    "004": ["deadly_spikes", "deadly", "dspike", "dspikes"],
     "005": ["perma-spike", "permaspike", "pspike"]
 }

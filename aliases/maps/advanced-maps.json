@@ -64,7 +64,13 @@
     ],
     "x_factor": [
         "xf",
-        "x",
+        "xfac",
         "factor"
+    ],
+    "sunken_columns": [
+        "sc",
+        "sunk",
+        "sunken",
+        "scull"
     ]
 }

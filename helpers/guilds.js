@@ -75,7 +75,7 @@ async function addMember(member) {
             )
             .addField(
                 'Who am I?',
-                `I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=2147863617),[discord server](${discord})`
+                `I am a BTD6 Discord bot. Links:\n[invite me to your server](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617),[discord server](${discord})`
             )
             .setColor(colours['cyber']);
         member.send(wel);

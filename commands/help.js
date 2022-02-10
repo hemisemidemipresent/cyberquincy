@@ -28,7 +28,7 @@ module.exports = {
             )
             .addField(
                 'Invite the bot',
-                '[invite link](https://discord.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=2147863617%5Cndiscord)'
+                '[invite link](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617)'
             )
             .addField(
                 'Upvote the bot',

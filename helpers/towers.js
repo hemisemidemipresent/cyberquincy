@@ -126,6 +126,14 @@ function isWaterTowerUpgrade(towerUpgrade) {
     );
 }
 
+function towerPathToIndexNormalForm(towerPath) {
+    let [tower, path] = towerPath.split('#');
+    path = path.split('-')
+                .map((tk) => gHelper.toTitleCase(tk))
+                .join(' ');
+    return `${Aliases.toIndexNormalForm(tower)} (${path})`
+}
+
 function towerUpgradeToIndexNormalForm(upgrade) {
     const indexNormalUnformatted = Aliases.getAliasSet(upgrade)[1];
     return Aliases.toIndexNormalForm(indexNormalUnformatted);
@@ -379,6 +387,7 @@ module.exports = {
     isTowerPath,
     allWaterTowers,
     isWaterTowerUpgrade,
+    towerPathToIndexNormalForm,
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,
     pathTierFromUpgradeSet,

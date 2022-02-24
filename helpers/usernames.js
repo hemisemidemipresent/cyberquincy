@@ -7,7 +7,7 @@ const skuID = 35;
 const skuSignature = 'A26308E242742374';
 const sessionID = null;
 
-const deviceID = 'vrej';
+const deviceID = 'no_link428482bf0b696dcf8ded17e53910b84f9bc99f53';
 
 module.exports = {
     /**

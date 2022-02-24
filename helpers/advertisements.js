@@ -40,7 +40,7 @@ function ownServer(message) {
         .setTitle('Want to invite the bot to your own server?')
         .addField(
             'Please spread the word around!',
-            'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=2147863617) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot&permissions=2147863617'
+            'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617'
         )
         .setColor(colours['turq'])
         .setFooter(

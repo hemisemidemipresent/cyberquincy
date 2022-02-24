@@ -533,8 +533,19 @@
         "obj": 0,
         "Cos": "N/A",
         "wa%": "-",
-        "los": "",
+        "los": "yes",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920467101712384/UndergroundBTD6.png",
+        "e": "2/2"
+    },
+    "sunken_columns": {
+        "ver": 30,
+        "len": 18.8,
+        "lenStr": 18.8,
+        "obj": 2,
+        "Cos": "2000",
+        "wa%": "yes",
+        "los": "yes",
+        "thu": "https://media.discordapp.net/attachments/770094137713885204/941145397320093746/unknown.png",
         "e": "2/2"
     },
     "cargo": {

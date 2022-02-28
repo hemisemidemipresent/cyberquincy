@@ -36,7 +36,7 @@ const Towers = require('../helpers/towers');
 let entityOption = 
     new SlashCommandStringOption()
         .setName('entity')
-        .setDescription('Hero/Tower/Path/Upgrade')
+        .setDescription('Hero/Tower/Upgrade')
         .setRequired(false);
 
 let mapOption = 
@@ -63,17 +63,15 @@ const OrParser = require('../parser/or-parser.js');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const HeroParser = require('../parser/hero-parser.js');
 const TowerParser = require('../parser/tower-parser.js')
-const TowerPathParser = require('../parser/tower-path-parser.js');
 const MapParser = require('../parser/map-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
-const PersonParser = require('../parser/person-parser.js');
 const EmptyParser = require('../parser/empty-parser.js');
 const Parsed = require('../parser/parsed.js');
 
 function validateInput(interaction) {
     parsedEntity = parseEntity(interaction)
     if (parsedEntity?.hasErrors())
-        return `Entity ${entity} didn't match tower/path/upgrade/hero, including aliases`
+        return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`
 
     parsedMap = parseMap(interaction)
     if (parsedMap?.hasErrors())
@@ -83,7 +81,6 @@ function validateInput(interaction) {
 function parseEntity(interaction) {
     entityParser = new OrParser(
         new TowerParser(),
-        new TowerPathParser(),
         new TowerUpgradeParser(),
         new HeroParser(),
         new EmptyParser(),
@@ -138,6 +135,218 @@ async function execute(interaction) {
             embeds: [challengeEmbed],
         })
     }
+
+    if (parsedEntity?.tower_upgrade || parsedEntity?.hero && !person && !parsedMap?.map_difficulty) {
+        if (parsedMap?.map) {
+
+        } else {
+            const challengeEmbed = await display2MPOG(parsedEntity?.hero || Towers.towerUpgradeToIndexNormalForm(parsedEntity?.tower_upgrade))
+            return interaction.reply({
+                embeds: [challengeEmbed],
+            })
+        }
+    }
+}
+
+// Displays the OG 2MPC completion
+async function display2MPOG(tower) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    entryRow = await rowFromTower(tower);
+
+    // Load the row where the map was found
+    await sheet.loadCells(`${COLS.NUMBER}${entryRow}:${COLS.LINK}${entryRow}`);
+
+    // Assign each value to be discord-embedded in a simple default way
+    values = {};
+    for (key in COLS) {
+        values[key] = sheet.getCellByA1(`${COLS[key]}${entryRow}`).value;
+    }
+
+    // Special formatting for date (get formattedValue instead)
+    dateCell = sheet.getCellByA1(`${COLS.DATE}${entryRow}`);
+    values.DATE = dateCell.formattedValue;
+
+    // Special handling for link (use hyperlink to cleverly embed in discord)
+    linkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
+    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+
+    // Embed and send the message
+    let challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(`${values.TOWER} 2MPC Combo`)
+        .setColor(paleblue);
+
+    for (field in values) {
+        challengeEmbed.addField(
+            gHelper.toTitleCase(field.replace('_', ' ')),
+            values[field],
+            true
+        );
+    }
+
+    challengeEmbed.addField('OG?', 'OG', true);
+
+    mapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
+    altMaps = Object.keys(parseMapNotes(mapCell.note));
+    ogMap = Aliases.mapToIndexAbbreviation(
+        Aliases.toAliasNormalForm(values.OG_MAP)
+    );
+
+    mapGroups = [
+        Aliases.beginnerMaps(),
+        Aliases.intermediateMaps(),
+        Aliases.advancedMaps(),
+        Aliases.expertMaps(),
+    ];
+    if (Towers.isWaterTowerUpgrade(tower)) {
+        mapGroups = mapGroups.map((aliases) =>
+            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
+        );
+    }
+    mapGroups = mapGroups.map((aliases) =>
+        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+    );
+
+    altMapGroups = mapGroups.map((mapGroup) =>
+        mapGroup.filter((map) => altMaps.includes(map))
+    );
+    unCompletedAltMapGroups = mapGroups.map((mapGroup) =>
+        mapGroup.filter((map) => !altMaps.concat(ogMap).includes(map))
+    );
+
+    wordAllIncluded = false;
+
+    displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
+        mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
+        waterTowerAsterisk = Towers.isWaterTowerUpgrade(tower) ? '*' : '';
+        if (unCompletedAltMapGroups[i] == 0) {
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk}`;
+        } else if (unCompletedAltMapGroups[i].length < 3) {
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[
+                i
+            ].join(', ')}}`;
+        } else if (altMapGroups[i].length == 0) {
+            return '';
+        } else {
+            return `{${altMapGroups[i].join(', ')}}`;
+        }
+    });
+
+    if (altMapGroups.some((group) => group.length > 0)) {
+        altMapsString = '';
+        altMapsString += `\n${displayedMapGroups[0]}`;
+        altMapsString += `\n${displayedMapGroups[1]}`;
+        altMapsString += `\n${displayedMapGroups[2]}`;
+        altMapsString += `\n${displayedMapGroups[3]}`;
+        challengeEmbed.addField('**Alt Maps**', altMapsString);
+    } else {
+        challengeEmbed.addField('**Alt Maps**', 'None');
+    }
+
+    if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
+        challengeEmbed.setFooter('*with water');
+    }
+
+    return challengeEmbed;
+}
+
+// Gets the row of tower completion stats for the given tower
+async function rowFromTower(tower) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    [rowBegin, rowEnd] = await rowBoundaries();
+
+    // Load the column containing the different maps
+    await sheet.loadCells(`${COLS.TOWER}${rowBegin}:${COLS.TOWER}${rowEnd}`); // loads all possible cells with tower
+
+    // The row where the queried map is found
+    let entryRow = null;
+
+    // Search for the row in all "possible" rows
+    for (let row = rowBegin; row <= rowEnd; row++) {
+        let towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
+
+        if (!towerCandidate) continue;
+
+        // input is "in_the_loop" but needs to be compared to "In The Loop"
+        if (
+            Aliases.toIndexNormalForm(tower) ===
+            gHelper.toTitleCase(towerCandidate)
+        ) {
+            entryRow = row;
+            break;
+        }
+    }
+
+    if (!entryRow) {
+        throw new UserCommandError(
+            `Tower \`${Aliases.toIndexNormalForm(
+                tower
+            )}\` doesn't yet have a 2MP completion`
+        );
+    }
+
+    return entryRow;
+}
+
+async function rowBoundaries() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+    await sheet.loadCells(`${COLS.NUMBER}1:${COLS.NUMBER}${sheet.rowCount}`);
+
+    startRow = null;
+    endRow = null;
+
+    for (let row = 1; row <= sheet.rowCount; row++) {
+        numberCandidate = sheet.getCellByA1(`${COLS.NUMBER}${row}`).value;
+
+        // If startRow has been found, find the first occurence of a blank cell
+        if (startRow && !numberCandidate) {
+            endRow = row - 1;
+            break;
+        } else if (
+            numberCandidate &&
+            numberCandidate.replace(/ /g, '') === '1st'
+        ) {
+            startRow = row;
+        }
+    }
+
+    if (!startRow) {
+        throw new DeveloperCommandError(
+            `Orientation failed because \`1st\` couldn't be found in the "Number" column.`
+        );
+    }
+
+    // If there wasn't a trailing blank cell, then the last cell viewed must be the end cell
+    if (!endRow) endRow = sheet.rowCount;
+
+    return [startRow, endRow];
+}
+
+// Parses the map notes by splitting on comma and colon to get the map+person+link
+function parseMapNotes(notes) {
+    if (!notes) return {};
+    return Object.fromEntries(
+        notes
+            .trim()
+            .split('\n')
+            .map((n) => {
+                let altmap, altperson, altbitly;
+                [altmap, altperson, altbitly] = n
+                    .split(/[,:]/)
+                    .map((t) => t.replace(/ /g, ''));
+
+                return [
+                    altmap,
+                    {
+                        PERSON: altperson,
+                        LINK: `[${altbitly}](http://${altbitly})`,
+                    },
+                ];
+            })
+    );
 }
 
 // Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier above base

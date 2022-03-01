@@ -67,6 +67,7 @@ const MapParser = require('../parser/map-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const EmptyParser = require('../parser/empty-parser.js');
 const Parsed = require('../parser/parsed.js');
+const UserCommandError = require('../exceptions/user-command-error.js');
 
 function validateInput(interaction) {
     parsedEntity = parseEntity(interaction)
@@ -136,15 +137,80 @@ async function execute(interaction) {
         })
     }
 
-    if (parsedEntity?.tower_upgrade || parsedEntity?.hero && !person && !parsedMap?.map_difficulty) {
-        if (parsedMap?.map) {
+    // Simple displays
+    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && !person && !parsedMap?.map_difficulty) {
+        let challengeEmbed;
+        entity = parsedEntity?.hero || Towers.towerUpgradeToIndexNormalForm(parsedEntity?.tower_upgrade)
 
+        if (parsedMap?.map) {
+            try {
+                challengeEmbed = await display2MPAlt(entity, parsedMap.map)
+            } catch(e) {
+                challengeEmbed = err(e)
+            }
         } else {
-            const challengeEmbed = await display2MPOG(parsedEntity?.hero || Towers.towerUpgradeToIndexNormalForm(parsedEntity?.tower_upgrade))
-            return interaction.reply({
-                embeds: [challengeEmbed],
-            })
+            try {
+                challengeEmbed = await display2MPOG(entity)
+            } catch(e) {
+                challengeEmbed = err(e)
+            }
         }
+
+        return interaction.reply({
+            embeds: [challengeEmbed],
+        })
+    }
+}
+
+function err(e) {
+    // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
+    if (e instanceof UserCommandError) {
+        return new Discord.MessageEmbed()
+            .setTitle(e.message)
+            .setColor(paleblue);
+    } else {
+        throw e;
+    }
+}
+
+// Displays a 2MPC completion on the specified map
+async function display2MPAlt(tower, map) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    mapFormatted = gHelper.toTitleCase(map.split('_').join(' '));
+    towerFormatted = gHelper.toTitleCase(tower.split('_').join(' '));
+
+    entryRow = await rowFromTower(tower);
+
+    // Load the map cell, the only cell that likely matters
+    await sheet.loadCells(
+        `${COLS.OG_MAP}${entryRow}:${COLS.OG_MAP}${entryRow}`
+    );
+
+    ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
+    ogMap = ogMapCell.value;
+
+    // Display OG map as if map weren't in the query
+    if (mapFormatted == ogMap) {
+        return display2MPOG(message, tower);
+    }
+
+    notes = parseMapNotes(ogMapCell.note);
+
+    // Tower has been completed on queried map if the map abbreviation can be found in the notes
+    if ((altCompletion = notes[Aliases.mapToIndexAbbreviation(map)])) {
+        // Embed and send the message
+        let challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(`${towerFormatted} 2MPC Combo on ${mapFormatted}`)
+            .setColor(paleblue)
+            .addField('Person', altCompletion.PERSON, true)
+            .addField('Link', altCompletion.LINK, true);
+        
+        return challengeEmbed;
+    } else {
+        throw new UserCommandError(
+            `Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``
+        );
     }
 }
 

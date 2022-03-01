@@ -256,7 +256,7 @@ function isValidTempleSet(str) {
 }
 function formatTower(tower) {
     if (isTower(tower)) {
-        return `${towerUpgradeToIndexNormalForm(tower)}`;
+        return towerUpgradeToIndexNormalForm(tower);
     } else if (isTowerPath(tower)) {
         [towerName, path] = tower.split('#');
         return (
@@ -264,9 +264,9 @@ function formatTower(tower) {
             `${towerUpgradeToIndexNormalForm(towerName)}`
         );
     } else if (isTowerUpgrade(tower)) {
-        return `${towerUpgradeToIndexNormalForm(tower)}`;
+        return towerUpgradeToIndexNormalForm(tower);
     } else if (Aliases.isHero(tower)) {
-        return `${gHelper.toTitleCase(tower)}`;
+        return gHelper.toTitleCase(tower);
     } else {
         throw `Tower ${tower} is not within allotted tower/hero category`;
     }

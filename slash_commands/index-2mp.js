@@ -128,7 +128,7 @@ async function execute(interaction) {
 
     parsedEntity = parseEntity(interaction)
     parsedMap = parseMap(interaction)
-    person = interaction.options.getString('person')
+    person = interaction.options.getString('person')?.toLowerCase()
 
     if (parsedEntity?.tower && !parsedMap && !person) {
         const challengeEmbed = await display2MPTowerStatistics(parsedEntity.tower)
@@ -160,6 +160,246 @@ async function execute(interaction) {
             embeds: [challengeEmbed],
         })
     }
+
+    function filterCombo(entity, c) {
+        const matchesPerson = person ? person === c.PERSON.toLowerCase() : true
+
+        let matchesEntity = true
+        if (parsedEntity) {
+            if (parsedEntity.tower) {
+                if (Towers.isTowerUpgrade(entity)) {
+                    matchesEntity = Towers.towerUpgradeToTower(entity) == parsedEntity.tower;
+                } else { // Hero
+                    matchesEntity = false
+                }
+            } else { // Tower upgrade or hero
+                matchesEntity = entity == (parsedEntity.tower_upgrade || parsedEntity.hero);
+            }
+        }
+
+        let matchesMap = true
+        if (parsedMap) {
+            if (parsedMap.map_difficulty) {
+                matchesMap = Aliases.allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(c.MAP)
+            } else { // Map
+                matchesMap = parsedMap.map = c.MAP
+            }
+        }
+
+        return matchesPerson && matchesEntity && matchesMap;
+    }
+
+    return display2MPFilterAll(interaction, filterCombo)
+}
+
+async function display2MPFilterAll(
+    interaction,
+    conditional,
+    titleFunction,
+    noCombosMessage,
+    excludedColumns
+) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    // Load TOWER and MAP columns
+    [startRow, endRow] = await rowBoundaries();
+    await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`);
+
+    // Collect data from 4 columns: tower, map, person, link
+    // Only 3 can be used maximum to format a discord embed
+    towerColumn = [];
+    personColumn = [];
+    linkColumn = [];
+    mapColumn = [];
+
+    let numOGCompletions = 0;
+
+    // Retrieve og- and alt-map notes from each tower row
+    for (var row = startRow; row <= endRow; row++) {
+        entity = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
+
+        towerMapNotes = parsePreloadedMapNotesWithOG(row);
+        for (map in towerMapNotes) {
+            note = {
+                MAP: map,
+                ...towerMapNotes[map],
+            };
+
+            if (!conditional(entity, note)) {
+                continue;
+            }
+
+            bold = note.OG ? '**' : '';
+            if (note.OG) numOGCompletions += 1;
+
+            towerColumn.push(`${bold}${entity}${bold}`);
+            mapColumn.push(`${bold}${note.MAP}${bold}`);
+            linkColumn.push(`${bold}${note.LINK}${bold}`);
+            personColumn.push(`${bold}${note.PERSON}${bold}`);
+        }
+    }
+
+    // Format the title using the method passed in and the first filtered combo found
+    title = titleFunction({
+        TOWER: towerColumn[0],
+        PERSON: personColumn[0],
+        MAP: mapColumn[0],
+        LINK: linkColumn[0],
+    });
+
+    // If no combos were found after filtering
+    if (towerColumn.length == 0) {
+        try {
+            return message.channel.send(noCombosMessage);
+        } catch (e) {
+            console.log(e.name);
+        }
+    }
+
+    // Exclude columns from data output based on function input
+    columns = {};
+    columns.TOWER = towerColumn;
+    if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
+    if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
+    columns.LINK = linkColumn;
+
+    // Paginate if there are too many combos to display at once
+    if (columns.TOWER.length > MAX_VALUES_LIST_LENGTH_2MP) {
+        return await embedPages(message, title, columns, numOGCompletions);
+    }
+
+    let challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(title)
+        .addField('#Combos', columns.LINK.length.toString())
+        .setColor(paleblue);
+
+    // Display the non-excluded columns
+    for (columnHeader in columns) {
+        challengeEmbed.addField(
+            gHelper.toTitleCase(columnHeader),
+            columns[columnHeader].join('\n'),
+            true
+        );
+    }
+
+    if (numOGCompletions == 1) {
+        challengeEmbed.setFooter(`---\nOG completion bolded`);
+    }
+    if (numOGCompletions > 1) {
+        challengeEmbed.setFooter(
+            `---\n${numOGCompletions} OG completions bolded`
+        );
+    }
+
+    return message.channel.send({ embeds: [challengeEmbed] });
+}
+
+//  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
+async function embedPages(message, title, columns, numOGCompletions) {
+    let interaction = undefined;
+    let botMessage = undefined;
+    let mobile = false;
+    columnChunks = {};
+    for (columnHeader in columns) {
+        columnChunks[columnHeader] = gHelper.chunk(
+            columns[columnHeader],
+            MAX_VALUES_LIST_LENGTH_2MP
+        );
+    }
+
+    // Divide results into chunks of MAX_VALUES_LIST_LENGTH_2MP
+    numPages = columnChunks.LINK.length;
+    pg = 0;
+
+    async function displayCurrentPage() {
+        const startCombo = pg * MAX_VALUES_LIST_LENGTH_2MP + 1;
+        const endCombo = Math.min(
+            (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP,
+            columns[Object.keys(columns)[0]].length
+        );
+
+        challengeEmbed = new Discord.MessageEmbed()
+            .setTitle(title)
+            .setColor(paleblue)
+            .addField(
+                'Combos',
+                `**${startCombo}-${endCombo}** of ${columns.LINK.length}`
+            );
+        if (mobile) {
+            let arr = Array(endCombo - startCombo + 1 + 1).fill(''); // first +1 is because 1-12 contains 12 combos, the other +1 is for the titles (TOWER, PERSON, LINK)
+
+            for (columnHeader in columnChunks) {
+                let obj = columnChunks[columnHeader];
+                let page = obj[pg];
+                page.unshift(columnHeader);
+                let max = gHelper.longestStrLength(page);
+                for (let i = 0; i < page.length; i++) {
+                    if (columnHeader != 'LINK')
+                        arr[i] += '`' + gHelper.addSpaces(page[i], max) + '`|';
+                    else arr[i] += page[i];
+                }
+                page.shift(columnHeader);
+            }
+
+            challengeEmbed.setDescription(arr.join('\n'));
+        } else {
+            for (columnHeader in columnChunks) {
+                challengeEmbed.addField(
+                    columnHeader,
+                    columnChunks[columnHeader][pg].join('\n'),
+                    true
+                );
+            }
+        }
+
+        if (numOGCompletions == 1) {
+            challengeEmbed.setFooter(`---\nOG completion bolded`);
+        }
+        if (numOGCompletions > 1) {
+            challengeEmbed.setFooter(
+                `---\n${numOGCompletions} total OG completions bolded`
+            );
+        }
+
+        if (interaction) {
+            await interaction.update({
+                embeds: [challengeEmbed],
+                components: [buttons],
+            });
+        } else {
+            botMessage = await message.channel.send({
+                embeds: [challengeEmbed],
+                components: [buttons],
+            });
+        }
+        const filter = (i) => i.user.id == message.author.id;
+
+        const collector = botMessage.createMessageComponentCollector({
+            filter,
+            time: 20000,
+        });
+        collector.on('collect', async (i) => {
+            collector.stop();
+            interaction = i;
+            if (i.customId == 'mobile') {
+                mobile = !mobile;
+            } else {
+                switch (parseInt(i.customId)) {
+                    case -1:
+                        pg--;
+                        break;
+                    case 1:
+                        pg++;
+                        break;
+                }
+                pg += numPages; // Avoid negative numbers
+                pg %= numPages;
+            }
+            await displayCurrentPage();
+        });
+    }
+
+    displayCurrentPage();
 }
 
 function err(e) {

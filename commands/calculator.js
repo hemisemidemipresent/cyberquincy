@@ -71,9 +71,7 @@ async function calc(message, args, interaction) {
         c = e.message.match(/Unexpected character at index \d+: (.)/)[1];
         if (c) {
             footer = '';
-            if (c === '<')
-                footer =
-                    "Did you try to tag another discord user? That's definitely not allowed here.";
+            if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
             return await interaction.update({
                 content: '\u200b',
                 embeds: [
@@ -183,9 +181,7 @@ async function calc(message, args, interaction) {
             content: '\u200b',
             embeds: [
                 new Discord.MessageEmbed()
-                    .setTitle(
-                        gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))
-                    ) // At MOST 1 decimal place
+                    .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
                     .setDescription(`\`${expression}\``)
                     .setColor(colours['cyber'])
             ],
@@ -200,10 +196,7 @@ function isTowerUpgradeCrosspath(t) {
 
     let [tower, upgrades] = t.split(/[!#]/);
 
-    return (
-        Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) &&
-        Towers.isValidUpgradeSet(upgrades)
-    );
+    return Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) && Towers.isValidUpgradeSet(upgrades);
 }
 
 function costOfTowerUpgradeCrosspath(t) {
@@ -245,43 +238,43 @@ function costOfHero(hero) {
     let priceMult = module.exports.priceMult;
     switch (Aliases.getCanonicalForm(hero)) {
         case 'adora':
-            basecost = 1080;
+            basecost = 1000;
             break;
         case 'benjamin':
-            basecost = 1295;
+            basecost = 1200;
             break;
         case 'brickell':
-            basecost = 810;
+            basecost = 750;
             break;
         case 'churchill':
-            basecost = 2160;
+            basecost = 2000;
             break;
         case 'etienne':
-            basecost = 920;
+            basecost = 850;
             break;
         case 'ezili':
-            basecost = 650;
+            basecost = 600;
             break;
         case 'gwen':
-            basecost = 970;
+            basecost = 900;
             break;
         case 'jones':
-            basecost = 810;
+            basecost = 750;
             break;
         case 'obyn':
-            basecost = 700;
-            break;
-        case 'pat':
-            basecost = 865;
-            break;
-        case 'quincy':
-            basecost = 585;
-            break;
-        case 'sauda':
             basecost = 650;
             break;
+        case 'pat':
+            basecost = 800;
+            break;
+        case 'quincy':
+            basecost = 540;
+            break;
+        case 'sauda':
+            basecost = 600;
+            break;
         case 'psi':
-            basecost = 865;
+            basecost = 800;
             break;
     }
     return mult(basecost, priceMult);
@@ -312,9 +305,7 @@ function parseAndValueToken(t, i) {
         } else {
             s = t.charAt(0) + t.charAt(1) + '...';
         }
-        throw new UnrecognizedTokenError(
-            `at input ${i}: Unrecognized token "${s}" of length ${t.length}`
-        );
+        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${s}" of length ${t.length}`);
     }
 }
 
@@ -389,8 +380,7 @@ module.exports = {
             content: 'Select the mode to calculate prices',
             components: [row]
         });
-        const filter = (interaction) =>
-            interaction.customId === 'mode' && interaction.user.id == message.author.id; //  nothing basically
+        const filter = (interaction) => interaction.customId === 'mode' && interaction.user.id == message.author.id; //  nothing basically
         const collector = await message.channel.createMessageComponentCollector({
             filter,
             time: 10000
@@ -402,9 +392,7 @@ module.exports = {
         });
         collector.on('end', async (collected) => {
             if (!collected.first()) {
-                let errorEmbed = new Discord.MessageEmbed()
-                    .setTitle(`You took too long to select a mode`)
-                    .setColor(magenta);
+                let errorEmbed = new Discord.MessageEmbed().setTitle(`You took too long to select a mode`).setColor(magenta);
                 return await message.channel.send({ embeds: [errorEmbed] });
             }
         });

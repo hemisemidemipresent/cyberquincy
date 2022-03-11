@@ -1,7 +1,5 @@
-const axios = require('axios');
-
+const nodefetch = require('node-fetch');
 const { chunk } = require('./general.js');
-
 const appID = 11;
 const skuID = 35;
 const skuSignature = 'A26308E242742374';
@@ -9,6 +7,7 @@ const sessionID = null;
 
 const deviceID = 'no_link428482bf0b696dcf8ded17e53910b84f9bc99f53';
 
+const { UserAgent } = require('../1/config.json');
 module.exports = {
     /**
      * @param {string[]} unknownUsers array of userIDs (string)
@@ -17,23 +16,22 @@ module.exports = {
         let chunks = chunk(unknownUsers, 150);
         let promises = [];
         for (let arr of chunks) {
-            let newPromise = new Promise((res, rej) => {
+            let newPromise = new Promise(async (res, rej) => {
                 let body = {
                     method: 'nkapiID',
                     keys: arr,
                     includeOnlineStatus: false
                 };
-                res(module.exports.request(body));
+                res(await module.exports.request(body));
             });
             promises.push(newPromise);
         }
 
         let results = await Promise.all(promises);
         let userObjects = [];
-
         for (let res of results) {
             if (!res) continue;
-            let data = JSON.parse(res.data.data);
+            let data = JSON.parse(res.data);
             for (let j in data.users) {
                 let user = data.users[j];
                 // ensure all objects have correct userName string
@@ -43,14 +41,13 @@ module.exports = {
                 userObjects.push(user);
             }
         }
-
         let usernames = [];
 
         for (let i = 0; i < unknownUsers.length; i++) {
             let userObj = userObjects.find((user) => {
                 return user.nkapiID == unknownUsers[i];
             });
-            usernames.push(userObj.username);
+            if (userObj) usernames.push(userObj.username);
         }
         return usernames;
     },
@@ -61,34 +58,33 @@ module.exports = {
         if (bodyString.length > 1024 * 1024) {
             let length = 1024 * 1024;
 
-            md5 =
-                'W/' +
-                length +
-                '/' +
-                hex_md5(sessionID + skuSignature + bodyString.substr(0, length) + nonce);
+            md5 = 'W/' + length + '/' + hex_md5(sessionID + skuSignature + bodyString.substr(0, length) + nonce);
         } else if (sessionID != null) {
             md5 = hex_md5(sessionID + skuSignature + bodyString + nonce);
         } else {
             md5 = hex_md5(skuSignature + bodyString + nonce);
         }
         try {
-            let res = await axios.post('https://api.ninjakiwi.com/user/search', {
-                data: bodyString,
-                auth: {
-                    session: sessionID,
-                    appID: appID,
-                    skuID: skuID,
-                    device: deviceID
-                },
-                sig: md5,
-                nonce: nonce
+            let k = await nodefetch('https://api.ninjakiwi.com/user/search', {
+                method: 'POST',
+                body: JSON.stringify({
+                    data: bodyString,
+                    auth: {
+                        session: sessionID,
+                        appID: appID,
+                        skuID: skuID,
+                        device: deviceID
+                    },
+                    sig: md5,
+                    nonce: nonce
+                }),
+                headers: { 'User-Agent': UserAgent, 'Content-Type': 'application/json' }
             });
-
-            return res;
+            return await k.json();
         } catch (error) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
+            // console.log(error.response.data);
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
             return undefined;
         }
 
@@ -165,14 +161,9 @@ module.exports = {
 
                 /* Encode output as utf-8 */
                 if (x <= 0x7f) output += String.fromCharCode(x);
-                else if (x <= 0x7ff)
-                    output += String.fromCharCode(0xc0 | ((x >>> 6) & 0x1f), 0x80 | (x & 0x3f));
+                else if (x <= 0x7ff) output += String.fromCharCode(0xc0 | ((x >>> 6) & 0x1f), 0x80 | (x & 0x3f));
                 else if (x <= 0xffff)
-                    output += String.fromCharCode(
-                        0xe0 | ((x >>> 12) & 0x0f),
-                        0x80 | ((x >>> 6) & 0x3f),
-                        0x80 | (x & 0x3f)
-                    );
+                    output += String.fromCharCode(0xe0 | ((x >>> 12) & 0x0f), 0x80 | ((x >>> 6) & 0x3f), 0x80 | (x & 0x3f));
                 else if (x <= 0x1fffff)
                     output += String.fromCharCode(
                         0xf0 | ((x >>> 18) & 0x07),
@@ -191,8 +182,7 @@ module.exports = {
         function rstr2binl(input) {
             var output = Array(input.length >> 2);
             for (var i = 0; i < output.length; i++) output[i] = 0;
-            for (var i = 0; i < input.length * 8; i += 8)
-                output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32;
+            for (var i = 0; i < input.length * 8; i += 8) output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32;
             return output;
         }
 
@@ -201,8 +191,7 @@ module.exports = {
          */
         function binl2rstr(input) {
             var output = '';
-            for (var i = 0; i < input.length * 32; i += 8)
-                output += String.fromCharCode((input[i >> 5] >>> i % 32) & 0xff);
+            for (var i = 0; i < input.length * 32; i += 8) output += String.fromCharCode((input[i >> 5] >>> i % 32) & 0xff);
             return output;
         }
 

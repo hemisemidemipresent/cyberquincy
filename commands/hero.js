@@ -1,74 +1,15 @@
 const { cyber, red } = require('../jsons/colours.json');
 const request = require('request');
 const aliases = [
-    [
-        'quincy',
-        'q',
-        'cyberquincy',
-        'quincey',
-        'quinc',
-        'quonc',
-        'quonce',
-        'quoncy',
-        'cyber',
-        'furry',
-        'cq',
-        'uincy'
-    ],
+    ['quincy', 'q', 'cyberquincy', 'quincey', 'quinc', 'quonc', 'quonce', 'quoncy', 'cyber', 'furry', 'cq', 'uincy'],
 
-    [
-        'gwendolin',
-        'g',
-        'gwen',
-        'gwendolyn',
-        'gwendolyn',
-        'scientist',
-        'gwendolin',
-        'gwend',
-        'gwendo',
-        'fire'
-    ],
+    ['gwendolin', 'g', 'gwen', 'gwendolyn', 'gwendolyn', 'scientist', 'gwendolin', 'gwend', 'gwendo', 'fire'],
     ['striker-jones', 'sj', 'striker', 'bones', 'jones', 'biker', 'who'],
     ['obyn-greenfoot', 'obyn', 'greenfoot', 'o', 'ocyn'],
-    [
-        'captain-churchill',
-        'churchill',
-        'c',
-        'ch',
-        'chirch',
-        'church',
-        'captain',
-        'tank',
-        'winston',
-        'hill'
-    ],
-    [
-        'benjamin',
-        'b',
-        'dj',
-        'ben',
-        'benny',
-        'boi',
-        'best',
-        'benjammin',
-        "benjammin'",
-        'yeet',
-        'boy'
-    ],
+    ['captain-churchill', 'churchill', 'c', 'ch', 'chirch', 'church', 'captain', 'tank', 'winston', 'hill'],
+    ['benjamin', 'b', 'dj', 'ben', 'benny', 'boi', 'best', 'benjammin', "benjammin'", 'yeet', 'boy'],
     ['ezili', 'e', 'ez', 'voodo', 'vm', 'ezi', 'ezil', 'voodoo'],
-    [
-        'pat-fusty',
-        'p',
-        'pat',
-        'pf',
-        'fusty',
-        'patfusty',
-        'frosty',
-        'snowman',
-        'fusticator',
-        'patfrosty',
-        'thicc'
-    ],
+    ['pat-fusty', 'p', 'pat', 'pf', 'fusty', 'patfusty', 'frosty', 'snowman', 'fusticator', 'patfrosty', 'thicc'],
     ['adora', 'ad', 'ador', 'ado', 'dora', 'priestess', 'high', 'highpriestess'],
     ['admiral-brickell', 'brick', 'brickell', 'brickel'],
     ['etienne', 'etiene', 'french', 'etine', 'etinne', 'etenne', 'et', 'eti', 'drone'],
@@ -94,8 +35,7 @@ module.exports = {
     name: '<hero>',
     aliases: aliases.flat(),
     async execute(message, args, commandName) {
-        if (args.length == 0 || args[0] == 'help')
-            return message.channel.send('`q!<hero> <level>`');
+        if (args.length == 0 || args[0] == 'help') return await message.channel.send('`q!<hero> <level>`');
         let name = findName(commandName);
         if (!name) this.errorMessage('invalid hero name');
         if (!args) this.errorMessage('Please specify a level for the hero');
@@ -103,11 +43,11 @@ module.exports = {
 
         let level = parseInt(args[0]);
         if (level < 1 || level > 20) {
-            return message.channel.send({
+            return await message.channel.send({
                 embeds: [this.errorMessage('lvl must be btwn 1-20')]
             });
         }
-        request(link, async (err, res, body) => {
+        await request(link, async (err, res, body) => {
             if (err) {
                 let embed = this.errorMessage('something went wrong while fetching the data');
                 await message.channel.send({ embeds: [embed] });

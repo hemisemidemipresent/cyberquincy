@@ -35,7 +35,7 @@ const PRICE_MULTS = {
 }
 
 function difficultyPriceMult(mediumCost, difficulty) {
-    return Math.round((mediumCost * difficulty) / 5) * 5;
+    return Math.round((mediumCost * PRICE_MULTS[difficulty]) / 5) * 5;
 }
 
 module.exports = {
@@ -59,7 +59,5 @@ module.exports = {
      */
     getSpeedRamping,
 
-    difficultyPriceMult(cost, difficulty) {
-        return Math.round((cost * PRICE_MULTS[difficulty]) / 5) * 5;
-    }
+    difficultyPriceMult,
 };

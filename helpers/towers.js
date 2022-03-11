@@ -1,4 +1,5 @@
 const gHelper = require('../helpers/general.js');
+const bHelper = require('../helpers/bloons-general')
 
 function towerUpgradeToTower(towerUpgrade) {
     if (!towerUpgrade) return null;
@@ -312,23 +313,23 @@ function totalTowerUpgradeCrosspathCostMult(
     json,
     towerName,
     upgrade,
-    priceMult
+    difficulty
 ) {
     // uses different json format found in ../jsons/costs.json
 
     let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
     let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgrade);
     let tower = json[`${towerName}`];
-    let totalCost = mult(tower.cost, priceMult); // base cost of tower
+    let totalCost = bHelper.difficultyPriceMult(tower.cost, difficulty); // base cost of tower
 
     for (let i = 0; i < tier; i++) {
         // main path of tower
-        totalCost += mult(tower.upgrades[`${path}`][i], priceMult);
+        totalCost += bHelper.difficultyPriceMult(tower.upgrades[`${path}`][i], difficulty);
     }
 
     for (let i = 0; i < crossTier; i++) {
         // cross path of tower
-        totalCost += mult(tower.upgrades[`${crossPath}`][i], priceMult);
+        totalCost += bHelper.difficultyPriceMult(tower.upgrades[`${crossPath}`][i], difficulty);
     }
     return totalCost;
 }
@@ -338,10 +339,6 @@ function upgradeCost(tower, path, tier) {
         totalCost += tower.upgrades[`${path}`][tier - 1];
     }
     return totalCost;
-}
-
-function mult(cost, priceMult) {
-    return Math.round((cost * priceMult) / 5) * 5;
 }
 
 // legacy

@@ -1,6 +1,7 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
 const gHelper = require('../helpers/general.js');
+const heroes = require('../jsons/heroes.json')
 
 BASE_XP_TO_GET_LEVEL = [
     null, // Slot for non-existent level-0
@@ -25,22 +26,6 @@ BASE_XP_TO_GET_LEVEL = [
     16470,
     17280,
 ];
-
-LEVELING_MODIFIERS = {
-    ADORA: 1.71,
-    BENJAMIN: 1.5,
-    BRICKELL: 1.425,
-    CHURCHILL: 1.71,
-    ETIENNE: 1,
-    EZILI: 1.425,
-    GWEN: 1,
-    JONES: 1,
-    OBYN: 1,
-    PAT: 1.425,
-    PSI: 1.5,
-    QUINCY: 1,
-    SAUDA: 1.425,
-};
 
 LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     BEGINNER: 1,
@@ -91,7 +76,8 @@ function accumulatedXpCurve(
 }
 
 function heroLevelXpRequirements(hero) {
-    heroSpecificLevelingMultiplier = LEVELING_MODIFIERS[hero.toUpperCase()];
+    heroSpecificLevelingMultiplier = heroes[hero]['levelModifier'];
+    if (!heroSpecificLevelingMultiplier) throw `${hero} does not have "levelModifier" entry in heroes.json`
     acc = 0;
     return BASE_XP_TO_GET_LEVEL.map((bxp) => {
         return bxp == null

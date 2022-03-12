@@ -1,12 +1,9 @@
-const { 
-  SlashCommandBuilder, 
-  SlashCommandStringOption,
-} = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
 const gHelper = require('../helpers/general.js');
-const bHelper = require('../helpers/bloons-general')
+const bHelper = require('../helpers/bloons-general');
 
 const LexicalParser = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round2.json');
@@ -15,23 +12,21 @@ const RoundParser = require('../parser/round-parser');
 const { red } = require('../jsons/colours.json');
 
 const costs = require('../jsons/costs.json');
-const heroes = require('../jsons/heroes.json')
+const heroes = require('../jsons/heroes.json');
 
-const exprOption = 
-    new SlashCommandStringOption()
-        .setName('expr')
-        .setDescription('Expression')
-        .setRequired(true);
+const exprOption = new SlashCommandStringOption()
+    .setName('expr')
+    .setDescription('Expression (press TAB when done)')
+    .setRequired(true);
 
-const difficulty = 
-    new SlashCommandStringOption()
-        .setName('difficulty')
-        .setDescription('Game Difficulty')
-        .setRequired(false)
-        .addChoice('Easy (Primary only, Deflation)', 'easy')
-        .addChoice('Medium (Military only, Reverse, Apopalypse)', 'medium')
-        .addChoice('Hard (Magic only, Double HP MOABs, Half Cash, C.H.I.M.P.S.)', 'hard')
-        .addChoice('Impoppable', 'impoppable');
+const difficulty = new SlashCommandStringOption()
+    .setName('difficulty')
+    .setDescription('Game Difficulty')
+    .setRequired(false)
+    .addChoice('Easy (Primary only, Deflation)', 'easy')
+    .addChoice('Medium (Military only, Reverse, Apopalypse)', 'medium')
+    .addChoice('Hard (Magic only, Double HP MOABs, Half Cash, C.H.I.M.P.S.)', 'hard')
+    .addChoice('Impoppable', 'impoppable');
 
 builder = new SlashCommandBuilder()
     .setName('calc')
@@ -71,7 +66,6 @@ async function calc(interaction) {
         associativity: 'left'
     };
 
-
     var parser = new LexicalParser({
         '+': term,
         '-': term,
@@ -91,8 +85,8 @@ async function calc(interaction) {
     }
 
     // Get the original command arguments string back (other than the command name)
-    const expression = interaction.options.getString('expr')
-    const difficulty = interaction.options.getString('difficulty') || 'hard'
+    const expression = interaction.options.getString('expr');
+    const difficulty = interaction.options.getString('difficulty') || 'hard';
     try {
         parsed = parse(expression);
     } catch (e) {
@@ -100,9 +94,7 @@ async function calc(interaction) {
         c = e.message.match(/Unexpected character at index \d+: (.)/)[1];
         if (c) {
             footer = '';
-            if (c === '<')
-                footer =
-                    "Did you try to tag another discord user? That's definitely not allowed here.";
+            if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
             return await interaction.reply({
                 embeds: [
                     new Discord.MessageEmbed()
@@ -171,7 +163,7 @@ async function calc(interaction) {
                         .setTitle(e.message)
                         .setColor(red)
                         .setFooter('due to manipulation, your full input will not be shown')
-                ],
+                ]
             });
         } else console.log(e);
     }
@@ -187,7 +179,7 @@ async function calc(interaction) {
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
                     .setFooter('Enter `q!calc` for help')
-            ],
+            ]
         });
     } else if (stack.length > 0) {
         return await interaction.reply({
@@ -197,19 +189,17 @@ async function calc(interaction) {
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
                     .setFooter('Enter `q!calc` for help')
-            ],
+            ]
         });
     } else {
         // G2g!
         return await interaction.reply({
             embeds: [
                 new Discord.MessageEmbed()
-                    .setTitle(
-                        gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))
-                    ) // At MOST 1 decimal place
+                    .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
                     .setDescription(`\`${expression}\``)
                     .setColor(colours['cyber'])
-            ],
+            ]
         });
     }
 }
@@ -220,10 +210,7 @@ function isTowerUpgradeCrosspath(t) {
 
     let [tower, upgrades] = t.split(/[!#]/);
 
-    return (
-        Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) &&
-        Towers.isValidUpgradeSet(upgrades)
-    );
+    return Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) && Towers.isValidUpgradeSet(upgrades);
 }
 
 function costOfTowerUpgradeCrosspath(t, difficulty) {
@@ -256,8 +243,8 @@ function costOfTowerUpgradeCrosspath(t, difficulty) {
 
 // TODO: Use hero json
 function costOfHero(hero, difficulty) {
-    const mediumCost = heroes[hero]['cost']
-    if (!mediumCost) throw `${hero} does not have entry in heroes.json`
+    const mediumCost = heroes[hero]['cost'];
+    if (!mediumCost) throw `${hero} does not have entry in heroes.json`;
     return bHelper.difficultyPriceMult(mediumCost, difficulty);
 }
 
@@ -286,19 +273,17 @@ function parseAndValueToken(t, i, difficulty) {
         } else {
             s = t.charAt(0) + t.charAt(1) + '...';
         }
-        throw new UnrecognizedTokenError(
-            `at input ${i}: Unrecognized token "${s}" of length ${t.length}`
-        );
+        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${s}" of length ${t.length}`);
     }
 }
 
 class UnrecognizedTokenError extends Error {}
 
 function execute(interaction) {
-  calc(interaction)
+    calc(interaction);
 }
 
 module.exports = {
     data: builder,
-    execute,
+    execute
 };

@@ -17,11 +17,7 @@ function allTowerUpgrades() {
 
 // Gets all 0-0-0 tower names
 function allTowers() {
-    return []
-        .concat(allPrimaryTowers())
-        .concat(allMilitaryTowers())
-        .concat(allMagicTowers())
-        .concat(allSupportTowers());
+    return [].concat(allPrimaryTowers()).concat(allMilitaryTowers()).concat(allMagicTowers()).concat(allSupportTowers());
 }
 
 function allTowerPaths() {
@@ -105,13 +101,11 @@ GROUP_TO_TOWER = {
     PRIMARY: 'DART',
     MILITARY: 'HELI',
     MAGIC: 'WIZ',
-    SUPPORT: 'FARM',
+    SUPPORT: 'FARM'
 };
 
 function allGroupTowerCanonicals(group) {
-    return Aliases.getAliasGroupsFromSameImmediateDirectoryAs(
-        GROUP_TO_TOWER[group]
-    ).map((ag) => ag.canonical);
+    return Aliases.getAliasGroupsFromSameImmediateDirectoryAs(GROUP_TO_TOWER[group]).map((ag) => ag.canonical);
 }
 
 function allWaterTowers() {
@@ -119,11 +113,7 @@ function allWaterTowers() {
 }
 
 function isWaterTowerUpgrade(towerUpgrade) {
-    return allWaterTowers().includes(
-        Aliases.isHero(towerUpgrade)
-            ? towerUpgrade
-            : Towers.towerUpgradeToTower(towerUpgrade)
-    );
+    return allWaterTowers().includes(Aliases.isHero(towerUpgrade) ? towerUpgrade : Towers.towerUpgradeToTower(towerUpgrade));
 }
 
 function towerUpgradeToIndexNormalForm(upgrade) {
@@ -133,10 +123,7 @@ function towerUpgradeToIndexNormalForm(upgrade) {
 
 function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
     // Re-assign tower to canonical and ensure that it exists and is a tower
-    if (
-        !(tower = Aliases.getCanonicalForm(tower)) ||
-        !allTowers().includes(tower)
-    ) {
+    if (!(tower = Aliases.getCanonicalForm(tower)) || !allTowers().includes(tower)) {
         throw 'First argument must be a tower';
     }
 
@@ -251,10 +238,7 @@ function formatTower(tower) {
         return `${towerUpgradeToIndexNormalForm(tower)}`;
     } else if (isTowerPath(tower)) {
         [towerName, path] = tower.split('#');
-        return (
-            `${gHelper.toTitleCase(path.split('-').join(' '))} ` +
-            `${towerUpgradeToIndexNormalForm(towerName)}`
-        );
+        return `${gHelper.toTitleCase(path.split('-').join(' '))} ` + `${towerUpgradeToIndexNormalForm(towerName)}`;
     } else if (isTowerUpgrade(tower)) {
         return `${towerUpgradeToIndexNormalForm(tower)}`;
     } else if (Aliases.isHero(tower)) {
@@ -308,12 +292,7 @@ function totalTowerUpgradeCrosspathCost(json, towerName, upgrade) {
     return totalCost;
 }
 
-function totalTowerUpgradeCrosspathCostMult(
-    json,
-    towerName,
-    upgrade,
-    priceMult
-) {
+function totalTowerUpgradeCrosspathCostMult(json, towerName, upgrade, priceMult) {
     // uses different json format found in ../jsons/costs.json
 
     let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
@@ -390,4 +369,5 @@ module.exports = {
     totalTowerUpgradeCrosspathCostHard,
     totalTowerUpgradeCrosspathCostMult,
     upgradeCost,
+    hard
 };

@@ -15,12 +15,8 @@ const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL_2 = '924830831585939456';
 const TEST_SUBMISSIONS_CHANNEL = '897024571801239573'; //'737445888602931252';
 const IS_TESTING = require('../1/config.json')['testing'];
 const { MessageEmbed } = require('discord.js');
-const SUBMISSIONS_CHANNEL = IS_TESTING
-    ? TEST_SUBMISSIONS_CHANNEL
-    : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
-const SUBMISSIONS_CHANNEL_2 = IS_TESTING
-    ? TEST_SUBMISSIONS_CHANNEL
-    : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL_2;
+const SUBMISSIONS_CHANNEL = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
+const SUBMISSIONS_CHANNEL_2 = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL_2;
 async function submit(message, args) {
     // Determines whether to follow up a submission preview with reaction collection and submission to another channel
     const liveMode = message.channel.guild.id == Guilds.BTD6_INDEX || IS_TESTING;
@@ -64,8 +60,7 @@ async function submit(message, args) {
     PREVIEW_REACTIONS.forEach((previewReaction) => {
         preview.react(previewReaction);
     });
-    const filter = (reaction, user) =>
-        user.id == message.author.id && PREVIEW_REACTIONS.includes(reaction.emoji.name);
+    const filter = (reaction, user) => user.id == message.author.id && PREVIEW_REACTIONS.includes(reaction.emoji.name);
     let collector = preview.createReactionCollector({ filter, time: 20000 });
 
     collector.once('collect', (reaction) => {
@@ -76,12 +71,8 @@ async function submit(message, args) {
         // (or to the test channel if dev is testing)
         if (reaction.emoji.name == WHITE_HEAVY_CHECK_MARK) {
             (async () => {
-                const SUBMISSIONS_CHANNEL_OBJ = await message.channel.guild.channels.cache.get(
-                    SUBMISSIONS_CHANNEL
-                );
-                const SUBMISSIONS_CHANNEL_OBJ_2 = await message.channel.guild.channels.cache.get(
-                    SUBMISSIONS_CHANNEL_2
-                );
+                const SUBMISSIONS_CHANNEL_OBJ = await message.channel.guild.channels.cache.get(SUBMISSIONS_CHANNEL);
+                const SUBMISSIONS_CHANNEL_OBJ_2 = await message.channel.guild.channels.cache.get(SUBMISSIONS_CHANNEL_2);
                 let submissionMessage = undefined;
                 if (submission instanceof MessageEmbed) {
                     await SUBMISSIONS_CHANNEL_OBJ.send({
@@ -90,6 +81,7 @@ async function submit(message, args) {
                     submissionMessage = await SUBMISSIONS_CHANNEL_OBJ_2.send({
                         embeds: [submission]
                     });
+                    await submissionMessage.crosspost();
                 } else {
                     await SUBMISSIONS_CHANNEL_OBJ.send(submission);
                     submissionMessage = await SUBMISSIONS_CHANNEL_OBJ_2.send(submission);
@@ -130,10 +122,7 @@ function helpMessage() {
     return new Discord.MessageEmbed()
         .setTitle('`q!index-submit` help')
         .setDescription('**Generate a submission in `#submissions`**')
-        .addField(
-            '`q!isub <image_link/attachment> <text>`',
-            'Uploads to imgur and submit with <text>'
-        )
+        .addField('`q!isub <image_link/attachment> <text>`', 'Uploads to imgur and submit with <text>')
         .addField('`q!isub <link> <text>`', 'Submits a link with text')
         .addField('`q!isub <CHALLENGE_CODE> <text>`', 'Submits a challenge code with text')
         .addField(

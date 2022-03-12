@@ -4,7 +4,6 @@ const AnyOrderParser = require('../parser/any-order-parser.js');
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const OptionalParser = require('../parser/optional-parser.js');
 const PersonParser = require('../parser/person-parser');
-const OrParser = require('../parser/or-parser');
 const RaceParser = require('../parser/raceid-parser.js');
 
 const gHelper = require('../helpers/general.js');
@@ -20,7 +19,9 @@ const raceEmojis = Emojis[seclateServerID + ''].race;
 
 const raceImg =
     'https://static.wikia.nocookie.net/b__/images/4/40/EventRaceIcon.png/revision/latest/scale-to-width-down/340?cb=20200616225307&path-prefix=bloons';
-const id = 'Lotus_of_the_jungle_kx8dwx14';
+
+let ids = require('../aliases/raceid.json');
+const id = Object.keys(ids)[Object.keys(ids).length - 1];
 
 module.exports = {
     name: 'raceleaderboard',
@@ -32,7 +33,7 @@ module.exports = {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        let raceID = 'Chracetmas_kx8dxktj';
+        let raceID = id;
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,8 +91,7 @@ module.exports = {
             return await message.channel.send({ embeds: [embed] });
         } else {
             let output = '';
-            if (parsed.natural_numbers)
-                output = lb.getWall(parsed.natural_numbers[0], parsed.natural_numbers[1]);
+            if (parsed.natural_numbers) output = lb.getWall(parsed.natural_numbers[0], parsed.natural_numbers[1]);
             else output = lb.getWall();
             if (output.length > 4096) {
                 return await module.exports.errorMessage(message, ['too many characters']);
@@ -105,13 +105,8 @@ module.exports = {
                     'Timestamps are known to be inaccurate for certain versions',
                     'see [this video](https://youtu.be/IGE155tCmss)'
                 )
-                .addField(
-                    'Individual info',
-                    'to see how to get individual (more detailed) stats use `q!lb help`'
-                )
-                .setFooter(
-                    'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)'
-                )
+                .addField('Individual info', 'to see how to get individual (more detailed) stats use `q!lb help`')
+                .setFooter('this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)')
                 .setColor(cyber)
                 .setTimestamp()
                 .setThumbnail(raceImg);

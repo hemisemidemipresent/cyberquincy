@@ -76,15 +76,17 @@ builder = new SlashCommandBuilder()
             .addChoice('Mortar Monkey', '11')
             .addChoice('Dartling Gunner', '12')
             .addChoice('Wizard Monkey', '13')
-            .addChoice('Ninja Monkey', '14')
-            .addChoice('Alchemist', '15')
-            .addChoice('Druid', '16')
-            .addChoice('Banana Farm', '17')
-            .addChoice('Monkey Village', '18')
-            .addChoice('Engineer Monkey', '19')
+            .addChoice('Super Monkey', '14')
+            .addChoice('Ninja Monkey', '15')
+            .addChoice('Alchemist', '16')
+            .addChoice('Druid', '17')
+            .addChoice('Banana Farm', '18')
+            .addChoice('Spike Factory', '19')
+            .addChoice('Monkey Village', '20')
+            .addChoice('Engineer Monkey', '21')
     )
     .addStringOption((option) =>
-        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
+        option.setName('tower_path').setDescription('The tower path that you want the information for.').setRequired(true)
     );
 
 function validateInput(interaction) {
@@ -150,7 +152,7 @@ async function execute(interaction) {
         });
     }
 
-    towerID = interaction.options.getString('tower');
+    towerID = parseInt(interaction.options.getString('tower'));
     tower_path = interaction.options.getString('tower_path');
     tower_path == 'base' ? '000' : tower_path;
 

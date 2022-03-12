@@ -1,4 +1,9 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('@discordjs/builders');
+const {
+    SlashCommandBuilder,
+    SlashCommandStringOption,
+    SlashCommandIntegerOption,
+    SlashCommandBooleanOption
+} = require('@discordjs/builders');
 
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
@@ -26,6 +31,11 @@ const energizerRoundOption = new SlashCommandIntegerOption()
     .setDescription('Optional Round Energizer was Placed')
     .setRequired(false);
 
+const ephemeralOption = new SlashCommandBooleanOption()
+    .setName('ephemeral')
+    .setDescription('Whether you want this to be viewed only by you or by everyone')
+    .setRequired(false);
+
 builder = new SlashCommandBuilder()
     .setName('herolevel')
     .setDescription('See how heroes level based on your inputted parameters (optionally with energizer)')
@@ -33,6 +43,7 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(heroLevelOption)
     .addStringOption(mapDifficultyOption)
     .addIntegerOption(energizerRoundOption);
+//    .addBooleanOption(ephemeralOption);
 
 function generateHeroLevels(interaction) {
     hero = interaction.options.getString('hero');

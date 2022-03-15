@@ -1,3 +1,4 @@
+const b = require('../helpers/bloons-general');
 module.exports = {
     name: 'health',
     aliases: ['h', 'hp'],
@@ -32,9 +33,7 @@ module.exports = {
         let bhealth = Math.floor(baseHealth * b.getHealthRamping(round));
 
         if (round > 80) {
-            return message.channel.send(
-                `${bhealth} pops are needed to pop this blimp (not including children)`
-            );
+            return message.channel.send(`${bhealth} pops are needed to pop this blimp (not including children)`);
         } else if (round < 1) {
             return message.channel.send('quincy has no experience in these rounds');
         } else if (round > 0 && round < 81) {

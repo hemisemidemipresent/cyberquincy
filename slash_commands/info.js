@@ -1,5 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
+const { cyber } = require('../jsons/colours.json');
+const { discord } = require('../aliases/misc.json');
+
 builder = new SlashCommandBuilder().setName('info').setDescription('Information and Stats about this bot');
 
 async function execute(interaction) {
@@ -25,7 +28,6 @@ async function execute(interaction) {
             true
         )
         .addField('discord server, join for updates (happens pretty often)', `${discord}`, true)
-        .addField('using', dyno)
         .setFooter('thank you for using it! Please share!');
     return await interaction.reply({
         embeds: [infoEmbed]

@@ -1,6 +1,7 @@
 const DifficultyParser = require('./difficulty-parser.js');
 const NaturalNumberParser = require('./natural-number-parser.js');
 
+const b = require('../helpers/bloons-general');
 // Looks for a round number, permitting natural numbers based on the difficulty provided to the constructor.
 // Discord command users can provide the round in any of the following forms:
 //    - 15, r15, round15
@@ -54,10 +55,7 @@ class RoundParser {
         if (isNaN(arg)) {
             var result = arg.match(/(?:round|r)(\d+)/);
             if (result) return result[1];
-            else
-                throw new UserCommandError(
-                    `Round must be of form \`15\`, \`R15\` or \`round15\` (Got \`${arg}\` instead)`
-                );
+            else throw new UserCommandError(`Round must be of form \`15\`, \`R15\` or \`round15\` (Got \`${arg}\` instead)`);
         } else {
             return arg;
         }

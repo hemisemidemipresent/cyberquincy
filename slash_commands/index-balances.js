@@ -48,7 +48,7 @@ const {
           new HeroParser()
       );
   
-      const entity = interaction.options.getString('entity')
+      const entity = Aliases.canonicizeArg(interaction.options.getString('entity'))
       const parsedEntity = CommandParser.parse([entity], entityParser)
       if ( !(parsedEntity.tower || parsedEntity.tower_path || parsedEntity.tower_upgrade || parsedEntity.hero) ) {
           return `Entity entered does not match any towers, tower paths, tower upgrades, or heroes`
@@ -77,7 +77,7 @@ const {
           }
       }
 
-      if (parsedVersion1?.version && parsedVersion2?.version && parsedVersion1.version >= parsedVersion2.version) {
+      if (parsedVersion1?.version && parsedVersion2?.version && parseFloat(parsedVersion1.version) >= parseFloat(parsedVersion2.version)) {
           return `Ending version must be larger than starting version`
       }
   }
@@ -100,7 +100,7 @@ const {
 
     // Re-using the old infrastructure to make porting much easier
     args = [
-        interaction.options.getString('entity'),
+        Aliases.canonicizeArg(interaction.options.getString('entity')),
         interaction.options.getString('version1'),
         interaction.options.getString('version2'),
     ].filter(arg => arg)
@@ -111,11 +111,9 @@ const {
         new OptionalParser(new VersionParser(2, null, false)),
         new OptionalParser(new VersionParser(3, null, false))
     );
-  
-    return interaction.reply({
-        content: 'yeet',
-        ephermal: true
-    })
+
+    // Towers might take a while
+    interaction.deferReply({ ephemeral: true });
   
     await loadEntityBuffNerfsTableCells(parsed);
     if (!parsed.hero) await loadTowerChangesTableCells(parsed);
@@ -126,14 +124,14 @@ const {
         colIndex
     );
     return await formatAndDisplayBalanceChanges(
-        message,
+        interaction,
         parsed,
         versionAdded,
         balanceChanges
     );
   }
   
-  async function loadEntityBuffNerfsTableCells(parsed) {
+async function loadEntityBuffNerfsTableCells(parsed) {
     let sheet = getSheet(parsed);
     const currentVersion = await parseCurrentVersion(parsed);
   
@@ -146,7 +144,7 @@ const {
     );
   }
   
-  async function loadTowerChangesTableCells(parsed) {
+async function loadTowerChangesTableCells(parsed) {
     let sheet = getSheet(parsed);
     const currentVersion = await parseCurrentVersion(parsed);
   
@@ -161,7 +159,7 @@ const {
     );
   }
   
-  async function locateSpecifiedEntityColumnIndex(parsed) {
+async function locateSpecifiedEntityColumnIndex(parsed) {
     const sheet = getSheet(parsed);
   
     // Parse {column}{headerRow} until tower alias is reached
@@ -197,37 +195,37 @@ const {
     }
   }
   
-  function headerRow(parsed) {
+function headerRow(parsed) {
     return parsed.hero ? 18 : 23;
-  }
+}
   
-  async function towerChangesHeaderRow(parsed) {
+async function towerChangesHeaderRow(parsed) {
     return (await parseCurrentVersion(parsed)) + headerRow(parsed) + 2;
-  }
+}
   
-  VERSION_COLUMN = 'C';
+VERSION_COLUMN = 'C';
   
-  function getSheet(parsed) {
+function getSheet(parsed) {
     if (parsed.hero) return heroesSheet();
     else return towersSheet();
-  }
+}
   
-  function towersSheet() {
+function towersSheet() {
     return GoogleSheetsHelper.sheetByName(Btd6Index, 'Towers');
-  }
+}
   
-  function heroesSheet() {
+function heroesSheet() {
     return GoogleSheetsHelper.sheetByName(Btd6Index, 'Heroes');
-  }
+}
   
-  function parsedEntity(parsed) {
+function parsedEntity(parsed) {
     if (parsed.hero) return parsed.hero;
     else if (parsed.tower) return parsed.tower;
     else if (parsed.tower_upgrade) return parsed.tower_upgrade;
     else if (parsed.tower_path) return parsed.tower_path;
-  }
+}
   
-  async function parseCurrentVersion(parsed) {
+async function parseCurrentVersion(parsed) {
     let sheet = getSheet(parsed);
   
     // Get version number from J3
@@ -236,9 +234,9 @@ const {
     const lastUpdatedAsOfTokens = lastUpdatedAsOf.split(' ');
     version = lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1];
     return Math.floor(new Number(version));
-  }
+}
   
-  async function parseBalanceChanges(parsed, entryColIndex) {
+async function parseBalanceChanges(parsed, entryColIndex) {
     const sheet = getSheet(parsed);
     const currentVersion = await parseCurrentVersion(parsed);
   
@@ -362,19 +360,19 @@ const {
     });
   
     return notes.length > 0 ? notes.join('\n') : null;
-  }
+}
   
-  function handleIrregularNote(note, parsed) {
+function handleIrregularNote(note, parsed) {
     // TODO: Handle non-standard notes rather than always just not including them
     return false;
-  }
+}
   
-  async function formatAndDisplayBalanceChanges(
-    message,
+async function formatAndDisplayBalanceChanges(
+    interaction,
     parsed,
     versionAdded,
     balances
-  ) {
+) {
     formattedTower = Towers.formatTower(
         parsed.tower || parsed.tower_upgrade || parsed.tower_path || parsed.hero
     );
@@ -389,7 +387,7 @@ const {
         } else if (parsed.versions) {
             versionText = ` in v${parsed.version}`;
         }
-        return message.channel.send({
+        return interaction.editReply({
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(
@@ -415,11 +413,11 @@ const {
     }
   
     try {
-        await message.channel.send({ embeds: [embed] });
+        await interaction.editReply({ embeds: [embed] });
     } catch (e) {
-        return message.channel.send(
-            `Too many balance changes for ${formattedTower}; Try a more narrow search. Type \`q!balance\` for details.`
-        );
+        return interaction.editReply({
+            content: `Too many balance changes for ${formattedTower}; Try a more narrow search using a more specific entity or by incorporating version limits`
+        });
     }
 }
   

@@ -516,7 +516,7 @@ function filterCombos(filteredCombos, parsed) {
             } else {
                 return (
                     parsed.version == combo.VERSION ||
-                    combo.VERSION.includes(`${parsed.version}.`)
+                    combo.VERSION.startsWith(`${parsed.version}.`)
                 );
             }
         });

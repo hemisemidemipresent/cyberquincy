@@ -279,8 +279,8 @@ function parseAndValueToken(t, i, difficulty) {
 
 class UnrecognizedTokenError extends Error {}
 
-function execute(interaction) {
-    calc(interaction);
+async function execute(interaction) {
+    await calc(interaction);
 }
 
 module.exports = {

@@ -29,7 +29,7 @@ class VersionParser {
     transformArgument(arg) {
         var result = null
         if (this.allowSubVersion) {
-            result = arg.match(/v?(\d\d?\.?\d?)/i);
+            result = arg.match(/^v?(\d\d?\.?\d?)$/i);
             if (result) return result[1]
             else this.badFormattingError(arg);
         } else {

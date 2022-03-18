@@ -1,46 +1,48 @@
 const {
     SlashCommandBuilder,
     SlashCommandStringOption,
+    SlashCommandIntegerOption,
   } = require('@discordjs/builders');
   
-  const GoogleSheetsHelper = require('../helpers/google-sheets');
-  
-  const OrParser = require('../parser/or-parser');
-  
-  const TowerParser = require('../parser/tower-parser');
-  const TowerPathParser = require('../parser/tower-path-parser');
-  const TowerUpgradeParser = require('../parser/tower-upgrade-parser');
-  const HeroParser = require('../parser/hero-parser');
-  
-  const VersionParser = require('../parser/version-parser');
-  const OptionalParser = require('../parser/optional-parser');
+const GoogleSheetsHelper = require('../helpers/google-sheets');
 
-  const { yellow, darkgreen } = require('../jsons/colours.json');
-  const isEqual = require('lodash.isequal');
+const OrParser = require('../parser/or-parser');
+
+const TowerParser = require('../parser/tower-parser');
+const TowerPathParser = require('../parser/tower-path-parser');
+const TowerUpgradeParser = require('../parser/tower-upgrade-parser');
+const HeroParser = require('../parser/hero-parser');
+
+const VersionParser = require('../parser/version-parser');
   
-  const entityOption = new SlashCommandStringOption()
+const OptionalParser = require('../parser/optional-parser');
+
+const { yellow, darkgreen } = require('../jsons/colours.json');
+const isEqual = require('lodash.isequal');
+  
+const entityOption = new SlashCommandStringOption()
     .setName('entity')
     .setDescription('Tower/Path/Upgrade/Hero')
     .setRequired(true)
   
-  const version1Option = new SlashCommandStringOption()
+const version1Option = new SlashCommandIntegerOption()
     .setName('version1')
     .setDescription('Exact or Starting Version')
     .setRequired(false)
   
-  const version2Option = new SlashCommandStringOption()
+const version2Option = new SlashCommandIntegerOption()
     .setName('version2')
     .setDescription('End Version')
     .setRequired(false)
   
-  builder = new SlashCommandBuilder()
+builder = new SlashCommandBuilder()
     .setName('balance')
     .setDescription('Check balance history of all towers/heroes throughout versions according to index records')
     .addStringOption(entityOption)
-    .addStringOption(version1Option)
-    .addStringOption(version2Option)
+    .addIntegerOption(version1Option)
+    .addIntegerOption(version2Option)
   
-  function validateInput(interaction) {
+function validateInput(interaction) {
       entityParser = new OrParser(
           new TowerParser(),
           new TowerPathParser(),
@@ -54,30 +56,22 @@ const {
           return `Entity entered does not match any towers, tower paths, tower upgrades, or heroes`
       }
   
-      version1 = interaction.options.getString('version1')
-      version2 = interaction.options.getString('version2')
+      version1 = interaction.options.getInteger('version1')
+      version2 = interaction.options.getInteger('version2')
   
       if ( version2 && !version1 ) {
           return `You entered an ending version but not a starting version`
       }
     
-      let parsedVersion1 = null
-      if (version1) {
-          parsedVersion1 = CommandParser.parse([version1], new VersionParser())
-          if ( !parsedVersion1.version ) {
-              return `Starting/Only version not valid`
-          }
+      if (version1 < 1) {
+          return `Starting/Only version not valid`
       }
   
-      let parsedVersion2 = null
-      if (version2) {
-          parsedVersion2 = CommandParser.parse([version2], new VersionParser())
-          if ( !parsedVersion2.version ) {
-              return `Starting/Only version not valid`
-          }
+      if (version2 < 1) {
+          return `Ending version not valid`
       }
 
-      if (parsedVersion1?.version && parsedVersion2?.version && parseFloat(parsedVersion1.version) >= parseFloat(parsedVersion2.version)) {
+      if (version1 >= version2) {
           return `Ending version must be larger than starting version`
       }
   }
@@ -101,15 +95,15 @@ const {
     // Re-using the old infrastructure to make porting much easier
     args = [
         Aliases.canonicizeArg(interaction.options.getString('entity')),
-        interaction.options.getString('version1'),
-        interaction.options.getString('version2'),
+        'v' + String(interaction.options.getInteger('version1')),
+        'v' + String(interaction.options.getInteger('version2')),
     ].filter(arg => arg)
   
     const parsed = CommandParser.parse(
         args,
         entityParser,
-        new OptionalParser(new VersionParser(2, null, false)),
-        new OptionalParser(new VersionParser(3, null, false))
+        new OptionalParser(new VersionParser()),
+        new OptionalParser(new VersionParser())
     );
 
     // Towers might take a while

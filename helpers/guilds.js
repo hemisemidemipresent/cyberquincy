@@ -6,24 +6,19 @@ const EMOJIS_SERVER = '614111055890612225';
 const xp = require('../helpers/xp');
 const { discord } = require('../aliases/misc.json');
 function enterGuild(guild) {
-    let channeltosend = guild.channels.cache.find(
-        (channel) => channel.name.includes('general') === true
-    );
+    let channeltosend = guild.channels.cache.find((channel) => channel.name.includes('general') === true);
     if (channeltosend) {
         let helpEmbed = new Discord.MessageEmbed()
             .setColor(colours['cyber'])
-            .setDescription(`Hi! I am Cyber Quincy. I am a btd6 discord bot.`)
-            .addField(
-                'General Info',
-                `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})`
-            )
+            .setDescription(`Hi! I am Cyber Quincy. I am a BTD6 discord bot.`)
+            .addField('General Info', `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})`)
             .addField(
                 'Note',
                 "Quincy son of Quincy is property of Ninja Kiwi. Although they didn't develop this bot, Ninja Kiwi approved of its use and development."
             )
             .addField(
                 'You should know...',
-                `The most popular commands by far are those that describe towers, for example \`q!boomer 005\` (format: \`q!<towername> <path>\`)`
+                `The most popular commands by far are those that describe towers, \`/tower\` (tower path format: \`010\`, \`420\`, etc)`
             )
             .setFooter(`Use \`${prefix}info\` for more information`);
 
@@ -80,9 +75,7 @@ async function addMember(member) {
             .setColor(colours['cyber']);
         member.send(wel);
     } else if (member.guild.id == RACE_SERVER) {
-        const general = member.guild.channels.cache.find((channel) =>
-            channel.name.includes('general')
-        );
+        const general = member.guild.channels.cache.find((channel) => channel.name.includes('general'));
         general.send(
             `welcome to the only rAcE sErVer. \nIf you cant get a top 50, you have to read <#667495608155635765> 100 times before entering`
         );
@@ -91,17 +84,11 @@ async function addMember(member) {
 
 async function removeMember(member) {
     if (member.guild.id == BTD6_INDEX) {
-        let welcome = member.guild.channels.cache.find((channel) =>
-            channel.name.includes('welcome')
-        );
+        let welcome = member.guild.channels.cache.find((channel) => channel.name.includes('welcome'));
         welcome.send(`**${member.displayName}** got nerfed. hard.`);
     } else if (member.guild.id == RACE_SERVER) {
-        const general = member.guild.channels.cache.find((channel) =>
-            channel.name.includes('general')
-        );
-        general.send(
-            `**${member.displayName}** couldn't resist it and accidentally revealed that he/she is hacking races`
-        );
+        const general = member.guild.channels.cache.find((channel) => channel.name.includes('general'));
+        general.send(`**${member.displayName}** couldn't resist it and accidentally revealed that he/she is hacking races`);
     }
 }
 

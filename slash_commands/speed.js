@@ -40,7 +40,7 @@ function validateInput(interaction) {
     return null;
 }
 
-function execute(interaction) {
+async function execute(interaction) {
     validationFailure = validateInput(interaction);
     if (validationFailure) {
         return interaction.reply({
@@ -99,7 +99,7 @@ function execute(interaction) {
             baseBloonSpeed = 4.5;
             break;
         case 'DDT':
-            baseBloonSpeed = 68.75;
+            baseBloonSpeed = 66;
             break;
         case 'BAD':
             baseBloonSpeed = 4.5;
@@ -113,7 +113,7 @@ function execute(interaction) {
     else if (round <= 100) actualBloonSpeed *= 4.5 + (round - 201) * 0.02;
     else if (round > 251) actualBloonSpeed *= 6.0 + (round - 252) * 0.02;
 
-    return interaction.reply({
+    return await interaction.reply({
         content: `The bloon speed for \`${bloon_type}\` on r${round} is ${actualBloonSpeed} (arbitrary units)`,
         ephemeral: true
     });

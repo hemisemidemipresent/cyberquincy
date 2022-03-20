@@ -33,7 +33,6 @@ function pingHeroku() {
 }
 function globalRequirements() {
     global.colours = require('./jsons/colours.json');
-    global.b = require('./helpers/bloons-general');
     global.Towers = require('./helpers/towers.js');
     global.AliasRepository = require('./alias-repository.js');
 
@@ -45,8 +44,8 @@ function globalRequirements() {
             Intents.FLAGS.GUILDS,
             Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
             Intents.FLAGS.DIRECT_MESSAGES,
-            Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-        ],
+            Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        ]
     });
 
     global.prefix = require('./1/config.json')['prefix'];
@@ -67,9 +66,9 @@ function consoleBootup() {
     client.once('ready', () => {
         client.user.setPresence({
             activity: {
-                name: `${prefix}help`,
+                name: `${prefix}help`
             },
-            status: 'online',
+            status: 'online'
         });
         console.log('<Program Directive> Discord Bot Client is ready');
         const botposting = require('./1/config.json')['botposting'];
@@ -85,7 +84,7 @@ function consoleBootup() {
         }
         const statcord = new Statcord.Client({
             client,
-            key: statcordKey,
+            key: statcordKey
         });
         statcord.autopost();
         statcord.on('autopost-start', () => {
@@ -116,9 +115,7 @@ async function googleSheetsInitialization() {
 
     const GoogleSheetsHelper = require('./helpers/google-sheets.js');
     // Load the BTD6 Index
-    global.Btd6Index = await GoogleSheetsHelper.load(
-        GoogleSheetsHelper.BTD6_INDEX_KEY
-    );
+    global.Btd6Index = await GoogleSheetsHelper.load(GoogleSheetsHelper.BTD6_INDEX_KEY);
     console.log('<INITIATE> Btd6 Index has been loaded');
 }
 
@@ -159,7 +156,7 @@ function generateCommandListeners(commandCenter, slashCommandCenter) {
     });
 
     // slash commands
-    client.on('interactionCreate', interaction => {
+    client.on('interactionCreate', async (interaction) => {
         if (!interaction.isCommand()) return;
 
         slashCommandCenter.handleCommand(interaction);

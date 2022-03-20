@@ -618,7 +618,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
             bold = relevantNotes[mapAbbr].OG ? '**' : '';
 
             mapColumn.push(
-                `${bold}${Aliases.indexAbbreviationToMap(mapAbbr)}${bold}`
+                `${bold}${Aliases.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`
             );
             personColumn.push(`${bold}${relevantNotes[mapAbbr].PERSON}${bold}`);
             linkColumn.push(`${bold}${relevantNotes[mapAbbr].LINK}${bold}`);

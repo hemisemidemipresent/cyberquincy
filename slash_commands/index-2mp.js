@@ -70,13 +70,17 @@ const Parsed = require('../parser/parsed.js');
 const UserCommandError = require('../exceptions/user-command-error.js');
 
 function validateInput(interaction) {
-    parsedEntity = parseEntity(interaction)
+    let [parsedEntity, parsedMap, person] = parseAll(interaction)
+
     if (parsedEntity?.hasErrors())
         return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`
 
-    parsedMap = parseMap(interaction)
     if (parsedMap?.hasErrors())
         return `Map/Difficulty ${map} didn't match, including aliases`
+    
+    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && parsedMap?.map && person) {
+        return "Don't search a person if you're already narrowing down your search to a specific completion"
+    }
 }
 
 function parseEntity(interaction) {
@@ -117,6 +121,13 @@ function parseMap(interaction) {
     } else return null;
 }
 
+function parseAll(interaction) {
+    parsedEntity = parseEntity(interaction)
+    parsedMap = parseMap(interaction)
+    person = interaction.options.getString('person')?.toLowerCase()
+    return [parsedEntity, parsedMap, person];
+}
+
 async function execute(interaction) {
     validationFailure = validateInput(interaction);
     if (validationFailure) {
@@ -126,9 +137,7 @@ async function execute(interaction) {
         });
     }
 
-    parsedEntity = parseEntity(interaction)
-    parsedMap = parseMap(interaction)
-    person = interaction.options.getString('person')?.toLowerCase()
+    let [parsedEntity, parsedMap, person] = parseAll(interaction)
 
     if (parsedEntity?.tower && !parsedMap && !person) {
         const challengeEmbed = await display2MPTowerStatistics(parsedEntity.tower)
@@ -137,8 +146,10 @@ async function execute(interaction) {
         })
     }
 
+    interaction.deferReply({ ephemeral: true });
+
     // Simple displays
-    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && !person && !parsedMap?.map_difficulty) {
+    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && !parsedMap?.map_difficulty && !person) {
         let challengeEmbed;
         entity = parsedEntity?.hero || Towers.towerUpgradeToIndexNormalForm(parsedEntity?.tower_upgrade)
 
@@ -156,80 +167,124 @@ async function execute(interaction) {
             }
         }
 
-        return interaction.reply({
+        return interaction.editReply({
             embeds: [challengeEmbed],
         })
     }
 
-    function filterCombo(entity, c) {
-        const matchesPerson = person ? person === c.PERSON.toLowerCase() : true
-
-        let matchesEntity = true
-        if (parsedEntity) {
-            if (parsedEntity.tower) {
-                if (Towers.isTowerUpgrade(entity)) {
-                    matchesEntity = Towers.towerUpgradeToTower(entity) == parsedEntity.tower;
-                } else { // Hero
-                    matchesEntity = false
-                }
-            } else { // Tower upgrade or hero
-                matchesEntity = entity == (parsedEntity.tower_upgrade || parsedEntity.hero);
-            }
-        }
-
-        let matchesMap = true
-        if (parsedMap) {
-            if (parsedMap.map_difficulty) {
-                matchesMap = Aliases.allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(c.MAP)
-            } else { // Map
-                matchesMap = parsedMap.map = c.MAP
-            }
-        }
-
-        return matchesPerson && matchesEntity && matchesMap;
-    }
-
-    return display2MPFilterAll(interaction, filterCombo)
+    return display2MPFilterAll(interaction)
 }
 
-async function display2MPFilterAll(
-    interaction,
-    conditional,
-    titleFunction,
-    noCombosMessage,
-    excludedColumns
-) {
+function filterCombo(interaction, comboEntity, c) {
+    let [parsedEntity, parsedMap, person] = parseAll(interaction)
+
+    const matchesPerson = person ? person === c.PERSON.toLowerCase() : true
+
+    let matchesEntity = true
+    if (parsedEntity) {
+        comboEntity = Aliases.getCanonicalForm(Aliases.toAliasNormalForm(comboEntity))
+        if (parsedEntity.tower) {
+            if (Towers.isTowerUpgrade(comboEntity)) {
+                console.log(parsedEntity.tower, Towers.towerUpgradeToTower(comboEntity))
+                matchesEntity = Towers.towerUpgradeToTower(comboEntity) == parsedEntity.tower;
+            } else { // Hero
+                matchesEntity = false
+            }
+        } else { // Tower upgrade or hero
+            matchesEntity = comboEntity == (parsedEntity.tower_upgrade || parsedEntity.hero);
+        }
+    }
+
+    let matchesMap = true
+    if (parsedMap) {
+        const comboMap = Aliases.indexMapAbbreviationToMap(c.MAP)
+        if (parsedMap.map_difficulty) {
+            matchesMap = Aliases.allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(comboMap)
+        } else { // Map
+            matchesMap = parsedMap.map == comboMap
+        }
+    }
+
+    return matchesPerson && matchesEntity && matchesMap;
+}
+
+function titleFunction(interaction) {
+    let [parsedEntity, parsedMap, person] = parseAll(interaction)
+
+    title = 'All 2MPs'
+    if (parsedEntity?.tower) {
+        title += ` with ${Aliases.toIndexNormalForm(parsedEntity.tower)}`
+    } else if (parsedEntity?.tower_upgrade) {
+        title += ` with ${Towers.towerUpgradeToIndexNormalForm(parsedEntity.tower_upgrade)}`
+    } else if (parsedEntity?.hero) {
+        title += ` with ${Aliases.toIndexNormalForm(parsedEntity.hero)}`
+    }
+
+    if (parsedMap?.map) {
+        title += ` on ${Aliases.toIndexNormalForm(parsedMap.map)}`
+    } else if (parsedMap?.map_difficulty) {
+        title += ` on ${Aliases.toIndexNormalForm(parsedMap.map_difficulty)} maps`
+    }
+
+    if (person) {
+        title += ` by ${person}`
+    }
+
+    return title;
+}
+
+function excludedColumnsFunction(interaction) {
+    let [parsedEntity, parsedMap, person] = parseAll(interaction)
+    
+    let excludedColumns = []
+
+    if (parsedEntity?.tower_upgrade || parsedEntity?.hero) {
+        excludedColumns.push('entity')
+    }
+
+    if (parsedMap?.map) {
+        excludedColumns.push('map')
+    }
+
+    if (person) {
+        excludedColumns.push('person')
+    }
+
+    return excludedColumns;
+}
+
+async function display2MPFilterAll(interaction) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     // Load TOWER and MAP columns
-    [startRow, endRow] = await rowBoundaries();
+    let [startRow, endRow] = await rowBoundaries();
     await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`);
 
     // Collect data from 4 columns: tower, map, person, link
     // Only 3 can be used maximum to format a discord embed
-    towerColumn = [];
-    personColumn = [];
-    linkColumn = [];
-    mapColumn = [];
+    let towerColumn = [];
+    let personColumn = [];
+    let linkColumn = [];
+    let mapColumn = [];
 
     let numOGCompletions = 0;
 
     // Retrieve og- and alt-map notes from each tower row
     for (var row = startRow; row <= endRow; row++) {
-        entity = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
+        const entity = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
 
-        towerMapNotes = parsePreloadedMapNotesWithOG(row);
+        const towerMapNotes = parsePreloadedMapNotesWithOG(row);
         for (map in towerMapNotes) {
-            note = {
+            const note = {
                 MAP: map,
                 ...towerMapNotes[map],
             };
 
-            if (!conditional(entity, note)) {
+            if (!filterCombo(interaction, entity, note)) {
                 continue;
             }
 
-            bold = note.OG ? '**' : '';
+            const bold = note.OG ? '**' : '';
             if (note.OG) numOGCompletions += 1;
 
             towerColumn.push(`${bold}${entity}${bold}`);
@@ -239,13 +294,10 @@ async function display2MPFilterAll(
         }
     }
 
-    // Format the title using the method passed in and the first filtered combo found
-    title = titleFunction({
-        TOWER: towerColumn[0],
-        PERSON: personColumn[0],
-        MAP: mapColumn[0],
-        LINK: linkColumn[0],
-    });
+    const title = titleFunction(interaction);
+
+    console.log(towerColumn, mapColumn, linkColumn, personColumn)
+    console.log(title)
 
     // If no combos were found after filtering
     if (towerColumn.length == 0) {
@@ -256,16 +308,18 @@ async function display2MPFilterAll(
         }
     }
 
+    const excludedColumns = excludedColumnsFunction(interaction)
+
     // Exclude columns from data output based on function input
-    columns = {};
-    columns.TOWER = towerColumn;
+    let columns = {};
+    if (!excludedColumns.includes('entity')) columns.TOWER = towerColumn;
     if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
     if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
     columns.LINK = linkColumn;
 
     // Paginate if there are too many combos to display at once
-    if (columns.TOWER.length > MAX_VALUES_LIST_LENGTH_2MP) {
-        return await embedPages(message, title, columns, numOGCompletions);
+    if (columns.LINK.length > MAX_VALUES_LIST_LENGTH_2MP) {
+        return await embedPages(interaction, title, columns, numOGCompletions);
     }
 
     let challengeEmbed = new Discord.MessageEmbed()
@@ -291,7 +345,7 @@ async function display2MPFilterAll(
         );
     }
 
-    return message.channel.send({ embeds: [challengeEmbed] });
+    return interaction.editReply({ embeds: [challengeEmbed] });
 }
 
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
@@ -402,6 +456,31 @@ async function embedPages(message, title, columns, numOGCompletions) {
     displayCurrentPage();
 }
 
+// Assumes appropriate cells are loaded beforehand!
+function parsePreloadedMapNotesWithOG(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
+    ogMapAbbr = Aliases.mapToIndexAbbreviation(
+        Aliases.toAliasNormalForm(ogMapCell.value)
+    );
+    ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
+    ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
+
+    notes = {};
+    // Add OG map to list of maps completed
+    notes[ogMapAbbr] = {
+        PERSON: ogPerson,
+        LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
+        OG: true,
+    };
+    // Add rest of maps found in notes
+    return {
+        ...notes,
+        ...parseMapNotes(ogMapCell.note),
+    };
+}
+
 function err(e) {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
     if (e instanceof UserCommandError) {
@@ -432,7 +511,7 @@ async function display2MPAlt(tower, map) {
 
     // Display OG map as if map weren't in the query
     if (mapFormatted == ogMap) {
-        return display2MPOG(message, tower);
+        return display2MPOG(tower);
     }
 
     notes = parseMapNotes(ogMapCell.note);

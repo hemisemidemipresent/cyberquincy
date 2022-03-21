@@ -293,7 +293,7 @@ async function display2MPMapDifficulty(entity, mapDifficulty) {
         }
 
         if (ogCompletionPresent)
-            challengeEmbed.setFooter('----\nOG completion bolded');
+            challengeEmbed.setFooter({ text: '----\nOG completion bolded' });
 
         return challengeEmbed;
     } else {
@@ -313,7 +313,6 @@ function filterCombo(interaction, comboEntity, c) {
         comboEntity = Aliases.getCanonicalForm(Aliases.toAliasNormalForm(comboEntity))
         if (parsedEntity.tower) {
             if (Towers.isTowerUpgrade(comboEntity)) {
-                console.log(parsedEntity.tower, Towers.towerUpgradeToTower(comboEntity))
                 matchesEntity = Towers.towerUpgradeToTower(comboEntity) == parsedEntity.tower;
             } else { // Hero
                 matchesEntity = false
@@ -424,9 +423,6 @@ async function display2MPFilterAll(interaction) {
 
     const title = titleFunction(interaction);
 
-    console.log(towerColumn, mapColumn, linkColumn, personColumn)
-    console.log(title)
-
     // If no combos were found after filtering
     if (towerColumn.length == 0) {
         try {
@@ -465,21 +461,28 @@ async function display2MPFilterAll(interaction) {
     }
 
     if (numOGCompletions == 1) {
-        challengeEmbed.setFooter(`---\nOG completion bolded`);
+        challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
     }
     if (numOGCompletions > 1) {
-        challengeEmbed.setFooter(
-            `---\n${numOGCompletions} OG completions bolded`
-        );
+        challengeEmbed.setFooter({
+            text: `---\n${numOGCompletions} OG completions bolded`
+        });
     }
 
     return interaction.editReply({ embeds: [challengeEmbed] });
 }
 
+const multipageButtons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
+    new MessageButton()
+        .setCustomId('mobile')
+        .setLabel('📱')
+        .setStyle('SECONDARY')
+);
+
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
-async function embedPages(message, title, columns, numOGCompletions) {
-    let interaction = undefined;
-    let botMessage = undefined;
+async function embedPages(interaction, title, columns, numOGCompletions) {
     let mobile = false;
     columnChunks = {};
     for (columnHeader in columns) {
@@ -535,38 +538,45 @@ async function embedPages(message, title, columns, numOGCompletions) {
         }
 
         if (numOGCompletions == 1) {
-            challengeEmbed.setFooter(`---\nOG completion bolded`);
+            challengeEmbed.setFooter({text: `---\nOG completion bolded`});
         }
         if (numOGCompletions > 1) {
-            challengeEmbed.setFooter(
-                `---\n${numOGCompletions} total OG completions bolded`
-            );
-        }
-
-        if (interaction) {
-            await interaction.update({
-                embeds: [challengeEmbed],
-                components: [buttons],
-            });
-        } else {
-            botMessage = await message.channel.send({
-                embeds: [challengeEmbed],
-                components: [buttons],
+            challengeEmbed.setFooter({
+                text: `---\n${numOGCompletions} total OG completions bolded`
             });
         }
-        const filter = (i) => i.user.id == message.author.id;
 
-        const collector = botMessage.createMessageComponentCollector({
+        await interaction.editReply({
+            embeds: [challengeEmbed],
+            components: [multipageButtons]
+        });
+
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        }
+
+        const collector = interaction.channel.createMessageComponentCollector({
             filter,
+            componentType: 'BUTTON',
             time: 20000,
         });
-        collector.on('collect', async (i) => {
+        collector.on('collect', async (buttonInteraction) => {
             collector.stop();
-            interaction = i;
-            if (i.customId == 'mobile') {
+            buttonInteraction.deferUpdate();
+
+            if (buttonInteraction.customId == 'mobile') {
                 mobile = !mobile;
             } else {
-                switch (parseInt(i.customId)) {
+                switch (parseInt(buttonInteraction.customId)) {
                     case -1:
                         pg--;
                         break;
@@ -578,6 +588,15 @@ async function embedPages(message, title, columns, numOGCompletions) {
                 pg %= numPages;
             }
             await displayCurrentPage();
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size == 0) {
+                await interaction.editReply({
+                    embeds: [challengeEmbed],
+                    components: []
+                });
+            }
         });
     }
 
@@ -759,7 +778,7 @@ async function display2MPOG(tower) {
     }
 
     if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
-        challengeEmbed.setFooter('*with water');
+        challengeEmbed.setFooter({ text: '*with water' });
     }
 
     return challengeEmbed;

@@ -422,7 +422,7 @@ class AliasRepository extends Array {
 
     indexMapAbbreviationToNormalForm(mapAbbr) {
         return this.toIndexNormalForm(
-            indexMapAbbreviationToMap(mapAbbr)
+            this.indexMapAbbreviationToMap(mapAbbr)
         );
     }
 

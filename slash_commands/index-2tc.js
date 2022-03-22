@@ -692,7 +692,7 @@ function filterCombos(filteredCombos, parsed) {
             towerNum = towerMatch(combo, providedTowers[0]);
             if (!providedTowers[1]) return towerNum != 0; // If only 1 tower-query, return true for the combo if there was a tower match
 
-            otherTowerNum = towerMatch(combo, providedTowers[1]);
+            otherTowerNum = towerMatch(combo, providedTowers[1], towerNum);
             return towerNum + otherTowerNum == 3; // Ensure that one tower matched to tower 1, other matched to tower 2
             // Note that failed matches return 0
         });
@@ -769,12 +769,18 @@ function filterByCompletion(filter, combos) {
     return combos;
 }
 
-function towerMatch(combo, tower) {
-    const comboTowers = [combo.TOWER_1, combo.TOWER_2];
+function towerMatch(combo, tower, excludeMatch) {
+    let comboTowers = [combo.TOWER_1, combo.TOWER_2];
+    // If a match was previously made, we don't want to match to it again
+    // This is to deal with `/2tc wiz wiz#bot` for necromancer wlp
+    if (excludeMatch) {
+        comboTowers[excludeMatch - 1] = null
+    }
     if (Towers.isTower(tower)) {
         return (
             comboTowers
                 .map((t) => {
+                    if (!t) return null;
                     towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
                     return Towers.towerUpgradeToTower(towerUpgrade);
                 })
@@ -784,6 +790,7 @@ function towerMatch(combo, tower) {
         return (
             comboTowers
                 .map((t) => {
+                    if (!t) return null;
                     towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
                     return Aliases.getCanonicalForm(towerUpgrade);
                 })
@@ -793,6 +800,7 @@ function towerMatch(combo, tower) {
         return (
             comboTowers
                 .map((t) => {
+                    if (!t) return null;
                     return t.NAME.toLowerCase();
                 })
                 .indexOf(tower) + 1
@@ -801,6 +809,7 @@ function towerMatch(combo, tower) {
         return (
             comboTowers
                 .map((t) => {
+                    if (!t) return null;
                     upgradeArray = t.UPGRADE.split('-').map((u) => parseInt(u));
                     pathIndex = upgradeArray.indexOf(Math.max(...upgradeArray));
                     path =

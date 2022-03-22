@@ -186,7 +186,7 @@ async function execute(interaction) {
         }
     }
 
-    return display2MPFilterAll(interaction)
+    return await display2MPFilterAll(interaction)
 }
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
@@ -658,7 +658,7 @@ async function display2MPAlt(tower, map) {
 
     // Display OG map as if map weren't in the query
     if (mapFormatted == ogMap) {
-        return display2MPOG(tower);
+        return await display2MPOG(tower);
     }
 
     notes = parseMapNotes(ogMapCell.note);

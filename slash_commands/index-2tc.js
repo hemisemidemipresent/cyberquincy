@@ -83,7 +83,7 @@ const personOption =
         .setRequired(false);
 
 const versionOption = 
-    new SlashCommandNumberOption()
+    new SlashCommandStringOption()
         .setName('version')
         .setDescription('Exact Version or Version Endpoint')
         .setRequired(false)
@@ -109,7 +109,7 @@ builder =
         .addStringOption(entity2Option)
         .addStringOption(mapOption)
         .addStringOption(personOption)
-        .addNumberOption(versionOption)
+        .addStringOption(versionOption)
         .addIntegerOption(numberOption)
         .addStringOption(reloadOption)
 
@@ -148,8 +148,8 @@ function parseMap(interaction) {
 }
 
 function parseVersion(interaction) {
-    const v = interaction.options.getNumber(`version`)
-    if (v || v == 0) {
+    const v = interaction.options.getString(`version`)
+    if (v) {
         return CommandParser.parse([`v${v}`], new VersionParser(1))
     } else return new Parsed();
 }
@@ -195,7 +195,7 @@ function validateInput(interaction) {
     }
 
     if (parsedVersion.hasErrors()) {
-        return `Parsed Version must be >= 1`
+        return `Parsed Version must be a number >= 1`
     }
 
     if (parsedNumber.hasErrors()) {

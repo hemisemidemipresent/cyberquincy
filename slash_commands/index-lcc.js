@@ -18,7 +18,7 @@ const COLS = {
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
-const { orange, paleyellow } = require('../jsons/colours.json');
+const { paleyellow } = require('../jsons/colours.json');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
 
@@ -41,14 +41,14 @@ async function execute(interaction) {
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 
     if (parsed.hasErrors()) {
-        return interaction.reply("Map provided not valid");
+        return await interaction.reply("Map provided not valid");
     } else {
-        let challengeEmbed = await displayLCC(parsed.map)
-        interaction.reply({ embeds: [challengeEmbed] })
+        let challengeEmbed = await lcc(parsed.map)
+        return await interaction.reply({ embeds: [challengeEmbed] })
     }
 }
 
-async function displayLCC(btd6_map) {
+async function lcc(btd6_map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
 
     // Load the column containing the different maps

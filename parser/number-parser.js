@@ -43,6 +43,7 @@ class NumberParser {
             throw new UserCommandError(`Expected number but got \`${arg}\``);
         }
 
+        console.log(n, this.low)
         // Ensure arg is within bounds
         if (n < this.low || n > this.high) {
             throw new UserCommandError(

@@ -15,6 +15,8 @@ const PersonParser = require('../parser/person-parser');
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const VersionParser = require('../parser/version-parser');
 
+const Parsed = require('../parser/parsed')
+
 const UserCommandError = require('../exceptions/user-command-error.js');
 
 const clonedeep = require('lodash.clonedeep');
@@ -47,26 +49,175 @@ const ALT_COLS = {
     LINK: 'W',
 };
 
-const buttons = new MessageActionRow().addComponents(
-    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY')
-);
+const { 
+    SlashCommandBuilder, 
+    SlashCommandStringOption, 
+    SlashCommandIntegerOption, 
+    SlashCommandNumberOption,
+} = require('@discordjs/builders');
 
-module.exports = {
-    name: '2tc',
-    cooldown: 1,
-    execute,
-    helpMessage,
-    errorMessage,
-    dependencies: ['btd6index'],
-};
+const entity1Option = 
+    new SlashCommandStringOption()
+        .setName('entity1')
+        .setDescription('Tower/Path/Upgrade/Hero')
+        .setRequired(false)
 
-async function execute(message, args) {
-    if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
-        return await module.exports.helpMessage(message);
+const entity2Option = 
+    new SlashCommandStringOption()
+        .setName('entity2')
+        .setDescription('Tower/Path/Upgrade/Hero')
+        .setRequired(false)
+
+const mapOption = 
+    new SlashCommandStringOption()
+        .setName('map')
+        .setDescription('Map')
+        .setRequired(false);
+
+const version1Option = 
+    new SlashCommandNumberOption()
+        .setName('version1')
+        .setDescription('Exact Version or Version Endpoint')
+        .setRequired(false)
+    
+const version2Option = 
+    new SlashCommandNumberOption()
+        .setName('version2')
+        .setDescription('Exact Version or Version Endpoint')
+        .setRequired(false)
+
+const numberOption = 
+    new SlashCommandIntegerOption()
+        .setName('number')
+        .setDescription('Combo Number')
+        .setRequired(false)
+
+const reloadOption =
+    new SlashCommandStringOption()
+        .setName('reload')
+        .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
+        .setRequired(false)
+        .addChoice('Yes', 'yes')
+
+builder = 
+    new SlashCommandBuilder()
+        .setName('2tc')
+        .setDescription('Search and Browse Completed 2TC Index Combos')
+        .addStringOption(entity1Option)
+        .addStringOption(entity2Option)
+        .addStringOption(mapOption)
+        .addNumberOption(version1Option)
+        .addNumberOption(version2Option)
+        .addIntegerOption(numberOption)
+        .addStringOption(reloadOption)
+
+function parseEntity(interaction, num) {
+    const entityParser = new OrParser(
+        new TowerParser(),
+        new TowerPathParser(),
+        new TowerUpgradeParser(),
+        new HeroParser(),
+    )
+    const entity = interaction.options.getString(`entity${num}`)
+    if (entity) {
+        const canonicalEntity = Aliases.canonicizeArg(entity)
+        if (canonicalEntity) {
+            return CommandParser.parse([canonicalEntity], entityParser)
+        } else {
+            const parsed = new Parsed()
+            parsed.addError('Canonical not found')
+            return parsed;
+        }
+    } else return new Parsed();
+}
+
+function parseMap(interaction) {
+    const map = interaction.options.getString('map')
+    if (map) {
+        const canonicalMap = Aliases.getCanonicalForm(map)
+        if (canonicalMap) {
+            return CommandParser.parse([canonicalMap], new MapParser())
+        } else {
+            const parsed = new Parsed()
+            parsed.addError('Canonical not found')
+            return parsed;
+        }
+    } else return new Parsed();
+}
+
+function parseVersion(interaction, num) {
+    const v = interaction.options.getNumber(`version${num}`)
+    if (v || v == 0) {
+        return CommandParser.parse([`v${v}`], new VersionParser(1))
+    } else return new Parsed();
+}
+
+function parsePerson(interaction) {
+    const u = interaction.options.getString('person')?.toLowerCase()
+    if (u) {
+        return CommandParser.parse([`u#${u}`], new PersonParser())
+    } else return new Parsed();
+}
+
+function parseNumber(interaction) {
+    const n = interaction.options.getInteger('number')
+    if (n || n == 0) {
+        return CommandParser.parse([n], new NaturalNumberParser())
+    } else return new Parsed();
+}
+
+function parseAll(interaction) {
+    const parsedEntity1 = parseEntity(interaction, 1)
+    const parsedEntity2 = parseEntity(interaction, 2)
+    const parsedMap = parseMap(interaction)
+    const parsedPerson = parsePerson(interaction)
+    const parsedVersion1 = parseVersion(interaction, 1)
+    const parsedVersion2 = parseVersion(interaction, 2)
+    const parsedNumber = parseNumber(interaction)
+
+    return [parsedEntity1, parsedEntity2, parsedMap, parsedPerson, parsedVersion1, parsedVersion2, parsedNumber];
+}
+
+function validateInput(interaction) {
+    let [parsedEntity1, parsedEntity2, parsedMap, parsedPerson, parsedVersion1, parsedVersion2, parsedNumber] = parseAll(interaction)
+
+    if (parsedEntity1.hasErrors()) {
+        return 'Entity1 did not match a tower/upgrade/path/hero'
     }
 
-    towerOrHeroParser = new OrParser(
+    if (parsedEntity2.hasErrors()) {
+        return 'Entity2 did not match a tower/upgrade/path/hero'
+    }
+
+    if (parsedMap.hasErrors()) {
+        return `Map not valid`
+    }
+
+    if (parsedVersion1.hasErrors()) {
+        return `Parsed Version 1 must be >= 1`
+    }
+
+    if (parsedVersion2.hasErrors()) {
+        return `Parsed Version 2 must be >= 1`
+    }
+
+    if (parsedNumber.hasErrors()) {
+        return `Combo Number must be >= 1`
+    }
+}
+
+async function execute(interaction) {
+    validationFailure =  validateInput(interaction);
+    if (validationFailure) {
+        return interaction.reply({
+            content: validationFailure,
+            ephemeral: true,
+        })
+    }
+
+    return interaction.reply({ content: 'g2g', ephemeral: true});
+
+    entityParser = new OrParser(
         new HeroParser(),
         new TowerParser(),
         new TowerPathParser(),
@@ -76,9 +227,9 @@ async function execute(message, args) {
     parsers = [
         new OptionalParser(new OrParser(new MapParser(), new VersionParser())),
         new OptionalParser(
-            new OrParser(new NaturalNumberParser(), towerOrHeroParser, [
-                towerOrHeroParser,
-                towerOrHeroParser,
+            new OrParser(new NaturalNumberParser(), entityParser, [
+                entityParser,
+                entityParser,
             ])
         ),
         new OptionalParser(new PersonParser()),
@@ -87,10 +238,11 @@ async function execute(message, args) {
     const parsed = CommandParser.parse(args, new AnyOrderParser(...parsers));
 
     if (parsed.hasErrors()) {
-        return await module.exports.errorMessage(message, parsed.parsingErrors);
     }
 
     try {
+        reload = interaction.options.getString('reload') ? true : false
+
         // allCombos = await scrapeAllCombos();
 
         // cacheCombos(allCombos)
@@ -132,14 +284,12 @@ function cacheCombos(combos) {
     dir2 = 'cache/index'
 
     if (!fs.existsSync(dir1)){
-        console.log('1')
         fs.mkdirSync(dir1);
     }
     if (!fs.existsSync(dir2)){
         fs.mkdirSync(dir2);
     }
     fs.writeFileSync(`${dir2}/2tc.json`, fileData, err => {
-        console.log(fileData)
         if (err) {
             console.error(err)
         }
@@ -265,6 +415,11 @@ async function displayCombos(message, combos, parsed, allCombos) {
     }
 }
 
+const multipageButtons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY')
+);
+
 async function displayOneOrMultiplePages(
     userQueryMessage,
     parsed,
@@ -340,12 +495,12 @@ async function displayOneOrMultiplePages(
             if (!interaction) {
                 botMessage = await userQueryMessage.channel.send({
                     embeds: [embed],
-                    components: [buttons],
+                    components: [multipageButtons],
                 });
             } else {
                 await interaction.update({
                     embeds: [embed],
-                    components: [buttons],
+                    components: [multipageButtons],
                 });
             }
         } catch (e) {
@@ -667,63 +822,6 @@ function towerMatch(combo, tower) {
     }
 }
 
-async function helpMessage(message) {
-    let helpEmbed = new Discord.MessageEmbed()
-        .setTitle('`q!2tc` HELP')
-        .setDescription('**2TC Combo Finder**')
-        .addField('`1`,`42`, `101`', 'Find the nth combo')
-        .addField(
-            '`u#case_insensitive_username`',
-            'Search combos by username; replace all spaces with underscores; keep all symbols'
-        )
-        .addField('`wiz`, `spact`', 'Search combos by base tower name')
-        .addField('`wiz#top`, `spact#bot`', 'Search combos by tower path')
-        .addField(
-            '`aspike`, `spact#005`',
-            'Seach combos by upgrade; if you write out the upgrade itself, do not crosspath'
-        )
-        .addField('`obyn`, `eti`', 'Search combos by hero')
-        .addField(
-            '`logs`, `ck`, `moon-landing`',
-            'Search combos by map completed on'
-        )
-        .addField('`v23`, `v10.2`', 'Limit results to version completed in')
-        .addField(
-            'Examples',
-            '`q!2tc ice`\n' +
-                '`q!2tc churchill v21`\n' +
-                '`q!2tc dart ace`\n' +
-                '`q!2tc 11`\n' +
-                '`q!2tc moonlanding`\n' +
-                '`q!2tc obyn cube`'
-        )
-        .addField(
-            'Notes',
-            ' • You may include the above arguments in the `q!2tc` command in nearly any combination, except in ways outlined by the following rules:\n' +
-                ' • You may only search a max of two tower-like arguments at a time. Searching for two towers finds combos with A _AND_ B, not A _OR_ B\n' +
-                ' • For every other field listed, you may only search one per command. For example, searching two usernames will not work.\n' +
-                " • You may not search version and map at the same time. This is because alt map completions don't specify version completed.\n" +
-                ' • Including the version number will exclude alt map completions for the above reason.\n' +
-                ' • There is currently no way to search by map difficulty, like `beginner` or `advanced`. Adding any more options slows the command down way too much.\n'
-        )
-        .setColor(palered);
-
-    return await message.channel.send({ embeds: [helpEmbed] });
-}
-
-async function errorMessage(message, parsingErrors) {
-    let errorEmbed = new Discord.MessageEmbed()
-        .setTitle('Input Error')
-        .addField(
-            'Likely Cause(s)',
-            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-        )
-        .addField('Type `q!2tc` for help', '\u200b')
-        .setColor(orange);
-
-    return await message.channel.send({ embeds: [errorEmbed] });
-}
-
 function sheet2TC() {
     return GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 }
@@ -917,3 +1015,8 @@ async function hasGonePastLastAlt2TCCombo(row) {
 
     return !sheet.getCellByA1(`${ALT_COLS.PERSON}${row}`).value;
 }
+
+module.exports = {
+    data: builder,
+    execute
+};

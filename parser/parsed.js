@@ -37,7 +37,7 @@ class Parsed extends Object {
 
     // Combines two Parsed objects and returns the result
     merge(otherParsed) {
-        parsed = new Parsed();
+        const parsed = new Parsed();
         for (const type in this) {
             this.__mergeField(type, parsed, this);
         }
@@ -82,6 +82,11 @@ class Parsed extends Object {
 
     hasErrors() {
         return this.parsingErrors.length > 0;
+    }
+
+    hasAny() {
+        // Parsing errors come included
+        return Object.keys(this).length > 1;
     }
 }
 

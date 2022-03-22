@@ -20,6 +20,8 @@ const Parsed = require('../parser/parsed')
 const UserCommandError = require('../exceptions/user-command-error.js');
 
 const clonedeep = require('lodash.clonedeep');
+const fs = require('fs')
+const resolve = require('path').resolve;
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
@@ -74,18 +76,18 @@ const mapOption =
         .setDescription('Map')
         .setRequired(false);
 
-const version1Option = 
+const personOption = 
+    new SlashCommandStringOption()
+        .setName('person')
+        .setDescription('Completer')
+        .setRequired(false);
+
+const versionOption = 
     new SlashCommandNumberOption()
-        .setName('version1')
+        .setName('version')
         .setDescription('Exact Version or Version Endpoint')
         .setRequired(false)
     
-const version2Option = 
-    new SlashCommandNumberOption()
-        .setName('version2')
-        .setDescription('Exact Version or Version Endpoint')
-        .setRequired(false)
-
 const numberOption = 
     new SlashCommandIntegerOption()
         .setName('number')
@@ -106,8 +108,8 @@ builder =
         .addStringOption(entity1Option)
         .addStringOption(entity2Option)
         .addStringOption(mapOption)
-        .addNumberOption(version1Option)
-        .addNumberOption(version2Option)
+        .addStringOption(personOption)
+        .addNumberOption(versionOption)
         .addIntegerOption(numberOption)
         .addStringOption(reloadOption)
 
@@ -145,8 +147,8 @@ function parseMap(interaction) {
     } else return new Parsed();
 }
 
-function parseVersion(interaction, num) {
-    const v = interaction.options.getNumber(`version${num}`)
+function parseVersion(interaction) {
+    const v = interaction.options.getNumber(`version`)
     if (v || v == 0) {
         return CommandParser.parse([`v${v}`], new VersionParser(1))
     } else return new Parsed();
@@ -155,7 +157,7 @@ function parseVersion(interaction, num) {
 function parsePerson(interaction) {
     const u = interaction.options.getString('person')?.toLowerCase()
     if (u) {
-        return CommandParser.parse([`u#${u}`], new PersonParser())
+        return CommandParser.parse([`user#${u}`], new PersonParser())
     } else return new Parsed();
 }
 
@@ -171,15 +173,14 @@ function parseAll(interaction) {
     const parsedEntity2 = parseEntity(interaction, 2)
     const parsedMap = parseMap(interaction)
     const parsedPerson = parsePerson(interaction)
-    const parsedVersion1 = parseVersion(interaction, 1)
-    const parsedVersion2 = parseVersion(interaction, 2)
+    const parsedVersion = parseVersion(interaction)
     const parsedNumber = parseNumber(interaction)
 
-    return [parsedEntity1, parsedEntity2, parsedMap, parsedPerson, parsedVersion1, parsedVersion2, parsedNumber];
+    return [parsedEntity1, parsedEntity2, parsedMap, parsedPerson, parsedVersion, parsedNumber];
 }
 
 function validateInput(interaction) {
-    let [parsedEntity1, parsedEntity2, parsedMap, parsedPerson, parsedVersion1, parsedVersion2, parsedNumber] = parseAll(interaction)
+    let [parsedEntity1, parsedEntity2, parsedMap, parsedPerson, parsedVersion, parsedNumber] = parseAll(interaction)
 
     if (parsedEntity1.hasErrors()) {
         return 'Entity1 did not match a tower/upgrade/path/hero'
@@ -193,21 +194,25 @@ function validateInput(interaction) {
         return `Map not valid`
     }
 
-    if (parsedVersion1.hasErrors()) {
-        return `Parsed Version 1 must be >= 1`
-    }
-
-    if (parsedVersion2.hasErrors()) {
-        return `Parsed Version 2 must be >= 1`
+    if (parsedVersion.hasErrors()) {
+        return `Parsed Version must be >= 1`
     }
 
     if (parsedNumber.hasErrors()) {
         return `Combo Number must be >= 1`
     }
+
+    if ((parsedEntity1.hasAny() || parsedEntity2.hasAny()) && parsedNumber.hasAny()) {
+        return `Entity + Combo Number either conflict or are redundant; don't enter both`
+    }
+
+    if (parsedMap.hasAny() && parsedVersion.hasAny()) {
+        return `Alt map completions don't have an associated version; don't search both map and version`
+    }
 }
 
 async function execute(interaction) {
-    validationFailure =  validateInput(interaction);
+    const validationFailure =  validateInput(interaction);
     if (validationFailure) {
         return interaction.reply({
             content: validationFailure,
@@ -215,48 +220,31 @@ async function execute(interaction) {
         })
     }
 
-    return interaction.reply({ content: 'g2g', ephemeral: true});
+    const parsed = parseAll(interaction).reduce(
+        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
+        new Parsed()
+    )
 
-    entityParser = new OrParser(
-        new HeroParser(),
-        new TowerParser(),
-        new TowerPathParser(),
-        new TowerUpgradeParser()
-    );
-
-    parsers = [
-        new OptionalParser(new OrParser(new MapParser(), new VersionParser())),
-        new OptionalParser(
-            new OrParser(new NaturalNumberParser(), entityParser, [
-                entityParser,
-                entityParser,
-            ])
-        ),
-        new OptionalParser(new PersonParser()),
-    ];
-
-    const parsed = CommandParser.parse(args, new AnyOrderParser(...parsers));
-
-    if (parsed.hasErrors()) {
-    }
+    await interaction.deferReply({ ephermal: true })
 
     try {
-        reload = interaction.options.getString('reload') ? true : false
-
-        // allCombos = await scrapeAllCombos();
-
-        // cacheCombos(allCombos)
+        const forceReload = interaction.options.getString('reload') ? true : false
 
         // https://attacomsian.com/blog/nodejs-get-file-last-modified-date
+        let allCombos;
+        if (forceReload || noCachedCombos()) {
+            allCombos = await scrapeAllCombos();
+            cacheCombos(allCombos)
+        } else {
+            allCombos = await fetchCachedCombos()
+        }
 
-        const allCombos = await fetchCachedCombos()
-
-        filteredCombos = filterCombos(clonedeep(allCombos), parsed);
-
-        await displayCombos(message, filteredCombos, parsed, allCombos);
+        const filteredCombos = filterCombos(clonedeep(allCombos), parsed);
+        
+        await displayCombos(interaction, filteredCombos, parsed, allCombos);
     } catch (e) {
         if (e instanceof UserCommandError) {
-            await message.channel.send({
+            await interaction.editReply({
                 embeds: [
                     new Discord.MessageEmbed()
                         .setTitle(e.message)
@@ -269,36 +257,40 @@ async function execute(interaction) {
     }
 }
 
-function fetchCachedCombos() {
-    const fs = require('fs');
+DIR1 = 'cache'
+DIR2 = 'index'
+FNAME = '2tc.json'
 
-    let data = fs.readFileSync('./cache/index/2tc.json')
+function noCachedCombos() {
+    return !fs.existsSync(resolve(DIR1, DIR2, FNAME))
+}
+
+function fetchCachedCombos() {
+    const data = fs.readFileSync('./cache/index/2tc.json')
     return JSON.parse(data).combos;
 }
 
 function cacheCombos(combos) {
-    const fs = require('fs')
     const fileData = JSON.stringify({ combos: combos })
 
-    dir1 = 'cache'
-    dir2 = 'cache/index'
-
+    const dir1 = resolve(DIR1)
     if (!fs.existsSync(dir1)){
         fs.mkdirSync(dir1);
     }
+    const dir2 = resolve(DIR1, DIR2)
     if (!fs.existsSync(dir2)){
         fs.mkdirSync(dir2);
     }
-    fs.writeFileSync(`${dir2}/2tc.json`, fileData, err => {
+    fs.writeFileSync(resolve(DIR1, DIR2, FNAME), fileData, err => {
         if (err) {
             console.error(err)
         }
     })
 }
 
-async function displayCombos(message, combos, parsed, allCombos) {
+async function displayCombos(interaction, combos, parsed, allCombos) {
     if (combos.length == 0) {
-        return await message.channel.send({
+        return await interaction.editReply({
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(embedTitleNoCombos(parsed))
@@ -312,9 +304,9 @@ async function displayCombos(message, combos, parsed, allCombos) {
             .setTitle(embedTitle(parsed, combos))
             .setColor(palered);
 
-        flatCombo = flattenCombo(clonedeep(combos[0]));
-        strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
-        combo = orderCombo(clonedeep(strippedCombo));
+        const flatCombo = flattenCombo(clonedeep(combos[0]));
+        const strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
+        const combo = orderCombo(clonedeep(strippedCombo));
 
         for (field in combo) {
             challengeEmbed.addField(
@@ -327,10 +319,10 @@ async function displayCombos(message, combos, parsed, allCombos) {
         challengeEmbed.addField('OG?', flatCombo.OG ? 'OG' : 'ALT', true);
 
         if (flatCombo.OG && !(parsed.map || parsed.version || parsed.person)) {
-            allCompletedMaps = Object.keys(
+            const allCompletedMaps = Object.keys(
                 allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS
             );
-            altMaps = allCompletedMaps.filter((map) => map != combo.MAP);
+            let altMaps = allCompletedMaps.filter((map) => map != combo.MAP);
             altMaps = altMaps.map((properMapName) =>
                 properMapName.split(' ').join('_').toLowerCase()
             );
@@ -338,7 +330,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
                 Aliases.mapToIndexAbbreviation(properMapName)
             );
 
-            mapGroups = [
+            let mapGroups = [
                 Aliases.beginnerMaps(),
                 Aliases.intermediateMaps(),
                 Aliases.advancedMaps(),
@@ -348,12 +340,12 @@ async function displayCombos(message, combos, parsed, allCombos) {
                 aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
             );
 
-            altMapGroups = mapGroups.map((mapGroup) =>
+            const altMapGroups = mapGroups.map((mapGroup) =>
                 mapGroup.filter((map) => altMaps.includes(map))
             );
 
             if (altMapGroups.some((group) => group.length > 0)) {
-                altMapsString = '';
+                let altMapsString = '';
                 altMapsString += `\n${altMapGroups[0].join(', ')}`;
                 altMapsString += `\n${altMapGroups[1].join(', ')}`;
                 altMapsString += `\n${altMapGroups[2].join(', ')}`;
@@ -364,11 +356,11 @@ async function displayCombos(message, combos, parsed, allCombos) {
             }
         }
 
-        return await message.channel.send({ embeds: [challengeEmbed] });
+        return await interaction.editReply({ embeds: [challengeEmbed] });
     } else {
-        fieldHeaders = getDisplayCols(parsed);
+        const fieldHeaders = getDisplayCols(parsed);
 
-        colData = Object.fromEntries(
+        const colData = Object.fromEntries(
             fieldHeaders.map((fieldHeader) => {
                 return [fieldHeader, []];
             })
@@ -378,16 +370,16 @@ async function displayCombos(message, combos, parsed, allCombos) {
 
         for (var i = 0; i < combos.length; i++) {
             for (map in combos[i].MAPS) {
-                combo = flattenCombo(clonedeep(combos[i]), map);
+                const combo = flattenCombo(clonedeep(combos[i]), map);
 
                 for (
-                    var colIndex = 0;
+                    let colIndex = 0;
                     colIndex < fieldHeaders.length;
                     colIndex++
                 ) {
-                    fieldHeader = fieldHeaders[colIndex];
+                    const fieldHeader = fieldHeaders[colIndex];
 
-                    key = fieldHeader;
+                    let key = fieldHeader;
 
                     if (fieldHeader === 'UNSPECIFIED_TOWER') {
                         providedTower = parseProvidedDefinedTowers(parsed)[0];
@@ -396,7 +388,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
                         key = `TOWER_${otherTowerNum}`;
                     }
 
-                    bold = combo.OG && !excludeOG(parsed) ? '**' : '';
+                    const bold = combo.OG && !excludeOG(parsed) ? '**' : '';
 
                     colData[fieldHeader].push(`${bold}${combo[key]}${bold}`);
                 }
@@ -406,7 +398,7 @@ async function displayCombos(message, combos, parsed, allCombos) {
         }
 
         return await displayOneOrMultiplePages(
-            message,
+            interaction,
             parsed,
             combos,
             colData,
@@ -421,14 +413,12 @@ const multipageButtons = new MessageActionRow().addComponents(
 );
 
 async function displayOneOrMultiplePages(
-    userQueryMessage,
+    interaction,
     parsed,
     combos,
     colData,
     numOGCompletions
 ) {
-    let interaction = undefined;
-    let botMessage = undefined;
     MAX_NUM_ROWS = 15;
     const numRows = colData[Object.keys(colData)[0]].length;
     let leftIndex = 0;
@@ -457,7 +447,7 @@ async function displayOneOrMultiplePages(
             );
 
             for (header in colData) {
-                data =
+                const data =
                     numRows <= maxNumRowsDisplayed
                         ? colData[header]
                         : colData[header].slice(leftIndex, rightIndex + 1);
@@ -480,9 +470,7 @@ async function displayOneOrMultiplePages(
                 }
             }
 
-            for (let i = 0; i < 3; i++) {
-                if (isValidFormBody(challengeEmbed)) return challengeEmbed;
-            }
+            if (isValidFormBody(challengeEmbed)) return [challengeEmbed, numRows > maxNumRowsDisplayed];
 
             if (direction > 0) rightIndex--;
             if (direction < 0) leftIndex++;
@@ -490,57 +478,68 @@ async function displayOneOrMultiplePages(
     }
 
     async function displayPages(direction = 1) {
-        let embed = await createPage(direction);
-        try {
-            if (!interaction) {
-                botMessage = await userQueryMessage.channel.send({
-                    embeds: [embed],
-                    components: [multipageButtons],
-                });
-            } else {
-                await interaction.update({
-                    embeds: [embed],
-                    components: [multipageButtons],
-                });
-            }
-        } catch (e) {
-            console.log(e.name);
+        let [embed, multipage] = await createPage(direction);
+
+        await interaction.editReply({
+            embeds: [embed],
+            components: multipage ? [multipageButtons] : [],
+        });
+
+        if (multipage) {
+            const filter = (selection) => {
+                // Ensure user clicking button is same as the user that started the interaction
+                if (selection.user.id !== interaction.user.id) {
+                    return false;
+                }
+                // Ensure that the button press corresponds with this interaction and wasn't
+                // a button press on the previous interaction
+                if (selection.message.interaction.id !== interaction.id) {
+                    return false;
+                }
+                return true;
+            };
+
+            const collector = interaction.channel.createMessageComponentCollector({
+                filter,
+                componentType: 'BUTTON',
+                time: 20000
+            });
+
+            collector.on('collect', async (buttonInteraction) => {
+                collector.stop();
+                buttonInteraction.deferUpdate();
+
+                switch (parseInt(buttonInteraction.customId)) {
+                    case -1:
+                        rightIndex = (leftIndex - 1 + numRows) % numRows;
+                        leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                        if (leftIndex < 0) leftIndex = 0;
+                        await displayPages(-1);
+                        break;
+                    case 1:
+                        leftIndex = (rightIndex + 1) % numRows;
+                        rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                        if (rightIndex >= numRows) rightIndex = numRows - 1;
+                        await displayPages(1);
+                        break;
+                }
+            });
+
+            collector.on('end', async (collected) => {
+                if (collected.size == 0) {
+                    await interaction.editReply({
+                        embeds: [embed],
+                        components: []
+                    });
+                }
+            });
         }
-
-        const filter = (i) => i.user.id == userQueryMessage.author.id;
-
-        const collector = botMessage.createMessageComponentCollector({
-            filter,
-            time: 20000,
-        });
-        collector.on('collect', async (i) => {
-            collector.stop();
-            interaction = i;
-            switch (parseInt(i.customId)) {
-                case -1:
-                    rightIndex = (leftIndex - 1 + numRows) % numRows;
-                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                    if (leftIndex < 0) leftIndex = 0;
-                    await displayPages(-1);
-                    break;
-                case 1:
-                    leftIndex = (rightIndex + 1) % numRows;
-                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                    if (rightIndex >= numRows) rightIndex = numRows - 1;
-                    await displayPages(1);
-                    break;
-            }
-        });
     }
 
     // Gets the reaction to the pagination message by the command author
     // and respond by turning the page in the correction direction
 
-    try {
-        await displayPages(1);
-    } catch {
-        await errorMessage(userQueryMessage, ['Missing Permissions?']);
-    }
+    await displayPages(1);
 }
 
 function isValidFormBody(embed) {
@@ -574,7 +573,7 @@ function getDisplayCols(parsed) {
 }
 
 function stripCombo(combo, parsed) {
-    wellDefinedTowers = []
+    const wellDefinedTowers = []
         .concat(parsed.tower_upgrades)
         .concat(parsed.heroes)
         .filter((el) => el);
@@ -597,8 +596,8 @@ function stripCombo(combo, parsed) {
 }
 
 function orderCombo(combo) {
-    ordering = Object.keys(OG_COLS).filter((v) => v !== 'UPGRADES');
-    newCombo = {};
+    const ordering = Object.keys(OG_COLS).filter((v) => v !== 'UPGRADES');
+    let newCombo = {};
     ordering.forEach((key) => {
         if (combo[key]) newCombo[key] = combo[key];
     });
@@ -607,9 +606,9 @@ function orderCombo(combo) {
 
 function flattenCombo(combo, map) {
     if (!map) map = Object.keys(combo.MAPS)[0];
-    subcombo = combo.MAPS[map];
+    const subcombo = combo.MAPS[map];
 
-    flattenedCombo = combo;
+    let flattenedCombo = combo;
 
     flattenedCombo.MAP = map;
     flattenedCombo.PERSON = subcombo.PERSON;
@@ -628,21 +627,21 @@ function flattenCombo(combo, map) {
 
 // include sampleCombo for the correct capitalization and punctuation
 function embedTitle(parsed, combos) {
-    sampleCombo = combos[0];
-    multipleCombos =
+    const sampleCombo = combos[0];
+    const multipleCombos =
         combos.length > 1 || Object.keys(combos[0].MAPS).length > 1;
 
-    towers = parsedProvidedTowers(parsed);
-    map = Object.keys(sampleCombo.MAPS)[0];
+    const towers = parsedProvidedTowers(parsed);
+    const map = Object.keys(sampleCombo.MAPS)[0];
 
-    title = '';
+    let title = '';
     if (parsed.natural_number)
         title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
     else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
     if (parsed.person) title += `by ${sampleCombo.MAPS[map].PERSON} `;
     if (parsed.map) title += `on ${map} `;
     for (var i = 0; i < towers.length; i++) {
-        tower = towers[i];
+        const tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';
         title += `${Towers.formatTower(tower)} `;
@@ -652,9 +651,9 @@ function embedTitle(parsed, combos) {
 }
 
 function embedTitleNoCombos(parsed) {
-    towers = parsedProvidedTowers(parsed);
+    const towers = parsedProvidedTowers(parsed);
 
-    title = 'No Combos found ';
+    let title = 'No Combos found ';
     if (parsed.person) title += `by "${parsed.person}" `;
     if (parsed.map) title += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
     for (var i = 0; i < towers.length; i++) {
@@ -669,7 +668,7 @@ function embedTitleNoCombos(parsed) {
 
 function filterCombos(filteredCombos, parsed) {
     if (parsed.natural_number) {
-        combo = filteredCombos[parsed.natural_number - 1];
+        const combo = filteredCombos[parsed.natural_number - 1];
         // Filter by combo # provided
         filteredCombos = combo ? [combo] : []; // Wrap single combo object in an array for consistency
     } else if (
@@ -687,7 +686,7 @@ function filterCombos(filteredCombos, parsed) {
             );
         }
 
-        providedTowers = parsedProvidedTowers(parsed);
+        const providedTowers = parsedProvidedTowers(parsed);
 
         filteredCombos = filteredCombos.filter((combo) => {
             towerNum = towerMatch(combo, providedTowers[0]);
@@ -757,7 +756,7 @@ function parsedProvidedTowers(parsed) {
 }
 
 function filterByCompletion(filter, combos) {
-    for (var i = combos.length - 1; i >= 0; i--) {
+    for (let i = combos.length - 1; i >= 0; i--) {
         combos[i].MAPS = Object.keys(combos[i].MAPS)
             .filter((map) => filter(map, combos[i].MAPS[map]))
             .reduce((completion, map) => {
@@ -771,7 +770,7 @@ function filterByCompletion(filter, combos) {
 }
 
 function towerMatch(combo, tower) {
-    comboTowers = [combo.TOWER_1, combo.TOWER_2];
+    const comboTowers = [combo.TOWER_1, combo.TOWER_2];
     if (Towers.isTower(tower)) {
         return (
             comboTowers
@@ -827,27 +826,27 @@ function sheet2TC() {
 }
 
 async function scrapeAllCombos() {
-    ogCombos = await scrapeAllOGCombos();
-    altCombos = await scrapeAllAltCombos();
+    const ogCombos = await scrapeAllOGCombos();
+    const altCombos = await scrapeAllAltCombos();
     return mergeCombos(ogCombos, altCombos);
 }
 
 function mergeCombos(ogCombos, altCombos) {
-    mergedCombos = [];
+    let mergedCombos = [];
 
     for (var i = 0; i < ogCombos.length; i++) {
-        toBeMergedOgCombo = ogCombos[i];
+        const toBeMergedOgCombo = ogCombos[i];
 
-        map = toBeMergedOgCombo.MAP;
+        const map = toBeMergedOgCombo.MAP;
         delete toBeMergedOgCombo.MAP; // Incorporated as key of outer Object within array index
 
-        person = toBeMergedOgCombo.PERSON;
+        const person = toBeMergedOgCombo.PERSON;
         delete toBeMergedOgCombo.PERSON; // Incorporated as key-value pair in comboObject
 
-        link = toBeMergedOgCombo.LINK;
+        const link = toBeMergedOgCombo.LINK;
         delete toBeMergedOgCombo.LINK; // Incorporated as key-value pair in comboObject
 
-        comboObject = {
+        const comboObject = {
             ...toBeMergedOgCombo,
             MAPS: {},
         };
@@ -861,12 +860,12 @@ function mergeCombos(ogCombos, altCombos) {
     }
 
     for (var i = 0; i < altCombos.length; i++) {
-        toBeMergedAltCombo = altCombos[i];
+        const toBeMergedAltCombo = altCombos[i];
 
-        n = gHelper.fromOrdinalSuffix(toBeMergedAltCombo.NUMBER);
+        const n = gHelper.fromOrdinalSuffix(toBeMergedAltCombo.NUMBER);
         delete toBeMergedAltCombo.NUMBER;
 
-        map = toBeMergedAltCombo.MAP;
+        const map = toBeMergedAltCombo.MAP;
         delete toBeMergedAltCombo.MAP;
 
         mergedCombos[n - 1].MAPS[map] = {
@@ -879,16 +878,17 @@ function mergeCombos(ogCombos, altCombos) {
 }
 
 async function scrapeAllOGCombos() {
-    sheet = sheet2TC();
-    nCombos = await numCombos();
-    rOffset = await findOGRowOffset();
+    const sheet = sheet2TC();
+    const nCombos = await numCombos();
+    const rOffset = await findOGRowOffset();
 
-    ogCombos = [];
+    let ogCombos = [];
 
     await sheet.loadCells(
         `${OG_COLS.NUMBER}${rOffset + 1}:${OG_COLS.CURRENT}${rOffset + nCombos}`
     );
 
+    let row;
     for (var n = 1; n <= nCombos; n++) {
         row = rOffset + n;
 
@@ -899,14 +899,14 @@ async function scrapeAllOGCombos() {
 }
 
 async function scrapeAllAltCombos() {
-    sheet = sheet2TC();
-    rOffset = await findOGRowOffset();
+    const sheet = sheet2TC();
+    const rOffset = await findOGRowOffset();
 
     await sheet.loadCells(
         `${ALT_COLS.NUMBER}${rOffset + 1}:${ALT_COLS.LINK}${sheet.rowCount}`
     );
 
-    altCombos = [];
+    let altCombos = [];
 
     for (var row = rOffset + 1; row <= sheet.rowCount; row++) {
         if (await hasGonePastLastAlt2TCCombo(row)) break;
@@ -975,7 +975,7 @@ async function findOGRowOffset() {
     );
 
     for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
-        cellValue = sheet.getCellByA1(`B${row}`).value;
+        const cellValue = sheet.getCellByA1(`B${row}`).value;
         if (cellValue) {
             if (cellValue.toLowerCase().includes('number')) {
                 return row;

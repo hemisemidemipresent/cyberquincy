@@ -239,9 +239,11 @@ async function execute(interaction) {
             allCombos = await fetchCachedCombos()
         }
 
+        const mtime = getLastCacheModified()
+
         const filteredCombos = filterCombos(clonedeep(allCombos), parsed);
         
-        await displayCombos(interaction, filteredCombos, parsed, allCombos);
+        await displayCombos(interaction, filteredCombos, parsed, allCombos, mtime);
     } catch (e) {
         if (e instanceof UserCommandError) {
             await interaction.editReply({
@@ -288,12 +290,17 @@ function cacheCombos(combos) {
     })
 }
 
-async function displayCombos(interaction, combos, parsed, allCombos) {
+function getLastCacheModified() {
+    return fs.statSync(resolve(DIR1, DIR2, FNAME)).mtime
+}
+
+async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
     if (combos.length == 0) {
         return await interaction.editReply({
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(embedTitleNoCombos(parsed))
+                    .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
                     .setColor(palered),
             ],
         });
@@ -302,6 +309,7 @@ async function displayCombos(interaction, combos, parsed, allCombos) {
     if (combos.length == 1) {
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos))
+            .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
             .setColor(palered);
 
         const flatCombo = flattenCombo(clonedeep(combos[0]));
@@ -402,7 +410,8 @@ async function displayCombos(interaction, combos, parsed, allCombos) {
             parsed,
             combos,
             colData,
-            numOGCompletions
+            numOGCompletions,
+            mtime
         );
     }
 }
@@ -417,7 +426,8 @@ async function displayOneOrMultiplePages(
     parsed,
     combos,
     colData,
-    numOGCompletions
+    numOGCompletions,
+    mtime
 ) {
     MAX_NUM_ROWS = 15;
     const numRows = colData[Object.keys(colData)[0]].length;
@@ -439,6 +449,7 @@ async function displayOneOrMultiplePages(
         ) {
             let challengeEmbed = new Discord.MessageEmbed()
                 .setTitle(embedTitle(parsed, combos))
+                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
                 .setColor(palered);
 
             challengeEmbed.addField(

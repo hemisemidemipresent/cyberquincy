@@ -283,7 +283,7 @@ function parseConcreteArgsParsersAligned(args, parsers) {
             throw `Null parser and null argument at index ${i} in the arg-parser traversal. This shouldn't happen.`;
 
         // If there is missing argument in the position
-        if (!arg) {
+        if (!arg && arg != 0) {
             parsed.addError(
                 new UserCommandError(
                     `Command is missing ${gHelper.toOrdinalSuffix(

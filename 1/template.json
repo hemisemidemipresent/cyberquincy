@@ -2,13 +2,15 @@
     "prefix": "q!",
     "testToken": "put testing token here",
     "token": "production token",
-    "colour": "#00E6BB",
+    "testClient": "testing bot client ID",
+    "client": "actual bot client ID",
+    "testingGuild": "testing server guild ID",
     "type": "service_account",
     "project_id": "cyber-quincy",
     "private_key_id": "",
     "private_key": "-----BEGIN PRIVATE KEY-----\nblahblahblah\n-----END PRIVATE KEY-----\n",
     "client_email": "something@something.iam.gserviceaccount.com",
-    "client_id": "42069",
+    "client_id": "420690005140001337000",
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
@@ -16,7 +18,7 @@
     "statcord": "statcord.com-token",
     "btd6index": true,
     "botposting": false,
-    "reddit": false,
     "testing": true,
-    "btd6Version": 28
+    "btd6Version": 30,
+    "UserAgent": "btd6-windowsplayer-30.1"
 }

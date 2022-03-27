@@ -50,7 +50,7 @@ const ALT_COLS = {
     LINK: 'W',
 };
 
-CACHE_FNAME = '2tc.json'
+CACHE_FNAME_2TC = '2tc.json'
 
 const { 
     SlashCommandBuilder, 
@@ -231,14 +231,14 @@ async function execute(interaction) {
         const forceReload = interaction.options.getString('reload') ? true : false
 
         let allCombos;
-        if (Index.hasCachedCombos(CACHE_FNAME) && !forceReload) {
-            allCombos = await Index.fetchCachedCombos(CACHE_FNAME)           
+        if (Index.hasCachedCombos(CACHE_FNAME_2TC) && !forceReload) {
+            allCombos = await Index.fetchCachedCombos(CACHE_FNAME_2TC)
         } else {
             allCombos = await scrapeAllCombos();
-            Index.cacheCombos(allCombos, CACHE_FNAME)
+            Index.cacheCombos(allCombos, CACHE_FNAME_2TC)
         }
 
-        const mtime = Index.getLastCacheModified(CACHE_FNAME)
+        const mtime = Index.getLastCacheModified(CACHE_FNAME_2TC)
 
         const filteredCombos = filterCombos(clonedeep(allCombos), parsed);
         

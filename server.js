@@ -157,9 +157,8 @@ function generateCommandListeners(commandCenter, slashCommandCenter) {
 
     // slash commands
     client.on('interactionCreate', async (interaction) => {
-        if (!interaction.isCommand()) return;
-
-        slashCommandCenter.handleCommand(interaction);
+        if (interaction.isCommand()) slashCommandCenter.handleCommand(interaction);
+        if (interaction.isAutocomplete()) slashCommandCenter.handleAutocomplete(interaction);
     });
 }
 

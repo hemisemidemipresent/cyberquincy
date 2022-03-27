@@ -30,8 +30,21 @@ async function handleCommand(interaction) {
     }
 }
 
+async function handleAutocomplete(interaction) {
+    const command = client.commands.get(interaction.commandName);
+
+    if (!command || !command.onAutocomplete) return;
+
+    try {
+        await command.onAutocomplete(interaction);
+    } catch {
+        // do nothing
+    }
+}
+
 module.exports = {
     commandFiles,
     configureCommands,
-    handleCommand
+    handleCommand,
+    handleAutocomplete
 };

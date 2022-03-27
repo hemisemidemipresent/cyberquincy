@@ -63,15 +63,15 @@ function validateInput(interaction) {
           return `You entered an ending version but not a starting version`
       }
     
-      if (version1 < 1) {
+      if (version1 && version1 < 1) {
           return `Starting/Only version not valid`
       }
   
-      if (version2 < 1) {
+      if (version2 && version2 < 1) {
           return `Ending version not valid`
       }
 
-      if (version1 >= version2) {
+      if (version1 && version2 && version1 >= version2) {
           return `Ending version must be larger than starting version`
       }
   }

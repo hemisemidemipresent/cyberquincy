@@ -20,13 +20,12 @@ const Parsed = require('../parser/parsed')
 const UserCommandError = require('../exceptions/user-command-error.js');
 
 const clonedeep = require('lodash.clonedeep');
-const fs = require('fs')
-const resolve = require('path').resolve;
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 const gHelper = require('../helpers/general.js');
+const Index = require('../helpers/index.js');
 
 const { orange, palered } = require('../jsons/colours.json');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
@@ -51,11 +50,12 @@ const ALT_COLS = {
     LINK: 'W',
 };
 
+CACHE_FNAME = '2tc.json'
+
 const { 
     SlashCommandBuilder, 
     SlashCommandStringOption, 
     SlashCommandIntegerOption, 
-    SlashCommandNumberOption,
 } = require('@discordjs/builders');
 
 const entity1Option = 
@@ -230,16 +230,15 @@ async function execute(interaction) {
     try {
         const forceReload = interaction.options.getString('reload') ? true : false
 
-        // https://attacomsian.com/blog/nodejs-get-file-last-modified-date
         let allCombos;
-        if (forceReload || noCachedCombos()) {
-            allCombos = await scrapeAllCombos();
-            cacheCombos(allCombos)
+        if (Index.hasCachedCombos(CACHE_FNAME) && !forceReload) {
+            allCombos = await Index.fetchCachedCombos(CACHE_FNAME)           
         } else {
-            allCombos = await fetchCachedCombos()
+            allCombos = await scrapeAllCombos();
+            Index.cacheCombos(allCombos, CACHE_FNAME)
         }
 
-        const mtime = getLastCacheModified()
+        const mtime = Index.getLastCacheModified(CACHE_FNAME)
 
         const filteredCombos = filterCombos(clonedeep(allCombos), parsed);
         
@@ -257,41 +256,6 @@ async function execute(interaction) {
             throw e;
         }
     }
-}
-
-DIR1 = 'cache'
-DIR2 = 'index'
-FNAME = '2tc.json'
-
-function noCachedCombos() {
-    return !fs.existsSync(resolve(DIR1, DIR2, FNAME))
-}
-
-function fetchCachedCombos() {
-    const data = fs.readFileSync('./cache/index/2tc.json')
-    return JSON.parse(data).combos;
-}
-
-function cacheCombos(combos) {
-    const fileData = JSON.stringify({ combos: combos })
-
-    const dir1 = resolve(DIR1)
-    if (!fs.existsSync(dir1)){
-        fs.mkdirSync(dir1);
-    }
-    const dir2 = resolve(DIR1, DIR2)
-    if (!fs.existsSync(dir2)){
-        fs.mkdirSync(dir2);
-    }
-    fs.writeFileSync(resolve(DIR1, DIR2, FNAME), fileData, err => {
-        if (err) {
-            console.error(err)
-        }
-    })
-}
-
-function getLastCacheModified() {
-    return fs.statSync(resolve(DIR1, DIR2, FNAME)).mtime
 }
 
 async function displayCombos(interaction, combos, parsed, allCombos, mtime) {

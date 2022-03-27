@@ -1,8 +1,9 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const gHelper = require('../helpers/general.js');
+const Index = require('../helpers/index.js');
 
-const { orange, paleblue } = require('../jsons/colours.json');
+const { paleblue } = require('../jsons/colours.json');
 const { MessageActionRow, MessageButton, BaseGuildEmojiManager } = require('discord.js');
 
 const COLS = {
@@ -33,6 +34,8 @@ const {
 
 const Towers = require('../helpers/towers');
 
+CACHE_FNAME_2MP = '2mp.json'
+
 let entityOption = 
     new SlashCommandStringOption()
         .setName('entity')
@@ -51,12 +54,20 @@ let userOption =
         .setDescription('Person')
         .setRequired(false);
 
+const reloadOption =
+    new SlashCommandStringOption()
+        .setName('reload')
+        .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
+        .setRequired(false)
+        .addChoice('Yes', 'yes')
+
 builder = new SlashCommandBuilder()
     .setName('2mp')
     .setDescription('Search and Browse Completed 2MP Index Combos')
     .addStringOption(entityOption)
     .addStringOption(mapOption)
     .addStringOption(userOption)
+    .addStringOption(reloadOption)
 
 const OrParser = require('../parser/or-parser.js');
 
@@ -68,20 +79,6 @@ const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const EmptyParser = require('../parser/empty-parser.js');
 const Parsed = require('../parser/parsed.js');
 const UserCommandError = require('../exceptions/user-command-error.js');
-
-function validateInput(interaction) {
-    let [parsedEntity, parsedMap, person] = parseAll(interaction)
-
-    if (parsedEntity?.hasErrors())
-        return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`
-
-    if (parsedMap?.hasErrors())
-        return `Map/Difficulty ${map} didn't match, including aliases`
-    
-    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && parsedMap?.map && person) {
-        return "Don't search a person if you're already narrowing down your search to a specific completion"
-    }
-}
 
 function parseEntity(interaction) {
     entityParser = new OrParser(
@@ -128,6 +125,20 @@ function parseAll(interaction) {
     return [parsedEntity, parsedMap, person];
 }
 
+function validateInput(interaction) {
+    let [parsedEntity, parsedMap, person] = parseAll(interaction)
+
+    if (parsedEntity?.hasErrors())
+        return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`
+
+    if (parsedMap?.hasErrors())
+        return `Map/Difficulty ${map} didn't match, including aliases`
+    
+    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && parsedMap?.map && person) {
+        return "Don't search a person if you're already narrowing down your search to a specific completion"
+    }
+}
+
 async function execute(interaction) {
     validationFailure = validateInput(interaction);
     if (validationFailure) {
@@ -139,14 +150,33 @@ async function execute(interaction) {
 
     let [parsedEntity, parsedMap, person] = parseAll(interaction)
 
+    await interaction.deferReply({ ephemeral: true })
+
+    const forceReload = interaction.options.getString('reload') ? true : false
+
+    console.log('yeah')
+
+    let allCombos;
+    if (Index.hasCachedCombos(CACHE_FNAME_2MP) && !forceReload) {
+        console.log('woah')
+        allCombos = await Index.fetchCachedCombos(CACHE_FNAME_2MP)           
+    } else {
+        allCombos = await scrapeAllCombos();
+        return interaction.editReply({ content: 'yeet' })
+        return
+        Index.cacheCombos(allCombos, CACHE_FNAME_2MP)
+    }
+
+    return
+
+    const mtime = Index.getLastCacheModified(CACHE_FNAME_2MP)
+
     if (parsedEntity?.tower && !parsedMap && !person) {
         const challengeEmbed = await display2MPTowerStatistics(parsedEntity.tower)
         return interaction.reply({
             embeds: [challengeEmbed],
         })
     }
-
-    interaction.deferReply({ ephemeral: true });
 
     // Simple displays
     if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && !parsedMap?.map_difficulty && !person) {
@@ -187,6 +217,27 @@ async function execute(interaction) {
     }
 
     return await display2MPFilterAll(interaction)
+}
+
+async function scrapeAllCombos() {
+    console.log('hea')
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    // Load TOWER and MAP columns
+    let [startRow, endRow] = await rowBoundaries();
+    await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`);
+
+    let combos = []
+
+    // Retrieve og- and alt-map notes from each tower row
+    for (var row = startRow; row <= endRow; row++) {
+        const entity = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
+
+        const towerMapNotes = parsePreloadedMapNotesWithOG(row);
+        console.log(towerMapNotes)
+    }
+
+    return combos;
 }
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty

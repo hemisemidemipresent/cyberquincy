@@ -8,8 +8,8 @@ const { MessageActionRow, MessageButton, BaseGuildEmojiManager } = require('disc
 
 const COLS = {
     NUMBER: 'B',
-    TOWER: 'C',
-    UPGRADES: 'E',
+    ENTITY: 'C',
+    UPGRADE: 'E',
     OG_MAP: 'F',
     VERSION: 'H',
     DATE: 'I',
@@ -17,8 +17,8 @@ const COLS = {
     LINK: 'L',
 };
 
-const TOWER_COLS = {
-    TOWER: 'O',
+const ENTITY_COLS = {
+    ENTITY: 'O',
     BASE: 'P',
     LAST: 'Y',
 };
@@ -154,20 +154,19 @@ async function execute(interaction) {
 
     const forceReload = interaction.options.getString('reload') ? true : false
 
-    console.log('yeah')
 
     let allCombos;
     if (Index.hasCachedCombos(CACHE_FNAME_2MP) && !forceReload) {
-        console.log('woah')
         allCombos = await Index.fetchCachedCombos(CACHE_FNAME_2MP)           
     } else {
         allCombos = await scrapeAllCombos();
-        return interaction.editReply({ content: 'yeet' })
-        return
+        console.log(allCombos)
         Index.cacheCombos(allCombos, CACHE_FNAME_2MP)
     }
 
-    return
+    return interaction.editReply({
+        content: `${allCombos.length} combos`
+    })
 
     const mtime = Index.getLastCacheModified(CACHE_FNAME_2MP)
 
@@ -220,21 +219,18 @@ async function execute(interaction) {
 }
 
 async function scrapeAllCombos() {
-    console.log('hea')
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
-    // Load TOWER and MAP columns
+    // Load ENTITY and MAP columns
     let [startRow, endRow] = await rowBoundaries();
-    await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`);
+    await sheet.loadCells(`${COLS.NUMBER}${startRow}:${COLS.LINK}${endRow}`);
 
     let combos = []
-
     // Retrieve og- and alt-map notes from each tower row
     for (var row = startRow; row <= endRow; row++) {
-        const entity = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
-
-        const towerMapNotes = parsePreloadedMapNotesWithOG(row);
-        console.log(towerMapNotes)
+        combos.push(
+            parsePreloadedRow(row)
+        );
     }
 
     return combos;
@@ -252,7 +248,7 @@ async function display2MPMapDifficulty(entity, mapDifficulty) {
     // Load the map cell, person cell, link cell and a few in between
     await sheet.loadCells(`${COLS.OG_MAP}${entryRow}:${COLS.LINK}${entryRow}`);
 
-    const notes = parsePreloadedMapNotesWithOG(entryRow);
+    const notes = parsePreloadedRow(entryRow);
 
     // Get all map abbreviations for the specified map difficulty
     const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) =>
@@ -434,9 +430,9 @@ function excludedColumnsFunction(interaction) {
 async function display2MPFilterAll(interaction) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
-    // Load TOWER and MAP columns
+    // Load ENTITY and MAP columns
     let [startRow, endRow] = await rowBoundaries();
-    await sheet.loadCells(`${COLS.TOWER}${startRow}:${COLS.LINK}${endRow}`);
+    await sheet.loadCells(`${COLS.ENTITY}${startRow}:${COLS.LINK}${endRow}`);
 
     // Collect data from 4 columns: tower, map, person, link
     // Only 3 can be used maximum to format a discord embed
@@ -449,7 +445,7 @@ async function display2MPFilterAll(interaction) {
 
     // Retrieve og- and alt-map notes from each tower row
     for (var row = startRow; row <= endRow; row++) {
-        const entity = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
+        const entity = sheet.getCellByA1(`${COLS.ENTITY}${row}`).value;
 
         const towerMapNotes = parsePreloadedMapNotesWithOG(row);
         for (map in towerMapNotes) {
@@ -487,7 +483,7 @@ async function display2MPFilterAll(interaction) {
 
     // Exclude columns from data output based on function input
     let columns = {};
-    if (!excludedColumns.includes('entity')) columns.TOWER = towerColumn;
+    if (!excludedColumns.includes('entity')) columns.ENTITY = towerColumn;
     if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
     if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
     columns.LINK = linkColumn;
@@ -562,7 +558,7 @@ async function embedPages(interaction, title, columns, numOGCompletions) {
                 `**${startCombo}-${endCombo}** of ${columns.LINK.length}`
             );
         if (mobile) {
-            let arr = Array(endCombo - startCombo + 1 + 1).fill(''); // first +1 is because 1-12 contains 12 combos, the other +1 is for the titles (TOWER, PERSON, LINK)
+            let arr = Array(endCombo - startCombo + 1 + 1).fill(''); // first +1 is because 1-12 contains 12 combos, the other +1 is for the titles (ENTITY, PERSON, LINK)
 
             for (columnHeader in columnChunks) {
                 let obj = columnChunks[columnHeader];
@@ -655,17 +651,17 @@ async function embedPages(interaction, title, columns, numOGCompletions) {
 }
 
 // Assumes appropriate cells are loaded beforehand!
-function parsePreloadedMapNotesWithOG(row) {
+function parsePreloadedRow(row) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
-    ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
-    ogMapAbbr = Aliases.mapToIndexAbbreviation(
+    const ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
+    const ogMapAbbr = Aliases.mapToIndexAbbreviation(
         Aliases.toAliasNormalForm(ogMapCell.value)
     );
-    ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
-    ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
+    const ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
+    const ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
 
-    notes = {};
+    let notes = {};
     // Add OG map to list of maps completed
     notes[ogMapAbbr] = {
         PERSON: ogPerson,
@@ -673,10 +669,21 @@ function parsePreloadedMapNotesWithOG(row) {
         OG: true,
     };
     // Add rest of maps found in notes
-    return {
+    const maps = {
         ...notes,
         ...parseMapNotes(ogMapCell.note),
     };
+
+    let completion = {}
+    for (const col of ["NUMBER", "ENTITY", "UPGRADE", "VERSION"]) {
+        console.log(col, COLS[col])
+        completion[col] = sheet.getCellByA1(`${COLS[col]}${row}`).value;
+    }
+    completion.DATE = sheet.getCellByA1(`${COLS.DATE}${row}`).formattedValue;
+
+    completion.MAPS = maps;
+
+    return completion
 }
 
 function err(e) {
@@ -756,7 +763,7 @@ async function display2MPOG(tower) {
 
     // Embed and send the message
     let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${values.TOWER} 2MPC Combo`)
+        .setTitle(`${values.ENTITY} 2MPC Combo`)
         .setColor(paleblue);
 
     for (field in values) {
@@ -842,14 +849,14 @@ async function rowFromTower(tower) {
     [rowBegin, rowEnd] = await rowBoundaries();
 
     // Load the column containing the different maps
-    await sheet.loadCells(`${COLS.TOWER}${rowBegin}:${COLS.TOWER}${rowEnd}`); // loads all possible cells with tower
+    await sheet.loadCells(`${COLS.ENTITY}${rowBegin}:${COLS.ENTITY}${rowEnd}`); // loads all possible cells with tower
 
     // The row where the queried map is found
     let entryRow = null;
 
     // Search for the row in all "possible" rows
     for (let row = rowBegin; row <= rowEnd; row++) {
-        let towerCandidate = sheet.getCellByA1(`${COLS.TOWER}${row}`).value;
+        let towerCandidate = sheet.getCellByA1(`${COLS.ENTITY}${row}`).value;
 
         if (!towerCandidate) continue;
 
@@ -941,7 +948,7 @@ async function display2MPTowerStatistics(tower) {
 
     // Load the row where the map was found
     await sheet.loadCells(
-        `${TOWER_COLS.TOWER}${entryRow}:${TOWER_COLS.LAST}${entryRow}`
+        `${ENTITY_COLS.ENTITY}${entryRow}:${ENTITY_COLS.LAST}${entryRow}`
     );
 
     // Check or X
@@ -984,7 +991,7 @@ async function findTowerRow(tower) {
 
     // Load the column containing the different towers
     await sheet.loadCells(
-        `${TOWER_COLS.TOWER}1:${TOWER_COLS.TOWER}${sheet.rowCount}`
+        `${ENTITY_COLS.ENTITY}1:${ENTITY_COLS.ENTITY}${sheet.rowCount}`
     );
 
     entryRow = null;
@@ -992,7 +999,7 @@ async function findTowerRow(tower) {
     // Search for the row in all "possible" rows
     for (let row = 1; row <= sheet.rowCount; row++) {
         let towerCandidate = sheet.getCellByA1(
-            `${TOWER_COLS.TOWER}${row}`
+            `${ENTITY_COLS.ENTITY}${row}`
         ).value;
 
         if (!towerCandidate) continue;
@@ -1022,10 +1029,10 @@ async function getCompletionMarking(entryRow, path, tier) {
     upgradeCol = null;
 
     if (tier == 2) {
-        upgradeCol = TOWER_COLS.BASE;
+        upgradeCol = ENTITY_COLS.BASE;
     } else {
         upgradeCol = String.fromCharCode(
-            TOWER_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2
+            ENTITY_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2
         );
     }
 

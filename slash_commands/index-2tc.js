@@ -225,7 +225,7 @@ async function execute(interaction) {
         new Parsed()
     )
 
-    await interaction.deferReply({ ephermal: true })
+    await interaction.deferReply()
 
     try {
         const forceReload = interaction.options.getString('reload') ? true : false

@@ -169,7 +169,7 @@ async function execute(interaction) {
         })
     }
 
-    await interaction.deferReply({ ephemeral: true })
+    await interaction.deferReply()
 
     const forceReload = interaction.options.getString('reload') ? true : false
 
@@ -184,23 +184,32 @@ async function execute(interaction) {
     const mtime = Index.getLastCacheModified(CACHE_FNAME_2MP)
 
     if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
-        let challengeEmbed;
         const entity = parsed.hero || Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade)
+        const entityFormatted = Aliases.toIndexNormalForm(entity)
+        const combo = allCombos.find(c => c.ENTITY == entityFormatted)
+
+        let challengeEmbed;
 
         try {
+            if (!combo) {
+                throw new UserCommandError(
+                    `Entity \`${entityFormatted}\` does not yet have a 2MP`
+                );
+            }
+
             if (parsed.map_difficulty) {
-                challengeEmbed = await embed2MPMapDifficulty(entity, parsed.map_difficulty)
+                challengeEmbed = await embed2MPMapDifficulty(combo, parsed.map_difficulty)
             } else if (parsed.map) {
-                challengeEmbed = await embed2MPAlt(entity, parsed.map, allCombos)
+                challengeEmbed = embed2MPAlt(combo, parsed.map)
             } else {
-                challengeEmbed = await embed2MPOG(entity, allCombos)
+                challengeEmbed = embed2MPOG(combo)
             }
             challengeEmbed.setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
         } catch(e) {
             challengeEmbed = err(e)
         }
 
-        return interaction.editReply({
+        return await interaction.editReply({
             embeds: [challengeEmbed],
         })
     }
@@ -224,6 +233,119 @@ async function scrapeAllCombos() {
     }
 
     return combos;
+}
+
+// Displays a 2MPC completion on the specified map
+function embed2MPAlt(combo, map) {
+    const mapFormatted = Aliases.toIndexNormalForm(map)
+    const mapAbbr = Aliases.mapToIndexAbbreviation(map)
+
+    const altCombo = combo.MAPS[mapAbbr]
+
+    if (!altCombo) {
+        throw new UserCommandError(
+            `\`${combo.ENTITY}\` hasn't been completed yet on \`${mapFormatted}\``
+        );
+    }
+
+    // Display OG map as if map weren't in the query
+    if (altCombo.OG) {
+        return embed2MPOG(combo);
+    }
+
+    // Embed and send the message
+    let challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(`${combo.ENTITY} 2MPC Combo on ${mapFormatted}`)
+        .setColor(paleblue)
+        .addField('Person', altCombo.PERSON, true)
+        .addField('Link', altCombo.LINK, true);
+
+    return challengeEmbed;
+}
+
+// Displays the OG 2MPC completion
+function embed2MPOG(entity, combos) {
+    
+
+    // Embed and send the message
+    let challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(`${values.ENTITY} 2MPC Combo`)
+        .setColor(paleblue);
+
+    for (field in values) {
+        challengeEmbed.addField(
+            gHelper.toTitleCase(field.replace('_', ' ')),
+            values[field],
+            true
+        );
+    }
+
+    challengeEmbed.addField('OG?', 'OG', true);
+
+    mapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
+    altMaps = Object.keys(parseMapNotes(mapCell.note));
+    ogMap = Aliases.mapToIndexAbbreviation(
+        Aliases.toAliasNormalForm(values.OG_MAP)
+    );
+
+    mapGroups = [
+        Aliases.beginnerMaps(),
+        Aliases.intermediateMaps(),
+        Aliases.advancedMaps(),
+        Aliases.expertMaps(),
+    ];
+    if (Towers.isWaterTowerUpgrade(tower)) {
+        mapGroups = mapGroups.map((aliases) =>
+            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
+        );
+    }
+    mapGroups = mapGroups.map((aliases) =>
+        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+    );
+
+    altMapGroups = mapGroups.map((mapGroup) =>
+        mapGroup.filter((map) => altMaps.includes(map))
+    );
+    unCompletedAltMapGroups = mapGroups.map((mapGroup) =>
+        mapGroup.filter((map) => !altMaps.concat(ogMap).includes(map))
+    );
+
+    wordAllIncluded = false;
+
+    displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
+        mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
+        waterTowerAsterisk = Towers.isWaterTowerUpgrade(tower) ? '*' : '';
+        if (unCompletedAltMapGroups[i] == 0) {
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk}`;
+        } else if (unCompletedAltMapGroups[i].length < 3) {
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[
+                i
+            ].join(', ')}}`;
+        } else if (altMapGroups[i].length == 0) {
+            return '';
+        } else {
+            return `{${altMapGroups[i].join(', ')}}`;
+        }
+    });
+
+    if (altMapGroups.some((group) => group.length > 0)) {
+        altMapsString = '';
+        altMapsString += `\n${displayedMapGroups[0]}`;
+        altMapsString += `\n${displayedMapGroups[1]}`;
+        altMapsString += `\n${displayedMapGroups[2]}`;
+        altMapsString += `\n${displayedMapGroups[3]}`;
+        challengeEmbed.addField('**Alt Maps**', altMapsString);
+    } else {
+        challengeEmbed.addField('**Alt Maps**', 'None');
+    }
+
+    if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
+        challengeEmbed.setFooter({ text: '*with water' });
+    }
+
+    return challengeEmbed;
 }
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
@@ -684,122 +806,6 @@ function err(e) {
     } else {
         throw e;
     }
-}
-
-// Displays a 2MPC completion on the specified map
-async function embed2MPAlt(entity, map, combos) {
-    const mapFormatted = Aliases.toIndexNormalForm(map)
-    const mapAbbr = Aliases.mapToIndexAbbreviation(map)
-
-    const entityFormatted = Aliases.toIndexNormalForm(entity)
-
-    const combo = combos.find(c => c.ENTITY == entityFormatted)
-    const altCombo = combo.MAPS[mapAbbr]
-
-    if (!altCombo) {
-        throw new UserCommandError(
-            `Tower \`${entityFormatted}\` has not yet been completed on \`${mapFormatted}\``
-        );
-    }
-
-    // Display OG map as if map weren't in the query
-    if (altCombo.OG) {
-        return await embed2MPOG(entity);
-    }
-
-    // Embed and send the message
-    let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${entityFormatted} 2MPC Combo on ${mapFormatted}`)
-        .setColor(paleblue)
-        .addField('Person', altCombo.PERSON, true)
-        .addField('Link', altCombo.LINK, true);
-    
-    return challengeEmbed;
-}
-
-// Displays the OG 2MPC completion
-async function embed2MPOG(entity, combos) {
-    
-
-    // Embed and send the message
-    let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${values.ENTITY} 2MPC Combo`)
-        .setColor(paleblue);
-
-    for (field in values) {
-        challengeEmbed.addField(
-            gHelper.toTitleCase(field.replace('_', ' ')),
-            values[field],
-            true
-        );
-    }
-
-    challengeEmbed.addField('OG?', 'OG', true);
-
-    mapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
-    altMaps = Object.keys(parseMapNotes(mapCell.note));
-    ogMap = Aliases.mapToIndexAbbreviation(
-        Aliases.toAliasNormalForm(values.OG_MAP)
-    );
-
-    mapGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps(),
-    ];
-    if (Towers.isWaterTowerUpgrade(tower)) {
-        mapGroups = mapGroups.map((aliases) =>
-            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
-        );
-    }
-    mapGroups = mapGroups.map((aliases) =>
-        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
-    );
-
-    altMapGroups = mapGroups.map((mapGroup) =>
-        mapGroup.filter((map) => altMaps.includes(map))
-    );
-    unCompletedAltMapGroups = mapGroups.map((mapGroup) =>
-        mapGroup.filter((map) => !altMaps.concat(ogMap).includes(map))
-    );
-
-    wordAllIncluded = false;
-
-    displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
-        mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
-        waterTowerAsterisk = Towers.isWaterTowerUpgrade(tower) ? '*' : '';
-        if (unCompletedAltMapGroups[i] == 0) {
-            wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk}`;
-        } else if (unCompletedAltMapGroups[i].length < 3) {
-            wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[
-                i
-            ].join(', ')}}`;
-        } else if (altMapGroups[i].length == 0) {
-            return '';
-        } else {
-            return `{${altMapGroups[i].join(', ')}}`;
-        }
-    });
-
-    if (altMapGroups.some((group) => group.length > 0)) {
-        altMapsString = '';
-        altMapsString += `\n${displayedMapGroups[0]}`;
-        altMapsString += `\n${displayedMapGroups[1]}`;
-        altMapsString += `\n${displayedMapGroups[2]}`;
-        altMapsString += `\n${displayedMapGroups[3]}`;
-        challengeEmbed.addField('**Alt Maps**', altMapsString);
-    } else {
-        challengeEmbed.addField('**Alt Maps**', 'None');
-    }
-
-    if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
-        challengeEmbed.setFooter({ text: '*with water' });
-    }
-
-    return challengeEmbed;
 }
 
 // Gets the row of tower completion stats for the given tower

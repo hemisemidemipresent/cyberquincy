@@ -198,7 +198,7 @@ async function execute(interaction) {
             }
 
             if (parsed.map_difficulty) {
-                challengeEmbed = await embed2MPMapDifficulty(combo, parsed.map_difficulty)
+                challengeEmbed = embed2MPMapDifficulty(combo, parsed.map_difficulty)
             } else if (parsed.map) {
                 challengeEmbed = embed2MPAlt(combo, parsed.map)
             } else {
@@ -377,117 +377,100 @@ function embed2MPOG(combo) {
 }
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
-async function embed2MPMapDifficulty(entity, mapDifficulty) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    const mapDifficultyFormatted = gHelper.toTitleCase(mapDifficulty);
-    const towerFormatted = gHelper.toTitleCase(entity.split('_').join(' '));
-
-    const entryRow = await rowFromTower(entity);
-
-    // Load the map cell, person cell, link cell and a few in between
-    await sheet.loadCells(`${COLS.OG_MAP}${entryRow}:${COLS.LINK}${entryRow}`);
-
-    const notes = parsePreloadedRow(entryRow);
+function embed2MPMapDifficulty(combo, mapDifficulty) {
+    const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
 
     // Get all map abbreviations for the specified map difficulty
     const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) =>
         Aliases.mapToIndexAbbreviation(map)
     );
-    // Filter the completion entries by the permitted maps specified by the command-entered map difficulty
-    const relevantNotes = Object.keys(notes)
-        .filter((noteMapAbbr) => permittedMapAbbrs.includes(noteMapAbbr))
-        .reduce((relevantNote, noteMapAbbr) => {
-            relevantNote[noteMapAbbr] = notes[noteMapAbbr];
-            return relevantNote;
-        }, {});
 
-    const numCombosCompleted = Object.keys(relevantNotes).length;
-    const ogCompletionPresent = Object.values(relevantNotes).some((v) => v.OG);
+    const relevantMaps = Object.keys(combo.MAPS).filter(m => permittedMapAbbrs.includes(m))
 
-    if (numCombosCompleted > 0) {
-        // Format 3 columns: map, person, link
-        let mapColumn = [];
-        let personColumn = [];
-        let linkColumn = [];
-        for (const mapAbbr in relevantNotes) {
-            const bold = relevantNotes[mapAbbr].OG ? '**' : '';
+    const numCombosCompleted = relevantMaps.length;
 
-            mapColumn.push(
-                `${bold}${Aliases.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`
-            );
-            personColumn.push(`${bold}${relevantNotes[mapAbbr].PERSON}${bold}`);
-            linkColumn.push(`${bold}${relevantNotes[mapAbbr].LINK}${bold}`);
-        }
-        mapColumn = mapColumn.join('\n');
-        personColumn = personColumn.join('\n');
-        linkColumn = linkColumn.join('\n');
-
-        const mapsLeft = permittedMapAbbrs.filter(
-            (m) => !Object.keys(relevantNotes).includes(m)
-        );
-
-        // Check if tower is water tower
-        let impossibleMaps = [];
-        if (Towers.isWaterEntity(entity)) {
-            // Calculate impossible maps (those that do not contain any water)
-            nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
-                Aliases.mapToIndexAbbreviation(m)
-            );
-            impossibleMaps = mapsLeft.filter((m) => nonWaterMaps.includes(m));
-
-            mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
-        }
-
-        // Embed and send the message
-        let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(
-                `${towerFormatted} 2MPCs on ${mapDifficultyFormatted} Maps`
-            )
-            .setColor(paleblue);
-
-        const numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
-        let possiblePhrasing;
-        if (mapsLeft.length > 0) {
-            possiblePhrasing =
-                impossibleMaps.length > 0 ? ' (that are possible)' : '';
-            challengeEmbed.addField(
-                `Combos${possiblePhrasing}`,
-                `**${numCombosCompleted}**/${numCombosPossible}`
-            );
-        } else {
-            possiblePhrasing = impossibleMaps.length > 0 ? ' possible' : '';
-            challengeEmbed.addField(
-                `All${possiblePhrasing} ${mapDifficulty} maps completed`,
-                '-'.repeat(40)
-            );
-        }
-
-        challengeEmbed
-            .addField('Map', mapColumn, true)
-            .addField('Person', personColumn, true)
-            .addField('Link', linkColumn, true);
-
-        if (impossibleMaps.length > 0) {
-            challengeEmbed.addField(
-                'Impossible maps',
-                impossibleMaps.join(', ')
-            );
-        }
-
-        if (mapsLeft.length > 0) {
-            challengeEmbed.addField('Maps Left', mapsLeft.join(', '));
-        }
-
-        if (ogCompletionPresent)
-            challengeEmbed.setFooter({ text: '----\nOG completion bolded' });
-
-        return challengeEmbed;
-    } else {
+    if (numCombosCompleted == 0) {
         throw new UserCommandError(
-            `Tower \`${towerFormatted}\` has not yet been completed on any \`${mapDifficulty}\` maps`
+            `\`${combo.ENTITY}\` has not yet been completed on any \`${mapDifficulty}\` maps`
         );
     }
+
+    // Format 3 columns: map, person, link
+    let mapColumn = [];
+    let personColumn = [];
+    let linkColumn = [];
+    for (const mapAbbr of relevantMaps) {
+        const bold = combo.MAPS[mapAbbr].OG ? '**' : '';
+
+        mapColumn.push(
+            `${bold}${Aliases.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`
+        );
+        personColumn.push(`${bold}${combo.MAPS[mapAbbr].PERSON}${bold}`);
+        linkColumn.push(`${bold}${combo.MAPS[mapAbbr].LINK}${bold}`);
+    }
+    mapColumn = mapColumn.join('\n');
+    personColumn = personColumn.join('\n');
+    linkColumn = linkColumn.join('\n');
+
+    let mapsLeft = permittedMapAbbrs.filter(
+        (m) => !Object.keys(combo.MAPS).includes(m)
+    );
+
+    // Check if tower is water tower
+    let impossibleMaps = [];
+    if (isWaterEntityCombo(combo)) {
+        // Calculate impossible maps (those that do not contain any water)
+        nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
+            Aliases.mapToIndexAbbreviation(m)
+        );
+        impossibleMaps = mapsLeft.filter((m) => nonWaterMaps.includes(m));
+
+        mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
+    }
+
+    // Embed and send the message
+    let challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(
+            `${combo.ENTITY} 2MPCs on ${mapDifficultyFormatted} Maps`
+        )
+        .setColor(paleblue);
+
+    const numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
+    let possiblePhrasing;
+    if (mapsLeft.length > 0) {
+        possiblePhrasing =
+            impossibleMaps.length > 0 ? ' (that are possible)' : '';
+        challengeEmbed.addField(
+            `Combos${possiblePhrasing}`,
+            `**${numCombosCompleted}**/${numCombosPossible}`
+        );
+    } else {
+        possiblePhrasing = impossibleMaps.length > 0 ? ' possible' : '';
+        challengeEmbed.addField(
+            `All${possiblePhrasing} ${mapDifficulty} maps completed`,
+            '-'.repeat(40)
+        );
+    }
+
+    challengeEmbed
+        .addField('Map', mapColumn, true)
+        .addField('Person', personColumn, true)
+        .addField('Link', linkColumn, true);
+
+    if (impossibleMaps.length > 0) {
+        challengeEmbed.addField(
+            'Impossible maps',
+            impossibleMaps.join(', ')
+        );
+    }
+
+    if (mapsLeft.length > 0) {
+        challengeEmbed.addField('Maps Left', mapsLeft.join(', '));
+    }
+
+    challengeEmbed.setFooter({ text: '----\nOG completion bolded' });
+
+    return challengeEmbed;
 }
 
 function filterCombo(interaction, comboEntity, c) {

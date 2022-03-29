@@ -85,7 +85,7 @@ const personOption =
 const versionOption = 
     new SlashCommandStringOption()
         .setName('version')
-        .setDescription('Exact Version or Version Endpoint')
+        .setDescription('Version or Subversion')
         .setRequired(false)
     
 const numberOption = 

@@ -214,7 +214,11 @@ async function execute(interaction) {
         })
     }
 
-    return await display2MPFilterAll(interaction)
+    try {
+        return await display2MPFilterAll(interaction, allCombos, parsed)
+    } catch(e) {
+        return await interaction.editReply({ embeds: [err(e)] })
+    }
 }
 
 async function scrapeAllCombos() {
@@ -327,7 +331,7 @@ function embed2MPOG(combo) {
         .setTitle(`${comboToEmbed.ENTITY} 2MPC Combo`)
         .setColor(paleblue);
 
-    for (field in comboToEmbed) {
+    for (const field in comboToEmbed) {
         challengeEmbed.addField(
             gHelper.toTitleCase(field.replace('_', ' ')),
             comboToEmbed[field],
@@ -473,90 +477,80 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     return challengeEmbed;
 }
 
-function filterCombo(interaction, comboEntity, c) {
-    let [parsedEntity, parsedMap, person] = parseAll(interaction)
-
-    const matchesPerson = person ? person === c.PERSON.toLowerCase() : true
+function filterCombo(c, parsed) {
+    const matchesPerson = parsed.person ? parsed.person === c.PERSON.toLowerCase() : true
 
     let matchesEntity = true
-    if (parsedEntity) {
-        comboEntity = Aliases.getCanonicalForm(Aliases.toAliasNormalForm(comboEntity))
-        if (parsedEntity.tower) {
-            if (Towers.isTowerUpgrade(comboEntity)) {
-                matchesEntity = Towers.towerUpgradeToTower(comboEntity) == parsedEntity.tower;
-            } else { // Hero
-                matchesEntity = false
-            }
-        } else { // Tower upgrade or hero
-            matchesEntity = comboEntity == (parsedEntity.tower_upgrade || parsedEntity.hero);
+    if (parsed.tower) {
+        if (Towers.isTowerUpgrade(c.ENTITY)) {
+            matchesEntity = Towers.towerUpgradeToTower(c.ENTITY) == parsed.tower;
+        } else { // Hero
+            matchesEntity = false
         }
+    } else if (parsed.tower_upgrade || parsed.hero) { // Tower upgrade or hero
+        matchesEntity = c.ENTITY == (parsed.tower_upgrade || parsed.hero);
     }
 
     let matchesMap = true
-    if (parsedMap) {
-        const comboMap = Aliases.indexMapAbbreviationToMap(c.MAP)
-        if (parsedMap.map_difficulty) {
-            matchesMap = Aliases.allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(comboMap)
-        } else { // Map
-            matchesMap = parsedMap.map == comboMap
-        }
+    if (parsed.map_difficulty) {
+        matchesMap = Aliases.allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(c.MAP)
+    } else if (parsed.map) { // Map
+        matchesMap = parsedMap.map == c.MAP
     }
 
-    return matchesPerson && matchesEntity && matchesMap;
+    const matchesOg = parsed.hasAny() ? true : c.OG
+
+    return matchesPerson && matchesEntity && matchesMap && matchesOg
 }
 
-function titleFunction(interaction) {
-    let [parsedEntity, parsedMap, person] = parseAll(interaction)
-
-    title = 'All 2MPs'
-    if (parsedEntity?.tower) {
-        title += ` with ${Aliases.toIndexNormalForm(parsedEntity.tower)}`
-    } else if (parsedEntity?.tower_upgrade) {
-        title += ` with ${Towers.towerUpgradeToIndexNormalForm(parsedEntity.tower_upgrade)}`
-    } else if (parsedEntity?.hero) {
-        title += ` with ${Aliases.toIndexNormalForm(parsedEntity.hero)}`
+function titleFunction(parsed, noCombos=false) {
+    let title;
+    if (noCombos) {
+        title = 'No 2MPs Completed'
+    } else {
+        title = 'All 2MPs'
     }
 
-    if (parsedMap?.map) {
-        title += ` on ${Aliases.toIndexNormalForm(parsedMap.map)}`
-    } else if (parsedMap?.map_difficulty) {
-        title += ` on ${Aliases.toIndexNormalForm(parsedMap.map_difficulty)} maps`
+    if (parsed.tower) {
+        title += ` with ${Aliases.toIndexNormalForm(parsed.tower)}`
+    } else if (parsed.tower_upgrade) {
+        title += ` with ${Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade)}`
+    } else if (parsed.hero) {
+        title += ` with ${Aliases.toIndexNormalForm(parsed.hero)}`
     }
 
-    if (person) {
-        title += ` by ${person}`
+    if (parsed.map) {
+        title += ` on ${Aliases.toIndexNormalForm(parsed.map)}`
+    } else if (parsed.map_difficulty) {
+        title += ` on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} maps`
+    }
+
+    if (parsed.person) {
+        title += ` by ${parsed.person}`
     }
 
     return title;
 }
 
-function excludedColumnsFunction(interaction) {
-    let [parsedEntity, parsedMap, person] = parseAll(interaction)
-    
+function determineExcludedColumns(parsed) {
     let excludedColumns = []
 
-    if (parsedEntity?.tower_upgrade || parsedEntity?.hero) {
+    if (parsed.tower_upgrade || parsed.hero) {
         excludedColumns.push('entity')
     }
 
-    if (parsedMap?.map) {
+    if (parsed.map) {
         excludedColumns.push('map')
     }
 
-    if (person) {
+    if (parsed.person || !parsed.hasAny()) {
         excludedColumns.push('person')
     }
 
     return excludedColumns;
 }
 
-async function display2MPFilterAll(interaction) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    // Load ENTITY and MAP columns
-    let [startRow, endRow] = await rowBoundaries();
-    await sheet.loadCells(`${COLS.ENTITY}${startRow}:${COLS.LINK}${endRow}`);
-
+async function display2MPFilterAll(interaction, combos, parsed) {
     // Collect data from 4 columns: tower, map, person, link
     // Only 3 can be used maximum to format a discord embed
     let towerColumn = [];
@@ -567,42 +561,42 @@ async function display2MPFilterAll(interaction) {
     let numOGCompletions = 0;
 
     // Retrieve og- and alt-map notes from each tower row
-    for (var row = startRow; row <= endRow; row++) {
-        const entity = sheet.getCellByA1(`${COLS.ENTITY}${row}`).value;
+    for (const combo of combos) {
+        for (const map in combo.MAPS) {
+            const mapCompletion = combo.MAPS[map]
 
-        const towerMapNotes = parsePreloadedMapNotesWithOG(row);
-        for (map in towerMapNotes) {
-            const note = {
-                MAP: map,
-                ...towerMapNotes[map],
+            const canonicalCompletion = {
+                ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
+                MAP: Aliases.indexMapAbbreviationToMap(map),
+                PERSON: mapCompletion.PERSON,
+                LINK: mapCompletion.LINK,
+                OG: mapCompletion.OG || false
             };
 
-            if (!filterCombo(interaction, entity, note)) {
+            if (!filterCombo(canonicalCompletion, parsed)) {
                 continue;
             }
 
-            const bold = note.OG ? '**' : '';
-            if (note.OG) numOGCompletions += 1;
+            const bold = mapCompletion.OG ? '**' : '';
+            if (mapCompletion.OG) numOGCompletions += 1;
 
-            towerColumn.push(`${bold}${entity}${bold}`);
-            mapColumn.push(`${bold}${note.MAP}${bold}`);
-            linkColumn.push(`${bold}${note.LINK}${bold}`);
-            personColumn.push(`${bold}${note.PERSON}${bold}`);
+            towerColumn.push(`${bold}${combo.ENTITY}${bold}`);
+            mapColumn.push(`${bold}${map}${bold}`);
+            linkColumn.push(`${bold}${mapCompletion.LINK}${bold}`);
+            personColumn.push(`${bold}${mapCompletion.PERSON}${bold}`);
         }
     }
-
-    const title = titleFunction(interaction);
 
     // If no combos were found after filtering
     if (towerColumn.length == 0) {
-        try {
-            return message.channel.send(noCombosMessage);
-        } catch (e) {
-            console.log(e.name);
-        }
+        throw new UserCommandError(
+            titleFunction(parsed, true)
+        );
     }
 
-    const excludedColumns = excludedColumnsFunction(interaction)
+    const title = titleFunction(parsed);
+
+    const excludedColumns = determineExcludedColumns(parsed)
 
     // Exclude columns from data output based on function input
     let columns = {};
@@ -817,45 +811,6 @@ function err(e) {
     } else {
         throw e;
     }
-}
-
-// Gets the row of tower completion stats for the given tower
-async function rowFromTower(tower) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    [rowBegin, rowEnd] = await rowBoundaries();
-
-    // Load the column containing the different maps
-    await sheet.loadCells(`${COLS.ENTITY}${rowBegin}:${COLS.ENTITY}${rowEnd}`); // loads all possible cells with tower
-
-    // The row where the queried map is found
-    let entryRow = null;
-
-    // Search for the row in all "possible" rows
-    for (let row = rowBegin; row <= rowEnd; row++) {
-        let towerCandidate = sheet.getCellByA1(`${COLS.ENTITY}${row}`).value;
-
-        if (!towerCandidate) continue;
-
-        // input is "in_the_loop" but needs to be compared to "In The Loop"
-        if (
-            Aliases.toIndexNormalForm(tower) ===
-            gHelper.toTitleCase(towerCandidate)
-        ) {
-            entryRow = row;
-            break;
-        }
-    }
-
-    if (!entryRow) {
-        throw new UserCommandError(
-            `Tower \`${Aliases.toIndexNormalForm(
-                tower
-            )}\` doesn't yet have a 2MP completion`
-        );
-    }
-
-    return entryRow;
 }
 
 async function rowBoundaries() {

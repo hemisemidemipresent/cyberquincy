@@ -370,17 +370,18 @@ async function formatAndDisplayBalanceChanges(
     const formattedEntity = Towers.formatEntity(
         parsed.tower || parsed.tower_upgrade || parsed.tower_path || parsed.hero
     );
+
+    let versionText = '';
+    if (parsed.versions && parsed.versions.length == 2) {
+        const sortedVersions = parsed.versions.sort((a, b) => Number(a) - b);
+        versionText = ` between ${sortedVersions
+            .map((v) => `v${v}`)
+            .join(' & ')}`;
+    } else if (parsed.versions) {
+        versionText = ` in v${parsed.version}`;
+    }
   
     if (Object.keys(balances).length == 0) {
-        let versionText = '';
-        if (parsed.versions && parsed.versions.length == 2) {
-            const sortedVersions = parsed.versions.sort((a, b) => Number(a) - b);
-            versionText = ` between ${sortedVersions
-                .map((v) => `v${v}`)
-                .join(' & ')}`;
-        } else if (parsed.versions) {
-            versionText = ` in v${parsed.version}`;
-        }
         return interaction.editReply({
             embeds: [
                 new Discord.MessageEmbed()
@@ -396,9 +397,9 @@ async function formatAndDisplayBalanceChanges(
   
     if (parsed.tower_upgrade == 'wizard_monkey#005')
         addedText = `Reworked from Soulbind in 2.0`;
-  
+
     let embed = new Discord.MessageEmbed()
-        .setTitle(`Buffs and Nerfs for ${formattedEntity}`)
+        .setTitle(`Buffs and Nerfs for ${formattedEntity}${versionText}`)
         .setDescription(addedText)
         .setColor(darkgreen);
   
@@ -410,7 +411,7 @@ async function formatAndDisplayBalanceChanges(
         await interaction.editReply({ embeds: [embed] });
     } catch (e) {
         return interaction.editReply({
-            content: `Too many balance changes for ${formattedEntity}; Try a more narrow search using a more specific entity or by incorporating version limits`
+            content: `Too many balance changes for ${formattedEntity}${versionText}; Try a more narrow search using a more specific entity or by incorporating version limits`
         });
     }
 }

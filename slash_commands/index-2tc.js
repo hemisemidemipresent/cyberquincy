@@ -619,7 +619,7 @@ function embedTitle(parsed, combos) {
         const tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';
-        title += `${Towers.formatTower(tower)} `;
+        title += `${Towers.formatEntity(tower)} `;
     }
     if (parsed.version) title += `in v${parsed.version} `;
     return title.slice(0, title.length - 1);
@@ -635,7 +635,7 @@ function embedTitleNoCombos(parsed) {
         tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';
-        title += `${Towers.formatTower(tower)} `;
+        title += `${Towers.formatEntity(tower)} `;
     }
     if (parsed.version) title += `in v${parsed.version} `;
     return title.slice(0, title.length - 1);

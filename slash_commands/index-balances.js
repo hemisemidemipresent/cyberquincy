@@ -367,14 +367,14 @@ async function formatAndDisplayBalanceChanges(
     versionAdded,
     balances
 ) {
-    formattedTower = Towers.formatTower(
+    const formattedEntity = Towers.formatEntity(
         parsed.tower || parsed.tower_upgrade || parsed.tower_path || parsed.hero
     );
   
     if (Object.keys(balances).length == 0) {
-        versionText = '';
+        let versionText = '';
         if (parsed.versions && parsed.versions.length == 2) {
-            sortedVersions = parsed.versions.sort((a, b) => Number(a) - b);
+            const sortedVersions = parsed.versions.sort((a, b) => Number(a) - b);
             versionText = ` between ${sortedVersions
                 .map((v) => `v${v}`)
                 .join(' & ')}`;
@@ -385,7 +385,7 @@ async function formatAndDisplayBalanceChanges(
             embeds: [
                 new Discord.MessageEmbed()
                     .setTitle(
-                        `No patch notes found for ${formattedTower}${versionText}`
+                        `No patch notes found for ${formattedEntity}${versionText}`
                     )
                     .setColor(yellow),
             ],
@@ -398,7 +398,7 @@ async function formatAndDisplayBalanceChanges(
         addedText = `Reworked from Soulbind in 2.0`;
   
     let embed = new Discord.MessageEmbed()
-        .setTitle(`Buffs and Nerfs for ${formattedTower}`)
+        .setTitle(`Buffs and Nerfs for ${formattedEntity}`)
         .setDescription(addedText)
         .setColor(darkgreen);
   
@@ -410,7 +410,7 @@ async function formatAndDisplayBalanceChanges(
         await interaction.editReply({ embeds: [embed] });
     } catch (e) {
         return interaction.editReply({
-            content: `Too many balance changes for ${formattedTower}; Try a more narrow search using a more specific entity or by incorporating version limits`
+            content: `Too many balance changes for ${formattedEntity}; Try a more narrow search using a more specific entity or by incorporating version limits`
         });
     }
 }

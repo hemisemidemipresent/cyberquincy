@@ -430,6 +430,10 @@ class AliasRepository extends Array {
         return indexForm.toLowerCase().split(' ').join('_');
     }
 
+    toAliasCanonical(indexForm) {
+        return this.getCanonicalForm(this.toAliasNormalForm(indexForm))
+    }
+
     toIndexNormalForm(canonical) {
         return canonical
             .split('_')

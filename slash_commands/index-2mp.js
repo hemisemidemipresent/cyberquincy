@@ -263,10 +263,14 @@ function embed2MPAlt(combo, map) {
     return challengeEmbed;
 }
 
-function orderAndFlatten2MPOGCompletion(combo) {
-    let [ogMap, ogCompletion] = Object.entries(combo.MAPS).find( ([_, altCombo]) => {
+function ogCombo(combo) {
+    return Object.entries(combo.MAPS).find( ([_, altCombo]) => {
         return altCombo.OG
     });
+}
+
+function orderAndFlatten2MPOGCompletion(combo) {
+    let [ogMap, ogCompletion] = ogCombo(combo)
     combo = {
         ...combo,
         OG_MAP: Aliases.indexMapAbbreviationToNormalForm(ogMap),
@@ -278,6 +282,40 @@ function orderAndFlatten2MPOGCompletion(combo) {
     let orderedFields = {};
     ordering.forEach(col => orderedFields[col] = combo[col])
     return orderedFields;
+}
+
+function isWaterEntityCombo(combo) {
+    const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY)
+    return Towers.isWaterEntity(canonicalEntity)
+}
+
+function altMapDifficultyGroups(combo) {
+    const ogMap = ogCombo(combo)[0]
+    const completedAltMaps = Object.keys(combo.MAPS).filter(m => m != ogMap);
+
+    let mapDifficultyGroups = [
+        Aliases.beginnerMaps(),
+        Aliases.intermediateMaps(),
+        Aliases.advancedMaps(),
+        Aliases.expertMaps(),
+    ];
+    if (isWaterEntityCombo(combo)) {
+        mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
+            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
+        );
+    }
+    mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
+        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+    );
+
+    const altMapGroups = mapDifficultyGroups.map((mapGroup) =>
+        mapGroup.filter((map) => completedAltMaps.includes(map))
+    );
+    const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
+        mapGroup.filter((map) => !completedAltMaps.concat(ogMap).includes(map))
+    );
+
+    return [altMapGroups, unCompletedAltMapGroups]
 }
 
 // Displays the OG 2MPC completion
@@ -299,44 +337,16 @@ function embed2MPOG(combo) {
 
     challengeEmbed.addField('OG?', 'OG', true);
 
-    return challengeEmbed;
+    let [altMapGroups, unCompletedAltMapGroups] = altMapDifficultyGroups(combo)
+    let wordAllIncluded = false
 
-    altMaps = Object.keys();
-    ogMap = Aliases.mapToIndexAbbreviation(
-        Aliases.toAliasNormalForm(values.OG_MAP)
-    );
-
-    mapGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps(),
-    ];
-    if (Towers.isWaterTowerUpgrade(tower)) {
-        mapGroups = mapGroups.map((aliases) =>
-            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
-        );
-    }
-    mapGroups = mapGroups.map((aliases) =>
-        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
-    );
-
-    altMapGroups = mapGroups.map((mapGroup) =>
-        mapGroup.filter((map) => altMaps.includes(map))
-    );
-    unCompletedAltMapGroups = mapGroups.map((mapGroup) =>
-        mapGroup.filter((map) => !altMaps.concat(ogMap).includes(map))
-    );
-
-    wordAllIncluded = false;
-
-    displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
+    const displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
         mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
-        waterTowerAsterisk = Towers.isWaterTowerUpgrade(tower) ? '*' : '';
+        waterTowerAsterisk = isWaterEntityCombo(combo) ? '*' : '';
         if (unCompletedAltMapGroups[i] == 0) {
             wordAllIncluded = true;
             return `All ${mapDifficulty}${waterTowerAsterisk}`;
-        } else if (unCompletedAltMapGroups[i].length < 3) {
+        } else if (unCompletedAltMapGroups[i].length < 5) {
             wordAllIncluded = true;
             return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[
                 i
@@ -348,18 +358,18 @@ function embed2MPOG(combo) {
         }
     });
 
-    if (altMapGroups.some((group) => group.length > 0)) {
-        altMapsString = '';
-        altMapsString += `\n${displayedMapGroups[0]}`;
-        altMapsString += `\n${displayedMapGroups[1]}`;
-        altMapsString += `\n${displayedMapGroups[2]}`;
-        altMapsString += `\n${displayedMapGroups[3]}`;
-        challengeEmbed.addField('**Alt Maps**', altMapsString);
+    if (displayedMapGroups.some(group => group.length > 0)) {
+        completedAltMapsString = '';
+        completedAltMapsString += `\n${displayedMapGroups[0]}`;
+        completedAltMapsString += `\n${displayedMapGroups[1]}`;
+        completedAltMapsString += `\n${displayedMapGroups[2]}`;
+        completedAltMapsString += `\n${displayedMapGroups[3]}`;
+        challengeEmbed.addField('**Alt Maps**', completedAltMapsString);
     } else {
         challengeEmbed.addField('**Alt Maps**', 'None');
     }
 
-    if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
+    if (isWaterEntityCombo(combo) && wordAllIncluded) {
         challengeEmbed.setFooter({ text: '*with water' });
     }
 
@@ -419,7 +429,7 @@ async function embed2MPMapDifficulty(entity, mapDifficulty) {
 
         // Check if tower is water tower
         let impossibleMaps = [];
-        if (Towers.isWaterTowerUpgrade(entity)) {
+        if (Towers.isWaterEntity(entity)) {
             // Calculate impossible maps (those that do not contain any water)
             nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
                 Aliases.mapToIndexAbbreviation(m)

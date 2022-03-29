@@ -17,8 +17,8 @@ const COLS = {
     LINK: 'L',
 };
 
-const ENTITY_COLS = {
-    ENTITY: 'O',
+const TOWER_COLS = {
+    TOWER: 'O',
     BASE: 'P',
     LAST: 'Y',
 };
@@ -263,27 +263,45 @@ function embed2MPAlt(combo, map) {
     return challengeEmbed;
 }
 
+function orderAndFlatten2MPOGCompletion(combo) {
+    let [ogMap, ogCompletion] = Object.entries(combo.MAPS).find( ([_, altCombo]) => {
+        return altCombo.OG
+    });
+    combo = {
+        ...combo,
+        OG_MAP: Aliases.indexMapAbbreviationToNormalForm(ogMap),
+        PERSON: ogCompletion.PERSON,
+        LINK: ogCompletion.LINK,
+    }
+
+    const ordering = Object.keys(COLS)
+    let orderedFields = {};
+    ordering.forEach(col => orderedFields[col] = combo[col])
+    return orderedFields;
+}
+
 // Displays the OG 2MPC completion
-function embed2MPOG(entity, combos) {
-    
+function embed2MPOG(combo) {
+    const comboToEmbed = orderAndFlatten2MPOGCompletion(combo)
 
     // Embed and send the message
     let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${values.ENTITY} 2MPC Combo`)
+        .setTitle(`${comboToEmbed.ENTITY} 2MPC Combo`)
         .setColor(paleblue);
 
-    for (field in values) {
+    for (field in comboToEmbed) {
         challengeEmbed.addField(
             gHelper.toTitleCase(field.replace('_', ' ')),
-            values[field],
+            comboToEmbed[field],
             true
         );
     }
 
     challengeEmbed.addField('OG?', 'OG', true);
 
-    mapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
-    altMaps = Object.keys(parseMapNotes(mapCell.note));
+    return challengeEmbed;
+
+    altMaps = Object.keys();
     ogMap = Aliases.mapToIndexAbbreviation(
         Aliases.toAliasNormalForm(values.OG_MAP)
     );
@@ -914,7 +932,7 @@ async function display2MPTowerStatistics(tower) {
 
     // Load the row where the map was found
     await sheet.loadCells(
-        `${ENTITY_COLS.ENTITY}${entryRow}:${ENTITY_COLS.LAST}${entryRow}`
+        `${TOWER_COLS.TOWER}${entryRow}:${TOWER_COLS.LAST}${entryRow}`
     );
 
     // Check or X
@@ -957,7 +975,7 @@ async function findTowerRow(tower) {
 
     // Load the column containing the different towers
     await sheet.loadCells(
-        `${ENTITY_COLS.ENTITY}1:${ENTITY_COLS.ENTITY}${sheet.rowCount}`
+        `${TOWER_COLS.TOWER}1:${TOWER_COLS.TOWER}${sheet.rowCount}`
     );
 
     entryRow = null;
@@ -965,7 +983,7 @@ async function findTowerRow(tower) {
     // Search for the row in all "possible" rows
     for (let row = 1; row <= sheet.rowCount; row++) {
         let towerCandidate = sheet.getCellByA1(
-            `${ENTITY_COLS.ENTITY}${row}`
+            `${TOWER_COLS.TOWER}${row}`
         ).value;
 
         if (!towerCandidate) continue;
@@ -995,10 +1013,10 @@ async function getCompletionMarking(entryRow, path, tier) {
     upgradeCol = null;
 
     if (tier == 2) {
-        upgradeCol = ENTITY_COLS.BASE;
+        upgradeCol = TOWER_COLS.BASE;
     } else {
         upgradeCol = String.fromCharCode(
-            ENTITY_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2
+            TOWER_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2
         );
     }
 

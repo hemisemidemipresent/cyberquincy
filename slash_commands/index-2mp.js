@@ -79,6 +79,7 @@ const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const EmptyParser = require('../parser/empty-parser.js');
 const Parsed = require('../parser/parsed.js');
 const UserCommandError = require('../exceptions/user-command-error.js');
+const PersonParser = require('../parser/person-parser.js');
 
 function parseEntity(interaction) {
     entityParser = new OrParser(
@@ -97,7 +98,7 @@ function parseEntity(interaction) {
             parsed.addError('Canonical not found')
             return parsed;
         }
-    } else return null;
+    } else return new Parsed();
 }
 
 function parseMap(interaction) {
@@ -115,26 +116,33 @@ function parseMap(interaction) {
             parsed.addError('Canonical not found')
             return parsed;
         }
-    } else return null;
+    } else return new Parsed();
+}
+
+function parsePerson(interaction) {
+    person = interaction.options.getString('person')?.toLowerCase()
+    if (person) {
+        return CommandParser.parse([`user#${person}`], new PersonParser())
+    } else return new Parsed();
 }
 
 function parseAll(interaction) {
     parsedEntity = parseEntity(interaction)
     parsedMap = parseMap(interaction)
-    person = interaction.options.getString('person')?.toLowerCase()
+    person = parsePerson(interaction)
     return [parsedEntity, parsedMap, person];
 }
 
 function validateInput(interaction) {
     let [parsedEntity, parsedMap, person] = parseAll(interaction)
 
-    if (parsedEntity?.hasErrors())
+    if (parsedEntity.hasErrors())
         return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`
 
-    if (parsedMap?.hasErrors())
+    if (parsedMap.hasErrors())
         return `Map/Difficulty ${map} didn't match, including aliases`
     
-    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && parsedMap?.map && person) {
+    if ((parsedEntity.tower_upgrade || parsedEntity.hero) && parsedMap.map && person) {
         return "Don't search a person if you're already narrowing down your search to a specific completion"
     }
 }
@@ -148,71 +156,53 @@ async function execute(interaction) {
         });
     }
 
-    let [parsedEntity, parsedMap, person] = parseAll(interaction)
+    const parsed = parseAll(interaction).reduce(
+        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
+        new Parsed()
+    )
+
+    // Not cached
+    if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
+        const challengeEmbed = await display2MPTowerStatistics(parsed.tower)
+        return interaction.reply({
+            embeds: [challengeEmbed],
+        })
+    }
 
     await interaction.deferReply({ ephemeral: true })
 
     const forceReload = interaction.options.getString('reload') ? true : false
-
 
     let allCombos;
     if (Index.hasCachedCombos(CACHE_FNAME_2MP) && !forceReload) {
         allCombos = await Index.fetchCachedCombos(CACHE_FNAME_2MP)           
     } else {
         allCombos = await scrapeAllCombos();
-        console.log(allCombos)
         Index.cacheCombos(allCombos, CACHE_FNAME_2MP)
     }
 
-    return interaction.editReply({
-        content: `${allCombos.length} combos`
-    })
-
     const mtime = Index.getLastCacheModified(CACHE_FNAME_2MP)
 
-    if (parsedEntity?.tower && !parsedMap && !person) {
-        const challengeEmbed = await display2MPTowerStatistics(parsedEntity.tower)
-        return interaction.reply({
-            embeds: [challengeEmbed],
-        })
-    }
-
-    // Simple displays
-    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && !parsedMap?.map_difficulty && !person) {
+    if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
         let challengeEmbed;
-        entity = parsedEntity?.hero || Towers.towerUpgradeToIndexNormalForm(parsedEntity?.tower_upgrade)
+        const entity = parsed.hero || Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade)
 
-        if (parsedMap?.map) {
-            try {
-                challengeEmbed = await display2MPAlt(entity, parsedMap.map)
-            } catch(e) {
-                challengeEmbed = err(e)
+        try {
+            if (parsed.map_difficulty) {
+                challengeEmbed = await embed2MPMapDifficulty(entity, parsed.map_difficulty)
+            } else if (parsed.map) {
+                challengeEmbed = await embed2MPAlt(entity, parsed.map)
+            } else {
+                challengeEmbed = await embed2MPOG(entity)
             }
-        } else {
-            try {
-                challengeEmbed = await display2MPOG(entity)
-            } catch(e) {
-                challengeEmbed = err(e)
-            }
+            challengeEmbed.setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
+        } catch(e) {
+            challengeEmbed = err(e)
         }
 
         return interaction.editReply({
             embeds: [challengeEmbed],
         })
-    }
-
-    if ((parsedEntity?.tower_upgrade || parsedEntity?.hero) && parsedMap?.map_difficulty && !person) {
-        try {
-            entity = parsedEntity?.hero || Towers.towerUpgradeToIndexNormalForm(parsedEntity?.tower_upgrade)
-            const challengeEmbed = await display2MPMapDifficulty(entity, parsedMap.map_difficulty)
-            return interaction.editReply({
-                embeds: [challengeEmbed]
-            })
-        } catch(e) {
-            return interaction.editReply({
-                embeds: [err(e)]
-            })
-        }
     }
 
     return await display2MPFilterAll(interaction)
@@ -237,7 +227,7 @@ async function scrapeAllCombos() {
 }
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
-async function display2MPMapDifficulty(entity, mapDifficulty) {
+async function embed2MPMapDifficulty(entity, mapDifficulty) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     const mapDifficultyFormatted = gHelper.toTitleCase(mapDifficulty);
@@ -698,7 +688,7 @@ function err(e) {
 }
 
 // Displays a 2MPC completion on the specified map
-async function display2MPAlt(tower, map) {
+async function embed2MPAlt(tower, map) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     mapFormatted = gHelper.toTitleCase(map.split('_').join(' '));
@@ -716,7 +706,7 @@ async function display2MPAlt(tower, map) {
 
     // Display OG map as if map weren't in the query
     if (mapFormatted == ogMap) {
-        return await display2MPOG(tower);
+        return await embed2MPOG(tower);
     }
 
     notes = parseMapNotes(ogMapCell.note);
@@ -739,7 +729,7 @@ async function display2MPAlt(tower, map) {
 }
 
 // Displays the OG 2MPC completion
-async function display2MPOG(tower) {
+async function embed2MPOG(tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     entryRow = await rowFromTower(tower);

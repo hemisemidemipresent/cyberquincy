@@ -25,6 +25,7 @@ HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 const gHelper = require('../helpers/general.js');
+const discordHelper = require('../helpers/discord.js');
 const Index = require('../helpers/index.js');
 
 const { orange, palered } = require('../jsons/colours.json');
@@ -445,7 +446,7 @@ async function displayOneOrMultiplePages(
                 }
             }
 
-            if (isValidFormBody(challengeEmbed)) return [challengeEmbed, numRows > maxNumRowsDisplayed];
+            if (discordHelper.isValidFormBody(challengeEmbed)) return [challengeEmbed, numRows > maxNumRowsDisplayed];
 
             if (direction > 0) rightIndex--;
             if (direction < 0) leftIndex++;
@@ -460,68 +461,61 @@ async function displayOneOrMultiplePages(
             components: multipage ? [multipageButtons] : [],
         });
 
-        if (multipage) {
-            const filter = (selection) => {
-                // Ensure user clicking button is same as the user that started the interaction
-                if (selection.user.id !== interaction.user.id) {
-                    return false;
-                }
-                // Ensure that the button press corresponds with this interaction and wasn't
-                // a button press on the previous interaction
-                if (selection.message.interaction.id !== interaction.id) {
-                    return false;
-                }
-                return true;
-            };
+        if (!multipage) return;
 
-            const collector = interaction.channel.createMessageComponentCollector({
-                filter,
-                componentType: 'BUTTON',
-                time: 20000
-            });
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        };
 
-            collector.on('collect', async (buttonInteraction) => {
-                collector.stop();
-                buttonInteraction.deferUpdate();
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: 'BUTTON',
+            time: 20000
+        });
 
-                switch (parseInt(buttonInteraction.customId)) {
-                    case -1:
-                        rightIndex = (leftIndex - 1 + numRows) % numRows;
-                        leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                        if (leftIndex < 0) leftIndex = 0;
-                        await displayPages(-1);
-                        break;
-                    case 1:
-                        leftIndex = (rightIndex + 1) % numRows;
-                        rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                        if (rightIndex >= numRows) rightIndex = numRows - 1;
-                        await displayPages(1);
-                        break;
-                }
-            });
+        collector.on('collect', async (buttonInteraction) => {
+            collector.stop();
+            buttonInteraction.deferUpdate();
 
-            collector.on('end', async (collected) => {
-                if (collected.size == 0) {
-                    await interaction.editReply({
-                        embeds: [embed],
-                        components: []
-                    });
-                }
-            });
-        }
+            switch (parseInt(buttonInteraction.customId)) {
+                case -1:
+                    rightIndex = (leftIndex - 1 + numRows) % numRows;
+                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                    if (leftIndex < 0) leftIndex = 0;
+                    await displayPages(-1);
+                    break;
+                case 1:
+                    leftIndex = (rightIndex + 1) % numRows;
+                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                    if (rightIndex >= numRows) rightIndex = numRows - 1;
+                    await displayPages(1);
+                    break;
+            }
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size == 0) {
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
+            }
+        });
     }
 
     // Gets the reaction to the pagination message by the command author
     // and respond by turning the page in the correction direction
 
     await displayPages(1);
-}
-
-function isValidFormBody(embed) {
-    for (let i = 0; i < embed.fields.length; i++) {
-        if (embed.fields[i].value.length > 1024) return false;
-    }
-    return true;
 }
 
 function getDisplayCols(parsed) {

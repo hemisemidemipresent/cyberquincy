@@ -1,6 +1,7 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const gHelper = require('../helpers/general.js');
+const discordHelper = require('../helpers/discord')
 const Index = require('../helpers/index.js');
 
 const { paleblue } = require('../jsons/colours.json');
@@ -215,7 +216,7 @@ async function execute(interaction) {
     }
 
     try {
-        return await display2MPFilterAll(interaction, allCombos, parsed)
+        return await display2MPFilterAll(interaction, allCombos, parsed, mtime)
     } catch(e) {
         return await interaction.editReply({ embeds: [err(e)] })
     }
@@ -547,10 +548,14 @@ function determineExcludedColumns(parsed) {
         excludedColumns.push('person')
     }
 
+    if (!parsed.tower_upgrade && !parsed.hero && !parsed.map && !parsed.person) {
+        excludedColumns.push('person')
+    }
+
     return excludedColumns;
 }
 
-async function display2MPFilterAll(interaction, combos, parsed) {
+async function display2MPFilterAll(interaction, combos, parsed, mtime) {
     // Collect data from 4 columns: tower, map, person, link
     // Only 3 can be used maximum to format a discord embed
     let towerColumn = [];
@@ -605,115 +610,70 @@ async function display2MPFilterAll(interaction, combos, parsed) {
     if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
     columns.LINK = linkColumn;
 
-    // Paginate if there are too many combos to display at once
-    if (columns.LINK.length > MAX_VALUES_LIST_LENGTH_2MP) {
-        return await embedPages(interaction, title, columns, numOGCompletions);
-    }
-
-    let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(title)
-        .addField('#Combos', columns.LINK.length.toString())
-        .setColor(paleblue);
-
-    // Display the non-excluded columns
-    for (columnHeader in columns) {
-        challengeEmbed.addField(
-            gHelper.toTitleCase(columnHeader),
-            columns[columnHeader].join('\n'),
-            true
-        );
-    }
-
-    if (numOGCompletions == 1) {
-        challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
-    }
-    if (numOGCompletions > 1) {
-        challengeEmbed.setFooter({
-            text: `---\n${numOGCompletions} OG completions bolded`
-        });
-    }
-
-    return interaction.editReply({ embeds: [challengeEmbed] });
+    return await embedPages(interaction, title, columns, numOGCompletions, mtime);
 }
 
-const multipageButtons = new MessageActionRow().addComponents(
+const MULTIPAGE_BUTTONS_2MP = new MessageActionRow().addComponents(
     new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
     new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
-    new MessageButton()
-        .setCustomId('mobile')
-        .setLabel('📱')
-        .setStyle('SECONDARY')
 );
 
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
-async function embedPages(interaction, title, columns, numOGCompletions) {
-    let mobile = false;
-    columnChunks = {};
-    for (columnHeader in columns) {
-        columnChunks[columnHeader] = gHelper.chunk(
-            columns[columnHeader],
-            MAX_VALUES_LIST_LENGTH_2MP
-        );
-    }
+async function embedPages(interaction, title, columns, numOGCompletions, mtime) {
+    const numRows = columns.LINK.length
+    let leftIndex = 0;
+    let rightIndex = Math.min(MAX_VALUES_LIST_LENGTH_2MP, numRows) - 1
 
-    // Divide results into chunks of MAX_VALUES_LIST_LENGTH_2MP
-    numPages = columnChunks.LINK.length;
-    pg = 0;
+    async function embedPage(direction) {
+        for (
+            maxNumRowsDisplayed = MAX_VALUES_LIST_LENGTH_2MP;
+            maxNumRowsDisplayed > 0;
+            maxNumRowsDisplayed--
+        ) {
+            let challengeEmbed = new Discord.MessageEmbed()
+                .setTitle(title)
+                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
+                .setColor(paleblue)
+                .addField(
+                    '# Combos',
+                    `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
+                );
 
-    async function displayCurrentPage() {
-        const startCombo = pg * MAX_VALUES_LIST_LENGTH_2MP + 1;
-        const endCombo = Math.min(
-            (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP,
-            columns[Object.keys(columns)[0]].length
-        );
-
-        challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(title)
-            .setColor(paleblue)
-            .addField(
-                'Combos',
-                `**${startCombo}-${endCombo}** of ${columns.LINK.length}`
-            );
-        if (mobile) {
-            let arr = Array(endCombo - startCombo + 1 + 1).fill(''); // first +1 is because 1-12 contains 12 combos, the other +1 is for the titles (ENTITY, PERSON, LINK)
-
-            for (columnHeader in columnChunks) {
-                let obj = columnChunks[columnHeader];
-                let page = obj[pg];
-                page.unshift(columnHeader);
-                let max = gHelper.longestStrLength(page);
-                for (let i = 0; i < page.length; i++) {
-                    if (columnHeader != 'LINK')
-                        arr[i] += '`' + gHelper.addSpaces(page[i], max) + '`|';
-                    else arr[i] += page[i];
-                }
-                page.shift(columnHeader);
-            }
-
-            challengeEmbed.setDescription(arr.join('\n'));
-        } else {
-            for (columnHeader in columnChunks) {
+            for (columnHeader in columns) {
                 challengeEmbed.addField(
                     columnHeader,
-                    columnChunks[columnHeader][pg].join('\n'),
+                    columns[columnHeader].slice(leftIndex, rightIndex + 1).join('\n'),
                     true
                 );
             }
-        }
 
-        if (numOGCompletions == 1) {
-            challengeEmbed.setFooter({text: `---\nOG completion bolded`});
+            if (numOGCompletions == 1) {
+                challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
+            }
+            if (numOGCompletions > 1) {
+                challengeEmbed.setFooter({
+                    text: `---\n${numOGCompletions} total OG completions bolded`
+                });
+            }
+
+            if (discordHelper.isValidFormBody(challengeEmbed)) {
+                return [ challengeEmbed, numRows > maxNumRowsDisplayed ]
+            }
+
+            if (direction > 0) rightIndex--;
+            if (direction < 0) leftIndex++;
         }
-        if (numOGCompletions > 1) {
-            challengeEmbed.setFooter({
-                text: `---\n${numOGCompletions} total OG completions bolded`
-            });
-        }
+    }
+    
+    async function displayPage(direction) {
+        let [challengeEmbed, multipage] = await embedPage(direction)
 
         await interaction.editReply({
             embeds: [challengeEmbed],
-            components: [multipageButtons]
+            components: [MULTIPAGE_BUTTONS_2MP]
         });
+
+        if (!multipage) return;
 
         const filter = (selection) => {
             // Ensure user clicking button is same as the user that started the interaction
@@ -737,21 +697,20 @@ async function embedPages(interaction, title, columns, numOGCompletions) {
             collector.stop();
             buttonInteraction.deferUpdate();
 
-            if (buttonInteraction.customId == 'mobile') {
-                mobile = !mobile;
-            } else {
-                switch (parseInt(buttonInteraction.customId)) {
-                    case -1:
-                        pg--;
-                        break;
-                    case 1:
-                        pg++;
-                        break;
-                }
-                pg += numPages; // Avoid negative numbers
-                pg %= numPages;
+            switch (parseInt(buttonInteraction.customId)) {
+                case -1:
+                    rightIndex = (leftIndex - 1 + numRows) % numRows;
+                    leftIndex = rightIndex - (MAX_VALUES_LIST_LENGTH_2MP - 1);
+                    if (leftIndex < 0) leftIndex = 0;
+                    await displayPage(-1)
+                    break;
+                case 1:
+                    leftIndex = (rightIndex + 1) % numRows;
+                    rightIndex = leftIndex + (MAX_VALUES_LIST_LENGTH_2MP - 1);
+                    if (rightIndex >= numRows) rightIndex = numRows - 1;
+                    await displayPage(1);
+                    break;
             }
-            await displayCurrentPage();
         });
 
         collector.on('end', async (collected) => {
@@ -764,7 +723,7 @@ async function embedPages(interaction, title, columns, numOGCompletions) {
         });
     }
 
-    displayCurrentPage();
+    displayPage(1);
 }
 
 // Assumes appropriate cells are loaded beforehand!

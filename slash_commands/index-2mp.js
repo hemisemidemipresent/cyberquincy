@@ -670,7 +670,7 @@ async function embedPages(interaction, title, columns, numOGCompletions, mtime) 
 
         await interaction.editReply({
             embeds: [challengeEmbed],
-            components: [MULTIPAGE_BUTTONS_2MP]
+            components: multipage ? [MULTIPAGE_BUTTONS_2MP]  : []
         });
 
         if (!multipage) return;

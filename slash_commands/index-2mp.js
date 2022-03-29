@@ -134,7 +134,7 @@ function parseAll(interaction) {
 }
 
 function validateInput(interaction) {
-    let [parsedEntity, parsedMap, person] = parseAll(interaction)
+    let [parsedEntity, parsedMap, parsedPerson] = parseAll(interaction)
 
     if (parsedEntity.hasErrors())
         return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`
@@ -142,7 +142,7 @@ function validateInput(interaction) {
     if (parsedMap.hasErrors())
         return `Map/Difficulty ${map} didn't match, including aliases`
     
-    if ((parsedEntity.tower_upgrade || parsedEntity.hero) && parsedMap.map && person) {
+    if ((parsedEntity.tower_upgrade || parsedEntity.hero) && parsedMap.map && parsedPerson.person) {
         return "Don't search a person if you're already narrowing down your search to a specific completion"
     }
 }
@@ -191,9 +191,9 @@ async function execute(interaction) {
             if (parsed.map_difficulty) {
                 challengeEmbed = await embed2MPMapDifficulty(entity, parsed.map_difficulty)
             } else if (parsed.map) {
-                challengeEmbed = await embed2MPAlt(entity, parsed.map)
+                challengeEmbed = await embed2MPAlt(entity, parsed.map, allCombos)
             } else {
-                challengeEmbed = await embed2MPOG(entity)
+                challengeEmbed = await embed2MPOG(entity, allCombos)
             }
             challengeEmbed.setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
         } catch(e) {
@@ -666,7 +666,6 @@ function parsePreloadedRow(row) {
 
     let completion = {}
     for (const col of ["NUMBER", "ENTITY", "UPGRADE", "VERSION"]) {
-        console.log(col, COLS[col])
         completion[col] = sheet.getCellByA1(`${COLS[col]}${row}`).value;
     }
     completion.DATE = sheet.getCellByA1(`${COLS.DATE}${row}`).formattedValue;
@@ -688,68 +687,39 @@ function err(e) {
 }
 
 // Displays a 2MPC completion on the specified map
-async function embed2MPAlt(tower, map) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+async function embed2MPAlt(entity, map, combos) {
+    const mapFormatted = Aliases.toIndexNormalForm(map)
+    const mapAbbr = Aliases.mapToIndexAbbreviation(map)
 
-    mapFormatted = gHelper.toTitleCase(map.split('_').join(' '));
-    towerFormatted = gHelper.toTitleCase(tower.split('_').join(' '));
+    const entityFormatted = Aliases.toIndexNormalForm(entity)
 
-    entryRow = await rowFromTower(tower);
+    const combo = combos.find(c => c.ENTITY == entityFormatted)
+    const altCombo = combo.MAPS[mapAbbr]
 
-    // Load the map cell, the only cell that likely matters
-    await sheet.loadCells(
-        `${COLS.OG_MAP}${entryRow}:${COLS.OG_MAP}${entryRow}`
-    );
-
-    ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
-    ogMap = ogMapCell.value;
-
-    // Display OG map as if map weren't in the query
-    if (mapFormatted == ogMap) {
-        return await embed2MPOG(tower);
-    }
-
-    notes = parseMapNotes(ogMapCell.note);
-
-    // Tower has been completed on queried map if the map abbreviation can be found in the notes
-    if ((altCompletion = notes[Aliases.mapToIndexAbbreviation(map)])) {
-        // Embed and send the message
-        let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(`${towerFormatted} 2MPC Combo on ${mapFormatted}`)
-            .setColor(paleblue)
-            .addField('Person', altCompletion.PERSON, true)
-            .addField('Link', altCompletion.LINK, true);
-        
-        return challengeEmbed;
-    } else {
+    if (!altCombo) {
         throw new UserCommandError(
-            `Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``
+            `Tower \`${entityFormatted}\` has not yet been completed on \`${mapFormatted}\``
         );
     }
+
+    // Display OG map as if map weren't in the query
+    if (altCombo.OG) {
+        return await embed2MPOG(entity);
+    }
+
+    // Embed and send the message
+    let challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(`${entityFormatted} 2MPC Combo on ${mapFormatted}`)
+        .setColor(paleblue)
+        .addField('Person', altCombo.PERSON, true)
+        .addField('Link', altCombo.LINK, true);
+    
+    return challengeEmbed;
 }
 
 // Displays the OG 2MPC completion
-async function embed2MPOG(tower) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    entryRow = await rowFromTower(tower);
-
-    // Load the row where the map was found
-    await sheet.loadCells(`${COLS.NUMBER}${entryRow}:${COLS.LINK}${entryRow}`);
-
-    // Assign each value to be discord-embedded in a simple default way
-    values = {};
-    for (key in COLS) {
-        values[key] = sheet.getCellByA1(`${COLS[key]}${entryRow}`).value;
-    }
-
-    // Special formatting for date (get formattedValue instead)
-    dateCell = sheet.getCellByA1(`${COLS.DATE}${entryRow}`);
-    values.DATE = dateCell.formattedValue;
-
-    // Special handling for link (use hyperlink to cleverly embed in discord)
-    linkCell = sheet.getCellByA1(`${COLS.LINK}${entryRow}`);
-    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+async function embed2MPOG(entity, combos) {
+    
 
     // Embed and send the message
     let challengeEmbed = new Discord.MessageEmbed()

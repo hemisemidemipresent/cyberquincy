@@ -14,7 +14,7 @@
     ],
 
     "300": ["berserker_brew", "bbrew"],
-    "400": ["stronger_stimulant", "str_stim", "stronger_stim", "stim", "strim"],
+    "400": ["stronger_stimulant", "str_stim", "stronger_stim", "stim", "strim", "sstim"],
     "500": ["permanent_brew", "permabrew", "pbrew", "pb"],
 
     "030": ["unstable_concoction", "conc", "unstable", "uc", "coc"],

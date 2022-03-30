@@ -113,8 +113,28 @@ function allWaterTowers() {
     return ['sub', 'bucc', 'brick'].map((t) => Aliases.getCanonicalForm(t));
 }
 
-function isWaterTowerUpgrade(towerUpgrade) {
-    return allWaterTowers().includes(Aliases.isHero(towerUpgrade) ? towerUpgrade : Towers.towerUpgradeToTower(towerUpgrade));
+function isWaterEntity(entity) {
+    let entityToCompare;
+    if (isTowerPath(entity)) {
+        entityToCompare = entity.split('#')[0]
+    } else if (isTowerUpgrade(entity)) {
+        entityToCompare = towerUpgradeToTower(entity)
+    } else if (Aliases.isHero(entity)) {
+        entityToCompare = entity;
+    } else if (isTower(entity)) {
+        entityToCompare = entity
+    } else {
+        throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
+    }
+    return allWaterTowers().includes(entityToCompare);
+}
+
+function towerPathToIndexNormalForm(towerPath) {
+    let [tower, path] = towerPath.split('#');
+    path = path.split('-')
+                .map((tk) => gHelper.toTitleCase(tk))
+                .join(' ');
+    return `${Aliases.toIndexNormalForm(tower)} (${path})`
 }
 
 function towerUpgradeToIndexNormalForm(upgrade) {
@@ -175,12 +195,7 @@ function pathTierFromUpgradeSet(upgradeSet) {
     const path = upgrades.findIndex((u) => u == tier) + 1;
     return [path, tier];
 }
-function sacsFromTempleSet(temple) {
-    if (temple.contains('/')) temple.replace(/\//g, '');
-    return temple.split('').map((e) => {
-        e = parseInt(e);
-    });
-}
+
 function crossPathTierFromUpgradeSet(upgradeSet) {
     upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
@@ -234,43 +249,20 @@ function isValidTempleSet(str) {
     if (upgrades[3] > 2) return false; // stuff like 3300 gets thrown out
     return true;
 }
-function formatTower(tower) {
-    if (isTower(tower)) {
-        return `${towerUpgradeToIndexNormalForm(tower)}`;
-    } else if (isTowerPath(tower)) {
-        [towerName, path] = tower.split('#');
+function formatEntity(entity) {
+    if (isTower(entity)) {
+        return towerUpgradeToIndexNormalForm(entity);
+    } else if (isTowerPath(entity)) {
+        [towerName, path] = entity.split('#');
         return `${gHelper.toTitleCase(path.split('-').join(' '))} ` + `${towerUpgradeToIndexNormalForm(towerName)}`;
-    } else if (isTowerUpgrade(tower)) {
-        return `${towerUpgradeToIndexNormalForm(tower)}`;
-    } else if (Aliases.isHero(tower)) {
-        return `${gHelper.toTitleCase(tower)}`;
+    } else if (isTowerUpgrade(entity)) {
+        return towerUpgradeToIndexNormalForm(entity);
+    } else if (Aliases.isHero(entity)) {
+        return gHelper.toTitleCase(entity);
     } else {
-        throw `Tower ${tower} is not within allotted tower/hero category`;
+        throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
     }
 }
-/*
-function totalTowerUpgradeCrosspathCost(json, jsonTowerName, upgradeSet) {
-    let [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
-    let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgradeSet);
-
-    const baseCost = parseInt(json[`${jsonTowerName}`].cost);
-
-    let pathCost = 0;
-    for (let subTier = 1; subTier <= tier; subTier++) {
-        pathCost += parseInt(
-            json[`${jsonTowerName}`].upgrades[path - 1][subTier - 1].cost
-        );
-    }
-
-    let crossPathCost = 0;
-    for (let subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
-        crossPathCost += parseInt(
-            json[`${jsonTowerName}`].upgrades[crossPath - 1][subCrossTier - 1]
-                .cost
-        );
-    }
-    return baseCost + pathCost + crossPathCost;
-}*/
 
 function totalTowerUpgradeCrosspathCost(json, towerName, upgrade) {
     // uses different json format found in ../jsons/costs.json
@@ -354,14 +346,15 @@ module.exports = {
     isTower,
     isTowerPath,
     allWaterTowers,
-    isWaterTowerUpgrade,
+    isWaterEntity,
+    towerPathToIndexNormalForm,
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,
     pathTierFromUpgradeSet,
     crossPathTierFromUpgradeSet,
     isValidUpgradeSet,
     isValidTempleSet,
-    formatTower,
+    formatEntity,
     totalTowerUpgradeCrosspathCost,
     totalTowerUpgradeCrosspathCostHard,
     totalTowerUpgradeCrosspathCostMult,

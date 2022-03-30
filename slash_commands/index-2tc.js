@@ -20,13 +20,10 @@ const Parsed = require('../parser/parsed')
 const UserCommandError = require('../exceptions/user-command-error.js');
 
 const clonedeep = require('lodash.clonedeep');
-const fs = require('fs')
-const resolve = require('path').resolve;
-
-HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
-WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 
 const gHelper = require('../helpers/general.js');
+const discordHelper = require('../helpers/discord.js');
+const Index = require('../helpers/index.js');
 
 const { orange, palered } = require('../jsons/colours.json');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
@@ -51,11 +48,12 @@ const ALT_COLS = {
     LINK: 'W',
 };
 
+CACHE_FNAME_2TC = '2tc.json'
+
 const { 
     SlashCommandBuilder, 
     SlashCommandStringOption, 
     SlashCommandIntegerOption, 
-    SlashCommandNumberOption,
 } = require('@discordjs/builders');
 
 const entity1Option = 
@@ -85,7 +83,7 @@ const personOption =
 const versionOption = 
     new SlashCommandStringOption()
         .setName('version')
-        .setDescription('Exact Version or Version Endpoint')
+        .setDescription('Version or Subversion')
         .setRequired(false)
     
 const numberOption = 
@@ -225,21 +223,20 @@ async function execute(interaction) {
         new Parsed()
     )
 
-    await interaction.deferReply({ ephermal: true })
+    await interaction.deferReply()
 
     try {
         const forceReload = interaction.options.getString('reload') ? true : false
 
-        // https://attacomsian.com/blog/nodejs-get-file-last-modified-date
         let allCombos;
-        if (forceReload || noCachedCombos()) {
-            allCombos = await scrapeAllCombos();
-            cacheCombos(allCombos)
+        if (Index.hasCachedCombos(CACHE_FNAME_2TC) && !forceReload) {
+            allCombos = await Index.fetchCachedCombos(CACHE_FNAME_2TC)
         } else {
-            allCombos = await fetchCachedCombos()
+            allCombos = await scrapeAllCombos();
+            Index.cacheCombos(allCombos, CACHE_FNAME_2TC)
         }
 
-        const mtime = getLastCacheModified()
+        const mtime = Index.getLastCacheModified(CACHE_FNAME_2TC)
 
         const filteredCombos = filterCombos(clonedeep(allCombos), parsed);
         
@@ -257,41 +254,6 @@ async function execute(interaction) {
             throw e;
         }
     }
-}
-
-DIR1 = 'cache'
-DIR2 = 'index'
-FNAME = '2tc.json'
-
-function noCachedCombos() {
-    return !fs.existsSync(resolve(DIR1, DIR2, FNAME))
-}
-
-function fetchCachedCombos() {
-    const data = fs.readFileSync('./cache/index/2tc.json')
-    return JSON.parse(data).combos;
-}
-
-function cacheCombos(combos) {
-    const fileData = JSON.stringify({ combos: combos })
-
-    const dir1 = resolve(DIR1)
-    if (!fs.existsSync(dir1)){
-        fs.mkdirSync(dir1);
-    }
-    const dir2 = resolve(DIR1, DIR2)
-    if (!fs.existsSync(dir2)){
-        fs.mkdirSync(dir2);
-    }
-    fs.writeFileSync(resolve(DIR1, DIR2, FNAME), fileData, err => {
-        if (err) {
-            console.error(err)
-        }
-    })
-}
-
-function getLastCacheModified() {
-    return fs.statSync(resolve(DIR1, DIR2, FNAME)).mtime
 }
 
 async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
@@ -481,7 +443,7 @@ async function displayOneOrMultiplePages(
                 }
             }
 
-            if (isValidFormBody(challengeEmbed)) return [challengeEmbed, numRows > maxNumRowsDisplayed];
+            if (discordHelper.isValidFormBody(challengeEmbed)) return [challengeEmbed, numRows > maxNumRowsDisplayed];
 
             if (direction > 0) rightIndex--;
             if (direction < 0) leftIndex++;
@@ -496,68 +458,61 @@ async function displayOneOrMultiplePages(
             components: multipage ? [multipageButtons] : [],
         });
 
-        if (multipage) {
-            const filter = (selection) => {
-                // Ensure user clicking button is same as the user that started the interaction
-                if (selection.user.id !== interaction.user.id) {
-                    return false;
-                }
-                // Ensure that the button press corresponds with this interaction and wasn't
-                // a button press on the previous interaction
-                if (selection.message.interaction.id !== interaction.id) {
-                    return false;
-                }
-                return true;
-            };
+        if (!multipage) return;
 
-            const collector = interaction.channel.createMessageComponentCollector({
-                filter,
-                componentType: 'BUTTON',
-                time: 20000
-            });
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        };
 
-            collector.on('collect', async (buttonInteraction) => {
-                collector.stop();
-                buttonInteraction.deferUpdate();
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: 'BUTTON',
+            time: 20000
+        });
 
-                switch (parseInt(buttonInteraction.customId)) {
-                    case -1:
-                        rightIndex = (leftIndex - 1 + numRows) % numRows;
-                        leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                        if (leftIndex < 0) leftIndex = 0;
-                        await displayPages(-1);
-                        break;
-                    case 1:
-                        leftIndex = (rightIndex + 1) % numRows;
-                        rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                        if (rightIndex >= numRows) rightIndex = numRows - 1;
-                        await displayPages(1);
-                        break;
-                }
-            });
+        collector.on('collect', async (buttonInteraction) => {
+            collector.stop();
+            buttonInteraction.deferUpdate();
 
-            collector.on('end', async (collected) => {
-                if (collected.size == 0) {
-                    await interaction.editReply({
-                        embeds: [embed],
-                        components: []
-                    });
-                }
-            });
-        }
+            switch (parseInt(buttonInteraction.customId)) {
+                case -1:
+                    rightIndex = (leftIndex - 1 + numRows) % numRows;
+                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                    if (leftIndex < 0) leftIndex = 0;
+                    await displayPages(-1);
+                    break;
+                case 1:
+                    leftIndex = (rightIndex + 1) % numRows;
+                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                    if (rightIndex >= numRows) rightIndex = numRows - 1;
+                    await displayPages(1);
+                    break;
+            }
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size == 0) {
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
+            }
+        });
     }
 
     // Gets the reaction to the pagination message by the command author
     // and respond by turning the page in the correction direction
 
     await displayPages(1);
-}
-
-function isValidFormBody(embed) {
-    for (let i = 0; i < embed.fields.length; i++) {
-        if (embed.fields[i].value.length > 1024) return false;
-    }
-    return true;
 }
 
 function getDisplayCols(parsed) {
@@ -655,7 +610,7 @@ function embedTitle(parsed, combos) {
         const tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';
-        title += `${Towers.formatTower(tower)} `;
+        title += `${Towers.formatEntity(tower)} `;
     }
     if (parsed.version) title += `in v${parsed.version} `;
     return title.slice(0, title.length - 1);
@@ -671,7 +626,7 @@ function embedTitleNoCombos(parsed) {
         tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';
-        title += `${Towers.formatTower(tower)} `;
+        title += `${Towers.formatEntity(tower)} `;
     }
     if (parsed.version) title += `in v${parsed.version} `;
     return title.slice(0, title.length - 1);
@@ -977,8 +932,8 @@ async function getOG2TCFromPreloadedRow(row) {
     values.VERSION = values.VERSION.toString();
 
     // Replace checkmark that doesn't display in embedded with one that does
-    if (values.CURRENT === HEAVY_CHECK_MARK) {
-        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+    if (values.CURRENT === gHelper.HEAVY_CHECK_MARK) {
+        values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
 
     return values;

@@ -70,9 +70,6 @@ const COLS = {
     },
 };
 
-HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
-WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
-
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
 
 let mapOption = 
@@ -192,8 +189,8 @@ async function getRowStandardData(entryRow, colset) {
 
     // Special handling for current
     // (heavy checkmark doesn't format, use white heavy checkmark instead)
-    if (values.CURRENT === HEAVY_CHECK_MARK) {
-        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+    if (values.CURRENT === gHelper.HEAVY_CHECK_MARK) {
+        values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
 
     var challengeEmbed = new Discord.MessageEmbed()

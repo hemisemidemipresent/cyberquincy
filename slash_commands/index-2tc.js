@@ -21,9 +21,6 @@ const UserCommandError = require('../exceptions/user-command-error.js');
 
 const clonedeep = require('lodash.clonedeep');
 
-HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
-WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
-
 const gHelper = require('../helpers/general.js');
 const discordHelper = require('../helpers/discord.js');
 const Index = require('../helpers/index.js');
@@ -935,8 +932,8 @@ async function getOG2TCFromPreloadedRow(row) {
     values.VERSION = values.VERSION.toString();
 
     // Replace checkmark that doesn't display in embedded with one that does
-    if (values.CURRENT === HEAVY_CHECK_MARK) {
-        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+    if (values.CURRENT === gHelper.HEAVY_CHECK_MARK) {
+        values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
 
     return values;

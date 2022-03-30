@@ -726,8 +726,7 @@ async function embedPages(interaction, title, columns, numOGCompletions, mtime) 
     displayPage(1);
 }
 
-// Assumes appropriate cells are loaded beforehand!
-function parsePreloadedRow(row) {
+function parseMapCompletions(row) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     const ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
@@ -737,18 +736,23 @@ function parsePreloadedRow(row) {
     const ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
     const ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
 
-    let notes = {};
-    // Add OG map to list of maps completed
-    notes[ogMapAbbr] = {
+    const ogMapCompletion = {
         PERSON: ogPerson,
         LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
         OG: true,
     };
     // Add rest of maps found in notes
     const maps = {
-        ...notes,
+        [ogMapAbbr]: ogMapCompletion,
         ...parseMapNotes(ogMapCell.note),
     };
+
+    return maps
+}
+
+// Assumes appropriate cells are loaded beforehand!
+function parsePreloadedRow(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     let completion = {}
     for (const col of ["NUMBER", "ENTITY", "UPGRADE", "VERSION"]) {
@@ -756,7 +760,7 @@ function parsePreloadedRow(row) {
     }
     completion.DATE = sheet.getCellByA1(`${COLS.DATE}${row}`).formattedValue;
 
-    completion.MAPS = maps;
+    completion.MAPS = parseMapCompletions(row);
 
     return completion
 }

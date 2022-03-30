@@ -3,9 +3,12 @@ const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 const gHelper = require('../helpers/general.js');
 const discordHelper = require('../helpers/discord')
 const Index = require('../helpers/index.js');
+const Towers = require('../helpers/towers');
 
 const { paleblue } = require('../jsons/colours.json');
-const { MessageActionRow, MessageButton, BaseGuildEmojiManager } = require('discord.js');
+const { MessageActionRow, MessageButton } = require('discord.js');
+
+const Parsed = require('../parser/parsed.js');
 
 const COLS = {
     NUMBER: 'B',
@@ -24,14 +27,12 @@ const TOWER_COLS = {
     LAST: 'Y',
 };
 
+CACHE_FNAME_2MP = '2mp.json'
+
 const { 
     SlashCommandBuilder, 
     SlashCommandStringOption,
 } = require('@discordjs/builders');
-
-const Towers = require('../helpers/towers');
-
-CACHE_FNAME_2MP = '2mp.json'
 
 let entityOption = 
     new SlashCommandStringOption()
@@ -65,84 +66,6 @@ builder = new SlashCommandBuilder()
     .addStringOption(mapOption)
     .addStringOption(userOption)
     .addStringOption(reloadOption)
-
-const OrParser = require('../parser/or-parser.js');
-
-const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
-const HeroParser = require('../parser/hero-parser.js');
-const TowerParser = require('../parser/tower-parser.js')
-const MapParser = require('../parser/map-parser.js');
-const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
-const EmptyParser = require('../parser/empty-parser.js');
-const Parsed = require('../parser/parsed.js');
-const UserCommandError = require('../exceptions/user-command-error.js');
-const PersonParser = require('../parser/person-parser.js');
-
-function parseEntity(interaction) {
-    entityParser = new OrParser(
-        new TowerParser(),
-        new TowerUpgradeParser(),
-        new HeroParser(),
-        new EmptyParser(),
-    )
-    entity = interaction.options.getString('entity')
-    if (entity) {
-        canonicalEntity = Aliases.getCanonicalForm(entity)
-        if (canonicalEntity) {
-            return CommandParser.parse([canonicalEntity], entityParser)
-        } else {
-            parsed = new Parsed()
-            parsed.addError('Canonical not found')
-            return parsed;
-        }
-    } else return new Parsed();
-}
-
-function parseMap(interaction) {
-    mapParser = new OrParser(
-        new MapParser(),
-        new MapDifficultyParser(),
-    )
-    map = interaction.options.getString('map')
-    if (map) {
-        canonicalMap = Aliases.getCanonicalForm(map)
-        if (canonicalMap) {
-            return CommandParser.parse([canonicalMap], mapParser)
-        } else {
-            parsed = new Parsed()
-            parsed.addError('Canonical not found')
-            return parsed;
-        }
-    } else return new Parsed();
-}
-
-function parsePerson(interaction) {
-    person = interaction.options.getString('person')?.toLowerCase()
-    if (person) {
-        return CommandParser.parse([`user#${person}`], new PersonParser())
-    } else return new Parsed();
-}
-
-function parseAll(interaction) {
-    parsedEntity = parseEntity(interaction)
-    parsedMap = parseMap(interaction)
-    person = parsePerson(interaction)
-    return [parsedEntity, parsedMap, person];
-}
-
-function validateInput(interaction) {
-    let [parsedEntity, parsedMap, parsedPerson] = parseAll(interaction)
-
-    if (parsedEntity.hasErrors())
-        return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`
-
-    if (parsedMap.hasErrors())
-        return `Map/Difficulty ${map} didn't match, including aliases`
-    
-    if ((parsedEntity.tower_upgrade || parsedEntity.hero) && parsedMap.map && parsedPerson.person) {
-        return "Don't search a person if you're already narrowing down your search to a specific completion"
-    }
-}
 
 async function execute(interaction) {
     validationFailure = validateInput(interaction);
@@ -217,6 +140,90 @@ async function execute(interaction) {
         return await interaction.editReply({ embeds: [err(e)] })
     }
 }
+
+////////////////////////////////////////////////////////////
+// Parsing
+////////////////////////////////////////////////////////////
+
+function validateInput(interaction) {
+    let [parsedEntity, parsedMap, parsedPerson] = parseAll(interaction)
+
+    if (parsedEntity.hasErrors())
+        return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`
+
+    if (parsedMap.hasErrors())
+        return `Map/Difficulty ${map} didn't match, including aliases`
+    
+    if ((parsedEntity.tower_upgrade || parsedEntity.hero) && parsedMap.map && parsedPerson.person) {
+        return "Don't search a person if you're already narrowing down your search to a specific completion"
+    }
+}
+
+function parseAll(interaction) {
+    parsedEntity = parseEntity(interaction)
+    parsedMap = parseMap(interaction)
+    person = parsePerson(interaction)
+    return [parsedEntity, parsedMap, person];
+}
+
+const OrParser = require('../parser/or-parser.js');
+
+const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
+const HeroParser = require('../parser/hero-parser.js');
+const TowerParser = require('../parser/tower-parser.js')
+const MapParser = require('../parser/map-parser.js');
+const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
+const PersonParser = require('../parser/person-parser.js');
+
+const UserCommandError = require('../exceptions/user-command-error.js');
+
+function parseEntity(interaction) {
+    entityParser = new OrParser(
+        new TowerParser(),
+        new TowerUpgradeParser(),
+        new HeroParser(),
+    )
+    entity = interaction.options.getString('entity')
+    if (entity) {
+        canonicalEntity = Aliases.getCanonicalForm(entity)
+        if (canonicalEntity) {
+            return CommandParser.parse([canonicalEntity], entityParser)
+        } else {
+            parsed = new Parsed()
+            parsed.addError('Canonical not found')
+            return parsed;
+        }
+    } else return new Parsed();
+}
+
+function parseMap(interaction) {
+    mapParser = new OrParser(
+        new MapParser(),
+        new MapDifficultyParser(),
+    )
+    map = interaction.options.getString('map')
+    if (map) {
+        canonicalMap = Aliases.getCanonicalForm(map)
+        if (canonicalMap) {
+            return CommandParser.parse([canonicalMap], mapParser)
+        } else {
+            parsed = new Parsed()
+            parsed.addError('Canonical not found')
+            return parsed;
+        }
+    } else return new Parsed();
+}
+
+function parsePerson(interaction) {
+    person = interaction.options.getString('person')?.toLowerCase()
+    if (person) {
+        return CommandParser.parse([`user#${person}`], new PersonParser())
+    } else return new Parsed();
+}
+
+////////////////////////////////////////////////////////////
+// Parsing (when reloading)
+////////////////////////////////////////////////////////////
 
 async function scrapeAllCombos() {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
@@ -333,35 +340,10 @@ function parseMapNotes(notes) {
     );
 }
 
-// Displays a 2MPC completion on the specified map
-function embed2MPAlt(combo, map) {
-    const mapFormatted = Aliases.toIndexNormalForm(map)
-    const mapAbbr = Aliases.mapToIndexAbbreviation(map)
+////////////////////////////////////////////////////////////
+// 2MP OG
+////////////////////////////////////////////////////////////
 
-    const altCombo = combo.MAPS[mapAbbr]
-
-    if (!altCombo) {
-        throw new UserCommandError(
-            `\`${combo.ENTITY}\` hasn't been completed yet on \`${mapFormatted}\``
-        );
-    }
-
-    // Display OG map as if map weren't in the query
-    if (altCombo.OG) {
-        return embed2MPOG(combo);
-    }
-
-    // Embed and send the message
-    let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${combo.ENTITY} 2MPC Combo on ${mapFormatted}`)
-        .setColor(paleblue)
-        .addField('Person', altCombo.PERSON, true)
-        .addField('Link', altCombo.LINK, true);
-
-    return challengeEmbed;
-}
-
-// Displays the OG 2MPC completion
 function embed2MPOG(combo) {
     const comboToEmbed = orderAndFlatten2MPOGCompletion(combo)
 
@@ -469,10 +451,40 @@ function altMapDifficultyGroups(combo) {
     return [altMapGroups, unCompletedAltMapGroups]
 }
 
-function isWaterEntityCombo(combo) {
-    const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY)
-    return Towers.isWaterEntity(canonicalEntity)
+////////////////////////////////////////////////////////////
+// 2MP Alt Map
+////////////////////////////////////////////////////////////
+
+function embed2MPAlt(combo, map) {
+    const mapFormatted = Aliases.toIndexNormalForm(map)
+    const mapAbbr = Aliases.mapToIndexAbbreviation(map)
+
+    const altCombo = combo.MAPS[mapAbbr]
+
+    if (!altCombo) {
+        throw new UserCommandError(
+            `\`${combo.ENTITY}\` hasn't been completed yet on \`${mapFormatted}\``
+        );
+    }
+
+    // Display OG map as if map weren't in the query
+    if (altCombo.OG) {
+        return embed2MPOG(combo);
+    }
+
+    // Embed and send the message
+    let challengeEmbed = new Discord.MessageEmbed()
+        .setTitle(`${combo.ENTITY} 2MPC Combo on ${mapFormatted}`)
+        .setColor(paleblue)
+        .addField('Person', altCombo.PERSON, true)
+        .addField('Link', altCombo.LINK, true);
+
+    return challengeEmbed;
 }
+
+////////////////////////////////////////////////////////////
+// 2MP Map Difficulty
+////////////////////////////////////////////////////////////
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
 function embed2MPMapDifficulty(combo, mapDifficulty) {
@@ -571,6 +583,68 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     return challengeEmbed;
 }
 
+////////////////////////////////////////////////////////////
+// Custom Multipage Queries
+////////////////////////////////////////////////////////////
+
+async function display2MPFilterAll(interaction, combos, parsed, mtime) {
+    // Collect data from 4 columns: tower, map, person, link
+    // Only 3 can be used maximum to format a discord embed
+    let towerColumn = [];
+    let personColumn = [];
+    let linkColumn = [];
+    let mapColumn = [];
+
+    let numOGCompletions = 0;
+
+    // Retrieve og- and alt-map notes from each tower row
+    for (const combo of combos) {
+        for (const map in combo.MAPS) {
+            const mapCompletion = combo.MAPS[map]
+
+            const canonicalCompletion = {
+                ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
+                MAP: Aliases.indexMapAbbreviationToMap(map),
+                PERSON: mapCompletion.PERSON,
+                LINK: mapCompletion.LINK,
+                OG: mapCompletion.OG || false
+            };
+
+            if (!filterCombo(canonicalCompletion, parsed)) {
+                continue;
+            }
+
+            const bold = mapCompletion.OG ? '**' : '';
+            if (mapCompletion.OG) numOGCompletions += 1;
+
+            towerColumn.push(`${bold}${combo.ENTITY}${bold}`);
+            mapColumn.push(`${bold}${map}${bold}`);
+            linkColumn.push(`${bold}${mapCompletion.LINK}${bold}`);
+            personColumn.push(`${bold}${mapCompletion.PERSON}${bold}`);
+        }
+    }
+
+    // If no combos were found after filtering
+    if (towerColumn.length == 0) {
+        throw new UserCommandError(
+            titleFunction(parsed, true)
+        );
+    }
+
+    const title = titleFunction(parsed);
+
+    const excludedColumns = determineExcludedColumns(parsed)
+
+    // Exclude columns from data output based on function input
+    let columns = {};
+    if (!excludedColumns.includes('entity')) columns.ENTITY = towerColumn;
+    if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
+    if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
+    columns.LINK = linkColumn;
+
+    return await embedOneOrMultiplePages(interaction, title, columns, numOGCompletions, mtime);
+}
+
 function filterCombo(c, parsed) {
     const matchesPerson = parsed.person ? parsed.person === c.PERSON.toLowerCase() : true
 
@@ -648,71 +722,13 @@ function determineExcludedColumns(parsed) {
     return excludedColumns;
 }
 
-async function display2MPFilterAll(interaction, combos, parsed, mtime) {
-    // Collect data from 4 columns: tower, map, person, link
-    // Only 3 can be used maximum to format a discord embed
-    let towerColumn = [];
-    let personColumn = [];
-    let linkColumn = [];
-    let mapColumn = [];
-
-    let numOGCompletions = 0;
-
-    // Retrieve og- and alt-map notes from each tower row
-    for (const combo of combos) {
-        for (const map in combo.MAPS) {
-            const mapCompletion = combo.MAPS[map]
-
-            const canonicalCompletion = {
-                ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
-                MAP: Aliases.indexMapAbbreviationToMap(map),
-                PERSON: mapCompletion.PERSON,
-                LINK: mapCompletion.LINK,
-                OG: mapCompletion.OG || false
-            };
-
-            if (!filterCombo(canonicalCompletion, parsed)) {
-                continue;
-            }
-
-            const bold = mapCompletion.OG ? '**' : '';
-            if (mapCompletion.OG) numOGCompletions += 1;
-
-            towerColumn.push(`${bold}${combo.ENTITY}${bold}`);
-            mapColumn.push(`${bold}${map}${bold}`);
-            linkColumn.push(`${bold}${mapCompletion.LINK}${bold}`);
-            personColumn.push(`${bold}${mapCompletion.PERSON}${bold}`);
-        }
-    }
-
-    // If no combos were found after filtering
-    if (towerColumn.length == 0) {
-        throw new UserCommandError(
-            titleFunction(parsed, true)
-        );
-    }
-
-    const title = titleFunction(parsed);
-
-    const excludedColumns = determineExcludedColumns(parsed)
-
-    // Exclude columns from data output based on function input
-    let columns = {};
-    if (!excludedColumns.includes('entity')) columns.ENTITY = towerColumn;
-    if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
-    if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
-    columns.LINK = linkColumn;
-
-    return await embedPages(interaction, title, columns, numOGCompletions, mtime);
-}
-
 const MULTIPAGE_BUTTONS_2MP = new MessageActionRow().addComponents(
     new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
     new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
 );
 
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
-async function embedPages(interaction, title, columns, numOGCompletions, mtime) {
+async function embedOneOrMultiplePages(interaction, title, columns, numOGCompletions, mtime) {
     const numRows = columns.LINK.length
     let leftIndex = 0;
     let rightIndex = Math.min(MAX_VALUES_LIST_LENGTH_2MP, numRows) - 1
@@ -819,23 +835,12 @@ async function embedPages(interaction, title, columns, numOGCompletions, mtime) 
     displayPage(1);
 }
 
-function err(e) {
-    // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
-    if (e instanceof UserCommandError) {
-        return new Discord.MessageEmbed()
-            .setTitle(e.message)
-            .setColor(paleblue);
-    } else {
-        throw e;
-    }
-}
-
 ////////////////////////////////////////////////////////////
 // Tower Statistics
 ////////////////////////////////////////////////////////////
 
-// Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier above base
-// Also displays base
+// Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier
+// Displays base centered above grid
 async function display2MPTowerStatistics(tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
@@ -937,6 +942,26 @@ async function getCompletionMarking(entryRow, path, tier) {
         return gHelper.WHITE_HEAVY_CHECK_MARK;
     } else {
         return gHelper.RED_X;
+    }
+}
+
+////////////////////////////////////////////////////////////
+// General Helpers
+////////////////////////////////////////////////////////////
+
+function isWaterEntityCombo(combo) {
+    const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY)
+    return Towers.isWaterEntity(canonicalEntity)
+}
+
+function err(e) {
+    // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
+    if (e instanceof UserCommandError) {
+        return new Discord.MessageEmbed()
+            .setTitle(e.message)
+            .setColor(paleblue);
+    } else {
+        throw e;
     }
 }
 

@@ -187,7 +187,7 @@ async function execute(interaction) {
     if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
         const entity = parsed.hero || Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade)
         const entityFormatted = Aliases.toIndexNormalForm(entity)
-        const combo = allCombos.find(c => c.ENTITY == entityFormatted)
+        const combo = allCombos.find(c => c.ENTITY.toLowerCase() == entityFormatted.toLowerCase())
 
         let challengeEmbed;
 

@@ -24,10 +24,6 @@ const TOWER_COLS = {
     LAST: 'Y',
 };
 
-HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
-WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
-RED_X = String.fromCharCode(10060);
-
 const { 
     SlashCommandBuilder, 
     SlashCommandStringOption,
@@ -240,6 +236,103 @@ async function scrapeAllCombos() {
     return combos;
 }
 
+async function rowBoundaries() {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+    await sheet.loadCells(`${COLS.NUMBER}1:${COLS.NUMBER}${sheet.rowCount}`);
+
+    startRow = null;
+    endRow = null;
+
+    for (let row = 1; row <= sheet.rowCount; row++) {
+        numberCandidate = sheet.getCellByA1(`${COLS.NUMBER}${row}`).value;
+
+        // If startRow has been found, find the first occurence of a blank cell
+        if (startRow && !numberCandidate) {
+            endRow = row - 1;
+            break;
+        } else if (
+            numberCandidate &&
+            numberCandidate.replace(/ /g, '') === '1st'
+        ) {
+            startRow = row;
+        }
+    }
+
+    if (!startRow) {
+        throw new DeveloperCommandError(
+            `Orientation failed because \`1st\` couldn't be found in the "Number" column.`
+        );
+    }
+
+    // If there wasn't a trailing blank cell, then the last cell viewed must be the end cell
+    if (!endRow) endRow = sheet.rowCount;
+
+    return [startRow, endRow];
+}
+
+// Assumes appropriate cells are loaded beforehand!
+function parsePreloadedRow(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    let completion = {}
+    for (const col of ["NUMBER", "ENTITY", "UPGRADE", "VERSION"]) {
+        completion[col] = sheet.getCellByA1(`${COLS[col]}${row}`).value;
+    }
+    completion.DATE = sheet.getCellByA1(`${COLS.DATE}${row}`).formattedValue;
+
+    completion.MAPS = parseMapCompletions(row);
+
+    return completion
+}
+
+function parseMapCompletions(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
+
+    const ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
+    const ogMapAbbr = Aliases.mapToIndexAbbreviation(
+        Aliases.toAliasNormalForm(ogMapCell.value)
+    );
+    const ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
+    const ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
+
+    const ogMapCompletion = {
+        PERSON: ogPerson,
+        LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
+        OG: true,
+    };
+    // Add rest of maps found in notes
+    const maps = {
+        [ogMapAbbr]: ogMapCompletion,
+        ...parseMapNotes(ogMapCell.note),
+    };
+
+    return maps
+}
+
+// Parses the map notes by splitting on comma and colon to get the map+person+link
+function parseMapNotes(notes) {
+    if (!notes) return {};
+    return Object.fromEntries(
+        notes
+            .trim()
+            .split('\n')
+            .map((n) => {
+                let altmap, altperson, altbitly;
+                [altmap, altperson, altbitly] = n
+                    .split(/[,:]/)
+                    .map((t) => t.replace(/ /g, ''));
+
+                return [
+                    altmap,
+                    {
+                        PERSON: altperson,
+                        LINK: `[${altbitly}](http://${altbitly})`,
+                    },
+                ];
+            })
+    );
+}
+
 // Displays a 2MPC completion on the specified map
 function embed2MPAlt(combo, map) {
     const mapFormatted = Aliases.toIndexNormalForm(map)
@@ -266,61 +359,6 @@ function embed2MPAlt(combo, map) {
         .addField('Link', altCombo.LINK, true);
 
     return challengeEmbed;
-}
-
-function ogCombo(combo) {
-    return Object.entries(combo.MAPS).find( ([_, altCombo]) => {
-        return altCombo.OG
-    });
-}
-
-function orderAndFlatten2MPOGCompletion(combo) {
-    let [ogMap, ogCompletion] = ogCombo(combo)
-    combo = {
-        ...combo,
-        OG_MAP: Aliases.indexMapAbbreviationToNormalForm(ogMap),
-        PERSON: ogCompletion.PERSON,
-        LINK: ogCompletion.LINK,
-    }
-
-    const ordering = Object.keys(COLS)
-    let orderedFields = {};
-    ordering.forEach(col => orderedFields[col] = combo[col])
-    return orderedFields;
-}
-
-function isWaterEntityCombo(combo) {
-    const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY)
-    return Towers.isWaterEntity(canonicalEntity)
-}
-
-function altMapDifficultyGroups(combo) {
-    const ogMap = ogCombo(combo)[0]
-    const completedAltMaps = Object.keys(combo.MAPS).filter(m => m != ogMap);
-
-    let mapDifficultyGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps(),
-    ];
-    if (isWaterEntityCombo(combo)) {
-        mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
-        );
-    }
-    mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
-    );
-
-    const altMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => completedAltMaps.includes(map))
-    );
-    const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => !completedAltMaps.concat(ogMap).includes(map))
-    );
-
-    return [altMapGroups, unCompletedAltMapGroups]
 }
 
 // Displays the OG 2MPC completion
@@ -379,6 +417,61 @@ function embed2MPOG(combo) {
     }
 
     return challengeEmbed;
+}
+
+function orderAndFlatten2MPOGCompletion(combo) {
+    let [ogMap, ogCompletion] = ogCombo(combo)
+    combo = {
+        ...combo,
+        OG_MAP: Aliases.indexMapAbbreviationToNormalForm(ogMap),
+        PERSON: ogCompletion.PERSON,
+        LINK: ogCompletion.LINK,
+    }
+
+    const ordering = Object.keys(COLS)
+    let orderedFields = {};
+    ordering.forEach(col => orderedFields[col] = combo[col])
+    return orderedFields;
+}
+
+function ogCombo(combo) {
+    return Object.entries(combo.MAPS).find( ([_, altCombo]) => {
+        return altCombo.OG
+    });
+}
+
+function altMapDifficultyGroups(combo) {
+    const ogMap = ogCombo(combo)[0]
+    const completedAltMaps = Object.keys(combo.MAPS).filter(m => m != ogMap);
+
+    let mapDifficultyGroups = [
+        Aliases.beginnerMaps(),
+        Aliases.intermediateMaps(),
+        Aliases.advancedMaps(),
+        Aliases.expertMaps(),
+    ];
+    if (isWaterEntityCombo(combo)) {
+        mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
+            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
+        );
+    }
+    mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
+        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+    );
+
+    const altMapGroups = mapDifficultyGroups.map((mapGroup) =>
+        mapGroup.filter((map) => completedAltMaps.includes(map))
+    );
+    const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
+        mapGroup.filter((map) => !completedAltMaps.concat(ogMap).includes(map))
+    );
+
+    return [altMapGroups, unCompletedAltMapGroups]
+}
+
+function isWaterEntityCombo(combo) {
+    const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY)
+    return Towers.isWaterEntity(canonicalEntity)
 }
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
@@ -726,45 +819,6 @@ async function embedPages(interaction, title, columns, numOGCompletions, mtime) 
     displayPage(1);
 }
 
-function parseMapCompletions(row) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    const ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
-    const ogMapAbbr = Aliases.mapToIndexAbbreviation(
-        Aliases.toAliasNormalForm(ogMapCell.value)
-    );
-    const ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
-    const ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
-
-    const ogMapCompletion = {
-        PERSON: ogPerson,
-        LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
-        OG: true,
-    };
-    // Add rest of maps found in notes
-    const maps = {
-        [ogMapAbbr]: ogMapCompletion,
-        ...parseMapNotes(ogMapCell.note),
-    };
-
-    return maps
-}
-
-// Assumes appropriate cells are loaded beforehand!
-function parsePreloadedRow(row) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    let completion = {}
-    for (const col of ["NUMBER", "ENTITY", "UPGRADE", "VERSION"]) {
-        completion[col] = sheet.getCellByA1(`${COLS[col]}${row}`).value;
-    }
-    completion.DATE = sheet.getCellByA1(`${COLS.DATE}${row}`).formattedValue;
-
-    completion.MAPS = parseMapCompletions(row);
-
-    return completion
-}
-
 function err(e) {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
     if (e instanceof UserCommandError) {
@@ -776,63 +830,9 @@ function err(e) {
     }
 }
 
-async function rowBoundaries() {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-    await sheet.loadCells(`${COLS.NUMBER}1:${COLS.NUMBER}${sheet.rowCount}`);
-
-    startRow = null;
-    endRow = null;
-
-    for (let row = 1; row <= sheet.rowCount; row++) {
-        numberCandidate = sheet.getCellByA1(`${COLS.NUMBER}${row}`).value;
-
-        // If startRow has been found, find the first occurence of a blank cell
-        if (startRow && !numberCandidate) {
-            endRow = row - 1;
-            break;
-        } else if (
-            numberCandidate &&
-            numberCandidate.replace(/ /g, '') === '1st'
-        ) {
-            startRow = row;
-        }
-    }
-
-    if (!startRow) {
-        throw new DeveloperCommandError(
-            `Orientation failed because \`1st\` couldn't be found in the "Number" column.`
-        );
-    }
-
-    // If there wasn't a trailing blank cell, then the last cell viewed must be the end cell
-    if (!endRow) endRow = sheet.rowCount;
-
-    return [startRow, endRow];
-}
-
-// Parses the map notes by splitting on comma and colon to get the map+person+link
-function parseMapNotes(notes) {
-    if (!notes) return {};
-    return Object.fromEntries(
-        notes
-            .trim()
-            .split('\n')
-            .map((n) => {
-                let altmap, altperson, altbitly;
-                [altmap, altperson, altbitly] = n
-                    .split(/[,:]/)
-                    .map((t) => t.replace(/ /g, ''));
-
-                return [
-                    altmap,
-                    {
-                        PERSON: altperson,
-                        LINK: `[${altbitly}](http://${altbitly})`,
-                    },
-                ];
-            })
-    );
-}
+////////////////////////////////////////////////////////////
+// Tower Statistics
+////////////////////////////////////////////////////////////
 
 // Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier above base
 // Also displays base
@@ -933,10 +933,10 @@ async function getCompletionMarking(entryRow, path, tier) {
 
     completion = sheet.getCellByA1(`${upgradeCol}${entryRow}`).value.trim();
 
-    if (completion == HEAVY_CHECK_MARK) {
-        return WHITE_HEAVY_CHECK_MARK;
+    if (completion == gHelper.HEAVY_CHECK_MARK) {
+        return gHelper.WHITE_HEAVY_CHECK_MARK;
     } else {
-        return RED_X;
+        return gHelper.RED_X;
     }
 }
 

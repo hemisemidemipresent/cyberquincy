@@ -414,15 +414,24 @@ class AliasRepository extends Array {
         return mapAliases[1].toUpperCase();
     }
 
-    indexAbbreviationToMap(mapAbbr) {
-        const indexNormalUnformatted = this.getAliasSet(
+    indexMapAbbreviationToMap(mapAbbr) {
+        return this.getAliasSet(
             mapAbbr.toLowerCase()
         )[0];
-        return this.toIndexNormalForm(indexNormalUnformatted);
+    }
+
+    indexMapAbbreviationToNormalForm(mapAbbr) {
+        return this.toIndexNormalForm(
+            this.indexMapAbbreviationToMap(mapAbbr)
+        );
     }
 
     toAliasNormalForm(indexForm) {
         return indexForm.toLowerCase().split(' ').join('_');
+    }
+
+    toAliasCanonical(indexForm) {
+        return this.getCanonicalForm(this.toAliasNormalForm(indexForm))
     }
 
     toIndexNormalForm(canonical) {

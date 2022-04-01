@@ -15,9 +15,6 @@ const COLS = {
     CURRENT: 'J',
 };
 
-HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
-WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
-
 const { paleyellow } = require('../jsons/colours.json');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
@@ -96,8 +93,8 @@ async function lcc(btd6_map) {
 
     // Special handling for current
     // (heavy checkmark doesn't format, use white heavy checkmark instead)
-    if (values.CURRENT === HEAVY_CHECK_MARK) {
-        values.CURRENT = WHITE_HEAVY_CHECK_MARK;
+    if (values.CURRENT === gHelper.HEAVY_CHECK_MARK) {
+        values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
 
     // Embed and send the message

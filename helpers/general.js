@@ -198,6 +198,10 @@ function timeSince(date) {
     return Math.floor(seconds) + " seconds";
 }
 
+HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
+WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
+RED_X = String.fromCharCode(10060);
+
 module.exports = {
     is_str,
     is_fn,
@@ -218,4 +222,7 @@ module.exports = {
     longestStrLength,
     addSpaces,
     timeSince,
+    HEAVY_CHECK_MARK,
+    WHITE_HEAVY_CHECK_MARK,
+    RED_X,
 };

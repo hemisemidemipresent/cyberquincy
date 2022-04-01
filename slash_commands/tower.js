@@ -135,9 +135,9 @@ async function process(upgrade, towerID) {
                 )
                 .addField('total cost', `${totalCost} - medium\n${hardTotalCost} - hard`, true)
                 .addField('Bug reporting', `report [here](${discord})`, true)
-                .setFooter(
-                    'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
-                )
+                .setFooter({
+                    text: 'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
+                })
                 .setColor(cyber);
             return embed;
         }
@@ -158,7 +158,7 @@ async function execute(interaction) {
 
     const embed = await process(tower_path, towerID);
 
-    return await interaction.reply({ embeds: [embed], ephemeral: true });
+    return await interaction.reply({ embeds: [embed], ephemeral: false });
 }
 
 module.exports = {

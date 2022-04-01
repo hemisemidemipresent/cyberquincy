@@ -58,11 +58,9 @@ module.exports = {
 
             if (args[0] == '-all') {
                 let embed = new Discord.MessageEmbed();
-                embed
-                    .setColor(cyber)
-                    .setFooter(
-                        'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
-                    );
+                embed.setColor(cyber).setFooter({
+                    text: 'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
+                });
                 for (let i = 0; i < 20; i++) {
                     embed.addField((i + 1).toString(), sentences[i], true);
                 }
@@ -110,7 +108,7 @@ function oneUpgrade(sentences, level) {
     return new Discord.MessageEmbed()
         .setDescription(desc)
         .setColor(cyber)
-        .setFooter(
-            'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
-        );
+        .setFooter({
+            text: 'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
+        });
 }

@@ -1,12 +1,6 @@
 const { default: axios } = require('axios');
 const stream = require('stream');
-const {
-    MessageEmbed,
-    MessageSelectMenu,
-    MessageActionRow,
-    BufferResolvable,
-    MessageAttachment
-} = require('discord.js');
+const { MessageEmbed, MessageSelectMenu, MessageActionRow, BufferResolvable, MessageAttachment } = require('discord.js');
 const { palered } = require('../jsons/colours.json');
 const { UserAgent } = require('../1/config.json');
 const { getUsernames } = require('../helpers/usernames');
@@ -36,9 +30,7 @@ module.exports = {
             });
         } catch {
             return await message.channel.send({
-                embeds: [
-                    new Discord.MessageEmbed().setDescription('invalid user id').setColor(palered)
-                ]
+                embeds: [new Discord.MessageEmbed().setDescription('invalid user id').setColor(palered)]
             });
         }
         let obj = body.data;
@@ -53,12 +45,7 @@ module.exports = {
             this.botMessage = await message.channel.send({
                 embeds: [embed],
                 components: [this.row],
-                files: [
-                    new MessageAttachment(
-                        Buffer.from(JSON.stringify(obj, null, 1)),
-                        userID + '.json'
-                    )
-                ]
+                files: [new MessageAttachment(Buffer.from(JSON.stringify(obj, null, 1)), userID + '.json')]
             });
             await this.createCollector(message);
         } else
@@ -151,10 +138,7 @@ function mainPage(obj) {
         `DDT: ${obj.ddtsPopped}`,
         `BAD: ${obj.badsPopped}`
     ];
-    let ody = [
-        `total odysseys completed: ${obj.totalOdysseysCompleted}`,
-        `total odyssey stars: ${obj.totalOdysseyStars}`
-    ];
+    let ody = [`total odysseys completed: ${obj.totalOdysseysCompleted}`, `total odyssey stars: ${obj.totalOdysseyStars}`];
     let heroesPlacedData = JSON.stringify(obj.heroesPlacedData, null, 1);
     let towersPlacedData = JSON.stringify(obj.towersPlacedData, null, 1);
     let spMedals = JSON.stringify(obj.spMedals, null, 1);
@@ -203,9 +187,9 @@ function mainPage(obj) {
     mainEmbed.addField('Race medals', raceStr, true);
     mainEmbed.addField('Boss medals', bossMedals, true);
     mainEmbed.addField('Odyssey', ody.join('\n'), true);
-    mainEmbed.setFooter(
-        'There is way too much data, this will all be polished slowly over time, before NK inevitably kills this OP system. btw this "datasniffing" has been around this entire time'
-    );
+    mainEmbed.setFooter({
+        text: 'There is way too much data, this will all be polished slowly over time, before NK inevitably kills this OP system. btw this "datasniffing" has been around this entire time'
+    });
     return mainEmbed;
 }
 function showInstaStats(obj, insta) {
@@ -237,7 +221,7 @@ function showInstaStats(obj, insta) {
     ];
     embed.setDescription(desc.join('\n'));
     embed.addField('Pops', popinfo.join('\n'));
-    embed.setFooter('sorry you cant go back to the main page');
+    embed.setFooter({ text: 'sorry you cant go back to the main page' });
     return embed;
 }
 function createSelector(obj) {
@@ -276,10 +260,7 @@ function createSelector(obj) {
         if (monke.name) option.description = monke.name;
         options.push(option);
     }
-    return new MessageSelectMenu()
-        .setCustomId('towerSelector')
-        .setPlaceholder('Nothing selected')
-        .addOptions(options);
+    return new MessageSelectMenu().setCustomId('towerSelector').setPlaceholder('Nothing selected').addOptions(options);
 }
 function isEmpty(obj) {
     for (var key in obj) {

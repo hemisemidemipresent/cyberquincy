@@ -17,11 +17,7 @@ module.exports = {
             return await this.helpMessage(message);
         }
 
-        let parsed = CommandParser.parse(
-            args,
-            new TowerParser(),
-            new OptionalParser(new NaturalNumberParser(1, 100), 1)
-        );
+        let parsed = CommandParser.parse(args, new TowerParser(), new OptionalParser(new NaturalNumberParser(1, 100), 1));
         let x = parsed.natural_number; // degree
         if (parsed.hasErrors()) return await this.errorMessage(message, parsed.parsingErrors);
 
@@ -110,9 +106,7 @@ module.exports = {
 
             var { d: d, bd: bd, ed: ed, p: p } = pHelp.getDamagesObj(blues, x);
 
-            desc +=
-                `**blue shuriken** - ${d}d, ${bd}bd, ${ed}ed, ${p}p, 3j\n` +
-                `• 15% chance to distract, decamos\n`;
+            desc += `**blue shuriken** - ${d}d, ${bd}bd, ${ed}ed, ${p}p, 3j\n` + `• 15% chance to distract, decamos\n`;
 
             var { d: d, bd: bd, ed: ed, p: p, s: s } = pHelp.getDamagesObj(sbomb, x);
 
@@ -159,7 +153,7 @@ module.exports = {
             let messageEmbed = new Discord.MessageEmbed()
                 .setTitle(`\`${parsed.tower}\` paragon - level ${x}`)
                 .setDescription(desc)
-                .setFooter(footer)
+                .setFooter({ text: footer })
                 .setColor(paragon);
             return await message.channel.send({ embeds: [messageEmbed] });
         }

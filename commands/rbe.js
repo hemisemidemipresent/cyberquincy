@@ -41,7 +41,7 @@ module.exports = {
         const dataEmbed = new Discord.MessageEmbed()
             .setTitle(`<:PopIcon:755016023333404743>${totalpopcount}`)
             .setDescription(`from round ${startround} to ${endround}`)
-            .setFooter('note: towers may count pops differently due to bugs')
+            .setFooter({ text: 'note: towers may count pops differently due to bugs' })
             .setColor(magenta);
         await channel.send({ embeds: [dataEmbed] });
     }

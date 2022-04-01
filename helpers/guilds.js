@@ -20,7 +20,7 @@ function enterGuild(guild) {
                 'You should know...',
                 `The most popular commands by far are those that describe towers, \`/tower\` (tower path format: \`010\`, \`420\`, etc)`
             )
-            .setFooter(`Use \`${prefix}info\` for more information`);
+            .setFooter({ text: `Use \`${prefix}info\` for more information` });
 
         channeltosend.send({ embeds: [helpEmbed] });
     }

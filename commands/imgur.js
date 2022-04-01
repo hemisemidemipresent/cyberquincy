@@ -21,7 +21,7 @@ function uploadImgur(message, args) {
             const embed = new Discord.MessageEmbed()
                 .setTimestamp()
                 .setDescription(`${json.link}\n${text}`)
-                .setFooter(footer)
+                .setFooter({ text: footer })
                 .setColor(cyber)
                 .setImage(`${json.link}`);
             message.channel.send({ embeds: [embed] });
@@ -42,5 +42,5 @@ module.exports = {
     rawArgs: true,
     execute(message, args) {
         uploadImgur(message, args);
-    },
+    }
 };

@@ -28,13 +28,13 @@ const COLS = {
     VERSION: 'H',
     DATE: 'I',
     PERSON: 'J',
-    LINK: 'L',
+    LINK: 'L'
 };
 
 const TOWER_COLS = {
     TOWER: 'O',
     BASE: 'P',
-    LAST: 'Y',
+    LAST: 'Y'
 };
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
@@ -44,10 +44,7 @@ RED_X = String.fromCharCode(10060);
 const buttons = new MessageActionRow().addComponents(
     new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
     new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
-    new MessageButton()
-        .setCustomId('mobile')
-        .setLabel('📱')
-        .setStyle('SECONDARY')
+    new MessageButton().setCustomId('mobile').setLabel('📱').setStyle('SECONDARY')
 );
 
 function execute(message, args) {
@@ -71,12 +68,7 @@ function execute(message, args) {
 
     const parsed = CommandParser.parse(
         args,
-        new OrParser(
-            completionParser,
-            towerCompletionParser,
-            allTowersOnGivenMapParser,
-            personParser
-        )
+        new OrParser(completionParser, towerCompletionParser, allTowersOnGivenMapParser, personParser)
     );
 
     if (parsed.hasErrors()) {
@@ -94,22 +86,16 @@ function execute(message, args) {
         return display2MPMap(message, parsed.map).catch((e) => err(e, message));
     } else if (parsed.tower) {
         // 0-0-0 tower name provided
-        return display2MPTowerStatistics(message, parsed.tower).catch((e) =>
-            err(e, message)
-        );
+        return display2MPTowerStatistics(message, parsed.tower).catch((e) => err(e, message));
     } else if (parsed.person) {
-        return display2MPPerson(message, parsed.person).catch((e) =>
-            err(e, message)
-        );
+        return display2MPPerson(message, parsed.person).catch((e) => err(e, message));
     } else {
         return message.channel.send('Feature yet to be decided');
     }
 
     if (parsed.map) {
         // tower + map
-        return display2MPAlt(message, tower, parsed.map).catch((e) =>
-            err(e, message)
-        );
+        return display2MPAlt(message, tower, parsed.map).catch((e) => err(e, message));
     } else if (parsed.exact_string) {
         // tower on all maps
         // TODO
@@ -117,11 +103,7 @@ function execute(message, args) {
     } else if (parsed.map_difficulty) {
         // tower on maps under specified difficulty
         // TODO
-        return display2MPMapDifficulty(
-            message,
-            tower,
-            parsed.map_difficulty
-        ).catch((e) => err(e, message));
+        return display2MPMapDifficulty(message, tower, parsed.map_difficulty).catch((e) => err(e, message));
     } else {
         // tower (OG completion)
         return display2MPOG(message, tower).catch((e) => err(e, message));
@@ -133,29 +115,15 @@ function helpMessage(message) {
         .setTitle('`q!2mp` HELP')
         .addField(
             '`q!2mp <tower_upgrade/hero>`',
-            'The OG 2MPC completion for the specified tower upgrade or hero.\n' +
-                '`q!2mp wlp` / `q!2mp pat`'
+            'The OG 2MPC completion for the specified tower upgrade or hero.\n' + '`q!2mp wlp` / `q!2mp pat`'
         )
-        .addField(
-            '`q!2mp <map>`',
-            'All 2MPC completions on the specified map.\n' + '`q!2mp inf`'
-        )
+        .addField('`q!2mp <map>`', 'All 2MPC completions on the specified map.\n' + '`q!2mp inf`')
         .addField(
             '`q!2mp <user>`',
-            'All 2MPC completions (including alt maps) by the specified user.\n' +
-                '`q!2mp u#rmlgaming`'
+            'All 2MPC completions (including alt maps) by the specified user.\n' + '`q!2mp u#rmlgaming`'
         )
-        .addField(
-            '`q!2mp <tower>`',
-            'The path-completion statistics for a given tower.\n' +
-                '`q!2mp wiz`'
-        )
-        .addField(
-            'Further usages',
-            '`q!2mp dartship another_brick`\n' +
-                '`q!2mp prime expert`\n' +
-                '`q!2mp sav dc`'
-        )
+        .addField('`q!2mp <tower>`', 'The path-completion statistics for a given tower.\n' + '`q!2mp wiz`')
+        .addField('Further usages', '`q!2mp dartship another_brick`\n' + '`q!2mp prime expert`\n' + '`q!2mp sav dc`')
         .setColor(paleblue);
 
     return message.channel.send({ embeds: [helpEmbed] });
@@ -164,10 +132,7 @@ function helpMessage(message) {
 function errorMessage(message, parsingErrors) {
     let errorEmbed = new Discord.MessageEmbed()
         .setTitle('Input Error')
-        .addField(
-            'Likely Cause(s)',
-            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-        )
+        .addField('Likely Cause(s)', parsingErrors.map((msg) => ` • ${msg}`).join('\n'))
         .addField('Type `q!2mp` for help', '\u200b')
         .setColor(orange);
 
@@ -177,9 +142,7 @@ function errorMessage(message, parsingErrors) {
 function err(e, message) {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
     if (e instanceof UserCommandError) {
-        let noComboEmbed = new Discord.MessageEmbed()
-            .setTitle(e.message)
-            .setColor(paleblue);
+        let noComboEmbed = new Discord.MessageEmbed().setTitle(e.message).setColor(paleblue);
         return message.channel.send({ embeds: [noComboEmbed] });
     } else {
         throw e;
@@ -210,47 +173,26 @@ async function display2MPOG(message, tower) {
     values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
 
     // Embed and send the message
-    let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${values.TOWER} 2MPC Combo`)
-        .setColor(paleblue);
+    let challengeEmbed = new Discord.MessageEmbed().setTitle(`${values.TOWER} 2MPC Combo`).setColor(paleblue);
 
     for (field in values) {
-        challengeEmbed.addField(
-            gHelper.toTitleCase(field.replace('_', ' ')),
-            values[field],
-            true
-        );
+        challengeEmbed.addField(gHelper.toTitleCase(field.replace('_', ' ')), values[field], true);
     }
 
     challengeEmbed.addField('OG?', 'OG', true);
 
     mapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
     altMaps = Object.keys(parseMapNotes(mapCell.note));
-    ogMap = Aliases.mapToIndexAbbreviation(
-        Aliases.toAliasNormalForm(values.OG_MAP)
-    );
+    ogMap = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(values.OG_MAP));
 
-    mapGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps(),
-    ];
+    mapGroups = [Aliases.beginnerMaps(), Aliases.intermediateMaps(), Aliases.advancedMaps(), Aliases.expertMaps()];
     if (Towers.isWaterTowerUpgrade(tower)) {
-        mapGroups = mapGroups.map((aliases) =>
-            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
-        );
+        mapGroups = mapGroups.map((aliases) => aliases.filter((map) => Aliases.allWaterMaps().includes(map)));
     }
-    mapGroups = mapGroups.map((aliases) =>
-        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
-    );
+    mapGroups = mapGroups.map((aliases) => aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias)));
 
-    altMapGroups = mapGroups.map((mapGroup) =>
-        mapGroup.filter((map) => altMaps.includes(map))
-    );
-    unCompletedAltMapGroups = mapGroups.map((mapGroup) =>
-        mapGroup.filter((map) => !altMaps.concat(ogMap).includes(map))
-    );
+    altMapGroups = mapGroups.map((mapGroup) => mapGroup.filter((map) => altMaps.includes(map)));
+    unCompletedAltMapGroups = mapGroups.map((mapGroup) => mapGroup.filter((map) => !altMaps.concat(ogMap).includes(map)));
 
     wordAllIncluded = false;
 
@@ -262,9 +204,7 @@ async function display2MPOG(message, tower) {
             return `All ${mapDifficulty}${waterTowerAsterisk}`;
         } else if (unCompletedAltMapGroups[i].length < 3) {
             wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[
-                i
-            ].join(', ')}}`;
+            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {
@@ -284,7 +224,7 @@ async function display2MPOG(message, tower) {
     }
 
     if (Towers.isWaterTowerUpgrade(tower) && wordAllIncluded) {
-        challengeEmbed.setFooter('*with water');
+        challengeEmbed.setFooter({ text: '*with water' });
     }
 
     return message.channel.send({ embeds: [challengeEmbed] });
@@ -300,9 +240,7 @@ async function display2MPAlt(message, tower, map) {
     entryRow = await rowFromTower(tower);
 
     // Load the map cell, the only cell that likely matters
-    await sheet.loadCells(
-        `${COLS.OG_MAP}${entryRow}:${COLS.OG_MAP}${entryRow}`
-    );
+    await sheet.loadCells(`${COLS.OG_MAP}${entryRow}:${COLS.OG_MAP}${entryRow}`);
 
     ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${entryRow}`);
     ogMap = ogMapCell.value;
@@ -325,9 +263,7 @@ async function display2MPAlt(message, tower, map) {
 
         message.channel.send({ embeds: [challengeEmbed] });
     } else {
-        throw new UserCommandError(
-            `Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``
-        );
+        throw new UserCommandError(`Tower \`${towerFormatted}\` has not yet been completed on \`${mapFormatted}\``);
     }
 }
 
@@ -370,13 +306,7 @@ async function display2MPMap(message, map) {
     );
 }
 
-async function display2MPFilterAll(
-    message,
-    conditional,
-    titleFunction,
-    noCombosMessage,
-    excludedColumns
-) {
+async function display2MPFilterAll(message, conditional, titleFunction, noCombosMessage, excludedColumns) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     // Load TOWER and MAP columns
@@ -400,7 +330,7 @@ async function display2MPFilterAll(
         for (map in towerMapNotes) {
             note = {
                 MAP: map,
-                ...towerMapNotes[map],
+                ...towerMapNotes[map]
             };
 
             if (!conditional(note)) {
@@ -422,7 +352,7 @@ async function display2MPFilterAll(
         TOWER: towerColumn[0],
         PERSON: personColumn[0],
         MAP: mapColumn[0],
-        LINK: linkColumn[0],
+        LINK: linkColumn[0]
     });
 
     // If no combos were found after filtering
@@ -453,20 +383,14 @@ async function display2MPFilterAll(
 
     // Display the non-excluded columns
     for (columnHeader in columns) {
-        challengeEmbed.addField(
-            gHelper.toTitleCase(columnHeader),
-            columns[columnHeader].join('\n'),
-            true
-        );
+        challengeEmbed.addField(gHelper.toTitleCase(columnHeader), columns[columnHeader].join('\n'), true);
     }
 
     if (numOGCompletions == 1) {
-        challengeEmbed.setFooter(`---\nOG completion bolded`);
+        challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
     }
     if (numOGCompletions > 1) {
-        challengeEmbed.setFooter(
-            `---\n${numOGCompletions} OG completions bolded`
-        );
+        challengeEmbed.setFooter({ text: `---\n${numOGCompletions} OG completions bolded` });
     }
 
     return message.channel.send({ embeds: [challengeEmbed] });
@@ -479,10 +403,7 @@ async function embedPages(message, title, columns, numOGCompletions) {
     let mobile = false;
     columnChunks = {};
     for (columnHeader in columns) {
-        columnChunks[columnHeader] = gHelper.chunk(
-            columns[columnHeader],
-            MAX_VALUES_LIST_LENGTH_2MP
-        );
+        columnChunks[columnHeader] = gHelper.chunk(columns[columnHeader], MAX_VALUES_LIST_LENGTH_2MP);
     }
 
     // Divide results into chunks of MAX_VALUES_LIST_LENGTH_2MP
@@ -491,18 +412,12 @@ async function embedPages(message, title, columns, numOGCompletions) {
 
     async function displayCurrentPage() {
         const startCombo = pg * MAX_VALUES_LIST_LENGTH_2MP + 1;
-        const endCombo = Math.min(
-            (pg + 1) * MAX_VALUES_LIST_LENGTH_2MP,
-            columns[Object.keys(columns)[0]].length
-        );
+        const endCombo = Math.min((pg + 1) * MAX_VALUES_LIST_LENGTH_2MP, columns[Object.keys(columns)[0]].length);
 
         challengeEmbed = new Discord.MessageEmbed()
             .setTitle(title)
             .setColor(paleblue)
-            .addField(
-                'Combos',
-                `**${startCombo}-${endCombo}** of ${columns.LINK.length}`
-            );
+            .addField('Combos', `**${startCombo}-${endCombo}** of ${columns.LINK.length}`);
         if (mobile) {
             let arr = Array(endCombo - startCombo + 1 + 1).fill(''); // first +1 is because 1-12 contains 12 combos, the other +1 is for the titles (TOWER, PERSON, LINK)
 
@@ -512,8 +427,7 @@ async function embedPages(message, title, columns, numOGCompletions) {
                 page.unshift(columnHeader);
                 let max = gHelper.longestStrLength(page);
                 for (let i = 0; i < page.length; i++) {
-                    if (columnHeader != 'LINK')
-                        arr[i] += '`' + gHelper.addSpaces(page[i], max) + '`|';
+                    if (columnHeader != 'LINK') arr[i] += '`' + gHelper.addSpaces(page[i], max) + '`|';
                     else arr[i] += page[i];
                 }
                 page.shift(columnHeader);
@@ -522,39 +436,33 @@ async function embedPages(message, title, columns, numOGCompletions) {
             challengeEmbed.setDescription(arr.join('\n'));
         } else {
             for (columnHeader in columnChunks) {
-                challengeEmbed.addField(
-                    columnHeader,
-                    columnChunks[columnHeader][pg].join('\n'),
-                    true
-                );
+                challengeEmbed.addField(columnHeader, columnChunks[columnHeader][pg].join('\n'), true);
             }
         }
 
         if (numOGCompletions == 1) {
-            challengeEmbed.setFooter(`---\nOG completion bolded`);
+            challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
         }
         if (numOGCompletions > 1) {
-            challengeEmbed.setFooter(
-                `---\n${numOGCompletions} total OG completions bolded`
-            );
+            challengeEmbed.setFooter({ text: `---\n${numOGCompletions} total OG completions bolded` });
         }
 
         if (interaction) {
             await interaction.update({
                 embeds: [challengeEmbed],
-                components: [buttons],
+                components: [buttons]
             });
         } else {
             botMessage = await message.channel.send({
                 embeds: [challengeEmbed],
-                components: [buttons],
+                components: [buttons]
             });
         }
         const filter = (i) => i.user.id == message.author.id;
 
         const collector = botMessage.createMessageComponentCollector({
             filter,
-            time: 20000,
+            time: 20000
         });
         collector.on('collect', async (i) => {
             collector.stop();
@@ -595,9 +503,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
     notes = parsePreloadedMapNotesWithOG(entryRow);
 
     // Get all map abbreviations for the specified map difficulty
-    permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) =>
-        Aliases.mapToIndexAbbreviation(map)
-    );
+    permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) => Aliases.mapToIndexAbbreviation(map));
     // Filter the completion entries by the permitted maps specified by the command-entered map difficulty
     relevantNotes = Object.keys(notes)
         .filter((noteMapAbbr) => permittedMapAbbrs.includes(noteMapAbbr))
@@ -617,9 +523,7 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         for (const mapAbbr in relevantNotes) {
             bold = relevantNotes[mapAbbr].OG ? '**' : '';
 
-            mapColumn.push(
-                `${bold}${Aliases.indexAbbreviationToMap(mapAbbr)}${bold}`
-            );
+            mapColumn.push(`${bold}${Aliases.indexAbbreviationToMap(mapAbbr)}${bold}`);
             personColumn.push(`${bold}${relevantNotes[mapAbbr].PERSON}${bold}`);
             linkColumn.push(`${bold}${relevantNotes[mapAbbr].LINK}${bold}`);
         }
@@ -627,17 +531,13 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
         personColumn = personColumn.join('\n');
         linkColumn = linkColumn.join('\n');
 
-        mapsLeft = permittedMapAbbrs.filter(
-            (m) => !Object.keys(relevantNotes).includes(m)
-        );
+        mapsLeft = permittedMapAbbrs.filter((m) => !Object.keys(relevantNotes).includes(m));
 
         // Check if tower is water tower
         impossibleMaps = [];
         if (Towers.isWaterTowerUpgrade(tower)) {
             // Calculate impossible maps (those that do not contain any water)
-            nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
-                Aliases.mapToIndexAbbreviation(m)
-            );
+            nonWaterMaps = Aliases.allNonWaterMaps().map((m) => Aliases.mapToIndexAbbreviation(m));
             impossibleMaps = mapsLeft.filter((m) => nonWaterMaps.includes(m));
 
             mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
@@ -645,25 +545,16 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
 
         // Embed and send the message
         let challengeEmbed = new Discord.MessageEmbed()
-            .setTitle(
-                `${towerFormatted} 2MPCs on ${mapDifficultyFormatted} Maps`
-            )
+            .setTitle(`${towerFormatted} 2MPCs on ${mapDifficultyFormatted} Maps`)
             .setColor(paleblue);
 
         numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
         if (mapsLeft.length > 0) {
-            possiblePhrasing =
-                impossibleMaps.length > 0 ? ' (that are possible)' : '';
-            challengeEmbed.addField(
-                `Combos${possiblePhrasing}`,
-                `**${numCombosCompleted}**/${numCombosPossible}`
-            );
+            possiblePhrasing = impossibleMaps.length > 0 ? ' (that are possible)' : '';
+            challengeEmbed.addField(`Combos${possiblePhrasing}`, `**${numCombosCompleted}**/${numCombosPossible}`);
         } else {
             possiblePhrasing = impossibleMaps.length > 0 ? ' possible' : '';
-            challengeEmbed.addField(
-                `All${possiblePhrasing} ${mapDifficulty} maps completed`,
-                '-'.repeat(40)
-            );
+            challengeEmbed.addField(`All${possiblePhrasing} ${mapDifficulty} maps completed`, '-'.repeat(40));
         }
 
         challengeEmbed
@@ -672,18 +563,14 @@ async function display2MPMapDifficulty(message, tower, mapDifficulty) {
             .addField('Link', linkColumn, true);
 
         if (impossibleMaps.length > 0) {
-            challengeEmbed.addField(
-                'Impossible maps',
-                impossibleMaps.join(', ')
-            );
+            challengeEmbed.addField('Impossible maps', impossibleMaps.join(', '));
         }
 
         if (mapsLeft.length > 0) {
             challengeEmbed.addField('Maps Left', mapsLeft.join(', '));
         }
 
-        if (ogCompletionPresent)
-            challengeEmbed.setFooter('----\nOG completion bolded');
+        if (ogCompletionPresent) challengeEmbed.setFooter({ text: '----\nOG completion bolded' });
 
         return message.channel.send({ embeds: [challengeEmbed] });
     } else {
@@ -707,18 +594,13 @@ async function rowBoundaries() {
         if (startRow && !numberCandidate) {
             endRow = row - 1;
             break;
-        } else if (
-            numberCandidate &&
-            numberCandidate.replace(/ /g, '') === '1st'
-        ) {
+        } else if (numberCandidate && numberCandidate.replace(/ /g, '') === '1st') {
             startRow = row;
         }
     }
 
     if (!startRow) {
-        throw new DeveloperCommandError(
-            `Orientation failed because \`1st\` couldn't be found in the "Number" column.`
-        );
+        throw new DeveloperCommandError(`Orientation failed because \`1st\` couldn't be found in the "Number" column.`);
     }
 
     // If there wasn't a trailing blank cell, then the last cell viewed must be the end cell
@@ -746,21 +628,14 @@ async function rowFromTower(tower) {
         if (!towerCandidate) continue;
 
         // input is "in_the_loop" but needs to be compared to "In The Loop"
-        if (
-            Aliases.toIndexNormalForm(tower) ===
-            gHelper.toTitleCase(towerCandidate)
-        ) {
+        if (Aliases.toIndexNormalForm(tower) === gHelper.toTitleCase(towerCandidate)) {
             entryRow = row;
             break;
         }
     }
 
     if (!entryRow) {
-        throw new UserCommandError(
-            `Tower \`${Aliases.toIndexNormalForm(
-                tower
-            )}\` doesn't yet have a 2MP completion`
-        );
+        throw new UserCommandError(`Tower \`${Aliases.toIndexNormalForm(tower)}\` doesn't yet have a 2MP completion`);
     }
 
     return entryRow;
@@ -771,9 +646,7 @@ function parsePreloadedMapNotesWithOG(row) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
-    ogMapAbbr = Aliases.mapToIndexAbbreviation(
-        Aliases.toAliasNormalForm(ogMapCell.value)
-    );
+    ogMapAbbr = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(ogMapCell.value));
     ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
     ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
 
@@ -782,12 +655,12 @@ function parsePreloadedMapNotesWithOG(row) {
     notes[ogMapAbbr] = {
         PERSON: ogPerson,
         LINK: `[${ogLinkCell.value}](${ogLinkCell.hyperlink})`,
-        OG: true,
+        OG: true
     };
     // Add rest of maps found in notes
     return {
         ...notes,
-        ...parseMapNotes(ogMapCell.note),
+        ...parseMapNotes(ogMapCell.note)
     };
 }
 
@@ -800,16 +673,14 @@ function parseMapNotes(notes) {
             .split('\n')
             .map((n) => {
                 let altmap, altperson, altbitly;
-                [altmap, altperson, altbitly] = n
-                    .split(/[,:]/)
-                    .map((t) => t.replace(/ /g, ''));
+                [altmap, altperson, altbitly] = n.split(/[,:]/).map((t) => t.replace(/ /g, ''));
 
                 return [
                     altmap,
                     {
                         PERSON: altperson,
-                        LINK: `[${altbitly}](http://${altbitly})`,
-                    },
+                        LINK: `[${altbitly}](http://${altbitly})`
+                    }
                 ];
             })
     );
@@ -823,9 +694,7 @@ async function display2MPTowerStatistics(message, tower) {
     entryRow = await findTowerRow(tower);
 
     // Load the row where the map was found
-    await sheet.loadCells(
-        `${TOWER_COLS.TOWER}${entryRow}:${TOWER_COLS.LAST}${entryRow}`
-    );
+    await sheet.loadCells(`${TOWER_COLS.TOWER}${entryRow}:${TOWER_COLS.LAST}${entryRow}`);
 
     // Check or X
     baseTowerCompletionMarking = await getCompletionMarking(entryRow, null, 2);
@@ -841,21 +710,9 @@ async function display2MPTowerStatistics(message, tower) {
 
     for (var tier = 3; tier <= 5; tier++) {
         for (var path = 1; path <= 3; path++) {
-            towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(
-                tower,
-                path,
-                tier
-            );
-            upgradeCompletionMarking = await getCompletionMarking(
-                entryRow,
-                path,
-                tier
-            );
-            challengeEmbed.addField(
-                towerUpgradeName,
-                upgradeCompletionMarking,
-                true
-            );
+            towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
+            upgradeCompletionMarking = await getCompletionMarking(entryRow, path, tier);
+            challengeEmbed.addField(towerUpgradeName, upgradeCompletionMarking, true);
         }
     }
 
@@ -872,9 +729,7 @@ async function getCompletionMarking(entryRow, path, tier) {
     if (tier == 2) {
         upgradeCol = TOWER_COLS.BASE;
     } else {
-        upgradeCol = String.fromCharCode(
-            TOWER_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2
-        );
+        upgradeCol = String.fromCharCode(TOWER_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2);
     }
 
     completion = sheet.getCellByA1(`${upgradeCol}${entryRow}`).value.trim();
@@ -890,17 +745,13 @@ async function findTowerRow(tower) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
 
     // Load the column containing the different towers
-    await sheet.loadCells(
-        `${TOWER_COLS.TOWER}1:${TOWER_COLS.TOWER}${sheet.rowCount}`
-    );
+    await sheet.loadCells(`${TOWER_COLS.TOWER}1:${TOWER_COLS.TOWER}${sheet.rowCount}`);
 
     entryRow = null;
 
     // Search for the row in all "possible" rows
     for (let row = 1; row <= sheet.rowCount; row++) {
-        let towerCandidate = sheet.getCellByA1(
-            `${TOWER_COLS.TOWER}${row}`
-        ).value;
+        let towerCandidate = sheet.getCellByA1(`${TOWER_COLS.TOWER}${row}`).value;
 
         if (!towerCandidate) continue;
 
@@ -911,11 +762,7 @@ async function findTowerRow(tower) {
     }
 
     if (!entryRow) {
-        throw new UserCommandError(
-            `Tower \`${Aliases.toIndexNormalForm(
-                tower
-            )}\` doesn't yet have a 2MP completion`
-        );
+        throw new UserCommandError(`Tower \`${Aliases.toIndexNormalForm(tower)}\` doesn't yet have a 2MP completion`);
     }
 
     return entryRow;
@@ -928,5 +775,5 @@ module.exports = {
     dependencies: ['btd6index'],
     execute,
     helpMessage,
-    errorMessage,
+    errorMessage
 };

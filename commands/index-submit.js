@@ -45,7 +45,7 @@ async function submit(message, args) {
         submission = new Discord.MessageEmbed()
             .setTimestamp()
             .setDescription(`${imgurJson.link}\n${imgurText}`)
-            .setFooter(`sent by ${message.author.tag}`)
+            .setFooter({ text: `sent by ${message.author.tag}` })
             //.setColor(cyber)
             .setImage(`${imgurJson.link}`);
         preview = await message.channel.send({ embeds: [submission] });

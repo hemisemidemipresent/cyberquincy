@@ -77,7 +77,7 @@ async function displayHeroPlacementRounds(interaction) {
             .setDescription(description)
             .addField('Place on round', rounds.join('\n'), true)
             .addField(`Pay on r${goalRound}`, costs.join('\n'), true)
-            .setFooter(`Click a button below to see more starting rounds`)
+            .setFooter({ text: `Click a button below to see more starting rounds` })
             .setColor(colours['cyber']);
 
         if (heroPlacementRound == -Infinity) {
@@ -153,7 +153,7 @@ async function displayHeroPlacementRounds(interaction) {
         collector.on('end', async (collected) => {
             if (collected.size == 0) {
                 await interaction.editReply({
-                    embeds: [embed.setFooter('')],
+                    embeds: [embed.setFooter({ text: '' })],
                     components: []
                 });
             }

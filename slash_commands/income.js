@@ -68,7 +68,7 @@ function normalIncome(startround, endround) {
     return new Discord.MessageEmbed()
         .setTitle(`$${Math.trunc(income * 100) / 100} earned in CHIMPS from rounds ${startround} to ${endround} inclusive`)
         .setColor(magenta)
-        .setFooter('not including starting cash');
+        .setFooter({ text: 'not including starting cash' });
 }
 
 function halfIncome(startround, endround) {
@@ -82,7 +82,7 @@ function halfIncome(startround, endround) {
             } earned in Half Cash CHIMPS from rounds ${startround} to ${endround} inclusive`
         )
         .setColor(red)
-        .setFooter('not including starting cash');
+        .setFooter({ text: 'not including starting cash' });
 }
 
 function abrIncome(startround, endround) {
@@ -94,7 +94,7 @@ function abrIncome(startround, endround) {
             `$${Math.trunc(income * 100) / 100} earned in ABR CHIMPS from rounds ${startround} to ${endround} inclusive`
         )
         .setColor(yellow)
-        .setFooter('not including starting cash');
+        .setFooter({ text: 'not including starting cash' });
 }
 
 function chincomeEmbed(mode, round) {
@@ -150,7 +150,7 @@ function chincomeEmbed(mode, round) {
     }
 
     if (round === 6 && mode !== 'abr') {
-        embed.setFooter("*Doesn't include starting cash");
+        embed.setFooter({ text: "Doesn't include starting cash" });
     }
 
     return embed;

@@ -28,7 +28,7 @@ async function execute(interaction) {
             true
         )
         .addField('discord server, join for updates (happens pretty often)', `${discord}`, true)
-        .setFooter('thank you for using it! Please share!');
+        .setFooter({ text: 'thank you for using it! Please share!' });
     return await interaction.reply({
         embeds: [infoEmbed]
     });

@@ -4,12 +4,7 @@ const { MessageActionRow, MessageButton } = require('discord.js');
 const { discord } = require('../aliases/misc.json');
 const Quiz = require('../helpers/quiz.js');
 let numbers = [0, 1, 2, 3];
-const emojis = [
-    ':regional_indicator_a:',
-    ':regional_indicator_b:',
-    ':regional_indicator_c:',
-    ':regional_indicator_d:',
-];
+const emojis = [':regional_indicator_a:', ':regional_indicator_b:', ':regional_indicator_c:', ':regional_indicator_d:'];
 
 const time = 10000;
 let item;
@@ -30,22 +25,10 @@ module.exports = {
             shuffle(numbers);
 
             const buttons = new MessageActionRow().addComponents(
-                new MessageButton()
-                    .setCustomId(numbers[0].toString())
-                    .setLabel('A')
-                    .setStyle('PRIMARY'),
-                new MessageButton()
-                    .setCustomId(numbers[1].toString())
-                    .setLabel('B')
-                    .setStyle('PRIMARY'),
-                new MessageButton()
-                    .setCustomId(numbers[2].toString())
-                    .setLabel('C')
-                    .setStyle('PRIMARY'),
-                new MessageButton()
-                    .setCustomId(numbers[3].toString())
-                    .setLabel('D')
-                    .setStyle('PRIMARY')
+                new MessageButton().setCustomId(numbers[0].toString()).setLabel('A').setStyle('PRIMARY'),
+                new MessageButton().setCustomId(numbers[1].toString()).setLabel('B').setStyle('PRIMARY'),
+                new MessageButton().setCustomId(numbers[2].toString()).setLabel('C').setStyle('PRIMARY'),
+                new MessageButton().setCustomId(numbers[3].toString()).setLabel('D').setStyle('PRIMARY')
             );
 
             let string = '';
@@ -57,20 +40,17 @@ module.exports = {
             let QuestionEmbed = new Discord.MessageEmbed()
                 .setTitle(`${item.question}`)
                 .addField('options', string)
-                .addField(
-                    'please contribute',
-                    `join [this server](${discord}) to suggest a question`
-                )
+                .addField('please contribute', `join [this server](${discord}) to suggest a question`)
                 .setColor(cyber);
             if (!interaction) {
                 botMessage = await message.reply({
                     embeds: [QuestionEmbed],
-                    components: [buttons],
+                    components: [buttons]
                 });
             } else {
                 await interaction.update({
                     embeds: [QuestionEmbed],
-                    components: [buttons],
+                    components: [buttons]
                 });
             }
             await createCollector();
@@ -78,7 +58,7 @@ module.exports = {
         async function createCollector() {
             const collector = botMessage.createMessageComponentCollector({
                 filter,
-                time: time,
+                time: time
             });
             collector.on('collect', async (i) => {
                 collector.stop();
@@ -91,12 +71,10 @@ module.exports = {
             });
             collector.on('end', async (collected) => {
                 if (!collected.first()) {
-                    let errorEmbed = new Discord.MessageEmbed()
-                        .setTitle(`Game over! You took too long.`)
-                        .setColor(magenta);
+                    let errorEmbed = new Discord.MessageEmbed().setTitle(`Game over! You took too long.`).setColor(magenta);
                     Quiz.answerWrong(message.author.id);
                     return await message.channel.send({
-                        embeds: [errorEmbed],
+                        embeds: [errorEmbed]
                     });
                 }
             });
@@ -104,7 +82,7 @@ module.exports = {
         async function playagainCollector() {
             const collector = botMessage.createMessageComponentCollector({
                 filter,
-                time: time,
+                time: time
             });
             collector.on('collect', async (i) => {
                 collector.stop();
@@ -114,26 +92,19 @@ module.exports = {
             collector.on('end', async (collected) => {
                 if (!collected.first()) {
                     await botMessage.channel.send({
-                        embeds: [
-                            new Discord.MessageEmbed()
-                                .setColor(magenta)
-                                .setTitle('Game ended'),
-                        ],
+                        embeds: [new Discord.MessageEmbed().setColor(magenta).setTitle('Game ended')]
                     });
                     interaction = undefined;
                     botMessage = undefined;
                 }
             });
         }
-    },
+    }
 };
 function process(interaction, userID) {
     let id = parseInt(interaction.customId);
     const buttons = new MessageActionRow().addComponents(
-        new MessageButton()
-            .setCustomId('playagain')
-            .setLabel('Play Again')
-            .setStyle('SUCCESS')
+        new MessageButton().setCustomId('playagain').setLabel('Play Again').setStyle('SUCCESS')
     );
     if (item.ans == id) {
         Quiz.answerCorrect(userID);
@@ -143,9 +114,7 @@ function process(interaction, userID) {
             .setTitle('Congratulations! You got the correct answer!')
             .setDescription(streak)
             .setColor(turq)
-            .setFooter(
-                'streak will not be carried over when the bot restarts and that might happen randomly.'
-            );
+            .setFooter({ text: 'streak will not be carried over when the bot restarts and that might happen randomly.' });
         return { embeds: [correctEmbed], components: [buttons] };
     } else {
         Quiz.answerWrong(userID);
@@ -156,9 +125,7 @@ function process(interaction, userID) {
             .setDescription(streak)
             .addField('answer', `||${item.optns[item.ans]}||`)
             .setColor(orange)
-            .setFooter(
-                'streak will not be carried over when the bot restarts and that might happen randomly.'
-            );
+            .setFooter({ text: 'streak will not be carried over when the bot restarts and that might happen randomly.' });
 
         return { embeds: [wrongEmbed], components: [buttons] };
     }
@@ -175,10 +142,7 @@ function shuffle(array) {
         currentIndex--;
 
         // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex],
-            array[currentIndex],
-        ];
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
 
     return array;

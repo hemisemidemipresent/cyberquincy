@@ -6,7 +6,7 @@
     "scripts": {
         "logout": "heroku logout",
         "login": "heroku login -i",
-        "connect": "heroku git:remote -a cyberquincy",
+        "connect": "heroku git:remote -a jajajosh",
         "register": "node register",
         "test": "npm run register && node server.js",
         "commit": "git add . && git commit -m p",
@@ -45,6 +45,7 @@
         "discord.js-minesweeper": "^1.0.6",
         "express": "^4.17.1",
         "filepath": "^1.1.0",
+        "fuzzyset.js": "^1.0.7",
         "google-spreadsheet": "^3.0.13",
         "hastebin-gen": "^2.0.5",
         "imgur": "^0.3.1",

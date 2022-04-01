@@ -53,7 +53,7 @@ module.exports = {
     freePlayMsg(cashNeeded, round) {
         let embed = new Discord.MessageEmbed()
             .setTitle(`You cant get $${cashNeeded} from popping bloons by round ${round}`)
-            .setFooter('freeplay is random, hence cash is random')
+            .setFooter({ text: 'freeplay is random, hence cash is random' })
             .setColor(orange);
         return embed;
     },

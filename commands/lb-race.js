@@ -106,7 +106,7 @@ module.exports = {
                     'see [this video](https://youtu.be/IGE155tCmss)'
                 )
                 .addField('Individual info', 'to see how to get individual (more detailed) stats use `q!lb help`')
-                .setFooter('this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)')
+                .setFooter({ text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)' })
                 .setColor(cyber)
                 .setTimestamp()
                 .setThumbnail(raceImg);
@@ -126,9 +126,9 @@ module.exports = {
                     `\`q!lb u#tsp\` - shows user placement`
             )
 
-            .setFooter(
-                'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins), if you are in t100 the lb you see is more accurate'
-            )
+            .setFooter({
+                text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins), if you are in t100 the lb you see is more accurate'
+            })
             .setColor(green);
         await message.channel.send({ embeds: [embed] });
     },

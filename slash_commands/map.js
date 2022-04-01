@@ -1,42 +1,41 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { ApplicationCommandOptionChoice } = require('discord.js');
+
+const { cyber } = require('../jsons/colours.json');
+const { discord } = require('../aliases/misc.json');
+const FuzzySet = require('fuzzyset.js');
 
 builder = new SlashCommandBuilder()
     .setName('map')
-    .setDescription('Information about maps')
+    .setDescription('Information and Stats about BTD6 maps')
     .addStringOption((option) =>
         option
             .setName('map_name')
-            .setDescription('The map you are finding information for')
-            .setRequired(true)
+            .setDescription('The name of the map whose data you want')
             .setAutocomplete(true)
-    )
-    .addStringOption((option) =>
-        option
-            .setName('map_name2')
-            .setDescription('The map you are finding information for')
             .setRequired(true)
-            .setAutocomplete(true)
     );
 
-async function execute(interaction) {}
-
+async function execute(interaction) {
+    return await interaction.reply('under construction');
+}
 async function onAutocomplete(interaction) {
     const hoistedOptions = interaction.options._hoistedOptions; // array of the previous thing, each for each autocomplete field
     const map_name_partial = hoistedOptions.find((option) => option.name == 'map_name'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = map_name_partial.value;
 
-    /*
-    // Example:
-    interaction.respond([
-        {
-            name: 'Option 1',
-            value: 'option1'
-        }
-    ]);
-    */
-}
+    fs = FuzzySet(Aliases.allMaps());
+    const values = fs.get(value);
 
+    console.log(values);
+
+    responseArr = [];
+    values.forEach((value, index) => {
+        if (index < 25) {
+            responseArr.push({ name: value[1], value: value[1] });
+        }
+    });
+    await interaction.respond(responseArr);
+}
 module.exports = {
     data: builder,
     execute,

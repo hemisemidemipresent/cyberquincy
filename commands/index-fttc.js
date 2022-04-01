@@ -112,9 +112,7 @@ async function execute(message, args) {
     let allResults = await parseFTTC();
     let filteredResults = filterResults(allResults, parsed);
     if (filteredResults.length == 0) {
-        const noCombosEmbed = new Discord.MessageEmbed()
-            .setTitle(titleNoCombos(parsed))
-            .setColor(paleorange);
+        const noCombosEmbed = new Discord.MessageEmbed().setTitle(titleNoCombos(parsed)).setColor(paleorange);
 
         return message.channel.send({ embeds: [noCombosEmbed] });
     } else {
@@ -195,11 +193,7 @@ async function getRowStandardData(entryRow, colset) {
             });
     } else {
         for (var i = 0; i < colset['TOWERS'].length; i++) {
-            values.TOWERS.push(
-                Aliases.getCanonicalForm(
-                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
-                )
-            );
+            values.TOWERS.push(Aliases.getCanonicalForm(sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value));
         }
     }
 
@@ -252,10 +246,7 @@ async function getRowAltData(entryRow, colset) {
 
 function sectionHeader(mapRow, sheet) {
     // Looks for "One|Two|...|Five|Six+ Towers"
-    headerRegex = new RegExp(
-        `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`,
-        'i'
-    );
+    headerRegex = new RegExp(`(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`, 'i');
 
     // Check cell to see if it's a header indicating the number of towers
     let candidateHeaderCell = sheet.getCellByA1(`${COLS['ONE'].MAP}${mapRow}`);
@@ -281,15 +272,11 @@ function filterResults(allCombos, parsed) {
     }
 
     if (parsed.person) {
-        results = results.filter(
-            (combo) => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person
-        );
+        results = results.filter((combo) => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person);
     }
 
     if (parsed.towers) {
-        results = results.filter((combo) =>
-            parsed.towers.every((specifiedTower) => combo.TOWERS.includes(specifiedTower))
-        );
+        results = results.filter((combo) => parsed.towers.every((specifiedTower) => combo.TOWERS.includes(specifiedTower)));
     }
 
     if (keepOnlyOG(parsed)) {
@@ -361,14 +348,9 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
         // The number of rows to be displayed is variable depending on the characters in each link
         // Try 15 and decrement every time it doesn't work.
         for (maxNumRowsDisplayed = MAX_NUM_ROWS; maxNumRowsDisplayed > 0; maxNumRowsDisplayed--) {
-            let challengeEmbed = new Discord.MessageEmbed()
-                .setTitle(title(parsed, combos))
-                .setColor(paleorange);
+            let challengeEmbed = new Discord.MessageEmbed().setTitle(title(parsed, combos)).setColor(paleorange);
 
-            challengeEmbed.addField(
-                '# Combos',
-                `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
-            );
+            challengeEmbed.addField('# Combos', `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`);
 
             for (var c = 0; c < displayCols.length; c++) {
                 challengeEmbed.addField(
@@ -379,13 +361,13 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
             }
 
             if (keepOnlyOG(parsed)) {
-                challengeEmbed.setFooter(`---\nNon-OG completions excluded`);
+                challengeEmbed.setFooter({ text: `---\nNon-OG completions excluded` });
             } else {
                 if (numOGCompletions == 1) {
-                    challengeEmbed.setFooter(`---\nOG completion bolded`);
+                    challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
                 }
                 if (numOGCompletions > 1) {
-                    challengeEmbed.setFooter(`---\n${numOGCompletions} OG completions bolded`);
+                    challengeEmbed.setFooter({ text: `---\n${numOGCompletions} OG completions bolded` });
                 }
             }
 
@@ -414,8 +396,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
 
         // Read author reaction (time limit specified below in milliseconds)
         // and respond with appropriate action
-        const filter = (reaction, user) =>
-            user.id === userQueryMessage.author.id && REACTIONS.includes(reaction.emoji.name);
+        const filter = (reaction, user) => user.id === userQueryMessage.author.id && REACTIONS.includes(reaction.emoji.name);
         botMessage
             .createReactionCollector({
                 filter,
@@ -447,8 +428,7 @@ function title(parsed, combos) {
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${combos[0].MAP} `;
     if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
-    if (parsed.towers && parsed.towers[1])
-        t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
+    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 
@@ -458,8 +438,7 @@ function titleNoCombos(parsed) {
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
     if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
-    if (parsed.towers && parsed.towers[1])
-        t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
+    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 
@@ -468,14 +447,8 @@ function helpMessage(message) {
         .setTitle('`q!fttc` HELP — The BTD6 Index Fewest Tower Type CHIMPS')
         .addField('`q!fttc <map>`', 'All FTTCs for the queried map' + '\n`q!fttc frozenover`')
         .addField('`q!fttc <n>`', 'All FTTCs with _n_ towers' + '\n`q!fttc 3`')
-        .addField(
-            '`q!fttc <tower_1> {tower_2}`',
-            'All FTTCs with (all) specified tower(s)' + '\n`q!fttc ace ninja`'
-        )
-        .addField(
-            '`q!fttc <person>`',
-            'All FTTCs by a given person' + '\n`q!fttc u#usernamegoeshere`'
-        )
+        .addField('`q!fttc <tower_1> {tower_2}`', 'All FTTCs with (all) specified tower(s)' + '\n`q!fttc ace ninja`')
+        .addField('`q!fttc <person>`', 'All FTTCs by a given person' + '\n`q!fttc u#usernamegoeshere`')
         .addField(
             'Notes',
             ' • You can combine query fields in any combination, except you may only search `<n>` OR `<map>` in a given command\n' +

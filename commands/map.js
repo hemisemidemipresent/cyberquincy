@@ -48,15 +48,10 @@ async function displayMapDifficultyRBS(message, mapDifficulty) {
         .setColor(cyber);
 
     mapToRbsSorted.forEach(([map, mapLength]) => {
-        infoEmbed.addField(
-            Aliases.toIndexNormalForm(map),
-            mapLength.toFixed(1)
-        );
+        infoEmbed.addField(Aliases.toIndexNormalForm(map), mapLength.toFixed(1));
     });
 
-    infoEmbed.setFooter(
-        'average of all paths with no obstacles removed and no map mechanics'
-    );
+    infoEmbed.setFooter({ text: 'average of all paths with no obstacles removed and no map mechanics' });
 
     return await message.channel.send({ embeds: [infoEmbed] });
 }
@@ -65,10 +60,7 @@ async function helpMessage(message) {
     let helpEmbed = new Discord.MessageEmbed()
         .setTitle('`q!map` HELP')
         .addField('`q!map <map>`', 'Map Info')
-        .addField(
-            '`q!map <map_difficulty>`',
-            'RBSs (sorted) of all maps of the given map difficulty'
-        )
+        .addField('`q!map <map_difficulty>`', 'RBSs (sorted) of all maps of the given map difficulty')
         .setColor(cyber);
 
     return await message.channel.send({ embeds: [helpEmbed] });
@@ -79,10 +71,7 @@ async function errorMessage(message, parsingErrors) {
         .setAuthor(`Sent by ${message.author.tag}`)
 
         .setTitle('ERROR')
-        .addField(
-            'Likely Cause(s)',
-            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-        )
+        .addField('Likely Cause(s)', parsingErrors.map((msg) => ` • ${msg}`).join('\n'))
         .setColor(cyber);
 
     return await message.channel.send({ embeds: [errorEmbed] });
@@ -98,20 +87,14 @@ module.exports = {
             return helpMessage(message);
         }
         let arr = [args[0]];
-        const parsed = CommandParser.parse(
-            arr,
-            new OrParser(new MapParser(), new MapDifficultyParser())
-        );
+        const parsed = CommandParser.parse(arr, new OrParser(new MapParser(), new MapDifficultyParser()));
         if (parsed.hasErrors()) {
             return await errorMessage(message, parsed.parsingErrors);
         }
         if (parsed.map) {
             return await displayMapInfo(message, parsed.map);
         } else if (parsed.map_difficulty) {
-            return await displayMapDifficultyRBS(
-                message,
-                parsed.map_difficulty
-            );
+            return await displayMapDifficultyRBS(message, parsed.map_difficulty);
         }
-    },
+    }
 };

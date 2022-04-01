@@ -31,10 +31,7 @@ module.exports = {
         }
         // search up command alias db
         let command =
-            client.commands.get(alias) ||
-            client.commands.find(
-                (cmd) => cmd.aliases && cmd.aliases.includes(alias)
-            );
+            client.commands.get(alias) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(alias));
 
         if (command && command.aliases) {
             commandAliases = command.aliases;
@@ -42,10 +39,7 @@ module.exports = {
             suffix = '';
             // 1024 embedded field character limit
             while ((cmdStr = commandAliases.join(', ')).length > 1016) {
-                commandAliases = commandAliases.slice(
-                    0,
-                    commandAliases.length / 2
-                );
+                commandAliases = commandAliases.slice(0, commandAliases.length / 2);
                 suffix = ', ...';
             }
             cmdStr += suffix;
@@ -64,9 +58,9 @@ module.exports = {
             .addField('Arg alias', `${aliasStr}`)
             .addField('Cmd alias', `${cmdStr}`)
             .setColor(colours['cyber'])
-            .setFooter(
-                'NOTE: FOR q!<tower> AND q!<hero>, THE ARGUMENTS WILL SHOW EVERYTHING THAT TRIGGERS q!<tower> and q!<hero> respectively'
-            );
+            .setFooter({
+                text: 'NOTE: FOR q!<tower> AND q!<hero>, THE ARGUMENTS WILL SHOW EVERYTHING THAT TRIGGERS q!<tower> and q!<hero> respectively'
+            });
 
         return message.channel.send({ embeds: [aliasEmbed] });
     },
@@ -74,10 +68,7 @@ module.exports = {
     helpMessage(message) {
         let messageEmbed = new Discord.MessageEmbed()
             .setTitle(`q!alias <command>`)
-            .addField(
-                'Use',
-                'Learn all of the different ways to provide arguments/invoke commands'
-            )
+            .addField('Use', 'Learn all of the different ways to provide arguments/invoke commands')
             .addField(
                 'Clarification',
                 'Some words can be both commands and arguments that you can provide to commands, such as `wizard'
@@ -86,7 +77,7 @@ module.exports = {
                 'Example: `q!wizard 300`; `q!2mp wizard`',
                 'Command aliases to invoke `q!wizard` might be different than argument aliases to invoke `q!2mp wizard`'
             )
-            .setFooter('"alias" = "synonym"; "argument" = "input"')
+            .setFooter({ text: '"alias" = "synonym"; "argument" = "input"' })
             .setColor(colours['cyber']);
 
         return message.channel.send({ embeds: [messageEmbed] });
@@ -100,5 +91,5 @@ module.exports = {
             .setColor(colours['orange']);
 
         return message.channel.send({ embeds: [errorEmbed] });
-    },
+    }
 };

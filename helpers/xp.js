@@ -7,8 +7,8 @@ async function addCommandXp(message) {
 
     let tag = await Tags.findOne({
         where: {
-            name: user.id,
-        },
+            name: user.id
+        }
     });
 
     // Create db user if it doesn't already exist
@@ -18,7 +18,7 @@ async function addCommandXp(message) {
             xp: 0,
             showAds: true,
             showLevelUpMsg: true,
-            quiz: 0,
+            quiz: 0
         });
     }
 
@@ -30,8 +30,8 @@ async function addCommandXp(message) {
 
     tag = await Tags.findOne({
         where: {
-            name: user.id,
-        },
+            name: user.id
+        }
     });
 
     newLevel = xpToLevel(tag.xp);
@@ -59,11 +59,8 @@ function levelUpMessage(message, newLevel) {
 
     levelUpEmbed = new Discord.MessageEmbed()
         .setTitle(`Level Up!`)
-        .addField(
-            `Congratulations ${user.username}#${user.discriminator}!`,
-            `You have advanced to level ${newLevel}`
-        )
-        .setFooter('Type `q!level` for more information')
+        .addField(`Congratulations ${user.username}#${user.discriminator}!`, `You have advanced to level ${newLevel}`)
+        .setFooter({ text: 'Type `q!level` for more information' })
         .setColor(colours['green']);
 
     message.channel.send(levelUpEmbed);
@@ -76,9 +73,7 @@ async function levelUpRole(user, newLevel) {
         .find((m) => m.id === user.id);
     if (!guildmember) {
         if (newLevel == 3 || newLevel == 10) {
-            let roleEmbed = new Discord.MessageEmbed().setTitle(
-                `You can now get a role in the discord server: ${discord}`
-            );
+            let roleEmbed = new Discord.MessageEmbed().setTitle(`You can now get a role in the discord server: ${discord}`);
             return message.channel.send(roleEmbed);
         }
     }
@@ -95,5 +90,5 @@ async function levelUpRole(user, newLevel) {
 
 module.exports = {
     addCommandXp,
-    xpToLevel,
+    xpToLevel
 };

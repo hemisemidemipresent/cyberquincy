@@ -103,7 +103,7 @@ async function calc(interaction) {
                             `"${c}" is not a valid character in the \`q!calc\` expression. Type \`q!calc\` for help.`
                         )
                         .setColor(red)
-                        .setFooter(footer)
+                        .setFooter({ text: footer })
                 ],
                 components: []
             });
@@ -162,7 +162,7 @@ async function calc(interaction) {
                     new Discord.MessageEmbed()
                         .setTitle(e.message)
                         .setColor(red)
-                        .setFooter('due to manipulation, your full input will not be shown')
+                        .setFooter({ text: 'due to manipulation, your full input will not be shown' })
                 ]
             });
         } else console.log(e);
@@ -178,7 +178,7 @@ async function calc(interaction) {
                     .setTitle('Error processing expression. Did you add an extra operator?')
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
-                    .setFooter('Enter `q!calc` for help')
+                    .setFooter({ text: 'Enter `q!calc` for help' })
             ]
         });
     } else if (stack.length > 0) {
@@ -188,7 +188,7 @@ async function calc(interaction) {
                     .setTitle('Error processing expression. Did you leave out an operator?')
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
-                    .setFooter('Enter `q!calc` for help')
+                    .setFooter({ text: 'Enter `q!calc` for help' })
             ]
         });
     } else {

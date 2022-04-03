@@ -727,6 +727,8 @@ const MULTIPAGE_BUTTONS_2MP = new MessageActionRow().addComponents(
     new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
 );
 
+MAX_VALUES_LIST_LENGTH_2MP = 12
+
 //  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
 async function embedOneOrMultiplePages(interaction, title, columns, numOGCompletions, mtime) {
     const numRows = columns.LINK.length

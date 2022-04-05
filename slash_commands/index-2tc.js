@@ -561,13 +561,8 @@ function orderCombo(combo) {
     return newCombo;
 }
 
-function ogCombo(combo) {
-    return Object.entries(combo.MAPS)
-                    .find( ([_, altCombo]) => altCombo.OG);
-}
-
 function flattenCombo(combo, map) {
-    if (!map) map = ogCombo(combo)[0]
+    if (!map) map = Object.keys(combo.MAPS)[0];
     const subcombo = combo.MAPS[map];
 
     let flattenedCombo = combo;
@@ -594,14 +589,14 @@ function embedTitle(parsed, combos) {
         combos.length > 1 || Object.keys(combos[0].MAPS).length > 1;
 
     const towers = parsedProvidedTowers(parsed);
-    const map = Object.keys(sampleCombo.MAPS)[0];
+    const sampleMap = Object.keys(sampleCombo.MAPS)[0];
 
     let title = '';
     if (parsed.natural_number)
         title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
     else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
-    if (parsed.person) title += `by ${sampleCombo.MAPS[map].PERSON} `;
-    if (parsed.map) title += `on ${map} `;
+    if (parsed.person) title += `by ${sampleCombo.MAPS[sampleMap].PERSON} `;
+    if (parsed.map) title += `on ${Aliases.indexMapAbbreviationToNormalForm(parsed.map)} `;
     for (var i = 0; i < towers.length; i++) {
         const tower = towers[i];
         if (i == 0) title += 'with ';
@@ -675,7 +670,7 @@ function filterCombos(filteredCombos, parsed) {
 
     if (parsed.person) {
         function personFilter(_, completion) {
-            return completion.PERSON.toString().toLowerCase() == parsed.person;
+            return completion.PERSON.toString().toLowerCase().split(' ').join('_') == parsed.person.split(' ').join('_');
         }
         filteredCombos = filterByCompletion(personFilter, filteredCombos);
     }
@@ -831,7 +826,7 @@ function parsePreloadedRow(row) {
 
     // Assign each value to be discord-embedded in a simple default way
     let values = {};
-    const ogSpecificCols = Object.keys(OG_COLS).splice(0, 3, 'PERSON', 'MAP', 'LINK')
+    const ogSpecificCols = Object.keys(OG_COLS).filter(col => !['PERSON', 'MAP', 'LINK'].includes(col))
     for (key of ogSpecificCols) {
         values[key] = sheet.getCellByA1(`${OG_COLS[key]}${row}`).value;
     }
@@ -886,6 +881,8 @@ async function findOGRowOffset() {
 }
 
 function parseMapCompletions(row) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
+
     const ogCells = Object.fromEntries(
         ['MAP', 'PERSON', 'LINK'].map(col => {
             return [col, sheet.getCellByA1(`${OG_COLS[col]}${row}`)]

@@ -1,8 +1,6 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const OrParser = require('../parser/or-parser.js');
-const OptionalParser = require('../parser/optional-parser.js');
-const AnyOrderParser = require('../parser/any-order-parser.js');
 
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const TowerPathParser = require('../parser/tower-path-parser');
@@ -292,26 +290,19 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
             const allCompletedMaps = Object.keys(
                 allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS
             );
-            let altMaps = allCompletedMaps.filter((map) => map != combo.MAP);
-            altMaps = altMaps.map((properMapName) =>
-                properMapName.split(' ').join('_').toLowerCase()
-            );
-            altMaps = altMaps.map((properMapName) =>
-                Aliases.mapToIndexAbbreviation(properMapName)
-            );
+            const altMaps = allCompletedMaps.filter((map) => map != combo.MAP);
 
-            let mapGroups = [
+            const mapGroups = [
                 Aliases.beginnerMaps(),
                 Aliases.intermediateMaps(),
                 Aliases.advancedMaps(),
                 Aliases.expertMaps(),
-            ];
-            mapGroups = mapGroups.map((aliases) =>
-                aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+            ].map(mapGroup =>
+                mapGroup.map(map => Aliases.mapToIndexAbbreviation(map))
             );
 
-            const altMapGroups = mapGroups.map((mapGroup) =>
-                mapGroup.filter((map) => altMaps.includes(map))
+            const altMapGroups = mapGroups.map(mapGroup =>
+                mapGroup.filter(map => altMaps.includes(map))
             );
 
             if (altMapGroups.some((group) => group.length > 0)) {
@@ -576,7 +567,7 @@ function flattenCombo(combo, map) {
 
     let flattenedCombo = combo;
 
-    flattenedCombo.MAP = map;
+    flattenedCombo.MAP = Aliases.indexMapAbbreviationToNormalForm(map);
     flattenedCombo.PERSON = subcombo.PERSON;
     flattenedCombo.LINK = subcombo.LINK;
     flattenedCombo.OG = subcombo.OG;
@@ -598,14 +589,14 @@ function embedTitle(parsed, combos) {
         combos.length > 1 || Object.keys(combos[0].MAPS).length > 1;
 
     const towers = parsedProvidedTowers(parsed);
-    const map = Object.keys(sampleCombo.MAPS)[0];
+    const sampleMap = Object.keys(sampleCombo.MAPS)[0];
 
     let title = '';
     if (parsed.natural_number)
         title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
     else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
-    if (parsed.person) title += `by ${sampleCombo.MAPS[map].PERSON} `;
-    if (parsed.map) title += `on ${map} `;
+    if (parsed.person) title += `by ${sampleCombo.MAPS[sampleMap].PERSON} `;
+    if (parsed.map) title += `on ${Aliases.indexMapAbbreviationToNormalForm(parsed.map)} `;
     for (var i = 0; i < towers.length; i++) {
         const tower = towers[i];
         if (i == 0) title += 'with ';
@@ -679,14 +670,15 @@ function filterCombos(filteredCombos, parsed) {
 
     if (parsed.person) {
         function personFilter(_, completion) {
-            return completion.PERSON.toString().toLowerCase() == parsed.person;
+            return completion.PERSON.toString().toLowerCase().split(' ').join('_') == parsed.person.split(' ').join('_');
         }
         filteredCombos = filterByCompletion(personFilter, filteredCombos);
     }
 
     if (parsed.map) {
+        mapAbbr = Aliases.mapToIndexAbbreviation(parsed.map)
         function mapFilter(map, _) {
-            return Aliases.toAliasNormalForm(map) == parsed.map;
+            return map == mapAbbr;
         }
         filteredCombos = filterByCompletion(mapFilter, filteredCombos);
     }
@@ -801,95 +793,22 @@ function sheet2TC() {
 }
 
 async function scrapeAllCombos() {
-    const ogCombos = await scrapeAllOGCombos();
-    const altCombos = await scrapeAllAltCombos();
-    return mergeCombos(ogCombos, altCombos);
-}
-
-function mergeCombos(ogCombos, altCombos) {
-    let mergedCombos = [];
-
-    for (var i = 0; i < ogCombos.length; i++) {
-        const toBeMergedOgCombo = ogCombos[i];
-
-        const map = toBeMergedOgCombo.MAP;
-        delete toBeMergedOgCombo.MAP; // Incorporated as key of outer Object within array index
-
-        const person = toBeMergedOgCombo.PERSON;
-        delete toBeMergedOgCombo.PERSON; // Incorporated as key-value pair in comboObject
-
-        const link = toBeMergedOgCombo.LINK;
-        delete toBeMergedOgCombo.LINK; // Incorporated as key-value pair in comboObject
-
-        const comboObject = {
-            ...toBeMergedOgCombo,
-            MAPS: {},
-        };
-        comboObject.MAPS[map] = {
-            PERSON: person,
-            LINK: link,
-            OG: true,
-        };
-
-        mergedCombos.push(comboObject);
-    }
-
-    for (var i = 0; i < altCombos.length; i++) {
-        const toBeMergedAltCombo = altCombos[i];
-
-        const n = gHelper.fromOrdinalSuffix(toBeMergedAltCombo.NUMBER);
-        delete toBeMergedAltCombo.NUMBER;
-
-        const map = toBeMergedAltCombo.MAP;
-        delete toBeMergedAltCombo.MAP;
-
-        mergedCombos[n - 1].MAPS[map] = {
-            ...toBeMergedAltCombo,
-            OG: false,
-        };
-    }
-
-    return mergedCombos;
-}
-
-async function scrapeAllOGCombos() {
     const sheet = sheet2TC();
+
     const nCombos = await numCombos();
     const rOffset = await findOGRowOffset();
-
-    let ogCombos = [];
-
     await sheet.loadCells(
         `${OG_COLS.NUMBER}${rOffset + 1}:${OG_COLS.CURRENT}${rOffset + nCombos}`
     );
 
-    let row;
-    for (var n = 1; n <= nCombos; n++) {
-        row = rOffset + n;
-
-        ogCombos.push(await getOG2TCFromPreloadedRow(row));
+    let combos = [];
+    for (let n = 1; n <= nCombos; n++) {
+        combos.push(
+            parsePreloadedRow(rOffset + n)
+        )
     }
 
-    return ogCombos;
-}
-
-async function scrapeAllAltCombos() {
-    const sheet = sheet2TC();
-    const rOffset = await findOGRowOffset();
-
-    await sheet.loadCells(
-        `${ALT_COLS.NUMBER}${rOffset + 1}:${ALT_COLS.LINK}${sheet.rowCount}`
-    );
-
-    let altCombos = [];
-
-    for (var row = rOffset + 1; row <= sheet.rowCount; row++) {
-        if (await hasGonePastLastAlt2TCCombo(row)) break;
-
-        altCombos.push(await getAlt2TCFromPreloadedRow(row));
-    }
-
-    return altCombos;
+    return combos;
 }
 
 async function numCombos() {
@@ -902,12 +821,13 @@ async function numCombos() {
 // OG Combos
 ////////////////////////////////////////////////////////////
 
-async function getOG2TCFromPreloadedRow(row) {
+function parsePreloadedRow(row) {
     const sheet = sheet2TC();
 
     // Assign each value to be discord-embedded in a simple default way
     let values = {};
-    for (key in OG_COLS) {
+    const ogSpecificCols = Object.keys(OG_COLS).filter(col => !['PERSON', 'MAP', 'LINK'].includes(col))
+    for (key of ogSpecificCols) {
         values[key] = sheet.getCellByA1(`${OG_COLS[key]}${row}`).value;
     }
 
@@ -926,15 +846,14 @@ async function getOG2TCFromPreloadedRow(row) {
     // Recapture date to format properly
     values.DATE = sheet.getCellByA1(`${OG_COLS.DATE}${row}`).formattedValue;
 
-    // Recapture link to format properly
-    const linkCell = sheet.getCellByA1(`${OG_COLS.LINK}${row}`);
-    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
-    values.VERSION = values.VERSION.toString();
-
     // Replace checkmark that doesn't display in embedded with one that does
     if (values.CURRENT === gHelper.HEAVY_CHECK_MARK) {
         values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
+
+    values.VERSION = values.VERSION.toString();
+
+    values.MAPS = parseMapCompletions(row)
 
     return values;
 }
@@ -961,34 +880,31 @@ async function findOGRowOffset() {
     throw `Cannot find 2TC header "Number" to orient combo searching`;
 }
 
-////////////////////////////////////////////////////////////
-// Alt Combos
-////////////////////////////////////////////////////////////
-
-async function getAlt2TCFromPreloadedRow(row) {
+function parseMapCompletions(row) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 
-    // Assign each value to be discord-embedded in a simple default way
-    let values = {};
-    for (key in ALT_COLS) {
-        values[key] = sheet.getCellByA1(`${ALT_COLS[key]}${row}`).value;
+    const ogCells = Object.fromEntries(
+        ['MAP', 'PERSON', 'LINK'].map(col => {
+            return [col, sheet.getCellByA1(`${OG_COLS[col]}${row}`)]
+        }
+    ))
+
+    const ogMapCompletion = {
+        PERSON: ogCells.PERSON.value,
+        LINK: `[${ogCells.LINK.value}](${ogCells.LINK.hyperlink})`,
+        OG: true,
     }
 
-    // Format link properly
-    const linkCell = sheet.getCellByA1(`${ALT_COLS.LINK}${row}`);
-    values.LINK = `[${linkCell.value}](${linkCell.hyperlink})`;
+    const ogMapAbbr = Aliases.mapToIndexAbbreviation(
+        Aliases.toAliasNormalForm(ogCells.MAP.value)
+    );
 
-    while (!values.NUMBER) {
-        values.NUMBER = sheet.getCellByA1(`${ALT_COLS.NUMBER}${--row}`).value;
+    const maps = {
+        [ogMapAbbr]: ogMapCompletion,
+        ...Index.parseMapNotes(ogCells.MAP.note),
     }
 
-    return values;
-}
-
-async function hasGonePastLastAlt2TCCombo(row) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
-
-    return !sheet.getCellByA1(`${ALT_COLS.PERSON}${row}`).value;
+    return maps
 }
 
 module.exports = {

@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////
+// Cacheing 
+//////////////////////////////////////////////////////
+
 const fs = require('fs')
 const resolve = require('path').resolve;
 
@@ -35,9 +39,39 @@ function getLastCacheModified(fname) {
     return fs.statSync(resolve(DIR1, DIR2, fname)).mtime
 }
 
+//////////////////////////////////////////////////////
+// Parsing 
+//////////////////////////////////////////////////////
+
+// Parses the map notes by splitting on comma and colon to get the map+person+link
+function parseMapNotes(notes) {
+    if (!notes) return {};
+    return Object.fromEntries(
+        notes
+            .trim()
+            .split('\n')
+            .map((n) => {
+                let altmap, altperson, altbitly;
+                [altmap, altperson, altbitly] = n
+                    .split(/[,:]/)
+                    .map((t) => t.replace(/ /g, ''));
+
+                return [
+                    altmap,
+                    {
+                        PERSON: altperson,
+                        LINK: `[${altbitly}](http://${altbitly})`,
+                    },
+                ];
+            })
+    );
+}
+
 module.exports = {
     hasCachedCombos,
     fetchCachedCombos,
     cacheCombos,
     getLastCacheModified,
+
+    parseMapNotes,
 }

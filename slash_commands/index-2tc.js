@@ -290,7 +290,10 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
             const allCompletedMaps = Object.keys(
                 allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS
             );
-            const altMaps = allCompletedMaps.filter((map) => map != combo.MAP);
+            const ogMapAbbr = Aliases.mapToIndexAbbreviation(
+                Aliases.toAliasNormalForm(combo.MAP)
+            );
+            const altMaps = allCompletedMaps.filter((map) => map != ogMapAbbr);
 
             const mapGroups = [
                 Aliases.beginnerMaps(),

@@ -23,6 +23,10 @@
 		"cost": 600,
 		"levelModifier": 1.425
 	},
+    "geraldo": {
+        "cost": 600,
+        "levelModifier": 1
+    },
 	"gwen": {
 		"cost": 900,
 		"levelModifier": 1

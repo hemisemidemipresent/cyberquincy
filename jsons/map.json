@@ -209,7 +209,7 @@
         "e": "1/1"
     },
     "quiet_street": {
-        "ver": 6,
+        "ver": 29,
         "len": [
             24.4,
             25.2
@@ -221,6 +221,16 @@
         "los": "",
         "thu": "https://media.discordapp.net/attachments/598768319625035776/921259883033157642/826.png",
         "e": "3/3"
+    },
+    "scrapyard": {
+        "ver": 31,
+        "len": 51,
+        "lenStr": "51?",
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "-",
+        "los": "-",
+        "e": "1/1"
     },
     "moon_landing": {
         "ver": 6,

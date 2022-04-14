@@ -107,5 +107,14 @@
         "cab",
         "cabin",
         "le_cabin"
+    ],
+    "scrapyard": [
+        "sy",
+        "scrap",
+        "scr",
+        "scraps",
+        "yard",
+        "syard",
+        "scyard"
     ]
 }

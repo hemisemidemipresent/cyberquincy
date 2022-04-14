@@ -2,7 +2,6 @@ const { cyber, red } = require('../jsons/colours.json');
 const request = require('request');
 const aliases = [
     ['quincy', 'q', 'cyberquincy', 'quincey', 'quinc', 'quonc', 'quonce', 'quoncy', 'cyber', 'furry', 'cq', 'uincy'],
-
     ['gwendolin', 'g', 'gwen', 'gwendolyn', 'gwendolyn', 'scientist', 'gwendolin', 'gwend', 'gwendo', 'fire'],
     ['striker-jones', 'sj', 'striker', 'bones', 'jones', 'biker', 'who'],
     ['obyn-greenfoot', 'obyn', 'greenfoot', 'o', 'ocyn'],
@@ -14,7 +13,8 @@ const aliases = [
     ['admiral-brickell', 'brick', 'brickell', 'brickel'],
     ['etienne', 'etiene', 'french', 'etine', 'etinne', 'etenne', 'et', 'eti', 'drone'],
     ['sauda', 'saud', 'sau', '🥛', 'sawdust', 'isabgirl'],
-    ['psi', 'psy', 'Ψ', 'sigh']
+    ['psi', 'psy', 'Ψ', 'sigh'],
+    ['geraldo', 'ger'],
 ];
 const links = [
     'https://pastebin.com/raw/ASpHNduS',
@@ -37,6 +37,7 @@ module.exports = {
     async execute(message, args, commandName) {
         if (args.length == 0 || args[0] == 'help') return await message.channel.send('`q!<hero> <level>`');
         let name = findName(commandName);
+        if (name == 'geraldo') return await message.channel.send({ content: 'TBD' })
         if (!name) this.errorMessage('invalid hero name');
         if (!args) this.errorMessage('Please specify a level for the hero');
         let link = findLink(commandName);

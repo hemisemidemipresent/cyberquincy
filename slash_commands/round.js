@@ -4,6 +4,7 @@ const FBG = require('../jsons/freeplay.json');
 const json = require('../jsons/rounds_topper.json');
 const rounds = require('../jsons/rounds.json');
 const rounds2 = require('../jsons/round2.json');
+const cashAbr = require('../jsons/income-abr.json');
 
 const b = require('../helpers/bloons-general');
 const gHelper = require('../helpers/general');
@@ -135,11 +136,11 @@ async function execute(interaction) {
     let roundInfo = isAbr ? json.alt : json.reg;
     let roundLength = getLength(round, roundInfo);
     let roundContents = rounds[`${isAbr ? 'a' : ''}r${round}`].split(',').join('\n');
-    let roundRBE = isAbr ? 'Not available in ABR' : rounds2[round].rbe;
+    let roundRBE = isAbr ? cashAbr[round].rbe : rounds2[round].rbe;
     let roundCash = rounds2[round].cashThisRound;
     if (isAbr) {
         if (round > 2) {
-            roundCash = cashAbr[round - 2][0];
+            roundCash = cashAbr[round].cashThisRound;
         } else {
             roundCash = 'ABR cash data not available for R1/R2';
         }

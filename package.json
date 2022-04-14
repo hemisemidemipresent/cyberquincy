@@ -11,7 +11,7 @@
         "test": "npm run register && node server.js",
         "commit": "git add . && git commit -m p",
         "push": "git push heroku master",
-        "deploy": "npm run register && npm run commit && npm run push",
+        "deploy": "npm run register && npm run commit && npm run push && npm run logs",
         "refresh": "del /f package-lock.json && npm install",
         "logs": "heroku logs --tail"
     },

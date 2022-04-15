@@ -4,7 +4,7 @@ const axios = require('axios');
 const costs = require('../jsons/costs.json');
 const gHelper = require('../helpers/general.js');
 const Towers = require('../helpers/towers.js');
-const { discord } = require('../aliases/misc.json');
+const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colours.json');
 const names = [
     'dart-monkey',
@@ -135,9 +135,7 @@ async function process(upgrade, towerID) {
                 )
                 .addField('total cost', `${totalCost} - medium\n${hardTotalCost} - hard`, true)
                 .addField('Bug reporting', `report [here](${discord})`, true)
-                .setFooter({
-                    text: 'd:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • j:projectile count • q!ap for help and elaboration • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE'
-                })
+                .setFooter({ text: footer })
                 .setColor(cyber);
             return embed;
         }

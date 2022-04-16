@@ -248,12 +248,10 @@ async function execute(interaction) {
 
     console.log(filteredCombos)
 
-    return interaction.editReply({ content: filteredCombos.length.toString() })
-
     if (filteredCombos.length == 0) {
         const noCombosEmbed = new Discord.MessageEmbed().setTitle(titleNoCombos(parsed)).setColor(paleorange);
 
-        return interaction.channel.send({ embeds: [noCombosEmbed] });
+        return interaction.editReply({ embeds: [noCombosEmbed] });
     } else {
         displayOneOrMultiplePages(interaction, parsed, filteredCombos, mtime);
     }
@@ -441,7 +439,7 @@ function keepOnlyOG(parsed) {
     return parsed.natural_number && !parsed.person && !parsed.tower;
 }
 
-async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
+async function displayOneOrMultiplePages(interaction, parsed, combos, mtime) {
     // Setup / Data consolidation
     let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK'];
 

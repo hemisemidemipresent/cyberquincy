@@ -11,10 +11,9 @@ const Parsed = require('../parser/parsed')
 const GoogleSheetsHelper = require('../helpers/google-sheets');
 
 const gHelper = require('../helpers/general.js');
+const Index = require('../helpers/index.js');
 
 const { paleorange } = require('../jsons/colours.json');
-
-const SHEET_NAME = 'FTTC';
 
 const COLS = {
     ONE: {
@@ -81,6 +80,7 @@ const {
     SlashCommandStringOption, 
     SlashCommandIntegerOption, 
 } = require('@discordjs/builders');
+const { Message } = require('discord.js');
 
 const mapOption = 
     new SlashCommandStringOption()
@@ -232,19 +232,35 @@ async function execute(interaction) {
 
     await interaction.deferReply()
 
-    let allResults = await parseFTTC();
-    let filteredResults = filterResults(allResults, parsed);
-    if (filteredResults.length == 0) {
+    const forceReload = interaction.options.getString('reload') ? true : false
+
+    let allCombos;
+    if (Index.hasCachedCombos(CACHE_FNAME_FTTC) && !forceReload) {
+        allCombos = await Index.fetchCachedCombos(CACHE_FNAME_FTTC)           
+    } else {
+        allCombos = await scrapeAllCombos();
+        Index.cacheCombos(allCombos, CACHE_FNAME_FTTC)
+    }
+
+    const mtime = Index.getLastCacheModified(CACHE_FNAME_FTTC)
+
+    let filteredCombos = filterResults(allCombos, parsed);
+
+    console.log(filteredCombos)
+
+    return interaction.editReply({ content: filteredCombos.length.toString() })
+
+    if (filteredCombos.length == 0) {
         const noCombosEmbed = new Discord.MessageEmbed().setTitle(titleNoCombos(parsed)).setColor(paleorange);
 
-        return message.channel.send({ embeds: [noCombosEmbed] });
+        return interaction.channel.send({ embeds: [noCombosEmbed] });
     } else {
-        displayOneOrMultiplePages(message, parsed, filteredResults);
+        displayOneOrMultiplePages(interaction, parsed, filteredCombos, mtime);
     }
     return true;
 }
 
-const TOWER_ABBREVIATIONS = {
+const FTTC_TOWER_ABBREVIATIONS = {
     dart_monkey: 'drt',
     boomerang_monkey: 'boo',
     bomb_shooter: 'bmb',
@@ -268,8 +284,12 @@ const TOWER_ABBREVIATIONS = {
     engineer: 'eng'
 };
 
-async function parseFTTC() {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
+function sheetFTTC() {
+    return GoogleSheetsHelper.sheetByName(Btd6Index, 'fttc');
+}
+
+async function scrapeAllCombos() {
+    const sheet = sheetFTTC()
 
     await sheet.loadCells(`${COLS['SIX+'].MAP}${1}:${COLS['SIX+'].CURRENT}${sheet.rowCount}`);
 
@@ -303,7 +323,7 @@ async function getRowData(entryRow, colset) {
 }
 
 async function getRowStandardData(entryRow, colset) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
+    const sheet = sheetFTTC();
     let values = { TOWERS: [] };
 
     // Six+
@@ -345,13 +365,13 @@ async function getRowStandardData(entryRow, colset) {
 }
 
 async function getRowAltData(entryRow, colset) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, SHEET_NAME);
+    const sheet = sheetFTTC()
     mapCell = sheet.getCellByA1(`${colset.MAP}${entryRow}`);
 
     notes = mapCell.note;
     if (!notes) return null;
 
-    return notes
+    q = notes
         .trim()
         .split('\n')
         .map((entry) => {
@@ -365,6 +385,12 @@ async function getRowAltData(entryRow, colset) {
                 OG: false
             };
         });
+    
+    if (entryRow == 26) {
+        console.log(notes.trim())
+    }
+
+    return q;
 }
 
 function sectionHeader(mapRow, sheet) {
@@ -395,7 +421,9 @@ function filterResults(allCombos, parsed) {
     }
 
     if (parsed.person) {
-        results = results.filter((combo) => combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person);
+        results = results.filter((combo) => {
+            return combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person
+        });
     }
 
     if (parsed.towers) {
@@ -434,7 +462,7 @@ async function displayOneOrMultiplePages(userQueryMessage, parsed, combos) {
                 combo[col].map((tower) => {
                     if (tower) {
                         const towerCanonical = Aliases.getCanonicalForm(tower);
-                        const towerAbbreviation = TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
+                        const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
                         return parsed.towers && parsed.towers.includes(towerCanonical)
                             ? `**${towerAbbreviation}**`
                             : towerAbbreviation;

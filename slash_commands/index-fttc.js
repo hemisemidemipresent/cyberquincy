@@ -423,7 +423,7 @@ function filterResults(allCombos, parsed) {
         results = results.filter((combo) => parsed.towers.every((specifiedTower) => combo.TOWERS.includes(specifiedTower)));
     }
 
-    if (keepOnlyOG(parsed)) {
+    if (keepOnlyOG(parsed) || !parsed.hasAny()) {
         results = results.filter((combo) => combo.OG);
     }
 

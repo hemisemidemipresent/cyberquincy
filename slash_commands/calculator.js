@@ -263,7 +263,7 @@ function parseAndValueToken(t, i, difficulty) {
         // Catches base tower names/aliases
         return costOfTowerUpgradeCrosspath(`${t}#000`, difficulty);
     } else if (Aliases.isHero(Aliases.getCanonicalForm(t))) {
-        return costOfHero(t, difficulty);
+        return costOfHero(Aliases.getCanonicalForm(t), difficulty);
     } else {
         s = '';
         if (t.length == 1) {

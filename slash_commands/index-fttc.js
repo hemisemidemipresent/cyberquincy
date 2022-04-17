@@ -133,6 +133,49 @@ builder =
         .addStringOption(personOption)
         .addStringOption(reloadOption)
 
+async function execute(interaction) {
+    const validationFailure =  validateInput(interaction);
+    if (validationFailure) {
+        return interaction.reply({
+            content: validationFailure,
+            ephemeral: true,
+        })
+    }
+
+    const parsed = parseAll(interaction).reduce(
+        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
+        new Parsed()
+    )
+
+    await interaction.deferReply()
+
+    const forceReload = interaction.options.getString('reload') ? true : false
+
+    let allCombos;
+    if (Index.hasCachedCombos(CACHE_FNAME_FTTC) && !forceReload) {
+        allCombos = await Index.fetchCachedCombos(CACHE_FNAME_FTTC)           
+    } else {
+        allCombos = await scrapeAllCombos();
+        Index.cacheCombos(allCombos, CACHE_FNAME_FTTC)
+    }
+
+    const mtime = Index.getLastCacheModified(CACHE_FNAME_FTTC)
+
+    let filteredCombos = filterResults(allCombos, parsed);
+
+    if (filteredCombos.length == 0) {
+        const noCombosEmbed = new Discord.MessageEmbed().setTitle(titleNoCombos(parsed)).setColor(paleorange);
+
+        return interaction.editReply({ embeds: [noCombosEmbed] });
+    } else {
+        return await embedOneOrMultiplePages(interaction, parsed, filteredCombos, mtime);
+    }
+}
+                
+////////////////////////////////////////////////////////////
+// Parsing SlashCommand Input
+////////////////////////////////////////////////////////////
+
 function parseMap(interaction) {
     mapParser = new OrParser(
         new MapParser(),
@@ -219,69 +262,9 @@ function validateInput(interaction) {
     }
 }
 
-async function execute(interaction) {
-    const validationFailure =  validateInput(interaction);
-    if (validationFailure) {
-        return interaction.reply({
-            content: validationFailure,
-            ephemeral: true,
-        })
-    }
-
-    const parsed = parseAll(interaction).reduce(
-        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
-        new Parsed()
-    )
-
-    await interaction.deferReply()
-
-    const forceReload = interaction.options.getString('reload') ? true : false
-
-    let allCombos;
-    if (Index.hasCachedCombos(CACHE_FNAME_FTTC) && !forceReload) {
-        allCombos = await Index.fetchCachedCombos(CACHE_FNAME_FTTC)           
-    } else {
-        allCombos = await scrapeAllCombos();
-        Index.cacheCombos(allCombos, CACHE_FNAME_FTTC)
-    }
-
-    const mtime = Index.getLastCacheModified(CACHE_FNAME_FTTC)
-
-    let filteredCombos = filterResults(allCombos, parsed);
-
-    if (filteredCombos.length == 0) {
-        const noCombosEmbed = new Discord.MessageEmbed().setTitle(titleNoCombos(parsed)).setColor(paleorange);
-
-        return interaction.editReply({ embeds: [noCombosEmbed] });
-    } else {
-        return await embedOneOrMultiplePages(interaction, parsed, filteredCombos, mtime);
-    }
-    return true;
-}
-
-const FTTC_TOWER_ABBREVIATIONS = {
-    dart_monkey: 'drt',
-    boomerang_monkey: 'boo',
-    bomb_shooter: 'bmb',
-    tack_shooter: 'tac',
-    ice_monkey: 'ice',
-    glue_gunner: 'glu',
-    sniper_monkey: 'sni',
-    monkey_sub: 'sub',
-    monkey_buccaneer: 'buc',
-    monkey_ace: 'ace',
-    heli_pilot: 'hel',
-    mortar_monkey: 'mor',
-    dartling_gunner: 'dlg',
-    wizard_monkey: 'wiz',
-    super_monkey: 'sup',
-    ninja_monkey: 'nin',
-    alchemist: 'alc',
-    druid_monkey: 'dru',
-    spike_factory: 'spk',
-    monkey_village: 'vil',
-    engineer: 'eng'
-};
+////////////////////////////////////////////////////////////
+// Parsing Combos (when reloading)
+////////////////////////////////////////////////////////////
 
 function sheetFTTC() {
     return GoogleSheetsHelper.sheetByName(Btd6Index, 'fttc');
@@ -312,6 +295,24 @@ async function scrapeAllCombos() {
     }
 
     return combos;
+}
+
+function sectionHeader(mapRow, sheet) {
+    // Looks for "One|Two|...|Five|Six+ Towers"
+    headerRegex = new RegExp(`(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`, 'i');
+
+    // Check cell to see if it's a header indicating the number of towers
+    let candidateHeaderCell = sheet.getCellByA1(`${COLS['ONE'].MAP}${mapRow}`);
+
+    // Header rows take up 2 rows. If you check the bottom row, the data value is null.
+    if (candidateHeaderCell.value) {
+        const match = candidateHeaderCell.value.match(headerRegex);
+
+        // Get the column set from the number of towers string in the header cell
+        if (match) {
+            return match[1].toUpperCase();
+        }
+    }
 }
 
 async function getRowData(entryRow, colset) {
@@ -386,24 +387,6 @@ async function getRowAltData(entryRow, colset) {
         });
 }
 
-function sectionHeader(mapRow, sheet) {
-    // Looks for "One|Two|...|Five|Six+ Towers"
-    headerRegex = new RegExp(`(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`, 'i');
-
-    // Check cell to see if it's a header indicating the number of towers
-    let candidateHeaderCell = sheet.getCellByA1(`${COLS['ONE'].MAP}${mapRow}`);
-
-    // Header rows take up 2 rows. If you check the bottom row, the data value is null.
-    if (candidateHeaderCell.value) {
-        const match = candidateHeaderCell.value.match(headerRegex);
-
-        // Get the column set from the number of towers string in the header cell
-        if (match) {
-            return match[1].toUpperCase();
-        }
-    }
-}
-
 function filterResults(allCombos, parsed) {
     results = allCombos;
 
@@ -415,7 +398,7 @@ function filterResults(allCombos, parsed) {
 
     if (parsed.person) {
         results = results.filter((combo) => {
-            return combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person
+            return combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person.toLowerCase().split(' ').join('_')
         });
     }
 
@@ -433,6 +416,34 @@ function filterResults(allCombos, parsed) {
 function keepOnlyOG(parsed) {
     return parsed.natural_number && !parsed.person && !parsed.tower;
 }
+
+////////////////////////////////////////////////////////////
+// Display Combos
+////////////////////////////////////////////////////////////
+
+const FTTC_TOWER_ABBREVIATIONS = {
+    dart_monkey: 'drt',
+    boomerang_monkey: 'boo',
+    bomb_shooter: 'bmb',
+    tack_shooter: 'tac',
+    ice_monkey: 'ice',
+    glue_gunner: 'glu',
+    sniper_monkey: 'sni',
+    monkey_sub: 'sub',
+    monkey_buccaneer: 'buc',
+    monkey_ace: 'ace',
+    heli_pilot: 'hel',
+    mortar_monkey: 'mor',
+    dartling_gunner: 'dlg',
+    wizard_monkey: 'wiz',
+    super_monkey: 'sup',
+    ninja_monkey: 'nin',
+    alchemist: 'alc',
+    druid_monkey: 'dru',
+    spike_factory: 'spk',
+    monkey_village: 'vil',
+    engineer: 'eng'
+};
 
 async function embedOneOrMultiplePages(interaction, parsed, combos, mtime) {
     // Setup / Data consolidation

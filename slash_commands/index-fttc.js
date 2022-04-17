@@ -1,5 +1,4 @@
 const MapParser = require('../parser/map-parser');
-const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const NaturalNumberParser = require('../parser/natural-number-parser');
 const PersonParser = require('../parser/person-parser');
 const TowerParser = require('../parser/tower-parser');
@@ -177,15 +176,11 @@ async function execute(interaction) {
 ////////////////////////////////////////////////////////////
 
 function parseMap(interaction) {
-    mapParser = new OrParser(
-        new MapParser(),
-        new MapDifficultyParser(),
-    )
     const map = interaction.options.getString('map')
     if (map) {
         const canonicalMap = Aliases.getCanonicalForm(map)
         if (canonicalMap) {
-            return CommandParser.parse([canonicalMap], mapParser)
+            return CommandParser.parse([canonicalMap], new MapParser())
         } else {
             const parsed = new Parsed()
             parsed.addError('Canonical not found')
@@ -236,7 +231,7 @@ function validateInput(interaction) {
     let [parsedMap, parsedTower1, parsedTower2, parsedNumTowerTypes, _,] = parseAll(interaction)
 
     if (parsedMap.hasErrors()) {
-        return `Map/Difficulty not valid`
+        return `Map not valid`
     }
 
     if (parsedTower1.hasErrors()) {
@@ -392,7 +387,9 @@ function filterResults(allCombos, parsed) {
 
     if (parsed.map) {
         results = results.filter((combo) => Aliases.toAliasNormalForm(combo.MAP) == parsed.map);
-    } else if (parsed.natural_number) {
+    }
+    
+    if (parsed.natural_number) {
         results = results.filter((combo) => combo.TOWERS.length === parsed.natural_number);
     }
 

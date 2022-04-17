@@ -249,8 +249,6 @@ async function execute(interaction) {
 
     let filteredCombos = filterResults(allCombos, parsed);
 
-    console.log(filteredCombos)
-
     if (filteredCombos.length == 0) {
         const noCombosEmbed = new Discord.MessageEmbed().setTitle(titleNoCombos(parsed)).setColor(paleorange);
 
@@ -467,7 +465,7 @@ async function embedOneOrMultiplePages(interaction, parsed, combos, mtime) {
                 );
                 const colValues = boldedAbbreviatedTowers.map((comboTowers, i) => {
                     let value = comboTowers.join(' | ');
-                    if (combos[i].OG && !keepOnlyOG(parsed) && !parsed.towers) {
+                    if (combos[i].OG && !parsed.towers) {
                         value = `**${value}**`;
                     }
                     return value;
@@ -476,7 +474,7 @@ async function embedOneOrMultiplePages(interaction, parsed, combos, mtime) {
             } else {
                 const colValues = combos.map((combo) => {
                     value = combo[col];
-                    if (combo.OG && !keepOnlyOG(parsed)) {
+                    if (combo.OG) {
                         value = `**${value}**`;
                     }
                     return value;
@@ -551,15 +549,13 @@ async function displayOneOrMultiplePages(
                 );
             }
 
-            if (!keepOnlyOG(parsed)) {
-                if (numOGCompletions == 1) {
-                    challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
-                }
-                if (numOGCompletions > 1) {
-                    challengeEmbed.setFooter({
-                        text: `---\n${numOGCompletions} OG completions bolded`
-                    });
-                }
+            if (numOGCompletions == 1) {
+                challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
+            }
+            if (numOGCompletions > 1) {
+                challengeEmbed.setFooter({
+                    text: `---\n${numOGCompletions} OG completions bolded`
+                });
             }
 
             if (discordHelper.isValidFormBody(challengeEmbed)) return [challengeEmbed, numRows > maxNumRowsDisplayed];

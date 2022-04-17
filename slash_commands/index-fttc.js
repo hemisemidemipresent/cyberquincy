@@ -451,43 +451,47 @@ async function embedOneOrMultiplePages(interaction, parsed, combos, mtime) {
     if (displayCols.length === 4) {
         displayCols = displayCols.filter((col) => col != 'PERSON');
     }
-    const displayValues = displayCols.map((col) => {
-        if (col == 'TOWERS') {
-            const boldedAbbreviatedTowers = combos.map((combo) =>
-                combo[col].map((tower) => {
-                    if (tower) {
-                        const towerCanonical = Aliases.getCanonicalForm(tower);
-                        const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
-                        return parsed.towers && parsed.towers.includes(towerCanonical)
-                            ? `**${towerAbbreviation}**`
-                            : towerAbbreviation;
+    const colData = Object.fromEntries(
+        displayCols.map((col) => {
+            if (col == 'TOWERS') {
+                const boldedAbbreviatedTowers = combos.map((combo) =>
+                    combo[col].map((tower) => {
+                        if (tower) {
+                            const towerCanonical = Aliases.getCanonicalForm(tower);
+                            const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
+                            return parsed.towers && parsed.towers.includes(towerCanonical)
+                                ? `**${towerAbbreviation}**`
+                                : towerAbbreviation;
+                        }
+                    })
+                );
+                const colValues = boldedAbbreviatedTowers.map((comboTowers, i) => {
+                    let value = comboTowers.join(' | ');
+                    if (combos[i].OG && !keepOnlyOG(parsed) && !parsed.towers) {
+                        value = `**${value}**`;
                     }
-                })
-            );
-            return boldedAbbreviatedTowers.map((comboTowers, i) => {
-                let value = comboTowers.join(' | ');
-                if (combos[i].OG && !keepOnlyOG(parsed) && !parsed.towers) {
-                    value = `**${value}**`;
-                }
-                return value;
-            });
-        } else {
-            return combos.map((combo) => {
-                value = combo[col];
-                if (combo.OG && !keepOnlyOG(parsed)) {
-                    value = `**${value}**`;
-                }
-                return value;
-            });
-        }
-    });
+                    return value;
+                });
+                return [col, colValues]
+            } else {
+                const colValues = combos.map((combo) => {
+                    value = combo[col];
+                    if (combo.OG && !keepOnlyOG(parsed)) {
+                        value = `**${value}**`;
+                    }
+                    return value;
+                });
+                return [col, colValues]
+            }
+        })
+    );
     const numOGCompletions = combos.filter((combo) => combo.OG).length;
 
     return await displayOneOrMultiplePages(
         interaction, 
         parsed, 
         combos, 
-        displayValues, 
+        colData, 
         numOGCompletions, 
         mtime
     )
@@ -547,7 +551,7 @@ async function displayOneOrMultiplePages(
                 );
             }
 
-            if (keepOnlyOG(parsed)) {
+            if (!keepOnlyOG(parsed)) {
                 if (numOGCompletions == 1) {
                     challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
                 }

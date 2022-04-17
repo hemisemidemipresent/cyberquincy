@@ -12,6 +12,9 @@ const GoogleSheetsHelper = require('../helpers/google-sheets');
 
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
+const discordHelper = require('../helpers/discord.js');
+
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 const { paleorange } = require('../jsons/colours.json');
 
@@ -253,7 +256,7 @@ async function execute(interaction) {
 
         return interaction.editReply({ embeds: [noCombosEmbed] });
     } else {
-        displayOneOrMultiplePages(interaction, parsed, filteredCombos, mtime);
+        return await embedOneOrMultiplePages(interaction, parsed, filteredCombos, mtime);
     }
     return true;
 }
@@ -369,7 +372,7 @@ async function getRowAltData(entryRow, colset) {
     notes = mapCell.note;
     if (!notes) return null;
 
-    q = notes
+    return notes
         .trim()
         .split('\n')
         .map((entry) => {
@@ -383,12 +386,6 @@ async function getRowAltData(entryRow, colset) {
                 OG: false
             };
         });
-    
-    if (entryRow == 26) {
-        console.log(notes.trim())
-    }
-
-    return q;
 }
 
 function sectionHeader(mapRow, sheet) {
@@ -439,7 +436,7 @@ function keepOnlyOG(parsed) {
     return parsed.natural_number && !parsed.person && !parsed.tower;
 }
 
-async function displayOneOrMultiplePages(interaction, parsed, combos, mtime) {
+async function embedOneOrMultiplePages(interaction, parsed, combos, mtime) {
     // Setup / Data consolidation
     let displayCols = ['TOWERS', 'MAP', 'PERSON', 'LINK'];
 
@@ -486,92 +483,155 @@ async function displayOneOrMultiplePages(interaction, parsed, combos, mtime) {
     });
     const numOGCompletions = combos.filter((combo) => combo.OG).length;
 
-    // Begin React-Loop
-    REACTIONS = ['⬅️', '➡️'];
-    MAX_NUM_ROWS = 15;
-    const numRows = combos.length;
-    let leftIndex = 0;
-    let rightIndex = Math.min(MAX_NUM_ROWS, numRows) - 1;
+    return await displayOneOrMultiplePages(
+        interaction, 
+        parsed, 
+        combos, 
+        displayValues, 
+        numOGCompletions, 
+        mtime
+    )
+}
 
-    async function displayPages(direction = 1) {
+const multipageButtons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY')
+);
+
+async function displayOneOrMultiplePages(
+    interaction,
+    parsed,
+    combos,
+    colData,
+    numOGCompletions,
+    mtime
+) {
+    MAX_NUM_ROWS = 15;
+    const numRows = colData[Object.keys(colData)[0]].length;
+    let leftIndex = 0;
+    let rightIndex = Math.min(MAX_NUM_ROWS - 1, numRows - 1);
+
+    /**
+     * creates embed for next page
+     * @param {int} direction
+     * @returns {MessageEmbed}
+     */
+    async function createPage(direction = 1) {
         // The number of rows to be displayed is variable depending on the characters in each link
         // Try 15 and decrement every time it doesn't work.
-        for (maxNumRowsDisplayed = MAX_NUM_ROWS; maxNumRowsDisplayed > 0; maxNumRowsDisplayed--) {
-            let challengeEmbed = new Discord.MessageEmbed().setTitle(title(parsed, combos)).setColor(paleorange);
+        for (
+            maxNumRowsDisplayed = MAX_NUM_ROWS;
+            maxNumRowsDisplayed > 0;
+            maxNumRowsDisplayed--
+        ) {
+            let challengeEmbed = new Discord.MessageEmbed()
+                .setTitle(embedTitle(parsed, combos))
+                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
+                .setColor(paleorange);
 
-            challengeEmbed.addField('# Combos', `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`);
+            challengeEmbed.addField(
+                '# Combos',
+                `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
+            );
 
-            for (var c = 0; c < displayCols.length; c++) {
+            for (header in colData) {
+                const data =
+                    numRows <= maxNumRowsDisplayed
+                        ? colData[header]
+                        : colData[header].slice(leftIndex, rightIndex + 1);
+
                 challengeEmbed.addField(
-                    gHelper.toTitleCase(displayCols[c]),
-                    displayValues[c].slice(leftIndex, rightIndex + 1).join('\n'),
+                    gHelper.toTitleCase(header.split('_').join(' ')),
+                    data.join('\n'),
                     true
                 );
             }
 
             if (keepOnlyOG(parsed)) {
-                challengeEmbed.setFooter({ text: `---\nNon-OG completions excluded` });
-            } else {
                 if (numOGCompletions == 1) {
                     challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
                 }
                 if (numOGCompletions > 1) {
-                    challengeEmbed.setFooter({ text: `---\n${numOGCompletions} OG completions bolded` });
+                    challengeEmbed.setFooter({
+                        text: `---\n${numOGCompletions} OG completions bolded`
+                    });
                 }
             }
 
-            try {
-                let msg = await userQueryMessage.channel.send({
-                    embeds: [challengeEmbed]
-                });
-                if (maxNumRowsDisplayed < numRows) {
-                    return await reactLoop(msg);
-                }
-                return msg;
-            } catch (e) {} // Retry by decrementing maxNumRowsDisplayed
+            if (discordHelper.isValidFormBody(challengeEmbed)) return [challengeEmbed, numRows > maxNumRowsDisplayed];
 
             if (direction > 0) rightIndex--;
             if (direction < 0) leftIndex++;
         }
     }
 
+    async function displayPages(direction = 1) {
+        let [embed, multipage] = await createPage(direction);
+
+        await interaction.editReply({
+            embeds: [embed],
+            components: multipage ? [multipageButtons] : [],
+        });
+
+        if (!multipage) return;
+
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        };
+
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: 'BUTTON',
+            time: 20000
+        });
+
+        collector.on('collect', async (buttonInteraction) => {
+            collector.stop();
+            buttonInteraction.deferUpdate();
+
+            switch (parseInt(buttonInteraction.customId)) {
+                case -1:
+                    rightIndex = (leftIndex - 1 + numRows) % numRows;
+                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                    if (leftIndex < 0) leftIndex = 0;
+                    await displayPages(-1);
+                    break;
+                case 1:
+                    leftIndex = (rightIndex + 1) % numRows;
+                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                    if (rightIndex >= numRows) rightIndex = numRows - 1;
+                    await displayPages(1);
+                    break;
+            }
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size == 0) {
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
+            }
+        });
+    }
+
     // Gets the reaction to the pagination message by the command author
     // and respond by turning the page in the correction direction
-    async function reactLoop(botMessage) {
-        // Lays out predefined reactions
-        for (var i = 0; i < REACTIONS.length; i++) {
-            botMessage.react(REACTIONS[i]);
-        }
 
-        // Read author reaction (time limit specified below in milliseconds)
-        // and respond with appropriate action
-        const filter = (reaction, user) => user.id === userQueryMessage.author.id && REACTIONS.includes(reaction.emoji.name);
-        botMessage
-            .createReactionCollector({
-                filter,
-                time: 20000
-            })
-            .once('collect', async (reaction) => {
-                switch (reaction.emoji.name) {
-                    case '⬅️':
-                        rightIndex = (leftIndex - 1 + numRows) % numRows;
-                        leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                        if (leftIndex < 0) leftIndex = 0;
-                        await displayPages(-1);
-                        break;
-                    case '➡️':
-                        leftIndex = (rightIndex + 1) % numRows;
-                        rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                        if (rightIndex >= numRows) rightIndex = numRows - 1;
-                        await displayPages(1);
-                        break;
-                }
-            });
-    }
     await displayPages(1);
 }
 
-function title(parsed, combos) {
+
+function embedTitle(parsed, combos) {
     t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';
     if (parsed.person) t += `by ${combos[0].PERSON} `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;

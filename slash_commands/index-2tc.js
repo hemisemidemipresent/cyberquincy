@@ -254,6 +254,14 @@ async function execute(interaction) {
     }
 }
 
+function isWaterEntityCombo(combo) {
+    return [1, 2].some(entityNum => {
+        const indexEntity = combo[`TOWER_${entityNum}`].NAME
+        const entity = Aliases.getCanonicalForm(Aliases.toAliasNormalForm(indexEntity))
+        return Towers.isWaterEntity(entity)
+    })
+}
+
 async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
     if (combos.length == 0) {
         return await interaction.editReply({
@@ -293,30 +301,17 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
             const ogMapAbbr = Aliases.mapToIndexAbbreviation(
                 Aliases.toAliasNormalForm(combo.MAP)
             );
-            const altMaps = allCompletedMaps.filter((map) => map != ogMapAbbr);
 
-            const mapGroups = [
-                Aliases.beginnerMaps(),
-                Aliases.intermediateMaps(),
-                Aliases.advancedMaps(),
-                Aliases.expertMaps(),
-            ].map(mapGroup =>
-                mapGroup.map(map => Aliases.mapToIndexAbbreviation(map))
-            );
-
-            const altMapGroups = mapGroups.map(mapGroup =>
-                mapGroup.filter(map => altMaps.includes(map))
-            );
-
-            if (altMapGroups.some((group) => group.length > 0)) {
-                let altMapsString = '';
-                altMapsString += `\n${altMapGroups[0].join(', ')}`;
-                altMapsString += `\n${altMapGroups[1].join(', ')}`;
-                altMapsString += `\n${altMapGroups[2].join(', ')}`;
-                altMapsString += `\n${altMapGroups[3].join(', ')}`;
-                challengeEmbed.addField('**Alt Maps**', altMapsString);
-            } else {
-                challengeEmbed.addField('**Alt Maps**', 'None');
+            let completedAltMapsFields = Index.altMapsField(
+                ogMapAbbr,
+                allCompletedMaps,
+                isWaterEntityCombo(combos[0])
+            )
+        
+            challengeEmbed.addField('**Alt Maps**', completedAltMapsFields.field)
+        
+            if (completedAltMapsFields.footer) {
+                challengeEmbed.setFooter({ text: completedAltMapsFields.footer });
             }
         }
 

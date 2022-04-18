@@ -72,8 +72,8 @@ function parseMapNotes(notes) {
 // Formatting 
 //////////////////////////////////////////////////////
 
-function altMapsField(ogMap, allCompletedMaps, isWaterEntity) {
-    const completedAltMaps = allCompletedMaps.filter(m => m != ogMap);
+function altMapsField(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
+    const completedAltMaps = allCompletedMapAbbrs.filter(m => m != ogMapAbbr);
 
     let mapDifficultyGroups = [
         Aliases.beginnerMaps(),
@@ -94,7 +94,7 @@ function altMapsField(ogMap, allCompletedMaps, isWaterEntity) {
         mapGroup.filter((map) => completedAltMaps.includes(map))
     );
     const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => !completedAltMaps.concat(ogMap).includes(map))
+        mapGroup.filter((map) => !completedAltMaps.concat(ogMapAbbr).includes(map))
     );
 
     let wordAllIncluded = false

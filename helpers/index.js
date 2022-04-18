@@ -4,6 +4,7 @@
 
 const fs = require('fs')
 const resolve = require('path').resolve;
+const gHelper = require('../helpers/general')
 
 DIR1 = 'cache'
 DIR2 = 'index'
@@ -67,6 +68,74 @@ function parseMapNotes(notes) {
     );
 }
 
+//////////////////////////////////////////////////////
+// Formatting 
+//////////////////////////////////////////////////////
+
+function altMapsField(ogMap, allCompletedMaps, isWaterEntity) {
+    const completedAltMaps = allCompletedMaps.filter(m => m != ogMap);
+
+    let mapDifficultyGroups = [
+        Aliases.beginnerMaps(),
+        Aliases.intermediateMaps(),
+        Aliases.advancedMaps(),
+        Aliases.expertMaps(),
+    ];
+    if (isWaterEntity) {
+        mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
+            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
+        );
+    }
+    mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
+        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+    );
+
+    const altMapGroups = mapDifficultyGroups.map((mapGroup) =>
+        mapGroup.filter((map) => completedAltMaps.includes(map))
+    );
+    const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
+        mapGroup.filter((map) => !completedAltMaps.concat(ogMap).includes(map))
+    );
+
+    let wordAllIncluded = false
+
+    const displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
+        mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
+        waterTowerAsterisk = isWaterEntity ? '*' : '';
+        if (unCompletedAltMapGroups[i] == 0) {
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk}`;
+        } else if (unCompletedAltMapGroups[i].length < 5) {
+            wordAllIncluded = true;
+            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[
+                i
+            ].join(', ')}}`;
+        } else if (altMapGroups[i].length == 0) {
+            return '';
+        } else {
+            return `{${altMapGroups[i].join(', ')}}`;
+        }
+    });
+    
+    let completedAltMapsString = '';
+    if (displayedMapGroups.some(group => group.length > 0)) {
+        completedAltMapsString += `\n${displayedMapGroups[0]}`;
+        completedAltMapsString += `\n${displayedMapGroups[1]}`;
+        completedAltMapsString += `\n${displayedMapGroups[2]}`;
+        completedAltMapsString += `\n${displayedMapGroups[3]}`;
+        completedAltMapsString;
+    } else {
+        completedAltMapsString = 'None';
+    }
+
+    completedAltMapsFooter = isWaterEntity && wordAllIncluded ? '*with water' : null
+
+    return {
+        field: completedAltMapsString,
+        footer: completedAltMapsFooter
+    }
+}
+
 module.exports = {
     hasCachedCombos,
     fetchCachedCombos,
@@ -74,4 +143,6 @@ module.exports = {
     getLastCacheModified,
 
     parseMapNotes,
+
+    altMapsField,
 }

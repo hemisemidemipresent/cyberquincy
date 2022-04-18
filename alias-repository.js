@@ -318,6 +318,7 @@ class AliasRepository extends Array {
     // TODO: rewrite this involving the q!map command results rather than hardcoding it
     allNonWaterMaps() {
         return [
+            'SY',
             'TS',
             'H',
             'AR',

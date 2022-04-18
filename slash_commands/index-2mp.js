@@ -339,7 +339,7 @@ function embed2MPOG(combo) {
     challengeEmbed.addField('OG?', 'OG', true);
 
     const ogMapAbbr = ogCombo(combo)[0]
-    let completedAltMapsFields = Index.altMapsField(
+    let completedAltMapsFields = Index.altMapsFields(
         ogMapAbbr,
         Object.keys(combo.MAPS),
         isWaterEntityCombo(combo)

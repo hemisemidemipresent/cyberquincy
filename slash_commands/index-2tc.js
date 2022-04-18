@@ -302,7 +302,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
                 Aliases.toAliasNormalForm(combo.MAP)
             );
 
-            let completedAltMapsFields = Index.altMapsField(
+            let completedAltMapsFields = Index.altMapsFields(
                 ogMapAbbr,
                 allCompletedMaps,
                 isWaterEntityCombo(combos[0])

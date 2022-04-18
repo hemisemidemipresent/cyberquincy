@@ -72,7 +72,7 @@ function parseMapNotes(notes) {
 // Formatting 
 //////////////////////////////////////////////////////
 
-function altMapsField(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
+function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
     const completedAltMaps = allCompletedMapAbbrs.filter(m => m != ogMapAbbr);
 
     let mapDifficultyGroups = [
@@ -144,5 +144,5 @@ module.exports = {
 
     parseMapNotes,
 
-    altMapsField,
+    altMapsFields,
 }

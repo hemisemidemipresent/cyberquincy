@@ -375,35 +375,6 @@ function ogCombo(combo) {
     });
 }
 
-function altMapDifficultyGroups(combo) {
-    const ogMap = ogCombo(combo)[0]
-    const completedAltMaps = Object.keys(combo.MAPS).filter(m => m != ogMap);
-
-    let mapDifficultyGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps(),
-    ];
-    if (isWaterEntityCombo(combo)) {
-        mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
-        );
-    }
-    mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
-    );
-
-    const altMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => completedAltMaps.includes(map))
-    );
-    const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => !completedAltMaps.concat(ogMap).includes(map))
-    );
-
-    return [altMapGroups, unCompletedAltMapGroups]
-}
-
 ////////////////////////////////////////////////////////////
 // 2MP Alt Map
 ////////////////////////////////////////////////////////////

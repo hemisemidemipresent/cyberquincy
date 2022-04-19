@@ -8,6 +8,7 @@ const TowerParser = require('../parser/tower-parser');
 const HeroParser = require('../parser/hero-parser.js');
 
 const MapParser = require('../parser/map-parser.js');
+const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const PersonParser = require('../parser/person-parser');
 
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
@@ -39,13 +40,6 @@ const OG_COLS = {
     CURRENT: 'P',
 };
 
-const ALT_COLS = {
-    NUMBER: 'R',
-    MAP: 'S',
-    PERSON: 'U',
-    LINK: 'W',
-};
-
 CACHE_FNAME_2TC = '2tc.json'
 
 const { 
@@ -69,7 +63,7 @@ const entity2Option =
 const mapOption = 
     new SlashCommandStringOption()
         .setName('map')
-        .setDescription('Map')
+        .setDescription('Map/Difficulty')
         .setRequired(false);
 
 const personOption = 
@@ -130,11 +124,15 @@ function parseEntity(interaction, num) {
 }
 
 function parseMap(interaction) {
+    mapParser = new OrParser(
+        new MapParser(),
+        new MapDifficultyParser(),
+    )
     const map = interaction.options.getString('map')
     if (map) {
         const canonicalMap = Aliases.getCanonicalForm(map)
         if (canonicalMap) {
-            return CommandParser.parse([canonicalMap], new MapParser())
+            return CommandParser.parse([canonicalMap], mapParser)
         } else {
             const parsed = new Parsed()
             parsed.addError('Canonical not found')
@@ -187,7 +185,7 @@ function validateInput(interaction) {
     }
 
     if (parsedMap.hasErrors()) {
-        return `Map not valid`
+        return `Map/Difficulty not valid`
     }
 
     if (parsedVersion.hasErrors()) {
@@ -274,7 +272,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
         });
     }
 
-    if (combos.length == 1) {
+    if (combos.length == 1 && Object.keys(combos[0].MAPS).length == 1) {
         let challengeEmbed = new Discord.MessageEmbed()
             .setTitle(embedTitle(parsed, combos))
             .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
@@ -347,7 +345,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
                         key = `TOWER_${otherTowerNum}`;
                     }
 
-                    const bold = combo.OG && !excludeOG(parsed) ? '**' : '';
+                    const bold = combo.OG && !includeOnlyOG(parsed) ? '**' : '';
 
                     colData[fieldHeader].push(`${bold}${combo[key]}${bold}`);
                 }
@@ -421,7 +419,7 @@ async function displayOneOrMultiplePages(
                 );
             }
 
-            if (!excludeOG(parsed)) {
+            if (!includeOnlyOG(parsed)) {
                 if (numOGCompletions == 1) {
                     challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
                 }
@@ -516,6 +514,14 @@ function getDisplayCols(parsed) {
         } else {
             return ['TOWER_1', 'TOWER_2', 'MAP'];
         }
+    } else if (parsed.map_difficulty) {
+        if (definiteTowers.length == 2 || parsed.natural_number) {
+            return ['PERSON', 'MAP', 'LINK'];
+        } if (definiteTowers.length == 1) {
+            return ['UNSPECIFIED_TOWER', 'MAP', 'LINK'];
+        } else {
+            return ['NUMBER', 'MAP', 'LINK'];
+        }
     } else if (definiteTowers.length == 2) {
         return ['NUMBER', 'PERSON', 'LINK'];
     } else if (parsed.tower_upgrade || parsed.hero) {
@@ -595,6 +601,7 @@ function embedTitle(parsed, combos) {
     else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
     if (parsed.person) title += `by ${sampleCombo.MAPS[sampleMap].PERSON} `;
     if (parsed.map) title += `on ${Aliases.indexMapAbbreviationToNormalForm(parsed.map)} `;
+    if (parsed.map_difficulty) title += `on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} Maps `
     for (var i = 0; i < towers.length; i++) {
         const tower = towers[i];
         if (i == 0) title += 'with ';
@@ -611,6 +618,7 @@ function embedTitleNoCombos(parsed) {
     let title = 'No Combos found ';
     if (parsed.person) title += `by "${parsed.person}" `;
     if (parsed.map) title += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
+    if (parsed.map_difficulty) title += `on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} Maps `;
     for (var i = 0; i < towers.length; i++) {
         tower = towers[i];
         if (i == 0) title += 'with ';
@@ -674,15 +682,23 @@ function filterCombos(filteredCombos, parsed) {
     }
 
     if (parsed.map) {
-        mapAbbr = Aliases.mapToIndexAbbreviation(parsed.map)
+        const mapAbbr = Aliases.mapToIndexAbbreviation(parsed.map)
         function mapFilter(map, _) {
             return map == mapAbbr;
         }
         filteredCombos = filterByCompletion(mapFilter, filteredCombos);
     }
 
+    if (parsed.map_difficulty) {
+        function mapDifficultyFilter(map, _) {
+            const mapCanonical = Aliases.toAliasNormalForm(Aliases.getCanonicalForm(map))
+            return Aliases.allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical)
+        }
+        filteredCombos = filterByCompletion(mapDifficultyFilter, filteredCombos)
+    }
+
     // Unless searching by map or person, the command user wants OG completions and not alt map spam
-    if (excludeOG(parsed)) {
+    if (includeOnlyOG(parsed)) {
         function ogFilter(_, completion) {
             return completion.OG;
         }
@@ -691,8 +707,8 @@ function filterCombos(filteredCombos, parsed) {
     return filteredCombos;
 }
 
-function excludeOG(parsed) {
-    return parsed.version || (!parsed.person && !parsed.map);
+function includeOnlyOG(parsed) {
+    return parsed.version || (!parsed.person && !parsed.map && !parsed.map_difficulty);
 }
 
 function parseProvidedDefinedTowers(parsed) {

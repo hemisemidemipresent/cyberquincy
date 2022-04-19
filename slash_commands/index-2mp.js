@@ -338,40 +338,17 @@ function embed2MPOG(combo) {
 
     challengeEmbed.addField('OG?', 'OG', true);
 
-    let [altMapGroups, unCompletedAltMapGroups] = altMapDifficultyGroups(combo)
-    let wordAllIncluded = false
+    const ogMapAbbr = ogCombo(combo)[0]
+    let completedAltMapsFields = Index.altMapsFields(
+        ogMapAbbr,
+        Object.keys(combo.MAPS),
+        isWaterEntityCombo(combo)
+    )
 
-    const displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
-        mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
-        waterTowerAsterisk = isWaterEntityCombo(combo) ? '*' : '';
-        if (unCompletedAltMapGroups[i] == 0) {
-            wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk}`;
-        } else if (unCompletedAltMapGroups[i].length < 5) {
-            wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[
-                i
-            ].join(', ')}}`;
-        } else if (altMapGroups[i].length == 0) {
-            return '';
-        } else {
-            return `{${altMapGroups[i].join(', ')}}`;
-        }
-    });
+    challengeEmbed.addField('**Alt Maps**', completedAltMapsFields.field)
 
-    if (displayedMapGroups.some(group => group.length > 0)) {
-        completedAltMapsString = '';
-        completedAltMapsString += `\n${displayedMapGroups[0]}`;
-        completedAltMapsString += `\n${displayedMapGroups[1]}`;
-        completedAltMapsString += `\n${displayedMapGroups[2]}`;
-        completedAltMapsString += `\n${displayedMapGroups[3]}`;
-        challengeEmbed.addField('**Alt Maps**', completedAltMapsString);
-    } else {
-        challengeEmbed.addField('**Alt Maps**', 'None');
-    }
-
-    if (isWaterEntityCombo(combo) && wordAllIncluded) {
-        challengeEmbed.setFooter({ text: '*with water' });
+    if (completedAltMapsFields.footer) {
+        challengeEmbed.setFooter({ text: completedAltMapsFields.footer });
     }
 
     return challengeEmbed;

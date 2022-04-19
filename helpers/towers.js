@@ -249,6 +249,7 @@ function isValidTempleSet(str) {
     if (upgrades[3] > 2) return false; // stuff like 3300 gets thrown out
     return true;
 }
+
 function formatEntity(entity) {
     if (isTower(entity)) {
         return towerUpgradeToIndexNormalForm(entity);
@@ -259,6 +260,20 @@ function formatEntity(entity) {
         return towerUpgradeToIndexNormalForm(entity);
     } else if (Aliases.isHero(entity)) {
         return gHelper.toTitleCase(entity);
+    } else {
+        throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
+    }
+}
+
+function getEntityType(entity) {
+    if (isTower(entity)) {
+        return 'TOWER';
+    } else if (isTowerPath(entity)) {
+        return 'TOWER_PATH'
+    } else if (isTowerUpgrade(entity)) {
+        return 'TOWER_UPGRADE';
+    } else if (Aliases.isHero(entity)) {
+        return 'HERO';
     } else {
         throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
     }
@@ -355,6 +370,7 @@ module.exports = {
     isValidUpgradeSet,
     isValidTempleSet,
     formatEntity,
+    getEntityType,
     totalTowerUpgradeCrosspathCost,
     totalTowerUpgradeCrosspathCostHard,
     totalTowerUpgradeCrosspathCostMult,

@@ -341,9 +341,13 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
                     let key = fieldHeader;
 
                     if (fieldHeader === 'UNSPECIFIED_TOWER') {
-                        providedTower = parseProvidedDefinedTowers(parsed)[0];
-                        towerNum = towerMatch(combos[i], providedTower);
-                        otherTowerNum = 3 - towerNum;
+                        const providedEntity = parseProvidedDefinedEntities(parsed)[0];
+                        const entity = {
+                            NAME: providedEntity,
+                            TYPE: Towers.getEntityType(providedEntity),
+                        }
+                        const towerNum = entityMatch(combos[i], entity);
+                        const otherTowerNum = 3 - towerNum;
                         key = `TOWER_${otherTowerNum}`;
                     }
 
@@ -505,7 +509,7 @@ async function displayOneOrMultiplePages(
 }
 
 function getDisplayCols(parsed) {
-    definiteTowers = parseProvidedDefinedTowers(parsed);
+    definiteTowers = parseProvidedDefinedEntities(parsed);
     if (parsed.person) {
         if (definiteTowers.length == 2) {
             return ['NUMBER', 'MAP', 'LINK'];
@@ -586,7 +590,7 @@ function embedTitle(parsed, combos) {
     const multipleCombos =
         combos.length > 1 || Object.keys(combos[0].MAPS).length > 1;
 
-    const towers = parsedProvidedTowers(parsed);
+    const towers = parsedProvidedEntities(parsed);
     const sampleMap = Object.keys(sampleCombo.MAPS)[0];
 
     let title = '';
@@ -606,7 +610,7 @@ function embedTitle(parsed, combos) {
 }
 
 function embedTitleNoCombos(parsed) {
-    const towers = parsedProvidedTowers(parsed);
+    const towers = parsedProvidedEntities(parsed);
 
     let title = 'No Combos found ';
     if (parsed.person) title += `by "${parsed.person}" `;
@@ -641,13 +645,23 @@ function filterCombos(filteredCombos, parsed) {
             );
         }
 
-        const providedTowers = parsedProvidedTowers(parsed);
+        const providedEntities = parsedProvidedEntities(parsed);
+
+        const entity1 = {
+            NAME: providedEntities[0],
+            TYPE: Towers.getEntityType(providedEntities[0])
+        }
+
+        const entity2 = providedEntities[1] ? {
+            NAME: providedEntities[1],
+            TYPE: Towers.getEntityType(providedEntities[1])
+        } : null
 
         filteredCombos = filteredCombos.filter((combo) => {
-            towerNum = towerMatch(combo, providedTowers[0]);
-            if (!providedTowers[1]) return towerNum != 0; // If only 1 tower-query, return true for the combo if there was a tower match
+            towerNum = entityMatch(combo, entity1);
+            if (!entity2) return towerNum != 0; // If only 1 tower-query, return true for the combo if there was a tower match
 
-            otherTowerNum = towerMatch(combo, providedTowers[1], towerNum);
+            otherTowerNum = entityMatch(combo, entity2, towerNum);
             return towerNum + otherTowerNum == 3; // Ensure that one tower matched to tower 1, other matched to tower 2
             // Note that failed matches return 0
         });
@@ -695,14 +709,14 @@ function excludeOG(parsed) {
     return parsed.version || (!parsed.person && !parsed.map);
 }
 
-function parseProvidedDefinedTowers(parsed) {
+function parseProvidedDefinedEntities(parsed) {
     return []
         .concat(parsed.tower_upgrades)
         .concat(parsed.heroes)
         .filter((el) => el); // Remove null items
 }
 
-function parsedProvidedTowers(parsed) {
+function parsedProvidedEntities(parsed) {
     return []
         .concat(parsed.tower_upgrades)
         .concat(parsed.tower_paths)
@@ -725,14 +739,14 @@ function filterByCompletion(filter, combos) {
     return combos;
 }
 
-function towerMatch(combo, tower, excludeMatch) {
+function entityMatch(combo, entity, excludeMatch) {
     let comboTowers = [combo.TOWER_1, combo.TOWER_2];
     // If a match was previously made, we don't want to match to it again
     // This is to deal with `/2tc wiz wiz#bot` for necromancer wlp
     if (excludeMatch) {
         comboTowers[excludeMatch - 1] = null
     }
-    if (Towers.isTower(tower)) {
+    if (entity.TYPE == 'TOWER') {
         return (
             comboTowers
                 .map((t) => {
@@ -740,9 +754,9 @@ function towerMatch(combo, tower, excludeMatch) {
                     towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
                     return Towers.towerUpgradeToTower(towerUpgrade);
                 })
-                .indexOf(tower) + 1
+                .indexOf(entity.NAME) + 1
         );
-    } else if (Towers.isTowerUpgrade(tower)) {
+    } else if (entity.TYPE == 'TOWER_UPGRADE') {
         return (
             comboTowers
                 .map((t) => {
@@ -750,18 +764,18 @@ function towerMatch(combo, tower, excludeMatch) {
                     towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
                     return Aliases.getCanonicalForm(towerUpgrade);
                 })
-                .indexOf(tower) + 1
+                .indexOf(entity.NAME) + 1
         );
-    } else if (Aliases.isHero(tower)) {
+    } else if (entity.TYPE == 'HERO') {
         return (
             comboTowers
                 .map((t) => {
                     if (!t) return null;
                     return t.NAME.toLowerCase();
                 })
-                .indexOf(tower) + 1
+                .indexOf(entity.NAME) + 1
         );
-    } else if (Towers.isTowerPath(tower)) {
+    } else if (entity.TYPE == 'TOWER_PATH') {
         return (
             comboTowers
                 .map((t) => {
@@ -779,7 +793,7 @@ function towerMatch(combo, tower, excludeMatch) {
                     towerBase = Towers.towerUpgradeToTower(towerUpgrade);
                     return `${towerBase}#${path}-path`;
                 })
-                .indexOf(tower) + 1
+                .indexOf(entity.NAME) + 1
         );
     } else {
         throw `Somehow received tower that is not in any of [tower, tower_upgrade, tower_path, hero]`;

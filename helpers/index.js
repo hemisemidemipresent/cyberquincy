@@ -36,13 +36,36 @@ function cacheCombos(combos, fname) {
     })
 }
 
-function getLastCacheModified(fname) {
-    return fs.statSync(resolve(DIR1, DIR2, fname)).mtime
+function getLastCacheModified(challenge) {
+    return fs.statSync(resolve(DIR1, DIR2, `${challenge}.json`)).mtime
 }
 
 //////////////////////////////////////////////////////
 // Parsing 
 //////////////////////////////////////////////////////
+
+async function fetchCombos(challenge, reload=false) {
+    cacheFname = `${challenge}.json`
+    let allCombos;
+    if (hasCachedCombos(cacheFname) && !reload) {
+        allCombos = await fetchCachedCombos(cacheFname)
+    } else {
+        allCombos = await scrapeAllCombos(challenge)
+        cacheCombos(allCombos, cacheFname)
+    }
+    return allCombos
+}
+
+const scraper2TC = require('../services/index/2tc_scraper.js')
+
+async function scrapeAllCombos(challenge) {
+    switch(challenge) {
+        case '2tc':
+            return await scraper2TC.scrapeAllCombos();
+        default:
+            throw 'Challenge not found'
+    }
+}
 
 // Parses the map notes by splitting on comma and colon to get the map+person+link
 function parseMapNotes(notes) {
@@ -143,6 +166,7 @@ module.exports = {
     getLastCacheModified,
 
     parseMapNotes,
+    fetchCombos,
 
     altMapsFields,
 }

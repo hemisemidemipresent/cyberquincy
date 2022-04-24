@@ -18,7 +18,7 @@ function sheet2TC() {
     return GoogleSheetsHelper.sheetByName(Btd6Index, '2tc');
 }
 
-async function scrapeAllCombos() {
+async function scrapeAll2TCCombos() {
     const sheet = sheet2TC();
 
     const nCombos = await numCombos();
@@ -137,6 +137,6 @@ function parseMapCompletions(row) {
 }
 
 module.exports = { 
-    scrapeAllCombos,
+    scrapeAll2TCCombos,
     OG_COLS,
 }

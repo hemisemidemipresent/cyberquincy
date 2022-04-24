@@ -57,11 +57,14 @@ async function fetchCombos(challenge, reload=false) {
 }
 
 const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js')
+const { scrapeAll2MPCompletions } = require('../services/index/2mp_scraper.js')
 
 async function scrapeAllCombos(challenge) {
     switch(challenge) {
         case '2tc':
             return await scrapeAll2TCCombos();
+        case '2mp':
+            return await scrapeAll2MPCompletions();
         default:
             throw 'Challenge not found'
     }

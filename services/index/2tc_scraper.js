@@ -1,7 +1,7 @@
 const GoogleSheetsHelper = require('../../helpers/google-sheets.js');
 const gHelper = require('../../helpers/general.js');
 
-const OG_COLS = {
+const COLS = {
     NUMBER: 'B',
     TOWER_1: 'C',
     TOWER_2: 'E',
@@ -24,7 +24,7 @@ async function scrapeAll2TCCombos() {
     const nCombos = await numCombos();
     const rOffset = await findOGRowOffset();
     await sheet.loadCells(
-        `${OG_COLS.NUMBER}${rOffset + 1}:${OG_COLS.CURRENT}${rOffset + nCombos}`
+        `${COLS.NUMBER}${rOffset + 1}:${COLS.CURRENT}${rOffset + nCombos}`
     );
 
     let combos = [];
@@ -52,9 +52,9 @@ function parsePreloadedRow(row) {
 
     // Assign each value to be discord-embedded in a simple default way
     let values = {};
-    const ogSpecificCols = Object.keys(OG_COLS).filter(col => !['PERSON', 'MAP', 'LINK'].includes(col))
+    const ogSpecificCols = Object.keys(COLS).filter(col => !['PERSON', 'MAP', 'LINK'].includes(col))
     for (key of ogSpecificCols) {
-        values[key] = sheet.getCellByA1(`${OG_COLS[key]}${row}`).value;
+        values[key] = sheet.getCellByA1(`${COLS[key]}${row}`).value;
     }
 
     const upgrades = values.UPGRADES.split('|').map((u) =>
@@ -70,7 +70,7 @@ function parsePreloadedRow(row) {
     delete values.UPGRADES; // Don't display upgrades on their own, display with towers
 
     // Recapture date to format properly
-    values.DATE = sheet.getCellByA1(`${OG_COLS.DATE}${row}`).formattedValue;
+    values.DATE = sheet.getCellByA1(`${COLS.DATE}${row}`).formattedValue;
 
     // Replace checkmark that doesn't display in embedded with one that does
     if (values.CURRENT === gHelper.HEAVY_CHECK_MARK) {
@@ -91,7 +91,7 @@ async function findOGRowOffset() {
     const MAX_OFFSET = 20;
 
     await sheet.loadCells(
-        `${OG_COLS.NUMBER}${MIN_OFFSET}:${OG_COLS.NUMBER}${MAX_OFFSET}`
+        `${COLS.NUMBER}${MIN_OFFSET}:${COLS.NUMBER}${MAX_OFFSET}`
     );
 
     for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
@@ -111,7 +111,7 @@ function parseMapCompletions(row) {
 
     const ogCells = Object.fromEntries(
         ['MAP', 'PERSON', 'LINK'].map(col => {
-            return [col, sheet.getCellByA1(`${OG_COLS[col]}${row}`)]
+            return [col, sheet.getCellByA1(`${COLS[col]}${row}`)]
         }
     ))
 
@@ -138,5 +138,5 @@ function parseMapCompletions(row) {
 
 module.exports = { 
     scrapeAll2TCCombos,
-    OG_COLS,
+    COLS,
 }

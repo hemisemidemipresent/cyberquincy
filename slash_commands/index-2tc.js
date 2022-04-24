@@ -25,7 +25,7 @@ const Index = require('../helpers/index.js');
 const { orange, palered } = require('../jsons/colours.json');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
-const { OG_COLS } = require('../services/index/2tc_scraper');
+const { COLS } = require('../services/index/2tc_scraper');
 
 const { 
     SlashCommandBuilder, 
@@ -540,7 +540,7 @@ function stripCombo(combo, parsed) {
 }
 
 function orderCombo(combo) {
-    const ordering = Object.keys(OG_COLS).filter((v) => v !== 'UPGRADES');
+    const ordering = Object.keys(COLS).filter((v) => v !== 'UPGRADES');
     let newCombo = {};
     ordering.forEach((key) => {
         if (combo[key]) newCombo[key] = combo[key];

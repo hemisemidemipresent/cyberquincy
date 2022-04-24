@@ -27,7 +27,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 const { COLS } = require('../services/index/2tc_scraper');
 
-const { 
+const {
     SlashCommandBuilder, 
     SlashCommandStringOption, 
     SlashCommandIntegerOption, 

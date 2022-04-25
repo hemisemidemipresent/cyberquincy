@@ -39,13 +39,42 @@ function cacheCombos(combos, fname) {
     })
 }
 
-function getLastCacheModified(fname) {
-    return fs.statSync(resolve(DIR1, DIR2, fname)).mtime
+function getLastCacheModified(challenge) {
+    return fs.statSync(resolve(DIR1, DIR2, `${challenge}.json`)).mtime
 }
 
 //////////////////////////////////////////////////////
 // Parsing 
 //////////////////////////////////////////////////////
+
+async function fetchCombos(challenge, reload=false) {
+    cacheFname = `${challenge}.json`
+    let allCombos;
+    if (hasCachedCombos(cacheFname) && !reload) {
+        allCombos = await fetchCachedCombos(cacheFname)
+    } else {
+        allCombos = await scrapeAllCombos(challenge)
+        cacheCombos(allCombos, cacheFname)
+    }
+    return allCombos
+}
+
+const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js')
+const { scrapeAll2MPCompletions } = require('../services/index/2mp_scraper.js');
+const { scrapeAllFTTCCombos } = require('../services/index/fttc_scraper');
+
+async function scrapeAllCombos(challenge) {
+    switch(challenge) {
+        case '2tc':
+            return await scrapeAll2TCCombos();
+        case '2mp':
+            return await scrapeAll2MPCompletions();
+        case 'fttc':
+            return await scrapeAllFTTCCombos();
+        default:
+            throw 'Challenge not found'
+    }
+}
 
 // Parses the map notes by splitting on comma and colon to get the map+person+link
 function parseMapNotes(notes) {
@@ -266,6 +295,7 @@ module.exports = {
     getLastCacheModified,
 
     parseMapNotes,
+    fetchCombos,
 
     altMapsFields,
     displayOneOrMultiplePages,

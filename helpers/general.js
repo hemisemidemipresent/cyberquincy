@@ -161,11 +161,7 @@ function binaryLambdaSearch(low, high, f) {
         else return binaryLambdaSearch(low, mid, f);
     }
 }
-function longestStrLength(arr) {
-    var max = arr[0].length;
-    arr.map((v) => (max = Math.max(max, v.length)));
-    return max;
-}
+
 function addSpaces(str, max) {
     if (str == null || !str) {
         str = ' '.repeat(max);
@@ -219,7 +215,6 @@ module.exports = {
     chunk,
     arraysEqual,
     binaryLambdaSearch,
-    longestStrLength,
     addSpaces,
     timeSince,
     HEAVY_CHECK_MARK,

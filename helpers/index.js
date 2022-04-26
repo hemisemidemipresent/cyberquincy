@@ -168,16 +168,23 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
     }
 }
 
+const singlepageButtons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('mobile').setLabel('📱').setStyle('SECONDARY'),
+)
+
 const multipageButtons = new MessageActionRow().addComponents(
     new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY')
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('mobile').setLabel('📱').setStyle('SECONDARY'),
 );
+
 
 async function displayOneOrMultiplePages(interaction, colData, setCustomFields) {
     MAX_NUM_ROWS = 15;
     const numRows = Object.values(colData)[0].length;
     let leftIndex = 0;
     let rightIndex = Math.min(MAX_NUM_ROWS - 1, numRows - 1);
+    let mobile = false
 
     /**
      * creates embed for next page
@@ -188,7 +195,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
         // The number of rows to be displayed is variable depending on the characters in each link
         // Try 15 and decrement every time it doesn't work.
         for (
-            maxNumRowsDisplayed = MAX_NUM_ROWS;
+            maxNumRowsDisplayed = rightIndex + 1 - leftIndex;
             maxNumRowsDisplayed > 0;
             maxNumRowsDisplayed--
         ) {
@@ -199,17 +206,62 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                 `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
             );
 
-            for (header in colData) {
-                const data =
-                    numRows <= maxNumRowsDisplayed
-                        ? colData[header]
-                        : colData[header].slice(leftIndex, rightIndex + 1);
+            if (mobile) {
+                // PADDING
+                let colWidths = []
 
-                challengeEmbed.addField(
-                    gHelper.toTitleCase(header.split('_').join(' ')),
-                    data.join('\n'),
-                    true
-                );
+                for (header in colData) {
+                    const data = colData[header].slice(leftIndex, rightIndex + 1);
+
+                    colWidths.push(
+                        Math.max( ...data.concat(header).map(row => row.length) )
+                    )
+                }
+
+                // HEADER
+                const headers = Object.keys(colData)
+
+                if (headers.slice(0, -1).includes('LINK')) {
+                    throw 'LINK column cannot appear anywhere but the last column for mobile formatting purposes'
+                }
+
+                let headerField = headers.map((header, colIndex) =>
+                    header == 'LINK' ? header.padEnd(15, ' ') : header.padEnd(colWidths[colIndex], ' ')
+                ).join(" | ");
+                headerField = `\`${headerField}\``
+
+                // VALUES
+                let rowField = ''
+                for (let rowIndex = leftIndex; rowIndex < rightIndex + 1; rowIndex++) {
+                    const rowData = headers.map(header => colData[header][rowIndex])
+                    let rowText = "`"
+                    rowText += rowData.map((cellData, colIndex) =>  {
+                        // Don't display LINK in formatted mode
+                        // Close the line's opening tick (`) mark before the LINK
+                        // Otherwise, close the line's opening tick mark after the last column
+                        if (headers[colIndex] == 'LINK') {
+                            return `\`${cellData}`
+                        } else {
+                            text = cellData.padEnd(colWidths[colIndex], ' ')
+                            if (colIndex == rowData.length - 1) text += "`"
+                            return text
+                        }
+                    }).join(" | ")
+                    rowField += rowText + "\n"
+                }
+                
+                // FINISH
+                challengeEmbed.addField(headerField, rowField, true)
+            } else {
+                for (header in colData) {
+                    const data = colData[header].slice(leftIndex, rightIndex + 1);
+    
+                    challengeEmbed.addField(
+                        gHelper.toTitleCase(header.split('_').join(' ')),
+                        data.join('\n'),
+                        true
+                    );
+                }
             }
 
             setCustomFields(challengeEmbed)
@@ -228,10 +280,8 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
 
         await interaction.editReply({
             embeds: [embed],
-            components: multipage ? [multipageButtons] : [],
+            components: multipage ? [multipageButtons] : [singlepageButtons],
         });
-
-        if (!multipage) return;
 
         const filter = (selection) => {
             // Ensure user clicking button is same as the user that started the interaction
@@ -256,14 +306,18 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
             collector.stop();
             buttonInteraction.deferUpdate();
 
-            switch (parseInt(buttonInteraction.customId)) {
-                case -1:
+            switch (buttonInteraction.customId) {
+                case "mobile":
+                    mobile = !mobile
+                    await displayPages(direction)
+                    break;
+                case "-1":
                     rightIndex = (leftIndex - 1 + numRows) % numRows;
                     leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
                     if (leftIndex < 0) leftIndex = 0;
                     await displayPages(-1);
                     break;
-                case 1:
+                case "1":
                     leftIndex = (rightIndex + 1) % numRows;
                     rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
                     if (rightIndex >= numRows) rightIndex = numRows - 1;

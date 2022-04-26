@@ -6,7 +6,7 @@
     "scripts": {
         "logout": "heroku logout",
         "login": "heroku login -i",
-        "connect": "heroku git:remote -a jajajosh",
+        "connect": "heroku git:remote -a cyberquincy",
         "register": "node register",
         "test": "npm run register && node server.js",
         "commit": "git add . && git commit -m p",

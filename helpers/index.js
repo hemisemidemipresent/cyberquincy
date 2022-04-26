@@ -219,11 +219,9 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
 
                 // HEADER
                 const headers = Object.keys(colData)
-
                 if (headers.slice(0, -1).includes('LINK')) {
                     throw 'LINK column cannot appear anywhere but the last column for mobile formatting purposes'
                 }
-
                 let headerField = headers.map((header, colIndex) =>
                     header == 'LINK' ? header.padEnd(15, ' ') : header.padEnd(colWidths[colIndex], ' ')
                 ).join(" | ");

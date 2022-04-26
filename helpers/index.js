@@ -209,7 +209,6 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
             if (mobile) {
                 // PADDING
                 let colWidths = []
-
                 for (header in colData) {
                     const data = colData[header].slice(leftIndex, rightIndex + 1);
 

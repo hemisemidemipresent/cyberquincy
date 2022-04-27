@@ -108,4 +108,7 @@ function parseMapCompletions(row) {
     return maps
 }
 
-module.exports = { scrapeAll2MPCompletions }
+module.exports = { 
+    scrapeAll2MPCompletions,
+    COLS
+}

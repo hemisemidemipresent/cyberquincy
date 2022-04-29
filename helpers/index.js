@@ -1,3 +1,5 @@
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+
 //////////////////////////////////////////////////////
 // Cacheing 
 //////////////////////////////////////////////////////
@@ -5,6 +7,7 @@
 const fs = require('fs')
 const resolve = require('path').resolve;
 const gHelper = require('../helpers/general')
+const discordHelper = require('../helpers/discord.js');
 
 DIR1 = 'cache'
 DIR2 = 'index'
@@ -165,6 +168,177 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
     }
 }
 
+const singlepageButtons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('mobile').setLabel('📱').setStyle('SECONDARY'),
+)
+
+const multipageButtons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('mobile').setLabel('📱').setStyle('SECONDARY'),
+);
+
+
+async function displayOneOrMultiplePages(interaction, colData, setCustomFields) {
+    MAX_NUM_ROWS = 15;
+    const numRows = Object.values(colData)[0].length;
+    let leftIndex = 0;
+    let rightIndex = Math.min(MAX_NUM_ROWS - 1, numRows - 1);
+    let mobile = false
+
+    /**
+     * creates embed for next page
+     * @param {int} direction
+     * @returns {MessageEmbed}
+     */
+    async function createPage(direction = 1) {
+        // The number of rows to be displayed is variable depending on the characters in each link
+        // Try 15 and decrement every time it doesn't work.
+        for (
+            maxNumRowsDisplayed = rightIndex + 1 - leftIndex;
+            maxNumRowsDisplayed > 0;
+            maxNumRowsDisplayed--
+        ) {
+            let challengeEmbed = new Discord.MessageEmbed()
+
+            challengeEmbed.addField(
+                '# Combos',
+                `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
+            );
+
+            if (mobile) {
+                // PADDING
+                let colWidths = []
+                for (header in colData) {
+                    const data = colData[header].slice(leftIndex, rightIndex + 1);
+
+                    colWidths.push(
+                        Math.max( ...data.concat(header).map(row => row.length) )
+                    )
+                }
+
+                // HEADER
+                const headers = Object.keys(colData)
+                if (headers.slice(0, -1).includes('LINK')) {
+                    throw 'LINK column cannot appear anywhere but the last column for mobile formatting purposes'
+                }
+                let headerField = headers.map((header, colIndex) =>
+                    header == 'LINK' ? header.padEnd(15, ' ') : header.padEnd(colWidths[colIndex], ' ')
+                ).join(" | ");
+                headerField = `\`${headerField}\``
+
+                // VALUES
+                let rowField = ''
+                for (let rowIndex = leftIndex; rowIndex < rightIndex + 1; rowIndex++) {
+                    const rowData = headers.map(header => colData[header][rowIndex])
+                    let rowText = "`"
+                    rowText += rowData.map((cellData, colIndex) =>  {
+                        // Don't display LINK in formatted mode
+                        // Close the line's opening tick (`) mark before the LINK
+                        // Otherwise, close the line's opening tick mark after the last column
+                        if (headers[colIndex] == 'LINK') {
+                            return `\`${cellData}`
+                        } else {
+                            text = cellData.padEnd(colWidths[colIndex], ' ')
+                            if (colIndex == rowData.length - 1) text += "`"
+                            return text
+                        }
+                    }).join(" | ")
+                    rowField += rowText + "\n"
+                }
+                
+                // FINISH
+                challengeEmbed.addField(headerField, rowField, true)
+            } else {
+                for (header in colData) {
+                    const data = colData[header].slice(leftIndex, rightIndex + 1);
+    
+                    challengeEmbed.addField(
+                        gHelper.toTitleCase(header.split('_').join(' ')),
+                        data.join('\n'),
+                        true
+                    );
+                }
+            }
+
+            setCustomFields(challengeEmbed)
+
+            if (discordHelper.isValidFormBody(challengeEmbed)) {
+                return [challengeEmbed, numRows > maxNumRowsDisplayed];
+            }
+
+            if (direction > 0) rightIndex--;
+            if (direction < 0) leftIndex++;
+        }
+    }
+
+    async function displayPages(direction = 1) {
+        let [embed, multipage] = await createPage(direction);
+
+        await interaction.editReply({
+            embeds: [embed],
+            components: multipage ? [multipageButtons] : [singlepageButtons],
+        });
+
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        };
+
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: 'BUTTON',
+            time: 20000
+        });
+
+        collector.on('collect', async (buttonInteraction) => {
+            collector.stop();
+            buttonInteraction.deferUpdate();
+
+            switch (buttonInteraction.customId) {
+                case "mobile":
+                    mobile = !mobile
+                    await displayPages(direction)
+                    break;
+                case "-1":
+                    rightIndex = (leftIndex - 1 + numRows) % numRows;
+                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
+                    if (leftIndex < 0) leftIndex = 0;
+                    await displayPages(-1);
+                    break;
+                case "1":
+                    leftIndex = (rightIndex + 1) % numRows;
+                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
+                    if (rightIndex >= numRows) rightIndex = numRows - 1;
+                    await displayPages(1);
+                    break;
+            }
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size == 0) {
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
+            }
+        });
+    }
+
+    // Gets the reaction to the pagination message by the command author
+    // and respond by turning the page in the correction direction
+
+    await displayPages(1);
+}
+
 module.exports = {
     hasCachedCombos,
     fetchCachedCombos,
@@ -175,4 +349,5 @@ module.exports = {
     fetchCombos,
 
     altMapsFields,
+    displayOneOrMultiplePages,
 }

@@ -7,9 +7,6 @@ const Parsed = require('../parser/parsed')
 
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
-const discordHelper = require('../helpers/discord.js');
-
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 const { paleorange } = require('../jsons/colours.json');
 
@@ -295,153 +292,30 @@ async function embedOneOrMultiplePages(interaction, parsed, combos, mtime) {
             }
         })
     );
+
     const numOGCompletions = combos.filter((combo) => combo.OG).length;
 
-    return await displayOneOrMultiplePages(
-        interaction, 
-        parsed, 
-        combos, 
-        colData, 
-        numOGCompletions, 
-        mtime
-    )
-}
+    function setOtherDisplayFields(challengeEmbed) {
+        challengeEmbed.setTitle(embedTitle(parsed, combos))
+            .setColor(paleorange)
+            .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
 
-const multipageButtons = new MessageActionRow().addComponents(
-    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY')
-);
-
-async function displayOneOrMultiplePages(
-    interaction,
-    parsed,
-    combos,
-    colData,
-    numOGCompletions,
-    mtime
-) {
-    MAX_NUM_ROWS = 15;
-    const numRows = colData[Object.keys(colData)[0]].length;
-    let leftIndex = 0;
-    let rightIndex = Math.min(MAX_NUM_ROWS - 1, numRows - 1);
-
-    /**
-     * creates embed for next page
-     * @param {int} direction
-     * @returns {MessageEmbed}
-     */
-    async function createPage(direction = 1) {
-        // The number of rows to be displayed is variable depending on the characters in each link
-        // Try 15 and decrement every time it doesn't work.
-        for (
-            maxNumRowsDisplayed = MAX_NUM_ROWS;
-            maxNumRowsDisplayed > 0;
-            maxNumRowsDisplayed--
-        ) {
-            let challengeEmbed = new Discord.MessageEmbed()
-                .setTitle(embedTitle(parsed, combos))
-                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
-                .setColor(paleorange);
-
-            challengeEmbed.addField(
-                '# Combos',
-                `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
-            );
-
-            for (header in colData) {
-                const data =
-                    numRows <= maxNumRowsDisplayed
-                        ? colData[header]
-                        : colData[header].slice(leftIndex, rightIndex + 1);
-
-                challengeEmbed.addField(
-                    gHelper.toTitleCase(header.split('_').join(' ')),
-                    data.join('\n'),
-                    true
-                );
-            }
-
-            if (numOGCompletions == 1) {
-                challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
-            }
-            if (numOGCompletions > 1) {
-                challengeEmbed.setFooter({
-                    text: `---\n${numOGCompletions} OG completions bolded`
-                });
-            }
-
-            if (discordHelper.isValidFormBody(challengeEmbed)) return [challengeEmbed, numRows > maxNumRowsDisplayed];
-
-            if (direction > 0) rightIndex--;
-            if (direction < 0) leftIndex++;
+        if (numOGCompletions == 1) {
+            challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
+        }
+        if (numOGCompletions > 1) {
+            challengeEmbed.setFooter({
+                text: `---\n${numOGCompletions} OG completions bolded`
+            });
         }
     }
 
-    async function displayPages(direction = 1) {
-        let [embed, multipage] = await createPage(direction);
-
-        await interaction.editReply({
-            embeds: [embed],
-            components: multipage ? [multipageButtons] : [],
-        });
-
-        if (!multipage) return;
-
-        const filter = (selection) => {
-            // Ensure user clicking button is same as the user that started the interaction
-            if (selection.user.id !== interaction.user.id) {
-                return false;
-            }
-            // Ensure that the button press corresponds with this interaction and wasn't
-            // a button press on the previous interaction
-            if (selection.message.interaction.id !== interaction.id) {
-                return false;
-            }
-            return true;
-        };
-
-        const collector = interaction.channel.createMessageComponentCollector({
-            filter,
-            componentType: 'BUTTON',
-            time: 20000
-        });
-
-        collector.on('collect', async (buttonInteraction) => {
-            collector.stop();
-            buttonInteraction.deferUpdate();
-
-            switch (parseInt(buttonInteraction.customId)) {
-                case -1:
-                    rightIndex = (leftIndex - 1 + numRows) % numRows;
-                    leftIndex = rightIndex - (MAX_NUM_ROWS - 1);
-                    if (leftIndex < 0) leftIndex = 0;
-                    await displayPages(-1);
-                    break;
-                case 1:
-                    leftIndex = (rightIndex + 1) % numRows;
-                    rightIndex = leftIndex + (MAX_NUM_ROWS - 1);
-                    if (rightIndex >= numRows) rightIndex = numRows - 1;
-                    await displayPages(1);
-                    break;
-            }
-        });
-
-        collector.on('end', async (collected) => {
-            if (collected.size == 0) {
-                await interaction.editReply({
-                    embeds: [embed],
-                    components: []
-                });
-            }
-        });
-    }
-
-    // Gets the reaction to the pagination message by the command author
-    // and respond by turning the page in the correction direction
-
-    await displayPages(1);
+    return await Index.displayOneOrMultiplePages(
+        interaction,
+        colData,
+        setOtherDisplayFields
+    )
 }
-
 
 function embedTitle(parsed, combos) {
     t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';

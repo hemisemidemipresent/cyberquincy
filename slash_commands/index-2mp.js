@@ -1,12 +1,10 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const gHelper = require('../helpers/general.js');
-const discordHelper = require('../helpers/discord')
 const Index = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
 
 const { paleblue } = require('../jsons/colours.json');
-const { MessageActionRow, MessageButton } = require('discord.js');
 
 const Parsed = require('../parser/parsed.js');
 
@@ -454,7 +452,26 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
     if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
     columns.LINK = linkColumn;
 
-    return await embedOneOrMultiplePages(interaction, title, columns, numOGCompletions, mtime);
+    function setOtherDisplayFields(challengeEmbed) {
+        challengeEmbed.setTitle(title)
+            .setColor(paleblue)
+            .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
+
+        if (numOGCompletions == 1) {
+            challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
+        }
+        if (numOGCompletions > 1) {
+            challengeEmbed.setFooter({
+                text: `---\n${numOGCompletions} total OG completions bolded`
+            });
+        }
+    }
+
+    return await Index.displayOneOrMultiplePages(
+        interaction,
+        columns,
+        setOtherDisplayFields,
+    )
 }
 
 function filterCombo(c, parsed) {
@@ -532,121 +549,6 @@ function determineExcludedColumns(parsed) {
     }
 
     return excludedColumns;
-}
-
-const MULTIPAGE_BUTTONS_2MP = new MessageActionRow().addComponents(
-    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
-);
-
-MAX_VALUES_LIST_LENGTH_2MP = 12
-
-//  If >MAX_VALUES_LIST_LENGTH_2MP combos are found, it paginates the results; navigation is driven by emoji reactions
-async function embedOneOrMultiplePages(interaction, title, columns, numOGCompletions, mtime) {
-    const numRows = columns.LINK.length
-    let leftIndex = 0;
-    let rightIndex = Math.min(MAX_VALUES_LIST_LENGTH_2MP, numRows) - 1
-
-    async function embedPage(direction) {
-        for (
-            maxNumRowsDisplayed = MAX_VALUES_LIST_LENGTH_2MP;
-            maxNumRowsDisplayed > 0;
-            maxNumRowsDisplayed--
-        ) {
-            let challengeEmbed = new Discord.MessageEmbed()
-                .setTitle(title)
-                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
-                .setColor(paleblue)
-                .addField(
-                    '# Combos',
-                    `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
-                );
-
-            for (columnHeader in columns) {
-                challengeEmbed.addField(
-                    columnHeader,
-                    columns[columnHeader].slice(leftIndex, rightIndex + 1).join('\n'),
-                    true
-                );
-            }
-
-            if (numOGCompletions == 1) {
-                challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
-            }
-            if (numOGCompletions > 1) {
-                challengeEmbed.setFooter({
-                    text: `---\n${numOGCompletions} total OG completions bolded`
-                });
-            }
-
-            if (discordHelper.isValidFormBody(challengeEmbed)) {
-                return [ challengeEmbed, numRows > maxNumRowsDisplayed ]
-            }
-
-            if (direction > 0) rightIndex--;
-            if (direction < 0) leftIndex++;
-        }
-    }
-    
-    async function displayPage(direction) {
-        let [challengeEmbed, multipage] = await embedPage(direction)
-
-        await interaction.editReply({
-            embeds: [challengeEmbed],
-            components: multipage ? [MULTIPAGE_BUTTONS_2MP]  : []
-        });
-
-        if (!multipage) return;
-
-        const filter = (selection) => {
-            // Ensure user clicking button is same as the user that started the interaction
-            if (selection.user.id !== interaction.user.id) {
-                return false;
-            }
-            // Ensure that the button press corresponds with this interaction and wasn't
-            // a button press on the previous interaction
-            if (selection.message.interaction.id !== interaction.id) {
-                return false;
-            }
-            return true;
-        }
-
-        const collector = interaction.channel.createMessageComponentCollector({
-            filter,
-            componentType: 'BUTTON',
-            time: 20000,
-        });
-        collector.on('collect', async (buttonInteraction) => {
-            collector.stop();
-            buttonInteraction.deferUpdate();
-
-            switch (parseInt(buttonInteraction.customId)) {
-                case -1:
-                    rightIndex = (leftIndex - 1 + numRows) % numRows;
-                    leftIndex = rightIndex - (MAX_VALUES_LIST_LENGTH_2MP - 1);
-                    if (leftIndex < 0) leftIndex = 0;
-                    await displayPage(-1)
-                    break;
-                case 1:
-                    leftIndex = (rightIndex + 1) % numRows;
-                    rightIndex = leftIndex + (MAX_VALUES_LIST_LENGTH_2MP - 1);
-                    if (rightIndex >= numRows) rightIndex = numRows - 1;
-                    await displayPage(1);
-                    break;
-            }
-        });
-
-        collector.on('end', async (collected) => {
-            if (collected.size == 0) {
-                await interaction.editReply({
-                    embeds: [challengeEmbed],
-                    components: []
-                });
-            }
-        });
-    }
-
-    displayPage(1);
 }
 
 ////////////////////////////////////////////////////////////

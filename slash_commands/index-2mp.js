@@ -479,10 +479,10 @@ function filterCombo(c, parsed) {
 
     let matchesEntity = true
     if (parsed.tower) {
-        if (Towers.isTowerUpgrade(c.ENTITY)) {
-            matchesEntity = Towers.towerUpgradeToTower(c.ENTITY) == parsed.tower;
-        } else { // Hero
+        if (Aliases.isHero(c.ENTITY)) {
             matchesEntity = false
+        } else { // Tower Upgrade
+            matchesEntity = Towers.towerUpgradeToTower(c.ENTITY) == parsed.tower;
         }
     } else if (parsed.tower_upgrade || parsed.hero) { // Tower upgrade or hero
         matchesEntity = c.ENTITY == (parsed.tower_upgrade || parsed.hero);

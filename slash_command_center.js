@@ -29,10 +29,18 @@ async function handleCommand(interaction) {
         }
     }
 }
+async function handleButton(interaction) {
+    const command = client.commands.get(interaction.message.interaction.commandName);
+    if (!command || !command.onButtonClick) return;
+    try {
+        await command.onButtonClick(interaction);
+    } catch {
+        // do nothing
+    }
+}
 
 async function handleAutocomplete(interaction) {
     const command = client.commands.get(interaction.commandName);
-
     if (!command || !command.onAutocomplete) return;
 
     try {
@@ -46,5 +54,6 @@ module.exports = {
     commandFiles,
     configureCommands,
     handleCommand,
+    handleButton,
     handleAutocomplete
 };

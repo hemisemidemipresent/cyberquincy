@@ -44,7 +44,7 @@ function freeplay(round, isAbr) {
     let bloonSets = getBloonSets(round);
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${round}` + (isAbr ? ' ABR' : ''))
-        .addField('ramping', `health: ${hRamping}x\nspeed: ${sRamping}`)
+        .addField('ramping', `health: ${hRamping}x\nspeed: ${Math.round(sRamping * 100) / 100}`)
         .setDescription(`all **POSSIBLE** bloon sets\n${bloonSets.join('\n')}`)
         .addField(
             `XP Earned on R${round}`,

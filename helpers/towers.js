@@ -43,8 +43,6 @@ function allTempleSets() {
     }
     return all;
 }
-
-// Warning: Slow! Use isHero instead or avoid reusing this method many times
 function isTowerUpgrade(candidate) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     return allTowerUpgrades().includes(candidate.toLowerCase());

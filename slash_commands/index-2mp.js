@@ -118,6 +118,7 @@ async function execute(interaction) {
     try {
         return await display2MPFilterAll(interaction, allCombos, parsed, mtime)
     } catch(e) {
+        console.log('e')
         return await interaction.editReply({ embeds: [err(e)] })
     }
 }
@@ -157,6 +158,7 @@ const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const PersonParser = require('../parser/person-parser.js');
 
 const UserCommandError = require('../exceptions/user-command-error.js');
+const DeveloperCommandError = require('../exceptions/developer-command-error.js');
 
 function parseEntity(interaction) {
     entityParser = new OrParser(
@@ -420,6 +422,12 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
                 OG: mapCompletion.OG || false
             };
 
+            if (!canonicalCompletion.MAP) {
+                throw new DeveloperCommandError(
+                    `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`
+                )
+            }
+
             if (!filterCombo(canonicalCompletion, parsed)) {
                 continue;
             }
@@ -674,7 +682,7 @@ function isWaterEntityCombo(combo) {
 
 function err(e) {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
-    if (e instanceof UserCommandError) {
+    if (e instanceof UserCommandError || e instanceof DeveloperCommandError) {
         return new Discord.MessageEmbed()
             .setTitle(e.message)
             .setColor(paleblue);

@@ -82,7 +82,6 @@ async function embedBloonology(towerName, upgrade) {
     const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(costs, towerName, upgrade);
     const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
     const upgradeFullDescription = body.split('\r\n\r\n'); // each newline is \r\n\r\n
-    const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier)
 
     fullDescription = upgradeFullDescription.find(fullDescription => fullDescription.substr(0, 3) == upgrade).substr(3)
 
@@ -97,8 +96,16 @@ async function embedBloonology(towerName, upgrade) {
     const formattedUpgrade = upgrade.split('').join('-')
     const formattedTowerName = Aliases.toIndexNormalForm(towerName)
 
+    let title;
+    if (tier <= 2) {
+        title = `${formattedTowerName} (${formattedUpgrade})`
+    } else {
+        const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier)
+        title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`
+    }
+
     let embed = new Discord.MessageEmbed()
-        .setTitle(`${upgradeName} (${formattedUpgrade} ${formattedTowerName})`)
+        .setTitle(title)
         .setDescription(info)
         .addField(
             'cost',

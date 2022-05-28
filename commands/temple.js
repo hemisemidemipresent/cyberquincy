@@ -17,6 +17,9 @@ module.exports = {
     name: 'temple',
     aliases: ['t', 'tsg', 'sg', 'monkeygod', 'god', 'totmg', 'vtsg'],
     async execute(message, args) {
+        return await message.channel.send(
+            'Please use `/temple` instead.\nIf this does not show up on your server please re-add the bot using a new link: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617'
+        );
         if (args.length == 0 || (args.length == 1 && args[0] == 'help')) {
             return module.exports.helpMessage(message);
         }
@@ -43,7 +46,6 @@ module.exports = {
                 parsed.cashs.push(undefined);
             }
         }
-        console.log(parsed);
         if (!parsed.temple_set) {
             ReactionChain.process(
                 message,

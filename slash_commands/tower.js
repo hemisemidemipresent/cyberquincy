@@ -5,7 +5,6 @@ const {
 
 const axios = require('axios');
 const costs = require('../jsons/costs.json');
-const gHelper = require('../helpers/general.js');
 const Towers = require('../helpers/towers.js');
 const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colours.json');
@@ -77,15 +76,15 @@ async function embedBloonology(towerName, upgrade) {
     }
     let body = res.data;
 
-    let tower = costs[towerName];
-    let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
-    let totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
-    let hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(costs, towerName, upgrade);
-    let cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
-    let upgrades = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+    const tower = costs[towerName];
+    const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
+    const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
+    const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(costs, towerName, upgrade);
+    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
+    const upgradeFullDescription = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+    const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier)
 
-
-    fullDescription = upgrades.find(fullDescription => fullDescription.substr(0, 3) == upgrade)
+    fullDescription = upgradeFullDescription.find(fullDescription => fullDescription.substr(0, 3) == upgrade).substr(3)
 
     // background info: there are 2 newlines present in the string: \n and \r. \n is preferred
     let info = fullDescription
@@ -95,8 +94,11 @@ async function embedBloonology(towerName, upgrade) {
         .replace(/ \t-/g, '-    ') // removes remaining tabs
         .replace(/\r/g, '\n'); // switches back all remaining \r with \n
 
+    const formattedUpgrade = upgrade.split('').join('-')
+    const formattedTowerName = Aliases.toIndexNormalForm(towerName)
+
     let embed = new Discord.MessageEmbed()
-        .setTitle(gHelper.toTitleCase(towerName))
+        .setTitle(`${upgradeName} (${formattedUpgrade} ${formattedTowerName})`)
         .setDescription(info)
         .addField(
             'cost',

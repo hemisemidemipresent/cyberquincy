@@ -439,7 +439,7 @@ class AliasRepository extends Array {
 
     toIndexNormalForm(canonical) {
         return canonical
-            .split('_')
+            .split(/_|-/)
             .map((tk) => gHelper.toTitleCase(tk))
             .join(' ');
     }

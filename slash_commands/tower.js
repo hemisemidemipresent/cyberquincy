@@ -39,7 +39,7 @@ const towerOption = new SlashCommandStringOption()
     .setRequired(true)
 Object.keys(jsonTowerNameToBloonologyLinkMapping).forEach(tower => {
     towerOption.addChoice(
-        Aliases.toIndexNormalForm(tower),
+        Aliases.toIndexNormalForm(tower, '-'),
         tower
     )
 })
@@ -94,7 +94,7 @@ async function embedBloonology(towerName, upgrade) {
         .replace(/\r/g, '\n'); // switches back all remaining \r with \n
 
     const formattedUpgrade = upgrade.split('').join('-')
-    const formattedTowerName = Aliases.toIndexNormalForm(towerName)
+    const formattedTowerName = Aliases.toIndexNormalForm(towerName, '-')
 
     let title;
     if (tier <= 2) {

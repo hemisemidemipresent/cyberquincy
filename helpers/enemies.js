@@ -34,6 +34,26 @@ function allEnemies() {
     return enemies.map((ag) => ag.canonical);
 }
 
+function isBloon(b) {
+    return allBloons().includes(b)
+}
+
+function isMOAB(m) {
+    return allMOABs().includes(m)
+}
+
+function formatEnemy(e, formalName=false) {
+    if (isBloon(e)) {
+        let name = Aliases.toIndexNormalForm(e)
+        if (formalName) name += " Bloon"
+        return name
+    } else if (isMOAB(e)) {
+        return e.toUpperCase()
+    } else {
+        throw `${e} is not a bloon/moab`
+    }
+}
+
 RED_BLOON_SECONDS_PER_SECOND = {
     red: 1,
     blue: 1.4,
@@ -56,7 +76,7 @@ RED_BLOON_SECONDS_PER_SECOND = {
 
 module.exports = {
     RED_BLOON_SECONDS_PER_SECOND,
-    
+
     /**
      * @summary returns back the multiplicative factor for health ramping
      * @param {int} round
@@ -73,4 +93,6 @@ module.exports = {
     allBloons,
     allMOABs,
     allEnemies,
+
+    formatEnemy,
 }

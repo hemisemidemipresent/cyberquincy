@@ -50,8 +50,8 @@ builder = new SlashCommandBuilder()
     .addStringOption(towerOption)
     .addStringOption((option) =>
         option.setName('tower_path')
-                .setDescription('The tower path that you want the information for')
-                .setRequired(true)
+            .setDescription('The tower path that you want the information for')
+            .setRequired(true)
     );
 
 function validateInput(interaction) {

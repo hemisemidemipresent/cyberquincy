@@ -1,3 +1,5 @@
+const EnemyHelper = require('../helpers/enemies')
+
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 // we want to only maintain an alias of unmodified bloon names but we also want to be able to parse things like fmoab, cceramic, rrainbow, etc...
 // the order of prefixes are "crf"
@@ -8,7 +10,7 @@ class BloonParser {
 
     constructor(...permitted_bloons) {
         let permitted_values = permitted_bloons.map((d) => d.toLowerCase());
-        let bloons = this.addModifiers(Aliases.allBloons());
+        let bloons = this.addModifiers(EnemyHelper.allEnemies());
         if (permitted_values.length == 0) {
             permitted_values = bloons;
         }

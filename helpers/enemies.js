@@ -74,6 +74,38 @@ RED_BLOON_SECONDS_PER_SECOND = {
     bad: 0.18,
 }
 
+LAYER_RBES = {
+    ceramic: 10,
+    super_ceramic: 60,
+    moab: 200,
+    bfb: 700,
+    zomg: 4000,
+    ddt: 400,
+    bad: 20000,
+}
+
+function enemyChildren(enemy, round) {
+    switch(enemy) {
+        case 'ceramic':
+            return Array(2).fill('rainbow')
+        case 'super_ceramic':
+            return Array(1).fill('rainbow')
+        case 'moab':
+        case 'ddt': // regrow children, but irrelevant
+            if (round <= 80) {
+                return Array(4).fill('ceramic')
+            } else {
+                return Array(4).fill('super_ceramic')
+            }
+        case 'bfb':
+            return Array(4).fill('moab')
+        case 'zomg':
+            Array(4).fill('bfb')
+        case 'bad':
+            return Array(2).fill('zomg') + Array(3).fill('ddt')
+    }
+}
+
 module.exports = {
     RED_BLOON_SECONDS_PER_SECOND,
 

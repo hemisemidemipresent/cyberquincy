@@ -1,10 +1,8 @@
 const TempleSetParser = require('../parser/temple-set-parser');
 const OptionalParser = require('../parser/optional-parser');
 const CashParser = require('../parser/cash-parser');
-const SingleTextParser = require('../helpers/reactor/single_text_parser');
 const AnyOrderParser = require('../parser/any-order-parser');
 const OrParser = require('../parser/or-parser');
-const ReactionChain = require('../helpers/reactor/reaction_chain');
 
 const t = require('../jsons/temple.json');
 const t2 = require('../jsons/temple2.json'); // TSG variants

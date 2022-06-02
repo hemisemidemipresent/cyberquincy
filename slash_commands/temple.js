@@ -12,16 +12,16 @@ builder = new SlashCommandBuilder()
             .setName('by_category')
             .setDescription('Input the amount of money you sacrificed into the temple (you can get this with `/calc`)') //
             .addIntegerOption((option) =>
-                option.setName('primary').setDescription('Total amount of money in **primary** towers sacrificed')
+                option.setName('primary').setDescription('Total amount of money in PRIMARY towers sacrificed')
             )
             .addIntegerOption((option) =>
-                option.setName('military').setDescription('Total amount of money in **military** towers sacrificed')
+                option.setName('military').setDescription('Total amount of money in MILITARY towers sacrificed')
             )
             .addIntegerOption((option) =>
-                option.setName('magic').setDescription('Total amount of money in **magic** towers sacrificed')
+                option.setName('magic').setDescription('Total amount of money in MAGIC towers sacrificed')
             )
             .addIntegerOption((option) =>
-                option.setName('support').setDescription('amt of money in **support** towers sacrificed')
+                option.setName('support').setDescription('amt of money in SUPPORT towers sacrificed')
             )
     )
     .addSubcommand((subcommand) =>

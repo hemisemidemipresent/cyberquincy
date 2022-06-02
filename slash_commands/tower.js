@@ -44,7 +44,7 @@ Object.keys(jsonTowerNameToBloonologyLinkMapping).forEach(tower => {
     )
 })
     
-builder = new SlashCommandBuilder()
+const builder = new SlashCommandBuilder()
     .setName('tower')
     .setDescription('Find information for each tower')
     .addStringOption(towerOption)
@@ -55,9 +55,9 @@ builder = new SlashCommandBuilder()
     );
 
 function validateInput(interaction) {
-    tower_path = parseTowerPath(interaction)
-    if (isNaN(tower_path)) return "Tower path provided isn't `base` and contains non-numerical characters";
-    if (!Towers.isValidUpgradeSet(tower_path)) return 'Invalid tower path provided!';
+    const towerPath = parseTowerPath(interaction)
+    if (isNaN(towerPath)) return "Tower path provided isn't `base` and contains non-numerical characters";
+    if (!Towers.isValidUpgradeSet(towerPath)) return 'Invalid tower path provided!';
 }
 
 function parseTowerPath(interaction) {

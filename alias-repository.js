@@ -437,9 +437,9 @@ class AliasRepository extends Array {
         return this.getCanonicalForm(this.toAliasNormalForm(indexForm))
     }
 
-    toIndexNormalForm(canonical) {
+    toIndexNormalForm(canonical, separator='_') {
         return canonical
-            .split('_')
+            .split(separator)
             .map((tk) => gHelper.toTitleCase(tk))
             .join(' ');
     }

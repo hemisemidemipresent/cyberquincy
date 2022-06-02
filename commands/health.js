@@ -1,4 +1,4 @@
-const b = require('../helpers/bloons-general');
+const enemyHelper = require('../helpers/enemies');
 module.exports = {
     name: 'health',
     aliases: ['h', 'hp'],
@@ -30,7 +30,7 @@ module.exports = {
         }
         //percentage increase
 
-        let bhealth = Math.floor(baseHealth * b.getHealthRamping(round));
+        let bhealth = Math.floor(baseHealth * enemyHelper.getHealthRamping(round));
 
         if (round > 80) {
             return message.channel.send(`${bhealth} pops are needed to pop this blimp (not including children)`);

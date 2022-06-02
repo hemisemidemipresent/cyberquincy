@@ -6,7 +6,8 @@ const rounds = require('../jsons/rounds.json');
 const rounds2 = require('../jsons/round2.json');
 const cashAbr = require('../jsons/income-abr.json');
 
-const b = require('../helpers/bloons-general');
+const roundHelper = require('../helpers/rounds')
+const enemyHelper = require('../helpers/enemies')
 const gHelper = require('../helpers/general');
 
 const { cyber } = require('../jsons/colours.json');
@@ -32,15 +33,15 @@ function validateInput(interaction) {
 
     // Validations
     if (round < 1) return `Must enter positive numbers for round ${round}`;
-    if (round > b.ALL_ROUNDS) return `Rounds are meaningless past ${b.ALL_ROUNDS} since no bloons spawn`;
+    if (round > roundHelper.ALL_ROUNDS) return `Rounds are meaningless past ${roundHelper.ALL_ROUNDS} since no bloons spawn`;
     return;
 }
 
 function freeplay(round, isAbr) {
     [xp, totalxp] = calculateXps(round);
 
-    let hRamping = b.getHealthRamping(round);
-    let sRamping = b.getSpeedRamping(round);
+    let hRamping = enemyHelper.getHealthRamping(round);
+    let sRamping = enemyHelper.getSpeedRamping(round);
     let bloonSets = getBloonSets(round);
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${round}` + (isAbr ? ' ABR' : ''))
@@ -161,8 +162,8 @@ async function execute(interaction) {
         .setFooter({ text: `For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\`` })
         .setColor(colours['cyber']);
     if (round > 80) {
-        let hRamping = b.getHealthRamping(round);
-        let sRamping = b.getSpeedRamping(round);
+        let hRamping = enemyHelper.getHealthRamping(round);
+        let sRamping = enemyHelper.getSpeedRamping(round);
         roundEmbed.addField('ramping', `health: ${hRamping}x\nspeed: ${sRamping}x`);
     }
     return await interaction.reply({ embeds: [roundEmbed] });

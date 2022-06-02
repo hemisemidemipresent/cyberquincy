@@ -1,3 +1,33 @@
+const roundHelper = require('./rounds')
+
+ENEMIES = [
+    BLOONS = [
+        RED = 'red',
+        BLUE = 'blue',
+        GREEN = 'green',
+        YELLOW = 'yellow',
+        PINK = 'pink',
+        WHITE = 'white',
+        BLACK = 'black',
+        ZEBRA = 'zebra',
+        LEAD = 'lead',
+        RAINBOW = 'rainbow',
+        CERAMIC = 'ceramic',
+    ],
+    MOABS = [
+        MOAB = 'moab',
+        BFB = 'bfb',
+        ZOMG = 'zomg',
+        DDT = 'ddt',
+        BAD = 'bad',
+    ]
+].flat()
+
+ENEMIES_THAT_CAN_BE_FORTIFIED = [LEAD, CERAMICS] + MOABS
+ENEMIES_THAT_CAN_BE_SUPER = [
+    WHITE, BLACK, ZEBRA, LEAD, RAINBOW, CERAMIC
+]
+
 function getHealthRamping(r) {
     if (r <= 80) return 1;
     else if (r <= 100) return (r - 30) / 50;
@@ -19,27 +49,16 @@ function getSpeedRamping(r) {
     return 6.0 + (r - 252) * 0.02;
 }
 
-function allBloons() {
-    const bloons = Aliases.getAliasGroupsFromSameFileAs('RED')
-    return bloons.map((ag) => ag.canonical);
-}
-
-function allMOABs() {
-    const moabs = Aliases.getAliasGroupsFromSameFileAs('MOAB')
-    return moabs.map((ag) => ag.canonical);
-}
-
-function allEnemies() {
-    const enemies = Aliases.getAliasGroupsFromSameImmediateDirectoryAs('RED');
-    return enemies.map((ag) => ag.canonical);
+function isValidEnemy(e) {
+    return ENEMIES.includes(e)
 }
 
 function isBloon(b) {
-    return allBloons().includes(b)
+    return BLOONS.includes(b)
 }
 
 function isMOAB(m) {
-    return allMOABs().includes(m)
+    return MOABS.includes(m)
 }
 
 function formatEnemy(e, formalName=false) {
@@ -75,6 +94,7 @@ RED_BLOON_SECONDS_PER_SECOND = {
 }
 
 LAYER_RBES = {
+    fortified_lead: 4,
     ceramic: 10,
     super_ceramic: 60,
     moab: 200,
@@ -84,13 +104,48 @@ LAYER_RBES = {
     bad: 20000,
 }
 
-function enemyChildren(enemy, round) {
+function enemyChildren(enemy, round=80, fortified=false) {
+    if (!isValidEnemy(enemy)) {
+        throw `${enemy} is not a valid bloon/MOAB`
+    }
+    if (!roundHelper.isValidRound(round)) {
+        throw `${round} is not a valid BTD6 round`
+    }
+    if (round > 80)
     switch(enemy) {
+        case 'red':
+            return Array(0)
+        case 'blue':
+            return Array(1).fill('red')
+        case 'green':
+            return Array(1).fill('blue')
+        case 'yellow':
+            return Array(1).fill('green')
+        case 'pink':
+            return Array(1).fill('yellow')
+        case 'white':
+            return Array(2).fill('pink')
+        case 'black':
+            return Array(2).fill('pink')
+        case 'lead':
+            return Array(2).fill('black')
+        case 'zebra':
+            return ['black', 'white']
+        case 'rainbow':
+            return Array(2).fill('zebra')
         case 'ceramic':
             return Array(2).fill('rainbow')
+        case 'super_black':
+            return Array(1).fill('pink')
+        case 'super_lead':
+            return Array(1).fill('black')
+        case 'super_zebra':
+            return Array(1).fill('super_black')
+        case 'super_rainbow':
+            return Array(1).fill('super_zebra')
         case 'super_ceramic':
             return Array(1).fill('rainbow')
-        case 'moab':
+        case 'moab': // same as ddt
         case 'ddt': // regrow children, but irrelevant
             if (round <= 80) {
                 return Array(4).fill('ceramic')
@@ -122,9 +177,9 @@ module.exports = {
      */
     getSpeedRamping,
 
-    allBloons,
-    allMOABs,
-    allEnemies,
+    BLOONS, MOABS, ENEMIES,
 
     formatEnemy,
+
+    enemyChildren,
 }

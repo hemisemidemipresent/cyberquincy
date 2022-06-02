@@ -1,14 +1,14 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
-const EnemyHelper = require('../helpers/enemies')
+const enemyHelper = require('../helpers/enemies')
 const { cyber } = require('../jsons/colours.json')
 
 const enemyOption = new SlashCommandStringOption()
     .setName('bloon_type')
     .setDescription('The type of bloon you for which you want to find the health and speed')
     .setRequired(true)
-EnemyHelper.allEnemies().forEach(enemy => {
+enemyHelper.allEnemies().forEach(enemy => {
     enemyOption.addChoice(
-        EnemyHelper.formatEnemy(enemy),
+        enemyHelper.formatEnemy(enemy),
         enemy
     )
 })
@@ -20,6 +20,11 @@ builder = new SlashCommandBuilder()
     .addIntegerOption((option) => 
         option.setName('round')
             .setDescription('Round the bloon is on')
+            .setRequired(false)
+    )
+    .addBooleanOption((option) =>
+        option.setName('fortified')
+            .setDescription('Is the bloon fortified')
             .setRequired(false)
     );
 
@@ -43,13 +48,13 @@ async function execute(interaction) {
     const enemy = interaction.options.getString('bloon_type');
     const round = interaction.options.getInteger('round') || 80; // any round <=80 is default
 
-    const r80BloonSpeed = EnemyHelper.RED_BLOON_SECONDS_PER_SECOND[enemy]
-    const speedRamping = EnemyHelper.getSpeedRamping(round)
+    const r80BloonSpeed = enemyHelper.RED_BLOON_SECONDS_PER_SECOND[enemy]
+    const speedRamping = enemyHelper.getSpeedRamping(round)
     const actualBloonSpeed = r80BloonSpeed * speedRamping
     console.log(r80BloonSpeed, speedRamping, actualBloonSpeed)
 
     embed = new Discord.MessageEmbed()
-        .setTitle(`Stats for a R${round} ${EnemyHelper.formatEnemy(enemy, true)}`)
+        .setTitle(`Stats for a R${round} ${enemyHelper.formatEnemy(enemy, true)}`)
         .setColor(cyber)
         // Speed
         .addField('Speed (RBS/s)', `${actualBloonSpeed}`, true)

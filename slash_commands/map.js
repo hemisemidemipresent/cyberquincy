@@ -1,7 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
-const { cyber } = require('../jsons/colours.json');
-const { discord } = require('../aliases/misc.json');
 const FuzzySet = require('fuzzyset.js');
 
 builder = new SlashCommandBuilder()

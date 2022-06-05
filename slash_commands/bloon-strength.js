@@ -1,15 +1,21 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
-const enemyHelper = require('../helpers/enemies')
+const { 
+    Enemy,
+    ENEMIES,
+    RED_BLOON_SECONDS_PER_SECOND,
+    formatName,
+    getSpeedRamping,
+ } = require('../helpers/enemies')
 const { cyber } = require('../jsons/colours.json')
 
 const enemyOption = new SlashCommandStringOption()
     .setName('bloon_type')
     .setDescription('The type of bloon you for which you want to find the health and speed')
     .setRequired(true)
-enemyHelper.allEnemies().forEach(enemy => {
+ENEMIES.forEach(enemyName => {
     enemyOption.addChoice(
-        enemyHelper.formatEnemy(enemy),
-        enemy
+        formatName(enemyName),
+        enemyName
     )
 })
 
@@ -45,22 +51,23 @@ async function execute(interaction) {
         });
     }
 
-    const enemy = interaction.options.getString('bloon_type');
+    const enemyName = interaction.options.getString('bloon_type');
     const round = interaction.options.getInteger('round') || 80; // any round <=80 is default
 
-    const r80BloonSpeed = enemyHelper.RED_BLOON_SECONDS_PER_SECOND[enemy]
-    const speedRamping = enemyHelper.getSpeedRamping(round)
+    const r80BloonSpeed = RED_BLOON_SECONDS_PER_SECOND[enemyName]
+    const speedRamping = getSpeedRamping(round)
     const actualBloonSpeed = r80BloonSpeed * speedRamping
-    console.log(r80BloonSpeed, speedRamping, actualBloonSpeed)
+
+    const enemy = new Enemy(enemyName, round)
 
     embed = new Discord.MessageEmbed()
-        .setTitle(`Stats for a R${round} ${enemyHelper.formatEnemy(enemy, true)}`)
+        .setTitle(`Stats for a R${round} ${enemy.format(true)}`)
         .setColor(cyber)
         // Speed
         .addField('Speed (RBS/s)', `${actualBloonSpeed}`, true)
         .addField('Speed Factor (R80 x ?)', `${speedRamping}`)
         // Health
-        .addField('Layer Health (RBE)', `${1}`)
+        .addField('Layer Health (RBE)', `TBD`)
 
     return await interaction.reply({
         embeds: [embed]

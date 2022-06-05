@@ -7,6 +7,7 @@ ENEMIES = [
         GREEN = 'green',
         YELLOW = 'yellow',
         PINK = 'pink',
+        PURPLE = 'purple',
         WHITE = 'white',
         BLACK = 'black',
         ZEBRA = 'zebra',
@@ -23,10 +24,164 @@ ENEMIES = [
     ]
 ].flat()
 
-ENEMIES_THAT_CAN_BE_FORTIFIED = [LEAD, CERAMICS] + MOABS
+SUPER = 'super'
+FORTIFIED = 'fortified'
+
+ENEMIES_THAT_CAN_BE_FORTIFIED = [LEAD, CERAMIC] + MOABS
 ENEMIES_THAT_CAN_BE_SUPER = [
     WHITE, BLACK, ZEBRA, LEAD, RAINBOW, CERAMIC
 ]
+
+const RED_BLOON_SECONDS_PER_SECOND = {
+    [RED]: 1,
+    [BLUE]: 1.4,
+    [GREEN]: 1.8,
+    [YELLOW]: 3.2,
+    [PINK]: 3.5,
+    [BLACK]: 1.8,
+    [WHITE]: 2,
+    [PURPLE]: 3,
+    [LEAD]: 1,
+    [ZEBRA]: 1.8,
+    [RAINBOW]: 2.2,
+    [CERAMIC]: 2.5,
+    [MOAB]: 1,
+    [BFB]: 0.25,
+    [ZOMG]: 0.18,
+    [DDT]: 2.64,
+    [BAD]: 0.18,
+}
+
+const LAYER_RBES = {
+    [`${FORTIFIED}_${LEAD}`]: 4,
+    [CERAMIC]: 10,
+    [`${SUPER}_${CERAMIC}`]: 60,
+    [MOAB]: 200,
+    [BFB]: 700,
+    [ZOMG]: 4000,
+    [DDT]: 400,
+    [BAD]: 20000,
+}
+
+class Enemy {
+    constructor(name, round=80, fortified=false, camo=false, regrow=false) {
+        if (!ENEMIES.includes(name)) {
+            throw `${name} is not a valid Enemy type; cannot instantiate Enemy`
+        }
+
+        if (!roundHelper.isValidRound(round)) {
+            throw `${round} is not a valid BTD6 round; cannot instantiate Enemy`
+        }
+
+        if (typeof fortified != "boolean") {
+            throw `fortified must be true/false; got ${fortified} instead; cannot instantiate Enemy`
+        }
+
+        if (typeof camo != "boolean") {
+            throw `camo must be true/false; got ${camo} instead; cannot instantiate Enemy`
+        }
+
+        if (typeof regrow != "boolean") {
+            throw `regrow must be true/false; got ${regrow} instead; cannot instantiate Enemy`
+        }
+
+        this.name = name
+        this.fortified = fortified
+        this.camo = camo
+        this.regrow = regrow
+        this.round = round
+    }
+
+    supr() {
+        return this.round > 80 && ENEMIES_THAT_CAN_BE_SUPER.includes(this.name)
+    }
+
+    isBloon() {
+        return isBloon(this.name)
+    }
+
+    isMOAB() {
+        return isMOAB(this.name)
+    }
+
+    format(formalName=false) {
+        return formatName(this.name, formalName)
+    }
+
+    children() {
+        switch(enemy.name) {
+            case RED:
+                return Array(0)
+            case BLUE:
+                return Array(1).fill(RED)
+            case GREEN:
+                return Array(1).fill(BLUE)
+            case YELLOW:
+                return Array(1).fill(GREEN)
+            case PINK:
+                return Array(1).fill(YELLOW)
+            case PURPLE:
+                return Array(2).fill(PINK)
+            case WHITE:
+                return Array(2).fill(PINK)
+            case BLACK:
+                return Array(2).fill(PINK)
+            case LEAD:
+                return Array(2).fill(BLACK)
+            case ZEBRA:
+                return [BLACK, WHITE]
+            case RAINBOW:
+                return Array(2).fill(ZEBRA)
+            case CERAMIC:
+                return Array(2).fill(RAINBOW)
+            case `${SUPER}_${PURPLE}`:
+                return Array(1).fill(PINK)
+            case `${SUPER}_${BLACK}`:
+                return Array(1).fill(PINK)
+            case `${SUPER}_${LEAD}`:
+                return Array(1).fill(BLACK)
+            case `${SUPER}_${ZEBRA}`:
+                return Array(1).fill(`${SUPER}_${BLACK}`)
+            case `${SUPER}_${RAINBOW}`:
+                return Array(1).fill(`${SUPER}_${ZEBRA}`)
+            case `${SUPER}_${CERAMIC}`:
+                return Array(1).fill(RAINBOW)
+            case MOAB: // same as ddt
+            case DDT: // regrow children, but irrelevant
+                if (round <= 80) {
+                    return Array(4).fill(CERAMIC)
+                } else {
+                    return Array(4).fill(`${SUPER}_${CERAMIC}`)
+                }
+            case BFB:
+                return Array(4).fill(MOAB)
+            case ZOMG:
+                Array(4).fill(BFB)
+            case BAD:
+                return Array(2).fill(ZOMG) + Array(3).fill(DDT)
+        }
+    }
+}
+
+function formatName(enemyName, formalName=false) {
+    if (isBloon(enemyName)) {
+        let name = Aliases.toIndexNormalForm(enemyName)
+        if (formalName) name += " Bloon"
+        return name
+    } else if (isMOAB(enemyName)) {
+        let name = enemyName.toUpperCase()
+        if (formalName) name = name.split('').join('.')
+        return name
+    }
+}
+
+function isBloon(enemyName) {
+    return BLOONS.includes(enemyName)
+}
+
+function isMOAB(enemyName) {
+    return MOABS.includes(enemyName)
+}
 
 function getHealthRamping(r) {
     if (r <= 80) return 1;
@@ -46,140 +201,28 @@ function getSpeedRamping(r) {
     else if (r <= 150) return 1.6 + (r - 101) * 0.02;
     else if (r <= 200) return 3.0 + (r - 151) * 0.02;
     else if (r <= 250) return 4.5 + (r - 201) * 0.02;
-    return 6.0 + (r - 252) * 0.02;
-}
-
-function isValidEnemy(e) {
-    return ENEMIES.includes(e)
-}
-
-function isBloon(b) {
-    return BLOONS.includes(b)
-}
-
-function isMOAB(m) {
-    return MOABS.includes(m)
-}
-
-function formatEnemy(e, formalName=false) {
-    if (isBloon(e)) {
-        let name = Aliases.toIndexNormalForm(e)
-        if (formalName) name += " Bloon"
-        return name
-    } else if (isMOAB(e)) {
-        return e.toUpperCase()
-    } else {
-        throw `${e} is not a bloon/moab`
-    }
-}
-
-RED_BLOON_SECONDS_PER_SECOND = {
-    red: 1,
-    blue: 1.4,
-    green: 1.8,
-    yellow: 3.2,
-    pink: 3.5,
-    black: 1.8,
-    white: 2,
-    purple: 3,
-    lead: 1,
-    zebra: 1.8,
-    rainbow: 2.2,
-    ceramic: 2.5,
-    moab: 1,
-    bfb: 0.25,
-    zomg: 0.18,
-    ddt: 2.64,
-    bad: 0.18,
-}
-
-LAYER_RBES = {
-    fortified_lead: 4,
-    ceramic: 10,
-    super_ceramic: 60,
-    moab: 200,
-    bfb: 700,
-    zomg: 4000,
-    ddt: 400,
-    bad: 20000,
-}
-
-function enemyChildren(enemy, round=80, fortified=false) {
-    if (!isValidEnemy(enemy)) {
-        throw `${enemy} is not a valid bloon/MOAB`
-    }
-    if (!roundHelper.isValidRound(round)) {
-        throw `${round} is not a valid BTD6 round`
-    }
-    if (round > 80)
-    switch(enemy) {
-        case 'red':
-            return Array(0)
-        case 'blue':
-            return Array(1).fill('red')
-        case 'green':
-            return Array(1).fill('blue')
-        case 'yellow':
-            return Array(1).fill('green')
-        case 'pink':
-            return Array(1).fill('yellow')
-        case 'white':
-            return Array(2).fill('pink')
-        case 'black':
-            return Array(2).fill('pink')
-        case 'lead':
-            return Array(2).fill('black')
-        case 'zebra':
-            return ['black', 'white']
-        case 'rainbow':
-            return Array(2).fill('zebra')
-        case 'ceramic':
-            return Array(2).fill('rainbow')
-        case 'super_black':
-            return Array(1).fill('pink')
-        case 'super_lead':
-            return Array(1).fill('black')
-        case 'super_zebra':
-            return Array(1).fill('super_black')
-        case 'super_rainbow':
-            return Array(1).fill('super_zebra')
-        case 'super_ceramic':
-            return Array(1).fill('rainbow')
-        case 'moab': // same as ddt
-        case 'ddt': // regrow children, but irrelevant
-            if (round <= 80) {
-                return Array(4).fill('ceramic')
-            } else {
-                return Array(4).fill('super_ceramic')
-            }
-        case 'bfb':
-            return Array(4).fill('moab')
-        case 'zomg':
-            Array(4).fill('bfb')
-        case 'bad':
-            return Array(2).fill('zomg') + Array(3).fill('ddt')
-    }
+    else return 6.0 + (r - 252) * 0.02;
 }
 
 module.exports = {
     RED_BLOON_SECONDS_PER_SECOND,
+
+    ENEMIES, BLOONS, MOABS,
+
+    Enemy,
+
+    formatName,
 
     /**
      * @summary returns back the multiplicative factor for health ramping
      * @param {int} round
      * @returns {int} multiplicative percentage increase
      */
-    getHealthRamping,
-    /**
-     * @summary returns back the multiplicative factor for speed ramping
-     * @param {int} round
-     * @returns {int} multiplicative percentage increase
-     */
-    getSpeedRamping,
-
-    BLOONS, MOABS, ENEMIES,
-
-    formatEnemy,
-
-    enemyChildren,
+     getHealthRamping,
+     /**
+      * @summary returns back the multiplicative factor for speed ramping
+      * @param {int} round
+      * @returns {int} multiplicative percentage increase
+      */
+     getSpeedRamping,
 }

@@ -14,18 +14,34 @@ async function registerCommands() {
     await loadAliases();
 
     slashCommandCenter = require('./slash_command_center');
-    commands = slashCommandCenter.commandFiles().map((file) => file.data.toJSON());
 
     const rest = new REST({ version: '9' }).setToken(activeToken());
     if (testing) {
+        const commands = slashCommandCenter
+            .commandFiles()
+            //.filter((file) => !file.beta)
+            .map((file) => file.data.toJSON());
         await rest
             .put(Routes.applicationGuildCommands(activeClientID(), testingGuild), { body: commands })
             .then(() => console.log('Successfully registered application commands for test guild.'))
             .catch(console.error);
     } else {
+        const commands = slashCommandCenter
+            .commandFiles()
+            .filter((file) => !file.beta)
+            .map((file) => file.data.toJSON());
         await rest
             .put(Routes.applicationCommands(activeClientID()), { body: commands })
             .then(() => console.log('Successfully registered application commands for all guilds.'))
+            .catch(console.error);
+
+        const betaCommands = slashCommandCenter
+            .commandFiles()
+            .filter((file) => file.beta)
+            .map((file) => file.data.toJSON());
+        await rest
+            .put(Routes.applicationGuildCommands(activeClientID(), testingGuild), { body: betaCommands })
+            .then(() => console.log('Successfully registered beta commands for test guild.'))
             .catch(console.error);
     }
 }

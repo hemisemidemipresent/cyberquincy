@@ -61,8 +61,11 @@ async function execute(interaction) {
 
     const enemy = new Enemy(enemyName, round)
 
+    console.log(enemy.thumbnail())
+
     embed = new Discord.MessageEmbed()
-        .setTitle(`${enemy.format(true)} (R${round})`)
+        .setTitle(`${enemy.formatName(true)} (R${round})`)
+        .setThumbnail(`https://static.wikia.nocookie.net/b__/images/f/f2/BTD6Red.png/revision/latest?cb=20180809060915&path-prefix=bloons`)
         .setColor(cyber)
         // Speed
         .addField('Speed (RBS/s)', `${actualBloonSpeed}`, true)

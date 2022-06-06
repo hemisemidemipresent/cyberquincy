@@ -104,7 +104,7 @@ class Enemy {
         return isMOAB(this.name)
     }
 
-    format(formalName=false) {
+    formatName(formalName=false) {
         return formatName(this.name, formalName)
     }
 
@@ -122,6 +122,20 @@ class Enemy {
         const newBloon = structuredClone(this)
         newBloon.name = name
         return newBloon
+    }
+
+    thumbnail() {
+        let popupLink;
+        if (this.isBloon()) {
+            const camo = this.camo ? 'Camo' : ''
+            const regrow = this.regrow ? 'Regrow' : ''
+            const fortified = this.fortified ? 'Fortified' : ''
+            popupLink = `https://bloons.fandom.com/wiki/Bloons_Wiki?file=BTD6${camo}${regrow}${fortified}${this.formatName()}.png`
+        } else if (this.isMOAB()) {
+            const fortified = this.fortified ? 'Fortified' : ''
+            popupLink = `https://bloons.fandom.com/wiki/Bloons_Wiki?file=BTD63D${fortified}${this.formatName()}.png`
+        }
+        return popupLink;
     }
 }
 

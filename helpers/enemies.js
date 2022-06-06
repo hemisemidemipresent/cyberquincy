@@ -109,56 +109,192 @@ class Enemy {
     }
 
     children() {
-        switch(enemy.name) {
+        const clump = new EnemyClump(this, 1)
+        return clump.children()
+    }
+
+    /**
+     * @summary copies itself but changes the name/color to specified. It maintains the other important properties, as if the layer were popped.
+     * @param {string} name
+     * @returns {Enemy} The same enemy as this (fortified, regrow, etc.) but with the specified new name
+     */
+    shade(name) {
+        const newBloon = structuredClone(this)
+        newBloon.name = name
+        return newBloon
+    }
+}
+
+// https://bloons.fandom.com/wiki/Bloons_Wiki?file=BTD63DDDT.png
+// https://bloons.fandom.com/wiki/Bloons_Wiki?file=BTD6CamoRegrowRed.png
+
+
+// Just a group of size N of the same type of enemy
+// This prevents the need from instantiating N of the same enemy type during calculation
+class EnemyClump {
+    constructor(enemy=null, size=1) {
+        if (enemy && !(enemy instanceof Enemy)) {
+            throw `enemy needs to be of type "Enemy"; got a ${typeof enemy} instead; cannot instantiate EnemyClump`
+        }
+
+        if (!Number.isInteger(size) || parseInt(size) < 0) {
+            throw `size needs to be a whole number; got ${size} instead; cannot instantiate EnemyClump`
+        }
+
+        if (!enemy && size > 0) {
+            throw `size must be zero if there is no enemy; cannot instantiate EnemyClump`
+        }
+
+        this.enemy = enemy
+        this.size = size
+    }
+
+    children() {
+        switch(this.enemy.name) {
             case RED:
-                return Array(0)
+                return []
             case BLUE:
-                return Array(1).fill(RED)
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(RED),
+                        this.size
+                    )
+                ]
             case GREEN:
-                return Array(1).fill(BLUE)
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(BLUE),
+                        this.size
+                    )
+                ]
             case YELLOW:
-                return Array(1).fill(GREEN)
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(GREEN),
+                        this.size
+                    )
+                ]
             case PINK:
-                return Array(1).fill(YELLOW)
-            case PURPLE:
-                return Array(2).fill(PINK)
-            case WHITE:
-                return Array(2).fill(PINK)
-            case BLACK:
-                return Array(2).fill(PINK)
-            case LEAD:
-                return Array(2).fill(BLACK)
-            case ZEBRA:
-                return [BLACK, WHITE]
-            case RAINBOW:
-                return Array(2).fill(ZEBRA)
-            case CERAMIC:
-                return Array(2).fill(RAINBOW)
-            case `${SUPER}_${PURPLE}`:
-                return Array(1).fill(PINK)
-            case `${SUPER}_${BLACK}`:
-                return Array(1).fill(PINK)
-            case `${SUPER}_${LEAD}`:
-                return Array(1).fill(BLACK)
-            case `${SUPER}_${ZEBRA}`:
-                return Array(1).fill(`${SUPER}_${BLACK}`)
-            case `${SUPER}_${RAINBOW}`:
-                return Array(1).fill(`${SUPER}_${ZEBRA}`)
-            case `${SUPER}_${CERAMIC}`:
-                return Array(1).fill(RAINBOW)
-            case MOAB: // same as ddt
-            case DDT: // regrow children, but irrelevant
-                if (round <= 80) {
-                    return Array(4).fill(CERAMIC)
-                } else {
-                    return Array(4).fill(`${SUPER}_${CERAMIC}`)
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(YELLOW),
+                        this.size
+                    )
+                ]
+            case PURPLE: {
+                const superFactor = this.enemy.supr() ? 1 : 2
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(PINK),
+                        this.size * superFactor
+                    )
+                ]
+            }
+            case WHITE: {
+                const superFactor = this.enemy.supr() ? 1 : 2
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(PINK),
+                        this.size * superFactor
+                    )
+                ]
+            }
+            case BLACK: {
+                const superFactor = this.enemy.supr() ? 1 : 2
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(PINK),
+                        this.size * superFactor
+                    )
+                ]
+            }
+            case LEAD: {
+                const superFactor = this.enemy.supr() ? 1 : 2
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(BLACK),
+                        this.size * superFactor
+                    )
+                ]
+            }
+            case ZEBRA: {
+                let result = [
+                    new EnemyClump(
+                        this.enemy.shade(BLACK),
+                        this.size * superFactor
+                    )
+                ]
+                if (this.enemy.supr()) {
+                    result += [
+                        new EnemyClump(
+                            this.enemy.shade(WHITE),
+                            this.size * superFactor
+                        )
+                    ]
                 }
+                return result;
+            }
+            case RAINBOW: {
+                const superFactor = this.enemy.supr() ? 1 : 2
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(ZEBRA),
+                        this.size * superFactor
+                    )
+                ]
+            }
+            case CERAMIC: {
+                const superFactor = this.enemy.supr() ? 1 : 2
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(RAINBOW),
+                        this.size * superFactor
+                    )
+                ]
+            }
+            case MOAB:
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(CERAMIC),
+                        this.size * 4
+                    )
+                ]
+            case DDT:
+                const child = this.enemy.shade(CERAMIC)
+                child.regrow = regrow
+                return [
+                    new EnemyClump(
+                        child,
+                        this.size * 4
+                    )
+                ]
             case BFB:
-                return Array(4).fill(MOAB)
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(MOAB),
+                        this.size * 4
+                    )
+                ]
             case ZOMG:
-                Array(4).fill(BFB)
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(BFB),
+                        this.size * 4
+                    )
+                ]
             case BAD:
-                return Array(2).fill(ZOMG) + Array(3).fill(DDT)
+                return [
+                    new EnemyClump(
+                        this.enemy.shade(ZOMG),
+                        this.size * 2
+                    ),
+                    new EnemyClump(
+                        this.enemy.shade(DDT),
+                        this.size * 3
+                    ),
+                ]
+            default:
+                throw `\`children()\` doesn't account for ${this.enemy.name}`
         }
     }
 }

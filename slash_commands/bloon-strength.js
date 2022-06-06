@@ -2,7 +2,7 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/bu
 const { 
     Enemy,
     ENEMIES,
-    RED_BLOON_SECONDS_PER_SECOND,
+    BASE_RED_BLOON_SECONDS_PER_SECOND,
     formatName,
     getSpeedRamping,
  } = require('../helpers/enemies')
@@ -54,7 +54,7 @@ async function execute(interaction) {
     const enemyName = interaction.options.getString('bloon_type');
     const round = interaction.options.getInteger('round') || 80; // any round <=80 is default
 
-    const r80BloonSpeed = RED_BLOON_SECONDS_PER_SECOND[enemyName]
+    const r80BloonSpeed = BASE_RED_BLOON_SECONDS_PER_SECOND[enemyName]
     const speedRamping = getSpeedRamping(round)
     const actualBloonSpeed = r80BloonSpeed * speedRamping
 

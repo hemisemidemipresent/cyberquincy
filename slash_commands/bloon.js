@@ -77,7 +77,7 @@ async function execute(interaction) {
     const enemy = new Enemy(enemyName, round, fortified, camo, regrow)
 
     embed = new Discord.MessageEmbed()
-        .setTitle(`${enemy.formatName(true)} (R${round})`)
+        .setTitle(`${enemy.description()} (R${round})`)
         .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
         // Speed

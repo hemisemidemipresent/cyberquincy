@@ -94,6 +94,14 @@ class Enemy {
         this.round = round
     }
 
+    description() {
+        const camo = this.camo ? 'Camo ' : ''
+        const regrow = this.regrow ? 'Regrow ' : ''
+        const fortified = this.fortified ? 'Fortified ' : ''
+        const supr = this.supr() ? 'Super ' : ''
+        return `${fortified}${regrow}${camo}${supr}${this.formatName(true)}`
+    }
+
     supr() {
         return this.round > 80 && ENEMIES_THAT_CAN_BE_SUPER.includes(this.name)
     }
@@ -132,25 +140,30 @@ class Enemy {
         const fortified = this.fortified ? 'Fortified' : ''
 
         let bloonPageLink;
-        let searches;
+        let bloonSelectors;
         if (this.isBloon()) {
             bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true).split(' ').join('_')}`
-            const searchKey = `${fortified}${camo}${regrow}${this.formatName()}.png`
-            searches = [searchKey, `BTD6${searchKey}`]
+            const selectorKey = `${fortified}${camo}${regrow}${this.formatName()}.png`
+            bloonSelectors = [selectorKey, `BTD6${selectorKey}`]
+            if (regrow) {
+                bloonSelectors = bloonSelectors.concat(
+                    bloonSelectors.map(search => search.replace(/Regrow/, 'Regrowth'))
+                )
+            }
         } else if (this.isMOAB()) {
             bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true)}`
-            const searchKey = `${fortified}${this.formatName()}.png`
-            searches = [`BTD63D${searchKey}`, `3D${searchKey}`, `BTD3D${searchKey}`, `BTD6${searchKey}`]
+            const selectorKey = `${fortified}${this.formatName()}.png`
+            bloonSelectors = [`BTD63D${selectorKey}`, `3D${selectorKey}`, `BTD3D${selectorKey}`, `BTD6${selectorKey}`]
             if (fortified) {
-                searches = searches.concat(
-                    searches.map(search => search.replace(/Fortified/, 'F'))
+                bloonSelectors = bloonSelectors.concat(
+                    bloonSelectors.map(search => search.replace(/Fortified/, 'F'))
                 )
             }
         }
         const response = await axios.get(bloonPageLink)
         let $ = cheerio.load(response.data);
 
-        for (const search of searches) {
+        for (const search of bloonSelectors) {
             let imageTile = $(this.thumbnailImageTileSelector(search))
             if (imageTile.length > 0) {
                 return imageTile.attr('data-src')

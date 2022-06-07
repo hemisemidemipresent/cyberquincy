@@ -127,27 +127,41 @@ class Enemy {
     }
 
     async thumbnail() {
-        if (this.isBloon()) {
-            const camo = this.camo ? 'Camo' : ''
-            const regrow = this.regrow ? 'Regrow' : ''
-            const fortified = this.fortified ? 'Fortified' : ''
+        const camo = this.camo ? 'Camo' : ''
+        const regrow = this.regrow ? 'Regrow' : ''
+        const fortified = this.fortified ? 'Fortified' : ''
 
-            const bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName()}`
-            const search = `${fortified}${camo}${regrow}${this.formatName()}.png`
-            const response = await axios.get(bloonPageLink)
-            let $ = cheerio.load(response.data);
-            
-            let imageTile = $(this.thumbnailImageTileSelector(search))
-            if (imageTile.length == 0) {
-                imageTile = $(this.thumbnailImageTileSelector(`BTD6${search}`))
-            }
-            return imageTile.attr('data-src');
+        let bloonPageLink;
+        let searches;
+        if (this.isBloon()) {
+            bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true).split(' ').join('_')}`
+            const searchKey = `${fortified}${camo}${regrow}${this.formatName()}.png`
+            searches = [searchKey, `BTD6${searchKey}`]
         } else if (this.isMOAB()) {
+            bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true)}`
+            const searchKey = `${fortified}${this.formatName()}.png`
+            searches = [`BTD63D${searchKey}`, `3D${searchKey}`, `BTD3D${searchKey}`, `BTD6${searchKey}`]
+            if (fortified) {
+                searches = searches.concat(
+                    searches.map(search => search.replace(/Fortified/, 'F'))
+                )
+            }
         }
+        const response = await axios.get(bloonPageLink)
+        let $ = cheerio.load(response.data);
+
+        for (const search of searches) {
+            let imageTile = $(this.thumbnailImageTileSelector(search))
+            if (imageTile.length > 0) {
+                return imageTile.attr('data-src')
+            }
+        }
+
+        return null;
     }
 
     thumbnailImageTileSelector(search) {
-        return `table.article-table img[data-image-name=${search}]`
+        return `table.article-table img[alt=${search}]`
     }
 }
 
@@ -332,7 +346,7 @@ function formatName(enemyName, formalName=false) {
         return name
     } else if (isMOAB(enemyName)) {
         let name = enemyName.toUpperCase()
-        if (formalName) name = name.split('').join('.')
+        if (formalName) name = name.split('').join('.') + '.'
         return name
     }
 }

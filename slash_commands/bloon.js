@@ -54,18 +54,17 @@ async function execute(interaction) {
 
     const enemyName = interaction.options.getString('bloon');
     const round = interaction.options.getInteger('round') || 80; // any round <=80 is default
+    const fortified = !!interaction.options.getString('fortified')
 
     const r80BloonSpeed = BASE_RED_BLOON_SECONDS_PER_SECOND[enemyName]
     const speedRamping = getSpeedRamping(round)
     const actualBloonSpeed = r80BloonSpeed * speedRamping
 
-    const enemy = new Enemy(enemyName, round)
-
-    console.log(enemy.thumbnail())
+    const enemy = new Enemy(enemyName, round, fortified)
 
     embed = new Discord.MessageEmbed()
         .setTitle(`${enemy.formatName(true)} (R${round})`)
-        .setThumbnail(`https://static.wikia.nocookie.net/b__/images/f/f2/BTD6Red.png/revision/latest?cb=20180809060915&path-prefix=bloons`)
+        .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
         // Speed
         .addField('Speed (RBS/s)', `${actualBloonSpeed}`, true)

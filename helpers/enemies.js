@@ -1,4 +1,6 @@
 const roundHelper = require('./rounds')
+const axios = require('axios')
+const cheerio = require('cheerio')
 
 ENEMIES = [
     BLOONS = [
@@ -124,18 +126,28 @@ class Enemy {
         return newBloon
     }
 
-    thumbnail() {
-        let popupLink;
+    async thumbnail() {
         if (this.isBloon()) {
             const camo = this.camo ? 'Camo' : ''
             const regrow = this.regrow ? 'Regrow' : ''
             const fortified = this.fortified ? 'Fortified' : ''
-            popupLink = `https://bloons.fandom.com/wiki/Bloons_Wiki?file=BTD6${camo}${regrow}${fortified}${this.formatName()}.png`
+
+            const bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName()}`
+            const search = `${fortified}${camo}${regrow}${this.formatName()}.png`
+            const response = await axios.get(bloonPageLink)
+            let $ = cheerio.load(response.data);
+            
+            let imageTile = $(this.thumbnailImageTileSelector(search))
+            if (imageTile.length == 0) {
+                imageTile = $(this.thumbnailImageTileSelector(`BTD6${search}`))
+            }
+            return imageTile.attr('data-src');
         } else if (this.isMOAB()) {
-            const fortified = this.fortified ? 'Fortified' : ''
-            popupLink = `https://bloons.fandom.com/wiki/Bloons_Wiki?file=BTD63D${fortified}${this.formatName()}.png`
         }
-        return popupLink;
+    }
+
+    thumbnailImageTileSelector(search) {
+        return `table.article-table img[data-image-name=${search}]`
     }
 }
 

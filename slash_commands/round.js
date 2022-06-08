@@ -32,7 +32,7 @@ function validateInput(interaction) {
 
     // Validations
     if (round < 1) return `Must enter positive numbers for round ${round}`;
-    if (round > roundHelper.ALL_ROUNDS) return `Rounds are meaningless past ${roundHelper.ALL_ROUNDS} since no bloons spawn`;
+    if (round > roundHelper.ALL_ROUNDS) return `Rounds are meaningless past ${roundHelper.ALL_ROUNDS[1]} since no bloons spawn`;
     return;
 }
 

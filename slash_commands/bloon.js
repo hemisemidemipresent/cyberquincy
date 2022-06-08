@@ -94,6 +94,11 @@ async function execute(interaction) {
         .addField('Normal Round Appearances', `${enemy.roundAppearances('r', true)}`)
         .addField('ABR Round Appearances', `${enemy.roundAppearances('ar', true)}`)
 
+    const notes = enemy.notes()
+    if (notes.length > 0) {
+        embed.addField('Notes', `${notes.map(n => ` • ${n}`).join("\n")}`)
+    }
+
     return await interaction.reply({
         embeds: [embed]
     });

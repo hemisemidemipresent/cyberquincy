@@ -118,8 +118,8 @@ class Enemy {
      * @returns The `round_contents.json`-formatted string for the bloon's appearances
      */
     roundAppearanceDescription() {
-        const camo = this.camo ? 'Camo ' : ''
-        const regrow = this.regrow ? 'Regrowth ' : ''
+        const camo = this.camo && this.name != DDT ? 'Camo ' : ''
+        const regrow = this.regrow && this.name != DDT ? 'Regrowth ' : ''
         const fortified = this.fortified ? 'Fortified ' : ''
         const name = this.formatName(this.isMOAB()) + ' '
         return `${fortified}${name}${camo}${regrow}`.trim()
@@ -305,6 +305,36 @@ class Enemy {
 
     thumbnailImageTileSelector(search) {
         return `table.article-table img[alt=${search}]`
+    }
+
+    actuallyExists() {
+        return !this.fortified || ENEMIES_THAT_CAN_BE_FORTIFIED.includes(this.name)
+    }
+
+    onlyExistsInChallengeEditor() {
+        return this.isMOAB() && this.name != DDT && (this.camo || this.regrow)
+    }
+
+    ddtRedundancy() {
+        return this.name == DDT && (this.camo || this.regrow)
+    }
+
+    notes() {
+        const notes = []
+
+        if (!this.actuallyExists()) {
+            notes.push("This bloon is only theoretical")
+        }
+
+        if (this.onlyExistsInChallengeEditor()) {
+            notes.push("Non-DDT MOABs can't have camgrow properties, but their ceramic descendants will. This is only available in challenge editor.")
+        }
+
+        if (this.ddtRedundancy()) {
+            notes.push("DDTs have the camgrow property by default")
+        }
+
+        return notes;
     }
 }
 

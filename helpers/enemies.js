@@ -100,12 +100,12 @@ class Enemy {
         this.round = round
     }
 
-    // Just the type, not the properties
+    // Just the enemy type, not the properties
     formatName(formalName=false) {
         return formatName(this.name, formalName)
     }
 
-    // The bloon's full property/type denomination
+    // The bloon's full property/type denotation
     description() {
         const camo = this.camo ? 'Camo ' : ''
         const regrow = this.regrow ? 'Regrow ' : ''

@@ -113,6 +113,9 @@ class Enemy {
         return `${fortified}${regrow}${camo}${supr}${this.formatName(true)}`
     }
 
+    /**
+     * @returns The `round_contents.json`-formatted string for the bloon's appearances
+     */
     roundAppearanceDescription() {
         const camo = this.camo ? 'Camo ' : ''
         const regrow = this.regrow ? 'Regrowth ' : ''
@@ -138,6 +141,12 @@ class Enemy {
         return this.clump().children()
     }
 
+    /**
+     *
+     * @param {string} mode "r" or "ar" for normal/ABR
+     * @param {boolean} format receive as object if false; formatted string if true
+     * @returns How often this exact bloon (ignoring round) appears in each round for the specific gamemode
+     */
     roundAppearances(mode='r', format=false) {
         if (!['r', 'ar'].includes(mode)) {
             throw `mode ${mode} is unsupported`

@@ -28,12 +28,11 @@ builder = new SlashCommandBuilder()
     );
 
 function validateInput(interaction) {
-    roundContents = interaction.options.getInteger('round');
-    mode = interaction.options.getString('mode');
+    const round = interaction.options.getInteger('round');
 
     // Validations
-    if (roundContents < 1) return `Must enter positive numbers for round ${roundContents}`;
-    if (roundContents > roundHelper.ALL_ROUNDS) return `Rounds are meaningless past ${roundHelper.ALL_ROUNDS} since no bloons spawn`;
+    if (round < 1) return `Must enter positive numbers for round ${round}`;
+    if (round > roundHelper.ALL_ROUNDS) return `Rounds are meaningless past ${roundHelper.ALL_ROUNDS} since no bloons spawn`;
     return;
 }
 
@@ -123,36 +122,36 @@ async function execute(interaction) {
         });
     }
 
-    roundContents = interaction.options.getInteger('round');
+    const round = interaction.options.getInteger('round');
     game_mode = interaction.options.getString('game_mode');
 
     let isAbr = game_mode == 'abr';
 
-    if (roundContents > 140 || (isAbr && roundContents > 100)) {
-        let ramp = freeplay(roundContents, isAbr);
+    if (round > 140 || (isAbr && round > 100)) {
+        let ramp = freeplay(round, isAbr);
         return await interaction.reply({ embeds: [ramp] });
     }
 
-    [xp, totalxp] = calculateXps(roundContents);
+    [xp, totalxp] = calculateXps(round);
     let roundInfo = isAbr ? json.alt : json.reg;
-    let roundLength = getLength(roundContents, roundInfo);
-    let roundContents = rounds[`${isAbr ? 'a' : ''}r${roundContents}`].split(',').join('\n');
-    let roundRBE = isAbr ? cashAbr[roundContents].rbe : rounds2[roundContents].rbe;
-    let roundCash = rounds2[roundContents].cashThisRound;
+    let roundLength = getLength(round, roundInfo);
+    let roundContent = roundContents[`${isAbr ? 'a' : ''}r${round}`].split(',').join('\n');
+    let roundRBE = isAbr ? cashAbr[round].rbe : rounds2[round].rbe;
+    let roundCash = rounds2[round].cashThisRound;
     if (isAbr) {
-        if (roundContents > 2) {
-            roundCash = cashAbr[roundContents].cashThisRound;
+        if (round > 2) {
+            roundCash = cashAbr[round].cashThisRound;
         } else {
             roundCash = 'ABR cash data not available for R1/R2';
         }
     }
     const roundEmbed = new Discord.MessageEmbed()
-        .setTitle(`R${roundContents}` + (isAbr ? ' ABR' : ''))
-        .setDescription(`${roundContents}`)
+        .setTitle(`R${round}` + (isAbr ? ' ABR' : ''))
+        .setDescription(`${roundContent}`)
         .addField('Round Length (seconds)', roundLength.toString(), true)
         .addField('RBE', `${gHelper.numberWithCommas(roundRBE)}`, true)
-        .addField(`XP Earned on R${roundContents}`, `${gHelper.numberWithCommas(xp)}`, true)
-        .addField(`Cash Earned from R${roundContents}`, `${gHelper.numberAsCost(roundCash)}`, true)
+        .addField(`XP Earned on R${round}`, `${gHelper.numberWithCommas(xp)}`, true)
+        .addField(`Cash Earned from R${round}`, `${gHelper.numberAsCost(roundCash)}`, true)
         .addField('Total XP if You Started on R1', `${gHelper.numberWithCommas(totalxp)}`)
         .addField(
             '**Note:**',
@@ -161,9 +160,9 @@ async function execute(interaction) {
         )
         .setFooter({ text: `For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\`` })
         .setColor(colours['cyber']);
-    if (roundContents > 80) {
-        let hRamping = enemyHelper.getHealthRamping(roundContents);
-        let sRamping = enemyHelper.getSpeedRamping(roundContents);
+    if (round > 80) {
+        let hRamping = enemyHelper.getHealthRamping(round);
+        let sRamping = enemyHelper.getSpeedRamping(round);
         roundEmbed.addField('ramping', `health: ${hRamping}x\nspeed: ${sRamping}x`);
     }
     return await interaction.reply({ embeds: [roundEmbed] });

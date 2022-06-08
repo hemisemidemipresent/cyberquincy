@@ -1,4 +1,6 @@
 const roundHelper = require('./rounds')
+const gHelper = require('../helpers/general')
+
 const axios = require('axios')
 const cheerio = require('cheerio')
 
@@ -54,10 +56,8 @@ const BASE_RED_BLOON_SECONDS_PER_SECOND = {
     [BAD]: 0.18,
 }
 
-const LAYER_RBES = {
-    [`${FORTIFIED}_${LEAD}`]: 4,
+const BASE_LAYER_RBES = {
     [CERAMIC]: 10,
-    [`${SUPER}_${CERAMIC}`]: 60,
     [MOAB]: 200,
     [BFB]: 700,
     [ZOMG]: 4000,
@@ -119,8 +119,51 @@ class Enemy {
     }
 
     children() {
-        const clump = new EnemyClump(this, 1)
-        return clump.children()
+        return this.clump().children()
+    }
+
+    layerRBE(format=false) {
+        let layerRBE = this.baseLayerRBE()
+
+        if (this.isMOAB()) {
+            layerRBE *= getHealthRamping(this.round)
+        }
+
+        return format ? gHelper.numberWithCommas(layerRBE) : layerRBE;
+    }
+
+    baseLayerRBE() {
+        let baseLayerRBE = BASE_LAYER_RBES[this.name] || 1
+
+        if (this.supr() && this.name == CERAMIC) {
+            baseLayerRBE = 60
+        }
+
+        if (this.fortified) {
+            if (this.name == LEAD) {
+                baseLayerRBE = 4
+            } else if (ENEMIES_THAT_CAN_BE_FORTIFIED.includes(this.name)) {
+                baseLayerRBE *= 2
+            } else { // Non-existent bloons like fortifed red
+                baseLayerRBE = 4 // Purely speculative, same as lead
+            }
+        }
+
+        return baseLayerRBE;
+    }
+
+    totalRBE(format=false) {
+        const result = this.clump().totalRBE()
+        return format ? gHelper.numberWithCommas(result) : result
+    }
+
+    verticalRBE(format=false) {
+        const result = this.clump().verticalRBE()
+        return format ? gHelper.numberWithCommas(result) : result
+    }
+
+    clump(size=1) {
+        return new EnemyClump(this, size)
     }
 
     /**
@@ -128,10 +171,17 @@ class Enemy {
      * @param {string} name
      * @returns {Enemy} The same enemy as this (fortified, regrow, etc.) but with the specified new name
      */
-    shade(name) {
-        const newBloon = structuredClone(this)
-        newBloon.name = name
-        return newBloon
+    offspring(name) {
+        const newEnemy = this.clone()
+        newEnemy.name = name
+        if (!ENEMIES_THAT_CAN_BE_FORTIFIED.includes(newEnemy)) {
+            newEnemy.fortified = false
+        }
+        return newEnemy
+    }
+
+    clone() {
+        return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
     }
 
     async thumbnail() {
@@ -209,28 +259,28 @@ class EnemyClump {
             case BLUE:
                 return [
                     new EnemyClump(
-                        this.enemy.shade(RED),
+                        this.enemy.offspring(RED),
                         this.size
                     )
                 ]
             case GREEN:
                 return [
                     new EnemyClump(
-                        this.enemy.shade(BLUE),
+                        this.enemy.offspring(BLUE),
                         this.size
                     )
                 ]
             case YELLOW:
                 return [
                     new EnemyClump(
-                        this.enemy.shade(GREEN),
+                        this.enemy.offspring(GREEN),
                         this.size
                     )
                 ]
             case PINK:
                 return [
                     new EnemyClump(
-                        this.enemy.shade(YELLOW),
+                        this.enemy.offspring(YELLOW),
                         this.size
                     )
                 ]
@@ -238,7 +288,7 @@ class EnemyClump {
                 const superFactor = this.enemy.supr() ? 1 : 2
                 return [
                     new EnemyClump(
-                        this.enemy.shade(PINK),
+                        this.enemy.offspring(PINK),
                         this.size * superFactor
                     )
                 ]
@@ -247,7 +297,7 @@ class EnemyClump {
                 const superFactor = this.enemy.supr() ? 1 : 2
                 return [
                     new EnemyClump(
-                        this.enemy.shade(PINK),
+                        this.enemy.offspring(PINK),
                         this.size * superFactor
                     )
                 ]
@@ -256,7 +306,7 @@ class EnemyClump {
                 const superFactor = this.enemy.supr() ? 1 : 2
                 return [
                     new EnemyClump(
-                        this.enemy.shade(PINK),
+                        this.enemy.offspring(PINK),
                         this.size * superFactor
                     )
                 ]
@@ -265,7 +315,7 @@ class EnemyClump {
                 const superFactor = this.enemy.supr() ? 1 : 2
                 return [
                     new EnemyClump(
-                        this.enemy.shade(BLACK),
+                        this.enemy.offspring(BLACK),
                         this.size * superFactor
                     )
                 ]
@@ -273,17 +323,17 @@ class EnemyClump {
             case ZEBRA: {
                 let result = [
                     new EnemyClump(
-                        this.enemy.shade(BLACK),
-                        this.size * superFactor
+                        this.enemy.offspring(BLACK),
+                        this.size
                     )
                 ]
-                if (this.enemy.supr()) {
-                    result += [
+                if (!this.enemy.supr()) {
+                    result.push(
                         new EnemyClump(
-                            this.enemy.shade(WHITE),
-                            this.size * superFactor
+                            this.enemy.offspring(WHITE),
+                            this.size
                         )
-                    ]
+                    )
                 }
                 return result;
             }
@@ -291,7 +341,7 @@ class EnemyClump {
                 const superFactor = this.enemy.supr() ? 1 : 2
                 return [
                     new EnemyClump(
-                        this.enemy.shade(ZEBRA),
+                        this.enemy.offspring(ZEBRA),
                         this.size * superFactor
                     )
                 ]
@@ -300,7 +350,7 @@ class EnemyClump {
                 const superFactor = this.enemy.supr() ? 1 : 2
                 return [
                     new EnemyClump(
-                        this.enemy.shade(RAINBOW),
+                        this.enemy.offspring(RAINBOW),
                         this.size * superFactor
                     )
                 ]
@@ -308,13 +358,13 @@ class EnemyClump {
             case MOAB:
                 return [
                     new EnemyClump(
-                        this.enemy.shade(CERAMIC),
+                        this.enemy.offspring(CERAMIC),
                         this.size * 4
                     )
                 ]
             case DDT:
-                const child = this.enemy.shade(CERAMIC)
-                child.regrow = regrow
+                const child = this.enemy.offspring(CERAMIC)
+                child.regrow = true
                 return [
                     new EnemyClump(
                         child,
@@ -324,31 +374,52 @@ class EnemyClump {
             case BFB:
                 return [
                     new EnemyClump(
-                        this.enemy.shade(MOAB),
+                        this.enemy.offspring(MOAB),
                         this.size * 4
                     )
                 ]
             case ZOMG:
                 return [
                     new EnemyClump(
-                        this.enemy.shade(BFB),
+                        this.enemy.offspring(BFB),
                         this.size * 4
                     )
                 ]
             case BAD:
                 return [
                     new EnemyClump(
-                        this.enemy.shade(ZOMG),
+                        this.enemy.offspring(ZOMG),
                         this.size * 2
                     ),
                     new EnemyClump(
-                        this.enemy.shade(DDT),
+                        this.enemy.offspring(DDT),
                         this.size * 3
                     ),
                 ]
             default:
                 throw `\`children()\` doesn't account for ${this.enemy.name}`
         }
+    }
+
+    layerRBE() {
+        return this.enemy.layerRBE() * this.size
+    }
+
+    totalRBE() {
+        let totalRBE = this.layerRBE()
+        // Very helpful debug statement:
+        // console.log(this.enemy.name, totalRBE, `(${this.enemy.layerRBE()} * ${this.size})`)
+        this.children().forEach(child =>
+            totalRBE += child.totalRBE()
+        )
+        return totalRBE
+    }
+
+    verticalRBE() {
+        let layerRBE = this.enemy.layerRBE()
+        let childVerticalRBEs = this.children().map(child => child.verticalRBE())
+        // console.log(layerRBE, childVerticalRBEs)
+        return layerRBE + Math.max(...childVerticalRBEs, 0)
     }
 }
 

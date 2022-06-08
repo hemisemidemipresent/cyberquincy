@@ -5,6 +5,7 @@ const {
     BASE_RED_BLOON_SECONDS_PER_SECOND,
     formatName,
     getSpeedRamping,
+    getHealthRamping,
  } = require('../helpers/enemies')
 const { cyber } = require('../jsons/colours.json')
 
@@ -72,19 +73,23 @@ async function execute(interaction) {
 
     const r80BloonSpeed = BASE_RED_BLOON_SECONDS_PER_SECOND[enemyName]
     const speedRamping = getSpeedRamping(round)
+    const healthRamping = getHealthRamping(round)
     const actualBloonSpeed = r80BloonSpeed * speedRamping
 
     const enemy = new Enemy(enemyName, round, fortified, camo, regrow)
 
+    const displayRound = round <= 80 ? "1-80" : round
+
     embed = new Discord.MessageEmbed()
-        .setTitle(`${enemy.description()} (R${round})`)
+        .setTitle(`${enemy.description()} (R${displayRound})`)
         .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
-        // Speed
-        .addField('Speed (RBS/s)', `${actualBloonSpeed}`, true)
-        .addField('Speed Factor (R80 x ?)', `${speedRamping}`)
-        // Health
-        .addField('Layer Health (RBE)', `TBD`)
+        .addField('Speed', `${actualBloonSpeed} RBS/s`, true)
+        .addField('• Layer Health', `${enemy.layerRBE(true)} RBE`, true)
+        .addField('⤩ Total Health', `${enemy.totalRBE(true)} RBE`, true)
+        .addField('↓ Vertical Health', `${enemy.verticalRBE(true)} RBE`, true)
+        .addField('Speed Factor', `${speedRamping} (xR80)`, true)
+        .addField('Health Factor', `${healthRamping} (xR80)`, true)
 
     return await interaction.reply({
         embeds: [embed]

@@ -264,7 +264,7 @@ class Enemy {
         const fortified = this.fortified ? 'Fortified' : ''
 
         let bloonPageLink;
-        let bloonSelectors; // Image alts can be formatted in multiple different ways, arbitrarily
+        let bloonSelectors; // Image alts can be named in multiple different ways, arbitrarily
         if (this.isBloon()) {
             // Green_Bloon, Ceramic_Bloon, etc.
             // https://bloons.fandom.com/wiki/Green_Bloon

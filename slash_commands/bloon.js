@@ -7,6 +7,7 @@ const {
     getSpeedRamping,
     getHealthRamping,
  } = require('../helpers/enemies')
+const roundHelper = require('../helpers/rounds')
 const { cyber } = require('../jsons/colours.json')
 
 const enemyOption = new SlashCommandStringOption()
@@ -51,8 +52,8 @@ builder = new SlashCommandBuilder()
 function validateInput(interaction) {
     const round = interaction.options.getInteger('round');
 
-    if ((round || round == 0) && round < 1) {
-        return `Must enter positive numbers for rounds (${round} inputted)`;
+    if (!roundHelper.isValidRound(round)) {
+        return `Must enter positive numbers for rounds less than ${roundHelper.ALL_ROUNDS[1]} (after which no bloons spawn)`;
     }
 }
 

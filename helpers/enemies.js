@@ -308,10 +308,6 @@ class Enemy {
     }
 }
 
-// https://bloons.fandom.com/wiki/Bloons_Wiki?file=BTD63DDDT.png
-// https://bloons.fandom.com/wiki/Bloons_Wiki?file=BTD6CamoRegrowRed.png
-
-
 // Just a group of size N of the same type of enemy
 // This prevents the need from instantiating N of the same enemy type during calculation
 class EnemyClump {

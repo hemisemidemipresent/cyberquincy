@@ -193,7 +193,7 @@ class Enemy {
     offspring(name) {
         const newEnemy = this.clone()
         newEnemy.name = name
-        if (!ENEMIES_THAT_CAN_BE_FORTIFIED.includes(newEnemy)) {
+        if (!ENEMIES_THAT_CAN_BE_FORTIFIED.includes(newEnemy.name)) {
             // Fortified lead will pop into non-fortified blacks; same with fceram into rainbow
             newEnemy.fortified = false
         }
@@ -451,7 +451,7 @@ class EnemyClump {
     totalRBE() {
         let totalRBE = this.layerRBE()
         // Very helpful debug statement:
-        // console.log(this.enemy.name, totalRBE, `(${this.enemy.layerRBE()} * ${this.size})`)
+        // console.log(this.enemy.description(), totalRBE, `(${this.enemy.layerRBE()} * ${this.size})`)
         this.children().forEach(child =>
             totalRBE += child.totalRBE()
         )

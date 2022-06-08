@@ -85,9 +85,9 @@ async function execute(interaction) {
         .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
         .addField('Speed', `${actualBloonSpeed} RBS/s`, true)
-        .addField('• Layer Health', `${enemy.layerRBE(true)} RBE`, true)
-        .addField('⤩ Total Health', `${enemy.totalRBE(true)} RBE`, true)
-        .addField('↓ Vertical Health', `${enemy.verticalRBE(true)} RBE`, true)
+        .addField('Layer Health', `${enemy.layerRBE(true)} RBE`, true)
+        .addField('Total Health', `${enemy.totalRBE(true)} RBE`, true)
+        .addField('Vertical Health', `${enemy.verticalRBE(true)} RBE`, true)
         .addField('Speed Factor', `${speedRamping} (xR80)`, true)
         .addField('Health Factor', `${healthRamping} (xR80)`, true)
 

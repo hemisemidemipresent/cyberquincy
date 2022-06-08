@@ -90,6 +90,8 @@ async function execute(interaction) {
         .addField('Vertical Health', `${enemy.verticalRBE(true)} RBE`, true)
         .addField('Speed Factor', `${speedRamping} (xR80)`, true)
         .addField('Health Factor', `${healthRamping} (xR80)`, true)
+        .addField('Normal Round Appearances', `${enemy.roundAppearances('r', true)}`)
+        .addField('ABR Round Appearances', `${enemy.roundAppearances('ar', true)}`)
 
     return await interaction.reply({
         embeds: [embed]

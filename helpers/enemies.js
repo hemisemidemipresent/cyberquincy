@@ -4,6 +4,8 @@ const gHelper = require('../helpers/general')
 const axios = require('axios')
 const cheerio = require('cheerio')
 
+const roundContents = require('../jsons/round_contents.json');
+
 ENEMIES = [
     BLOONS = [
         RED = 'red',
@@ -111,6 +113,14 @@ class Enemy {
         return `${fortified}${regrow}${camo}${supr}${this.formatName(true)}`
     }
 
+    roundAppearanceDescription() {
+        const camo = this.camo ? 'Camo ' : ''
+        const regrow = this.regrow ? 'Regrowth ' : ''
+        const fortified = this.fortified ? 'Fortified ' : ''
+        const name = this.formatName(this.isMOAB()) + ' '
+        return `${fortified}${name}${camo}${regrow}`.trim()
+    }
+
     supr() {
         return this.round > 80 && ENEMIES_THAT_CAN_BE_SUPER.includes(this.name)
     }
@@ -126,6 +136,35 @@ class Enemy {
     // Delegates to EnemyClump
     children() {
         return this.clump().children()
+    }
+
+    roundAppearances(mode='r', format=false) {
+        if (!['r', 'ar'].includes(mode)) {
+            throw `mode ${mode} is unsupported`
+        }
+
+        const roundAppearances = {}
+        const pattern = new RegExp(`(\\d+) ${this.roundAppearanceDescription()}(?:,|$)`)
+        
+        for (const r in roundContents) {
+            if (!r.startsWith(mode)) continue
+
+            const numAppearances = parseInt(
+                roundContents[r].match(pattern)?.[1] || '0'
+            );
+
+            if (numAppearances > 0) {
+                roundAppearances[r.replace(mode, 'R')] = parseInt(numAppearances)
+            }
+        }
+
+        if (format) {
+            if (Object.keys(roundAppearances).length > 0) {
+                return Object.entries(roundAppearances).map(pair => `**${pair[0]}**: ${pair[1]}`).join(", ")
+            } else {
+                return `No natural appearances`
+            }
+        } else return roundAppearances
     }
 
     /**

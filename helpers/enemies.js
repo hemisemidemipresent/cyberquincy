@@ -32,6 +32,9 @@ SUPER = 'super'
 FORTIFIED = 'fortified'
 
 ENEMIES_THAT_CAN_BE_FORTIFIED = [LEAD, CERAMIC] + MOABS
+
+// Super black bloons are black bloons with only 1 pink child (seen after R80)
+// i.e. this isn't just limited to "super ceramics"
 ENEMIES_THAT_CAN_BE_SUPER = [
     PURPLE, WHITE, BLACK, ZEBRA, LEAD, RAINBOW, CERAMIC
 ]
@@ -94,6 +97,12 @@ class Enemy {
         this.round = round
     }
 
+    // Just the type, not the properties
+    formatName(formalName=false) {
+        return formatName(this.name, formalName)
+    }
+
+    // The bloon's full property/type denomination
     description() {
         const camo = this.camo ? 'Camo ' : ''
         const regrow = this.regrow ? 'Regrow ' : ''
@@ -114,14 +123,14 @@ class Enemy {
         return isMOAB(this.name)
     }
 
-    formatName(formalName=false) {
-        return formatName(this.name, formalName)
-    }
-
+    // Delegates to EnemyClump
     children() {
         return this.clump().children()
     }
 
+    /**
+     * @returns The RBE of the outer layer of the specified enemy on the enemy's specified round
+     */
     layerRBE(format=false) {
         let layerRBE = this.baseLayerRBE()
 
@@ -132,6 +141,9 @@ class Enemy {
         return format ? gHelper.numberWithCommas(layerRBE) : layerRBE;
     }
 
+    /**
+     * @returns The RBE of the outer layer of the specified enemy on R80 or before
+     */
     baseLayerRBE() {
         let baseLayerRBE = BASE_LAYER_RBES[this.name] || 1
 
@@ -152,16 +164,23 @@ class Enemy {
         return baseLayerRBE;
     }
 
+    // Delegates to EnemyClump
     totalRBE(format=false) {
         const result = this.clump().totalRBE()
         return format ? gHelper.numberWithCommas(result) : result
     }
 
+    // Delegates to EnemyClump
     verticalRBE(format=false) {
         const result = this.clump().verticalRBE()
         return format ? gHelper.numberWithCommas(result) : result
     }
 
+    /**
+     * 
+     * @param {int} size the amount of the clump, defaults to 1
+     * @returns An enemy clump of this type of enemy of the specified size
+     */
     clump(size=1) {
         return new EnemyClump(this, size)
     }
@@ -169,12 +188,13 @@ class Enemy {
     /**
      * @summary copies itself but changes the name/color to specified. It maintains the other important properties, as if the layer were popped.
      * @param {string} name
-     * @returns {Enemy} The same enemy as this (fortified, regrow, etc.) but with the specified new name
+     * @returns {Enemy} The same enemy as this (regrow, etc.) but with the specified new name
      */
     offspring(name) {
         const newEnemy = this.clone()
         newEnemy.name = name
         if (!ENEMIES_THAT_CAN_BE_FORTIFIED.includes(newEnemy)) {
+            // Fortified lead will pop into non-fortified blacks; same with fceram into rainbow
             newEnemy.fortified = false
         }
         return newEnemy
@@ -184,14 +204,21 @@ class Enemy {
         return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
     }
 
+    /**
+     * 
+     * @summary Goes to the enemy page specified by the type (green, rainbow, bfb, etc.), "scrolls to" the #Variants section, and scrapes the correct image url using axios/cheerio
+     * @returns The image URL for the enemy's full description
+     */
     async thumbnail() {
         const camo = this.camo ? 'Camo' : ''
         const regrow = this.regrow ? 'Regrow' : ''
         const fortified = this.fortified ? 'Fortified' : ''
 
         let bloonPageLink;
-        let bloonSelectors;
+        let bloonSelectors; // Image alts can be formatted in multiple different ways, arbitrarily
         if (this.isBloon()) {
+            // Green_Bloon, Ceramic_Bloon, etc.
+            // https://bloons.fandom.com/wiki/Green_Bloon
             bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true).split(' ').join('_')}`
             const selectorKey = `${fortified}${camo}${regrow}${this.formatName()}.png`
             bloonSelectors = [selectorKey, `BTD6${selectorKey}`]
@@ -201,6 +228,9 @@ class Enemy {
                 )
             }
         } else if (this.isMOAB()) {
+            // https://bloons.fandom.com/wiki/M.O.A.B.
+            // Separating the letters with dots is the safest way to go to the right page
+            // i.e. /MOAB would bring you to a disambiguation
             bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true)}`
             const selectorKey = `${fortified}${this.formatName()}.png`
             bloonSelectors = [`BTD63D${selectorKey}`, `3D${selectorKey}`, `BTD3D${selectorKey}`, `BTD6${selectorKey}`]
@@ -216,6 +246,7 @@ class Enemy {
         for (const search of bloonSelectors) {
             let imageTile = $(this.thumbnailImageTileSelector(search))
             if (imageTile.length > 0) {
+                // Return the full image url at the first match for the correct bloon tile
                 return imageTile.attr('data-src')
             }
         }
@@ -252,6 +283,12 @@ class EnemyClump {
         this.size = size
     }
 
+    /**
+     * @returns a list of EnemyClumps corresponding to the children of this EnemyClump
+     * i.e. if this EnemyClump represents 3 BADs, then its children would be:
+     *   - An EnemyClump of 6 ZOMGs
+     *   - An EnemyClump of 9 DDTs
+     */
     children() {
         switch(this.enemy.name) {
             case RED:
@@ -401,10 +438,16 @@ class EnemyClump {
         }
     }
 
+    /**
+     * @returns The RBE needed to pop the layer of all enemies combined
+     */
     layerRBE() {
         return this.enemy.layerRBE() * this.size
     }
 
+    /**
+     * @returns The RBE needed to eliminate all enemies combined
+     */
     totalRBE() {
         let totalRBE = this.layerRBE()
         // Very helpful debug statement:
@@ -415,6 +458,9 @@ class EnemyClump {
         return totalRBE
     }
 
+    /**
+     * @returns The minimum hit that a first strike-type missile would need to do in order to one-shot the bloon
+     */
     verticalRBE() {
         let layerRBE = this.enemy.layerRBE()
         let childVerticalRBEs = this.children().map(child => child.verticalRBE())

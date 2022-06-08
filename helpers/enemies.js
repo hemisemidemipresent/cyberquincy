@@ -315,7 +315,7 @@ class Enemy {
         return this.isMOAB() && this.name != DDT && (this.camo || this.regrow)
     }
 
-    ddtRedundancy() {
+    hasDDTRedundancy() {
         return this.name == DDT && (this.camo || this.regrow)
     }
 
@@ -330,7 +330,7 @@ class Enemy {
             notes.push("Non-DDT MOABs can't have camgrow properties, but their ceramic descendants will. This is only available in challenge editor.")
         }
 
-        if (this.ddtRedundancy()) {
+        if (this.hasDDTRedundancy()) {
             notes.push("DDTs have the camgrow property by default")
         }
 
@@ -538,7 +538,7 @@ class EnemyClump {
     }
 
     /**
-     * @returns The minimum hit that a first strike-type missile would need to do in order to one-shot the bloon
+     * @returns The minimum damage that a tsar-bomba type detonation would need to do in order to one-shot the bloon and insides
      */
     verticalRBE() {
         let layerRBE = this.enemy.layerRBE()

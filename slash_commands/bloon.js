@@ -52,7 +52,7 @@ builder = new SlashCommandBuilder()
 function validateInput(interaction) {
     const round = interaction.options.getInteger('round');
 
-    if (!roundHelper.isValidRound(round)) {
+    if (round && !roundHelper.isValidRound(round)) {
         return `Must enter positive numbers for rounds less than ${roundHelper.ALL_ROUNDS[1]} (after which no bloons spawn)`;
     }
 }

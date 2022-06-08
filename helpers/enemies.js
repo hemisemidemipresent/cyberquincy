@@ -334,6 +334,10 @@ class Enemy {
             notes.push("DDTs have the camgrow property by default")
         }
 
+        if (this.round == 104 || this.round == 114) {
+            notes.push("There is a bizarre bug wherein all MOAB class bloons on rounds 104 and 114 have 1 less hp than they should for every layer. Quincybot doesn't take this into account for MOAB health calculation.")
+        }
+
         return notes;
     }
 }

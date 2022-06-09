@@ -2,11 +2,12 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 const FBG = require('../jsons/freeplay.json');
 const json = require('../jsons/rounds_topper.json');
-const rounds = require('../jsons/rounds.json');
+const roundContents = require('../jsons/round_contents.json');
 const rounds2 = require('../jsons/round2.json');
 const cashAbr = require('../jsons/income-abr.json');
 
-const b = require('../helpers/bloons-general');
+const roundHelper = require('../helpers/rounds')
+const enemyHelper = require('../helpers/enemies')
 const gHelper = require('../helpers/general');
 
 const { cyber } = require('../jsons/colours.json');
@@ -27,20 +28,19 @@ builder = new SlashCommandBuilder()
     );
 
 function validateInput(interaction) {
-    round = interaction.options.getInteger('round');
-    mode = interaction.options.getString('mode');
+    const round = interaction.options.getInteger('round');
 
     // Validations
     if (round < 1) return `Must enter positive numbers for round ${round}`;
-    if (round > b.ALL_ROUNDS) return `Rounds are meaningless past ${b.ALL_ROUNDS} since no bloons spawn`;
+    if (round > roundHelper.ALL_ROUNDS) return `Rounds are meaningless past ${roundHelper.ALL_ROUNDS[1]} since no bloons spawn`;
     return;
 }
 
 function freeplay(round, isAbr) {
     [xp, totalxp] = calculateXps(round);
 
-    let hRamping = b.getHealthRamping(round);
-    let sRamping = b.getSpeedRamping(round);
+    let hRamping = enemyHelper.getHealthRamping(round);
+    let sRamping = enemyHelper.getSpeedRamping(round);
     let bloonSets = getBloonSets(round);
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${round}` + (isAbr ? ' ABR' : ''))
@@ -122,7 +122,7 @@ async function execute(interaction) {
         });
     }
 
-    round = interaction.options.getInteger('round');
+    const round = interaction.options.getInteger('round');
     game_mode = interaction.options.getString('game_mode');
 
     let isAbr = game_mode == 'abr';
@@ -135,7 +135,7 @@ async function execute(interaction) {
     [xp, totalxp] = calculateXps(round);
     let roundInfo = isAbr ? json.alt : json.reg;
     let roundLength = getLength(round, roundInfo);
-    let roundContents = rounds[`${isAbr ? 'a' : ''}r${round}`].split(',').join('\n');
+    let roundContent = roundContents[`${isAbr ? 'a' : ''}r${round}`].split(',').join('\n');
     let roundRBE = isAbr ? cashAbr[round].rbe : rounds2[round].rbe;
     let roundCash = rounds2[round].cashThisRound;
     if (isAbr) {
@@ -147,7 +147,7 @@ async function execute(interaction) {
     }
     const roundEmbed = new Discord.MessageEmbed()
         .setTitle(`R${round}` + (isAbr ? ' ABR' : ''))
-        .setDescription(`${roundContents}`)
+        .setDescription(`${roundContent}`)
         .addField('Round Length (seconds)', roundLength.toString(), true)
         .addField('RBE', `${gHelper.numberWithCommas(roundRBE)}`, true)
         .addField(`XP Earned on R${round}`, `${gHelper.numberWithCommas(xp)}`, true)
@@ -161,8 +161,8 @@ async function execute(interaction) {
         .setFooter({ text: `For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\`` })
         .setColor(colours['cyber']);
     if (round > 80) {
-        let hRamping = b.getHealthRamping(round);
-        let sRamping = b.getSpeedRamping(round);
+        let hRamping = enemyHelper.getHealthRamping(round);
+        let sRamping = enemyHelper.getSpeedRamping(round);
         roundEmbed.addField('ramping', `health: ${hRamping}x\nspeed: ${sRamping}x`);
     }
     return await interaction.reply({ embeds: [roundEmbed] });

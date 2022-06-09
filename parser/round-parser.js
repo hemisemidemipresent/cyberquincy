@@ -1,7 +1,7 @@
 const DifficultyParser = require('./difficulty-parser.js');
 const NaturalNumberParser = require('./natural-number-parser.js');
 
-const b = require('../helpers/bloons-general');
+const roundHelper = require('../helpers/rounds');
 // Looks for a round number, permitting natural numbers based on the difficulty provided to the constructor.
 // Discord command users can provide the round in any of the following forms:
 //    - 15, r15, round15
@@ -37,7 +37,7 @@ class RoundParser {
 
             // Translate difficulty into rounds
             // The general helper module has the conversion between difficulty and valid rounds
-            [startRound, endRound] = b[difficulty + '_ROUNDS'];
+            [startRound, endRound] = roundHelper[difficulty + '_ROUNDS'];
         }
 
         // Ultimately at play is just a natural number parser with bounds

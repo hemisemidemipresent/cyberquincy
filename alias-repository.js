@@ -403,11 +403,6 @@ class AliasRepository extends Array {
         return heroes.map((ag) => ag.canonical);
     }
 
-    allBloons() {
-        const bloons = this.getAliasGroupsFromSameFileAs('RED');
-        return bloons.map((ag) => ag.canonical);
-    }
-
     mapToIndexAbbreviation(map) {
         if (!map) return null;
         const mapAliases = this.getAliasSet(map);

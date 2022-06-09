@@ -84,7 +84,6 @@ async function execute(interaction) {
     const displayRound = round <= 80 ? "1-80" : round
 
     const ignoringSuper = ENEMIES_THAT_CAN_BE_SUPER.includes(enemy.name) ? ' (super and not)' : ''
-    const verticalHealthUnits = enemy.isMOAB() ? 'rbe' : 'total layers'
 
     embed = new Discord.MessageEmbed()
         .setTitle(`${enemy.description()} (r${displayRound})`)
@@ -93,7 +92,7 @@ async function execute(interaction) {
         .addField('Speed', `${actualBloonSpeed} rbs/s`, true)
         .addField('Layer Health', `${enemy.layerRBE(true)} rbe`, true)
         .addField('Total Health', `${enemy.totalRBE(true)} rbe`, true)
-        .addField('Vertical Health', `${enemy.verticalRBE(true)} ${verticalHealthUnits}`, true)
+        .addField('Vertical Health', `${enemy.verticalRBE(true)} rbe`, true)
         .addField('Speed Factor', `${speedRamping} (x r80)`, true)
         .addField('Health Factor', `${healthRampingText}`, true)
         .addField('Direct Children', `${enemy.children(true)}`)

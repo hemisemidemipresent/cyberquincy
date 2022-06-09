@@ -3,6 +3,7 @@ const {
     Enemy,
     ENEMIES,
     BASE_RED_BLOON_SECONDS_PER_SECOND,
+    ENEMIES_THAT_CAN_BE_SUPER,
     formatName,
     getSpeedRamping,
     getHealthRamping,
@@ -72,27 +73,30 @@ async function execute(interaction) {
     const camo = !!interaction.options.getString('camo')
     const regrow = !!interaction.options.getString('regrow')
 
+    const enemy = new Enemy(enemyName, round, fortified, camo, regrow)
+
     const r80BloonSpeed = BASE_RED_BLOON_SECONDS_PER_SECOND[enemyName]
     const speedRamping = getSpeedRamping(round)
-    const healthRamping = getHealthRamping(round)
+    const healthRamping = enemy.isMOAB() ? getHealthRamping(round) : "Doesn't scale"
     const actualBloonSpeed = r80BloonSpeed * speedRamping
-
-    const enemy = new Enemy(enemyName, round, fortified, camo, regrow)
 
     const displayRound = round <= 80 ? "1-80" : round
 
+    const ignoringSuper = ENEMIES_THAT_CAN_BE_SUPER.includes(enemy.name) ? ' (super and not)' : ''
+
     embed = new Discord.MessageEmbed()
-        .setTitle(`${enemy.description()} (R${displayRound})`)
+        .setTitle(`${enemy.description()} (r${displayRound})`)
         .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
-        .addField('Speed', `${actualBloonSpeed} RBS/s`, true)
-        .addField('Layer Health', `${enemy.layerRBE(true)} RBE`, true)
-        .addField('Total Health', `${enemy.totalRBE(true)} RBE`, true)
-        .addField('Vertical Health', `${enemy.verticalRBE(true)} RBE`, true)
-        .addField('Speed Factor', `${speedRamping} (xR80)`, true)
-        .addField('Health Factor', `${healthRamping} (xR80)`, true)
-        .addField('Normal Round Appearances', `${enemy.roundAppearances('r', true)}`)
-        .addField('ABR Round Appearances', `${enemy.roundAppearances('ar', true)}`)
+        .addField('Speed', `${actualBloonSpeed} rbs/s`, true)
+        .addField('Layer Health', `${enemy.layerRBE(true)} rbe`, true)
+        .addField('Total Health', `${enemy.totalRBE(true)} rbe`, true)
+        .addField('Vertical Health', `${enemy.verticalRBE(true)} total layers`, true)
+        .addField('Speed Factor', `${speedRamping} (xr80)`, true)
+        .addField('Health Factor', `${healthRamping} (xr80)`, true)
+        .addField('Direct Children', `${enemy.children(true)}`)
+        .addField(`Normal Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('r', true)}`)
+        .addField(`ABR Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('ar', true)}`)
 
     const notes = enemy.notes()
     if (notes.length > 0) {

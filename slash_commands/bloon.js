@@ -77,12 +77,14 @@ async function execute(interaction) {
 
     const r80BloonSpeed = BASE_RED_BLOON_SECONDS_PER_SECOND[enemyName]
     const speedRamping = getSpeedRamping(round)
-    const healthRamping = enemy.isMOAB() ? getHealthRamping(round) : "Doesn't scale"
+    const healthRamping = getHealthRamping(round)
+    const healthRampingText = enemy.isMOAB() ? `${healthRamping} (x r80)` : "Doesn't scale"
     const actualBloonSpeed = r80BloonSpeed * speedRamping
 
     const displayRound = round <= 80 ? "1-80" : round
 
     const ignoringSuper = ENEMIES_THAT_CAN_BE_SUPER.includes(enemy.name) ? ' (super and not)' : ''
+    const verticalHealthUnits = enemy.isMOAB() ? 'rbe' : 'total layers'
 
     embed = new Discord.MessageEmbed()
         .setTitle(`${enemy.description()} (r${displayRound})`)
@@ -91,9 +93,9 @@ async function execute(interaction) {
         .addField('Speed', `${actualBloonSpeed} rbs/s`, true)
         .addField('Layer Health', `${enemy.layerRBE(true)} rbe`, true)
         .addField('Total Health', `${enemy.totalRBE(true)} rbe`, true)
-        .addField('Vertical Health', `${enemy.verticalRBE(true)} total layers`, true)
-        .addField('Speed Factor', `${speedRamping} (xr80)`, true)
-        .addField('Health Factor', `${healthRamping} (xr80)`, true)
+        .addField('Vertical Health', `${enemy.verticalRBE(true)} ${verticalHealthUnits}`, true)
+        .addField('Speed Factor', `${speedRamping} (x r80)`, true)
+        .addField('Health Factor', `${healthRampingText}`, true)
         .addField('Direct Children', `${enemy.children(true)}`)
         .addField(`Normal Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('r', true)}`)
         .addField(`ABR Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('ar', true)}`)

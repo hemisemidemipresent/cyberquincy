@@ -173,7 +173,7 @@ class Enemy {
 
         if (format) {
             if (Object.keys(roundAppearances).length > 0) {
-                return Object.entries(roundAppearances).map(pair => `${pair[0]}: \`${pair[1]}\``).join(", ")
+                return Object.entries(roundAppearances).map(pair => `**${pair[0]}**: ${pair[1]}`).join(", ")
             } else {
                 return `No natural appearances`
             }

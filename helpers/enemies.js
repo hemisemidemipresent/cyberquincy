@@ -576,7 +576,7 @@ class EnemyClump {
     }
 
     /**
-     * @returns The total amount of cash earned from this enemy
+     * @returns The total amount of cash earned from this enemy clump
      */
     cash() {
         let totalCash = this.cashEarnedFromLayer();

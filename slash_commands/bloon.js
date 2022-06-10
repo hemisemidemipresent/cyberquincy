@@ -68,7 +68,7 @@ async function execute(interaction) {
     }
 
     const enemyName = interaction.options.getString('bloon');
-    const round = interaction.options.getInteger('round') || 80; // any round <=80 is default
+    const round = interaction.options.getInteger('round') || 1
     const fortified = !!interaction.options.getString('fortified')
     const camo = !!interaction.options.getString('camo')
     const regrow = !!interaction.options.getString('regrow')
@@ -81,12 +81,10 @@ async function execute(interaction) {
     const healthRampingText = enemy.isMOAB() ? `${healthRamping} (x r80)` : "Doesn't scale"
     const actualBloonSpeed = r80BloonSpeed * speedRamping
 
-    const displayRound = round <= 80 ? "1-80" : round
-
     const ignoringSuper = ENEMIES_THAT_CAN_BE_SUPER.includes(enemy.name) ? ' (super and not)' : ''
 
     embed = new Discord.MessageEmbed()
-        .setTitle(`${enemy.description()} (r${displayRound})`)
+        .setTitle(`${enemy.description()} (r${round})`)
         .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
         .addField('Speed', `${actualBloonSpeed} rbs/s`, true)
@@ -95,8 +93,9 @@ async function execute(interaction) {
         .addField('Vertical Health', `${enemy.verticalRBE(true)} rbe`, true)
         .addField('Speed Factor', `${speedRamping} (x r80)`, true)
         .addField('Health Factor', `${healthRampingText}`, true)
-        .addField('Direct Children', `${enemy.children(true)}`)
-        .addField('Cash Earned', `${enemy.cash()}`, true)
+        .addField('Direct Children', `${enemy.children(true)}`, true)
+        .addField('Cash Earned', `${enemy.cash(true)}`, true)
+        .addField('Cash Factor', `${roundHelper.cashFactorForRound(round)}`, true)
         .addField(`Normal Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('r', true)}`)
         .addField(`ABR Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('ar', true)}`)
 

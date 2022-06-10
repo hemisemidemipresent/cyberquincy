@@ -125,8 +125,12 @@ class Enemy {
         return `${fortified}${name}${camo}${regrow}`.trim()
     }
 
+    isFreeplay() {
+        return this.round > 80
+    }
+
     supr() {
-        return this.round > 80 && ENEMIES_THAT_CAN_BE_SUPER.includes(this.name)
+        return this.isFreeplay() && ENEMIES_THAT_CAN_BE_SUPER.includes(this.name)
     }
 
     isBloon() {
@@ -235,9 +239,9 @@ class Enemy {
     }
 
     cashEarnedFromLayer() {
-        if (this.isMOAB() || [LEAD, CERAMIC].includes(this.name)) {
-            return 0
-        } else return roundHelper.cashFactorForRound(this.round)
+        if (this.isBloon()) {
+            return roundHelper.cashFactorForRound(this.round)
+        } else return 0
     }
 
     /**
@@ -575,6 +579,8 @@ class EnemyClump {
      */
     cash() {
         let totalCash = this.cashEarnedFromLayer();
+        // Very helpful debug statement:
+        // console.log(this.enemy.description(), `$${totalCash}`, `($${this.enemy.cashEarnedFromLayer()} * ${this.size})`)
         this.children().forEach(child =>
             totalCash += child.cash()
         )

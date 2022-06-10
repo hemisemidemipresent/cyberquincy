@@ -93,6 +93,13 @@ class Enemy {
             throw `regrow must be true/false; got ${regrow} instead; cannot instantiate Enemy`
         }
 
+        // Sure, DDTs *can* be de-camoed, but let's just do this for simplicity
+        // They can never spawn de-camoed for what it's worth
+        if (name == DDT) {
+            regrow = true
+            camo = true
+        }
+
         this.name = name
         this.fortified = fortified
         this.camo = camo
@@ -107,8 +114,8 @@ class Enemy {
 
     // The bloon's full property/type denotation
     description() {
-        const camo = this.camo ? 'Camo ' : ''
-        const regrow = this.regrow ? 'Regrow ' : ''
+        const camo = this.camo && this.name != DDT ? 'Camo ' : ''
+        const regrow = this.regrow && this.name != DDT ? 'Regrow ' : ''
         const fortified = this.fortified ? 'Fortified ' : ''
         const supr = this.supr() ? 'Super ' : ''
         return `${fortified}${regrow}${camo}${supr}${this.formatName(true)}`
@@ -342,10 +349,6 @@ class Enemy {
         return this.isMOAB() && this.name != DDT && (this.camo || this.regrow)
     }
 
-    hasDDTRedundancy() {
-        return this.name == DDT && (this.camo || this.regrow)
-    }
-
     notes() {
         const notes = []
 
@@ -357,7 +360,7 @@ class Enemy {
             notes.push("Non-DDT MOABs can't have camgrow properties, but their ceramic descendants will. This is only available in challenge editor.")
         }
 
-        if (this.hasDDTRedundancy()) {
+        if (this.name == DDT) {
             notes.push("DDTs have the camgrow property by default")
         }
 

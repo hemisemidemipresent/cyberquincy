@@ -138,8 +138,11 @@ class Enemy {
     }
 
     // Delegates to EnemyClump
-    children() {
-        return this.clump().children()
+    children(format=false) {
+        const children = this.clump().children()
+        if (format) {
+            return children.map(clump => clump.description()).join("\n")  || 'None'
+        } else return children
     }
 
     /**
@@ -164,7 +167,7 @@ class Enemy {
             );
 
             if (numAppearances > 0) {
-                roundAppearances[r.replace(mode, 'R')] = parseInt(numAppearances)
+                roundAppearances[r.replace(mode, 'r')] = parseInt(numAppearances)
             }
         }
 
@@ -336,6 +339,14 @@ class Enemy {
 
         if (this.round == 104 || this.round == 114) {
             notes.push("There is a bizarre bug wherein all MOAB class bloons on rounds 104 and 114 have 1 less hp than they should for every layer. Quincybot doesn't take this into account for MOAB health calculation.")
+        }
+
+        if (this.name == BAD && this.round < 100) {
+            notes.push("Warning! Sandbox B.A.D. layer is minimum-capped at r100-strength")
+        }
+
+        if ([BAD, DDT].includes(this.name) && this.round < 90) {
+            notes.push("Warning! Sandbox D.D.T. layer is minimum-capped at r90 strength")
         }
 
         return notes;
@@ -546,6 +557,10 @@ class EnemyClump {
         // console.log(layerRBE, childVerticalRBEs)
         return layerRBE + Math.max(...childVerticalRBEs, 0)
     }
+
+    description() {
+        return `${this.size} ${this.enemy.description()}`
+    }
 }
 
 function formatName(enemyName, formalName=false) {
@@ -591,6 +606,7 @@ function getSpeedRamping(r) {
 
 module.exports = {
     BASE_RED_BLOON_SECONDS_PER_SECOND,
+    ENEMIES_THAT_CAN_BE_SUPER,
 
     ENEMIES, BLOONS, MOABS,
 

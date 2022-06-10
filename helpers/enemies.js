@@ -184,6 +184,13 @@ class Enemy {
         } else return roundAppearances
     }
 
+    speed(format=false) {
+        const speed = BASE_RED_BLOON_SECONDS_PER_SECOND[this.name] * getSpeedRamping(this.round)
+        if (format) {
+            return gHelper.numberWithCommas(speed)
+        } else return speed
+    }
+
     /**
      * @returns The RBE of the outer layer of the specified enemy on the enemy's specified round
      */
@@ -618,24 +625,28 @@ function isMOAB(enemyName) {
 }
 
 function getHealthRamping(r) {
-    if (r <= 80) return 1;
-    else if (r <= 100) return (r - 30) / 50;
-    else if (r <= 124) return (r - 72) / 20;
-    else if (r <= 150) return (3 * r - 320) / 20;
-    else if (r <= 250) return (7 * r - 920) / 20;
-    else if (r <= 300) return r - 208.5;
-    else if (r <= 400) return (3 * r - 717) / 2;
-    else if (r <= 500) return (5 * r - 1517) / 2;
-    else return 5 * r - 2008.5;
+    let v;
+    if (r <= 80) v = 1;
+    else if (r <= 100) v = (r - 30) / 50;
+    else if (r <= 124) v = (r - 72) / 20;
+    else if (r <= 150) v = (3 * r - 320) / 20;
+    else if (r <= 250) v = (7 * r - 920) / 20;
+    else if (r <= 300) v = r - 208.5;
+    else if (r <= 400) v = (3 * r - 717) / 2;
+    else if (r <= 500) v = (5 * r - 1517) / 2;
+    else v = 5 * r - 2008.5;
+    return gHelper.round(v, 2)
 }
 
 function getSpeedRamping(r) {
-    if (r <= 80) return 1;
-    else if (r <= 100) return 1 + (r - 80) * 0.02;
-    else if (r <= 150) return 1.6 + (r - 101) * 0.02;
-    else if (r <= 200) return 3.0 + (r - 151) * 0.02;
-    else if (r <= 250) return 4.5 + (r - 201) * 0.02;
-    else return 6.0 + (r - 252) * 0.02;
+    let v;
+    if (r <= 80) v = 1;
+    else if (r <= 100) v = 1 + (r - 80) * 0.02;
+    else if (r <= 150) v = 1.6 + (r - 101) * 0.02;
+    else if (r <= 200) v = 3.0 + (r - 151) * 0.02;
+    else if (r <= 250) v = 4.5 + (r - 201) * 0.02;
+    else v = 6.0 + (r - 252) * 0.02;
+    return gHelper.round(v, 2)
 }
 
 module.exports = {

@@ -7,7 +7,9 @@ function is_fn(f) {
 }
 
 function numberWithCommas(x) {
-    if (x) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let [ones, decimals] = x.toString().split('.')
+    ones = ones.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return decimals ? `${ones}.${decimals}` : ones
 }
 
 function numberAsCost(x) {

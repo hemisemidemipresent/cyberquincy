@@ -2,7 +2,6 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/bu
 const { 
     Enemy,
     ENEMIES,
-    BASE_RED_BLOON_SECONDS_PER_SECOND,
     ENEMIES_THAT_CAN_BE_SUPER,
     formatName,
     getSpeedRamping,
@@ -75,11 +74,9 @@ async function execute(interaction) {
 
     const enemy = new Enemy(enemyName, round, fortified, camo, regrow)
 
-    const r80BloonSpeed = BASE_RED_BLOON_SECONDS_PER_SECOND[enemyName]
     const speedRamping = getSpeedRamping(round)
     const healthRamping = getHealthRamping(round)
     const healthRampingText = enemy.isMOAB() ? `${healthRamping} (x r80)` : "Doesn't scale"
-    const actualBloonSpeed = r80BloonSpeed * speedRamping
 
     const ignoringSuper = ENEMIES_THAT_CAN_BE_SUPER.includes(enemy.name) ? ' (super and not)' : ''
 
@@ -87,7 +84,7 @@ async function execute(interaction) {
         .setTitle(`${enemy.description()} (r${round})`)
         .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
-        .addField('Speed', `${actualBloonSpeed} rbs/s`, true)
+        .addField('Speed', `${enemy.speed(true)} rbs/s`, true)
         .addField('Layer Health', `${enemy.layerRBE(true)} rbe`, true)
         .addField('Total Health', `${enemy.totalRBE(true)} rbe`, true)
         .addField('Vertical Health', `${enemy.verticalRBE(true)} rbe`, true)

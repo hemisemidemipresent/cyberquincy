@@ -96,6 +96,7 @@ async function execute(interaction) {
         .addField('Speed Factor', `${speedRamping} (x r80)`, true)
         .addField('Health Factor', `${healthRampingText}`, true)
         .addField('Direct Children', `${enemy.children(true)}`)
+        .addField('Cash Earned', `${enemy.cash()}`, true)
         .addField(`Normal Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('r', true)}`)
         .addField(`ABR Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('ar', true)}`)
 

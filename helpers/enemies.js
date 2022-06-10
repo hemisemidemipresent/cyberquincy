@@ -228,6 +228,18 @@ class Enemy {
         return format ? gHelper.numberWithCommas(result) : result
     }
 
+    // Delegates to EnemyClump
+    cash(format=false) {
+        const result = this.clump().cash()
+        return format ? gHelper.numberAsCost(result): result
+    }
+
+    cashEarnedFromLayer() {
+        if (this.isMOAB() || [LEAD, CERAMIC].includes(this.name)) {
+            return 0
+        } else return roundHelper.cashFactorForRound(this.round)
+    }
+
     /**
      * 
      * @param {int} size the amount of the clump, defaults to 1
@@ -556,6 +568,21 @@ class EnemyClump {
         let childVerticalRBEs = this.children().map(child => child.verticalRBE())
         // console.log(layerRBE, childVerticalRBEs)
         return layerRBE + Math.max(...childVerticalRBEs, 0)
+    }
+
+    /**
+     * @returns The total amount of cash earned from this enemy
+     */
+    cash() {
+        let totalCash = this.cashEarnedFromLayer();
+        this.children().forEach(child =>
+            totalCash += child.cash()
+        )
+        return totalCash
+    }
+
+    cashEarnedFromLayer() {
+        return this.enemy.cashEarnedFromLayer() * this.size
     }
 
     description() {

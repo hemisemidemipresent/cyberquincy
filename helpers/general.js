@@ -194,6 +194,10 @@ function timeSince(date) {
     return Math.floor(seconds) + " seconds";
 }
 
+function round(num, numDigitsAfterDecimal=0) {
+    return Math.round(num * 10**numDigitsAfterDecimal) / 10**numDigitsAfterDecimal
+}
+
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 RED_X = String.fromCharCode(10060);
@@ -217,6 +221,7 @@ module.exports = {
     binaryLambdaSearch,
     addSpaces,
     timeSince,
+    round,
     HEAVY_CHECK_MARK,
     WHITE_HEAVY_CHECK_MARK,
     RED_X,

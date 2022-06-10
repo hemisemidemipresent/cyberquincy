@@ -234,13 +234,16 @@ class Enemy {
 
     // Delegates to EnemyClump
     cash(format=false) {
-        const result = this.clump().cash()
+        const result = gHelper.round(this.clump().cash(), 2)
         return format ? gHelper.numberAsCost(result): result
     }
 
     cashEarnedFromLayer() {
         if (this.isBloon()) {
-            return roundHelper.cashFactorForRound(this.round)
+            const cashFactor = roundHelper.cashFactorForRound(this.round)
+            if (this.name == CERAMIC && this.isFreeplay()) {
+                return 87 * cashFactor
+            } else return cashFactor
         } else return 0
     }
 

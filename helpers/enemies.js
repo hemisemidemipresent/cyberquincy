@@ -168,6 +168,8 @@ class Enemy {
         }
 
         const roundAppearances = {}
+        // It's looking for a number followed by the bloon descriptor followed by either a comma or end of string
+        // The match call below captures the number and is returned in the [1] slot in the array
         const pattern = new RegExp(`(\\d+) ${this.roundAppearanceDescription()}(?:,|$)`)
         
         for (const r in roundContents) {
@@ -184,6 +186,7 @@ class Enemy {
 
         if (format) {
             if (Object.keys(roundAppearances).length > 0) {
+                // Comma-separated key-value pairs of rounds (bolded) to number of bloon appearances
                 return Object.entries(roundAppearances).map(pair => `**${pair[0]}**: ${pair[1]}`).join(", ")
             } else {
                 return `No natural appearances`
@@ -234,19 +237,19 @@ class Enemy {
         return baseLayerRBE;
     }
 
-    // Delegates to EnemyClump
+    // Delegates to EnemyClump to deal with N copies of each level of descendant
     totalRBE(format=false) {
         const result = this.clump().totalRBE()
         return format ? gHelper.numberWithCommas(result) : result
     }
 
-    // Delegates to EnemyClump
+    // Delegates to EnemyClump to deal with N copies of each level of descendant
     verticalRBE(format=false) {
         const result = this.clump().verticalRBE()
         return format ? gHelper.numberWithCommas(result) : result
     }
 
-    // Delegates to EnemyClump
+    // Delegates to EnemyClump to deal with N copies of each level of descendant
     cash(format=false) {
         const result = gHelper.round(this.clump().cash(), 5)
         return format ? gHelper.numberAsCost(result): result
@@ -364,7 +367,7 @@ class Enemy {
             notes.push("DDTs have the camgrow property by default")
         }
 
-        if (this.round == 104 || this.round == 114) {
+        if (this.isMOAB() && (this.round == 104 || this.round == 114)) {
             notes.push("There is a bizarre bug wherein all MOAB class bloons on rounds 104 and 114 have 1 less hp than they should for every layer. Quincybot doesn't take this into account for MOAB health calculation.")
         }
 
@@ -402,7 +405,7 @@ class EnemyClump {
 
     /**
      * @returns a list of EnemyClumps corresponding to the children of this EnemyClump
-     * i.e. if this EnemyClump represents 3 BADs, then its children would be:
+     * i.e. if this EnemyClump represents 3 BADs, then its children would consist of:
      *   - An EnemyClump of 6 ZOMGs
      *   - An EnemyClump of 9 DDTs
      */
@@ -564,6 +567,8 @@ class EnemyClump {
 
     /**
      * @returns The RBE needed to eliminate all enemies combined
+     * Works recursively by summing the the current enemy's layer RBE to the sum total of all children's total RBE
+     * The base case is that an enemy cluster of reds will not have any children and a recursive call will not be made
      */
     totalRBE() {
         let totalRBE = this.layerRBE()
@@ -577,6 +582,10 @@ class EnemyClump {
 
     /**
      * @returns The minimum damage that a tsar-bomba type detonation would need to do in order to one-shot the bloon and insides
+     * Works recursively by summing the current enemy's layer RBE to the MAXIMUM of every child's vertical RBE
+     * Really, the only time there is a discrepancy between children is that the DDTs have much less vertical RBE than the ZOMGs
+     * The only other time there are different children types are for zebra bloons, but white and black bloons have the same vertical RBE
+     * The base case is that an enemy cluster of reds will not have any children and a recursive call will not be made
      */
     verticalRBE() {
         let layerRBE = this.enemy.layerRBE()
@@ -587,6 +596,8 @@ class EnemyClump {
 
     /**
      * @returns The total amount of cash earned from this enemy clump
+     * Works recursively summing up the cash earned from each layer of the enemy's descendants
+     * The base case is that an enemy cluster of reds will not have any children and a recursive call will not be made
      */
     cash() {
         let totalCash = this.cashEarnedFromLayer();

@@ -2,7 +2,6 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/bu
 const { 
     Enemy,
     ENEMIES,
-    BASE_RED_BLOON_SECONDS_PER_SECOND,
     ENEMIES_THAT_CAN_BE_SUPER,
     formatName,
     getSpeedRamping,
@@ -68,34 +67,32 @@ async function execute(interaction) {
     }
 
     const enemyName = interaction.options.getString('bloon');
-    const round = interaction.options.getInteger('round') || 80; // any round <=80 is default
+    const round = interaction.options.getInteger('round') || 1
     const fortified = !!interaction.options.getString('fortified')
     const camo = !!interaction.options.getString('camo')
     const regrow = !!interaction.options.getString('regrow')
 
     const enemy = new Enemy(enemyName, round, fortified, camo, regrow)
 
-    const r80BloonSpeed = BASE_RED_BLOON_SECONDS_PER_SECOND[enemyName]
     const speedRamping = getSpeedRamping(round)
     const healthRamping = getHealthRamping(round)
     const healthRampingText = enemy.isMOAB() ? `${healthRamping} (x r80)` : "Doesn't scale"
-    const actualBloonSpeed = r80BloonSpeed * speedRamping
-
-    const displayRound = round <= 80 ? "1-80" : round
 
     const ignoringSuper = ENEMIES_THAT_CAN_BE_SUPER.includes(enemy.name) ? ' (super and not)' : ''
 
     embed = new Discord.MessageEmbed()
-        .setTitle(`${enemy.description()} (r${displayRound})`)
+        .setTitle(`${enemy.description()} (r${round})`)
         .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
-        .addField('Speed', `${actualBloonSpeed} rbs/s`, true)
+        .addField('Speed', `${enemy.speed(true)} rbs/s`, true)
         .addField('Layer Health', `${enemy.layerRBE(true)} rbe`, true)
         .addField('Total Health', `${enemy.totalRBE(true)} rbe`, true)
         .addField('Vertical Health', `${enemy.verticalRBE(true)} rbe`, true)
         .addField('Speed Factor', `${speedRamping} (x r80)`, true)
         .addField('Health Factor', `${healthRampingText}`, true)
-        .addField('Direct Children', `${enemy.children(true)}`)
+        .addField('Direct Children', `${enemy.children(true)}`, true)
+        .addField('Cash Earned', `${enemy.cash(true)}`, true)
+        .addField('Cash Factor', `${roundHelper.cashFactorForRound(round)}`, true)
         .addField(`Normal Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('r', true)}`)
         .addField(`ABR Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('ar', true)}`)
 

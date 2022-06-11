@@ -93,6 +93,13 @@ class Enemy {
             throw `regrow must be true/false; got ${regrow} instead; cannot instantiate Enemy`
         }
 
+        // Sure, DDTs *can* be de-camoed, but let's just do this for simplicity
+        // They can never spawn de-camoed for what it's worth
+        if (name == DDT) {
+            regrow = true
+            camo = true
+        }
+
         this.name = name
         this.fortified = fortified
         this.camo = camo
@@ -107,8 +114,8 @@ class Enemy {
 
     // The bloon's full property/type denotation
     description() {
-        const camo = this.camo ? 'Camo ' : ''
-        const regrow = this.regrow ? 'Regrow ' : ''
+        const camo = this.camo && this.name != DDT ? 'Camo ' : ''
+        const regrow = this.regrow && this.name != DDT ? 'Regrow ' : ''
         const fortified = this.fortified ? 'Fortified ' : ''
         const supr = this.supr() ? 'Super ' : ''
         return `${fortified}${regrow}${camo}${supr}${this.formatName(true)}`
@@ -125,8 +132,12 @@ class Enemy {
         return `${fortified}${name}${camo}${regrow}`.trim()
     }
 
+    isFreeplay() {
+        return this.round > 80
+    }
+
     supr() {
-        return this.round > 80 && ENEMIES_THAT_CAN_BE_SUPER.includes(this.name)
+        return this.isFreeplay() && ENEMIES_THAT_CAN_BE_SUPER.includes(this.name)
     }
 
     isBloon() {
@@ -180,6 +191,13 @@ class Enemy {
         } else return roundAppearances
     }
 
+    speed(format=false) {
+        const speed = BASE_RED_BLOON_SECONDS_PER_SECOND[this.name] * getSpeedRamping(this.round)
+        if (format) {
+            return gHelper.numberWithCommas(speed)
+        } else return speed
+    }
+
     /**
      * @returns The RBE of the outer layer of the specified enemy on the enemy's specified round
      */
@@ -226,6 +244,19 @@ class Enemy {
     verticalRBE(format=false) {
         const result = this.clump().verticalRBE()
         return format ? gHelper.numberWithCommas(result) : result
+    }
+
+    // Delegates to EnemyClump
+    cash(format=false) {
+        const result = gHelper.round(this.clump().cash(), 5)
+        return format ? gHelper.numberAsCost(result): result
+    }
+
+    cashEarnedFromLayer() {
+        const cashFactor = roundHelper.cashFactorForRound(this.round)
+        if (this.name == CERAMIC && this.isFreeplay()) {
+            return 87 * cashFactor
+        } else return cashFactor
     }
 
     /**
@@ -318,10 +349,6 @@ class Enemy {
         return this.isMOAB() && this.name != DDT && (this.camo || this.regrow)
     }
 
-    hasDDTRedundancy() {
-        return this.name == DDT && (this.camo || this.regrow)
-    }
-
     notes() {
         const notes = []
 
@@ -333,7 +360,7 @@ class Enemy {
             notes.push("Non-DDT MOABs can't have camgrow properties, but their ceramic descendants will. This is only available in challenge editor.")
         }
 
-        if (this.hasDDTRedundancy()) {
+        if (this.name == DDT) {
             notes.push("DDTs have the camgrow property by default")
         }
 
@@ -558,6 +585,23 @@ class EnemyClump {
         return layerRBE + Math.max(...childVerticalRBEs, 0)
     }
 
+    /**
+     * @returns The total amount of cash earned from this enemy clump
+     */
+    cash() {
+        let totalCash = this.cashEarnedFromLayer();
+        // Very helpful debug statement:
+        // console.log(this.enemy.description(), `$${totalCash}`, `($${this.enemy.cashEarnedFromLayer()} * ${this.size})`)
+        this.children().forEach(child =>
+            totalCash += child.cash()
+        )
+        return totalCash
+    }
+
+    cashEarnedFromLayer() {
+        return this.enemy.cashEarnedFromLayer() * this.size
+    }
+
     description() {
         return `${this.size} ${this.enemy.description()}`
     }
@@ -584,24 +628,28 @@ function isMOAB(enemyName) {
 }
 
 function getHealthRamping(r) {
-    if (r <= 80) return 1;
-    else if (r <= 100) return (r - 30) / 50;
-    else if (r <= 124) return (r - 72) / 20;
-    else if (r <= 150) return (3 * r - 320) / 20;
-    else if (r <= 250) return (7 * r - 920) / 20;
-    else if (r <= 300) return r - 208.5;
-    else if (r <= 400) return (3 * r - 717) / 2;
-    else if (r <= 500) return (5 * r - 1517) / 2;
-    else return 5 * r - 2008.5;
+    let v;
+    if (r <= 80) v = 1;
+    else if (r <= 100) v = (r - 30) / 50;
+    else if (r <= 124) v = (r - 72) / 20;
+    else if (r <= 150) v = (3 * r - 320) / 20;
+    else if (r <= 250) v = (7 * r - 920) / 20;
+    else if (r <= 300) v = r - 208.5;
+    else if (r <= 400) v = (3 * r - 717) / 2;
+    else if (r <= 500) v = (5 * r - 1517) / 2;
+    else v = 5 * r - 2008.5;
+    return gHelper.round(v, 2)
 }
 
 function getSpeedRamping(r) {
-    if (r <= 80) return 1;
-    else if (r <= 100) return 1 + (r - 80) * 0.02;
-    else if (r <= 150) return 1.6 + (r - 101) * 0.02;
-    else if (r <= 200) return 3.0 + (r - 151) * 0.02;
-    else if (r <= 250) return 4.5 + (r - 201) * 0.02;
-    else return 6.0 + (r - 252) * 0.02;
+    let v;
+    if (r <= 80) v = 1;
+    else if (r <= 100) v = 1 + (r - 80) * 0.02;
+    else if (r <= 150) v = 1.6 + (r - 101) * 0.02;
+    else if (r <= 200) v = 3.0 + (r - 151) * 0.02;
+    else if (r <= 250) v = 4.5 + (r - 201) * 0.02;
+    else v = 6.0 + (r - 252) * 0.02;
+    return gHelper.round(v, 2)
 }
 
 module.exports = {

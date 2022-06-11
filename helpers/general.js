@@ -7,7 +7,9 @@ function is_fn(f) {
 }
 
 function numberWithCommas(x) {
-    if (x) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let [ones, decimals] = x.toString().split('.')
+    ones = ones.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return decimals ? `${ones}.${decimals}` : ones
 }
 
 function numberAsCost(x) {
@@ -194,6 +196,10 @@ function timeSince(date) {
     return Math.floor(seconds) + " seconds";
 }
 
+function round(num, numDigitsAfterDecimal=0) {
+    return Math.round(num * 10**numDigitsAfterDecimal) / 10**numDigitsAfterDecimal
+}
+
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 RED_X = String.fromCharCode(10060);
@@ -217,6 +223,7 @@ module.exports = {
     binaryLambdaSearch,
     addSpaces,
     timeSince,
+    round,
     HEAVY_CHECK_MARK,
     WHITE_HEAVY_CHECK_MARK,
     RED_X,

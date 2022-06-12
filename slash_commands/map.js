@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
-const { allMaps } = require('../helpers/maps')
+const { allMapNames } = require('../helpers/maps')
 
 const FuzzySet = require('fuzzyset.js');
 
@@ -23,7 +23,7 @@ async function onAutocomplete(interaction) {
     const map_name_partial = hoistedOptions.find((option) => option.name == 'map_name'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = map_name_partial.value;
 
-    fs = FuzzySet(allMaps());
+    fs = FuzzySet(allMapNames());
     const values = fs.get(value);
 
     console.log(values);

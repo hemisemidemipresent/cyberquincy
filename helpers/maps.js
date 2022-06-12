@@ -134,6 +134,8 @@ class Map {
 module.exports = {
     Map,
 
+    allMapNames,
+
     allMaps,
     beginnerMaps,
     intermediateMaps,

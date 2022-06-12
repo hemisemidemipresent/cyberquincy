@@ -302,94 +302,16 @@ class AliasRepository extends Array {
     ////////////////////////////////////////////////////
     // Expedited Access
     ////////////////////////////////////////////////////
-    allMaps() {
-        return this.beginnerMaps()
-            .concat(this.intermediateMaps())
-            .concat(this.advancedMaps())
-            .concat(this.expertMaps());
-    }
-
-    allWaterMaps() {
-        return this.allMaps().filter(
-            (m) => !this.allNonWaterMaps().includes(m)
-        );
-    }
-
-    // TODO: rewrite this involving the q!map command results rather than hardcoding it
-    allNonWaterMaps() {
-        return [
-            'SY',
-            'TS',
-            'H',
-            'AR',
-            'MM',
-            'ML',
-            'KD',
-            'CF',
-            'GD',
-            'UG',
-            'MS',
-            'W',
-            'XF',
-        ].map((m) => this.getCanonicalForm(m.toLowerCase()));
-    }
-
-    allMapsFromMapDifficulty(mapDifficulty) {
-        switch (mapDifficulty) {
-            case 'beginner':
-                return this.beginnerMaps();
-            case 'intermediate':
-                return this.intermediateMaps();
-            case 'advanced':
-                return this.advancedMaps();
-            case 'expert':
-                return this.expertMaps();
-            default:
-                throw `${mapDifficulty} is not a map difficulty`;
-        }
-    }
-
-    beginnerMaps() {
-        return this.getAliasGroupsFromSameFileAs('LOGS').map(
-            (ag) => ag.canonical
-        );
-    }
-
-    intermediateMaps() {
-        return this.getAliasGroupsFromSameFileAs('HAUNTED').map(
-            (ag) => ag.canonical
-        );
-    }
-
-    advancedMaps() {
-        return this.getAliasGroupsFromSameFileAs('CORNFIELD').map(
-            (ag) => ag.canonical
-        );
-    }
-
-    expertMaps() {
-        return this.getAliasGroupsFromSameFileAs('INFERNAL').map(
-            (ag) => ag.canonical
-        );
-    }
-
-    allMapDifficulties() {
-        const map_difficulties =
-            this.getAliasGroupsFromSameFileAs('INTERMEDIATE');
-
-        return map_difficulties.map((ag) => ag.canonical);
-    }
-
-    allDifficulties() {
-        const difficulties = this.getAliasGroupsFromSameFileAs('MEDIUM');
-
-        return difficulties.map((ag) => ag.canonical).concat('impoppable');
-    }
-
     allModes() {
         const modes = this.getAliasGroupsFromSameFileAs('STANDARD');
 
         return modes.map((ag) => ag.canonical);
+    }
+
+    allDifficulties() {
+        const difficulties = Aliases.getAliasGroupsFromSameFileAs('MEDIUM');
+    
+        return difficulties.map((ag) => ag.canonical).concat('impoppable');
     }
 
     isHero(candidate) {
@@ -401,27 +323,6 @@ class AliasRepository extends Array {
         const heroes = this.getAliasGroupsFromSameFileAs('EZILI');
 
         return heroes.map((ag) => ag.canonical);
-    }
-
-    mapToIndexAbbreviation(map) {
-        if (!map) return null;
-        const mapAliases = this.getAliasSet(map);
-        if (!mapAliases) return null;
-        return mapAliases[1].toUpperCase();
-    }
-
-    indexMapAbbreviationToMap(mapAbbr) {
-        const set = this.getAliasSet(
-            mapAbbr.toLowerCase()
-        );
-        if (!set) return null;
-        return set[0];
-    }
-
-    indexMapAbbreviationToNormalForm(mapAbbr) {
-        return this.toIndexNormalForm(
-            this.indexMapAbbreviationToMap(mapAbbr)
-        );
     }
 
     toAliasNormalForm(indexForm) {

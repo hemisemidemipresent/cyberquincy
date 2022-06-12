@@ -7,47 +7,36 @@ function allMaps() {
         .concat(expertMaps());
 }
 
-function beginnerMaps() {
-    return Aliases.getAliasGroupsFromSameFileAs('LOGS').map(
+function mapsFromSameFileAs(alias) {
+    return Aliases.getAliasGroupsFromSameFileAs(alias).map(
         (ag) => ag.canonical
-    );
+    ).map(m => new Map(m));
+}
+
+function beginnerMaps() {
+    return mapsFromSameFileAs('LOGS')
 }
 
 function intermediateMaps() {
-    return Aliases.getAliasGroupsFromSameFileAs('HAUNTED').map(
-        (ag) => ag.canonical
-    );
+    return mapsFromSameFileAs('HAUNTED')
 }
 
 function advancedMaps() {
-    return Aliases.getAliasGroupsFromSameFileAs('CORNFIELD').map(
-        (ag) => ag.canonical
-    );
+    return mapsFromSameFileAs('CORNFIELD')
 }
 
 function expertMaps() {
-    return Aliases.getAliasGroupsFromSameFileAs('INFERNAL').map(
-        (ag) => ag.canonical
-    );
+    return mapsFromSameFileAs('INFERNAL')
 }
+
+NO_WATER_SIGNIFIER = '0%'
 
 function allWaterMaps() {
-    return allMaps().filter(
-        (m) => !allNonWaterMaps().includes(m)
-    );
+    return allMaps().filter(m => m.waterPercentage() != NO_WATER_SIGNIFIER)
 }
 
-function allNonWaterMaps(returnObjs=false) {
-    const result = []
-    allMaps().forEach(m => {
-        mObj = new Map(m)
-        if (mObj.waterPercentage() == '0%') {
-            result.push(
-                returnObjs ? mObj : mObj.name
-            )
-        }
-    })
-    return result
+function allNonWaterMaps() {
+    return allMaps().filter(m => m.waterPercentage() == NO_WATER_SIGNIFIER)
 }
 
 function allMapDifficulties() {

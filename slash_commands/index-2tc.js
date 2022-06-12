@@ -562,7 +562,7 @@ function filterCombos(filteredCombos, parsed) {
     if (parsed.map_difficulty) {
         function mapDifficultyFilter(map, _) {
             const mapCanonical = Aliases.toAliasNormalForm(Aliases.getCanonicalForm(map))
-            return allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical)
+            return allMapsFromMapDifficulty(parsed.map_difficulty).map(m => m.name).includes(mapCanonical)
         }
         filteredCombos = filterByCompletion(mapDifficultyFilter, filteredCombos)
     }

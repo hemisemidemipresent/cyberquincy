@@ -304,9 +304,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
 
     // Get all map abbreviations for the specified map difficulty
-    const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) =>
-        Aliases.mapToIndexAbbreviation(map)
-    );
+    const permittedMapAbbrs = allMapsFromMapDifficulty(mapDifficulty).map(m => m.toIndexAbbreviation())
 
     const relevantMaps = Object.keys(combo.MAPS).filter(m => permittedMapAbbrs.includes(m))
 
@@ -497,7 +495,7 @@ function filterCombo(c, parsed) {
 
     let matchesMap = true
     if (parsed.map_difficulty) {
-        matchesMap = allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(c.MAP)
+        matchesMap = allMapsFromMapDifficulty(parsedMap.map_difficulty).map(m => m.name).includes(c.MAP)
     } else if (parsed.map) { // Map
         matchesMap = parsedMap.map == c.MAP
     }

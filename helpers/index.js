@@ -123,18 +123,18 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
     ];
     if (isWaterEntity) {
         mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-            aliases.filter((map) => allWaterMaps().includes(map))
+            aliases.filter((map) => allWaterMaps().map(wm => wm.name).includes(map.name))
         );
     }
-    mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+    mapDifficultyGroups = mapDifficultyGroups.map((maps) =>
+        maps.map((map) => map.toIndexAbbreviation)
     );
 
     const altMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => completedAltMaps.includes(map))
+        mapGroup.filter((map) => completedAltMaps.includes(map.name))
     );
     const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => !completedAltMaps.concat(ogMapAbbr).includes(map))
+        mapGroup.filter((map) => !completedAltMaps.concat(ogMapAbbr).includes(map.name))
     );
 
     let wordAllIncluded = false
@@ -142,7 +142,7 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
     const displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
         mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
         waterTowerAsterisk = isWaterEntity ? '*' : '';
-        if (unCompletedAltMapGroups[i] == 0) {
+        if (unCompletedAltMapGroups[i].length == 0) {
             wordAllIncluded = true;
             return `All ${mapDifficulty}${waterTowerAsterisk}`;
         } else if (unCompletedAltMapGroups[i].length < 5) {
@@ -153,7 +153,7 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {
-            return `{${altMapGroups[i].join(', ')}}`;
+            return `{${altMapGroups[i].map(m => m.name).join(', ')}}`;
         }
     });
     

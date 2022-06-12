@@ -1,5 +1,9 @@
 const mapInfo = require('../jsons/map_info.json')
 
+function allMapNames() {
+    return Aliases.getAliasGroupsFromSameImmediateDirectoryAs('LOGS').map(g => g.canonical)
+}
+
 function allMaps() {
     return beginnerMaps()
         .concat(intermediateMaps())
@@ -63,7 +67,7 @@ function allMapsFromMapDifficulty(mapDifficulty) {
 
 class Map {
     constructor(name) {
-        if (!allMaps.includes(name)) {
+        if (!allMapNames().includes(name)) {
             throw `${name} isn't a valid map according to QuincyBot. If this map is brand new, it will be added soon.`
         }
 
@@ -71,7 +75,7 @@ class Map {
     }
 
     aliases() {
-        Aliases.getAliasSet(this.name)
+        return Aliases.getAliasSet(this.name)
     }
 
     toIndexAbbreviation() {
@@ -79,11 +83,11 @@ class Map {
     }
 
     format() {
-        Aliases.toIndexNormalForm(this.name)
+        return Aliases.toIndexNormalForm(this.name)
     }
 
     info() {
-        mapInfo[this.name]
+        return mapInfo[this.name]
     }
 
     length(format=false) {
@@ -112,6 +116,13 @@ class Map {
 
     entrancesAndExits() {
         return this.info().e
+    }
+
+    static fromAlias(a) {
+        if (!a) return null
+        const g = Aliases.getAliasGroup(a.toLowerCase())
+        if (!g) return null
+        return new Map(g.canonical)
     }
 }
 

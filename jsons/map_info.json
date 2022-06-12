@@ -476,7 +476,7 @@
         "lenStr": "18.1",
         "obst": 1,
         "costObst": "2000",
-        "wa": "N/A",
+        "wa": "0%",
         "thu": "https://cdn.discordapp.com/attachments/770094137713885204/786122866969935892/Screenshot_1409.png",
         "e": "4/4"
     },
@@ -486,7 +486,7 @@
         "lenStr": "13.9",
         "obst": 0,
         "costObst": "0",
-        "wa": "N/A",
+        "wa": "0%",
         "thu": "https://cdn.discordapp.com/attachments/643773699916431361/693489104427417600/latest.png",
         "e": "1/1"
     },
@@ -532,7 +532,7 @@
         "lenStr": "14.5 Left\n11.1 Right",
         "obst": 3,
         "costObst": "1500",
-        "wa": "N/A",
+        "wa": "0%",
         "thu": "https://cdn.discordapp.com/attachments/663729150799904768/751606482000281670/Screenshot_1105.png",
         "e": "2/2"
     },

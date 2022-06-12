@@ -3,7 +3,11 @@ const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
-const { allNonWaterMaps, allMapsFromMapDifficulty } = require('../helpers/maps')
+const {
+    Map,
+    allNonWaterMaps,
+    allMapsFromMapDifficulty
+} = require('../helpers/maps')
 
 const { paleblue } = require('../jsons/colours.json');
 
@@ -247,7 +251,7 @@ function orderAndFlatten2MPOGCompletion(combo) {
     let [ogMap, ogCompletion] = ogCombo(combo)
     combo = {
         ...combo,
-        OG_MAP: Aliases.indexMapAbbreviationToNormalForm(ogMap),
+        OG_MAP: Map.fromAlias(ogMap).format(),
         PERSON: ogCompletion.PERSON,
         LINK: ogCompletion.LINK,
     }
@@ -268,15 +272,14 @@ function ogCombo(combo) {
 // 2MP Alt Map
 ////////////////////////////////////////////////////////////
 
-function embed2MPAlt(combo, map) {
-    const mapFormatted = Aliases.toIndexNormalForm(map)
-    const mapAbbr = Aliases.mapToIndexAbbreviation(map)
+function embed2MPAlt(combo, mapName) {
+    const map = new Map(mapName)
 
-    const altCombo = combo.MAPS[mapAbbr]
+    const altCombo = combo.MAPS[map.toIndexAbbreviation]
 
     if (!altCombo) {
         throw new UserCommandError(
-            `\`${combo.ENTITY}\` hasn't been completed yet on \`${mapFormatted}\``
+            `\`${combo.ENTITY}\` hasn't been completed yet on \`${map.format()}\``
         );
     }
 
@@ -287,7 +290,7 @@ function embed2MPAlt(combo, map) {
 
     // Embed and send the message
     let challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${combo.ENTITY} 2MPC Combo on ${mapFormatted}`)
+        .setTitle(`${combo.ENTITY} 2MPC Combo on ${map.format()}`)
         .setColor(paleblue)
         .addField('Person', altCombo.PERSON, true)
         .addField('Link', altCombo.LINK, true);

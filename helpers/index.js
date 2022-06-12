@@ -127,14 +127,14 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
         );
     }
     mapDifficultyGroups = mapDifficultyGroups.map((maps) =>
-        maps.map((map) => map.toIndexAbbreviation)
+        maps.map((map) => map.toIndexAbbreviation())
     );
 
     const altMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => completedAltMaps.includes(map.name))
+        mapGroup.filter((map) => completedAltMaps.includes(map))
     );
     const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
-        mapGroup.filter((map) => !completedAltMaps.concat(ogMapAbbr).includes(map.name))
+        mapGroup.filter((map) => !completedAltMaps.concat(ogMapAbbr).includes(map))
     );
 
     let wordAllIncluded = false
@@ -153,7 +153,7 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {
-            return `{${altMapGroups[i].map(m => m.name).join(', ')}}`;
+            return `{${altMapGroups[i].join(', ')}}`;
         }
     });
     

@@ -37,11 +37,17 @@ function allWaterMaps() {
     );
 }
 
-function allNonWaterMaps() {
-    return allMaps().filter(m => {
+function allNonWaterMaps(returnObjs=false) {
+    const result = []
+    allMaps().forEach(m => {
         mObj = new Map(m)
-        return mObj.waterPercentage() == '0%'
+        if (mObj.waterPercentage() == '0%') {
+            result.push(
+                returnObjs ? mObj : mObj.name
+            )
+        }
     })
+    return result
 }
 
 function allMapDifficulties() {

@@ -21,6 +21,8 @@ const clonedeep = require('lodash.clonedeep');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 
+const { allMapsFromMapDifficulty } = require('../helpers/maps')
+
 const { orange, palered } = require('../jsons/colours.json');
 
 const { COLS } = require('../services/index/2tc_scraper');
@@ -560,7 +562,7 @@ function filterCombos(filteredCombos, parsed) {
     if (parsed.map_difficulty) {
         function mapDifficultyFilter(map, _) {
             const mapCanonical = Aliases.toAliasNormalForm(Aliases.getCanonicalForm(map))
-            return Aliases.allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical)
+            return allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical)
         }
         filteredCombos = filterByCompletion(mapDifficultyFilter, filteredCombos)
     }

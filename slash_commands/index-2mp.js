@@ -3,6 +3,7 @@ const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
+const { allMapsFromMapDifficulty } = require('../helpers/maps')
 
 const { paleblue } = require('../jsons/colours.json');
 
@@ -342,9 +343,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     let impossibleMaps = [];
     if (isWaterEntityCombo(combo)) {
         // Calculate impossible maps (those that do not contain any water)
-        nonWaterMaps = Aliases.allNonWaterMaps().map((m) =>
-            Aliases.mapToIndexAbbreviation(m)
-        );
+        const nonWaterMaps = allNonWaterMaps(true).map(m => m.toIndexAbbreviation)
         impossibleMaps = mapsLeft.filter((m) => nonWaterMaps.includes(m));
 
         mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
@@ -498,7 +497,7 @@ function filterCombo(c, parsed) {
 
     let matchesMap = true
     if (parsed.map_difficulty) {
-        matchesMap = Aliases.allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(c.MAP)
+        matchesMap = allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(c.MAP)
     } else if (parsed.map) { // Map
         matchesMap = parsedMap.map == c.MAP
     }

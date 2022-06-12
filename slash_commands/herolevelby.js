@@ -1,4 +1,10 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('@discordjs/builders');
+const { 
+    SlashCommandBuilder, 
+    SlashCommandStringOption, 
+    SlashCommandIntegerOption 
+} = require('@discordjs/builders');
+
+const { allMapDifficulties } = require('../helpers/maps')
 
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
@@ -22,7 +28,7 @@ let mapDifficultyOption = new SlashCommandStringOption()
     .setName('map_difficulty')
     .setDescription('Map Difficulty')
     .setRequired(true);
-Aliases.allMapDifficulties().forEach((difficulty) => {
+allMapDifficulties().forEach((difficulty) => {
     mapDifficultyOption.addChoice(gHelper.toTitleCase(difficulty), difficulty);
 });
 

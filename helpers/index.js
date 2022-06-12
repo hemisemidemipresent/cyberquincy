@@ -1,5 +1,13 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
+const { 
+    beginnerMaps,
+    intermediateMaps,
+    advancedMaps,
+    expertMaps,
+    allWaterMaps,
+ } = require('../helpers/maps')
+
 //////////////////////////////////////////////////////
 // Cacheing 
 //////////////////////////////////////////////////////
@@ -108,14 +116,14 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
     const completedAltMaps = allCompletedMapAbbrs.filter(m => m != ogMapAbbr);
 
     let mapDifficultyGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps(),
+        beginnerMaps(),
+        intermediateMaps(),
+        advancedMaps(),
+        expertMaps(),
     ];
     if (isWaterEntity) {
         mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
+            aliases.filter((map) => allWaterMaps().includes(map))
         );
     }
     mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>

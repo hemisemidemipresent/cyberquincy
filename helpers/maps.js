@@ -124,6 +124,11 @@ class Map {
         if (!g) return null
         return new Map(g.canonical)
     }
+
+    static fromProper(n) {
+        if (!n) return null
+        return new Map(Aliases.toAliasNormalForm(n))
+    }
 }
 
 module.exports = {

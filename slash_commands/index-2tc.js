@@ -21,7 +21,7 @@ const clonedeep = require('lodash.clonedeep');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 
-const { allMapsFromMapDifficulty } = require('../helpers/maps')
+const { allMapsFromMapDifficulty, Map } = require('../helpers/maps')
 
 const { orange, palered } = require('../jsons/colours.json');
 
@@ -275,9 +275,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
             const allCompletedMaps = Object.keys(
                 allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS
             );
-            const ogMapAbbr = Aliases.mapToIndexAbbreviation(
-                Aliases.toAliasNormalForm(combo.MAP)
-            );
+            const ogMapAbbr = Map.fromProper(combo.MAP).toIndexAbbreviation()
 
             let completedAltMapsFields = Index.altMapsFields(
                 ogMapAbbr,
@@ -431,7 +429,7 @@ function flattenCombo(combo, map) {
 
     let flattenedCombo = combo;
 
-    flattenedCombo.MAP = Aliases.indexMapAbbreviationToNormalForm(map);
+    flattenedCombo.MAP = Map.fromAlias(map).format()
     flattenedCombo.PERSON = subcombo.PERSON;
     flattenedCombo.LINK = subcombo.LINK;
     flattenedCombo.OG = subcombo.OG;
@@ -561,7 +559,7 @@ function filterCombos(filteredCombos, parsed) {
 
     if (parsed.map_difficulty) {
         function mapDifficultyFilter(map, _) {
-            const mapCanonical = Aliases.toAliasNormalForm(Aliases.getCanonicalForm(map))
+            const mapCanonical = Map.fromAlias(map).name
             return allMapsFromMapDifficulty(parsed.map_difficulty).map(m => m.name).includes(mapCanonical)
         }
         filteredCombos = filterByCompletion(mapDifficultyFilter, filteredCombos)

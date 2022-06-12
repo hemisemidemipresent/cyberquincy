@@ -4,8 +4,6 @@ const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
 
-const { Map, MapError } = require('../helpers/maps')
-
 const { paleblue } = require('../jsons/colours.json');
 
 const Parsed = require('../parser/parsed.js');
@@ -145,7 +143,7 @@ function validateInput(interaction) {
 
 function parseAll(interaction) {
     parsedEntity = parseEntity(interaction)
-    parsedMap = parseMapArg(interaction)
+    parsedMap = parseMap(interaction)
     person = parsePerson(interaction)
     return [parsedEntity, parsedMap, person];
 }
@@ -155,6 +153,7 @@ const OrParser = require('../parser/or-parser.js');
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const HeroParser = require('../parser/hero-parser.js');
 const TowerParser = require('../parser/tower-parser.js')
+const MapParser = require('../parser/map-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const PersonParser = require('../parser/person-parser.js');
 
@@ -180,15 +179,13 @@ function parseEntity(interaction) {
     } else return new Parsed();
 }
 
-function parseMapArg(interaction) {
-    const mapArg = interaction.options.getString('map')
-
-    const mapObj = Map.fromAlias(mapArg)
-    if (!mapObj) {
-        
-    }
-
-    if (mapArg) {
+function parseMap(interaction) {
+    mapParser = new OrParser(
+        new MapParser(),
+        new MapDifficultyParser(),
+    )
+    map = interaction.options.getString('map')
+    if (map) {
         canonicalMap = Aliases.getCanonicalForm(map)
         if (canonicalMap) {
             return CommandParser.parse([canonicalMap], mapParser)

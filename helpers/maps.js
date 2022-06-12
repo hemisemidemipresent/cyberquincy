@@ -126,10 +126,6 @@ class Map {
     }
 }
 
-class MapDifficulty {
-    
-}
-
 module.exports = {
     Map,
     MapDifficulty,

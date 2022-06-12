@@ -123,7 +123,6 @@ async function execute(interaction) {
     try {
         return await display2MPFilterAll(interaction, allCombos, parsed, mtime)
     } catch(e) {
-        console.log('e')
         return await interaction.editReply({ embeds: [err(e)] })
     }
 }
@@ -327,7 +326,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
         const bold = combo.MAPS[mapAbbr].OG ? '**' : '';
 
         mapColumn.push(
-            `${bold}${Aliases.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`
+            `${bold}${Map.fromAlias(mapAbbr).format()}${bold}`
         );
         personColumn.push(`${bold}${combo.MAPS[mapAbbr].PERSON}${bold}`);
         linkColumn.push(`${bold}${combo.MAPS[mapAbbr].LINK}${bold}`);
@@ -344,7 +343,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     let impossibleMaps = [];
     if (isWaterEntityCombo(combo)) {
         // Calculate impossible maps (those that do not contain any water)
-        const nonWaterMaps = allNonWaterMaps(true).map(m => m.toIndexAbbreviation)
+        const nonWaterMaps = allNonWaterMaps().map(m => m.toIndexAbbreviation())
         impossibleMaps = mapsLeft.filter((m) => nonWaterMaps.includes(m));
 
         mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
@@ -411,12 +410,12 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
 
     // Retrieve og- and alt-map notes from each tower row
     for (const combo of combos) {
-        for (const map in combo.MAPS) {
-            const mapCompletion = combo.MAPS[map]
+        for (const mapAbbr in combo.MAPS) {
+            const mapCompletion = combo.MAPS[mapAbbr]
 
             const canonicalCompletion = {
                 ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
-                MAP: Aliases.indexMapAbbreviationToMap(map),
+                MAP: Map.fromAlias(mapAbbr)?.format(),
                 PERSON: mapCompletion.PERSON,
                 LINK: mapCompletion.LINK,
                 OG: mapCompletion.OG || false
@@ -424,7 +423,7 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
 
             if (!canonicalCompletion.MAP) {
                 throw new DeveloperCommandError(
-                    `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`
+                    `Index Entry Error: ${mapAbbr} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`
                 )
             }
 
@@ -436,7 +435,7 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
             if (mapCompletion.OG) numOGCompletions += 1;
 
             towerColumn.push(`${bold}${combo.ENTITY}${bold}`);
-            mapColumn.push(`${bold}${map}${bold}`);
+            mapColumn.push(`${bold}${mapAbbr}${bold}`);
             linkColumn.push(`${bold}${mapCompletion.LINK}${bold}`);
             personColumn.push(`${bold}${mapCompletion.PERSON}${bold}`);
         }
@@ -498,7 +497,7 @@ function filterCombo(c, parsed) {
 
     let matchesMap = true
     if (parsed.map_difficulty) {
-        matchesMap = allMapsFromMapDifficulty(parsedMap.map_difficulty).map(m => m.name).includes(c.MAP)
+        matchesMap = allMapsFromMapDifficulty(parsedMap.map_difficulty).map(m => m.format()).includes(c.MAP)
     } else if (parsed.map) { // Map
         matchesMap = parsedMap.map == c.MAP
     }

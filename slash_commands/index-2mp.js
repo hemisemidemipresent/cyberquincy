@@ -3,7 +3,7 @@ const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
-const { allMapsFromMapDifficulty } = require('../helpers/maps')
+const { allNonWaterMaps, allMapsFromMapDifficulty } = require('../helpers/maps')
 
 const { paleblue } = require('../jsons/colours.json');
 

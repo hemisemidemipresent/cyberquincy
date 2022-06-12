@@ -128,7 +128,6 @@ class Map {
 
 module.exports = {
     Map,
-    MapDifficulty,
 
     allMaps,
     beginnerMaps,

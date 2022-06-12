@@ -275,7 +275,7 @@ function ogCombo(combo) {
 function embed2MPAlt(combo, mapName) {
     const map = new Map(mapName)
 
-    const altCombo = combo.MAPS[map.toIndexAbbreviation]
+    const altCombo = combo.MAPS[map.toIndexAbbreviation()]
 
     if (!altCombo) {
         throw new UserCommandError(

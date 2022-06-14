@@ -242,6 +242,8 @@ class AliasRepository extends Array {
 
     // Converts a member of an alias group to its canonical form
     getCanonicalForm(aliasMember) {
+        if (!aliasMember) return null
+        aliasMember = aliasMember.replace(/ /g, '_')
         let ag = this.getAliasGroup(aliasMember.toLowerCase());
         if (ag) return ag.canonical;
         else return null;

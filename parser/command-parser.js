@@ -1,3 +1,9 @@
+/**
+ * This file is a relic from q! commands, when we'd essentially have to "guess"
+ * what users were entering for each argument in a command.
+ * However, it still proves to be useful in part for slash command individual argument parsing
+ */
+
 const Parsed = require('./parsed.js');
 const OptionalParser = require('./optional-parser.js');
 const OrParser = require('./or-parser.js');

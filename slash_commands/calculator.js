@@ -100,7 +100,7 @@ async function calc(interaction) {
                     new Discord.MessageEmbed()
                         .setTitle(`Unexpected character "${c}"`)
                         .setDescription(
-                            `"${c}" is not a valid character in the \`q!calc\` expression. Type \`q!calc\` for help.`
+                            `"${c}" is not a valid character in the \`/calc\` expression.`
                         )
                         .setColor(red)
                         .setFooter({ text: footer })
@@ -178,7 +178,6 @@ async function calc(interaction) {
                     .setTitle('Error processing expression. Did you add an extra operator?')
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
-                    .setFooter({ text: 'Enter `q!calc` for help' })
             ]
         });
     } else if (stack.length > 0) {
@@ -188,7 +187,6 @@ async function calc(interaction) {
                     .setTitle('Error processing expression. Did you leave out an operator?')
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
-                    .setFooter({ text: 'Enter `q!calc` for help' })
             ]
         });
     } else {

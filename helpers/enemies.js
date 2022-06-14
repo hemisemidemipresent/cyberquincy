@@ -212,6 +212,8 @@ class Enemy {
             layerRBE *= getHealthRamping(this.round)
         }
 
+        layerRBE = gHelper.round(layerRBE, 0)
+
         return format ? gHelper.numberWithCommas(layerRBE) : layerRBE;
     }
 

@@ -363,11 +363,11 @@ class Enemy {
         }
 
         if (this.onlyExistsInChallengeEditor()) {
-            notes.push("Non-DDT MOABs can't have camgrow properties, but their ceramic descendants will. This is only available in challenge editor.")
+            notes.push("Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)")
         }
 
         if (this.name == DDT) {
-            notes.push("DDTs have the camgrow property by default")
+            notes.push("DDTs have the camgrow property by default (meaning they release camgrow ceramics)")
         }
 
         if (this.isMOAB() && (this.round == 104 || this.round == 114)) {

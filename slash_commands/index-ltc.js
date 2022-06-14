@@ -59,14 +59,15 @@ const COLS = {
         LINK: 'U',
         CURRENT: 'V',
     },
-    'SIX+': {
+    SIX: {
         MAP: 'B',
-        AMOUNT: 'D',
-        VERSION: 'E',
-        DATE: 'F',
-        PERSON: 'G',
-        LINK: 'I',
-        CURRENT: 'J',
+        TOWERS: ['D', 'F', 'H', 'J', 'L', 'N'],
+        UPGRADES: 'P',
+        VERSION: 'S',
+        DATE: 'T',
+        PERSON: 'U',
+        LINK: 'W',
+        CURRENT: 'X',
     },
 };
 
@@ -253,7 +254,7 @@ function parseMapNotes(notes) {
 }
 
 function getColumnSet(mapRow, sheet) {
-    // Looks for "Two|Three|...|Six+ Towers" in the closest above header cell
+    // Looks for "Two|Three|...|Six Towers" in the closest above header cell
     headerRegex = new RegExp(
         `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Towers?`,
         'i'

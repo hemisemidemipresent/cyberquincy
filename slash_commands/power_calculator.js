@@ -363,6 +363,5 @@ class UnrecognizedTokenError extends Error {}
 
 module.exports = {
     data: builder,
-    beta: true,
     execute
 };

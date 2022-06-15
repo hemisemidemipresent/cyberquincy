@@ -17,7 +17,7 @@ const COLS = {
         DATE: 'I',
         PERSON: 'J',
         LINK: 'L',
-        CURRENT: 'M',
+        CURRENT: 'M'
     },
     TWO: {
         MAP: 'B',
@@ -27,7 +27,7 @@ const COLS = {
         DATE: 'K',
         PERSON: 'L',
         LINK: 'N',
-        CURRENT: 'O',
+        CURRENT: 'O'
     },
     THREE: {
         MAP: 'B',
@@ -37,7 +37,7 @@ const COLS = {
         DATE: 'M',
         PERSON: 'N',
         LINK: 'P',
-        CURRENT: 'Q',
+        CURRENT: 'Q'
     },
     FOUR: {
         MAP: 'B',
@@ -47,7 +47,7 @@ const COLS = {
         DATE: 'P',
         PERSON: 'Q',
         LINK: 'S',
-        CURRENT: 'T',
+        CURRENT: 'T'
     },
     FIVE: {
         MAP: 'B',
@@ -57,7 +57,7 @@ const COLS = {
         DATE: 'R',
         PERSON: 'S',
         LINK: 'U',
-        CURRENT: 'V',
+        CURRENT: 'V'
     },
     SIX: {
         MAP: 'B',
@@ -67,32 +67,25 @@ const COLS = {
         DATE: 'T',
         PERSON: 'U',
         LINK: 'W',
-        CURRENT: 'X',
-    },
+        CURRENT: 'X'
+    }
 };
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
 
-let mapOption = 
-    new SlashCommandStringOption()
-        .setName('map')
-        .setDescription('Map')
-        .setRequired(true);
+let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
 
-let comboModifierOption = 
-    new SlashCommandStringOption()
-        .setName('modifier')
-        .setDescription('LTC variant for the given map')
-        .setRequired(false)
-        .addChoice('Cheapest', 'cheapest')
-        .addChoice('OG', 'og')
+let comboModifierOption = new SlashCommandStringOption()
+    .setName('modifier')
+    .setDescription('LTC variant for the given map')
+    .setRequired(false)
+    .addChoices({ name: 'Cheapest', value: 'cheapest' }, { name: 'OG', value: 'og' });
 
-builder = 
-    new SlashCommandBuilder()
-        .setName('ltc')
-        .setDescription('Search and Browse Completed LTC Index Combos')
-        .addStringOption(mapOption)
-        .addStringOption(comboModifierOption)
+builder = new SlashCommandBuilder()
+    .setName('ltc')
+    .setDescription('Search and Browse Completed LTC Index Combos')
+    .addStringOption(mapOption)
+    .addStringOption(comboModifierOption);
 
 async function execute(interaction) {
     const mapArg = interaction.options.getString('map');
@@ -101,7 +94,7 @@ async function execute(interaction) {
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 
     if (parsed.hasErrors()) {
-        return await interaction.reply("Map provided not valid");
+        return await interaction.reply('Map provided not valid');
     } else {
         const modifier = interaction.options.getString('modifier');
         let challengeEmbed = await ltc(canonicalMap, modifier);
@@ -113,9 +106,7 @@ async function ltc(btd6_map, modifier) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
 
     // Load the column containing the different maps
-    await sheet.loadCells(
-        `${COLS['TWO'].MAP}${MIN_ROW}:${COLS['TWO'].MAP}${MAX_ROW}`
-    ); // loads all possible cells with map
+    await sheet.loadCells(`${COLS['TWO'].MAP}${MIN_ROW}:${COLS['TWO'].MAP}${MAX_ROW}`); // loads all possible cells with map
 
     // The row where the queried map is found
     var entryRow = null;
@@ -124,10 +115,7 @@ async function ltc(btd6_map, modifier) {
     for (let row = 1; row <= MAX_ROW; row++) {
         var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`).value;
         // input is "in_the_loop" but needs to be compared to "In The Loop"
-        if (
-            mapCandidate &&
-            mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map
-        ) {
+        if (mapCandidate && mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map) {
             entryRow = row;
             break;
         }
@@ -138,9 +126,7 @@ async function ltc(btd6_map, modifier) {
     colset = getColumnSet(entryRow, sheet);
 
     // Load the row where the map was found
-    await sheet.loadCells(
-        `${colset.MAP}${entryRow}:${colset.CURRENT}${entryRow}`
-    );
+    await sheet.loadCells(`${colset.MAP}${entryRow}:${colset.CURRENT}${entryRow}`);
 
     // Values to be included in the LTC embedded message
     values = {};
@@ -166,11 +152,7 @@ async function getRowStandardData(entryRow, colset) {
 
         for (var i = 0; i < colset['TOWERS'].length; i++) {
             values[`Tower ${i + 1}`] =
-                sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`)
-                    .value +
-                ' (' +
-                upgrades[i] +
-                ')';
+                sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value + ' (' + upgrades[i] + ')';
         }
     }
 
@@ -194,16 +176,10 @@ async function getRowStandardData(entryRow, colset) {
         values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
 
-    var challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${values.MAP} LTC Combo`)
-        .setColor(palegreen);
+    var challengeEmbed = new Discord.MessageEmbed().setTitle(`${values.MAP} LTC Combo`).setColor(palegreen);
 
     for (field in values) {
-        challengeEmbed = challengeEmbed.addField(
-            gHelper.toTitleCase(field),
-            values[field].toString(),
-            true
-        );
+        challengeEmbed = challengeEmbed.addField(gHelper.toTitleCase(field), values[field].toString(), true);
     }
 
     return challengeEmbed;
@@ -220,9 +196,7 @@ async function getRowAltData(entryRow, qualifier, colset) {
     }
 
     var challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(
-            `${gHelper.toTitleCase(qualifier)} ${mapCell.value} LTC Combo`
-        )
+        .setTitle(`${gHelper.toTitleCase(qualifier)} ${mapCell.value} LTC Combo`)
         .setColor(palegreen)
         .addField('Person', notes[qualifier].PERSON, true)
         .addField('Link', notes[qualifier].LINK, true);
@@ -238,16 +212,14 @@ function parseMapNotes(notes) {
             .split('\n')
             .map((n) => {
                 let qualifier, person, bitly;
-                [qualifier, person, bitly] = n
-                    .split(/[,:]/)
-                    .map((t) => t.replace(/ /g, ''));
+                [qualifier, person, bitly] = n.split(/[,:]/).map((t) => t.replace(/ /g, ''));
 
                 return [
                     qualifier.toUpperCase(),
                     {
                         PERSON: person,
-                        LINK: `[${bitly}](http://${bitly})`,
-                    },
+                        LINK: `[${bitly}](http://${bitly})`
+                    }
                 ];
             })
     );
@@ -255,17 +227,12 @@ function parseMapNotes(notes) {
 
 function getColumnSet(mapRow, sheet) {
     // Looks for "Two|Three|...|Six Towers" in the closest above header cell
-    headerRegex = new RegExp(
-        `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Towers?`,
-        'i'
-    );
+    headerRegex = new RegExp(`(${Object.keys(COLS).join('|').replace('+', '\\+')}) Towers?`, 'i');
 
     candidateHeaderRow = mapRow - 1;
     while (candidateHeaderRow > 0) {
         // Check cell to see if it's a header indicating the number of towers
-        let candidateHeaderCell = sheet.getCellByA1(
-            `${COLS['TWO'].MAP}${candidateHeaderRow}`
-        );
+        let candidateHeaderCell = sheet.getCellByA1(`${COLS['TWO'].MAP}${candidateHeaderRow}`);
 
         // Header rows take up 2 rows. If you check the bottom row, the data value is null.
         if (candidateHeaderCell.value) {
@@ -280,7 +247,7 @@ function getColumnSet(mapRow, sheet) {
         candidateHeaderRow -= 1;
     }
 
-    throw `Could not find header row`
+    throw `Could not find header row`;
 }
 
 module.exports = {

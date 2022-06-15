@@ -17,19 +17,16 @@ const heroNameToBloonologyLinkMapping = {
     etienne: 'https://pastebin.com/raw/UxN2Wx1F',
     sauda: 'https://pastebin.com/raw/8E2TSndk',
     psi: 'https://pastebin.com/raw/9h9aAPUm',
-    geraldo: 'https://pastebin.com/raw/rksZWhTV',
+    geraldo: 'https://pastebin.com/raw/rksZWhTV'
 };
 
 const heroOption = new SlashCommandStringOption()
     .setName('hero')
     .setDescription('The hero you are finding information for')
-    .setRequired(true)
-Object.keys(heroNameToBloonologyLinkMapping).forEach(hero => {
-    heroOption.addChoice(
-        Aliases.toIndexNormalForm(hero),
-        hero
-    )
-})
+    .setRequired(true);
+Object.keys(heroNameToBloonologyLinkMapping).forEach((hero) => {
+    heroOption.addChoices({ name: Aliases.toIndexNormalForm(hero), value: hero });
+});
 const builder = new SlashCommandBuilder()
     .setName('hero')
     .setDescription('Find information for each hero')
@@ -59,7 +56,7 @@ async function embedBloonology(heroName, level) {
     const sentences = cleaned.split(/\n\n/);
 
     const desc = sentences[level - 1];
-    const descWithoutLevel = desc.split("\n").slice(1).join("\n")
+    const descWithoutLevel = desc.split('\n').slice(1).join('\n');
     if (typeof desc != 'string') {
         return new Discord.MessageEmbed().setColor(red).setTitle('The bloonology datapiece is missing');
     }

@@ -6,8 +6,8 @@ const roundContents = require('../jsons/round_contents.json');
 const rounds2 = require('../jsons/round2.json');
 const cashAbr = require('../jsons/income-abr.json');
 
-const roundHelper = require('../helpers/rounds')
-const enemyHelper = require('../helpers/enemies')
+const roundHelper = require('../helpers/rounds');
+const enemyHelper = require('../helpers/enemies');
 const gHelper = require('../helpers/general');
 
 const { cyber } = require('../jsons/colours.json');
@@ -23,8 +23,7 @@ builder = new SlashCommandBuilder()
             .setName('game_mode')
             .setDescription('the game mode')
             .setRequired(false)
-            .addChoice('normal', 'chimps')
-            .addChoice('Alternate Bloon Rounds (ABR)', 'abr')
+            .addChoices({ name: 'normal', value: 'chimps' }, { name: 'Alternate Bloon Rounds (ABR)', value: 'abr' })
     );
 
 function validateInput(interaction) {
@@ -32,7 +31,8 @@ function validateInput(interaction) {
 
     // Validations
     if (round < 1) return `Must enter positive numbers for round ${round}`;
-    if (round > roundHelper.ALL_ROUNDS) return `Rounds are meaningless past ${roundHelper.ALL_ROUNDS[1]} since no bloons spawn`;
+    if (round > roundHelper.ALL_ROUNDS)
+        return `Rounds are meaningless past ${roundHelper.ALL_ROUNDS[1]} since no bloons spawn`;
     return;
 }
 

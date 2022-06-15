@@ -5,7 +5,7 @@ const Heroes = require('../helpers/heroes');
 
 let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Aliases.allHeroes().forEach((hero) => {
-    heroOption.addChoice(gHelper.toTitleCase(hero), hero);
+    heroOption.addChoices({ name: gHelper.toTitleCase(hero), value: hero });
 });
 
 const desiredLevelOption = new SlashCommandIntegerOption()
@@ -23,7 +23,7 @@ let mapDifficultyOption = new SlashCommandStringOption()
     .setDescription('Map Difficulty')
     .setRequired(true);
 Aliases.allMapDifficulties().forEach((difficulty) => {
-    mapDifficultyOption.addChoice(gHelper.toTitleCase(difficulty), difficulty);
+    mapDifficultyOption.addChoices({ name: gHelper.toTitleCase(difficulty), value: difficulty });
 });
 
 builder = new SlashCommandBuilder()

@@ -15,9 +15,11 @@ builder = new SlashCommandBuilder()
             .setName('game_mode')
             .setDescription('CHIMPS/ABR/HALFCASH')
             .setRequired(false)
-            .addChoice('CHIMPS', 'chimps')
-            .addChoice('ABR', 'abr')
-            .addChoice('Half Cash', 'halfcash')
+            .addChoices(
+                { name: 'CHIMPS', value: 'chimps' },
+                { name: 'ABR', value: 'abr' },
+                { name: 'Half Cash', value: 'halfcash' }
+            )
     );
 
 function validateInput(interaction) {

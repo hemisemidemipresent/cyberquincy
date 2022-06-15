@@ -10,7 +10,7 @@ const Heroes = require('../helpers/heroes');
 
 const heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Aliases.allHeroes().forEach((hero) => {
-    heroOption.addChoice(gHelper.toTitleCase(hero), hero);
+    heroOption.addChoices({ name: gHelper.toTitleCase(hero), value: hero });
 });
 
 const heroLevelOption = new SlashCommandIntegerOption()
@@ -23,7 +23,7 @@ const mapDifficultyOption = new SlashCommandStringOption()
     .setDescription('Map Difficulty')
     .setRequired(true);
 Aliases.allMapDifficulties().forEach((difficulty) => {
-    mapDifficultyOption.addChoice(gHelper.toTitleCase(difficulty), difficulty);
+    mapDifficultyOption.addChoices({ name: gHelper.toTitleCase(difficulty), value: difficulty });
 });
 
 const energizerRoundOption = new SlashCommandIntegerOption()

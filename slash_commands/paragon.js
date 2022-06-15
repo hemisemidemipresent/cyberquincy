@@ -17,10 +17,12 @@ builder = new SlashCommandBuilder()
             .setName('tower')
             .setDescription('The tower you want to find the paragon for')
             .setRequired(true)
-            .addChoice('Dart Monkey (Apex Plasma Master)', 'dart_monkey')
-            .addChoice('Boomerang Monkey (Glaive Dominus)', 'boomerang_monkey')
-            .addChoice('Ninja Monkey (Ascended Shadow)', 'ninja_monkey')
-            .addChoice('Monkey Buccaneer (Navarch of the Seas)', 'monkey_buccaneer')
+            .addChoices(
+                { name: 'Dart Monkey (Apex Plasma Master)', value: 'dart_monkey' },
+                { name: 'Boomerang Monkey (Glaive Dominus)', value: 'boomerang_monkey' },
+                { name: 'Ninja Monkey (Ascended Shadow)', value: 'ninja_monkey' },
+                { name: 'Monkey Buccaneer (Navarch of the Seas)', value: 'monkey_buccaneer' }
+            )
     )
     .addIntegerOption((option) => option.setName('level').setDescription('The level of the paragon').setRequired(true));
 

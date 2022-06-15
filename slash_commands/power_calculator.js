@@ -22,10 +22,12 @@ const difficulty = new SlashCommandStringOption()
     .setName('difficulty')
     .setDescription('Game Difficulty')
     .setRequired(false)
-    .addChoice('Easy (Primary only, Deflation)', 'easy')
-    .addChoice('Medium (Military only, Reverse, Apopalypse)', 'medium')
-    .addChoice('Hard (Magic only, Double HP MOABs, Half Cash, C.H.I.M.P.S.)', 'hard')
-    .addChoice('Impoppable', 'impoppable');
+    .addChoices(
+        { name: 'Easy (Primary only, Deflation)', value: 'easy' },
+        { name: 'Medium (Military only, Reverse, Apopalypse)', value: 'medium' },
+        { name: 'Hard (Magic only, Double HP MOABs, Half Cash, C.H.I.M.P.S.)', value: 'hard' },
+        { name: 'Impoppable', value: 'impoppable' }
+    );
 
 builder = new SlashCommandBuilder()
     .setName('test')

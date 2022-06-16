@@ -358,7 +358,7 @@ class Enemy {
         }
 
         if (this.name == DDT) {
-            notes.push("DDTs have the camgrow property by default (meaning they release camgrow ceramics)")
+            notes.push("DDTs have the camgrow property by default (meaning they release camgrow ceramics)");
         }
 
         if (this.isMOAB() && (this.round == 104 || this.round == 114)) {

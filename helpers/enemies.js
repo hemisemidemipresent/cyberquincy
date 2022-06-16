@@ -187,11 +187,11 @@ class Enemy {
     }
 
     speed(format = false) {
-        const speed = BASE_RED_BLOON_SECONDS_PER_SECOND[this.name] * getSpeedRamping(this.round)
-        const roundedSpeed = gHelper.round(speed, 4)
+        const speed = BASE_RED_BLOON_SECONDS_PER_SECOND[this.name] * getSpeedRamping(this.round);
+        const roundedSpeed = gHelper.round(speed, 4);
         if (format) {
-            return gHelper.numberWithCommas(roundedSpeed)
-        } else return roundedSpeed
+            return gHelper.numberWithCommas(roundedSpeed);
+        } else return roundedSpeed;
     }
 
     /**

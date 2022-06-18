@@ -53,6 +53,7 @@
         "lex": "^1.7.9",
         "lodash.clonedeep": "^4.5.0",
         "lodash.isequal": "^4.5.0",
+        "nksku": "^1.0.7",
         "node-dgdata": "^1.0.2",
         "node-fetch": "^2.6.7",
         "pluralize": "^8.0.0",

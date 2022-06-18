@@ -30,8 +30,8 @@ const difficulty = new SlashCommandStringOption()
     );
 
 builder = new SlashCommandBuilder()
-    .setName('test')
-    .setDescription('evaluate paragon degree? there are probably many issues')
+    .setName('degree')
+    .setDescription('evaluate paragon degree')
     .addStringOption(exprOption)
     .addStringOption(popsOption)
     .addStringOption(difficulty);

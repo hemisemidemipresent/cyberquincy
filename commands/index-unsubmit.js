@@ -62,14 +62,14 @@ async function unsubmit(message, url) {
             // Inline
             submitterTag = submission.content.match(/Sent by (.*?)_$/)[1];
         }
-        if (submitterTag == message.author.tag) {
+        if (submitterTag == message.author.tag || message.member.roles.cache.has('923076988607037470')) {
             try {
                 submission.delete();
                 return message.channel.send(
                     'Your submission was successfully removed.'
                 );
             } catch {
-                return message.channel.send('Failed to remove suggestion');
+                return message.channel.send('Failed to remove submission');
             }
         } else {
             return message.channel.send(

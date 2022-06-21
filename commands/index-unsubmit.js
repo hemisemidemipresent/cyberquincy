@@ -16,6 +16,7 @@ const TEST_CYBER_QUINCY_USER_ID = '737094027400183868';
 const CYBER_QUINCY_USER_ID = IS_TESTING
     ? TEST_CYBER_QUINCY_USER_ID
     : REAL_CYBER_QUINCY_USER_ID;
+const HELPER_ROLE_ID = '923076988607037470';
 
 DISCORD_LINK_REGEX = /https:\/\/discord.com\/channels\/(\d+)\/(\d+)\/(\d+)/i;
 
@@ -62,14 +63,14 @@ async function unsubmit(message, url) {
             // Inline
             submitterTag = submission.content.match(/Sent by (.*?)_$/)[1];
         }
-        if (submitterTag == message.author.tag) {
+        if (submitterTag == message.author.tag || message.member.roles.cache.has(HELPER_ROLE_ID)) {
             try {
                 submission.delete();
                 return message.channel.send(
                     'Your submission was successfully removed.'
                 );
             } catch {
-                return message.channel.send('Failed to remove suggestion');
+                return message.channel.send('Failed to remove submission');
             }
         } else {
             return message.channel.send(

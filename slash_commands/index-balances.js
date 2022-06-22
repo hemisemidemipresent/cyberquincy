@@ -15,8 +15,6 @@ const HeroParser = require('../parser/hero-parser');
 
 const VersionParser = require('../parser/version-parser');
   
-const OptionalParser = require('../parser/optional-parser');
-
 const { yellow, darkgreen } = require('../jsons/colours.json');
 const isEqual = require('lodash.isequal');
   
@@ -34,6 +32,12 @@ const version2Option = new SlashCommandIntegerOption()
     .setName('version2')
     .setDescription('End Version')
     .setRequired(false)
+
+const reloadOption = new SlashCommandStringOption()
+    .setName('reload')
+    .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
+    .setRequired(false)
+    .addChoices({ name: 'Yes', value: 'yes' });
   
 builder = new SlashCommandBuilder()
     .setName('balance')
@@ -41,42 +45,61 @@ builder = new SlashCommandBuilder()
     .addStringOption(entityOption)
     .addIntegerOption(version1Option)
     .addIntegerOption(version2Option)
+    .addStringOption(reloadOption)
+
+function parseEntity(interaction) {
+    const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
+    const entity = interaction.options.getString('entity');
+    if (entity) {
+        const canonicalEntity = Aliases.canonicizeArg(entity);
+        if (canonicalEntity) {
+            return CommandParser.parse([canonicalEntity], entityParser);
+        } else {
+            const parsed = new Parsed();
+            parsed.addError('Canonical not found');
+            return parsed;
+        }
+    } else return new Parsed();
+}
+
+function parseVersion(interaction, num) {
+    const v = interaction.options.getString(`version${num}`);
+    if (v) {
+        return CommandParser.parse([`v${v}`], new VersionParser());
+    } else return new Parsed();
+}
+
+function parseAll(interaction) {
+    const parsedEntity = parseEntity(interaction)
+    const parsedVersion1 = parseVersion(interaction, 1)
+    const parsedVersion2 = parseVersion(interaction, 2)
+    return [parsedEntity, parsedVersion1, parsedVersion2]
+}
   
 function validateInput(interaction) {
-      entityParser = new OrParser(
-          new TowerParser(),
-          new TowerPathParser(),
-          new TowerUpgradeParser(),
-          new HeroParser()
-      );
-  
-      const entity = Aliases.canonicizeArg(interaction.options.getString('entity'))
-      const parsedEntity = CommandParser.parse([entity], entityParser)
-      if ( !(parsedEntity.tower || parsedEntity.tower_path || parsedEntity.tower_upgrade || parsedEntity.hero) ) {
-          return `Entity entered does not match any towers, tower paths, tower upgrades, or heroes`
-      }
-  
-      version1 = interaction.options.getInteger('version1')
-      version2 = interaction.options.getInteger('version2')
-  
-      if ( version2 && !version1 ) {
-          return `You entered an ending version but not a starting version`
-      }
-    
-      if (version1 && version1 < 1) {
-          return `Starting/Only version not valid`
-      }
-  
-      if (version2 && version2 < 1) {
-          return `Ending version not valid`
-      }
+    entityParser = new OrParser(
+        new TowerParser(),
+        new TowerPathParser(),
+        new TowerUpgradeParser(),
+        new HeroParser()
+    );
 
-      if (version1 && version2 && version1 >= version2) {
-          return `Ending version must be larger than starting version`
-      }
+    let [parsedEntity, parsedVersion1, parsedVersion2] = parseAll(interaction)
+
+    if (parsedEntity.hasErrors()) {
+        return 'Entity did not match a tower/upgrade/path/hero'
+    }
+
+    if (parsedVersion1.hasErrors()) {
+        return `Parsed Version 1 must be a number >= 1`;
+    }
+
+    if (parsedVersion2.hasErrors()) {
+        return `Parsed Version 2 must be a number >= 1`;
+    }
   }
   
-  async function execute(interaction) {
+async function execute(interaction) {
     validationFailure = validateInput(interaction);
     if (validationFailure) {
         return interaction.reply({
@@ -85,29 +108,17 @@ function validateInput(interaction) {
         })
     }
   
-    entityParser = new OrParser(
-        new TowerParser(),
-        new TowerPathParser(),
-        new TowerUpgradeParser(),
-        new HeroParser()
+    const parsed = parseAll(interaction).reduce(
+        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
+        new Parsed()
     );
 
-    // Re-using the old infrastructure to make porting much easier
-    args = [
-        Aliases.canonicizeArg(interaction.options.getString('entity')),
-        'v' + String(interaction.options.getInteger('version1')),
-        'v' + String(interaction.options.getInteger('version2')),
-    ].filter(arg => arg)
-  
-    const parsed = CommandParser.parse(
-        args,
-        entityParser,
-        new OptionalParser(new VersionParser()),
-        new OptionalParser(new VersionParser())
-    );
+    parsed.versions.sort()
 
     // Towers might take a while
     interaction.deferReply({ ephemeral: true });
+
+
   
     await loadEntityBuffNerfsTableCells(parsed);
     if (!parsed.hero) await loadTowerChangesTableCells(parsed);

@@ -62,6 +62,7 @@ async function fetchInfo(info, reload=false) {
 const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js')
 const { scrapeAll2MPCompletions } = require('../services/index/2mp_scraper.js');
 const { scrapeAllFTTCCombos } = require('../services/index/fttc_scraper');
+const { scrapeAllBalanceChanges } = require('../services/index/balances_scraper')
 
 async function scrapeInfo(info) {
     switch(info) {
@@ -71,8 +72,10 @@ async function scrapeInfo(info) {
             return await scrapeAll2MPCompletions();
         case 'fttc':
             return await scrapeAllFTTCCombos();
+        case 'balances':
+            return await scrapeAllBalanceChanges();
         default:
-            throw 'Challenge not found'
+            throw 'Scraper not found'
     }
 }
 

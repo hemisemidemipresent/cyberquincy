@@ -98,7 +98,7 @@ function parseMap(interaction) {
 function parseVersion(interaction) {
     const v = interaction.options.getString(`version`);
     if (v) {
-        return CommandParser.parse([`v${v}`], new VersionParser(1));
+        return CommandParser.parse([`v${v}`], new VersionParser());
     } else return new Parsed();
 }
 

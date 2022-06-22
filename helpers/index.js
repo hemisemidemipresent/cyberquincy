@@ -12,7 +12,7 @@ const discordHelper = require('../helpers/discord.js');
 DIR1 = 'cache'
 DIR2 = 'index'
 
-function hasCachedCombos(fname) {
+function hasCachedInfo(fname) {
     return fs.existsSync(resolve(DIR1, DIR2, fname))
 }
 
@@ -21,7 +21,7 @@ function fetchCachedCombos(fname) {
     return JSON.parse(data).combos;
 }
 
-function cacheCombos(combos, fname) {
+function cacheInfo(combos, fname) {
     const fileData = JSON.stringify({ combos: combos })
 
     const dir1 = resolve(DIR1)
@@ -39,22 +39,22 @@ function cacheCombos(combos, fname) {
     })
 }
 
-function getLastCacheModified(challenge) {
-    return fs.statSync(resolve(DIR1, DIR2, `${challenge}.json`)).mtime
+function getLastCacheModified(info) {
+    return fs.statSync(resolve(DIR1, DIR2, `${info}.json`)).mtime
 }
 
 //////////////////////////////////////////////////////
 // Parsing 
 //////////////////////////////////////////////////////
 
-async function fetchCombos(challenge, reload=false) {
-    cacheFname = `${challenge}.json`
+async function fetchInfo(info, reload=false) {
+    cacheFname = `${info}.json`
     let allCombos;
-    if (hasCachedCombos(cacheFname) && !reload) {
+    if (hasCachedInfo(cacheFname) && !reload) {
         allCombos = await fetchCachedCombos(cacheFname)
     } else {
-        allCombos = await scrapeAllCombos(challenge)
-        cacheCombos(allCombos, cacheFname)
+        allCombos = await scrapeInfo(info)
+        cacheInfo(allCombos, cacheFname)
     }
     return allCombos
 }
@@ -63,8 +63,8 @@ const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js')
 const { scrapeAll2MPCompletions } = require('../services/index/2mp_scraper.js');
 const { scrapeAllFTTCCombos } = require('../services/index/fttc_scraper');
 
-async function scrapeAllCombos(challenge) {
-    switch(challenge) {
+async function scrapeInfo(info) {
+    switch(info) {
         case '2tc':
             return await scrapeAll2TCCombos();
         case '2mp':
@@ -340,14 +340,11 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
 }
 
 module.exports = {
-    hasCachedCombos,
-    fetchCachedCombos,
-    cacheCombos,
     getLastCacheModified,
+    fetchInfo,
 
     parseMapNotes,
-    fetchCombos,
-
     altMapsFields,
+
     displayOneOrMultiplePages,
 }

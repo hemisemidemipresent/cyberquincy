@@ -71,7 +71,8 @@ const ROUNDING_ERRORS = {
     104: MOABS,
     111: [BAD],
     114: [MOAB, BFB, DDT],
-    119: [MOAB, BFB, DDT]
+    119: [MOAB, BFB, DDT],
+    124: [BFB],
 }
 
 class Enemy {
@@ -375,7 +376,8 @@ class Enemy {
         const buggedLayers = ROUNDING_ERRORS[this.round]
         if (buggedLayers) {
             notes.push(
-                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: ${buggedLayers.map(l => formatName(l, true)).join(', ')}`
+                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers.map(l => formatName(l, true)).join(', ')}} ` + 
+                "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
             );
         }
 

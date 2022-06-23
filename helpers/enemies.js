@@ -365,7 +365,7 @@ class Enemy {
 
         if (this.onlyExistsInChallengeEditor()) {
             notes.push(
-                notes.push("Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)")
+                "Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)"
             );
         }
 

@@ -63,6 +63,17 @@ const BASE_LAYER_RBES = {
     [BAD]: 20000
 };
 
+const ROUNDING_ERRORS = {
+    83: [MOAB, BFB, DDT],
+    89: [MOAB, BFB, DDT],
+    95: [BFB],
+    96: [BFB, ZOMG],
+    104: MOABS,
+    111: [BAD],
+    114: [MOAB, BFB, DDT],
+    119: [MOAB, BFB, DDT]
+}
+
 class Enemy {
     constructor(name, round = 80, fortified = false, camo = false, regrow = false) {
         if (!ENEMIES.includes(name)) {
@@ -361,9 +372,10 @@ class Enemy {
             notes.push("DDTs have the camgrow property by default (meaning they release camgrow ceramics)");
         }
 
-        if (this.isMOAB() && (this.round == 104 || this.round == 114)) {
+        const buggedLayers = ROUNDING_ERRORS[this.round]
+        if (buggedLayers) {
             notes.push(
-                "There is a bizarre bug wherein all MOAB class bloons on rounds 104 and 114 have 1 less hp than they should for every layer. Quincybot doesn't take this into account for MOAB health calculation."
+                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: ${buggedLayers.map(l => formatName(l, true)).join(', ')}`
             );
         }
 

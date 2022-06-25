@@ -5,6 +5,7 @@ const {
   } = require('@discordjs/builders');
   
 const GoogleSheetsHelper = require('../helpers/google-sheets');
+const Index = require('../helpers/index.js');
 
 const OrParser = require('../parser/or-parser');
 
@@ -14,6 +15,8 @@ const TowerUpgradeParser = require('../parser/tower-upgrade-parser');
 const HeroParser = require('../parser/hero-parser');
 
 const VersionParser = require('../parser/version-parser');
+
+const Parsed = require('../parser/parsed')
   
 const { yellow, darkgreen } = require('../jsons/colours.json');
 const isEqual = require('lodash.isequal');
@@ -113,18 +116,22 @@ async function execute(interaction) {
         new Parsed()
     );
 
-    parsed.versions.sort()
+    parsed.versions?.sort()
 
     // Towers might take a while
     interaction.deferReply({ ephemeral: true });
 
+    const balanceChanges = await Index.fetchInfo('balances');
 
+    console.log(balanceChanges)
+
+    return;
   
     await loadEntityBuffNerfsTableCells(parsed);
     if (!parsed.hero) await loadTowerChangesTableCells(parsed);
     colIndex = await locateSpecifiedEntityColumnIndex(parsed);
   
-    let [versionAdded, balanceChanges] = await parseBalanceChanges(
+    let [versionAdded, changes] = await parseBalanceChanges(
         parsed,
         colIndex
     );
@@ -132,7 +139,7 @@ async function execute(interaction) {
         interaction,
         parsed,
         versionAdded,
-        balanceChanges
+        changes
     );
   }
   

@@ -19,21 +19,21 @@ async function scrapeAllTowers() {
     await loadTowerCells(towersSheet, currentVersion);
 
     const towerBalances = {}
-    let col;
+    let colIndex;
     for (
-        col =
+        colIndex =
             GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN) + 1;
-        col < towersSheet.columnCount;
-        col += 2
+        colIndex < towersSheet.columnCount;
+        colIndex += 2
     ) {
-        const towerHeader = towersSheet.getCell(TOWER_HEADER_ROW, col).value;
+        const towerHeader = towersSheet.getCell(TOWER_HEADER_ROW - 1, colIndex).value;
 
         if (!towerHeader) return towerBalances
 
         const tower = Aliases.getCanonicalForm(towerHeader);
 
-        const versionAdded = await parseVersionAdded(towersSheet, col)
-        const balanceChanges = await parseTowerBalanceChanges(towersSheet, currentVersion, col)
+        const versionAdded = await parseVersionAdded(towersSheet, colIndex)
+        const balanceChanges = await parseTowerBalanceChanges(towersSheet, currentVersion, colIndex)
 
         towerBalances[tower] = {
             versionAdded: versionAdded,
@@ -65,24 +65,22 @@ async function loadTowerCells(towersSheet, currentVersion) {
         `${VERSION_COLUMN}${TOWER_HEADER_ROW}:${bottomRightCellToBeLoaded}`
     );
 
-    const changesRow = `${VERSION_COLUMN}${getTowerChangesHeaderRow(currentVersion)}`
+    const changesRow = `${VERSION_COLUMN}${getTowerChangesRowEquivalent(currentVersion, TOWER_HEADER_ROW)}`
     const changesCol = GoogleSheetsHelper.rowColToA1(
-        getTowerChangesHeaderRow(currentVersion) + currentVersion - 1,
+        getTowerChangesRowEquivalent(currentVersion, TOWER_HEADER_ROW) + currentVersion - 1,
         towersSheet.columnCount
     )
     await towersSheet.loadCells(`${changesRow}:${changesCol}`)
 }
 
-async function parseVersionAdded(towersSheet, col) {
-    let row;
-    for (row = TOWER_HEADER_ROW; row < towersSheet.rowCount; row++) {
+async function parseVersionAdded(towersSheet, colIndex) {
+    let rowIndex, cellFormatting;
+    for (rowIndex = TOWER_HEADER_ROW; rowIndex < TOWER_HEADER_ROW + 4000 - 1; rowIndex++) {
+        cellFormatting = towersSheet.getCell(rowIndex, colIndex).effectiveFormat
         // The version added is the first non-greyed out row for the column
-        if (!isEqual(
-            towersSheet.getCell(row, col).effectiveFormat?.backgrounColor,
-            { red: 0.6, green: 0.6, blue: 0.6 }
-        )) {
+        if (cellFormatting && !isEqual(cellFormatting.backgroundColor, { red: 0.6, green: 0.6, blue: 0.6 })) {
             const version = towersSheet.getCell(
-                row,
+                rowIndex,
                 GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN)
             ).formattedValue;
 
@@ -91,22 +89,22 @@ async function parseVersionAdded(towersSheet, col) {
     }
 }
 
-async function parseTowerBalanceChanges(towersSheet, currentVersion, col) {
+async function parseTowerBalanceChanges(towersSheet, currentVersion, colIndex) {
     const balanceChanges = {}
 
-    let row, towerChangesHeaderRow;
-    for(row = TOWER_HEADER_ROW; row < towersSheet + currentVersion - 2; row++) {
+    let rowIndex, towerChangesRowIndex;
+    for(rowIndex = TOWER_HEADER_ROW; rowIndex < TOWER_HEADER_ROW + currentVersion - 1; rowIndex++) {
         const version = towersSheet.getCell(
-            row,
+            rowIndex,
             GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN)
         ).formattedValue;
 
-        towerChangesHeaderRow = getTowerChangesHeaderRow(currentVersion)
+        towerChangesRowIndex = getTowerChangesRowEquivalent(currentVersion, rowIndex + 1) - 1
 
-        const buffs = sheet.getCell(row, col).note?.replace(/✔️/g, '✅')?.split('\n\n') || [];
-        const nerfs = sheet.getCell(row, col + 1).note?.split('\n\n') || [];
-        const fixes = sheet.getCell(towerChangesHeaderRow, col).note?.split('\n\n') || [];
-        const changes = sheet.getCell(towerChangesHeaderRow, col + 1).note?.split('\n\n') || [];
+        const buffs = towersSheet.getCell(rowIndex, colIndex).note?.replace(/✔️/g, '✅')?.split('\n\n') || [];
+        const nerfs = towersSheet.getCell(rowIndex, colIndex + 1).note?.split('\n\n') || [];
+        const fixes = towersSheet.getCell(towerChangesRowIndex, colIndex).note?.split('\n\n') || [];
+        const changes = towersSheet.getCell(towerChangesRowIndex, colIndex + 1).note?.split('\n\n') || [];
 
         balanceChanges[version] = {
             buffs: buffs,
@@ -118,8 +116,8 @@ async function parseTowerBalanceChanges(towersSheet, currentVersion, col) {
     return balanceChanges
 }
 
-function getTowerChangesHeaderRow(currentVersion) {
-    return TOWER_HEADER_ROW + currentVersion + 2
+function getTowerChangesRowEquivalent(currentVersion, from) {
+    return from + currentVersion + 2
 }
 
 async function scrapeAllHeroes() {

@@ -119,11 +119,13 @@ async function execute(interaction) {
     parsed.versions?.sort()
 
     // Towers might take a while
-    interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: true });
 
-    const balanceChanges = await Index.fetchInfo('balances');
+    const forceReload = interaction.options.getString('reload') ? true : false;
 
-    console.log(balanceChanges)
+    const balanceChanges = await Index.fetchInfo('balances', forceReload);
+
+    return interaction.editReply({ embeds: [new Discord.MessageEmbed().setTitle('ok')] })
 
     return;
   

@@ -127,8 +127,6 @@ async function execute(interaction) {
 
     return interaction.editReply({ embeds: [new Discord.MessageEmbed().setTitle('ok')] })
 
-    return;
-  
     await loadEntityBuffNerfsTableCells(parsed);
     if (!parsed.hero) await loadTowerChangesTableCells(parsed);
     colIndex = await locateSpecifiedEntityColumnIndex(parsed);

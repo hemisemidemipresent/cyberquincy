@@ -178,7 +178,7 @@ async function execute(interaction) {
     try {
         const forceReload = interaction.options.getString('reload') ? true : false;
 
-        const allCombos = await Index.fetchInfo('2tc', (reload = forceReload));
+        const allCombos = await Index.fetchInfo('2tc', forceReload);
 
         const mtime = Index.getLastCacheModified('2tc');
 

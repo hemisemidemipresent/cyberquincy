@@ -59,7 +59,7 @@ async function execute(interaction) {
 
     const forceReload = interaction.options.getString('reload') ? true : false;
 
-    const allCombos = await Index.fetchInfo('fttc', (reload = forceReload));
+    const allCombos = await Index.fetchInfo('fttc', forceReload);
 
     const mtime = Index.getLastCacheModified('fttc');
 

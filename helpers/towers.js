@@ -131,6 +131,10 @@ function isWaterEntity(entity) {
     return allWaterTowers().includes(entityToCompare);
 }
 
+function towerPathToTower(towerPath) {
+    return towerPath.split('#')[0]
+}
+
 function towerPathToIndexNormalForm(towerPath) {
     let [tower, path] = towerPath.split('#');
     path = path.split('-')
@@ -364,6 +368,7 @@ module.exports = {
     isTowerPath,
     allWaterTowers,
     isWaterEntity,
+    towerPathToTower,
     towerPathToIndexNormalForm,
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,

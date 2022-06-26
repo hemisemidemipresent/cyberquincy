@@ -147,7 +147,6 @@ async function parseHeroBalances(heroesSheet, currentVersion, colIndex) {
 
         const buffs = buffLikes.filter(n => n.trim().startsWith('✅'))
         const nerfs = nerfLikes.filter(n => n.trim().startsWith('❌'))
-
         const fixes = combined.filter(n => n.trim().startsWith('🟡'))
         const changes = combined.filter(n => n.trim().startsWith('↔️'))
 

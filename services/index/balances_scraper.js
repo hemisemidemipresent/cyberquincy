@@ -78,7 +78,7 @@ async function parseTowerBalances(towersSheet, currentVersion, colIndex) {
         const buffs = towersSheet.getCell(rowIndex, colIndex).note?.replace(/✔️/g, '✅')?.split('\n\n') || [];
         const nerfs = towersSheet.getCell(rowIndex, colIndex + 1).note?.split('\n\n') || [];
         const fixes = towersSheet.getCell(changesRowIndex, colIndex).note?.split('\n\n') || [];
-        const changes = towersSheet.getCell(changesRowIndex, colIndex + 1).note?.split('\n\n') || [];
+        const changes = towersSheet.getCell(changesRowIndex, colIndex + 1).note?.replace(/🟦/g, "↔")?.split('\n\n') || [];
 
         balances[version] = {
             buffs: buffs,
@@ -150,7 +150,7 @@ async function parseHeroBalances(heroesSheet, currentVersion, colIndex) {
         const fixes = combined.filter(n => n.trim().startsWith('🟡'))
         const changes = combined.filter(n => n.trim().startsWith('↔️'))
 
-        balances[version] = {
+        balances[parseInt(version)] = {
             buffs: buffs,
             nerfs: nerfs,
             fixes: fixes,

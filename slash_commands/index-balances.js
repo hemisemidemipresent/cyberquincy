@@ -19,8 +19,6 @@ const Parsed = require('../parser/parsed')
 
 const Towers = require('../helpers/towers')
   
-const { yellow, darkgreen } = require('../jsons/colours.json');
-  
 const entityOption = new SlashCommandStringOption()
     .setName('entity')
     .setDescription('Tower/Path/Upgrade/Hero')
@@ -41,6 +39,15 @@ const reloadOption = new SlashCommandStringOption()
     .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
     .setRequired(false)
     .addChoices({ name: 'Yes', value: 'yes' });
+
+const filterOption = new SlashCommandStringOption()
+    .setName('type_filter')
+    .setDescription('Which type of balance changes do you wish to include (default = all)')
+    .setRequired(false)
+    .addChoices(
+        { name: "✅/❌", value: "✅/❌"},
+        { name: "🟡/↔", value: "🟡/↔"},
+    )
   
 builder = new SlashCommandBuilder()
     .setName('balance')
@@ -49,6 +56,14 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(version1Option)
     .addIntegerOption(version2Option)
     .addStringOption(reloadOption)
+    .addStringOption(filterOption)
+
+SYMBOL_MAPPINGS = {
+    "✅": "buffs",
+    "❌": "nerfs",
+    "🟡": "fixes",
+    "↔": "changes",
+}
 
 function parseEntity(interaction) {
     const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
@@ -72,11 +87,20 @@ function parseVersion(interaction, num) {
     } else return new Parsed();
 }
 
+function parseFilter(interaction) {
+    const parsed = new Parsed();
+    parsed.addField(
+        "show", interaction.options.getString('type_filter') || "✅/❌/🟡/↔"
+    )
+    return parsed
+}
+
 function parseAll(interaction) {
     const parsedEntity = parseEntity(interaction)
     const parsedVersion1 = parseVersion(interaction, 1)
     const parsedVersion2 = parseVersion(interaction, 2)
-    return [parsedEntity, parsedVersion1, parsedVersion2]
+    const parsedFilter = parseFilter(interaction)
+    return [parsedEntity, parsedVersion1, parsedVersion2, parsedFilter]
 }
   
 function validateInput(interaction) {
@@ -87,7 +111,7 @@ function validateInput(interaction) {
         new HeroParser()
     );
 
-    let [parsedEntity, parsedVersion1, parsedVersion2] = parseAll(interaction)
+    let [parsedEntity, parsedVersion1, parsedVersion2, parsedFilter] = parseAll(interaction)
 
     if (parsedEntity.hasErrors()) {
         return 'Entity did not match a tower/upgrade/path/hero'
@@ -100,7 +124,7 @@ function validateInput(interaction) {
     if (parsedVersion2.hasErrors()) {
         return `Parsed Version 2 must be a number >= 1`;
     }
-  }
+}
   
 async function execute(interaction) {
     validationFailure = validateInput(interaction);

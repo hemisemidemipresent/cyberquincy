@@ -130,7 +130,7 @@ module.exports = {
 
             var { d: d, md: md, bd: bd, ed: ed, p: p, s: s } = pHelp.getDamagesObj(plasmaDarts, x);
 
-            desc = `**Activated Ability** - Hook the strongest target on screen, works on BADs and generates 2x normal cash. 20s cooldown, maxes at 2 uses per round. [degree independent]
+            desc = `**Activated Ability** - Hook the strongest target on screen, works on BADs and generates 2x normal cash. 30s cooldown, maxes at 2 uses per round. [only cooldown changes with degree]
                 **Rapid Fire Hooks** - Has 10 hooks “stored”, MOABs, BFBs, and DDTs use 1 hook while ZOMGs use 2 hooks, 1s between each pull, generates 2x normal cash, 10s to replenish [cooldown _might_ be shorter with higher degree]
 
                 **Main ship:**
@@ -139,7 +139,7 @@ module.exports = {
 
             var { d: d, md: md, bd: bd, ed: ed, p: p, s: s } = pHelp.getDamagesObj(cannonball, x);
 
-            desc += `**cannonball** - ${d}d, ${md}md, ${bd}bd, ${ed}ed, ${p}p, ${s}s, 3j (per set of 3 cannons, effectively 9j each side)
+            desc += `**cannon-ball** - ${d}d, ${md}md, ${bd}bd, ${ed}ed, ${p}p, ${s}s, 3j (per set of 3 cannons, effectively 9j each side)
                 
                 **Fighter Planes:**
                 `;
@@ -173,7 +173,7 @@ module.exports = {
     async errorMessage(message, parsingErrors) {
         let errorEmbed = new Discord.MessageEmbed()
             .setTitle('ERROR')
-            .setDescription('`q!paragon <tower> <level>`\ne.g. q!paragon dart 100')
+            .setDescription('`/paragon <tower> <level>`\ne.g. q!paragon dart 100')
             .addField('Likely Cause(s)', parsingErrors.map((msg) => ` • ${msg}`).join('\n'))
             .setColor(red);
 
@@ -181,8 +181,8 @@ module.exports = {
     },
     async helpMessage(message) {
         let embed = new Discord.MessageEmbed()
-            .setTitle('q!paragon')
-            .setDescription('`q!paragon <tower> <level>`\ne.g. q!paragon dart 100')
+            .setTitle('/paragon')
+            .setDescription('`/paragon <tower> <level>`\ne.g. /paragon dart 100')
             .setColor(paragon);
 
         return await message.channel.send({ embeds: [embed] });

@@ -40,7 +40,7 @@ async function calc(interaction) {
     var lexer = new Lexer();
 
     lexer.addRule(/\s+/, function () {
-        /* skip whitespace */
+        // skip whitespace
     });
 
     lexer.addRule(/[a-zA-Z#!0-9\.]+/, function (lexeme) {

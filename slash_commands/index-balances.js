@@ -159,8 +159,26 @@ async function execute(interaction) {
         changesEntry = balances[Towers.towerPathToTower(parsed.tower_path)]
     }
 
-    for (const version in changesEntry) {
+    let weirdBalances = ""
+    const fs = require('fs')
+    for (const entity in balances) {
+        if (entity == 'quincy') break
+        const entityBalances = balances[entity].balances
+        for (const version in entityBalances) {
+            for (const balanceType in entityBalances[version]) {
+                for (const note of entityBalances[version][balanceType]) {
+                    const mat = note.match(/(?:✅|❌|🟡|↔) ?(?:\d|x|(?:\d\+)){3} /)
+                    // console.log(mat)
+                    if (!mat) {
+                        weirdBalances += `${entity} - ${version}\n`
+                        weirdBalances += note + "\n\n"
+                    }
+                }
+            }
+        }
     }
+    fs.writeFileSync('./weird-balances2.txt', weirdBalances)
+    console.log('done')
 }
   
 module.exports = {

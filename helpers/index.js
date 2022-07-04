@@ -16,13 +16,13 @@ function hasCachedInfo(fname) {
     return fs.existsSync(resolve(DIR1, DIR2, fname))
 }
 
-function fetchCachedCombos(fname) {
+function fetchCachedInfo(fname) {
     const data = fs.readFileSync(resolve(DIR1, DIR2, fname))
-    return JSON.parse(data).combos;
+    return JSON.parse(data).info;
 }
 
-function cacheInfo(combos, fname) {
-    const fileData = JSON.stringify({ combos: combos })
+function cacheInfo(info, fname) {
+    const fileData = JSON.stringify({ info: info })
 
     const dir1 = resolve(DIR1)
     if (!fs.existsSync(dir1)){
@@ -51,7 +51,7 @@ async function fetchInfo(info, reload=false) {
     cacheFname = `${info}.json`
     let allCombos;
     if (hasCachedInfo(cacheFname) && !reload) {
-        allCombos = await fetchCachedCombos(cacheFname)
+        allCombos = await fetchCachedInfo(cacheFname)
     } else {
         allCombos = await scrapeInfo(info)
         cacheInfo(allCombos, cacheFname)

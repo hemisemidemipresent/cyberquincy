@@ -202,6 +202,18 @@ function pathTierFromUpgradeSet(upgradeSet) {
     return [path, tier];
 }
 
+function upgradesFromPath(path) {
+    const entityUpgrades = []
+    const entityPathIndex = ['top-path', 'middle-path', 'bottom-path'].indexOf(path)
+    let tier;
+    for(tier = 1; tier <= 5; tier++) {
+        entityUpgrades.push(
+            '0'.repeat(entityPathIndex) + `${tier}` + '0'.repeat(2 - entityPathIndex)
+        )
+    }
+    return entityUpgrades
+}
+
 function crossPathTierFromUpgradeSet(upgradeSet) {
     upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
@@ -373,6 +385,7 @@ module.exports = {
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,
     pathTierFromUpgradeSet,
+    upgradesFromPath,
     crossPathTierFromUpgradeSet,
     isValidUpgradeSet,
     isValidTempleSet,

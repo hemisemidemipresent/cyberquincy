@@ -55,8 +55,8 @@ builder = new SlashCommandBuilder()
     .addStringOption(entityOption)
     .addIntegerOption(version1Option)
     .addIntegerOption(version2Option)
-    .addStringOption(reloadOption)
     .addStringOption(filterOption)
+    .addStringOption(reloadOption)
 
 SYMBOL_MAPPINGS = {
     "✅": "buffs",
@@ -159,26 +159,84 @@ async function execute(interaction) {
         changesEntry = balances[Towers.towerPathToTower(parsed.tower_path)]
     }
 
-    let weirdBalances = ""
-    const fs = require('fs')
+    const filteredBalances = []
+    let balanceUpgrade;
     for (const entity in balances) {
         if (entity == 'quincy') break
         const entityBalances = balances[entity].balances
         for (const version in entityBalances) {
             for (const balanceType in entityBalances[version]) {
                 for (const note of entityBalances[version][balanceType]) {
-                    const mat = note.match(/(?:✅|❌|🟡|↔) ?(?:\d|x|(?:\d\+)){3} /)
-                    // console.log(mat)
+                    const mat = note.match(/(?:✅|❌|🟡|↔) ?((?:\d|x|(?:\d\+)){3}) /)
+
                     if (!mat) {
-                        weirdBalances += `${entity} - ${version}\n`
-                        weirdBalances += note + "\n\n"
+                        console.log(`${entity} - ${version}`)
+                        console.log(note + "\n")
+                        continue
                     }
+
+                    balanceUpgrade = mat[1]
+
+                    if (!matchesEntity(entity, balanceUpgrade, parsed)) {
+                        continue
+                    }
+
+                    filteredBalances.push(note)
                 }
             }
         }
     }
-    fs.writeFileSync('./weird-balances2.txt', weirdBalances)
-    console.log('done')
+}
+
+function matchesEntity(noteEntity, noteUpgrade, parsed) {
+    if (parsed.tower) {
+        return noteEntity == parsed.tower
+    } else if (parsed.hero) {
+        return noteEntity == parsed.hero
+    }
+
+    const noteUpgrades = upgradesFromUpgradeNotation(noteUpgrade)
+
+    let entityUpgrades;
+    if (parsed.tower_upgrade) {
+        entityUpgrades = [ parsed.tower_upgrade.split('#')[1] ]
+    } else if (parsed.tower_path) {
+        const path = parsed.tower_path.split('#')[1]
+        entityUpgrades = Towers.upgradesFromPath(path)
+    }
+
+    const entityPathTiers = entityUpgrades.map(u => Towers.pathTierFromUpgradeSet(u))
+    const notePathTiers = noteUpgrades.map(u => 
+        Towers.pathTierFromUpgradeSet(
+            u.replace(/x/g, '0')
+        )
+    )
+
+    return entityPathTiers.some(pt => notePathTiers.includes(pt))
+}
+
+/**
+ * 
+ * @param {string} upgradeNotation The balance upgrade, such as 003 or x4+x
+ * @returns All upgrades the upgrade notation represents, i.e. 003 => {003}; x4+x => {x4x, x5x} 
+ */
+ function upgradesFromUpgradeNotation(upgradeNotation) {
+    const plusIndex = upgradeNotation.indexOf('+')
+
+    if (plusIndex == -1) {
+        return [upgradeNotation]
+    }
+
+    const upgrades = []
+
+    let tier;
+    for (tier = parseInt(upgradeNotation[plusIndex - 1]); tier <= 5; tier++) {
+        upgrades.push(
+            upgradeNotation.slice(0, plusIndex - 1) + `${tier}` + upgradeNotation.slice(plusIndex + 1)
+        )
+    }
+
+    return upgrades
 }
   
 module.exports = {

@@ -167,6 +167,7 @@ async function execute(interaction) {
         for (const version in entityBalances) {
             for (const balanceType in entityBalances[version]) {
                 for (const note of entityBalances[version][balanceType]) {
+                    // i.e. "🟡 3+xx blah blah blah ...""
                     const mat = note.match(/(?:✅|❌|🟡|↔) ?((?:\d|x|(?:\d\+)){3}) /)
 
                     if (!mat) {
@@ -181,6 +182,11 @@ async function execute(interaction) {
                         continue
                     }
 
+                    // If the balance note is of regular form,
+                    // matches the entity if provided,
+                    // matches the version(s) if provided,
+                    // and matches the balance type if provided,
+                    // then add it to the list of balances to display
                     filteredBalances.push(note)
                 }
             }
@@ -189,6 +195,10 @@ async function execute(interaction) {
 }
 
 function matchesEntity(noteEntity, noteUpgrade, parsed) {
+    if (!parsed.tower && !parsed.hero && !parsed.tower_upgrade && !parsed.tower_path) {
+        return true
+    }
+
     if (parsed.tower) {
         return noteEntity == parsed.tower
     } else if (parsed.hero) {
@@ -212,6 +222,7 @@ function matchesEntity(noteEntity, noteUpgrade, parsed) {
         )
     )
 
+    // Comparing path/tiers instead of upgrades in order to ignore crosspathing in the balance notes
     return entityPathTiers.some(pt => notePathTiers.includes(pt))
 }
 

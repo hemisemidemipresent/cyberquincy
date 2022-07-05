@@ -5,7 +5,11 @@ function towerUpgradeToTower(towerUpgrade) {
     if (!towerUpgrade) return null;
     canonical = Aliases.getCanonicalForm(towerUpgrade);
     if (!canonical) return null;
-    return canonical.slice(0, -4);
+    return canonical.split('#')[0];
+}
+
+function towerUpgradeToUpgrade(towerUpgrade) {
+    return towerUpgrade.split('#')[1]
 }
 
 function allTowerUpgrades() {
@@ -129,6 +133,10 @@ function isWaterEntity(entity) {
         throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
     }
     return allWaterTowers().includes(entityToCompare);
+}
+
+function towerPathtoPath(towerPath) {
+    return towerPath.split('#')[1]
 }
 
 function towerPathToTower(towerPath) {
@@ -371,6 +379,7 @@ function totalTowerUpgradeCrosspathCostHard(json, towerName, upgrade) {
 }
 module.exports = {
     towerUpgradeToTower,
+    towerUpgradeToUpgrade,
     allTowerUpgrades,
     allTowers,
     allTowerPaths,
@@ -381,6 +390,7 @@ module.exports = {
     allWaterTowers,
     isWaterEntity,
     towerPathToTower,
+    towerPathtoPath,
     towerPathToIndexNormalForm,
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,

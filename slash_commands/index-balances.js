@@ -47,6 +47,10 @@ const filterOption = new SlashCommandStringOption()
     .addChoices(
         { name: "✅/❌", value: "✅/❌"},
         { name: "🟡/↔", value: "🟡/↔"},
+        { name: "✅", value: "✅"},
+        { name: "❌", value: "❌"},
+        { name: "🟡", value: "🟡"},
+        { name: "↔", value: "↔"},
     )
   
 builder = new SlashCommandBuilder()
@@ -57,13 +61,6 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(version2Option)
     .addStringOption(filterOption)
     .addStringOption(reloadOption)
-
-SYMBOL_MAPPINGS = {
-    "✅": "buffs",
-    "❌": "nerfs",
-    "🟡": "fixes",
-    "↔": "changes",
-}
 
 function parseEntity(interaction) {
     const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
@@ -81,7 +78,7 @@ function parseEntity(interaction) {
 }
 
 function parseVersion(interaction, num) {
-    const v = interaction.options.getString(`version${num}`);
+    const v = interaction.options.getInteger(`version${num}`);
     if (v) {
         return CommandParser.parse([`v${v}`], new VersionParser());
     } else return new Parsed();
@@ -90,7 +87,7 @@ function parseVersion(interaction, num) {
 function parseFilter(interaction) {
     const parsed = new Parsed();
     parsed.addField(
-        "show", interaction.options.getString('type_filter') || "✅/❌/🟡/↔"
+        "balance_filter", interaction.options.getString('type_filter') || "✅/❌/🟡/↔"
     )
     return parsed
 }
@@ -140,7 +137,9 @@ async function execute(interaction) {
         new Parsed()
     );
 
-    parsed.versions?.sort()
+    parsed.versions?.sort(function(v1, v2) {
+        return parseInt(v1) - parseInt(v2)
+    })
 
     await interaction.deferReply({ ephemeral: true });
 
@@ -148,37 +147,32 @@ async function execute(interaction) {
 
     const balances = await Index.fetchInfo('balances', forceReload);
 
-    let changesEntry;
-    if (parsed.hero) {
-        changesEntry = balances[parsed.hero]
-    } else if (parsed.tower) {
-        changesEntry = balances[parsed.tower]
-    } else if (parsed.tower_upgrade) {
-        changesEntry = balances[Towers.towerUpgradeToTower(parsed.tower_upgrade)]
-    } else if (parsed.tower_path) {
-        changesEntry = balances[Towers.towerPathToTower(parsed.tower_path)]
-    }
-
-    const filteredBalances = []
-    let balanceUpgrade;
+    const filteredBalances = {}
+    let balanceTowerUpgrade, balanceSymbol;
     for (const entity in balances) {
-        if (entity == 'quincy') break
         const entityBalances = balances[entity].balances
         for (const version in entityBalances) {
             for (const balanceType in entityBalances[version]) {
                 for (const note of entityBalances[version][balanceType]) {
-                    // i.e. "🟡 3+xx blah blah blah ...""
-                    const mat = note.match(/(?:✅|❌|🟡|↔) ?((?:\d|x|(?:\d\+)){3}) /)
+                    // i.e. "🟡 3+xx blah blah blah ..."
+                    // or for heroes "🟡 blah blah blah"
+                    // there is some safeguarding against extra or not enough spaces
+                    const mat = note.match(/(✅|❌|🟡|↔) *(?:((?:\d|x|(?:\d\+)){3}) )?/)
 
-                    if (!mat) {
-                        console.log(`${entity} - ${version}`)
-                        console.log(note + "\n")
+                    // Will be undefined for hero
+                    balanceTowerUpgrade = mat?.[2]
+
+                    if (!matchesEntity(entity, balanceTowerUpgrade, parsed)) {
                         continue
                     }
 
-                    balanceUpgrade = mat[1]
+                    if (!matchesVersions(version, parsed)) {
+                        continue
+                    }
 
-                    if (!matchesEntity(entity, balanceUpgrade, parsed)) {
+                    balanceSymbol = mat[1]
+
+                    if (!matchesBalanceType(balanceSymbol, parsed)) {
                         continue
                     }
 
@@ -187,14 +181,19 @@ async function execute(interaction) {
                     // matches the version(s) if provided,
                     // and matches the balance type if provided,
                     // then add it to the list of balances to display
-                    filteredBalances.push(note)
+                    filteredBalances[entity] ||= {}
+                    filteredBalances[entity][version] ||= []
+                    filteredBalances[entity][version].push(note)
                 }
             }
         }
     }
+
+    console.log(filteredBalances)
 }
 
 function matchesEntity(noteEntity, noteUpgrade, parsed) {
+    // If no entity is provided, don't filter by entity
     if (!parsed.tower && !parsed.hero && !parsed.tower_upgrade && !parsed.tower_path) {
         return true
     }
@@ -205,25 +204,54 @@ function matchesEntity(noteEntity, noteUpgrade, parsed) {
         return noteEntity == parsed.hero
     }
 
+    if (!noteUpgrade) return false
+
     const noteUpgrades = upgradesFromUpgradeNotation(noteUpgrade)
 
     let entityUpgrades;
     if (parsed.tower_upgrade) {
-        entityUpgrades = [ parsed.tower_upgrade.split('#')[1] ]
+        if (Towers.towerUpgradeToTower(parsed.tower_upgrade) != noteEntity) {
+            return false
+        }
+        entityUpgrades = [
+            Towers.towerUpgradeToUpgrade(parsed.tower_upgrade)
+        ]
     } else if (parsed.tower_path) {
-        const path = parsed.tower_path.split('#')[1]
-        entityUpgrades = Towers.upgradesFromPath(path)
+        if (Towers.towerPathToTower(parsed.tower_path) != noteEntity) {
+            return false
+        }
+        entityUpgrades = Towers.upgradesFromPath(
+            Towers.towerPathtoPath(parsed.tower_path)
+        )
     }
 
     const entityPathTiers = entityUpgrades.map(u => Towers.pathTierFromUpgradeSet(u))
-    const notePathTiers = noteUpgrades.map(u => 
+    const notePathTiers = noteUpgrades.map(u =>
         Towers.pathTierFromUpgradeSet(
             u.replace(/x/g, '0')
         )
     )
 
     // Comparing path/tiers instead of upgrades in order to ignore crosspathing in the balance notes
-    return entityPathTiers.some(pt => notePathTiers.includes(pt))
+    return entityPathTiers.some(pt =>
+        notePathTiers.some(npt =>
+            pt[0] == npt[0] && pt[1] == npt[1]
+        )
+    )
+}
+
+function matchesVersions(noteVersion, parsed) {
+    if (!parsed.versions) return true
+
+    if (parsed.versions.length == 1) {
+        return parseInt(noteVersion) == parseInt(parsed.version)
+    }
+
+    return parseInt(noteVersion) >= parseInt(parsed.versions[0]) && parseInt(noteVersion) <= parseInt(parsed.versions[1])
+}
+
+function matchesBalanceType(noteSymbol, parsed) {
+    return parsed.balance_filter.split("/").includes(noteSymbol)
 }
 
 /**

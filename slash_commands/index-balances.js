@@ -22,7 +22,7 @@ const Towers = require('../helpers/towers')
 const entityOption = new SlashCommandStringOption()
     .setName('entity')
     .setDescription('Tower/Path/Upgrade/Hero')
-    .setRequired(true)
+    .setRequired(false)
   
 const version1Option = new SlashCommandIntegerOption()
     .setName('version1')
@@ -157,7 +157,7 @@ async function execute(interaction) {
                     // i.e. "🟡 3+xx blah blah blah ..."
                     // or for heroes "🟡 blah blah blah"
                     // there is some safeguarding against extra or not enough spaces
-                    const mat = note.match(/(✅|❌|🟡|↔) *(?:((?:\d|x|(?:\d\+)){3}) )?/)
+                    const mat = note.match(/(✅|❌|🟡|↔)? *(?:((?:\d|x|(?:\d\+)){3}) )?/)
 
                     // Will be undefined for hero
                     balanceTowerUpgrade = mat?.[2]

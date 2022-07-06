@@ -124,7 +124,7 @@ function validateInput(interaction) {
 }
   
 async function execute(interaction) {
-    validationFailure = validateInput(interaction);
+    const validationFailure = validateInput(interaction);
     if (validationFailure) {
         return interaction.reply({
             content: validationFailure,
@@ -154,7 +154,7 @@ async function execute(interaction) {
         for (const version in entityBalances) {
             for (const balanceType in entityBalances[version]) {
                 for (const note of entityBalances[version][balanceType]) {
-                    // i.e. "🟡 3+xx blah blah blah ..."
+                    // "🟡 3+xx blah blah blah ..."
                     // or for heroes "🟡 blah blah blah"
                     // there is some safeguarding against extra or not enough spaces
                     const mat = note.match(/(✅|❌|🟡|↔)? *(?:((?:\d|x|(?:\d\+)){3}) )?/)
@@ -204,7 +204,8 @@ function matchesEntity(noteEntity, noteUpgrade, parsed) {
         return noteEntity == parsed.hero
     }
 
-    if (!noteUpgrade) return false
+    // TODO: add paragons to tower aliases
+    if (!noteUpgrade || ['555', '600'].includes(noteUpgrade)) return false
 
     const noteUpgrades = upgradesFromUpgradeNotation(noteUpgrade)
 

@@ -3,6 +3,8 @@ const {
     SlashCommandStringOption,
     SlashCommandIntegerOption,
   } = require('@discordjs/builders');
+
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
   
 const Index = require('../helpers/index.js');
 
@@ -121,6 +123,10 @@ function validateInput(interaction) {
     if (parsedVersion2.hasErrors()) {
         return `Parsed Version 2 must be a number >= 1`;
     }
+
+    if (parsedVersion1.merge(parsedVersion2).versions?.length != 1 && !parsedEntity.hasAny()) {
+        return `You must provide an entity or exactly one version`
+    }
 }
   
 async function execute(interaction) {
@@ -141,14 +147,14 @@ async function execute(interaction) {
         return parseInt(v1) - parseInt(v2)
     })
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply();
 
     const forceReload = interaction.options.getString('reload') ? true : false;
 
     const balances = await Index.fetchInfo('balances', forceReload);
 
     const filteredBalances = {}
-    let balanceTowerUpgrade, balanceSymbol;
+    let balanceTowerUpgrade, balanceSymbol, versionNumber, noteKey;
     for (const entity in balances) {
         const entityBalances = balances[entity].balances
         for (const version in entityBalances) {
@@ -176,25 +182,130 @@ async function execute(interaction) {
                         continue
                     }
 
+                    versionNumber = parseInt(version)
+
                     // If the balance note is of regular form,
                     // matches the entity if provided,
                     // matches the version(s) if provided,
                     // and matches the balance type if provided,
                     // then add it to the list of balances to display
-                    filteredBalances[entity] ||= {}
-                    filteredBalances[entity][version] ||= []
-                    filteredBalances[entity][version].push(note)
+                    filteredBalances[versionNumber] ||= {}
+                    filteredBalances[versionNumber][entity] ||= []
+                    filteredBalances[versionNumber][entity].push(note)
                 }
             }
         }
     }
 
     console.log(filteredBalances)
+
+    const pages = []
+    let page = ""
+
+    const sortedVersions = Object.keys(filteredBalances).sort(function(v1, v2) {
+        return parseInt(v1) - parseInt(v2)
+    })
+
+    for (const version of sortedVersions) {
+        if (sortedVersions.length > 1) {
+            page += `**v${version}**\n`
+        }
+
+        for (const entity in filteredBalances[version]) {
+            if (!hasEntity(parsed)) {
+                page += `**${Aliases.toIndexNormalForm(entity)}**\n`
+            }
+
+            const notes = filteredBalances[version][entity]
+            page += notes.join("\n") + "\n"
+            if (page.length > 750) {
+                pages.push(page)
+                page = ""
+            }
+        }
+    }
+
+    if (page.length > 0) {
+        pages.push(page)
+    }
+
+    console.log(pages)
+
+    displayPages(interaction, pages)
 }
+
+function hasEntity(parsed) {
+    parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path
+}
+
+const multipageButtons = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
+);
+
+function displayPages(interaction, pages) {
+    page = 0
+    let embed;
+
+    async function embedPage() {
+        embed = new MessageEmbed().setTitle(`${page + 1}/${pages.length}`).setDescription(pages[page])
+
+        await interaction.editReply({
+            embeds: [embed],
+            components: [multipageButtons],
+        });
+
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        };
+
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: 'BUTTON',
+            time: 20000
+        });
+
+        collector.on('collect', async (buttonInteraction) => {
+            collector.stop();
+            buttonInteraction.deferUpdate();
+
+            switch (buttonInteraction.customId) {
+                case "-1":
+                    page = ((page - 1) + pages.length) % pages.length
+                    break
+                case "1":
+                    page = (page + 1) % pages.length
+            }
+
+            await embedPage()
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size == 0) {
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
+            }
+        });
+    }
+
+    embedPage()
+}
+
 
 function matchesEntity(noteEntity, noteUpgrade, parsed) {
     // If no entity is provided, don't filter by entity
-    if (!parsed.tower && !parsed.hero && !parsed.tower_upgrade && !parsed.tower_path) {
+    if (!hasEntity(parsed)) {
         return true
     }
 

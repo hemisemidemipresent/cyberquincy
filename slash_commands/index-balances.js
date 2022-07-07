@@ -123,10 +123,6 @@ function validateInput(interaction) {
     if (parsedVersion2.hasErrors()) {
         return `Parsed Version 2 must be a number >= 1`;
     }
-
-    if (parsedVersion1.merge(parsedVersion2).versions?.length != 1 && !parsedEntity.hasAny()) {
-        return `You must provide an entity or exactly one version`
-    }
 }
   
 async function execute(interaction) {
@@ -199,39 +195,61 @@ async function execute(interaction) {
 
     console.log(filteredBalances)
 
-    const pages = []
-    let page = ""
+    const pages = paginateBalances(filteredBalances, parsed)
 
-    const sortedVersions = Object.keys(filteredBalances).sort(function(v1, v2) {
+    console.log(pages)
+
+    return
+
+    displayPages(interaction, pages)
+}
+
+function paginateBalances(balances, parsed) {
+    const pages = []
+    let page = {}
+    let header, field, noteIndex;
+
+    const sortedVersions = Object.keys(balances).sort(function(v1, v2) {
         return parseInt(v1) - parseInt(v2)
     })
 
     for (const version of sortedVersions) {
-        if (sortedVersions.length > 1) {
-            page += `**v${version}**\n`
-        }
+        for (const entity in balances[version]) {
+            const pageLength = Object.entries(page).map((h, f) => h + f).join("").length
 
-        for (const entity in filteredBalances[version]) {
-            if (!hasEntity(parsed)) {
-                page += `**${Aliases.toIndexNormalForm(entity)}**\n`
+            if (parsed.versions?.length == 1) {
+                if (hasEntity(parsed)) {
+                    header = '\u200b'
+                } else {
+                    header = Aliases.toIndexNormalForm(entity)
+                }
+            } else {
+                if (hasEntity(parsed)) {
+                    header = `v${version}`
+                } else {
+                    header = `v${version} — ${Aliases.toIndexNormalForm(entity)}`
+                }
             }
 
-            const notes = filteredBalances[version][entity]
-            page += notes.join("\n") + "\n"
-            if (page.length > 750) {
-                pages.push(page)
-                page = ""
+            const notes = balances[version][entity]
+            field = ""
+            for (noteIndex = 0; noteIndex < notes.length; noteIndex++) {
+                field += notes[noteIndex] + "\n"
+
+                if (pageLength + header.length + field.length > 750) {
+                    pages.push(page)
+                    page = {}
+                    pageLength = 0
+                }
             }
         }
     }
 
-    if (page.length > 0) {
+    if (Object.keys(page) > 0) {
         pages.push(page)
     }
 
-    console.log(pages)
-
-    displayPages(interaction, pages)
+    return pages
 }
 
 function hasEntity(parsed) {

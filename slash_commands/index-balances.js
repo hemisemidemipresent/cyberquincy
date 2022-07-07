@@ -2,10 +2,12 @@ const {
     SlashCommandBuilder,
     SlashCommandStringOption,
     SlashCommandIntegerOption,
-  } = require('@discordjs/builders');
+} = require('@discordjs/builders');
 
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-  
+
+const { cyber } = require('../jsons/colours.json')
+
 const Index = require('../helpers/index.js');
 
 const OrParser = require('../parser/or-parser');
@@ -20,17 +22,17 @@ const VersionParser = require('../parser/version-parser');
 const Parsed = require('../parser/parsed')
 
 const Towers = require('../helpers/towers')
-  
+
 const entityOption = new SlashCommandStringOption()
     .setName('entity')
     .setDescription('Tower/Path/Upgrade/Hero')
     .setRequired(false)
-  
+
 const version1Option = new SlashCommandIntegerOption()
     .setName('version1')
     .setDescription('Exact or Starting Version')
     .setRequired(false)
-  
+
 const version2Option = new SlashCommandIntegerOption()
     .setName('version2')
     .setDescription('End Version')
@@ -47,14 +49,14 @@ const filterOption = new SlashCommandStringOption()
     .setDescription('Which type of balance changes do you wish to include (default = all)')
     .setRequired(false)
     .addChoices(
-        { name: "✅/❌", value: "✅/❌"},
-        { name: "🟡/↔", value: "🟡/↔"},
-        { name: "✅", value: "✅"},
-        { name: "❌", value: "❌"},
-        { name: "🟡", value: "🟡"},
-        { name: "↔", value: "↔"},
+        { name: "✅/❌", value: "✅/❌" },
+        { name: "⚠️/↔", value: "⚠️/↔" },
+        { name: "✅", value: "✅" },
+        { name: "❌", value: "❌" },
+        { name: "⚠️", value: "⚠️" },
+        { name: "↔", value: "↔" },
     )
-  
+
 builder = new SlashCommandBuilder()
     .setName('balance')
     .setDescription('Check balance history of all towers/heroes throughout versions according to index records')
@@ -89,7 +91,7 @@ function parseVersion(interaction, num) {
 function parseFilter(interaction) {
     const parsed = new Parsed();
     parsed.addField(
-        "balance_filter", interaction.options.getString('type_filter') || "✅/❌/🟡/↔"
+        "balance_filter", interaction.options.getString('type_filter') || "✅/❌/⚠️/↔"
     )
     return parsed
 }
@@ -101,7 +103,7 @@ function parseAll(interaction) {
     const parsedFilter = parseFilter(interaction)
     return [parsedEntity, parsedVersion1, parsedVersion2, parsedFilter]
 }
-  
+
 function validateInput(interaction) {
     entityParser = new OrParser(
         new TowerParser(),
@@ -124,7 +126,7 @@ function validateInput(interaction) {
         return `Parsed Version 2 must be a number >= 1`;
     }
 }
-  
+
 async function execute(interaction) {
     const validationFailure = validateInput(interaction);
     if (validationFailure) {
@@ -133,13 +135,13 @@ async function execute(interaction) {
             ephemeral: true,
         })
     }
-  
+
     const parsed = parseAll(interaction).reduce(
         (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
         new Parsed()
     );
 
-    parsed.versions?.sort(function(v1, v2) {
+    parsed.versions?.sort(function (v1, v2) {
         return parseInt(v1) - parseInt(v2)
     })
 
@@ -150,16 +152,16 @@ async function execute(interaction) {
     const balances = await Index.fetchInfo('balances', forceReload);
 
     const filteredBalances = {}
-    let balanceTowerUpgrade, balanceSymbol, versionNumber, noteKey;
+    let balanceTowerUpgrade, balanceSymbol, versionNumber;
     for (const entity in balances) {
         const entityBalances = balances[entity].balances
         for (const version in entityBalances) {
             for (const balanceType in entityBalances[version]) {
                 for (const note of entityBalances[version][balanceType]) {
-                    // "🟡 3+xx blah blah blah ..."
-                    // or for heroes "🟡 blah blah blah"
+                    // "⚠️ 3+xx blah blah blah ..."
+                    // or for heroes "⚠️ blah blah blah"
                     // there is some safeguarding against extra or not enough spaces
-                    const mat = note.match(/(✅|❌|🟡|↔)? *(?:((?:\d|x|(?:\d\+)){3}) )?/)
+                    const mat = note.match(/(✅|❌|⚠️|↔)? *(?:((?:\d|x|(?:\d\+)){3}) )?/)
 
                     // Will be undefined for hero
                     balanceTowerUpgrade = mat?.[2]
@@ -168,7 +170,9 @@ async function execute(interaction) {
                         continue
                     }
 
-                    if (!matchesVersions(version, parsed)) {
+                    versionNumber = parseInt(version)
+
+                    if (!matchesVersions(versionNumber, parsed)) {
                         continue
                     }
 
@@ -177,8 +181,6 @@ async function execute(interaction) {
                     if (!matchesBalanceType(balanceSymbol, parsed)) {
                         continue
                     }
-
-                    versionNumber = parseInt(version)
 
                     // If the balance note is of regular form,
                     // matches the entity if provided,
@@ -193,13 +195,7 @@ async function execute(interaction) {
         }
     }
 
-    console.log(filteredBalances)
-
     const pages = paginateBalances(filteredBalances, parsed)
-
-    console.log(pages)
-
-    return
 
     displayPages(interaction, pages)
 }
@@ -207,16 +203,16 @@ async function execute(interaction) {
 function paginateBalances(balances, parsed) {
     const pages = []
     let page = {}
-    let header, field, noteIndex;
+    let header;
+    let pageLength = 0;
+    let field = ""
 
-    const sortedVersions = Object.keys(balances).sort(function(v1, v2) {
+    const sortedVersions = Object.keys(balances).sort(function (v1, v2) {
         return parseInt(v1) - parseInt(v2)
     })
 
     for (const version of sortedVersions) {
         for (const entity in balances[version]) {
-            const pageLength = Object.entries(page).map((h, f) => h + f).join("").length
-
             if (parsed.versions?.length == 1) {
                 if (hasEntity(parsed)) {
                     header = '\u200b'
@@ -231,21 +227,27 @@ function paginateBalances(balances, parsed) {
                 }
             }
 
-            const notes = balances[version][entity]
-            field = ""
-            for (noteIndex = 0; noteIndex < notes.length; noteIndex++) {
-                field += notes[noteIndex] + "\n"
-
+            for (const note of balances[version][entity]) {
+                field += note + "\n"
                 if (pageLength + header.length + field.length > 750) {
+                    page[header] = field
                     pages.push(page)
                     page = {}
                     pageLength = 0
+                    field = ""
+                    header += ' (cont.)'
                 }
+            }
+
+            if (field.length > 0) {
+                page[header] = field
+                field = ""
+                pageLength = Object.entries(page).map((h, f) => h + f).join("").length
             }
         }
     }
 
-    if (Object.keys(page) > 0) {
+    if (Object.keys(page).length > 0) {
         pages.push(page)
     }
 
@@ -253,7 +255,7 @@ function paginateBalances(balances, parsed) {
 }
 
 function hasEntity(parsed) {
-    parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path
+    return parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path
 }
 
 const multipageButtons = new MessageActionRow().addComponents(
@@ -262,11 +264,15 @@ const multipageButtons = new MessageActionRow().addComponents(
 );
 
 function displayPages(interaction, pages) {
-    page = 0
+    pageNum = 0
     let embed;
 
     async function embedPage() {
-        embed = new MessageEmbed().setTitle(`${page + 1}/${pages.length}`).setDescription(pages[page])
+        embed = new MessageEmbed().setTitle(`${pageNum + 1}/${pages.length}`).setColor(cyber)
+
+        for (const header in pages[pageNum]) {
+            embed.addField(`**${header}**`, pages[pageNum][header])
+        }
 
         await interaction.editReply({
             embeds: [embed],
@@ -298,10 +304,10 @@ function displayPages(interaction, pages) {
 
             switch (buttonInteraction.customId) {
                 case "-1":
-                    page = ((page - 1) + pages.length) % pages.length
+                    pageNum = ((pageNum - 1) + pages.length) % pages.length
                     break
                 case "1":
-                    page = (page + 1) % pages.length
+                    pageNum = (pageNum + 1) % pages.length
             }
 
             await embedPage()
@@ -389,7 +395,7 @@ function matchesBalanceType(noteSymbol, parsed) {
  * @param {string} upgradeNotation The balance upgrade, such as 003 or x4+x
  * @returns All upgrades the upgrade notation represents, i.e. 003 => {003}; x4+x => {x4x, x5x} 
  */
- function upgradesFromUpgradeNotation(upgradeNotation) {
+function upgradesFromUpgradeNotation(upgradeNotation) {
     const plusIndex = upgradeNotation.indexOf('+')
 
     if (plusIndex == -1) {
@@ -407,7 +413,7 @@ function matchesBalanceType(noteSymbol, parsed) {
 
     return upgrades
 }
-  
+
 module.exports = {
     data: builder,
     execute,

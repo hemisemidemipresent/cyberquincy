@@ -65,6 +65,5 @@ async function request(objStr) {
 }
 module.exports = {
     data: builder,
-    beta: true,
     execute
 };

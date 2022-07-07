@@ -6,6 +6,8 @@
 
 art by [u/Projekt_Knyte](https://www.reddit.com/r/btd6/comments/f8rm5w/so_i_havent_drawn_cyber_quincy_yet/)
 
+Please give the repository a ⭐️!
+
 Cyber Quincy is the most polished BTD6 discord bot from providing information on towers, hero, rounds, maps, as well as calculating cash from rounds and hero levelling. (and more)
 
 ### Links

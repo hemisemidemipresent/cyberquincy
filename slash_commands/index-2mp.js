@@ -100,7 +100,6 @@ async function execute(interaction) {
     try {
         return await display2MPFilterAll(interaction, allCombos, parsed, mtime);
     } catch (e) {
-        console.log('e');
         return await interaction.editReply({ embeds: [err(e)] });
     }
 }

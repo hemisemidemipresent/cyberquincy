@@ -197,7 +197,7 @@ async function execute(interaction) {
 
     const pages = paginateBalances(filteredBalances, parsed)
 
-    displayPages(interaction, pages)
+    displayPages(interaction, pages, parsed)
 }
 
 function paginateBalances(balances, parsed) {
@@ -213,6 +213,7 @@ function paginateBalances(balances, parsed) {
 
     for (const version of sortedVersions) {
         for (const entity in balances[version]) {
+            // HEADER
             if (parsed.versions?.length == 1) {
                 if (hasEntity(parsed)) {
                     header = '\u200b'
@@ -227,8 +228,10 @@ function paginateBalances(balances, parsed) {
                 }
             }
 
+            // FIELD
             for (const note of balances[version][entity]) {
                 field += note + "\n"
+                // PAGE TURNING
                 if (pageLength + header.length + field.length > 750) {
                     page[header] = field
                     pages.push(page)
@@ -241,6 +244,7 @@ function paginateBalances(balances, parsed) {
                 }
             }
 
+            // ADD HEADER+FIELD TO PAGE
             if (field.length > 0) {
                 page[header] = field
                 field = ""
@@ -267,8 +271,8 @@ const multipageButtons = [
     new MessageButton().setCustomId('last').setLabel('⏩').setStyle('SECONDARY'),
 ];
 
-function displayPages(interaction, pages) {
-    pageNum = 0
+function displayPages(interaction, pages, parsed) {
+    pageIdx = 0
     let embed;
 
     let includedButtons;
@@ -283,10 +287,13 @@ function displayPages(interaction, pages) {
     const displayedButtons = new MessageActionRow().addComponents(...includedButtons)
 
     async function embedPage() {
-        embed = new MessageEmbed().setTitle(`${pageNum + 1}/${pages.length}`).setColor(cyber)
+        embed = new MessageEmbed()
+            .setTitle(title(parsed))
+            .setDescription(`**${pageIdx + 1}/${pages.length}**`)
+            .setColor(cyber)
 
-        for (const header in pages[pageNum]) {
-            embed.addField(`**${header}**`, pages[pageNum][header])
+        for (const header in pages[pageIdx]) {
+            embed.addField(`**${header}**`, pages[pageIdx][header])
         }
 
         await interaction.editReply({
@@ -307,7 +314,7 @@ function displayPages(interaction, pages) {
             return true;
         };
 
-        if (pages.length ==  1) return
+        if (pages.length == 1) return
 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
@@ -321,16 +328,16 @@ function displayPages(interaction, pages) {
 
             switch (buttonInteraction.customId) {
                 case "first":
-                    pageNum = 0
+                    pageIdx = 0
                     break
                 case "prev":
-                    pageNum = ((pageNum - 1) + pages.length) % pages.length
+                    pageIdx = ((pageIdx - 1) + pages.length) % pages.length
                     break
                 case "next":
-                    pageNum = (pageNum + 1) % pages.length
+                    pageIdx = (pageIdx + 1) % pages.length
                     break
                 case "last":
-                    pageNum = pages.length - 1
+                    pageIdx = pages.length - 1
                     break
             }
 
@@ -350,6 +357,9 @@ function displayPages(interaction, pages) {
     embedPage()
 }
 
+function title(parsed) {
+    return 'title'
+}
 
 function matchesEntity(noteEntity, noteUpgrade, parsed) {
     // If no entity is provided, don't filter by entity

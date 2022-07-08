@@ -378,6 +378,11 @@ function matchesEntity(noteEntity, noteUpgrade, parsed) {
 
     const noteUpgrades = upgradesFromUpgradeNotation(noteUpgrade)
 
+    if (noteUpgrades.some(u => u.length > 3)) {
+        console.log("Very irregular upgrade")
+        return false
+    }
+
     let entityUpgrades;
     if (parsed.tower_upgrade) {
         if (Towers.towerUpgradeToTower(parsed.tower_upgrade) != noteEntity) {

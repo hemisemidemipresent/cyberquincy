@@ -288,7 +288,7 @@ function displayPages(interaction, pages, parsed) {
         // Add page number as a disabled button
         includedButtons.splice(
             includedButtons.length / 2, // Put half way in
-            0, // Delete 0
+            0, // Don't delete any buttons to insert the below button
             new MessageButton().setCustomId('pg').setLabel('FILL_ME_IN').setStyle('SECONDARY').setDisabled(true),
         )
     }
@@ -304,7 +304,9 @@ function displayPages(interaction, pages, parsed) {
             embed.addField(`**${header}**`, pages[pageIdx][header])
         }
 
-        includedButtons[Math.floor(includedButtons.length / 2)].setLabel(`${pageIdx + 1}/${pages.length}`)
+        if (includedButtons.length > 0) {
+            includedButtons.find(b => b.disabled).setLabel(`${pageIdx + 1}/${pages.length}`)
+        }
 
         displayedButtons = new MessageActionRow().addComponents(...includedButtons)
 

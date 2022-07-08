@@ -278,10 +278,10 @@ function isValidTempleSet(str) {
 
 function formatEntity(entity) {
     if (isTower(entity)) {
-        return towerUpgradeToIndexNormalForm(entity);
+        return Aliases.toIndexNormalForm(entity);
     } else if (isTowerPath(entity)) {
         [towerName, path] = entity.split('#');
-        return `${gHelper.toTitleCase(path.split('-').join(' '))} ` + `${towerUpgradeToIndexNormalForm(towerName)}`;
+        return `${gHelper.toTitleCase(path.split('-').join(' '))} ` + `${Aliases.toIndexNormalForm(towerName)}`;
     } else if (isTowerUpgrade(entity)) {
         return towerUpgradeToIndexNormalForm(entity);
     } else if (Aliases.isHero(entity)) {

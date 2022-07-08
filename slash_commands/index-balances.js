@@ -205,7 +205,13 @@ async function execute(interaction) {
 
     const pages = paginateBalances(filteredBalances, parsed)
 
-    displayPages(interaction, pages, parsed)
+    let addedVersion = null
+    if (hasEntity(parsed) && pages.length > 0) {
+        const soleEntity = Object.keys(filteredBalances[Object.keys(filteredBalances)[0]])[0]
+        addedVersion = balances[soleEntity]?.versionAdded
+    }
+
+    displayPages(interaction, pages, addedVersion, parsed)
 }
 
 function paginateBalances(balances, parsed) {
@@ -279,7 +285,7 @@ const multipageButtons = [
     new MessageButton().setCustomId('last').setLabel('⏩').setStyle('PRIMARY'),
 ];
 
-function displayPages(interaction, pages, parsed) {
+function displayPages(interaction, pages, versionAdded, parsed) {
     pageIdx = 0
     let embed;
 
@@ -304,9 +310,13 @@ function displayPages(interaction, pages, parsed) {
     let displayedButtons;
 
     async function embedPage() {
-        embed = new MessageEmbed()
+        const embed = new MessageEmbed()
             .setTitle(title(parsed, pages.length > 0))
             .setColor(cyber)
+
+        if (versionAdded) {
+            embed.setDescription(`**Added in v${parseInt(versionAdded)}**`)
+        }
 
         for (const header in pages[pageIdx]) {
             embed.addField(`**${header}**`, pages[pageIdx][header])

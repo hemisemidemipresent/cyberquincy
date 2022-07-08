@@ -84,7 +84,7 @@ function parseEntity(interaction) {
 function parseVersion(interaction, num) {
     const v = interaction.options.getInteger(`version${num}`);
     if (v) {
-        return CommandParser.parse([`v${v}`], new VersionParser());
+        return CommandParser.parse([`v${v}`], new VersionParser(2));
     } else return new Parsed();
 }
 
@@ -119,11 +119,11 @@ function validateInput(interaction) {
     }
 
     if (parsedVersion1.hasErrors()) {
-        return `Parsed Version 1 must be a number >= 1`;
+        return `Parsed Version 1 must be a number >= 2`;
     }
 
     if (parsedVersion2.hasErrors()) {
-        return `Parsed Version 2 must be a number >= 1`;
+        return `Parsed Version 2 must be a number >= 2`;
     }
 }
 
@@ -206,6 +206,7 @@ function paginateBalances(balances, parsed) {
     let header;
     let pageLength = 0;
     let field = ""
+    const noHeader = '-'
 
     const sortedVersions = Object.keys(balances).sort(function (v1, v2) {
         return parseInt(v1) - parseInt(v2)
@@ -216,7 +217,7 @@ function paginateBalances(balances, parsed) {
             // HEADER
             if (parsed.versions?.length == 1) {
                 if (hasEntity(parsed)) {
-                    header = '\u200b'
+                    header = noHeader
                 } else {
                     header = Aliases.toIndexNormalForm(entity)
                 }
@@ -238,7 +239,7 @@ function paginateBalances(balances, parsed) {
                     page = {}
                     pageLength = 0
                     field = ""
-                    if (!header.endsWith(' (cont.)')) {
+                    if (!header.endsWith(' (cont.)') && header != noHeader) {
                         header += ' (cont.)'
                     }
                 }

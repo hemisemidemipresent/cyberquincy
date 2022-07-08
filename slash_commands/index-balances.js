@@ -291,7 +291,7 @@ function displayPages(interaction, pages) {
 
         await interaction.editReply({
             embeds: [embed],
-            components: [displayedButtons],
+            components: includedButtons.length > 0 ? [displayedButtons] : [],
         });
 
         const filter = (selection) => {

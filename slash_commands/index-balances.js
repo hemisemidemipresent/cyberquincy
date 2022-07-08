@@ -265,10 +265,10 @@ function hasEntity(parsed) {
 }
 
 const multipageButtons = [
-    new MessageButton().setCustomId('first').setLabel('⏪').setStyle('SECONDARY'),
-    new MessageButton().setCustomId('prev').setLabel('⬅️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('next').setLabel('➡️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('last').setLabel('⏩').setStyle('SECONDARY'),
+    new MessageButton().setCustomId('first').setLabel('⏪').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('prev!').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('next!').setLabel('➡️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('last').setLabel('⏩').setStyle('PRIMARY'),
 ];
 
 function displayPages(interaction, pages, parsed) {
@@ -279,22 +279,34 @@ function displayPages(interaction, pages, parsed) {
     if (pages.length == 1) {
         includedButtons = []
     } else if (pages.length < 5) {
-        includedButtons = multipageButtons.filter(b => b.style == 'PRIMARY')
+        includedButtons = multipageButtons.filter(b => b.customId.endsWith('!'))
     } else {
-        includedButtons = multipageButtons
+        includedButtons = multipageButtons.filter(b => true)
     }
 
-    const displayedButtons = new MessageActionRow().addComponents(...includedButtons)
+    if (includedButtons.length > 0) {
+        // Add page number as a disabled button
+        includedButtons.splice(
+            includedButtons.length / 2, // Put half way in
+            0, // Delete 0
+            new MessageButton().setCustomId('pg').setLabel('FILL_ME_IN').setStyle('SECONDARY').setDisabled(true),
+        )
+    }
+
+    let displayedButtons;
 
     async function embedPage() {
         embed = new MessageEmbed()
             .setTitle(title(parsed))
-            .setDescription(`**${pageIdx + 1}/${pages.length}**`)
             .setColor(cyber)
 
         for (const header in pages[pageIdx]) {
             embed.addField(`**${header}**`, pages[pageIdx][header])
         }
+
+        includedButtons[Math.floor(includedButtons.length / 2)].setLabel(`${pageIdx + 1}/${pages.length}`)
+
+        displayedButtons = new MessageActionRow().addComponents(...includedButtons)
 
         await interaction.editReply({
             embeds: [embed],
@@ -330,10 +342,10 @@ function displayPages(interaction, pages, parsed) {
                 case "first":
                     pageIdx = 0
                     break
-                case "prev":
+                case "prev!":
                     pageIdx = ((pageIdx - 1) + pages.length) % pages.length
                     break
-                case "next":
+                case "next!":
                     pageIdx = (pageIdx + 1) % pages.length
                     break
                 case "last":

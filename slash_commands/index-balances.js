@@ -50,11 +50,11 @@ const filterOption = new SlashCommandStringOption()
     .setRequired(false)
     .addChoices(
         { name: "✅/❌", value: "✅/❌" },
-        { name: "⚠️/↔", value: "⚠️/↔" },
+        { name: "🟡/🟦", value: "🟡/🟦" },
         { name: "✅", value: "✅" },
         { name: "❌", value: "❌" },
-        { name: "⚠️", value: "⚠️" },
-        { name: "↔", value: "↔" },
+        { name: "🟡", value: "🟡" },
+        { name: "🟦", value: "🟦" },
     )
 
 builder = new SlashCommandBuilder()
@@ -65,6 +65,13 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(version2Option)
     .addStringOption(filterOption)
     .addStringOption(reloadOption)
+
+const BALANCE_TYPE_MAPPINGS = {
+    "✅": 'Buffs',
+    "❌": 'Nerfs',
+    "⚠️": 'Fixes',
+    "↔": 'Changes',
+}
 
 function parseEntity(interaction) {
     const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
@@ -90,8 +97,9 @@ function parseVersion(interaction, num) {
 
 function parseFilter(interaction) {
     const parsed = new Parsed();
+    adjustedTypeFilter = interaction.options.getString('type_filter')?.replace('🟡', '⚠️')?.replace('🟦', '↔')
     parsed.addField(
-        "balance_filter", interaction.options.getString('type_filter') || "✅/❌/⚠️/↔"
+        "balance_filter", adjustedTypeFilter
     )
     return parsed
 }
@@ -373,6 +381,8 @@ function displayPages(interaction, pages, parsed) {
 }
 
 function title(parsed) {
+    let balanceTypes
+    if (parsed) {}
     return 'title'
 }
 
@@ -441,6 +451,8 @@ function matchesVersions(noteVersion, parsed) {
 }
 
 function matchesBalanceType(noteSymbol, parsed) {
+    if (!parsed.balance_filter) return true
+    
     return parsed.balance_filter.split("/").includes(noteSymbol)
 }
 

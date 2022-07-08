@@ -214,7 +214,6 @@ function paginateBalances(balances, parsed) {
     let header;
     let pageLength = 0;
     let field = ""
-    const noHeader = '-'
 
     const sortedVersions = Object.keys(balances).sort(function (v1, v2) {
         return parseInt(v1) - parseInt(v2)
@@ -225,7 +224,7 @@ function paginateBalances(balances, parsed) {
             // HEADER
             if (parsed.versions?.length == 1) {
                 if (hasEntity(parsed)) {
-                    header = noHeader
+                    header = `v${version} — ${Aliases.toIndexNormalForm(entity)}`
                 } else {
                     header = Aliases.toIndexNormalForm(entity)
                 }
@@ -247,7 +246,7 @@ function paginateBalances(balances, parsed) {
                     page = {}
                     pageLength = 0
                     field = ""
-                    if (!header.endsWith(' (cont.)') && header != noHeader) {
+                    if (!header.endsWith(' (cont.)')) {
                         header += ' (cont.)'
                     }
                 }
@@ -285,7 +284,7 @@ function displayPages(interaction, pages, parsed) {
     let embed;
 
     let includedButtons;
-    if (pages.length == 1) {
+    if (pages.length <= 1) {
         includedButtons = []
     } else if (pages.length < 5) {
         includedButtons = multipageButtons.filter(b => b.customId.endsWith('!'))
@@ -306,7 +305,7 @@ function displayPages(interaction, pages, parsed) {
 
     async function embedPage() {
         embed = new MessageEmbed()
-            .setTitle(title(parsed))
+            .setTitle(title(parsed, pages.length > 0))
             .setColor(cyber)
 
         for (const header in pages[pageIdx]) {
@@ -380,10 +379,28 @@ function displayPages(interaction, pages, parsed) {
     embedPage()
 }
 
-function title(parsed) {
-    let balanceTypes
-    if (parsed) {}
-    return 'title'
+function title(parsed, hasResults=true) {
+    let title = hasResults ? "All " : "No "
+
+    if (parsed.balance_filter) {
+        title += parsed.balance_filter.split('/').map(bf => BALANCE_TYPE_MAPPINGS[bf]).join('/')
+    } else {
+        title += "Balance Changes"
+    }
+
+    if (!hasResults) title += ' Found'
+
+    if (hasEntity(parsed)) {
+        title += ` for ${Towers.formatEntity(parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path)}`
+    }
+
+    if (parsed.versions?.length == 1) {
+        title += ` in v${parsed.version}`
+    } else if (parsed.versions?.length == 2) {
+        title += ` between v${parsed.versions[0]} and v${parsed.versions[1]}`
+    }
+
+    return title
 }
 
 function matchesEntity(noteEntity, noteUpgrade, parsed) {

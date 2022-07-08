@@ -235,7 +235,9 @@ function paginateBalances(balances, parsed) {
                     page = {}
                     pageLength = 0
                     field = ""
-                    header += ' (cont.)'
+                    if (!header.endsWith(' (cont.)')) {
+                        header += ' (cont.)'
+                    }
                 }
             }
 
@@ -258,14 +260,27 @@ function hasEntity(parsed) {
     return parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path
 }
 
-const multipageButtons = new MessageActionRow().addComponents(
-    new MessageButton().setCustomId('-1').setLabel('⬅️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('1').setLabel('➡️').setStyle('PRIMARY'),
-);
+const multipageButtons = [
+    new MessageButton().setCustomId('first').setLabel('⏪').setStyle('SECONDARY'),
+    new MessageButton().setCustomId('prev').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('next').setLabel('➡️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('last').setLabel('⏩').setStyle('SECONDARY'),
+];
 
 function displayPages(interaction, pages) {
     pageNum = 0
     let embed;
+
+    let includedButtons;
+    if (pages.length == 1) {
+        includedButtons = []
+    } else if (pages.length < 5) {
+        includedButtons = multipageButtons.filter(b => b.style == 'PRIMARY')
+    } else {
+        includedButtons = multipageButtons
+    }
+
+    const displayedButtons = new MessageActionRow().addComponents(...includedButtons)
 
     async function embedPage() {
         embed = new MessageEmbed().setTitle(`${pageNum + 1}/${pages.length}`).setColor(cyber)
@@ -276,7 +291,7 @@ function displayPages(interaction, pages) {
 
         await interaction.editReply({
             embeds: [embed],
-            components: [multipageButtons],
+            components: [displayedButtons],
         });
 
         const filter = (selection) => {
@@ -292,6 +307,8 @@ function displayPages(interaction, pages) {
             return true;
         };
 
+        if (pages.length ==  1) return
+
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
             componentType: 'BUTTON',
@@ -303,11 +320,18 @@ function displayPages(interaction, pages) {
             buttonInteraction.deferUpdate();
 
             switch (buttonInteraction.customId) {
-                case "-1":
+                case "first":
+                    pageNum = 0
+                    break
+                case "prev":
                     pageNum = ((pageNum - 1) + pages.length) % pages.length
                     break
-                case "1":
+                case "next":
                     pageNum = (pageNum + 1) % pages.length
+                    break
+                case "last":
+                    pageNum = pages.length - 1
+                    break
             }
 
             await embedPage()

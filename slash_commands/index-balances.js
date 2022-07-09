@@ -281,6 +281,7 @@ function hasEntity(parsed) {
 const multipageButtons = [
     new MessageButton().setCustomId('first').setLabel('⏪').setStyle('PRIMARY'),
     new MessageButton().setCustomId('prev!').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('pg').setLabel('FILL_ME_IN').setStyle('SECONDARY').setDisabled(true),
     new MessageButton().setCustomId('next!').setLabel('➡️').setStyle('PRIMARY'),
     new MessageButton().setCustomId('last').setLabel('⏩').setStyle('PRIMARY'),
 ];
@@ -293,18 +294,9 @@ function displayPages(interaction, pages, versionAdded, parsed) {
     if (pages.length <= 1) {
         includedButtons = []
     } else if (pages.length < 5) {
-        includedButtons = multipageButtons.filter(b => b.customId.endsWith('!'))
+        includedButtons = multipageButtons.filter(b => b.customId.endsWith('!') || b.style == 'SECONDARY')
     } else {
         includedButtons = multipageButtons.filter(b => true)
-    }
-
-    if (includedButtons.length > 0) {
-        // Add page number as a disabled button
-        includedButtons.splice(
-            includedButtons.length / 2, // Put half way in
-            0, // Don't delete any buttons to insert the below button
-            new MessageButton().setCustomId('pg').setLabel('FILL_ME_IN').setStyle('SECONDARY').setDisabled(true),
-        )
     }
 
     let displayedButtons;

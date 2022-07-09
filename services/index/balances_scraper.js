@@ -143,7 +143,7 @@ async function parseHeroBalances(heroesSheet, currentVersion, colIndex) {
 
         const buffLikes = heroesSheet.getCell(rowIndex, colIndex).note?.replace(/✔️/g, '✅')?.split('\n\n') || [];
         const nerfLikes = heroesSheet.getCell(rowIndex, colIndex + 1).note?.split('\n\n') || [];
-        const combined = buffLikes.concat(nerfLikes)
+        const combined = buffLikes.concat(nerfLikes).map(n => n.replace(/🟡/g, '⚠️').replace(/🟦/g, "↔"))
 
         const buffs = buffLikes.filter(n => n.trim().startsWith('✅'))
         const nerfs = nerfLikes.filter(n => n.trim().startsWith('❌'))

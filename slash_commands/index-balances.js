@@ -302,7 +302,7 @@ function displayPages(interaction, pages, versionAdded, parsed) {
     let displayedButtons;
 
     async function embedPage() {
-        const embed = new MessageEmbed()
+        embed = new MessageEmbed()
             .setTitle(title(parsed, pages.length > 0))
             .setColor(cyber)
 

@@ -1,7 +1,4 @@
-const botInfoHelper = require('./helpers/botinfo');
 const { Client, Intents } = require('discord.js');
-const e = require('express');
-const fs = require('fs');
 
 function main() {
     pingHeroku();
@@ -142,12 +139,6 @@ function generateCommandListeners(commandCenter, slashCommandCenter) {
 
     client.on('guildCreate', (guild) => {
         return Guilds.enterGuild(guild);
-    });
-    client.on('guildMemberAdd', async (member) => {
-        return Guilds.addMember(member);
-    });
-    client.on('guildMemberRemove', async (member) => {
-        return Guilds.removeMember(member);
     });
 
     // q! commands

@@ -83,7 +83,6 @@ class AliasRepository extends Array {
 
             // Hack to add appropriate base tower entry
             if (upgrade == 'xyz') {
-
                 const baseTowerAliasGroup = {
                     canonical: `${baseName}#222`,
                     aliases: towerUpgrades['xyz']

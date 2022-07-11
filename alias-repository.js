@@ -87,7 +87,7 @@ class AliasRepository extends Array {
                     canonical: `${baseName}#222`,
                     aliases: towerUpgrades['xyz']
                         .concat(baseName)
-                        .map((al) => `base_${al}`),
+                        .map((al) => [`b_${al}`, `base_${al}`]).flat(),
                     sourcefile: f,
                 };
                 this.addAliasGroup(baseTowerAliasGroup);

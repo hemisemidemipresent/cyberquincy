@@ -38,7 +38,7 @@ async function embedBloonology(heroName, level) {
     }
 
     const body = res.data;
-    const cleaned = body.replace(/\t/g, '').replace(/\r/g, '');
+    const cleaned = body.replace(/\t/g, '').replace(/\r/g, '').trim();
     const sentences = cleaned.split(/\n\n/);
 
     const desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
@@ -49,7 +49,7 @@ async function embedBloonology(heroName, level) {
 
     const title = level ?
         `${Aliases.toIndexNormalForm(heroName)} (Level-${level})` :
-        `${Aliases.toIndexNormalForm(heroName)} Summary`
+        `${Aliases.toIndexNormalForm(heroName)} All Levels`
 
     const embed = new Discord.MessageEmbed()
         .setTitle(title)

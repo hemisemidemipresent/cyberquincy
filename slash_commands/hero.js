@@ -1,30 +1,16 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
 
+const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
+
 const axios = require('axios');
 const { footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colours.json');
-const heroNameToBloonologyLinkMapping = {
-    quincy: 'https://pastebin.com/raw/ASpHNduS',
-    gwendolin: 'https://pastebin.com/raw/rZYjbEhX',
-    striker_jones: 'https://pastebin.com/raw/hrH8q0bd',
-    obyn_greenfoot: 'https://pastebin.com/raw/x2WiKEWi',
-    captain_churchill: 'https://pastebin.com/raw/cqaHnhgB',
-    benjamin: 'https://pastebin.com/raw/j6X3mazy',
-    ezili: 'https://pastebin.com/raw/dYu1B9bp',
-    pat_fusty: 'https://pastebin.com/raw/2YRMFjPG',
-    adora: 'https://pastebin.com/raw/WnsgkWRc',
-    admiral_brickell: 'https://pastebin.com/raw/amw39T29',
-    etienne: 'https://pastebin.com/raw/UxN2Wx1F',
-    sauda: 'https://pastebin.com/raw/8E2TSndk',
-    psi: 'https://pastebin.com/raw/9h9aAPUm',
-    geraldo: 'https://pastebin.com/raw/rksZWhTV'
-};
 
 const heroOption = new SlashCommandStringOption()
     .setName('hero')
     .setDescription('The hero you are finding information for')
     .setRequired(true);
-Object.keys(heroNameToBloonologyLinkMapping).forEach((hero) => {
+Object.keys(HERO_NAME_TO_BLOONOLOGY_LINK).forEach((hero) => {
     heroOption.addChoices({ name: Aliases.toIndexNormalForm(hero), value: hero });
 });
 const builder = new SlashCommandBuilder()
@@ -42,7 +28,7 @@ function validateInput(interaction) {
 }
 
 async function embedBloonology(heroName, level) {
-    const link = heroNameToBloonologyLinkMapping[heroName];
+    const link = HERO_NAME_TO_BLOONOLOGY_LINK[heroName];
     let res = '';
 
     try {

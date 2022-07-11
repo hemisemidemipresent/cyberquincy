@@ -18,12 +18,12 @@ const builder = new SlashCommandBuilder()
     .setDescription('Find information for each hero')
     .addStringOption(heroOption)
     .addIntegerOption((option) =>
-        option.setName('hero_lvl').setDescription("The hero' level that you want the information for.").setRequired(true)
+        option.setName('hero_lvl').setDescription('The hero level that you want the information for').setRequired(false)
     );
 
 function validateInput(interaction) {
     const heroLevel = interaction.options.getInteger('hero_lvl');
-    if (heroLevel > 20 || heroLevel < 1)
+    if (heroLevel && (heroLevel > 20 || heroLevel < 1))
         return `Invalid hero level \`${heroLevel}\` provided!\nHero level must be from \`1\` to \`20\` (inclusive)`;
 }
 
@@ -41,14 +41,18 @@ async function embedBloonology(heroName, level) {
     const cleaned = body.replace(/\t/g, '').replace(/\r/g, '');
     const sentences = cleaned.split(/\n\n/);
 
-    const desc = sentences[level - 1];
+    const desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
     const descWithoutLevel = desc.split('\n').slice(1).join('\n');
     if (typeof desc != 'string') {
         return new Discord.MessageEmbed().setColor(red).setTitle('The bloonology datapiece is missing');
     }
 
+    const title = level ?
+        `${Aliases.toIndexNormalForm(heroName)} (Level-${level})` :
+        `${Aliases.toIndexNormalForm(heroName)} Summary`
+
     const embed = new Discord.MessageEmbed()
-        .setTitle(`${Aliases.toIndexNormalForm(heroName)} (Level-${level})`)
+        .setTitle(title)
         .setDescription(descWithoutLevel)
         .setColor(cyber)
         .setFooter({ text: footer });

@@ -52,7 +52,6 @@ async function embedBloonology(towerName, upgrade) {
         upgrade.substring(0, firstXIndex) + '0' + upgrade.substring(firstXIndex + 1, lastXIndex) + '2' + upgrade.substring(lastXIndex + 1),
     ]
 
-    const [path, tier] = Towers.pathTierFromUpgradeSet(noCrosspathUpgrade);
     const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
     const noCrosspathDescription = cleanDescription(
@@ -71,7 +70,7 @@ async function embedBloonology(towerName, upgrade) {
             .split('\n').map(n => `• ${n}`).join('\n')
     )
 
-    const title = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier) + ' Crosspathing Benefits';
+    const title = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, ...Towers.pathTierFromUpgradeSet(noCrosspathUpgrade)) + ' Crosspathing Benefits';
 
     let embed = new Discord.MessageEmbed()
         .setTitle(title)
@@ -80,7 +79,7 @@ async function embedBloonology(towerName, upgrade) {
 
     crosspathUpgrades.forEach((u, idx) => {
         embed.addField(u, crosspathBenefits[idx] || '\u200b', true)
-        if (idx % 2 == 1) {
+        if (idx % 2 == 1) { // This is the only way to get a 2 column format in discord :eyeroll:
             embed.addField('\u200b', '\u200b', true)
         }
     })

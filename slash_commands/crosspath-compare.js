@@ -43,53 +43,50 @@ async function embedBloonology(towerName, upgrade) {
     const firstXIndex = upgrade.indexOf('x')
     const lastXIndex = upgrade.lastIndexOf('x')
 
-    const upgrades = [
+    const noCrosspathUpgrade = upgrade.replace(/x/g, '0')
+
+    const crosspathUpgrades = [
         upgrade.substring(0, firstXIndex) + '1' + upgrade.substring(firstXIndex + 1, lastXIndex) + '0' + upgrade.substring(lastXIndex + 1),
-        upgrade.substring(0, firstXIndex) + '2' + upgrade.substring(firstXIndex + 1, lastXIndex) + '0' + upgrade.substring(lastXIndex + 1),
         upgrade.substring(0, firstXIndex) + '0' + upgrade.substring(firstXIndex + 1, lastXIndex) + '1' + upgrade.substring(lastXIndex + 1),
+        upgrade.substring(0, firstXIndex) + '2' + upgrade.substring(firstXIndex + 1, lastXIndex) + '0' + upgrade.substring(lastXIndex + 1),
         upgrade.substring(0, firstXIndex) + '0' + upgrade.substring(firstXIndex + 1, lastXIndex) + '2' + upgrade.substring(lastXIndex + 1),
     ]
 
-    console.log(upgrades)
+    const [path, tier] = Towers.pathTierFromUpgradeSet(noCrosspathUpgrade);
+    const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
-    return
+    const noCrosspathDescription = cleanDescription(
+        descriptions.find((description) => description.substr(0, 3) == noCrosspathUpgrade)
+            .substr(3)
+            .split(/(?:__Changes from Previous Tier__)|(?:Changes from previous tier:)/i)[0]
+    );
 
-    const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
-    const upgradeFullDescription = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+    const crosspathDescriptions = crosspathUpgrades.map(u => cleanDescription(
+        descriptions.find((description) => description.substr(0, 3) == u).substr(3)
+    ))
 
-    fullDescription = upgradeFullDescription.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3);
+    const crosspathBenefits = crosspathDescriptions.map(desc => 
+        desc.split(/(?:__Crosspath Benefits__)|(?:Crosspath Benefits:)/i)[1]
+            ?.trim()
+            .split('\n').map(n => `• ${n}`).join('\n')
+    )
 
-    // background info: there are 2 newlines present in the string: \n and \r. \n is preferred
-    let info = fullDescription
-        .toString()
-        .replace(/\n/g, '') // removes all newlines \n
-        .replace(/\r \t/g, '\n') // removes all \r + tab
-        .replace(/ \t-/g, '-    ') // removes remaining tabs
-        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
-
-    const formattedUpgrade = upgrade.split('').join('-');
-    const formattedTowerName = Aliases.toIndexNormalForm(towerName, '-');
-
-    let title;
-    if (tier <= 2) {
-        title = `${formattedTowerName} (${formattedUpgrade})`;
-    } else {
-        const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
-        title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
-    }
+    const title = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier) + ' Crosspathing Benefits';
 
     let embed = new Discord.MessageEmbed()
         .setTitle(title)
-        .setDescription(info)
-        .addField(
-            'cost',
-            `${cost} - medium\n${Towers.hard(cost)} - hard\n` + `if this is wrong [yell at hemi here](${discord})`,
-            true
-        )
-        .addField('total cost', `${totalCost} - medium\n${hardTotalCost} - hard`, true)
-        .addField('Bug reporting', `report [here](${discord})`, true)
         .setFooter({ text: footer })
         .setColor(cyber);
+
+    crosspathUpgrades.forEach((u, idx) => {
+        embed.addField(u, crosspathBenefits[idx] || '\u200b', true)
+        if (idx % 2 == 1) {
+            embed.addField('\u200b', '\u200b', true)
+        }
+    })
+
+    embed.addField(`${noCrosspathUpgrade} Stats`, noCrosspathDescription)
+
     return embed;
 }
 
@@ -100,6 +97,15 @@ async function execute(interaction) {
     const embed = await embedBloonology(tower, towerPath);
 
     return await interaction.reply({ embeds: [embed], ephemeral: false });
+}
+
+// background info: there are 2 newlines present in the string: \n and \r. \n is preferred
+function cleanDescription(desc) {
+    return desc.toString()
+        .replace(/\n/g, '') // removes all newlines \n
+        .replace(/\r \t/g, '\n') // removes all \r + tab
+        .replace(/ \t-/g, '-    ') // removes remaining tabs
+        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
 }
 
 module.exports = {

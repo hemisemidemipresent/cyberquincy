@@ -14,25 +14,21 @@ Object.keys(Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
     towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower, '-'), value: tower });
 });
 
+const UUU = ['3xx', '4xx', '5xx', 'x3x', 'x4x', 'x5x', 'xx3', 'xx4', 'xx5']
+
+const pathOption = new SlashCommandStringOption()
+    .setName('tower_path')
+    .setDescription('The tower path that you want the information for')
+    .setRequired(true)
+UUU.forEach(u => {
+    pathOption.addChoices({ name: u, value: u })
+})
+
 const builder = new SlashCommandBuilder()
-    .setName('tower')
-    .setDescription('Find information for each tower')
+    .setName('crosspath_compare')
+    .setDescription("Compare crosspaths for a given tower that's T3 or above")
     .addStringOption(towerOption)
-    .addStringOption((option) =>
-        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
-    );
-
-function validateInput(interaction) {
-    const towerPath = parseTowerPath(interaction);
-    if (isNaN(towerPath)) return "Tower path provided isn't `base` and contains non-numerical characters";
-    if (!Towers.isValidUpgradeSet(towerPath)) return 'Invalid tower path provided!';
-}
-
-function parseTowerPath(interaction) {
-    const tp = interaction.options.getString('tower_path').toLowerCase();
-    if (tp == 'base') return '000';
-    else return tp;
-}
+    .addStringOption(pathOption);
 
 async function embedBloonology(towerName, upgrade) {
     let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
@@ -44,11 +40,21 @@ async function embedBloonology(towerName, upgrade) {
     }
     let body = res.data;
 
-    const tower = costs[towerName];
+    const firstXIndex = upgrade.indexOf('x')
+    const lastXIndex = upgrade.lastIndexOf('x')
+
+    const upgrades = [
+        upgrade.substring(0, firstXIndex) + '1' + upgrade.substring(firstXIndex + 1, lastXIndex) + '0' + upgrade.substring(lastXIndex + 1),
+        upgrade.substring(0, firstXIndex) + '2' + upgrade.substring(firstXIndex + 1, lastXIndex) + '0' + upgrade.substring(lastXIndex + 1),
+        upgrade.substring(0, firstXIndex) + '0' + upgrade.substring(firstXIndex + 1, lastXIndex) + '1' + upgrade.substring(lastXIndex + 1),
+        upgrade.substring(0, firstXIndex) + '0' + upgrade.substring(firstXIndex + 1, lastXIndex) + '2' + upgrade.substring(lastXIndex + 1),
+    ]
+
+    console.log(upgrades)
+
+    return
+
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
-    const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
-    const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(costs, towerName, upgrade);
-    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
     const upgradeFullDescription = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
     fullDescription = upgradeFullDescription.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3);
@@ -86,17 +92,10 @@ async function embedBloonology(towerName, upgrade) {
         .setColor(cyber);
     return embed;
 }
-async function execute(interaction) {
-    const validationFailure = validateInput(interaction);
-    if (validationFailure) {
-        return interaction.reply({
-            content: validationFailure,
-            ephemeral: true
-        });
-    }
 
+async function execute(interaction) {
     const tower = interaction.options.getString('tower');
-    const towerPath = parseTowerPath(interaction);
+    const towerPath = interaction.options.getString('tower_path')
 
     const embed = await embedBloonology(tower, towerPath);
 

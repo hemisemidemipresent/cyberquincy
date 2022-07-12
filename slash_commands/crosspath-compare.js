@@ -84,7 +84,7 @@ async function embedBloonology(towerName, upgrade) {
         }
     })
 
-    embed.addField(`${noCrosspathUpgrade} Stats`, noCrosspathDescription)
+    embed.addField(`${noCrosspathUpgrade} Stats`, noCrosspathDescription || 'Failed to parse description')
 
     return embed;
 }

@@ -5,36 +5,12 @@ const costs = require('../jsons/costs.json');
 const Towers = require('../helpers/towers.js');
 const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colours.json');
-const jsonTowerNameToBloonologyLinkMapping = {
-    'dart-monkey': 'https://pastebin.com/raw/FK4a9ZSi',
-    'boomerang-monkey': 'https://pastebin.com/raw/W2x9dvPs',
-    'bomb-shooter': 'https://pastebin.com/raw/XaR4JafN',
-    'tack-shooter': 'https://pastebin.com/raw/ywGCyWdT',
-    'ice-monkey': 'https://pastebin.com/raw/3VKx3upE',
-    'glue-gunner': 'https://pastebin.com/raw/cg8af3pj',
-    'sniper-monkey': 'https://pastebin.com/raw/8uQuKygM',
-    'monkey-sub': 'https://pastebin.com/raw/F9i5vPX9',
-    'monkey-buccaneer': 'https://pastebin.com/raw/EuiGUBWs',
-    'monkey-ace': 'https://pastebin.com/raw/hACdmBFa',
-    'heli-pilot': 'https://pastebin.com/raw/dfwcqzDT',
-    'mortar-monkey': 'https://pastebin.com/raw/64s0RqaZ',
-    'dartling-gunner': 'https://pastebin.com/raw/DDkmKP6n',
-    'wizard-monkey': 'https://pastebin.com/raw/4MsYDjFx',
-    'super-monkey': 'https://pastebin.com/raw/SUxZg6Dk',
-    'ninja-monkey': 'https://pastebin.com/raw/kPAF2hqw',
-    alchemist: 'https://pastebin.com/raw/76m7ATYF',
-    druid: 'https://pastebin.com/raw/4egsjcpa',
-    'banana-farm': 'https://pastebin.com/raw/Es0nVqt1',
-    'spike-factory': 'https://pastebin.com/raw/tTHZWiSi',
-    'monkey-village': 'https://pastebin.com/raw/e2QHaQSD',
-    'engineer-monkey': 'https://pastebin.com/raw/rTHT0L21'
-};
 
 const towerOption = new SlashCommandStringOption()
     .setName('tower')
     .setDescription('The tower you are finding information for')
     .setRequired(true);
-Object.keys(jsonTowerNameToBloonologyLinkMapping).forEach((tower) => {
+Object.keys(Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
     towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower, '-'), value: tower });
 });
 
@@ -59,7 +35,7 @@ function parseTowerPath(interaction) {
 }
 
 async function embedBloonology(towerName, upgrade) {
-    let link = jsonTowerNameToBloonologyLinkMapping[towerName];
+    let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
     let res;
     try {
         res = await axios.get(link);

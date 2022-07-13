@@ -112,12 +112,11 @@ async function embedBloonology(towerName, upgrade) {
 }
 async function execute(interaction) {
     const validationFailure = validateInput(interaction);
-    if (validationFailure) {
+    if (validationFailure)
         return interaction.reply({
             content: validationFailure,
             ephemeral: true
         });
-    }
 
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);

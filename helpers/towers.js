@@ -5,7 +5,11 @@ function towerUpgradeToTower(towerUpgrade) {
     if (!towerUpgrade) return null;
     canonical = Aliases.getCanonicalForm(towerUpgrade);
     if (!canonical) return null;
-    return canonical.slice(0, -4);
+    return canonical.split('#')[0];
+}
+
+function towerUpgradeToUpgrade(towerUpgrade) {
+    return towerUpgrade.split('#')[1]
 }
 
 function allTowerUpgrades() {
@@ -131,6 +135,14 @@ function isWaterEntity(entity) {
     return allWaterTowers().includes(entityToCompare);
 }
 
+function towerPathtoPath(towerPath) {
+    return towerPath.split('#')[1]
+}
+
+function towerPathToTower(towerPath) {
+    return towerPath.split('#')[0]
+}
+
 function towerPathToIndexNormalForm(towerPath) {
     let [tower, path] = towerPath.split('#');
     path = path.split('-')
@@ -198,6 +210,18 @@ function pathTierFromUpgradeSet(upgradeSet) {
     return [path, tier];
 }
 
+function upgradesFromPath(path) {
+    const entityUpgrades = []
+    const entityPathIndex = ['top-path', 'middle-path', 'bottom-path'].indexOf(path)
+    let tier;
+    for(tier = 1; tier <= 5; tier++) {
+        entityUpgrades.push(
+            '0'.repeat(entityPathIndex) + `${tier}` + '0'.repeat(2 - entityPathIndex)
+        )
+    }
+    return entityUpgrades
+}
+
 function crossPathTierFromUpgradeSet(upgradeSet) {
     upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
@@ -254,10 +278,10 @@ function isValidTempleSet(str) {
 
 function formatEntity(entity) {
     if (isTower(entity)) {
-        return towerUpgradeToIndexNormalForm(entity);
+        return Aliases.toIndexNormalForm(entity);
     } else if (isTowerPath(entity)) {
         [towerName, path] = entity.split('#');
-        return `${gHelper.toTitleCase(path.split('-').join(' '))} ` + `${towerUpgradeToIndexNormalForm(towerName)}`;
+        return `${gHelper.toTitleCase(path.split('-').join(' '))} ` + `${Aliases.toIndexNormalForm(towerName)}`;
     } else if (isTowerUpgrade(entity)) {
         return towerUpgradeToIndexNormalForm(entity);
     } else if (Aliases.isHero(entity)) {
@@ -355,6 +379,7 @@ function totalTowerUpgradeCrosspathCostHard(json, towerName, upgrade) {
 }
 module.exports = {
     towerUpgradeToTower,
+    towerUpgradeToUpgrade,
     allTowerUpgrades,
     allTowers,
     allTowerPaths,
@@ -364,10 +389,13 @@ module.exports = {
     isTowerPath,
     allWaterTowers,
     isWaterEntity,
+    towerPathToTower,
+    towerPathtoPath,
     towerPathToIndexNormalForm,
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,
     pathTierFromUpgradeSet,
+    upgradesFromPath,
     crossPathTierFromUpgradeSet,
     isValidUpgradeSet,
     isValidTempleSet,

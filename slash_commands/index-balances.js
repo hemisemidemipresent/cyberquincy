@@ -2,9 +2,13 @@ const {
     SlashCommandBuilder,
     SlashCommandStringOption,
     SlashCommandIntegerOption,
-  } = require('@discordjs/builders');
-  
-const GoogleSheetsHelper = require('../helpers/google-sheets');
+} = require('@discordjs/builders');
+
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+
+const { cyber } = require('../jsons/colours.json')
+
+const Index = require('../helpers/index.js');
 
 const OrParser = require('../parser/or-parser');
 
@@ -14,77 +18,101 @@ const TowerUpgradeParser = require('../parser/tower-upgrade-parser');
 const HeroParser = require('../parser/hero-parser');
 
 const VersionParser = require('../parser/version-parser');
-  
-const OptionalParser = require('../parser/optional-parser');
 
-const { yellow, darkgreen } = require('../jsons/colours.json');
-const isEqual = require('lodash.isequal');
-  
+const Parsed = require('../parser/parsed')
+
+const Towers = require('../helpers/towers')
+
 const entityOption = new SlashCommandStringOption()
     .setName('entity')
     .setDescription('Tower/Path/Upgrade/Hero')
-    .setRequired(true)
-  
+    .setRequired(false)
+
 const version1Option = new SlashCommandIntegerOption()
     .setName('version1')
     .setDescription('Exact or Starting Version')
     .setRequired(false)
-  
+
 const version2Option = new SlashCommandIntegerOption()
     .setName('version2')
     .setDescription('End Version')
     .setRequired(false)
-  
+
+const reloadOption = new SlashCommandStringOption()
+    .setName('reload')
+    .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
+    .setRequired(false)
+    .addChoices({ name: 'Yes', value: 'yes' });
+
+const filterOption = new SlashCommandStringOption()
+    .setName('type_filter')
+    .setDescription('Which type of balance changes do you wish to include (default = all)')
+    .setRequired(false)
+    .addChoices(
+        { name: "✅/❌", value: "✅/❌" },
+        { name: "🟡/🟦", value: "🟡/🟦" },
+        { name: "✅", value: "✅" },
+        { name: "❌", value: "❌" },
+        { name: "🟡", value: "🟡" },
+        { name: "🟦", value: "🟦" },
+    )
+
 builder = new SlashCommandBuilder()
     .setName('balance')
     .setDescription('Check balance history of all towers/heroes throughout versions according to index records')
     .addStringOption(entityOption)
     .addIntegerOption(version1Option)
     .addIntegerOption(version2Option)
-  
-function validateInput(interaction) {
-      entityParser = new OrParser(
-          new TowerParser(),
-          new TowerPathParser(),
-          new TowerUpgradeParser(),
-          new HeroParser()
-      );
-  
-      const entity = Aliases.canonicizeArg(interaction.options.getString('entity'))
-      const parsedEntity = CommandParser.parse([entity], entityParser)
-      if ( !(parsedEntity.tower || parsedEntity.tower_path || parsedEntity.tower_upgrade || parsedEntity.hero) ) {
-          return `Entity entered does not match any towers, tower paths, tower upgrades, or heroes`
-      }
-  
-      version1 = interaction.options.getInteger('version1')
-      version2 = interaction.options.getInteger('version2')
-  
-      if ( version2 && !version1 ) {
-          return `You entered an ending version but not a starting version`
-      }
-    
-      if (version1 && version1 < 1) {
-          return `Starting/Only version not valid`
-      }
-  
-      if (version2 && version2 < 1) {
-          return `Ending version not valid`
-      }
+    .addStringOption(filterOption)
+    .addStringOption(reloadOption)
 
-      if (version1 && version2 && version1 >= version2) {
-          return `Ending version must be larger than starting version`
-      }
-  }
-  
-  async function execute(interaction) {
-    validationFailure = validateInput(interaction);
-    if (validationFailure) {
-        return interaction.reply({
-            content: validationFailure,
-            ephemeral: true,
-        })
-    }
-  
+const BALANCE_TYPE_MAPPINGS = {
+    "✅": 'Buffs',
+    "❌": 'Nerfs',
+    "⚠️": 'Fixes',
+    "↔": 'Changes',
+}
+
+function parseEntity(interaction) {
+    const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
+    const entity = interaction.options.getString('entity');
+    if (entity) {
+        const canonicalEntity = Aliases.canonicizeArg(entity);
+        if (canonicalEntity) {
+            return CommandParser.parse([canonicalEntity], entityParser);
+        } else {
+            const parsed = new Parsed();
+            parsed.addError('Canonical not found');
+            return parsed;
+        }
+    } else return new Parsed();
+}
+
+function parseVersion(interaction, num) {
+    const v = interaction.options.getInteger(`version${num}`);
+    if (v) {
+        return CommandParser.parse([`v${v}`], new VersionParser(2));
+    } else return new Parsed();
+}
+
+function parseFilter(interaction) {
+    const parsed = new Parsed();
+    adjustedTypeFilter = interaction.options.getString('type_filter')?.replace('🟡', '⚠️')?.replace('🟦', '↔')
+    parsed.addField(
+        "balance_filter", adjustedTypeFilter
+    )
+    return parsed
+}
+
+function parseAll(interaction) {
+    const parsedEntity = parseEntity(interaction)
+    const parsedVersion1 = parseVersion(interaction, 1)
+    const parsedVersion2 = parseVersion(interaction, 2)
+    const parsedFilter = parseFilter(interaction)
+    return [parsedEntity, parsedVersion1, parsedVersion2, parsedFilter]
+}
+
+function validateInput(interaction) {
     entityParser = new OrParser(
         new TowerParser(),
         new TowerPathParser(),
@@ -92,330 +120,385 @@ function validateInput(interaction) {
         new HeroParser()
     );
 
-    // Re-using the old infrastructure to make porting much easier
-    args = [
-        Aliases.canonicizeArg(interaction.options.getString('entity')),
-        'v' + String(interaction.options.getInteger('version1')),
-        'v' + String(interaction.options.getInteger('version2')),
-    ].filter(arg => arg)
-  
-    const parsed = CommandParser.parse(
-        args,
-        entityParser,
-        new OptionalParser(new VersionParser()),
-        new OptionalParser(new VersionParser())
+    let [parsedEntity, parsedVersion1, parsedVersion2, parsedFilter] = parseAll(interaction)
+
+    if (parsedEntity.hasErrors()) {
+        return 'Entity did not match a tower/upgrade/path/hero'
+    }
+
+    if (parsedVersion1.hasErrors()) {
+        return `Parsed Version 1 must be a number >= 2`;
+    }
+
+    if (parsedVersion2.hasErrors()) {
+        return `Parsed Version 2 must be a number >= 2`;
+    }
+}
+
+async function execute(interaction) {
+    const validationFailure = validateInput(interaction);
+    if (validationFailure) {
+        return interaction.reply({
+            content: validationFailure,
+            ephemeral: true,
+        })
+    }
+
+    const parsed = parseAll(interaction).reduce(
+        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
+        new Parsed()
     );
 
-    // Towers might take a while
-    interaction.deferReply({ ephemeral: true });
-  
-    await loadEntityBuffNerfsTableCells(parsed);
-    if (!parsed.hero) await loadTowerChangesTableCells(parsed);
-    colIndex = await locateSpecifiedEntityColumnIndex(parsed);
-  
-    let [versionAdded, balanceChanges] = await parseBalanceChanges(
-        parsed,
-        colIndex
-    );
-    return await formatAndDisplayBalanceChanges(
-        interaction,
-        parsed,
-        versionAdded,
-        balanceChanges
-    );
-  }
-  
-async function loadEntityBuffNerfsTableCells(parsed) {
-    let sheet = getSheet(parsed);
-    const currentVersion = await parseCurrentVersion(parsed);
-  
-    bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(
-        headerRow(parsed) + currentVersion - 1,
-        sheet.columnCount
-    );
-    await sheet.loadCells(
-        `${VERSION_COLUMN}${headerRow(parsed)}:${bottomRightCellToBeLoaded}`
-    );
-  }
-  
-async function loadTowerChangesTableCells(parsed) {
-    let sheet = getSheet(parsed);
-    const currentVersion = await parseCurrentVersion(parsed);
-  
-    const hrow = await towerChangesHeaderRow(parsed);
-  
-    bottomRightCellToBeLoaded = GoogleSheetsHelper.rowColToA1(
-        hrow + currentVersion - 1,
-        sheet.columnCount
-    );
-    await sheet.loadCells(
-        `${VERSION_COLUMN}${hrow}:${bottomRightCellToBeLoaded}`
-    );
-  }
-  
-async function locateSpecifiedEntityColumnIndex(parsed) {
-    const sheet = getSheet(parsed);
-  
-    // Parse {column}{headerRow} until tower alias is reached
-    for (
-        colIndex =
-            GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN) + 1;
-        colIndex < sheet.columnCount;
-        colIndex += 2
-    ) {
-        towerHeader = sheet.getCell(headerRow(parsed) - 1, colIndex).value;
-  
-        if (!towerHeader)
-            throw `Something went wrong; ${parsedEntity(
-                parsed
-            )} couldn't be found in the headers`;
-  
-        canonicalHeader = Aliases.getCanonicalForm(towerHeader);
-        if (parsed.tower && parsed.tower == canonicalHeader) {
-            return colIndex;
-        } else if (
-            parsed.tower_path &&
-            parsed.tower_path.split('#')[0] == canonicalHeader
-        ) {
-            return colIndex;
-        } else if (
-            parsed.tower_upgrade &&
-            Towers.towerUpgradeToTower(parsed.tower_upgrade) == canonicalHeader
-        ) {
-            return colIndex;
-        } else if (parsed.hero && parsed.hero == canonicalHeader) {
-            return colIndex;
-        }
-    }
-  }
-  
-function headerRow(parsed) {
-    return parsed.hero ? 18 : 23;
-}
-  
-async function towerChangesHeaderRow(parsed) {
-    return (await parseCurrentVersion(parsed)) + headerRow(parsed) + 2;
-}
-  
-VERSION_COLUMN = 'C';
-  
-function getSheet(parsed) {
-    if (parsed.hero) return heroesSheet();
-    else return towersSheet();
-}
-  
-function towersSheet() {
-    return GoogleSheetsHelper.sheetByName(Btd6Index, 'Towers');
-}
-  
-function heroesSheet() {
-    return GoogleSheetsHelper.sheetByName(Btd6Index, 'Heroes');
-}
-  
-function parsedEntity(parsed) {
-    if (parsed.hero) return parsed.hero;
-    else if (parsed.tower) return parsed.tower;
-    else if (parsed.tower_upgrade) return parsed.tower_upgrade;
-    else if (parsed.tower_path) return parsed.tower_path;
-}
-  
-async function parseCurrentVersion(parsed) {
-    let sheet = getSheet(parsed);
-  
-    // Get version number from J3
-    await sheet.loadCells(`J3`);
-    const lastUpdatedAsOf = sheet.getCellByA1(`J3`).value;
-    const lastUpdatedAsOfTokens = lastUpdatedAsOf.split(' ');
-    version = lastUpdatedAsOfTokens[lastUpdatedAsOfTokens.length - 1];
-    return Math.floor(new Number(version));
-}
-  
-async function parseBalanceChanges(parsed, entryColIndex) {
-    const sheet = getSheet(parsed);
-    const currentVersion = await parseCurrentVersion(parsed);
-  
-    let versionAdded = null;
-  
-    let towerChangesOffset;
-    if (!parsed.hero)
-        towerChangesOffset =
-            (await towerChangesHeaderRow(parsed)) - headerRow(parsed);
-  
-    let balances = {};
-    // Iterate for currentVersion - 1 rows since there's no row for v1.0
-    for (
-        rowIndex = headerRow(parsed);
-        rowIndex <= headerRow(parsed) + currentVersion - 2;
-        rowIndex++
-    ) {
-        v = sheet.getCell(
-            rowIndex,
-            GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN)
-        ).formattedValue;
-  
-        let buff = sheet.getCell(rowIndex, entryColIndex).note;
-        buff = filterChangeNotes(buff, v, parsed);
-  
-        let nerf = sheet.getCell(rowIndex, entryColIndex + 1).note;
-        nerf = filterChangeNotes(nerf, v, parsed);
-  
-        let fix, change;
-  
-        if (!parsed.hero) {
-            const changesRowIndex = rowIndex + towerChangesOffset;
-  
-            fix = sheet.getCell(changesRowIndex, entryColIndex).note;
-            fix = filterChangeNotes(fix, v, parsed);
-            change = sheet.getCell(changesRowIndex, entryColIndex + 1).note;
-            change = filterChangeNotes(change, v, parsed);
-        }
-  
-        // The version added is the first non-greyed out row for the column
-        if (
-            !versionAdded &&
-            sheet.getCell(rowIndex, entryColIndex).effectiveFormat &&
-            !isEqual(
-                sheet.getCell(rowIndex, entryColIndex).effectiveFormat
-                    .backgroundColor,
-                { red: 0.6, green: 0.6, blue: 0.6 }
-            )
-        ) {
-            versionAdded = v;
-        }
-  
-        if (buff) {
-            buff = buff.replace(/✔️/g, '✅');
-            balances[v] = buff;
-        }
-        if (nerf) {
-            balances[v] = balances[v] ? balances[v] + '\n\n' : '';
-            balances[v] += nerf;
-        }
-        if (fix) {
-            balances[v] = balances[v] ? balances[v] + '\n\n' : '';
-            balances[v] += fix;
-        }
-        if (change) {
-            balances[v] = balances[v] ? balances[v] + '\n\n' : '';
-            balances[v] += change;
-        }
-    }
-  
-    if (versionAdded === '2.0') versionAdded = '1.0';
-  
-    return [versionAdded, balances];
-  }
-  
-  function filterChangeNotes(noteSet, v, parsed) {
-    if (!noteSet) return null;
-  
-    const version = Number(v);
-    if (parsed.versions) {
-        if (parsed.versions.length == 2) {
-            const [minV, maxV] = parsed.versions.sort(
-                (a, b) => Number(a) - Number(b)
-            );
-            if (version < Number(minV) || version > Number(maxV)) return null;
-        } else if (parsed.versions.length == 1) {
-            if (version !== Number(parsed.version)) return null;
-        }
-    }
-  
-    // TODOS:
-    // - 4+xx format
-    const notes = noteSet.split('\n\n').filter((note) => {
-        if (parsed.tower) return true;
-        else if (parsed.hero) return true;
-        else {
-            const upgradeSet = note
-                .replace(/✔️|❌/g, '')
-                .trim()
-                .split(' ')[0]
-                .replace(/x/gi, '0');
-            if (!Towers.isValidUpgradeSet(upgradeSet))
-                return handleIrregularNote(note, parsed);
-  
-            const [path, tier] = Towers.pathTierFromUpgradeSet(upgradeSet);
-            if (parsed.tower_path) {
-                const parsedPath = parsed.tower_path.split('#')[1];
-  
-                return (
-                    Aliases.getCanonicalForm(
-                        [null, 'top', 'mid', 'bot'][path]
-                    ) == parsedPath
-                );
-            } else if (parsed.tower_upgrade) {
-                const parsedUpgradeSet = parsed.tower_upgrade.split('#')[1];
-                const [parsedPath, parsedTier] =
-                    Towers.pathTierFromUpgradeSet(parsedUpgradeSet);
-                return parsedPath == path && parsedTier == tier;
+    parsed.versions?.sort(function (v1, v2) {
+        return parseInt(v1) - parseInt(v2)
+    })
+
+    await interaction.deferReply();
+
+    const forceReload = interaction.options.getString('reload') ? true : false;
+
+    const balances = await Index.fetchInfo('balances', forceReload);
+
+    const filteredBalances = {}
+    let balanceTowerUpgrade, balanceSymbol, versionNumber;
+    for (const entity in balances) {
+        const entityBalances = balances[entity].balances
+        for (const version in entityBalances) {
+            for (const balanceType in entityBalances[version]) {
+                for (const note of entityBalances[version][balanceType]) {
+                    // "⚠️ 3+xx blah blah blah ..."
+                    // or for heroes "⚠️ blah blah blah"
+                    // there is some safeguarding against extra or not enough spaces
+                    const mat = note.match(/(✅|❌|⚠️|↔)? *(?:((?:\d|x|(?:\d\+)){3}) )?/)
+
+                    // Will be undefined for hero
+                    balanceTowerUpgrade = mat?.[2]
+
+                    if (!matchesEntity(entity, balanceTowerUpgrade, parsed)) {
+                        continue
+                    }
+
+                    versionNumber = parseInt(version)
+
+                    if (!matchesVersions(versionNumber, parsed)) {
+                        continue
+                    }
+
+                    balanceSymbol = mat[1]
+
+                    if (!matchesBalanceType(balanceSymbol, parsed)) {
+                        continue
+                    }
+
+                    // If the balance note is of regular form,
+                    // matches the entity if provided,
+                    // matches the version(s) if provided,
+                    // and matches the balance type if provided,
+                    // then add it to the list of balances to display
+                    filteredBalances[versionNumber] ||= {}
+                    filteredBalances[versionNumber][entity] ||= []
+                    filteredBalances[versionNumber][entity].push(note)
+                }
             }
         }
-    });
-  
-    return notes.length > 0 ? notes.join('\n') : null;
-}
-  
-function handleIrregularNote(note, parsed) {
-    // TODO: Handle non-standard notes rather than always just not including them
-    return false;
-}
-  
-async function formatAndDisplayBalanceChanges(
-    interaction,
-    parsed,
-    versionAdded,
-    balances
-) {
-    const formattedEntity = Towers.formatEntity(
-        parsed.tower || parsed.tower_upgrade || parsed.tower_path || parsed.hero
-    );
-
-    let versionText = '';
-    if (parsed.versions && parsed.versions.length == 2) {
-        const sortedVersions = parsed.versions.sort((a, b) => Number(a) - b);
-        versionText = ` between ${sortedVersions
-            .map((v) => `v${v}`)
-            .join(' & ')}`;
-    } else if (parsed.versions) {
-        versionText = ` in v${parsed.version}`;
     }
-  
-    if (Object.keys(balances).length == 0) {
-        return interaction.editReply({
-            embeds: [
-                new Discord.MessageEmbed()
-                    .setTitle(
-                        `No patch notes found for ${formattedEntity}${versionText}`
-                    )
-                    .setColor(yellow),
-            ],
+
+    const pages = paginateBalances(filteredBalances, parsed)
+
+    let addedVersion = null
+    if (hasEntity(parsed) && pages.length > 0) {
+        const soleEntity = Object.keys(filteredBalances[Object.keys(filteredBalances)[0]])[0]
+        addedVersion = balances[soleEntity]?.versionAdded
+    }
+
+    displayPages(interaction, pages, addedVersion, parsed)
+}
+
+function paginateBalances(balances, parsed) {
+    const pages = []
+    let page = {}
+    let header;
+    let pageLength = 0;
+    let field = ""
+
+    const sortedVersions = Object.keys(balances).sort(function (v1, v2) {
+        return parseInt(v1) - parseInt(v2)
+    })
+
+    for (const version of sortedVersions) {
+        for (const entity in balances[version]) {
+            // HEADER
+            if (parsed.versions?.length == 1) {
+                if (hasEntity(parsed)) {
+                    header = `v${version} — ${Aliases.toIndexNormalForm(entity)}`
+                } else {
+                    header = Aliases.toIndexNormalForm(entity)
+                }
+            } else {
+                if (hasEntity(parsed)) {
+                    header = `v${version}`
+                } else {
+                    header = `v${version} — ${Aliases.toIndexNormalForm(entity)}`
+                }
+            }
+
+            // FIELD
+            for (const note of balances[version][entity]) {
+                field += note + "\n"
+                // PAGE TURNING
+                if (pageLength + header.length + field.length > 750) {
+                    page[header] = field
+                    pages.push(page)
+                    page = {}
+                    pageLength = 0
+                    field = ""
+                    if (!header.endsWith(' (cont.)')) {
+                        header += ' (cont.)'
+                    }
+                }
+            }
+
+            // ADD HEADER+FIELD TO PAGE
+            if (field.length > 0) {
+                page[header] = field
+                field = ""
+                pageLength = Object.entries(page).map((h, f) => h + f).join("").length
+            }
+        }
+    }
+
+    if (Object.keys(page).length > 0) {
+        pages.push(page)
+    }
+
+    return pages
+}
+
+function hasEntity(parsed) {
+    return parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path
+}
+
+const multipageButtons = [
+    new MessageButton().setCustomId('first').setLabel('⏪').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('prev!').setLabel('⬅️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('pg').setLabel('FILL_ME_IN').setStyle('SECONDARY').setDisabled(true),
+    new MessageButton().setCustomId('next!').setLabel('➡️').setStyle('PRIMARY'),
+    new MessageButton().setCustomId('last').setLabel('⏩').setStyle('PRIMARY'),
+];
+
+function displayPages(interaction, pages, versionAdded, parsed) {
+    pageIdx = 0
+    let embed;
+
+    let includedButtons;
+    if (pages.length <= 1) {
+        includedButtons = []
+    } else if (pages.length < 5) {
+        includedButtons = multipageButtons.filter(b => b.customId.endsWith('!') || b.style == 'SECONDARY')
+    } else {
+        includedButtons = multipageButtons.filter(b => true)
+    }
+
+    let displayedButtons;
+
+    async function embedPage() {
+        embed = new MessageEmbed()
+            .setTitle(title(parsed, pages.length > 0))
+            .setColor(cyber)
+
+        if (versionAdded) {
+            embed.setDescription(`**Added in v${parseInt(versionAdded)}**`)
+        }
+
+        for (const header in pages[pageIdx]) {
+            embed.addField(`**${header}**`, pages[pageIdx][header])
+        }
+
+        if (includedButtons.length > 0) {
+            includedButtons.find(b => b.disabled).setLabel(`${pageIdx + 1}/${pages.length}`)
+        }
+
+        displayedButtons = new MessageActionRow().addComponents(...includedButtons)
+
+        await interaction.editReply({
+            embeds: [embed],
+            components: includedButtons.length > 0 ? [displayedButtons] : [],
+        });
+
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        };
+
+        if (pages.length == 1) return
+
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: 'BUTTON',
+            time: 60000
+        });
+
+        collector.on('collect', async (buttonInteraction) => {
+            collector.stop();
+            buttonInteraction.deferUpdate();
+
+            switch (buttonInteraction.customId) {
+                case "first":
+                    pageIdx = 0
+                    break
+                case "prev!":
+                    pageIdx = ((pageIdx - 1) + pages.length) % pages.length
+                    break
+                case "next!":
+                    pageIdx = (pageIdx + 1) % pages.length
+                    break
+                case "last":
+                    pageIdx = pages.length - 1
+                    break
+            }
+
+            await embedPage()
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size == 0) {
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
+            }
         });
     }
-  
-    let addedText = `**Added in ${versionAdded}**`;
-  
-    if (parsed.tower_upgrade == 'wizard_monkey#005')
-        addedText = `Reworked from Soulbind in 2.0`;
 
-    let embed = new Discord.MessageEmbed()
-        .setTitle(`Buffs and Nerfs for ${formattedEntity}${versionText}`)
-        .setDescription(addedText)
-        .setColor(darkgreen);
-  
-    for (const version in balances) {
-        embed.addField(`v. ${version}`, balances[version] + '\n\u200b');
-    }
-  
-    try {
-        await interaction.editReply({ embeds: [embed] });
-    } catch (e) {
-        return interaction.editReply({
-            content: `Too many balance changes for ${formattedEntity}${versionText}; Try a more narrow search using a more specific entity or by incorporating version limits`
-        });
-    }
+    embedPage()
 }
-  
+
+function title(parsed, hasResults=true) {
+    let title = hasResults ? "All " : "No "
+
+    if (parsed.balance_filter) {
+        title += parsed.balance_filter.split('/').map(bf => BALANCE_TYPE_MAPPINGS[bf]).join('/')
+    } else {
+        title += "Balance Changes"
+    }
+
+    if (!hasResults) title += ' Found'
+
+    if (hasEntity(parsed)) {
+        title += ` for ${Towers.formatEntity(parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path)}`
+    }
+
+    if (parsed.versions?.length == 1) {
+        title += ` in v${parsed.version}`
+    } else if (parsed.versions?.length == 2) {
+        title += ` between v${parsed.versions[0]} and v${parsed.versions[1]}`
+    }
+
+    return title
+}
+
+function matchesEntity(noteEntity, noteUpgrade, parsed) {
+    // If no entity is provided, don't filter by entity
+    if (!hasEntity(parsed)) {
+        return true
+    }
+
+    if (parsed.tower) {
+        return noteEntity == parsed.tower
+    } else if (parsed.hero) {
+        return noteEntity == parsed.hero
+    }
+
+    // TODO: add paragons to tower aliases
+    if (!noteUpgrade || ['555', '600'].includes(noteUpgrade)) return false
+
+    const noteUpgrades = upgradesFromUpgradeNotation(noteUpgrade)
+
+    if (noteUpgrades.some(u => u.length > 3)) {
+        console.log("Very irregular upgrade")
+        return false
+    }
+
+    let entityUpgrades;
+    if (parsed.tower_upgrade) {
+        if (Towers.towerUpgradeToTower(parsed.tower_upgrade) != noteEntity) {
+            return false
+        }
+        entityUpgrades = [
+            Towers.towerUpgradeToUpgrade(parsed.tower_upgrade)
+        ]
+    } else if (parsed.tower_path) {
+        if (Towers.towerPathToTower(parsed.tower_path) != noteEntity) {
+            return false
+        }
+        entityUpgrades = Towers.upgradesFromPath(
+            Towers.towerPathtoPath(parsed.tower_path)
+        )
+    }
+
+    const entityPathTiers = entityUpgrades.map(u => Towers.pathTierFromUpgradeSet(u))
+    const notePathTiers = noteUpgrades.map(u =>
+        Towers.pathTierFromUpgradeSet(
+            u.replace(/x/g, '0')
+        )
+    )
+
+    // Comparing path/tiers instead of upgrades in order to ignore crosspathing in the balance notes
+    return entityPathTiers.some(pt =>
+        notePathTiers.some(npt =>
+            pt[0] == npt[0] && pt[1] == npt[1]
+        )
+    )
+}
+
+function matchesVersions(noteVersion, parsed) {
+    if (!parsed.versions) return true
+
+    if (parsed.versions.length == 1) {
+        return parseInt(noteVersion) == parseInt(parsed.version)
+    }
+
+    return parseInt(noteVersion) >= parseInt(parsed.versions[0]) && parseInt(noteVersion) <= parseInt(parsed.versions[1])
+}
+
+function matchesBalanceType(noteSymbol, parsed) {
+    if (!parsed.balance_filter) return true
+    
+    return parsed.balance_filter.split("/").includes(noteSymbol)
+}
+
+/**
+ * 
+ * @param {string} upgradeNotation The balance upgrade, such as 003 or x4+x
+ * @returns All upgrades the upgrade notation represents, i.e. 003 => {003}; x4+x => {x4x, x5x} 
+ */
+function upgradesFromUpgradeNotation(upgradeNotation) {
+    const plusIndex = upgradeNotation.indexOf('+')
+
+    if (plusIndex == -1) {
+        return [upgradeNotation]
+    }
+
+    const upgrades = []
+
+    let tier;
+    for (tier = parseInt(upgradeNotation[plusIndex - 1]); tier <= 5; tier++) {
+        upgrades.push(
+            upgradeNotation.slice(0, plusIndex - 1) + `${tier}` + upgradeNotation.slice(plusIndex + 1)
+        )
+    }
+
+    return upgrades
+}
+
 module.exports = {
     data: builder,
     execute,

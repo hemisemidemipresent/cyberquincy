@@ -12,17 +12,17 @@ const discordHelper = require('../helpers/discord.js');
 DIR1 = 'cache'
 DIR2 = 'index'
 
-function hasCachedCombos(fname) {
+function hasCachedInfo(fname) {
     return fs.existsSync(resolve(DIR1, DIR2, fname))
 }
 
-function fetchCachedCombos(fname) {
+function fetchCachedInfo(fname) {
     const data = fs.readFileSync(resolve(DIR1, DIR2, fname))
-    return JSON.parse(data).combos;
+    return JSON.parse(data).info;
 }
 
-function cacheCombos(combos, fname) {
-    const fileData = JSON.stringify({ combos: combos })
+function cacheInfo(info, fname) {
+    const fileData = JSON.stringify({ info: info })
 
     const dir1 = resolve(DIR1)
     if (!fs.existsSync(dir1)){
@@ -39,22 +39,22 @@ function cacheCombos(combos, fname) {
     })
 }
 
-function getLastCacheModified(challenge) {
-    return fs.statSync(resolve(DIR1, DIR2, `${challenge}.json`)).mtime
+function getLastCacheModified(info) {
+    return fs.statSync(resolve(DIR1, DIR2, `${info}.json`)).mtime
 }
 
 //////////////////////////////////////////////////////
 // Parsing 
 //////////////////////////////////////////////////////
 
-async function fetchCombos(challenge, reload=false) {
-    cacheFname = `${challenge}.json`
+async function fetchInfo(info, reload=false) {
+    cacheFname = `${info}.json`
     let allCombos;
-    if (hasCachedCombos(cacheFname) && !reload) {
-        allCombos = await fetchCachedCombos(cacheFname)
+    if (hasCachedInfo(cacheFname) && !reload) {
+        allCombos = await fetchCachedInfo(cacheFname)
     } else {
-        allCombos = await scrapeAllCombos(challenge)
-        cacheCombos(allCombos, cacheFname)
+        allCombos = await scrapeInfo(info)
+        cacheInfo(allCombos, cacheFname)
     }
     return allCombos
 }
@@ -62,17 +62,20 @@ async function fetchCombos(challenge, reload=false) {
 const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js')
 const { scrapeAll2MPCompletions } = require('../services/index/2mp_scraper.js');
 const { scrapeAllFTTCCombos } = require('../services/index/fttc_scraper');
+const { scrapeAllBalanceChanges } = require('../services/index/balances_scraper')
 
-async function scrapeAllCombos(challenge) {
-    switch(challenge) {
+async function scrapeInfo(info) {
+    switch(info) {
         case '2tc':
             return await scrapeAll2TCCombos();
         case '2mp':
             return await scrapeAll2MPCompletions();
         case 'fttc':
             return await scrapeAllFTTCCombos();
+        case 'balances':
+            return await scrapeAllBalanceChanges();
         default:
-            throw 'Challenge not found'
+            throw 'Scraper not found'
     }
 }
 
@@ -340,14 +343,11 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
 }
 
 module.exports = {
-    hasCachedCombos,
-    fetchCachedCombos,
-    cacheCombos,
     getLastCacheModified,
+    fetchInfo,
 
     parseMapNotes,
-    fetchCombos,
-
     altMapsFields,
+
     displayOneOrMultiplePages,
 }

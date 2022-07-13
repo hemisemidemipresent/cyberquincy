@@ -17,7 +17,7 @@ class Parsed extends Object {
         if (!value) return;
 
         let types = pluralize(type);
-        if (types == 'cash') types = 'cashs';
+        if (types == type) types += 's';
 
         // If this is the second+ of the type (<round>/<difficulty>/etc.) being parsed
         if (this[type]) {

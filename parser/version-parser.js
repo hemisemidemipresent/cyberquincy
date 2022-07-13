@@ -9,7 +9,7 @@ class VersionParser {
 
     constructor(minV, maxV, allowSubVersion=true) {
         // Ultimately at play is just a natural number parser with bounds
-        this.delegateParser = new NumberParser(minV, maxV);
+        this.delegateParser = new NumberParser(minV || 1, maxV);
         this.allowSubVersion = allowSubVersion
     }
 

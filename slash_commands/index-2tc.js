@@ -98,7 +98,7 @@ function parseMap(interaction) {
 function parseVersion(interaction) {
     const v = interaction.options.getString(`version`);
     if (v) {
-        return CommandParser.parse([`v${v}`], new VersionParser(1));
+        return CommandParser.parse([`v${v}`], new VersionParser());
     } else return new Parsed();
 }
 
@@ -178,7 +178,7 @@ async function execute(interaction) {
     try {
         const forceReload = interaction.options.getString('reload') ? true : false;
 
-        const allCombos = await Index.fetchCombos('2tc', (reload = forceReload));
+        const allCombos = await Index.fetchInfo('2tc', forceReload);
 
         const mtime = Index.getLastCacheModified('2tc');
 

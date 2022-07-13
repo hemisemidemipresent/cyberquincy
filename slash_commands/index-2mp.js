@@ -64,7 +64,7 @@ async function execute(interaction) {
 
     const forceReload = interaction.options.getString('reload') ? true : false;
 
-    const allCombos = await Index.fetchCombos('2mp', (reload = forceReload));
+    const allCombos = await Index.fetchInfo('2mp', forceReload);
 
     const mtime = Index.getLastCacheModified('2mp');
 
@@ -100,7 +100,6 @@ async function execute(interaction) {
     try {
         return await display2MPFilterAll(interaction, allCombos, parsed, mtime);
     } catch (e) {
-        console.log('e');
         return await interaction.editReply({ embeds: [err(e)] });
     }
 }

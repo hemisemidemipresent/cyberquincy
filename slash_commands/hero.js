@@ -1,30 +1,16 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
 
+const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
+
 const axios = require('axios');
 const { footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colours.json');
-const heroNameToBloonologyLinkMapping = {
-    quincy: 'https://pastebin.com/raw/ASpHNduS',
-    gwendolin: 'https://pastebin.com/raw/rZYjbEhX',
-    striker_jones: 'https://pastebin.com/raw/hrH8q0bd',
-    obyn_greenfoot: 'https://pastebin.com/raw/x2WiKEWi',
-    captain_churchill: 'https://pastebin.com/raw/cqaHnhgB',
-    benjamin: 'https://pastebin.com/raw/j6X3mazy',
-    ezili: 'https://pastebin.com/raw/dYu1B9bp',
-    pat_fusty: 'https://pastebin.com/raw/2YRMFjPG',
-    adora: 'https://pastebin.com/raw/WnsgkWRc',
-    admiral_brickell: 'https://pastebin.com/raw/amw39T29',
-    etienne: 'https://pastebin.com/raw/UxN2Wx1F',
-    sauda: 'https://pastebin.com/raw/8E2TSndk',
-    psi: 'https://pastebin.com/raw/9h9aAPUm',
-    geraldo: 'https://pastebin.com/raw/rksZWhTV'
-};
 
 const heroOption = new SlashCommandStringOption()
     .setName('hero')
     .setDescription('The hero you are finding information for')
     .setRequired(true);
-Object.keys(heroNameToBloonologyLinkMapping).forEach((hero) => {
+Object.keys(HERO_NAME_TO_BLOONOLOGY_LINK).forEach((hero) => {
     heroOption.addChoices({ name: Aliases.toIndexNormalForm(hero), value: hero });
 });
 const builder = new SlashCommandBuilder()
@@ -32,17 +18,17 @@ const builder = new SlashCommandBuilder()
     .setDescription('Find information for each hero')
     .addStringOption(heroOption)
     .addIntegerOption((option) =>
-        option.setName('hero_lvl').setDescription("The hero' level that you want the information for.").setRequired(true)
+        option.setName('hero_lvl').setDescription('The hero level that you want the information for').setRequired(false)
     );
 
 function validateInput(interaction) {
     const heroLevel = interaction.options.getInteger('hero_lvl');
-    if (heroLevel > 20 || heroLevel < 1)
+    if (heroLevel && (heroLevel > 20 || heroLevel < 1))
         return `Invalid hero level \`${heroLevel}\` provided!\nHero level must be from \`1\` to \`20\` (inclusive)`;
 }
 
 async function embedBloonology(heroName, level) {
-    const link = heroNameToBloonologyLinkMapping[heroName];
+    const link = HERO_NAME_TO_BLOONOLOGY_LINK[heroName];
     let res = '';
 
     try {
@@ -52,17 +38,21 @@ async function embedBloonology(heroName, level) {
     }
 
     const body = res.data;
-    const cleaned = body.replace(/\t/g, '').replace(/\r/g, '');
+    const cleaned = body.replace(/\t/g, '').replace(/\r/g, '').trim();
     const sentences = cleaned.split(/\n\n/);
 
-    const desc = sentences[level - 1];
+    const desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
     const descWithoutLevel = desc.split('\n').slice(1).join('\n');
     if (typeof desc != 'string') {
         return new Discord.MessageEmbed().setColor(red).setTitle('The bloonology datapiece is missing');
     }
 
+    const title = level ?
+        `${Aliases.toIndexNormalForm(heroName)} (Level-${level})` :
+        `${Aliases.toIndexNormalForm(heroName)} All Levels`
+
     const embed = new Discord.MessageEmbed()
-        .setTitle(`${Aliases.toIndexNormalForm(heroName)} (Level-${level})`)
+        .setTitle(title)
         .setDescription(descWithoutLevel)
         .setColor(cyber)
         .setFooter({ text: footer });

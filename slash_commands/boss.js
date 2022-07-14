@@ -61,8 +61,9 @@ function process(data, name, tier, isElite) {
 
     let desc = data.desc + '\n' + isElite ? data.eliteDesc : normalDesc;
     let obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
-    desc += `\nhealth: ${obj.hp}
-    speed: ${obj.speed} rbs/s
+    desc += `\n\n**Stats**:
+    Health: ${obj.hp}
+    Speed: ${obj.speed} rbs/s
     ${obj.desc}
     \`\`\`${data.customRounds}\`\`\``;
     embed.setDescription(desc);

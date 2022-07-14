@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 const { cyber } = require('../jsons/colours.json');
-const { discord } = require('../aliases/misc.json');
+//const { discord } = require('../aliases/misc.json');
 const imgur = require('imgur');
 
 builder = new SlashCommandBuilder()

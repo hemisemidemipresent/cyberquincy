@@ -143,7 +143,7 @@ function parseEntity(interaction) {
     entityParser = new OrParser(new TowerParser(), new TowerUpgradeParser(), new HeroParser());
     entity = interaction.options.getString('entity');
     if (entity) {
-        canonicalEntity = Aliases.getCanonicalForm(entity);
+        canonicalEntity = Aliases.canonicizeArg(entity);
         if (canonicalEntity) {
             return CommandParser.parse([canonicalEntity], entityParser);
         } else {

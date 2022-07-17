@@ -34,7 +34,7 @@ function validateInput(interaction) {
 async function execute(interaction) {
     const validationFailure = validateInput(interaction);
     if (validationFailure)
-        return interaction.reply({
+        return await interaction.reply({
             content: validationFailure,
             ephemeral: true
         });
@@ -56,6 +56,7 @@ async function execute(interaction) {
     }
     return await interaction.reply({ embeds: [embed] });
 }
+
 function process(data, name, tier, isElite) {
     let embed = new Discord.MessageEmbed().setTitle(`${isElite ? '' : 'Elite'} ${name} Tier ${tier}`);
 

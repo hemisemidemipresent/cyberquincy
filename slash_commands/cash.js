@@ -57,7 +57,7 @@ async function execute(interaction) {
     else if (mode === 'abr') embed = calculate(cashNeeded, round, abrincome, 100, 1);
     else if (mode === 'halfcash') embed = calculate(cashNeeded, round, income, 140, 0.5);
 
-    interaction.reply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed] });
 }
 function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
     let cashSoFar = 0;

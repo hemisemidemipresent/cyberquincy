@@ -162,7 +162,7 @@ function validateInput(interaction) {
 async function execute(interaction) {
     const validationFailure = validateInput(interaction);
     if (validationFailure) {
-        return interaction.reply({
+        return await interaction.reply({
             content: validationFailure,
             ephemeral: true
         });

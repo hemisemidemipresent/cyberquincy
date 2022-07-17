@@ -40,12 +40,11 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     validationFailure = validateInput(interaction);
-    if (validationFailure) {
-        return interaction.reply({
+    if (validationFailure)
+        return await interaction.reply({
             content: validationFailure,
             ephemeral: true
         });
-    }
 
     const parsed = parseAll(interaction).reduce(
         (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
@@ -55,7 +54,7 @@ async function execute(interaction) {
     // Not cached
     if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
         const challengeEmbed = await display2MPTowerStatistics(parsed.tower);
-        return interaction.reply({
+        return await interaction.reply({
             embeds: [challengeEmbed]
         });
     }

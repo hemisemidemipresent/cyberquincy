@@ -27,7 +27,7 @@ async function execute(interaction) {
     const challengeCode = interaction.options.getString('challenge_code').toLowerCase();
     const objStr = `{"index":"challenges","query":"id:${challengeCode}","limit":1,"offset":0,"hint":"single_challenge","options":{}}`;
     const embed = await request(objStr);
-    interaction.reply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed] });
 }
 
 async function request(objStr) {

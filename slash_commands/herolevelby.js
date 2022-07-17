@@ -217,12 +217,11 @@ function validateInput(interaction) {
 
 async function execute(interaction) {
     validationFailure = validateInput(interaction);
-    if (validationFailure) {
-        return interaction.reply({
+    if (validationFailure)
+        return await interaction.reply({
             content: validationFailure,
             ephemeral: true
         });
-    }
 
     await displayHeroPlacementRounds(interaction);
 }

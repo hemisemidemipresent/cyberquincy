@@ -47,9 +47,9 @@ async function embedBloonology(heroName, level) {
         return new Discord.MessageEmbed().setColor(red).setTitle('The bloonology datapiece is missing');
     }
 
-    const title = level ?
-        `${Aliases.toIndexNormalForm(heroName)} (Level-${level})` :
-        `${Aliases.toIndexNormalForm(heroName)} All Levels`
+    const title = level
+        ? `${Aliases.toIndexNormalForm(heroName)} (Level-${level})`
+        : `${Aliases.toIndexNormalForm(heroName)} All Levels`;
 
     const embed = new Discord.MessageEmbed()
         .setTitle(title)
@@ -62,7 +62,7 @@ async function embedBloonology(heroName, level) {
 async function execute(interaction) {
     const validationFailure = validateInput(interaction);
     if (validationFailure) {
-        return interaction.reply({
+        return await interaction.reply({
             content: validationFailure,
             ephemeral: true
         });

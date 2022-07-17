@@ -54,10 +54,9 @@ async function embedBloonology(towerName, upgrade) {
     const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
     const noCrosspathDescription = cleanDescription(
-        descriptions.find((description) => description.substr(0, 3) == noCrosspathUpgrade)
+        descriptions.find((description) => description.substr(0, 3) == noCrosspathUpgrade))
             .substr(3)
             .split(/(?:__Changes from Previous Tier__)|(?:Changes from previous tier:)/i)[0]
-    );
 
     const crosspathDescriptions = crosspathUpgrades.map(u => cleanDescription(
         descriptions.find((description) => description.substr(0, 3) == u).substr(3)
@@ -71,7 +70,7 @@ async function embedBloonology(towerName, upgrade) {
 
     const title = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, ...Towers.pathTierFromUpgradeSet(noCrosspathUpgrade)) + ' Crosspathing Benefits';
 
-    let embed = new Discord.MessageEmbed()
+    const embed = new Discord.MessageEmbed()
         .setTitle(title)
         .setFooter({ text: footer })
         .setColor(cyber);

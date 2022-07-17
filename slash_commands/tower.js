@@ -92,6 +92,8 @@ async function embedBloonologySummary(towerName) {
     }
     let body = res.data;
 
+    const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+
     const tierUpgrades = []
     let idx, tier
     for (idx = 0; idx < 3; idx++) {
@@ -100,7 +102,25 @@ async function embedBloonologySummary(towerName) {
         }
     }
 
-    return new Discord.MessageEmbed().setTitle("WIP")
+    const pathDescriptions = tierUpgrades.map(u => cleanDescription(
+        descriptions.find(description => description.substr(0, 3) == u).substr(3)
+    ))
+
+    const splitTexts = ['__Changes from 0-0-0__','__Changes from Previous Tier__','__Crosspath Benefits__','Crosspath Benefits:',]
+    const splitTextsRegexStr = splitTexts.map(st => `(?:${st})`).join('|')
+
+    const pathBenefits = pathDescriptions.map(desc =>
+        desc.split(new RegExp(splitTextsRegexStr))[1]
+    )
+
+    const title = Aliases.toIndexNormalForm(Aliases.getCanonicalForm(towerName)) + ' Summary'
+
+    const embed = new Discord.MessageEmbed()
+        .setTitle(title)
+        .setFooter({ text: footer })
+        .setColor(cyber);
+
+    return embed;
 }
 
 async function execute(interaction) {

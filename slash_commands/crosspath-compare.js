@@ -1,9 +1,8 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
 
 const axios = require('axios');
-const costs = require('../jsons/costs.json');
 const Towers = require('../helpers/towers.js');
-const { discord, footer } = require('../aliases/misc.json');
+const { footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colours.json');
 
 const towerOption = new SlashCommandStringOption()

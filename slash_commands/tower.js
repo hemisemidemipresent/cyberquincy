@@ -19,17 +19,18 @@ const builder = new SlashCommandBuilder()
     .setDescription('Find information for each tower')
     .addStringOption(towerOption)
     .addStringOption((option) =>
-        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
+        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(false)
     );
 
 function validateInput(interaction) {
     const towerPath = parseTowerPath(interaction);
+    if (!towerPath) return
     if (isNaN(towerPath)) return "Tower path provided isn't `base` and contains non-numerical characters";
     if (!Towers.isValidUpgradeSet(towerPath)) return 'Invalid tower path provided!';
 }
 
 function parseTowerPath(interaction) {
-    const tp = interaction.options.getString('tower_path').toLowerCase();
+    const tp = interaction.options.getString('tower_path')?.toLowerCase();
     if (tp == 'base') return '000';
     else return tp;
 }
@@ -86,6 +87,30 @@ async function embedBloonology(towerName, upgrade) {
         .setColor(cyber);
     return embed;
 }
+
+async function embedBloonologySummary(towerName) {
+    let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+    let res;
+    try {
+        res = await axios.get(link);
+    } catch {
+        return new Discord.MessageEmbed().setColor(red).setTitle('Something went wrong while fetching the data');
+    }
+    let body = res.data;
+
+    const tierUpgrades = []
+    let idx, tier
+    for (idx = 0; idx < 3; idx++) {
+        for (tier = 1; tier <= 5; tier++) {
+            tierUpgrades.push('000'.slice(0, idx) + `${tier}` + '000'.slice(idx+1))
+        }
+    }
+
+    console.log(tierUpgrades)
+
+    return new Discord.MessageEmbed().setTitle("WIP")
+}
+
 async function execute(interaction) {
     const validationFailure = validateInput(interaction);
     if (validationFailure)
@@ -97,7 +122,12 @@ async function execute(interaction) {
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);
 
-    const embed = await embedBloonology(tower, towerPath);
+    let embed
+    if (towerPath) {
+        embed = await embedBloonology(tower, towerPath);
+    } else {
+        embed = await embedBloonologySummary(tower)
+    }
 
     return await interaction.reply({ embeds: [embed], ephemeral: false });
 }

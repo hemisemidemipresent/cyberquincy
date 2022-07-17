@@ -96,8 +96,8 @@ async function embedBloonologySummary(towerName) {
 
     const tierUpgrades = []
     let idx, tier
-    for (idx = 0; idx < 3; idx++) {
-        for (tier = 1; tier <= 5; tier++) {
+    for (tier = 1; tier <= 5; tier++) {
+        for (idx = 0; idx < 3; idx++) {
             tierUpgrades.push('000'.slice(0, idx) + `${tier}` + '000'.slice(idx+1))
         }
     }
@@ -113,12 +113,25 @@ async function embedBloonologySummary(towerName) {
         desc.split(new RegExp(splitTextsRegexStr))[1]
     )
 
-    const title = Aliases.toIndexNormalForm(Aliases.getCanonicalForm(towerName)) + ' Summary'
+    const headers = tierUpgrades.map(u => {
+        const [path, tier] = Towers.pathTierFromUpgradeSet(u);
+        let header;
+        if (tier <= 2) {
+            return u
+        } else {
+            const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
+            return `${upgradeName} (${u})`;
+        }
+    })
+
+    const title = Aliases.toIndexNormalForm(towerName, '-') + ' Summary'
 
     const embed = new Discord.MessageEmbed()
         .setTitle(title)
         .setFooter({ text: footer })
         .setColor(cyber);
+    
+    headers.forEach((header, idx) => embed.addField(header, pathBenefits[idx], true))
 
     return embed;
 }

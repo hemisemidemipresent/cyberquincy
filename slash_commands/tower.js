@@ -106,11 +106,18 @@ async function embedBloonologySummary(towerName) {
         descriptions.find(description => description.substr(0, 3) == u).substr(3)
     ))
 
-    const splitTexts = ['__Changes from 0-0-0__','__Changes from Previous Tier__','__Crosspath Benefits__','Crosspath Benefits:',]
+    const splitTexts = [
+        '__Changes from 0-0-0__',
+        'Changes from 000:',
+        '__Changes from Previous Tier__',
+        'Changes from previous tier:',
+        '__Crosspath Benefits__',
+        'Crosspath Benefits:',
+    ]
     const splitTextsRegexStr = splitTexts.map(st => `(?:${st})`).join('|')
 
     const pathBenefits = pathDescriptions.map((desc, idx) => {
-        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr))[1]?.trim()
+        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim()
         const [, tier] = Towers.pathTierFromUpgradeSet(tierUpgrades[idx]);
         const bulletSymbol = tier <= 2 ? '►' : '⟴'
         // const bulletSymbol = tier <= 2 ? '•' : '+'
@@ -138,7 +145,7 @@ async function embedBloonologySummary(towerName) {
 
     embed.addField(
         `Base Stats`,
-        placedTowerDescription.split(/(?:\n|\r)+/).map(s => s.trim()).filter(s => s.length > 0).join(' | ')
+        placedTowerDescription.split(/(?:\n|\r)+/).map(s => s.trim().replace(/\u200E/g, '')).filter(s => s.length > 0).join(' ♦ ')
     )
 
     headers.forEach((header, idx) => embed.addField(header, pathBenefits[idx], true))

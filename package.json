@@ -1,6 +1,6 @@
 {
     "name": "cyberquincy",
-    "version": "1.10.5",
+    "version": "1.19.4",
     "description": "A discord bot for btd6",
     "main": "server.js",
     "scripts": {
@@ -37,17 +37,16 @@
     "dependencies": {
         "@discordjs/builders": "^0.15.0",
         "@discordjs/rest": "^0.2.0-canary.0",
-        "atob": "^2.1.2",
         "axios": "^0.21.4",
         "bufferutil": "^4.0.2",
         "cheerio": "^1.0.0-rc.11",
         "discord-api-types": "^0.26.1",
         "discord.js": "^13.8.0",
         "discord.js-minesweeper": "^1.0.6",
-        "express": "^4.17.1",
+        "express": "^4.18.1",
         "filepath": "^1.1.0",
         "fuzzyset.js": "^1.0.7",
-        "google-spreadsheet": "^3.0.13",
+        "google-spreadsheet": "^3.3.0",
         "hastebin-gen": "^2.0.5",
         "imgur": "^0.3.1",
         "lex": "^1.7.9",
@@ -57,7 +56,6 @@
         "node-dgdata": "^1.0.2",
         "node-fetch": "^2.6.7",
         "pluralize": "^8.0.0",
-        "request": "^2.88.2",
         "statcord.js": "^3.2.0",
         "utf-8-validate": "^5.0.2",
         "zlib": "^1.0.5"

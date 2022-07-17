@@ -109,13 +109,16 @@ async function embedBloonologySummary(towerName) {
     const splitTexts = ['__Changes from 0-0-0__','__Changes from Previous Tier__','__Crosspath Benefits__','Crosspath Benefits:',]
     const splitTextsRegexStr = splitTexts.map(st => `(?:${st})`).join('|')
 
-    const pathBenefits = pathDescriptions.map(desc =>
-        desc.split(new RegExp(splitTextsRegexStr))[1]
-    )
+    const pathBenefits = pathDescriptions.map((desc, idx) => {
+        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr))[1]?.trim()
+        const [, tier] = Towers.pathTierFromUpgradeSet(tierUpgrades[idx]);
+        // const bulletSymbol = tier <= 2 ? '►' : '⟴'
+        const bulletSymbol = tier <= 2 ? '•' : '+'
+        return rawBenefits.split('\n').map(n => `${bulletSymbol} ${n}`).join('\n')
+    })
 
     const headers = tierUpgrades.map(u => {
         const [path, tier] = Towers.pathTierFromUpgradeSet(u);
-        let header;
         if (tier <= 2) {
             return u
         } else {

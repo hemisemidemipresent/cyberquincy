@@ -50,17 +50,11 @@ async function embedBloonology(towerName, upgrade) {
     const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
     const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(costs, towerName, upgrade);
     const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
-    const upgradeFullDescription = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+    const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
-    fullDescription = upgradeFullDescription.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3);
-
-    // background info: there are 2 newlines present in the string: \n and \r. \n is preferred
-    let info = fullDescription
-        .toString()
-        .replace(/\n/g, '') // removes all newlines \n
-        .replace(/\r \t/g, '\n') // removes all \r + tab
-        .replace(/ \t-/g, '-    ') // removes remaining tabs
-        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
+    const upgradeDescription = cleanDescription(
+        allUpgradeDescriptions.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3)
+    );
 
     const formattedUpgrade = upgrade.split('').join('-');
     const formattedTowerName = Aliases.toIndexNormalForm(towerName, '-');
@@ -75,7 +69,7 @@ async function embedBloonology(towerName, upgrade) {
 
     let embed = new Discord.MessageEmbed()
         .setTitle(title)
-        .setDescription(info)
+        .setDescription(upgradeDescription)
         .addField(
             'cost',
             `${cost} - medium\n${Towers.hard(cost)} - hard\n` + `if this is wrong [yell at hemi here](${discord})`,
@@ -106,8 +100,6 @@ async function embedBloonologySummary(towerName) {
         }
     }
 
-    console.log(tierUpgrades)
-
     return new Discord.MessageEmbed().setTitle("WIP")
 }
 
@@ -130,6 +122,15 @@ async function execute(interaction) {
     }
 
     return await interaction.reply({ embeds: [embed], ephemeral: false });
+}
+
+// background info: there are 2 newlines present in the string: \n and \r. \n is preferred
+function cleanDescription(desc) {
+    return desc.toString()
+        .replace(/\n/g, '') // removes all newlines \n
+        .replace(/\r \t/g, '\n') // removes all \r + tab
+        .replace(/ \t-/g, '-    ') // removes remaining tabs
+        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
 }
 
 module.exports = {

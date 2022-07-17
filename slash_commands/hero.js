@@ -49,7 +49,7 @@ async function embedBloonology(heroName, level) {
 
     const title = level
         ? `${Aliases.toIndexNormalForm(heroName)} (Level-${level})`
-        : `${Aliases.toIndexNormalForm(heroName)} All Levels`;
+        : `${Aliases.toIndexNormalForm(heroName)} (All Levels)`;
 
     const embed = new Discord.MessageEmbed()
         .setTitle(title)

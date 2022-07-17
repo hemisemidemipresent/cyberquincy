@@ -120,7 +120,6 @@ async function embedBloonologySummary(towerName) {
         const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim()
         const [, tier] = Towers.pathTierFromUpgradeSet(tierUpgrades[idx]);
         const bulletSymbol = tier <= 2 ? '►' : '⟴'
-        // const bulletSymbol = tier <= 2 ? '•' : '+'
         return rawBenefits.split('\n').map(n => `${bulletSymbol} ${n}`).join('\n')
     })
 

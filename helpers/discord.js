@@ -6,7 +6,7 @@ function isValidFormBody(embed) {
 }
 
 function isValidEmbedField(text) {
-    return text?.length <= 1024
+    return text.length <= 1024
 }
 
 module.exports = {

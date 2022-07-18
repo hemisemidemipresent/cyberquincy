@@ -3,6 +3,7 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/bu
 const axios = require('axios');
 const Towers = require('../helpers/towers.js');
 const { footer } = require('../aliases/misc.json');
+const { isValidEmbedField } = require('../helpers/discord')
 const { red, cyber } = require('../jsons/colours.json');
 
 const towerOption = new SlashCommandStringOption()
@@ -82,7 +83,21 @@ async function embedBloonology(towerName, upgrade) {
         }
     })
 
-    embed.addField(`${noCrosspathUpgrade} Stats`, noCrosspathDescription || 'Failed to parse description')
+
+    if (isValidEmbedField(noCrosspathDescription) || !noCrosspathDescription) {
+        embed.addField(`${noCrosspathUpgrade} Stats`, noCrosspathDescription || 'Failed to parse description')
+    } else {
+        const descriptionLines = noCrosspathDescription.split("\n")
+        const splitPointIndex = descriptionLines.length / 2
+        // Please tell me descriptions won't need 3 fields lol
+        const descriptionParts = [
+            descriptionLines.slice(0, splitPointIndex).join("\n"),
+            descriptionLines.slice(splitPointIndex).join("\n"),
+        ]
+        embed.addField(`${noCrosspathUpgrade} Stats`, descriptionParts[0])
+        embed.addField('\u200b', descriptionParts[1])
+    }
+
 
     return embed;
 }

@@ -1,14 +1,17 @@
 {
     "xyz": ["heli", "heli-pilot", "helicopter", "helipilot", "hel"],
 
+    "200": ["pursuit"],
     "300": ["razor_rotors", "rr", "rotor", "rotors"],
     "400": ["apache_dartship", "adart", "dartship", "dship"],
     "500": ["apache_prime", "aprime", "prime", "prim"],
 
+    "020": ["ifr"],
     "030": ["downdraft", "dd"],
     "040": ["support_chinook", "chinook", "support", "chin"],
     "050": ["special_poperations", "marine", "mar"],
 
+    "002": ["faster_firing"],
     "003": ["moab_shove", "shove"],
     "004": ["comanche_defense", "cdef", "comdef"],
     "005": ["comanche_commander", "commanche_commander","comcom", "commcomm"]

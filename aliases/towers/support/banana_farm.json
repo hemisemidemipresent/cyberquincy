@@ -1,14 +1,17 @@
 {
     "xyz": ["monkey_farm", "farm", "nan", "nana"],
 
+    "200": ["greater_production"],
     "300": ["banana_plantation", "plantation", "plant"],
     "400": ["banana_research_facility", "research", "facility", "brf"],
     "500": ["banana_central", "bcent"],
 
+    "020": ["valuable_bananas", "valuable"],
     "030": ["monkey_bank", "bank"],
     "040": ["imf_loan", "imf", "loan"],
     "050": ["monkey-nomics", "nomics", "economics"],
 
+    "002": ["banana_salvage", "salvage"],
     "003": ["marketplace", "place"],
     "004": ["central_market", "cmarket", "central"],
     "005": ["monkey_wall_street", "wall_street", "wall", "wsb"]

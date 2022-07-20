@@ -1,14 +1,17 @@
 {
     "xyz": ["village", "monkey_village", "vil", "vill", "mvil"],
 
+    "200": ["jungle_drums", "drums", "jdrums"],
     "300": ["primary_training", "ptraining", "ptrain", "training"],
     "400": ["primary_mentoring", "pment", "pmentoring", "mentoring"],
     "500": ["primary_expertise", "pe", "primex", "expertise", "pex", "pexpertise"],
 
+    "020": ["radar_scanner", "radar", "scanner"],
     "030": ["monkey_intelligence_bureau", "mib"],
     "040": ["call_to_arms", "cta", "c2a"],
     "050": ["homeland_defense", "homeland_defence", "homeland", "hd"],
 
+    "002": ["monkey_commerce", "commerce"],
     "003": ["monkey_town", "mtown"],
     "004": ["monkey_city", "mcity", "city"],
     "005": ["monkeyopolis", "opolis", "yopolis"]

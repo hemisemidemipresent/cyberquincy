@@ -6,7 +6,7 @@
     "400": ["bloon_impact", "impact", "blimpact"],
     "500": ["bloon_crush", "crush", "crunch", "bcrush", "crunchy"],
 
-    "020": ["missile_launcher"],
+    "020": ["missile_launcher", "missiles"],
     "030": ["moab_mauler", "mauler", "maul", "golden_shark", "happy"],
     "040": ["moab_assassin", "assassin", "ass", "black_shark"],
     "050": ["moab_eliminator", "elim", "moab_elim", "green_shark"],

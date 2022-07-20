@@ -8,7 +8,7 @@
     "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb","bbullet"],
     "040": ["supply_drop", "supplydrop", "supply", "sd"],
     "050": ["elite_sniper", "es", "esniper", "elitesniper"],
-    
+
     "003": ["semi_automatic", "semi", "semiauto"],
     "004": ["full_auto_rifle", "fully_automatic", "full_auto", "fully_auto"],
     "005": ["elite_defender", "ed", "edef"]

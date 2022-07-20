@@ -71,7 +71,19 @@ function parseEntity(interaction, num) {
     if (entity) {
         const canonicalEntity = Aliases.canonicizeArg(entity);
         if (canonicalEntity) {
-            return CommandParser.parse([canonicalEntity], entityParser);
+            let parsed = CommandParser.parse([canonicalEntity], entityParser);
+            if (parsed.tower_upgrade) {
+                const [, tier] = Towers.pathTierFromUpgradeSet(
+                    Towers.towerUpgradeToUpgrade(
+                        parsed.tower_upgrade
+                    )
+                )
+                if (tier < 3) {
+                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade)
+                    parsed = CommandParser.parse([`${tower}#222`], entityParser)
+                }
+            }
+            return parsed
         } else {
             const parsed = new Parsed();
             parsed.addError('Canonical not found');
@@ -81,7 +93,7 @@ function parseEntity(interaction, num) {
 }
 
 function parseMap(interaction) {
-    mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
+    const mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
     const map = interaction.options.getString('map');
     if (map) {
         const canonicalMap = Aliases.getCanonicalForm(map);

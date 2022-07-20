@@ -65,7 +65,7 @@ async function embedBloonology(towerName, upgrade) {
     const formattedTowerName = Aliases.toIndexNormalForm(towerName, '-');
 
     let title;
-    if (tier <= 2) {
+    if (tier <= 1) {
         title = `${formattedTowerName} (${formattedUpgrade})`;
     } else {
         const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);

@@ -438,7 +438,8 @@ class AliasRepository extends Array {
         return canonical
             .split(separator)
             .map((tk) => gHelper.toTitleCase(tk))
-            .join(' ');
+            .join(' ')
+            .replace(/ \(.*\)/, '');
     }
 
     allRaces() {

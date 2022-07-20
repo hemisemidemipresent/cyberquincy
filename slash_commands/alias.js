@@ -3,7 +3,7 @@ const { cyber } = require('../jsons/colours.json')
 
 builder = new SlashCommandBuilder()
     .setName('alias')
-    .setDescription('Search and Browse Completed LTC Index Combos')
+    .setDescription('Look up aliases of a given term to use in slash commands')
     .addStringOption(option => 
         option.setName('alias').setDescription('The term of which to view other aliases').setRequired(true)
     )

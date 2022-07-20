@@ -6,16 +6,12 @@ const OptionalParser = require('../parser/optional-parser.js');
 const PersonParser = require('../parser/person-parser');
 const RaceParser = require('../parser/raceid-parser.js');
 
-const gHelper = require('../helpers/general.js');
 const race = require('../helpers/race');
 
 const { red, cyber, green } = require('../jsons/colours.json');
 const { discord } = require('../aliases/misc.json');
 
-const seclateServerID = '543957081183617024';
-const Emojis = require('../jsons/emojis.json');
 const Leaderboard = require('../helpers/race/leaderboard.js');
-const raceEmojis = Emojis[seclateServerID + ''].race;
 
 const raceImg =
     'https://static.wikia.nocookie.net/b__/images/4/40/EventRaceIcon.png/revision/latest/scale-to-width-down/340?cb=20200616225307&path-prefix=bloons';

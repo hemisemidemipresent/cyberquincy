@@ -15,6 +15,7 @@ async function execute(interaction) {
     
     let embed;
     if (aliasSet) {
+        // Don't show all separator variations of every alias; just show the variation entered in the file
         const simplifiedAliases = []
         const displayedAliases = []
         aliasSet.forEach(a => {

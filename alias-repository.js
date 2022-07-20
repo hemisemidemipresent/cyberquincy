@@ -439,7 +439,7 @@ class AliasRepository extends Array {
             .split(separator)
             .map((tk) => gHelper.toTitleCase(tk))
             .join(' ')
-            .replace(/ \(.*\)/, '');
+            .replace(/ \(.*\)/, ''); // Parentheticals are used to avoid clashing aliases (e.g. double shot) but should be filtered out when displayed
     }
 
     allRaces() {

@@ -72,6 +72,7 @@ function parseEntity(interaction, num) {
         const canonicalEntity = Aliases.canonicizeArg(entity);
         if (canonicalEntity) {
             let parsed = CommandParser.parse([canonicalEntity], entityParser);
+            // Alias tier 1 and 2 towers to base tower
             if (parsed.tower_upgrade) {
                 const [, tier] = Towers.pathTierFromUpgradeSet(
                     Towers.towerUpgradeToUpgrade(

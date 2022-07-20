@@ -64,13 +64,8 @@ async function embedBloonology(towerName, upgrade) {
     const formattedUpgrade = upgrade.split('').join('-');
     const formattedTowerName = Aliases.toIndexNormalForm(towerName, '-');
 
-    let title;
-    if (tier <= 1) {
-        title = `${formattedTowerName} (${formattedUpgrade})`;
-    } else {
-        const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
-        title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
-    }
+    const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
+    const title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
 
     let embed = new Discord.MessageEmbed()
         .setTitle(title)

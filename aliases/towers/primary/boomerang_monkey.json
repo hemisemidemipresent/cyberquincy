@@ -1,14 +1,17 @@
 {
     "xyz": ["boomer", "boomerang-monkey","boomerang","bm","rang","bomerang","boo","bomer","rangs","bomerrang"],
 
+    "200": ["glaives"],
     "300": ["glaive_ricochet", "ricochet", "rich", "rick", "ricoshit"],
     "400": ["m.o.a.r_glaives", "moar", "more"],
     "500": ["glaive_lord", "glord", "gl", "glaives"],
 
+    "020": ["faster_rangs"],
     "030": ["bionic_boomerang", "bionic", "bio"],
     "040": ["turbo_charge", "turbo", "tchar", "tcharge"],
     "050": ["perma_charge", "pcharge", "pc", "pch"],
-    
+
+    "002": ["red_hot_rangs"],
     "003": ["kylie_boomerang", "kylie", "kyle", "kyl"],
     "004": ["moab_press", "press", "m_press"],
     "005": ["moab_domination", "moab_dom", "m_dom", "domination", "dom", "domm"]

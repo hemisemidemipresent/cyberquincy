@@ -1,14 +1,17 @@
 {
     "xyz": ["bomb", "bmb", "bomb-shooter", "bs", "can", "💣","boom","💥"],
 
+    "200": ["heavy_bombs"],
     "300": ["really_big_bombs", "idk_some_sort_of_alias"],
     "400": ["bloon_impact", "impact", "blimpact"],
     "500": ["bloon_crush", "crush", "crunch", "bcrush", "crunchy"],
 
+    "020": ["missile_launcher"],
     "030": ["moab_mauler", "mauler", "maul", "golden_shark", "happy"],
     "040": ["moab_assassin", "assassin", "ass", "black_shark"],
     "050": ["moab_eliminator", "elim", "moab_elim", "green_shark"],
-    
+
+    "002": ["frag_bombs"],
     "003": ["cluster_bombs", "cluster"],
     "004": ["recursive_cluster", "recursive", "clusters", "recurs", "recurse", "recur"],
     "005": ["bomb_blitz", "blitz", "bblitz"]

@@ -1,16 +1,19 @@
 {
 	"xyz": ["ace", "monkey-ace", "pilot", "plane", "airplane"],
 
+    "100": ["rapid_fire"],
     "200": ["lots_more_darts"],
 	"300": ["fighter_plane", "fighter", "fplane"],
 	"400": ["operation:_dart_storm", "ods", "dartstorm"],
 	"500": ["sky_shredder", "shredder", "shred", "sshred", "sshredder", "skyshred", "shredr"],
 
+    "010": ["exploding_pineapple", "pineapple", "pineapples"],
     "020": ["spy_plane"],
 	"030": ["bomber_ace", "bomber"],
 	"040": ["ground_zero", "gz"],
 	"050": ["tsar_bomba", "tb", "tsar", "bomba", "bombagang"],
 
+    "001": ["sharper_darts"],
     "002": ["centered_path"],
 	"003": ["neva-miss_targeting", "neva_miss", "neva", "nm", "miss"],
 	"004": ["spectre", "specter", "spect"],

@@ -1,16 +1,19 @@
 {
     "xyz": ["bucc","monkey-buccaneer","boat","buc","buccaneer"],
 
+    "100": ["faster_shooting_(buccaneer)"],
     "200": ["double_shot_(buccaneer)"],
     "300": ["destroyer","dest"],
     "400": ["aircraft_carrier","aircraft","air"],
     "500": ["carrier_flagship","carrier","flagship","flag","flagshit"],
 
+    "010": ["grape_shot", "grapes", "grapes"],
     "020": ["hot_shot"],
     "030": ["cannon_ship","cannon"],
     "040": ["monkey_pirates","mirates","mpir","hook"],
     "050": ["pirate_lord","plord","pl"],
 
+    "001": ["long_range"],
     "002": ["crow's_nest"],
     "003": ["merchantman","merchant","merch"],
     "004": ["favored_trades","flavored","flavored_trades","fave","trades"],

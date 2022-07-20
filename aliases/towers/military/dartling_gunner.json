@@ -1,16 +1,19 @@
 {
     "xyz": ["dartling", "gunner", "dlg", "dartl"],
 
+    "100": ["focused_firing", "focused"],
     "200": ["laser_shock", "lshock"],
     "300": ["laser_cannon", "lcan"],
     "400": ["plasma_accelerator", "accelerator", "acc", "accel", "accelerate", "paccel", "plasmacc"],
     "500": ["ray_of_doom", "rod", "ray", "ray_of_disappointment"],
 
+    "010": ["advanced_targeting", "atargeting"],
     "020": ["faster_barrel_spin", "faster_spin"],
     "030": ["hydra_rocket_pods", "hydra", "pods", "hrp", "hrps", "hyde", "hyd", "hy"],
     "040": ["rocket_storm", "rstorm"],
     "050": ["m.a.d", "m_a_d", "moab_assured_destroyer"],
 
+    "001": ["faster_swivel"],
     "002": ["powerful_darts"],
     "003": ["buckshot", "buck", "bshot", "buckshit", "fuckshit", "fuckshot"],
     "004": ["bloon_area_denial_system", "bads", "denial", "b.a.d.s"],

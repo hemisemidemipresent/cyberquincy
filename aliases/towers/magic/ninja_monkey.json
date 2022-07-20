@@ -1,16 +1,19 @@
 {
     "xyz": ["ninja", "ninja-monkey", "n", "ninj", "shuriken", "nin", "samurai"],
 
+    "100": ["ninja_discipline", "discipline"],
     "200": ["sharp_shurikens", "shurikens"],
     "300": ["double_shot", "d-shot", "dub", "doub", "double"],
     "400": ["bloonjitsu", "bloonjitzu", "jitsu", "jitzu", "bj"],
     "500": ["grandmaster_ninja", "grandmaster", "gmn", "gm"],
 
+    "010": ["distraction"],
     "020": ["counter-espionage", "counter", "espionage"],
     "030": ["shinobi_tactics", "shinobi", "shin", "chinobi", "tactics", "tact", "tacts"],
     "040": ["bloon_sabotage", "sabo", "b_sabo"],
     "050": ["grand_saboteur", "gsabo"],
 
+    "001": ["seeking_shuriken", "seeking"],
     "002": ["caltrops", "trops"],
     "003": ["flash_bomb", "flash", "fbomb"],
     "004": ["sticky_bomb", "sticky", "stick"],

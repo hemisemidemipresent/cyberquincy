@@ -1,16 +1,19 @@
 {
     "xyz": ["spact","factory","spike","spac","spak","spanc","spikes","spi","spk","sf","spacc","spike_shooter","spactory"],
 
+    "100": ["bigger_stacks"],
     "200": ["white_hot_spikes", "white_hot"],
     "300": ["spiked_balls", "sballs", "spalls"],
     "400": ["spiked_mines", "spines"],
     "500": ["super_mines", "swines","smines"],
 
+    "010": ["faster_production"],
     "020": ["even_faster_production"],
     "030": ["moab_shredr", "moab_shredder"],
     "040": ["spike_storm", "sporm"],
     "050": ["carpet_of_spikes", "cos", "carpet"],
 
+    "001": ["long_reach"],
     "002": ["smart_spikes", "smart"],
     "003": ["long_life_spikes", "ll", "lls", "llspike", "llspikes"],
     "004": ["deadly_spikes", "deadly", "dspike", "dspikes"],

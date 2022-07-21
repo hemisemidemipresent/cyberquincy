@@ -110,9 +110,11 @@ async function execute(interaction) {
 function validateInput(interaction) {
     let [parsedEntity, parsedMap, parsedPerson] = parseAll(interaction);
 
-    if (parsedEntity.hasErrors()) return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`;
+    if (parsedEntity.hasErrors()) {
+        return `Entity didn't match tower/upgrade/hero, including aliases`;
+    }
 
-    if (parsedMap.hasErrors()) return `Map/Difficulty ${map} didn't match, including aliases`;
+    if (parsedMap.hasErrors()) return `Map/Difficulty didn't match, including aliases`;
 
     if ((parsedEntity.tower_upgrade || parsedEntity.hero) && parsedMap.map && parsedPerson.person) {
         return "Don't search a person if you're already narrowing down your search to a specific completion";

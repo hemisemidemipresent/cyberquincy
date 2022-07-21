@@ -98,7 +98,7 @@ async function calc(interaction) {
             if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
             return await interaction.reply({
                 embeds: [
-                    new Discord.MessageEmbed()
+                    new Discord.EmbedBuilder()
                         .setTitle(`Unexpected character "${c}"`)
                         .setDescription(`"${c}" is not a valid character in the \`/calc\` expression.`)
                         .setColor(red)
@@ -158,7 +158,7 @@ async function calc(interaction) {
             // Catches nonsensical tokens
             return await interaction.reply({
                 embeds: [
-                    new Discord.MessageEmbed()
+                    new Discord.EmbedBuilder()
                         .setTitle(e.message)
                         .setColor(red)
                         .setFooter({ text: 'due to manipulation, your full input will not be shown' })
@@ -173,7 +173,7 @@ async function calc(interaction) {
     if (isNaN(output)) {
         return await interaction.reply({
             embeds: [
-                new Discord.MessageEmbed()
+                new Discord.EmbedBuilder()
                     .setTitle('Error processing expression. Did you add an extra operator?')
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
@@ -182,7 +182,7 @@ async function calc(interaction) {
     } else if (stack.length > 0) {
         return await interaction.reply({
             embeds: [
-                new Discord.MessageEmbed()
+                new Discord.EmbedBuilder()
                     .setTitle('Error processing expression. Did you leave out an operator?')
                     .setDescription(`\`${expression}\``)
                     .setColor(red)
@@ -192,7 +192,7 @@ async function calc(interaction) {
         // G2g!
         return await interaction.reply({
             embeds: [
-                new Discord.MessageEmbed()
+                new Discord.EmbedBuilder()
                     .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
                     .setDescription(`\`${expression}\``)
                     .setColor(colours['cyber'])

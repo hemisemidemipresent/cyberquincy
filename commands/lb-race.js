@@ -72,15 +72,17 @@ module.exports = {
         }
         if (identifiable) {
             let output = lb.getPlayer(identifiable); // works for username or position
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`ID: ${data.leaderboardID}`)
                 .setURL(race.getRaceURL(raceID))
                 .setDescription(output)
 
-                .addField(
-                    'Timestamps are known to be inaccurate for certain versions',
-                    'see [this video](https://youtu.be/IGE155tCmss)'
-                )
+                .addFields([
+                    {
+                        name: 'Timestamps are known to be inaccurate for certain versions',
+                        value: 'see [this video](https://youtu.be/IGE155tCmss)'
+                    }
+                ])
                 .setColor(cyber)
                 .setTimestamp()
                 .setThumbnail(raceImg);
@@ -92,16 +94,18 @@ module.exports = {
             if (output.length > 4096) {
                 return await module.exports.errorMessage(message, ['too many characters']);
             }
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`ID: ${data.leaderboardID}`)
                 .setURL(race.getRaceURL(raceID))
                 .setDescription(output)
 
-                .addField(
-                    'Timestamps are known to be inaccurate for certain versions',
-                    'see [this video](https://youtu.be/IGE155tCmss)'
-                )
-                .addField('Individual info', 'to see how to get individual (more detailed) stats use `q!lb help`')
+                .addFields([
+                    {
+                        name: 'Timestamps are known to be inaccurate for certain versions',
+                        value: 'see [this video](https://youtu.be/IGE155tCmss)'
+                    },
+                    { name: 'Individual info', value: 'to see how to get individual (more detailed) stats use `q!lb help`' }
+                ])
                 .setFooter({ text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)' })
                 .setColor(cyber)
                 .setTimestamp()
@@ -110,17 +114,19 @@ module.exports = {
         }
     },
     async helpMessage(message) {
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle('`q!racelb` HELP')
             .setDescription('BTD6 Race leaderboard loader')
-            .addField(
-                'Example Usages',
-                '`q!lb 1 50` - shows lb from 1st place to 50th place\n' +
-                    `\`q!lb r#100\` - shows lb for given race number\n` +
-                    `\`q!lb yinandyang\` - shows lb for given race name (in this case yin and yang) **NOTE: Names MUST NOT have any spaces**\n` +
-                    `\`q!lb ${id}\` - shows lb for given race ID. For list of race IDs see <#846647839312445451> in [this server](${discord})\n` +
-                    `\`q!lb u#tsp\` - shows user placement`
-            )
+            .addFields([
+                {
+                    name: 'Example Usages',
+                    values: `\`q!lb 1 50\` - shows lb from 1st place to 50th place
+\`q!lb r#100\` - shows lb for given race number
+\`q!lb yinandyang\` - shows lb for given race name (in this case yin and yang) **NOTE: Names MUST NOT have any spaces**
+\`q!lb ${id}\` - shows lb for given race ID. For list of race IDs see <#846647839312445451> in [this server](${discord})
+\`q!lb u#tsp\` - shows user placement`
+                }
+            ])
 
             .setFooter({
                 text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins), if you are in t100 the lb you see is more accurate'
@@ -129,17 +135,19 @@ module.exports = {
         await message.channel.send({ embeds: [embed] });
     },
     async errorMessage(message, parsingErrors) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle('ERROR')
-            .addField(
-                'Example Usages',
-                '`q!lb 1 50` - shows lb from 1st place to 50th place\n' +
-                    `\`q!lb r#100\` - shows lb for given race number\n` +
-                    `\`q!lb yinandyang\` - shows lb for given race name (in this case yin and yang) **NOTE: Names MUST NOT have any spaces**\n` +
-                    `\`q!lb ${id}\` - shows lb for given race ID. For list of race IDs see <#846647839312445451> in [this server](${discord})\n` +
-                    `\`q!lb u#tsp\` - shows user placement`
-            )
-            .addField('Likely Cause(s)', parsingErrors.map((msg) => ` • ${msg}`).join('\n'))
+            .addFields([
+                {
+                    name: 'Example Usages',
+                    values: `\`q!lb 1 50\` - shows lb from 1st place to 50th place
+\`q!lb r#100\` - shows lb for given race number
+\`q!lb yinandyang\` - shows lb for given race name (in this case yin and yang) **NOTE: Names MUST NOT have any spaces**
+\`q!lb ${id}\` - shows lb for given race ID. For list of race IDs see <#846647839312445451> in [this server](${discord})
+\`q!lb u#tsp\` - shows user placement`
+                },
+                { name: 'Likely Cause(s)', values: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+            ])
             .setColor(red);
 
         return await message.channel.send({ embeds: [errorEmbed] });

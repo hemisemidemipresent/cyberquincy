@@ -1,5 +1,5 @@
 const { default: axios } = require('axios');
-const { MessageEmbed, MessageSelectMenu, MessageActionRow, MessageAttachment } = require('discord.js');
+const { EmbedBuilder, SelectMenuBuilder, ActionRowBuilder, MessageAttachment } = require('discord.js');
 const { palered } = require('../jsons/colours.json');
 const { UserAgent } = require('../1/config.json');
 const { getUsernames } = require('../helpers/usernames');
@@ -33,7 +33,7 @@ module.exports = {
             });
         } catch {
             return await message.channel.send({
-                embeds: [new Discord.MessageEmbed().setDescription('invalid user id').setColor(palered)]
+                embeds: [new Discord.EmbedBuilder().setDescription('invalid user id').setColor(palered)]
             });
         }
         let obj = body.data;
@@ -44,7 +44,7 @@ module.exports = {
 
         if (!isEmpty(obj.namedMonkeyStats)) {
             let towerSelector = createSelector(obj);
-            this.row = new MessageActionRow().addComponents(towerSelector);
+            this.row = new ActionRowBuilder().addComponents(towerSelector);
             this.botMessage = await message.channel.send({
                 embeds: [embed],
                 components: [this.row],
@@ -57,17 +57,19 @@ module.exports = {
             });
     },
     async helpMessage(message) {
-        let embed = new MessageEmbed()
+        let embed = new EmbedBuilder()
             .setTitle('BIG BROTHER IS WATCHING YOU')
             .setDescription('`q!user <user id>` e.g. `q!user 5aa98318a0c6fb3a5e30c047` (tarn)')
-            .addField(
-                'How do I get my user id?',
-                'The easiest way is to get top 100 of the race leaderboard and use `q!lb <placement>` or `q!lb u#username`\notherwise you can check out [this video](https://youtu.be/SJ4Tczw1LyA)'
-            )
-            .addField(
-                'If you are on windows',
-                '(by <@746205219238707210>):Open BTD6\nGo to Content Browser\nSort by "My Challenges"\nPress Win+R and paste `C:\\Users\\YOUR USERNAME\\AppData\\Local\\Temp\\Ninja Kiwi\\BloonsTD6` in and press Enter/OK\nDelete `statsCache`\nClick Refresh on the Challenge Browser\nOpen `statsCache`)'
-            );
+            .addFields([
+                {
+                    name: 'How do I get my user id?',
+                    value: 'The easiest way is to get top 100 of the race leaderboard and use `q!lb <placement>` or `q!lb u#username`\notherwise you can check out [this video](https://youtu.be/SJ4Tczw1LyA)'
+                },
+                {
+                    name: 'If you are on windows',
+                    value: '(by <@746205219238707210>):Open BTD6\nGo to Content Browser\nSort by "My Challenges"\nPress Win+R and paste `C:\\Users\\YOUR USERNAME\\AppData\\Local\\Temp\\Ninja Kiwi\\BloonsTD6` in and press Enter/OK\nDelete `statsCache`\nClick Refresh on the Challenge Browser\nOpen `statsCache`)'
+                }
+            ]);
 
         await message.channel.send({ embeds: [embed] });
     },
@@ -203,18 +205,20 @@ function mainPage(obj) {
         raceMedalsStr = `${emoji} ${amt}\n${raceMedalsStr}`; // add from bottom to top
     }
     let bossMedals = `normal: ${obj.bossMedals['0']}\nelite: ${obj.bossMedals['1']}`;
-    let mainEmbed = new MessageEmbed();
+    let mainEmbed = new EmbedBuilder();
     mainEmbed
         .setTitle(`${name}'s stats`)
         .setDescription(desc.join('\n'))
-        .addField('Pops', popsInfo, true)
-        .addField('Hero placed stats', heroesPlacedData, true)
-        .addField('Tower placed stats', towersPlacedData, true)
-        .addField('Singleplayer medals', spMedals, true)
-        .addField('Coop medals', coopMedals, true)
-        .addField('Race medals', raceMedalsStr, true)
-        .addField('Boss medals', bossMedals, true)
-        .addField('Odyssey', ody, true)
+        .addFields([
+            { name: 'Pops', value: popsInfo, inline: true },
+            { name: 'Hero placed stats', value: heroesPlacedData, inline: true },
+            { name: 'Tower placed stats', value: towersPlacedData, inline: true },
+            { name: 'Singleplayer medals', value: spMedals, inline: true },
+            { name: 'Coop medals', value: coopMedals, inline: true },
+            { name: 'Race medals', value: raceMedalsStr, inline: true },
+            { name: 'Boss medals', value: bossMedals, inline: true },
+            { name: 'Odyssey', value: ody, inline: true }
+        ])
         .setFooter({
             text: 'There is way too much data, this will all be polished slowly over time, before NK inevitably kills this OP system. btw this "datasniffing" has been around this entire time'
         });
@@ -222,7 +226,7 @@ function mainPage(obj) {
 }
 function showInstaStats(obj, insta) {
     let i = obj.namedMonkeyStats[`${insta}`];
-    let embed = new MessageEmbed();
+    let embed = new EmbedBuilder();
     if (i.name.length == 0) i.name = i.BaseTower;
     let desc = [
         `games won: ${i.gamesWon}`,
@@ -249,7 +253,7 @@ function showInstaStats(obj, insta) {
     embed
         .setTitle(`name: ${i.name}`)
         .setDescription(desc.join('\n'))
-        .addField('Pops', popinfo.join('\n'))
+        .addFields([{ name: 'Pops', value: popinfo.join('\n') }])
         .setFooter({ text: 'sorry you cant go back to the main page' });
     return embed;
 }
@@ -289,7 +293,7 @@ function createSelector(obj) {
         if (monke.name) option.description = monke.name;
         options.push(option);
     }
-    return new MessageSelectMenu().setCustomId('towerSelector').setPlaceholder('Nothing selected').addOptions(options);
+    return new SelectMenuBuilder().setCustomId('towerSelector').setPlaceholder('Nothing selected').addOptions(options);
 }
 function isEmpty(obj) {
     for (var key in obj) {

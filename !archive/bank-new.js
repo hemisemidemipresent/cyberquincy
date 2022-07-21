@@ -18,21 +18,13 @@ module.exports = {
                 'Please type the second path upgrade (3/4/5) number in the chat'
             ),
             new SingleTextParser(
-                new LimitedStringSetValuesParser(
-                    'true/false',
-                    ['true', 'false'],
-                    ['true', 'false']
-                ),
+                new LimitedStringSetValuesParser('true/false', ['true', 'false'], ['true', 'false']),
                 'flatPackBuildings',
                 undefined,
                 'Please type the whether you have Flat Pack Buildings monkey knowledge (true/false).'
             ),
             new SingleTextParser(
-                new LimitedStringSetValuesParser(
-                    'true/false',
-                    ['true', 'false'],
-                    ['true', 'false']
-                ),
+                new LimitedStringSetValuesParser('true/false', ['true', 'false'], ['true', 'false']),
                 'biggerBanks',
                 undefined,
                 'Please type the whether you have Bigger Banks monkey knowledge (true/false).'
@@ -56,7 +48,7 @@ module.exports = {
                 'Please type the corresponding number to select the difficulty\n1 - easy\n2 - medium\n3 - hard\n4 - impoppable\n5 - half cash'
             )
         );
-    },
+    }
 };
 function tookTooLong(message) {
     return message.channel.send(`You took too long to answer!`);
@@ -96,14 +88,7 @@ function getBenjaminBankHack(level) {
     if (level < 9) return 5;
     return 12;
 }
-function calculate(
-    bankTier,
-    flatPackBuilding,
-    BiggerBanks,
-    hackPercent,
-    crosspathNum,
-    difficultyId
-) {
+function calculate(bankTier, flatPackBuilding, BiggerBanks, hackPercent, crosspathNum, difficultyId) {
     if (!crosspathNum) crosspathNum = 0;
     hackPercent = hackPercent / 100;
     let maxCapacity = 0;
@@ -121,7 +106,7 @@ function calculate(
     let costs = [
         [4800, 5650, 6105, 6780, 6105],
         [11175, 12650, 14205, 15780, 14205],
-        [96175, 112650, 122205, 135780, 122205],
+        [96175, 112650, 122205, 135780, 122205]
     ];
 
     let onexx = [425, 500, 540, 625, 540]; // costs of 1xx farm
@@ -138,8 +123,7 @@ function calculate(
     }
     //time to actually calculate this crap lol
     console.log(230 + 40 * parseInt(crosspathNum), 1 + parseInt(hackPercent));
-    let incomePerRound =
-        (230 + 40 * parseInt(crosspathNum)) * (1 + parseInt(hackPercent));
+    let incomePerRound = (230 + 40 * parseInt(crosspathNum)) * (1 + parseInt(hackPercent));
     let arr = [incomePerRound * (1.15 + hackPercent)];
     for (i = 0; i < 19; i++) {
         arr.push(Math.min((arr[i] + incomePerRound) * 1.15, maxCapacity));
@@ -166,16 +150,11 @@ function calculate(
     for (let i = 0; i < arr.length; i++) {
         resultArray.push(Math.round(arr[i]));
     }
-    let bankEmbed = new Discord.MessageEmbed()
+    let bankEmbed = new Discord.EmbedBuilder()
         .setTitle(`x${bankTier}x bank`)
-        .setDescription(
-            `**additional** cash in the bank for 20 rounds\n${resultArray}`
-        )
+        .setDescription(`**additional** cash in the bank for 20 rounds\n${resultArray}`)
         .addField('ideal collection', `${bestCollect}`)
-        .addField(
-            'round when full',
-            `${round} (round 1 is the round you place the bank)`
-        )
+        .addField('round when full', `${round} (round 1 is the round you place the bank)`)
         .addField(
             'income per round (Income before interest, this is how much money the Bank will add during the round)',
             `${incomePerRound}`

@@ -18,7 +18,7 @@ function uploadImgur(message, args) {
     imgur
         .uploadUrl(image)
         .then((json) => {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTimestamp()
                 .setDescription(`${json.link}\n${text}`)
                 .setFooter({ text: footer })

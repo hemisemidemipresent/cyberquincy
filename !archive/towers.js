@@ -72,20 +72,7 @@ const aliases = [
         'spact',
         'spactory'
     ],
-    [
-        'monkey-village',
-        'vill',
-        'vil',
-        'villi',
-        'town',
-        'house',
-        'energy',
-        'building',
-        'hut',
-        'circle',
-        'fort',
-        'village'
-    ],
+    ['monkey-village', 'vill', 'vil', 'villi', 'town', 'house', 'energy', 'building', 'hut', 'circle', 'fort', 'village'],
     ['engineer-monkey', 'engineer', 'engie', 'engi', 'eng', 'overclock', 'engie']
 ];
 module.exports = {
@@ -162,7 +149,7 @@ function hard(cost) {
 }
 function baseTower(name) {
     let object = towerJSON[`${name}`];
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
         .setColor(cyber)
         .setTitle(object.name)
         .addField('cost', `${object.cost} (medium), ${hard(parseInt(object.cost))} (hard)`)
@@ -183,7 +170,7 @@ function anyOtherTower(json, name, upgradeSet) {
 
     let link = `https://github.com/hemisemidemipresent/cq-imgs/blob/main/tower/${alternateCase}UpgradeIcon.png?raw=true`;
     // note: for identical upgrade names, AAAAAAAAAAAAAAAA (will be excluded in the future)
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
         .setColor(cyber)
         .setTitle(`${object.name} (${upgradeSet.split('').join('-')})`)
         .addField('Cost', `${hard(parseInt(object.cost))} (hard), ${object.cost} (medium)`, true)

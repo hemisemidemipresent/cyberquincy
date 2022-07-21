@@ -183,18 +183,20 @@ function embed2MPOG(combo) {
     const comboToEmbed = orderAndFlatten2MPOGCompletion(combo);
 
     // Embed and send the message
-    let challengeEmbed = new Discord.MessageEmbed().setTitle(`${comboToEmbed.ENTITY} 2MPC Combo`).setColor(paleblue);
+    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${comboToEmbed.ENTITY} 2MPC Combo`).setColor(paleblue);
 
     for (const field in comboToEmbed) {
-        challengeEmbed.addField(gHelper.toTitleCase(field.replace('_', ' ')), comboToEmbed[field], true);
+        challengeEmbed.addFields([
+            { name: gHelper.toTitleCase(field.replace('_', ' ')), value: comboToEmbed[field], inline: true }
+        ]);
     }
 
-    challengeEmbed.addField('OG?', 'OG', true);
+    challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
     const ogMapAbbr = ogCombo(combo)[0];
     let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), isWaterEntityCombo(combo));
 
-    challengeEmbed.addField('**Alt Maps**', completedAltMapsFields.field);
+    challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
     if (completedAltMapsFields.footer) {
         challengeEmbed.setFooter({ text: completedAltMapsFields.footer });
@@ -244,11 +246,13 @@ function embed2MPAlt(combo, map) {
     }
 
     // Embed and send the message
-    let challengeEmbed = new Discord.MessageEmbed()
+    let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`${combo.ENTITY} 2MPC Combo on ${mapFormatted}`)
         .setColor(paleblue)
-        .addField('Person', altCombo.PERSON, true)
-        .addField('Link', altCombo.LINK, true);
+        .addFields([
+            { name: 'Person', value: altCombo.PERSON, inline: true },
+            { name: 'Link', value: altCombo.LINK, inline: true }
+        ]);
 
     return challengeEmbed;
 }
@@ -300,7 +304,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     }
 
     // Embed and send the message
-    let challengeEmbed = new Discord.MessageEmbed()
+    let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`${combo.ENTITY} 2MPCs on ${mapDifficultyFormatted} Maps`)
         .setColor(paleblue);
 
@@ -308,23 +312,28 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     let possiblePhrasing;
     if (mapsLeft.length > 0) {
         possiblePhrasing = impossibleMaps.length > 0 ? ' (that are possible)' : '';
-        challengeEmbed.addField(`Combos${possiblePhrasing}`, `**${numCombosCompleted}**/${numCombosPossible}`);
+        challengeEmbed.addFields([
+            { name: `Combos${possiblePhrasing}`, value: `**${numCombosCompleted}**/${numCombosPossible}` }
+        ]);
     } else {
         possiblePhrasing = impossibleMaps.length > 0 ? ' possible' : '';
-        challengeEmbed.addField(`All${possiblePhrasing} ${mapDifficulty} maps completed`, '-'.repeat(40));
+        challengeEmbed.addFields([
+            { name: `All${possiblePhrasing} ${mapDifficulty} maps completed`, value: '-'.repeat(40) }
+        ]);
     }
 
-    challengeEmbed
-        .addField('Map', mapColumn, true)
-        .addField('Person', personColumn, true)
-        .addField('Link', linkColumn, true);
+    challengeEmbed.addFields([
+        { name: 'Map', value: mapColumn, inline: true },
+        { name: 'Person', value: personColumn, inline: true },
+        { name: 'Link', value: linkColumn, inline: true }
+    ]);
 
     if (impossibleMaps.length > 0) {
-        challengeEmbed.addField('Impossible maps', impossibleMaps.join(', '));
+        challengeEmbed.addFields([{ name: 'Impossible maps', value: impossibleMaps.join(', ') }]);
     }
 
     if (mapsLeft.length > 0) {
-        challengeEmbed.addField('Maps Left', mapsLeft.join(', '));
+        challengeEmbed.addFields([{ name: 'Maps Left', inline: mapsLeft.join(', ') }]);
     }
 
     challengeEmbed.setFooter({ text: '----\nOG completion bolded' });
@@ -514,18 +523,22 @@ async function display2MPTowerStatistics(tower) {
 
     const towerFormatted = Aliases.toIndexNormalForm(tower);
 
-    let challengeEmbed = new Discord.MessageEmbed()
+    let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
         .setColor(paleblue)
-        .addField('\u200b', '\u200b', true) // Left column placeholder
-        .addField('Base Tower', baseTowerCompletionMarking, true) // Base tower
-        .addField('\u200b', '\u200b', true); // Right column placeholder
+        .addFields([
+            { name: '\u200b', value: '\u200b', inline: true },
+            { name: 'Base Tower', value: baseTowerCompletionMarking, inline: true },
+            { name: '\u200b', value: '\u200b', inline: true }
+        ]); // Left column placeholder
+    // Base tower
+    // Right column placeholder
 
     for (var tier = 3; tier <= 5; tier++) {
         for (var path = 1; path <= 3; path++) {
             towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
             upgradeCompletionMarking = await getCompletionMarking(entryRow, path, tier);
-            challengeEmbed.addField(towerUpgradeName, upgradeCompletionMarking, true);
+            challengeEmbed.addFields([{ name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }]);
         }
     }
 
@@ -593,7 +606,7 @@ function isWaterEntityCombo(combo) {
 function err(e) {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
     if (e instanceof UserCommandError || e instanceof DeveloperCommandError) {
-        return new Discord.MessageEmbed().setTitle(e.message).setColor(paleblue);
+        return new Discord.EmbedBuilder().setTitle(e.message).setColor(paleblue);
     } else {
         throw e;
     }

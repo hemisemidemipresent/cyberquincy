@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('@discordjs/builders');
 
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 const { cyber } = require('../jsons/colours.json');
 
@@ -267,11 +267,11 @@ function hasEntity(parsed) {
 }
 
 const multipageButtons = [
-    new MessageButton().setCustomId('first').setLabel('⏪').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('prev!').setLabel('⬅️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('pg').setLabel('FILL_ME_IN').setStyle('SECONDARY').setDisabled(true),
-    new MessageButton().setCustomId('next!').setLabel('➡️').setStyle('PRIMARY'),
-    new MessageButton().setCustomId('last').setLabel('⏩').setStyle('PRIMARY')
+    new ButtonBuilder().setCustomId('first').setLabel('⏪').setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId('prev!').setLabel('⬅️').setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId('pg').setLabel('FILL_ME_IN').setStyle(ButtonStyle.Secondary).setDisabled(true),
+    new ButtonBuilder().setCustomId('next!').setLabel('➡️').setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId('last').setLabel('⏩').setStyle(ButtonStyle.Primary)
 ];
 
 function displayPages(interaction, pages, versionAdded, parsed) {
@@ -290,21 +290,21 @@ function displayPages(interaction, pages, versionAdded, parsed) {
     let displayedButtons;
 
     async function embedPage() {
-        embed = new MessageEmbed().setTitle(title(parsed, pages.length > 0)).setColor(cyber);
+        embed = new EmbedBuilder().setTitle(title(parsed, pages.length > 0)).setColor(cyber);
 
         if (versionAdded) {
             embed.setDescription(`**Added in v${parseInt(versionAdded)}**`);
         }
 
         for (const header in pages[pageIdx]) {
-            embed.addField(`**${header}**`, pages[pageIdx][header]);
+            embed.addFields([{ name: `**${header}**`, value: pages[pageIdx][header] }]);
         }
 
         if (includedButtons.length > 0) {
             includedButtons.find((b) => b.disabled).setLabel(`${pageIdx + 1}/${pages.length}`);
         }
 
-        displayedButtons = new MessageActionRow().addComponents(...includedButtons);
+        displayedButtons = new ActionRowBuilder().addComponents(...includedButtons);
 
         await interaction.editReply({
             embeds: [embed],

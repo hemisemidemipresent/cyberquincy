@@ -66,7 +66,7 @@ async function execute(interaction) {
     let filteredCombos = filterResults(allCombos, parsed);
 
     if (filteredCombos.length == 0) {
-        const noCombosEmbed = new Discord.MessageEmbed().setTitle(titleNoCombos(parsed)).setColor(paleorange);
+        const noCombosEmbed = new Discord.EmbedBuilder().setTitle(titleNoCombos(parsed)).setColor(paleorange);
 
         return interaction.editReply({ embeds: [noCombosEmbed] });
     } else {

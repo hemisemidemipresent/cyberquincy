@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageButton, MessageActionRow, MessageAttachment } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, MessageAttachment } = require('discord.js');
 
 const { default: axios } = require('axios');
 const nodefetch = require('node-fetch');
@@ -56,9 +56,11 @@ async function request(objStr, url) {
         let res = await k.json();
         return JSON.parse(res.data);
     } catch (error) {
-        return new Discord.MessageEmbed()
+        return new Discord.EmbedBuilder()
             .setTitle('Invalid Challenge Code!')
-            .addField('In case this is a valid challenge code:', `report it to the [discord server](${discord})`)
+            .addFields([
+                { name: 'In case this is a valid challenge code:', value: `report it to the [discord server](${discord})` }
+            ])
             .setColor(red);
     }
 }
@@ -72,26 +74,22 @@ module.exports = {
         let results = await request(objStr, 'https://api.ninjakiwi.com/utility/es/search');
         results = results.results[0];
         this.userID = results.owner;
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.EmbedBuilder()
             .setTitle('Success!')
             .setDescription(`The owner of the challenge's userID is \`${results.owner}\``)
-            .addField('challenge name', results.challengeName)
+            .addFields([{ name: 'challenge name', value: results.challengeName }])
             .setColor(green);
 
-        row = new MessageActionRow().addComponents(
-            new MessageButton().setCustomId('stats').setLabel('See user statistics').setStyle('PRIMARY')
+        row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder().setCustomId('stats').setLabel('See user statistics').setStyle('PRIMARY')
         );
         this.user = interaction.user;
-        this.interaction = await interaction.reply({ embeds: [embed], components: [] });
+        this.interaction = await interaction.reply({ embeds: [embed], components: [row] });
     },
-    async onButtonClick(bInter) {
+    async onButtonClick(interaction) {
         // bInter = button Interaction
-        if (bInter.user.id != this.user.id) return;
-        if (bInter.customId != 'stats') return;
-
-        await this.showStats(bInter);
-    },
-    async showStats(interaction) {
+        if (interaction.user.id != this.user.id) return;
+        if (interaction.customId != 'stats') return;
         let body;
         let url = `https://priority-static-api.nkstatic.com/storage/static/11/${this.userID}/public-stats`;
         try {
@@ -99,16 +97,19 @@ module.exports = {
         } catch {
             return await interaction.update({
                 embeds: [
-                    new Discord.MessageEmbed()
-                        .setDescription('invalid user id associated with the challenge code!')
+                    new Discord.EmbedBuilder()
+                        .setDescription('Invalid user id associated with the challenge code!')
                         .setColor(palered)
                 ],
                 components: []
             });
         }
-
         let obj = body.data;
         this.obj = obj;
+        await this.showStats(interaction);
+    },
+    async showStats(interaction) {
+        let obj = this.obj;
         obj.playerName = await getUsernames([this.userID]);
 
         function mainPage(obj) {
@@ -193,7 +194,6 @@ module.exports = {
             }
 
             // towers
-
             let towers = obj.towersPlacedData;
             sortable = [];
             for (let tower in towers) {
@@ -216,26 +216,26 @@ module.exports = {
                 raceMedalsStr = `${emoji} ${amt}\n${raceMedalsStr}`; // add from bottom to top
             }
             let bossMedals = `normal: ${obj.bossMedals['0']}\nelite: ${obj.bossMedals['1']}`;
-            let mainEmbed = new MessageEmbed();
+            let mainEmbed = new EmbedBuilder();
             mainEmbed
                 .setTitle(`${name}'s stats`)
                 .setDescription(desc.join('\n'))
-                .addField('Pops', popsInfo, true)
-                .addField('Hero placed stats', heroesPlacedData, true)
-                .addField('Tower placed stats', towersPlacedData, true)
-                .addField('Singleplayer medals', spMedals, true)
-                .addField('Coop medals', coopMedals, true)
-                .addField('Race medals', raceMedalsStr, true)
-                .addField('Boss medals', bossMedals, true)
-                .addField('Odyssey', ody, true)
+                .addFields([
+                    { name: 'Pops', value: popsInfo, inline: true },
+                    { name: 'Hero placed stats', value: heroesPlacedData, inline: true },
+                    { name: 'Tower placed stats', value: towersPlacedData, inline: true },
+                    { name: 'Singleplayer medals', value: spMedals, inline: true },
+                    { name: 'Coop medals', value: coopMedals, inline: true },
+                    { name: 'Race medals', value: raceMedalsStr, inline: true },
+                    { name: 'Boss medals', value: bossMedals, inline: true },
+                    { name: 'Odyssey', value: ody, inline: true }
+                ])
                 .setFooter({
-                    text: 'There is way too much data, this will all be polished slowly over time, before NK inevitably kills this OP system. btw this "datasniffing" has been around this entire time'
+                    text: 'There is way too much data, this will all be polished slowly over time. If emojis are not appearing for you, please enable the "use external emoji" permissions for _everyone_ because discord is weird.'
                 });
             return mainEmbed;
         }
         let embed = mainPage(obj);
-        a = client.emojis.cache.find((emoji) => emoji.name === 'top1percent').toString();
-        embed.addField('a', a);
         await interaction.update({
             embeds: [embed],
             components: [],

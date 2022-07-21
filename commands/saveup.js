@@ -43,15 +43,15 @@ module.exports = {
         await message.channel.send({ embeds: [embed] });
     },
     errorMessage(message, parsingErrors) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle('ERROR')
-            .addField('Likely Cause(s)', parsingErrors.join('\n'))
+            .addFields([{ name: 'Likely Cause(s)', value: parsingErrors.join('\n') }])
             .setColor(cyber);
 
         return message.channel.send({ embeds: [errorEmbed] });
     },
     freePlayMsg(cashNeeded, round) {
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle(`You cant get $${cashNeeded} from popping bloons by round ${round}`)
             .setFooter({ text: 'freeplay is random, hence cash is random' })
             .setColor(orange);
@@ -73,7 +73,7 @@ module.exports = {
             }
         }
         round++; // the last round-- is unecessary. There is a better way to do this
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle(
                 `You should get $${cashNeeded} BEFORE round ${originalRound} if you start saving up (popping) at round ${round}`
             )

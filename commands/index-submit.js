@@ -14,7 +14,7 @@ const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL_2 = '924830831585939456';
 // Change this to a channel in your test guild when testing
 const TEST_SUBMISSIONS_CHANNEL = '897024571801239573'; //'737445888602931252';
 const IS_TESTING = require('../1/config.json')['testing'];
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const SUBMISSIONS_CHANNEL = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
 const SUBMISSIONS_CHANNEL_2 = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL_2;
 async function submit(message, args) {
@@ -42,7 +42,7 @@ async function submit(message, args) {
     let preview = undefined;
     let submission = undefined;
     if (imgurJson) {
-        submission = new Discord.MessageEmbed()
+        submission = new Discord.EmbedBuilder()
             .setTimestamp()
             .setDescription(`${imgurJson.link}\n${imgurText}`)
             .setFooter({ text: `sent by ${message.author.tag}` })
@@ -74,7 +74,7 @@ async function submit(message, args) {
                 const SUBMISSIONS_CHANNEL_OBJ = await message.channel.guild.channels.cache.get(SUBMISSIONS_CHANNEL);
                 const SUBMISSIONS_CHANNEL_OBJ_2 = await message.channel.guild.channels.cache.get(SUBMISSIONS_CHANNEL_2);
                 let submissionMessage = undefined;
-                if (submission instanceof MessageEmbed) {
+                if (submission instanceof EmbedBuilder) {
                     await SUBMISSIONS_CHANNEL_OBJ.send({
                         embeds: [submission]
                     });
@@ -119,16 +119,18 @@ async function submit(message, args) {
 }
 
 function helpMessage() {
-    return new Discord.MessageEmbed()
+    return new Discord.EmbedBuilder()
         .setTitle('`q!index-submit` help')
         .setDescription('**Generate a submission in `#submissions`**')
-        .addField('`q!isub <image_link/attachment> <text>`', 'Uploads to imgur and submit with <text>')
-        .addField('`q!isub <link> <text>`', 'Submits a link with text')
-        .addField('`q!isub <CHALLENGE_CODE> <text>`', 'Submits a challenge code with text')
-        .addField(
-            'Note:',
-            'If you are _linking_ an image (rather than attaching it), you must make it the first argument to the command in order to imgur-ize it.'
-        );
+        .addFields([
+            { name: '`q!isub <image_link/attachment> <text>`', value: 'Uploads to imgur and submit with <text>' },
+            { name: '`q!isub <link> <text>`', value: 'Submits a link with text' },
+            { name: '`q!isub <CHALLENGE_CODE> <text>`', value: 'Submits a challenge code with text' },
+            {
+                name: 'Note:',
+                value: 'If you are _linking_ an image (rather than attaching it), you must make it the first argument to the command in order to imgur-ize it.'
+            }
+        ]);
     //.setColor(black);
 }
 

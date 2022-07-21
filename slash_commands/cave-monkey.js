@@ -6,7 +6,7 @@ const { cyber } = require('../jsons/colours.json');
 builder = new SlashCommandBuilder().setName('cave_monkey').setDescription('Cave Monkey Info/Stats');
 
 async function execute(interaction) {
-    const stats = new Discord.MessageEmbed()
+    const stats = new Discord.EmbedBuilder()
         .setTitle('Cave Monkey')
         .setFooter({ text: footer })
         .setColor(cyber)
@@ -19,7 +19,7 @@ async function execute(interaction) {
             Frozen Over map only
             requires 30 mortar shots (no matter the damage) to be freed from the ice
             receives tier 0 overclock benefits`
-        )
+        );
 
     return await interaction.reply({ embeds: [stats] });
 }

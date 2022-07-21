@@ -37,7 +37,7 @@ module.exports = {
                     longestRound = i + 1;
                 }
             }
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setDescription(
                     `From round ${startRound} to ${endRound}, the longest round is round ${longestRound} which is ${
                         Math.round(longestLength * 100) / 100
@@ -46,7 +46,7 @@ module.exports = {
                 .setColor(grey);
             await message.channel.send({ embeds: [embed] });
         }
-    },
+    }
 };
 /**
  *
@@ -54,12 +54,8 @@ module.exports = {
  * @returns {MesssageEmbed} - embed to send
  */
 function oneRoundData(parsed, lengths) {
-    let embed = new Discord.MessageEmbed()
-        .setDescription(
-            `round ${parsed.round} is ${
-                lengths[parseInt(parsed.round) - 1]
-            }s long`
-        )
+    let embed = new Discord.EmbedBuilder()
+        .setDescription(`round ${parsed.round} is ${lengths[parseInt(parsed.round) - 1]}s long`)
         .setColor(lightgrey);
     return embed;
 }
@@ -69,15 +65,12 @@ function oneRoundData(parsed, lengths) {
  * @param {parsingErrors} parsingErrors
  */
 async function errorMessage(message, parsingErrors) {
-    let errorEmbed = new Discord.MessageEmbed()
+    let errorEmbed = new Discord.EmbedBuilder()
         .setTitle('ERROR')
         .setDescription(
             'q!roundlength <round> (shows the length of one round)\nq!roundlength <start round> <end round> (shows the longest round from startRound to endRound)\nq!roundlength <start round> <end round> -t (total)'
         )
-        .addField(
-            'Likely Cause(s)',
-            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-        )
+        .addFields([{ name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }])
         .setColor(red);
 
     return await message.channel.send({ embeds: [errorEmbed] });

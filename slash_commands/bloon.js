@@ -76,26 +76,26 @@ async function execute(interaction) {
 
     const ignoringSuper = ENEMIES_THAT_CAN_BE_SUPER.includes(enemy.name) ? ' (super and not)' : '';
 
-    embed = new Discord.MessageEmbed()
+    embed = new Discord.EmbedBuilder()
         .setTitle(`${enemy.description()} (r${round})`)
         .setThumbnail(await enemy.thumbnail())
         .setColor(cyber)
-        .addField('Speed', `${enemy.speed(true)} rbs/s`, true)
-        .addField('Layer Health', `${enemy.layerRBE(true)} rbe`, true)
-        .addField('Total Health', `${enemy.totalRBE(true)} rbe`, true)
-        .addField('Vertical Health', `${enemy.verticalRBE(true)} rbe`, true)
-        .addField('Speed Factor', `${speedRamping} (x r80)`, true)
-        .addField('Health Factor', `${healthRampingText}`, true)
-        .addField('Direct Children', `${enemy.children(true)}`, true)
-        .addField('Cash Earned', `${enemy.cash(true)}`, true)
-        .addField('Cash Factor', `${roundHelper.cashFactorForRound(round)}`, true)
-        .addField(`Normal Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('r', true)}`)
-        .addField(`ABR Round Appearances${ignoringSuper}`, `${enemy.roundAppearances('ar', true)}`);
+        .addFields([
+            { name: 'Speed', value: `${enemy.speed(true)} rbs/s`, inline: true },
+            { name: 'Layer Health', value: `${enemy.layerRBE(true)} rbe`, inline: true },
+            { name: 'Total Health', value: `${enemy.totalRBE(true)} rbe`, inline: true },
+            { name: 'Vertical Health', value: `${enemy.verticalRBE(true)} rbe`, inline: true },
+            { name: 'Speed Factor', value: `${speedRamping} (x r80)`, inline: true },
+            { name: 'Health Factor', value: `${healthRampingText}`, inline: true },
+            { name: 'Direct Children', value: `${enemy.children(true)}`, inline: true },
+            { name: 'Cash Earned', value: `${enemy.cash(true)}`, inline: true },
+            { name: 'Cash Factor', value: `${roundHelper.cashFactorForRound(round)}`, inline: true },
+            { name: `Normal Round Appearances${ignoringSuper}`, value: `${enemy.roundAppearances('r', true)}` },
+            { name: `ABR Round Appearances${ignoringSuper}`, value: `${enemy.roundAppearances('ar', true)}` }
+        ]);
 
     const notes = enemy.notes();
-    if (notes.length > 0) {
-        embed.addField('Notes', `${notes.map((n) => ` • ${n}`).join('\n')}`);
-    }
+    if (notes.length > 0) embed.addFields([{ name: 'Notes', value: `${notes.map((n) => ` • ${n}`).join('\n')}` }]);
 
     return await interaction.reply({
         embeds: [embed]

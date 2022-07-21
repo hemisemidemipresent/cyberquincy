@@ -73,10 +73,12 @@ async function displayHeroPlacementRounds(interaction) {
         description += `by **r${goalRound}** `;
         description += `on **${mapDifficulty}** maps.`;
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.EmbedBuilder()
             .setDescription(description)
-            .addField('Place on round', rounds.join('\n'), true)
-            .addField(`Pay on r${goalRound}`, costs.join('\n'), true)
+            .addFields([
+                { name: 'Place on round', value: rounds.join('\n'), inline: true },
+                { name: `Pay on r${goalRound}`, value: costs.join('\n'), inline: true }
+            ])
             .setFooter({ text: `Click a button below to see more starting rounds` })
             .setColor(colours['cyber']);
 
@@ -86,7 +88,7 @@ async function displayHeroPlacementRounds(interaction) {
             embed.setTitle(`Place ${gHelper.toTitleCase(hero)} on R${heroPlacementRound}`);
         }
 
-        const buttons = new Discord.MessageActionRow();
+        const buttons = new Discord.ActionRowBuilder();
 
         for (let leftRound = 1; leftRound < 100; leftRound += 10) {
             // Show 5 buttons max
@@ -105,7 +107,7 @@ async function displayHeroPlacementRounds(interaction) {
             );
             const displayedRightRound = Math.min(leftRound + 9, goalRound);
             label = `${displayedLeftRound}->${displayedRightRound}`;
-            buttons.addComponents(new Discord.MessageButton().setLabel(label).setStyle('PRIMARY').setCustomId(label));
+            buttons.addComponents(new Discord.ButtonBuilder().setLabel(label).setStyle('PRIMARY').setCustomId(label));
         }
         if (interaction.replied) {
             await interaction.editReply({

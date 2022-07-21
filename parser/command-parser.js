@@ -35,7 +35,7 @@ module.exports = {
         return parseds[0];
     },
 
-    isAbstractParser,
+    isAbstractParser
 };
 
 concretizeAndParse = function (args, parsers, abstractParserIndex) {
@@ -45,8 +45,7 @@ concretizeAndParse = function (args, parsers, abstractParserIndex) {
     }
 
     // Get abstact parser function using the cycling index
-    const concretizeParserFunction =
-        ABSTRACT_PARSERS[abstractParserIndex].handler;
+    const concretizeParserFunction = ABSTRACT_PARSERS[abstractParserIndex].handler;
     // and call the function on the parsers
     const moreConcreteParsingAttempts = concretizeParserFunction(parsers);
 
@@ -60,15 +59,10 @@ concretizeAndParse = function (args, parsers, abstractParserIndex) {
         const alreadyParsed = moreConcreteParsingAttempts[i].parsed;
 
         // Cycle to the next abstract parser
-        const newAbstractParserIndex =
-            (abstractParserIndex + 1) % ABSTRACT_PARSERS.length;
+        const newAbstractParserIndex = (abstractParserIndex + 1) % ABSTRACT_PARSERS.length;
 
         // Recurse and save result
-        const newParseds = concretizeAndParse(
-            args,
-            moreConcreteParsers,
-            newAbstractParserIndex
-        );
+        const newParseds = concretizeAndParse(args, moreConcreteParsers, newAbstractParserIndex);
 
         parseds.push(...newParseds.map((pd) => pd.merge(alreadyParsed)));
     }
@@ -101,17 +95,15 @@ useItOrLoseIt = function (parsers) {
         .concat(parsers.slice(optionalParserIndex + 1));
 
     // Exclude the optional parser's wrapped parser
-    loseIt = parsers
-        .slice(0, optionalParserIndex)
-        .concat(parsers.slice(optionalParserIndex + 1));
+    loseIt = parsers.slice(0, optionalParserIndex).concat(parsers.slice(optionalParserIndex + 1));
 
     // Include the parsed value in the return object
     loseItParsed = new Parsed();
-    loseItParsed.addField(opt.parser.type(), opt.defaultValue);
+    loseItParsed.addFields([{ name: opt.parser.type(), value: opt.defaultValue }]);
 
     return [
         { parsers: useIt, parsed: new Parsed() },
-        { parsers: loseIt, parsed: loseItParsed },
+        { parsers: loseIt, parsed: loseItParsed }
     ];
 };
 
@@ -165,9 +157,7 @@ removeEmptyParser = function (parsers) {
     }
 
     // Just remove the EmptyParser if it exists
-    moreConcreteParsers = parsers
-        .slice(0, emptyParserIndex)
-        .concat(parsers.slice(emptyParserIndex + 1));
+    moreConcreteParsers = parsers.slice(0, emptyParserIndex).concat(parsers.slice(emptyParserIndex + 1));
 
     // No values were parsed in the OrParser concretization process
     return [{ parsers: moreConcreteParsers, parsed: new Parsed() }];
@@ -215,7 +205,7 @@ ABSTRACT_PARSERS = [
     { parser: OptionalParser, handler: useItOrLoseIt },
     { parser: OrParser, handler: expandOrParser },
     { parser: EmptyParser, handler: removeEmptyParser },
-    { parser: AnyOrderParser, handler: permutateParsers },
+    { parser: AnyOrderParser, handler: permutateParsers }
 ];
 
 /**
@@ -231,33 +221,17 @@ parseConcrete = function (args, parsers) {
         // If there are extra parsers, fill in the gaps in args with null buffers
         // but not just at the end of the array..in every possible permutable way within the array
         // giving error-handling the best chance at finding the closest match
-        argPaddingPermutations = gHelper.permutatePaddings(
-            args,
-            parsers.length
-        );
+        argPaddingPermutations = gHelper.permutatePaddings(args, parsers.length);
         for (var i = 0; i < argPaddingPermutations.length; i++) {
-            results.push(
-                parseConcreteArgsParsersAligned(
-                    argPaddingPermutations[i],
-                    parsers
-                )
-            );
+            results.push(parseConcreteArgsParsersAligned(argPaddingPermutations[i], parsers));
         }
     } else if (args.length > parsers.length) {
         // If there are extra args, fill in the gaps in parsers with null buffers
         // but not just at the end of the array..in every possible permutable way within the array
         // giving error-handling the best chance at finding the closest match
-        parserPaddingPermutations = gHelper.permutatePaddings(
-            parsers,
-            args.length
-        );
+        parserPaddingPermutations = gHelper.permutatePaddings(parsers, args.length);
         for (var i = 0; i < parserPaddingPermutations.length; i++) {
-            results.push(
-                parseConcreteArgsParsersAligned(
-                    args,
-                    parserPaddingPermutations[i]
-                )
-            );
+            results.push(parseConcreteArgsParsersAligned(args, parserPaddingPermutations[i]));
         }
     } else {
         // If the lengths match up then just make a direct call
@@ -292,9 +266,7 @@ function parseConcreteArgsParsersAligned(args, parsers) {
         if (!arg && arg != 0) {
             parsed.addError(
                 new UserCommandError(
-                    `Command is missing ${gHelper.toOrdinalSuffix(
-                        argPosition
-                    )} argument of type \`${parsers[i].type()}\``
+                    `Command is missing ${gHelper.toOrdinalSuffix(argPosition)} argument of type \`${parsers[i].type()}\``
                 )
             );
             continue;
@@ -302,11 +274,7 @@ function parseConcreteArgsParsersAligned(args, parsers) {
 
         // If there is an missing parser (i.e. extra argument) in the position
         if (!parser) {
-            parsed.addError(
-                new UserCommandError(
-                    `Extra argument \`${args[i]}\` at position ${argPosition}`
-                )
-            );
+            parsed.addError(new UserCommandError(`Extra argument \`${args[i]}\` at position ${argPosition}`));
             continue;
         }
 

@@ -1,4 +1,4 @@
-const { Client, Intents } = require('discord.js');
+const { Client, GatewayIntentBits, InteractionType } = require('discord.js');
 
 function main() {
     pingHeroku();
@@ -36,12 +36,12 @@ function globalRequirements() {
     global.Discord = require('discord.js');
     global.client = new Client({
         intents: [
-            Intents.FLAGS.GUILD_MESSAGES,
-            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-            Intents.FLAGS.GUILDS,
-            Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-            Intents.FLAGS.DIRECT_MESSAGES,
-            Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildMessageReactions,
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildEmojisAndStickers,
+            GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.DirectMessageReactions
         ]
     });
 
@@ -148,16 +148,20 @@ function generateCommandListeners(commandCenter, slashCommandCenter) {
 
     // slash commands
     client.on('interactionCreate', async (interaction) => {
-        if (interaction.isCommand()) slashCommandCenter.handleCommand(interaction);
+        if (interaction.type === InteractionType.ApplicationCommand) slashCommandCenter.handleCommand(interaction);
         if (interaction.isButton()) slashCommandCenter.handleButton(interaction);
-        if (interaction.isAutocomplete()) slashCommandCenter.handleAutocomplete(interaction);
+        if (interaction.type === InteractionType.ApplicationCommandAutocomplete)
+            slashCommandCenter.handleAutocomplete(interaction);
     });
 }
 
 function login() {
+    const { ActivityType } = require('discord.js');
     configHelper = require('./helpers/config');
     const activeToken = configHelper.activeToken();
-    client.login(activeToken);
+    client.login(activeToken).then(() => {
+        client.user?.setActivity('/help', { type: ActivityType.Listening });
+    });
 }
 
 try {

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const OptionalParser = require('../parser/optional-parser.js');
 
@@ -27,8 +27,8 @@ module.exports = {
         if (parsed.hasErrors()) {
             return await this.errorMessage(message, parsed.parsingErrors);
         }
-        const row = new MessageActionRow().addComponents(
-            new MessageSelectMenu()
+        const row = new ActionRowBuilder().addComponents(
+            new SelectMenuBuilder()
                 .setCustomId('type')
                 .setPlaceholder('Nothing selected')
                 .addOptions([
@@ -90,19 +90,23 @@ module.exports = {
         });
         collector.on('end', async (collected) => {
             if (!collected.first()) {
-                let errorEmbed = new Discord.MessageEmbed().setTitle(`You took too long to select`).setColor(magenta);
+                let errorEmbed = new Discord.EmbedBuilder().setTitle(`You took too long to select`).setColor(magenta);
                 return await message.channel.send({ embeds: [errorEmbed] });
             }
         });
     },
     async helpMessage(message) {
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle('`q!bosslb` HELP')
             .setDescription('BTD6 Boss leaderboard loader')
-            .addField(
-                'Example Usages',
-                '`q!blb 1 50` - shows lb from 1st place to 50th place\n' + `\`q!blb 5\` - shows lb for the 5th boss event\n`
-            )
+            .addFields([
+                {
+                    name: 'Example Usages',
+                    value:
+                        '`q!blb 1 50` - shows lb from 1st place to 50th place\n' +
+                        `\`q!blb 5\` - shows lb for the 5th boss event\n`
+                }
+            ])
 
             .setFooter({
                 text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins), if you are in t100 the lb you see is more accurate'
@@ -111,25 +115,33 @@ module.exports = {
         await message.channel.send({ embeds: [embed] });
     },
     async errorMessage(message, parsingErrors) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle('ERROR')
-            .addField(
-                'Example Usages',
-                '`q!blb 1 50` - shows lb from 1st place to 50th place\n' + `\`q!blb 5\` - shows lb for the 5th boss event\n`
-            )
-            .addField('Likely Cause(s)', parsingErrors.map((msg) => ` • ${msg}`).join('\n'))
+            .addFields([
+                {
+                    name: 'Example Usages',
+                    value:
+                        '`q!blb 1 50` - shows lb from 1st place to 50th place\n' +
+                        `\`q!blb 5\` - shows lb for the 5th boss event\n`
+                },
+                { name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+            ])
             .setColor(red);
 
         return await message.channel.send({ embeds: [errorEmbed] });
     },
     async errorMessageI(interaction, parsingErrors) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle('ERROR')
-            .addField(
-                'Example Usages',
-                '`q!blb 1 50` - shows lb from 1st place to 50th place\n' + `\`q!blb 5\` - shows lb for the 5th boss event\n`
-            )
-            .addField('Likely Cause(s)', parsingErrors.map((msg) => ` • ${msg}`).join('\n'))
+            .addFields([
+                {
+                    name: 'Example Usages',
+                    value:
+                        '`q!blb 1 50` - shows lb from 1st place to 50th place\n' +
+                        `\`q!blb 5\` - shows lb for the 5th boss event\n`
+                },
+                { name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+            ])
             .setColor(red);
 
         return await interaction.update({
@@ -155,7 +167,7 @@ module.exports = {
         if (output.length > 4096) {
             return await module.exports.errorMessageI(interaction, ['too many characters']);
         }
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle(`ID: ${data.leaderboardID}`)
             .setURL(race.getBossURL(bossID, obj))
             .setDescription('```' + output + '```')

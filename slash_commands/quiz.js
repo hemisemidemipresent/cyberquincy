@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const quiz = require('../jsons/quiz.json');
 const { cyber, orange, turq, magenta } = require('../jsons/colours.json');
 const { shuffle } = require('../helpers/general');
-const { MessageActionRow, MessageButton } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { discord } = require('../aliases/misc.json');
 const Quiz = require('../helpers/quiz.js');
 let numbers = [0, 1, 2, 3];
@@ -25,11 +25,11 @@ async function loadQuestion(interaction) {
 
     shuffle(numbers);
 
-    const buttons = new MessageActionRow().addComponents(
-        new MessageButton().setCustomId(numbers[0].toString()).setLabel('A').setStyle('PRIMARY'),
-        new MessageButton().setCustomId(numbers[1].toString()).setLabel('B').setStyle('PRIMARY'),
-        new MessageButton().setCustomId(numbers[2].toString()).setLabel('C').setStyle('PRIMARY'),
-        new MessageButton().setCustomId(numbers[3].toString()).setLabel('D').setStyle('PRIMARY')
+    const buttons = new ActionRowBuilder().addComponents(
+        new ButtonBuilder().setCustomId(numbers[0].toString()).setLabel('A').setStyle('PRIMARY'),
+        new ButtonBuilder().setCustomId(numbers[1].toString()).setLabel('B').setStyle('PRIMARY'),
+        new ButtonBuilder().setCustomId(numbers[2].toString()).setLabel('C').setStyle('PRIMARY'),
+        new ButtonBuilder().setCustomId(numbers[3].toString()).setLabel('D').setStyle('PRIMARY')
     );
 
     let string = '';
@@ -38,10 +38,12 @@ async function loadQuestion(interaction) {
         string += `${emojis[i]} ${options[rand]}\n`;
     }
 
-    let QuestionEmbed = new Discord.MessageEmbed()
+    let QuestionEmbed = new Discord.EmbedBuilder()
         .setTitle(`${item.question}`)
-        .addField('options', string)
-        .addField('please contribute', `join [this server](${discord}) to suggest a question`)
+        .addFields([
+            { name: 'options', value: string },
+            { name: 'please contribute', value: `join [this server](${discord}) to suggest a question` }
+        ])
         .setColor(cyber);
 
     await interaction.reply({
@@ -62,7 +64,7 @@ async function onButtonClick(interaction) {
     if (item.ans == id) {
         Quiz.answerCorrect(userID);
         let streak = Quiz.getStreak(userID);
-        let correctEmbed = new Discord.MessageEmbed()
+        let correctEmbed = new Discord.EmbedBuilder()
             .setTitle('Congratulations! You got the correct answer!')
             .setDescription(
                 `${streak}\nNOTE: streak will not be carried over when the bot restarts and that might happen randomly.`
@@ -74,12 +76,12 @@ async function onButtonClick(interaction) {
         Quiz.answerWrong(userID);
         let streak = Quiz.getStreak(userID);
 
-        let wrongEmbed = new Discord.MessageEmbed()
+        let wrongEmbed = new Discord.EmbedBuilder()
             .setTitle('Game over! You got the wrong answer!')
             .setDescription(
                 `${streak}\nNOTE: streak will not be carried over when the bot restarts and that might happen randomly.`
             )
-            .addField('answer', `||${item.optns[item.ans]}||`)
+            .addFields([{ name: 'answer', value: `||${item.optns[item.ans]}||` }])
             .setColor(orange)
             .setFooter({ text: 'run /quiz again to play again' });
 

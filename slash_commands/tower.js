@@ -116,21 +116,16 @@ async function embedBloonologySummary(towerName) {
     ]
     const splitTextsRegexStr = splitTexts.map(st => `(?:${st})`).join('|')
 
-    const pathBenefits = pathDescriptions.map((desc, idx) => {
+    const pathBenefits = pathDescriptions.map(desc => {
+        // We're relying on Changes from Previous Tier being the first header after the upgrade details
         const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim()
-        const [, tier] = Towers.pathTierFromUpgradeSet(tierUpgrades[idx]);
-        const bulletSymbol = tier <= 2 ? '►' : '⟴'
-        return rawBenefits.split('\n').map(n => `${bulletSymbol} ${n}`).join('\n')
+        return rawBenefits.split('\n').map(n => `⟴ ${n}`).join('\n')
     })
 
     const headers = tierUpgrades.map(u => {
         const [path, tier] = Towers.pathTierFromUpgradeSet(u);
-        if (tier <= 2) {
-            return u
-        } else {
-            const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
-            return `${upgradeName} (${u})`;
-        }
+        const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
+        return `${upgradeName} (${u})`;
     })
 
     const placedTowerDescription = cleanDescription(descriptions.find(description => description.substr(0, 3) == '000').substr(3))
@@ -163,14 +158,16 @@ async function execute(interaction) {
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);
 
-    let embed
+    let embed, ephemeral;
     if (towerPath) {
         embed = await embedBloonology(tower, towerPath);
+        ephemeral = false;
     } else {
         embed = await embedBloonologySummary(tower)
+        ephemeral = true;
     }
 
-    return await interaction.reply({ embeds: [embed], ephemeral: false });
+    return await interaction.reply({ embeds: [embed], ephemeral: ephemeral });
 }
 
 // background info: there are 2 newlines present in the string: \n and \r. \n is preferred

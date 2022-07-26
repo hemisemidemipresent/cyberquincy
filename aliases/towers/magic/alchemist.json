@@ -12,14 +12,20 @@
         "intoxicant"
     ],
 
+    "100": ["larger_potions"],
+    "200": ["acidic_mixture_drip", "amd"],
     "300": ["berserker_brew", "bbrew"],
     "400": ["stronger_stimulant", "str_stim", "stronger_stim", "stim", "strim", "sstim"],
     "500": ["permanent_brew", "permabrew", "pbrew", "pb"],
 
+    "010": ["stronger_acid"],
+    "020": ["perishing_potions", "perishing"],
     "030": ["unstable_concoction", "conc", "unstable", "uc", "coc"],
     "040": ["transforming_tonic", "tonic", "tt4", "trans_tonic"],
     "050": ["total_transformation", "totaltrans", "tt5"],
 
+    "001": ["faster_throwing_(alchemist)"],
+    "002": ["acid_pool", "acid_pools", "pools", "pool"],
     "003": ["lead_to_gold", "ltg"],
     "004": ["rubber_to_gold", "rtg"],
     "005": ["bloon_master_alchemist","bma","bloon_master"]

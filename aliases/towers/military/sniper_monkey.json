@@ -1,14 +1,20 @@
 {
     "xyz": ["sniper", "sniper-monkey", "sn", "sni", "snip", "snooper", "snipermonkey", "gun"],
 
+    "100": ["full_metal_jacket", "fmj"],
+    "200": ["larger_calibre", "larger_caliber"],
     "300": ["deadly_precision", "dprecision", "precision"],
     "400": ["maim_moab", "maim", "maimoab", "maimmoab", "mainmoan"],
     "500": ["cripple_moab", "cripple", "cripplemoab"],
 
+    "010": ["night_vision_goggles", "nvg", "goggles", "night_vision"],
+    "020": ["shrapnel_shot", "shrapnel"],
     "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb","bbullet"],
     "040": ["supply_drop", "supplydrop", "supply", "sd"],
     "050": ["elite_sniper", "es", "esniper", "elitesniper"],
-    
+
+    "001": ["fast_firing"],
+    "002": ["even_faster_firing"],
     "003": ["semi_automatic", "semi", "semiauto"],
     "004": ["full_auto_rifle", "fully_automatic", "full_auto", "fully_auto"],
     "005": ["elite_defender", "ed", "edef"]

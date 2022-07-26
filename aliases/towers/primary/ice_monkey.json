@@ -1,14 +1,20 @@
 {
     "xyz": ["ice", "ice-monkey", "im"],
 
+    "100": ["permafrost", "p_frost"],
+    "200": ["cold_snap"],
     "300": ["ice_shards", "shards", "ishards"],
     "400": ["embrittlement", "brittle", "brit", "brittlement", "britt"],
     "500": ["super_brittle", "sbrit", "sbrittle", "super_brit", "sbritt", "sbrike"],
 
+    "010": ["enhanced_freeze", "enhanced"],
+    "020": ["deep_freeze"],
     "030": ["arctic_wind", "wind", "arctic", "awind"],
     "040": ["snowstorm", "snow"],
     "050": ["absolute_zero", "az"],
-    
+
+    "001": ["larger_radius"],
+    "002": ["re-freeze"],
     "003": ["cryo_cannon", "cryo"],
     "004": ["icicles", "icy"],
     "005": ["icicle_impale", "impale", "iimpale", "impa"]

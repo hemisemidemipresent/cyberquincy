@@ -1,14 +1,20 @@
 {
     "xyz": ["sub", "monkey-sub", "submarine", "u-boat"],
 
+    "100": ["longer_range"],
+    "200": ["advanced_intel", "intel"],
     "300": ["submerge_and_support", "sas", "submerge"],
     "400": ["bloontonium_reactor", "react", "reactor"],
     "500": ["energizer", "energiser", "engz", "egz", "gizer"],
 
+    "010": ["barbed_darts", "barbs", "barbed"],
+    "020": ["heat-tipped_darts"],
     "030": ["ballistic_missile", "balm", "bmiss", "ballistic"],
     "040": ["first_strike_capability", "first_strike", "fs", "fstrike", "fsc"],
     "050": ["pre-emptive_strike", "pre", "preemp", "prestrike", "pstrike", "preemptive"],
 
+    "001": ["twin_guns", "twin", "twins"],
+    "002": ["airburst_darts", "airburst"],
     "003": ["triple_guns", "triple", "t_guns", "trip_guns"],
     "004": ["armor_piercing_darts", "armour_piercing_darts", "ap", "apd", "ad_darts", "ap_darts"],
     "005": ["sub_commander", "subcom", "scom", "scomm"]

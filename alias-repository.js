@@ -87,7 +87,7 @@ class AliasRepository extends Array {
                     canonical: `${baseName}#222`,
                     aliases: towerUpgrades['xyz']
                         .concat(baseName)
-                        .map((al) => [`b_${al}`, `base_${al}`]).flat(),
+                        .map((al) => [`base_${al}`, `b_${al}`]).flat(),
                     sourcefile: f,
                 };
                 this.addAliasGroup(baseTowerAliasGroup);
@@ -438,7 +438,8 @@ class AliasRepository extends Array {
         return canonical
             .split(separator)
             .map((tk) => gHelper.toTitleCase(tk))
-            .join(' ');
+            .join(' ')
+            .replace(/ \(.*\)/, ''); // Parentheticals are used to avoid clashing aliases (e.g. double shot) but are filtered out when displayed
     }
 
     allRaces() {
@@ -452,7 +453,7 @@ class AliasRepository extends Array {
     // This converts each arg part to its canonical form.
     // `spact#025` gets converted to `spike_factory#025` for example.
     canonicizeArg(arg) {
-        if (arg.includes('r#')) return Aliases.getCanonicalForm(arg) || arg; // for r#100 race args
+        if (arg.startsWith('r#')) return Aliases.getCanonicalForm(arg) || arg; // for r#100 race args
         return arg
             .split('#')
             .map((t) => Aliases.getCanonicalForm(t) || t)

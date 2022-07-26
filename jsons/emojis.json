@@ -1,18 +1,20 @@
 {
     "614111055890612225": {
         "hero": {
-            "adora": "734954248105623633",
-            "benjamin": "734953700551950427",
-            "brickell": "734955619697688587",
-            "churchill": "734953812762034278",
-            "etienne": "753231376618356789",
-            "ezili": "734953612924420107",
-            "gwen": "734953281830387882",
-            "jones": "734953662446567554",
-            "obyn": "734953281205436456",
-            "pat": "734953631048138851",
-            "quincy": "734951814016794645",
-            "sauda": "841545792007438346"
+            "adora": "<:Adora:734954248105623633>",
+            "benjamin": "<:Benjamin:999243241570455557>",
+            "brickell": "<:Brickell:734955619697688587>",
+            "churchill": "<:Churchill:734953812762034278>",
+            "etienne": "<:Etienne:753231376618356789> ",
+            "ezili": "<:Ezili:734953612924420107>",
+            "geraldo": "<:Geraldo:999242158810861618>",
+            "gwen": "<:Gwen:734953281830387882>",
+            "jones": "<:StrikerJones:734953662446567554> ",
+            "obyn": "<:Obyn:734953281205436456>",
+            "pat": "<:PatFusty:734953631048138851>",
+            "psi": "<:Psi:860764859695235082>",
+            "quincy": "<:Quincy:734951814016794645>",
+            "sauda": "<:Sauda:841545792007438346>"
         },
         "map_difficulty": {
             "beginner": "734966523487322202",
@@ -20,8 +22,58 @@
             "advanced": "734966523575140423",
             "expert": "734966521822183475"
         },
+        "bloon": {
+            "coop": "<:coop:999234715640930404>",
+            "camo": "<:camo:999236630936293386>",
+            "lead": "<:lead:999236332347998249>",
+            "purple": "<:purple:782896535373348886>",
+            "regrow": "<:regrow:999236797802491904>",
+            "ceramic": "<:ceramic:837873832085815296>",
+            "moab": "<:moab:837875121732452384>",
+            "bfb": "<:bfb:999232827763728477>",
+            "zomg": "<:zomg:999233000908783616>",
+            "ddt": "<:ddt:837875038585487401>",
+            "bad": "<:bad:999233180668276829>"
+        },
         "misc": {
             "goldmilk": "821676576525647882"
+        }
+    },
+    "753449196132237425": {
+        "race": {
+            "BlackDiamond": "<:first:999262732572434472>",
+            "RedDiamond": "<:second:999262856694480947>",
+            "Diamond": "<:third:999262920984772639>",
+            "GoldDiamond": "<:top50:999270029264683069>",
+            "DoubleGold": "<:top1percent:999262987808428162>",
+            "GoldSilver": "<:top10percent:999263280155602994>",
+            "DoubleSilver": "<:top25percent:999263307292753940>",
+            "Silver": "<:top50percent:999263344236187680>",
+            "Bronze": "<:top75percent:999263362934378567>"
+        },
+        "towers": {
+            "DartMonkey": "<:DartMonkey:999481347234091099> ",
+            "BoomerangMonkey": "<:BoomerangMonkey:999481537793900665> ",
+            "BombShooter": "<:BombShooter:999481354846736484> ",
+            "TackShooter": "<:TackShooter:999481428670681098> ",
+            "IceMonkey": "<:IceMonkey:999488195467157555> ",
+            "GlueGunner": "<:GlueGunner:1000591168985374761> ",
+            "SniperMonkey": "<:SniperMonkey:1000591208831262781> ",
+            "MonkeySub": "<:MonkeySub:1000591261335560232> ",
+            "MonkeyBuccaneer": "<:MonkeyBuccaneer:1000591290855063593> ",
+            "MonkeyAce": "<:MonkeyAce:1000591341987844128> ",
+            "HeliPilot": "<:HeliPilot:1000591372836933702> ",
+            "MortarMonkey": "<:MortarMonkey:1000591429632000060> ",
+            "DartlingGunner": "<:DartlingGunner:1000591457146646539>",
+            "WizardMonkey": "<:WizardMonkey:1000591638239903836> ",
+            "SuperMonkey": "<:SuperMonkey:1000591681931976814> ",
+            "NinjaMonkey": "<:NinjaMonkey:1000591720884478033>",
+            "Alchemist": "<:Alchemist:1000591767357366312> ",
+            "Druid": "<:Druid:1000591809598197930>",
+            "BananaFarm": "<:BananaFarm:1000591848412303440> ",
+            "SpikeFactory": "<:SpikeFactory:1000591882948194326> ",
+            "MonkeyVillage": "<:MonkeyVillage:1000592115526553640> ",
+            "EngineerMonkey": "<:EngineerMonkey:1000592141401206794>"
         }
     },
     "543957081183617024": {

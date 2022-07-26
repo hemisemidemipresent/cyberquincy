@@ -1,12 +1,13 @@
 const { default: axios } = require('axios');
-const stream = require('stream');
-const { MessageEmbed, MessageSelectMenu, MessageActionRow, BufferResolvable, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageSelectMenu, MessageActionRow, MessageAttachment } = require('discord.js');
 const { palered } = require('../jsons/colours.json');
 const { UserAgent } = require('../1/config.json');
 const { getUsernames } = require('../helpers/usernames');
-const seclateServerID = '543957081183617024';
 const Emojis = require('../jsons/emojis.json');
-const raceEmojis = Emojis[seclateServerID + ''].race;
+const { camo, lead, purple, regrow, ceramic, moab, bfb, zomg, ddt, bad } = Emojis['614111055890612225'].bloon;
+const { adora, benjamin, brickell, churchill, etienne, ezili, geraldo, gwen, jones, obyn, pat, psi, quincy, sauda } =
+    Emojis['614111055890612225'].hero;
+const raceEmojis = Emojis['753449196132237425'].race;
 
 module.exports = {
     name: 'user',
@@ -19,8 +20,10 @@ module.exports = {
     obj: {},
     async execute(message, args) {
         this.message = message;
+
         if (args.length == 0 || (args.length == 1 && args[0].toLowerCase() == 'help'))
             return await module.exports.helpMessage(message);
+
         userID = args[0];
         let url = `https://priority-static-api.nkstatic.com/storage/static/11/${userID}/public-stats`;
         let body;
@@ -125,71 +128,96 @@ function mainPage(obj) {
         `challenges completed: ${obj.challengesCompleted}`,
         `total trophies: ${obj.totalTrophiesEarned}`
     ];
-    let popsInfo = [
-        `Total: ${obj.bloonsPopped}`,
-        `camo: ${obj.camosPopped}`,
-        `lead: ${obj.leadsPopped}`,
-        `purple: ${obj.purplesPopped}`,
-        `regrow: ${obj.regrowsPopped}`,
-        `ceramic: ${obj.ceramicsPopped}`,
-        `MOAB: ${obj.moabsPopped}`,
-        `BFB: ${obj.bfbsPopped}`,
-        `ZOMG: ${obj.zomgsPopped}`,
-        `DDT: ${obj.ddtsPopped}`,
-        `BAD: ${obj.badsPopped}`
-    ];
-    let ody = [`total odysseys completed: ${obj.totalOdysseysCompleted}`, `total odyssey stars: ${obj.totalOdysseyStars}`];
-    let heroesPlacedData = JSON.stringify(obj.heroesPlacedData, null, 1);
-    let towersPlacedData = JSON.stringify(obj.towersPlacedData, null, 1);
+    const popsInfo = `Total: ${obj.bloonsPopped}
+        ${camo} ${obj.camosPopped}
+        ${lead} ${obj.leadsPopped}
+        ${purple} ${obj.purplesPopped}
+        ${regrow} ${obj.regrowsPopped}
+        ${ceramic} ${obj.ceramicsPopped}
+        ${moab} ${obj.moabsPopped}
+        ${bfb} ${obj.bfbsPopped}
+        ${zomg} ${obj.zomgsPopped}
+        ${ddt} ${obj.ddtsPopped}
+        ${bad} ${obj.badsPopped}`;
+
+    let ody = `total odysseys completed: ${obj.totalOdysseysCompleted}
+    total odyssey stars: ${obj.totalOdysseyStars}`;
+
+    // heroes
+    let heroes = obj.heroesPlacedData;
+    let sortable = [];
+    for (let hero in heroes) {
+        sortable.push([hero, heroes[hero]]);
+    }
+    sortable.sort((a, b) => b[1] - a[1]); // descending order
+    let heroesPlacedData = '';
+
+    const heroEmojiPairing = {
+        Quincy: quincy,
+        StrikerJones: jones,
+        Benjamin: benjamin,
+        Gwendolin: gwen,
+        PatFusty: pat,
+        CaptainChurchill: churchill,
+        Ezili: ezili,
+        Adora: adora,
+        AdmiralBrickell: brickell,
+        Etienne: etienne,
+        Sauda: sauda,
+        Psi: psi,
+        Geraldo: geraldo,
+        ObynGreenfoot: obyn
+    };
+
+    for (let i = 0; i < sortable.length; i++) {
+        let [name, amount] = sortable[i];
+        name = heroEmojiPairing[name] ? heroEmojiPairing[name] : name + ':';
+        heroesPlacedData += `${name} ${amount}\n`;
+    }
+
+    // towers
+
+    let towers = obj.towersPlacedData;
+    sortable = [];
+    for (let tower in towers) {
+        sortable.push([tower, towers[tower]]);
+    }
+    sortable.sort((a, b) => b[1] - a[1]); // descending order
+    let towersPlacedData = '';
+    for (let i = 0; i < sortable.length; i++) {
+        let [name, amount] = sortable[i];
+        towersPlacedData += `${name}: ${amount}\n`;
+    }
+
     let spMedals = JSON.stringify(obj.spMedals, null, 1);
     let coopMedals = JSON.stringify(obj.coopMedals, null, 1);
-    let medals = obj.raceMedals;
-    first = medals['BlackDiamond'] ?? 0;
-    second = medals['RedDiamond'] ?? 0;
-    third = medals['Diamond'] ?? 0;
-    fifty = medals['GoldDiamond'] ?? 0;
-    one = medals['DoubleGold'] ?? 0;
-    ten = medals['GoldSilver'] ?? 0;
-    twfive = medals['DoubleSilver'] ?? 0;
-    fiftyp = medals['Silver'] ?? 0;
-    seveny = medals['Bronze'] ?? 0;
-    let raceStr =
-        '1st: ' +
-        first +
-        '\n2nd: ' +
-        second +
-        '\n3rd: ' +
-        third +
-        '\ntop 50: ' +
-        fifty +
-        '\ntop 1%: ' +
-        one +
-        '\ntop 10%: ' +
-        ten +
-        '\ntop 25%: ' +
-        twfive +
-        '\ntop 50%: ' +
-        fiftyp +
-        '\ntop 75%: ' +
-        seveny +
-        '\n\nTotal: ' +
-        (first + second + third + fifty + one + ten + twfive + fiftyp + seveny);
+
+    let raceMedalsStr = '';
+    if (Object.keys(obj.raceMedals) == 0) {
+        raceMedalsStr = 'none';
+    }
+
+    for (medal in obj.raceMedals) {
+        let amt = obj.raceMedals[medal];
+        let emoji = raceEmojis[medal];
+        raceMedalsStr = `${emoji} ${amt}\n${raceMedalsStr}`; // add from bottom to top
+    }
     let bossMedals = `normal: ${obj.bossMedals['0']}\nelite: ${obj.bossMedals['1']}`;
     let mainEmbed = new MessageEmbed();
-    mainEmbed.setTitle(`${name}'s stats'`);
-    mainEmbed.setDescription('d');
-    mainEmbed.setDescription(desc.join('\n'));
-    mainEmbed.addField('Pops', popsInfo.join('\n').toString(), true);
-    mainEmbed.addField('Hero placed stats', heroesPlacedData, true);
-    mainEmbed.addField('Tower placed stats', towersPlacedData, true);
-    mainEmbed.addField('Singleplayer medals', spMedals, true);
-    mainEmbed.addField('Coop medals', coopMedals, true);
-    mainEmbed.addField('Race medals', raceStr, true);
-    mainEmbed.addField('Boss medals', bossMedals, true);
-    mainEmbed.addField('Odyssey', ody.join('\n'), true);
-    mainEmbed.setFooter({
-        text: 'There is way too much data, this will all be polished slowly over time, before NK inevitably kills this OP system. btw this "datasniffing" has been around this entire time'
-    });
+    mainEmbed
+        .setTitle(`${name}'s stats`)
+        .setDescription(desc.join('\n'))
+        .addField('Pops', popsInfo, true)
+        .addField('Hero placed stats', heroesPlacedData, true)
+        .addField('Tower placed stats', towersPlacedData, true)
+        .addField('Singleplayer medals', spMedals, true)
+        .addField('Coop medals', coopMedals, true)
+        .addField('Race medals', raceMedalsStr, true)
+        .addField('Boss medals', bossMedals, true)
+        .addField('Odyssey', ody, true)
+        .setFooter({
+            text: 'There is way too much data, this will all be polished slowly over time, before NK inevitably kills this OP system. btw this "datasniffing" has been around this entire time'
+        });
     return mainEmbed;
 }
 function showInstaStats(obj, insta) {
@@ -197,7 +225,6 @@ function showInstaStats(obj, insta) {
     let embed = new MessageEmbed();
     if (i.name.length == 0) i.name = i.BaseTower;
     let desc = [
-        `name: ${i.name}`,
         `games won: ${i.gamesWon}`,
         `highest round: ${i.highestRound}`,
         `times placed ${i.timesPlaced}`,
@@ -219,13 +246,15 @@ function showInstaStats(obj, insta) {
         `ddt: ${i.ddtsPopped}`,
         `bad: ${i.badsPopped}`
     ];
-    embed.setDescription(desc.join('\n'));
-    embed.addField('Pops', popinfo.join('\n'));
-    embed.setFooter({ text: 'sorry you cant go back to the main page' });
+    embed
+        .setTitle(`name: ${i.name}`)
+        .setDescription(desc.join('\n'))
+        .addField('Pops', popinfo.join('\n'))
+        .setFooter({ text: 'sorry you cant go back to the main page' });
     return embed;
 }
 function createSelector(obj) {
-    let normalNames = [
+    const normalNames = [
         'Dart Monkey',
         'Boomerang Monkey',
         'Bomb Shooter',
@@ -267,9 +296,4 @@ function isEmpty(obj) {
         if (obj.hasOwnProperty(key)) return false;
     }
     return true;
-}
-function getEmojiFromId(id) {
-    let guild = client.guilds.cache.get('543957081183617024');
-    let emoji = guild.emojis.cache.get(id);
-    return emoji;
 }

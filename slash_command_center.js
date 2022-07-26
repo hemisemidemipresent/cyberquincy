@@ -14,11 +14,10 @@ function configureCommands(client) {
 }
 
 async function handleCommand(interaction) {
-    const command = client.commands.get(interaction.commandName);
-
-    if (!command) return;
-
     try {
+        const command = client.commands.get(interaction.commandName);
+
+        if (!command) return;
         await command.execute(interaction);
     } catch (error) {
         console.error(error);
@@ -30,23 +29,34 @@ async function handleCommand(interaction) {
     }
 }
 async function handleButton(interaction) {
-    const command = client.commands.get(interaction.message.interaction.commandName);
-    if (!command || !command.onButtonClick) return;
     try {
+        const command = client.commands.get(interaction.message.interaction.commandName);
+        if (!command || !command.onButtonClick) return;
         await command.onButtonClick(interaction);
-    } catch {
-        // do nothing
+    } catch (e) {
+        console.log(e);
     }
 }
 
 async function handleAutocomplete(interaction) {
-    const command = client.commands.get(interaction.commandName);
-    if (!command || !command.onAutocomplete) return;
-
     try {
+        const command = client.commands.get(interaction.commandName);
+        if (!command || !command.onAutocomplete) return;
         await command.onAutocomplete(interaction);
-    } catch {
-        // do nothing
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+async function handleSelectMenu(interaction) {
+    try {
+        const command = client.commands.get(interaction.message.interaction.commandName);
+
+        if (!command || !command.onSelectMenu) return;
+
+        await command.onSelectMenu(interaction);
+    } catch (e) {
+        console.log(e);
     }
 }
 
@@ -55,5 +65,6 @@ module.exports = {
     configureCommands,
     handleCommand,
     handleButton,
-    handleAutocomplete
+    handleAutocomplete,
+    handleSelectMenu
 };

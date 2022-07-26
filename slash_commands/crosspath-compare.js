@@ -47,8 +47,8 @@ async function embedBloonology(towerName, upgrade) {
 
     const crosspathUpgrades = [
         upgrade.substring(0, firstXIndex) + '1' + upgrade.substring(firstXIndex + 1, lastXIndex) + '0' + upgrade.substring(lastXIndex + 1),
-        upgrade.substring(0, firstXIndex) + '0' + upgrade.substring(firstXIndex + 1, lastXIndex) + '1' + upgrade.substring(lastXIndex + 1),
         upgrade.substring(0, firstXIndex) + '2' + upgrade.substring(firstXIndex + 1, lastXIndex) + '0' + upgrade.substring(lastXIndex + 1),
+        upgrade.substring(0, firstXIndex) + '0' + upgrade.substring(firstXIndex + 1, lastXIndex) + '1' + upgrade.substring(lastXIndex + 1),
         upgrade.substring(0, firstXIndex) + '0' + upgrade.substring(firstXIndex + 1, lastXIndex) + '2' + upgrade.substring(lastXIndex + 1),
     ]
 

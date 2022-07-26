@@ -110,9 +110,11 @@ async function execute(interaction) {
 function validateInput(interaction) {
     let [parsedEntity, parsedMap, parsedPerson] = parseAll(interaction);
 
-    if (parsedEntity.hasErrors()) return `Entity ${entity} didn't match tower/upgrade/hero, including aliases`;
+    if (parsedEntity.hasErrors()) {
+        return `Entity didn't match tower/upgrade/hero, including aliases`;
+    }
 
-    if (parsedMap.hasErrors()) return `Map/Difficulty ${map} didn't match, including aliases`;
+    if (parsedMap.hasErrors()) return `Map/Difficulty didn't match, including aliases`;
 
     if ((parsedEntity.tower_upgrade || parsedEntity.hero) && parsedMap.map && parsedPerson.person) {
         return "Don't search a person if you're already narrowing down your search to a specific completion";
@@ -120,9 +122,9 @@ function validateInput(interaction) {
 }
 
 function parseAll(interaction) {
-    parsedEntity = parseEntity(interaction);
-    parsedMap = parseMap(interaction);
-    person = parsePerson(interaction);
+    const parsedEntity = parseEntity(interaction);
+    const parsedMap = parseMap(interaction);
+    const person = parsePerson(interaction);
     return [parsedEntity, parsedMap, person];
 }
 
@@ -139,14 +141,27 @@ const UserCommandError = require('../exceptions/user-command-error.js');
 const DeveloperCommandError = require('../exceptions/developer-command-error.js');
 
 function parseEntity(interaction) {
-    entityParser = new OrParser(new TowerParser(), new TowerUpgradeParser(), new HeroParser());
-    entity = interaction.options.getString('entity');
+    const entityParser = new OrParser(new TowerParser(), new TowerUpgradeParser(), new HeroParser());
+    const entity = interaction.options.getString('entity');
     if (entity) {
-        canonicalEntity = Aliases.getCanonicalForm(entity);
+        const canonicalEntity = Aliases.canonicizeArg(entity);
         if (canonicalEntity) {
-            return CommandParser.parse([canonicalEntity], entityParser);
+            let parsed = CommandParser.parse([canonicalEntity], entityParser);
+            // Alias tier 1 and 2 towers to base tower
+            if (parsed.tower_upgrade) {
+                const [, tier] = Towers.pathTierFromUpgradeSet(
+                    Towers.towerUpgradeToUpgrade(
+                        parsed.tower_upgrade
+                    )
+                )
+                if (tier < 3) {
+                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade)
+                    parsed = CommandParser.parse([`${tower}#222`], entityParser)
+                }
+            }
+            return parsed
         } else {
-            parsed = new Parsed();
+            const parsed = new Parsed();
             parsed.addError('Canonical not found');
             return parsed;
         }
@@ -154,14 +169,14 @@ function parseEntity(interaction) {
 }
 
 function parseMap(interaction) {
-    mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
-    map = interaction.options.getString('map');
+    const mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
+    const map = interaction.options.getString('map');
     if (map) {
-        canonicalMap = Aliases.getCanonicalForm(map);
+        const canonicalMap = Aliases.getCanonicalForm(map);
         if (canonicalMap) {
             return CommandParser.parse([canonicalMap], mapParser);
         } else {
-            parsed = new Parsed();
+            const parsed = new Parsed();
             parsed.addError('Canonical not found');
             return parsed;
         }
@@ -169,7 +184,7 @@ function parseMap(interaction) {
 }
 
 function parsePerson(interaction) {
-    person = interaction.options.getString('person')?.toLowerCase();
+    const person = interaction.options.getString('person')?.toLowerCase();
     if (person) {
         return CommandParser.parse([`user#${person}`], new PersonParser());
     } else return new Parsed();

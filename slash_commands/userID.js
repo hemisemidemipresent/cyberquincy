@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageButton, MessageActionRow, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageButton, MessageActionRow, MessageAttachment, MessageSelectMenu } = require('discord.js');
 
 const { default: axios } = require('axios');
 const nodefetch = require('node-fetch');
@@ -18,6 +18,7 @@ const { camo, lead, purple, regrow, ceramic, moab, bfb, zomg, ddt, bad } = Emoji
 const { adora, benjamin, brickell, churchill, etienne, ezili, geraldo, gwen, jones, obyn, pat, psi, quincy, sauda } =
     Emojis['614111055890612225'].hero;
 const raceEmojis = Emojis['753449196132237425'].race;
+const towerEmojis = Emojis['753449196132237425'].towers;
 
 const appID = 11;
 const skuID = 35;
@@ -35,91 +36,112 @@ builder = new SlashCommandBuilder()
             .setRequired(true)
     );
 
-async function request(objStr, url) {
-    const nonce = Math.random() * Math.pow(2, 63) + '';
-    try {
-        let k = await nodefetch(url, {
-            method: 'POST',
-            body: JSON.stringify({
-                data: objStr,
-                auth: {
-                    session: sessionID,
-                    appID: appID,
-                    skuID: skuID,
-                    device: deviceID
-                },
-                sig: nksku.signonce.sign(objStr, nonce),
-                nonce: nonce
-            }),
-            headers: { 'User-Agent': UserAgent, 'Content-Type': 'application/json' }
-        });
-        let res = await k.json();
-        return JSON.parse(res.data);
-    } catch (error) {
-        return new Discord.MessageEmbed()
-            .setTitle('Invalid Challenge Code!')
-            .addField('In case this is a valid challenge code:', `report it to the [discord server](${discord})`)
-            .setColor(red);
-    }
-}
 module.exports = {
     data: builder,
-    user: null,
+    // the "entry point" to the command
     async execute(interaction) {
         const challengeCode = interaction.options.getString('challenge_code').toLowerCase();
-        const objStr = `{"index":"challenges","query":"id:${challengeCode}","limit":1,"offset":0,"hint":"single_challenge","options":{}}`;
 
+        const objStr = `{"index":"challenges","query":"id:${challengeCode}","limit":1,"offset":0,"hint":"single_challenge","options":{}}`;
         let results = await request(objStr, 'https://api.ninjakiwi.com/utility/es/search');
         results = results.results[0];
         this.userID = results.owner;
+
         const embed = new Discord.MessageEmbed()
             .setTitle('Success!')
             .setDescription(`The owner of the challenge's userID is \`${results.owner}\``)
             .addField('challenge name', results.challengeName)
             .setColor(green);
 
-        row = new MessageActionRow().addComponents(
+        // user statistics part
+
+        seeUserAction = new MessageActionRow().addComponents(
             new MessageButton().setCustomId('stats').setLabel('See user statistics').setStyle('PRIMARY')
         );
         this.user = interaction.user;
-        this.interaction = await interaction.reply({ embeds: [embed], components: [] });
+        this.interaction = await interaction.reply({ embeds: [embed], components: [seeUserAction] });
     },
-    async onButtonClick(bInter) {
-        // bInter = button Interaction
-        if (bInter.user.id != this.user.id) return;
-        if (bInter.customId != 'stats') return;
 
-        await this.showStats(bInter);
-    },
-    async showStats(interaction) {
-        let body;
-        let url = `https://priority-static-api.nkstatic.com/storage/static/11/${this.userID}/public-stats`;
-        try {
-            body = await axios.get(url, { headers: { 'User-Agent': UserAgent } });
-        } catch {
-            return await interaction.update({
-                embeds: [
-                    new Discord.MessageEmbed()
-                        .setDescription('invalid user id associated with the challenge code!')
-                        .setColor(palered)
-                ],
-                components: []
-            });
+    async onButtonClick(interaction) {
+        if (interaction.user.id != this.user.id) return;
+        if (interaction.customId == 'stats') {
+            // load data
+            let body;
+            let url = `https://priority-static-api.nkstatic.com/storage/static/11/${this.userID}/public-stats`;
+            try {
+                body = await axios.get(url, { headers: { 'User-Agent': UserAgent } });
+            } catch {
+                return await interaction.update({
+                    embeds: [
+                        new Discord.MessageEmbed()
+                            .setDescription('invalid user id associated with the challenge code!')
+                            .setColor(palered)
+                    ],
+                    components: []
+                });
+            }
+            let obj = body.data;
+
+            obj.playerName = await getUsernames([this.userID]); // add in username
+            this.obj = obj;
+
+            // create the tower selector
+            function createSelector(obj) {
+                const normalNames = [
+                    'Dart Monkey',
+                    'Boomerang Monkey',
+                    'Bomb Shooter',
+                    'Tack Shooter',
+                    'Ice Monkey',
+                    'Glue Gunner',
+                    'Sniper Monkey',
+                    'Monkey Sub',
+                    'Monkey Buccaneer',
+                    'Monkey Ace',
+                    'Heli Pilot',
+                    'Mortar Monkey',
+                    'Dartling Gunner',
+                    'Wizard Monkey',
+                    'Super Monkey',
+                    'Ninja Monkey',
+                    'Alchemist',
+                    'Druid',
+                    'Banana Farm',
+                    'Spike Factory',
+                    'Monkey Village',
+                    'Engineer Monkey'
+                ];
+                let options = [];
+                for (let i = 0; i < normalNames.length; i++) {
+                    let codeName = normalNames[i].replace(/ +/g, '') + '1';
+                    let monke = obj.namedMonkeyStats[`${codeName}`];
+                    option = {
+                        label: normalNames[i],
+                        value: codeName
+                    };
+                    if (monke.name) option.description = monke.name;
+                    options.push(option);
+                }
+                options.push({ label: 'Main page', value: 'mainPage' });
+                return new MessageSelectMenu()
+                    .setCustomId('towerSelector')
+                    .setPlaceholder('Nothing selected')
+                    .addOptions(options);
+            }
+            this.row = new MessageActionRow().addComponents(createSelector(this.obj));
+            await this.showStats(interaction); //
         }
+    },
 
-        let obj = body.data;
-        this.obj = obj;
-        obj.playerName = await getUsernames([this.userID]);
+    // this function is in charge of the huge embed for the main user stats page
+    async showStats(interaction) {
+        let obj = this.obj;
 
         function mainPage(obj) {
             let name = obj.playerName;
             let winrate = Math.round((obj.gamesWon / obj.gameCount) * 100) / 100;
             let desc = [
                 `id: ${obj.playerId}`,
-                `rank: ${obj.playerRank}`,
-                `playerXp: ${obj.playerXp}`,
-                `veteran rank: ${obj.veteranRank}`,
-                `veteran xp: ${obj.veteranXp}`,
                 `avatar: ${obj.avatar}`,
                 `banner: ${obj.banner}`,
                 `game count: ${obj.gameCount}`,
@@ -203,7 +225,7 @@ module.exports = {
             let towersPlacedData = '';
             for (let i = 0; i < sortable.length; i++) {
                 let [name, amount] = sortable[i];
-                towersPlacedData += `${name}: ${amount}\n`;
+                towersPlacedData += `${towerEmojis[name]}: ${amount}\n`;
             }
 
             let spMedals = JSON.stringify(obj.spMedals, null, 1);
@@ -215,10 +237,17 @@ module.exports = {
                 let emoji = raceEmojis[medal];
                 raceMedalsStr = `${emoji} ${amt}\n${raceMedalsStr}`; // add from bottom to top
             }
-            let bossMedals = `normal: ${obj.bossMedals['0']}\nelite: ${obj.bossMedals['1']}`;
+
+            let bossMedals = JSON.stringify(obj.bossMedals, null, 4);
             let mainEmbed = new MessageEmbed();
+
+            // playerRank = obj.playerRank;
+            // playerXp = obj.playerXp;
+            // veteran_rank = obj.veteranRank;
+            // veteran_xp = obj.veteranXp;
+            let rank = obj.playerRank == 155 ? `Veteran Level ${obj.veteranRank}` : `Level ${obj.playerRank}`;
             mainEmbed
-                .setTitle(`${name}'s stats`)
+                .setTitle(`${name} (${rank})`)
                 .setDescription(desc.join('\n'))
                 .addField('Pops', popsInfo, true)
                 .addField('Hero placed stats', heroesPlacedData, true)
@@ -233,13 +262,80 @@ module.exports = {
                 });
             return mainEmbed;
         }
+
         let embed = mainPage(obj);
-        a = client.emojis.cache.find((emoji) => emoji.name === 'top1percent').toString();
-        embed.addField('a', a);
+
         await interaction.update({
             embeds: [embed],
-            components: [],
+            components: [this.row],
             files: [new MessageAttachment(Buffer.from(JSON.stringify(obj, null, 1)), `${this.userID}.json`)]
         });
+    },
+
+    async onSelectMenu(interaction) {
+        let id = interaction.values[0];
+
+        if (id === 'mainPage') {
+            await this.showStats(interaction);
+        } else {
+            await this.showTowerStats(interaction, id);
+        }
+    },
+
+    async showTowerStats(interaction, tower) {
+        let i = this.obj.namedMonkeyStats[tower];
+        let embed = new MessageEmbed();
+        if (i.name.length == 0) i.name = i.BaseTower;
+        let desc = [
+            `games won: ${i.gamesWon}`,
+            `highest round: ${i.highestRound}`,
+            `times placed ${i.timesPlaced}`,
+            `abilities used: ${i.abilitiesUsed}`,
+            `times upgraded: ${i.timesUpgraded}`,
+            `times sacrificed: ${i.timesSacrificed}`
+        ];
+        let popinfo = `Total: ${i.totalPopCount || 0}
+        Coop: ${i.totalCoopPopCount || 0}
+        ${camo} ${i.camoBloonsPopped || 0}
+        ${lead} ${i.leadBloonsPopped || 0}
+        ${purple} ${i.purpleBloonsPopped || 0}
+        ${regrow} ${i.regrowBloonsPopped || 0}
+        ${ceramic} ${i.ceramicBloonsPopped || 0}
+        ${moab} ${i.moabsPopped || 0}
+        ${bfb} ${i.bfbsPopped || 0}
+        ${zomg} ${i.zomgsPopped || 0}
+        ${ddt} ${i.ddtsPopped || 0}
+        ${bad} ${i.badsPopped || 0}`;
+        embed.setTitle(`name: ${i.name}`).setDescription(desc.join('\n')).addField('Pops', popinfo);
+        return await interaction.update({ embeds: [embed], components: [this.row] });
     }
 };
+
+// just a general "request" function
+async function request(objStr, url) {
+    const nonce = Math.random() * Math.pow(2, 63) + '';
+    try {
+        let k = await nodefetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                data: objStr,
+                auth: {
+                    session: sessionID,
+                    appID: appID,
+                    skuID: skuID,
+                    device: deviceID
+                },
+                sig: nksku.signonce.sign(objStr, nonce),
+                nonce: nonce
+            }),
+            headers: { 'User-Agent': UserAgent, 'Content-Type': 'application/json' }
+        });
+        let res = await k.json();
+        return JSON.parse(res.data);
+    } catch (error) {
+        return new Discord.MessageEmbed()
+            .setTitle('Invalid Challenge Code!')
+            .addField('In case this is a valid challenge code:', `report it to the [discord server](${discord})`)
+            .setColor(red);
+    }
+}

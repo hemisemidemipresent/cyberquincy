@@ -48,10 +48,23 @@ async function handleAutocomplete(interaction) {
     }
 }
 
+async function handleSelectMenu(interaction) {
+    try {
+        const command = client.commands.get(interaction.message.interaction.commandName);
+
+        if (!command || !command.onSelectMenu) return;
+
+        await command.onSelectMenu(interaction);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 module.exports = {
     commandFiles,
     configureCommands,
     handleCommand,
     handleButton,
-    handleAutocomplete
+    handleAutocomplete,
+    handleSelectMenu
 };

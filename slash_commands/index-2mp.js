@@ -446,10 +446,10 @@ function filterCombo(c, parsed) {
 
     let matchesMap = true;
     if (parsed.map_difficulty) {
-        matchesMap = Aliases.allMapsFromMapDifficulty(parsedMap.map_difficulty).includes(c.MAP);
+        matchesMap = Aliases.allMapsFromMapDifficulty(parsed.map_difficulty).includes(c.MAP);
     } else if (parsed.map) {
         // Map
-        matchesMap = parsedMap.map == c.MAP;
+        matchesMap = parsed.map == c.MAP;
     }
 
     const matchesOg = parsed.hasAny() ? true : c.OG;

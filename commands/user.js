@@ -254,7 +254,7 @@ function showInstaStats(obj, insta) {
     return embed;
 }
 function createSelector(obj) {
-    let normalNames = [
+    const normalNames = [
         'Dart Monkey',
         'Boomerang Monkey',
         'Bomb Shooter',

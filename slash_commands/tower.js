@@ -19,17 +19,18 @@ const builder = new SlashCommandBuilder()
     .setDescription('Find information for each tower')
     .addStringOption(towerOption)
     .addStringOption((option) =>
-        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
+        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(false)
     );
 
 function validateInput(interaction) {
     const towerPath = parseTowerPath(interaction);
+    if (!towerPath) return
     if (isNaN(towerPath)) return "Tower path provided isn't `base` and contains non-numerical characters";
     if (!Towers.isValidUpgradeSet(towerPath)) return 'Invalid tower path provided!';
 }
 
 function parseTowerPath(interaction) {
-    const tp = interaction.options.getString('tower_path').toLowerCase();
+    const tp = interaction.options.getString('tower_path')?.toLowerCase();
     if (tp == 'base') return '000';
     else return tp;
 }
@@ -49,17 +50,11 @@ async function embedBloonology(towerName, upgrade) {
     const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
     const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(costs, towerName, upgrade);
     const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
-    const upgradeFullDescription = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+    const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
-    fullDescription = upgradeFullDescription.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3);
-
-    // background info: there are 2 newlines present in the string: \n and \r. \n is preferred
-    let info = fullDescription
-        .toString()
-        .replace(/\n/g, '') // removes all newlines \n
-        .replace(/\r \t/g, '\n') // removes all \r + tab
-        .replace(/ \t-/g, '-    ') // removes remaining tabs
-        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
+    const upgradeDescription = cleanDescription(
+        allUpgradeDescriptions.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3)
+    );
 
     const formattedUpgrade = upgrade.split('').join('-');
     const formattedTowerName = Aliases.toIndexNormalForm(towerName, '-');
@@ -74,7 +69,7 @@ async function embedBloonology(towerName, upgrade) {
 
     let embed = new Discord.MessageEmbed()
         .setTitle(title)
-        .setDescription(info)
+        .setDescription(upgradeDescription)
         .addField(
             'cost',
             `${cost} - medium\n${Towers.hard(cost)} - hard\n` + `if this is wrong [yell at hemi here](${discord})`,
@@ -86,6 +81,72 @@ async function embedBloonology(towerName, upgrade) {
         .setColor(cyber);
     return embed;
 }
+
+async function embedBloonologySummary(towerName) {
+    let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+    let res;
+    try {
+        res = await axios.get(link);
+    } catch {
+        return new Discord.MessageEmbed().setColor(red).setTitle('Something went wrong while fetching the data');
+    }
+    let body = res.data;
+
+    const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+
+    const tierUpgrades = []
+    let idx, tier
+    for (tier = 1; tier <= 5; tier++) {
+        for (idx = 0; idx < 3; idx++) {
+            tierUpgrades.push('000'.slice(0, idx) + `${tier}` + '000'.slice(idx+1))
+        }
+    }
+
+    const pathDescriptions = tierUpgrades.map(u => cleanDescription(
+        descriptions.find(description => description.substr(0, 3) == u).substr(3)
+    ))
+
+    const splitTexts = [
+        '__Changes from 0-0-0__',
+        'Changes from 000:',
+        '__Changes from Previous Tier__',
+        'Changes from previous tier:',
+        '__Crosspath Benefits__',
+        'Crosspath Benefits:',
+    ]
+    const splitTextsRegexStr = splitTexts.map(st => `(?:${st})`).join('|')
+
+    const pathBenefits = pathDescriptions.map(desc => {
+        // We're relying on Changes from Previous Tier being the first header after the upgrade details
+        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim()
+        return rawBenefits.split('\n').map(n => `⟴ ${n}`).join('\n')
+    })
+
+    const headers = tierUpgrades.map(u => {
+        const [path, tier] = Towers.pathTierFromUpgradeSet(u);
+        const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
+        return `${upgradeName} (${u})`;
+    })
+
+    const placedTowerDescription = cleanDescription(descriptions.find(description => description.substr(0, 3) == '000').substr(3))
+
+    const title = Aliases.toIndexNormalForm(towerName, '-') + ' Summary'
+
+    const embed = new Discord.MessageEmbed()
+        .setTitle(title)
+        .setFooter({ text: footer })
+        .setColor(cyber);
+
+    embed.addField(
+        `Base Stats`,
+        placedTowerDescription.split(/(?:\n|\r)+/).map(s => s.trim().replace(/\u200E/g, '')).filter(s => s.length > 0).join(' ♦ ')
+    )
+
+    headers.forEach((header, idx) => embed.addField(header, pathBenefits[idx], true))
+
+    return embed;
+}
+
 async function execute(interaction) {
     const validationFailure = validateInput(interaction);
     if (validationFailure)
@@ -97,9 +158,25 @@ async function execute(interaction) {
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);
 
-    const embed = await embedBloonology(tower, towerPath);
+    let embed, ephemeral;
+    if (towerPath) {
+        embed = await embedBloonology(tower, towerPath);
+        ephemeral = false;
+    } else {
+        embed = await embedBloonologySummary(tower)
+        ephemeral = true;
+    }
 
-    return await interaction.reply({ embeds: [embed], ephemeral: false });
+    return await interaction.reply({ embeds: [embed], ephemeral: ephemeral });
+}
+
+// background info: there are 2 newlines present in the string: \n and \r. \n is preferred
+function cleanDescription(desc) {
+    return desc.toString()
+        .replace(/\n/g, '') // removes all newlines \n
+        .replace(/\r \t/g, '\n') // removes all \r + tab
+        .replace(/ \t-/g, '-    ') // removes remaining tabs
+        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
 }
 
 module.exports = {

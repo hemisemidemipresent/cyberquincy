@@ -1,10 +1,15 @@
 function isValidFormBody(embed) {
     for (const embedField of embed.fields) {
-        if (embedField.value.length > 1024) return false;
+        if (!isValidEmbedField(embedField.value)) return false;
     }
     return true;
 }
 
+function isValidEmbedField(text) {
+    return text.length <= 1024
+}
+
 module.exports = {
+    isValidEmbedField,
     isValidFormBody,
 }

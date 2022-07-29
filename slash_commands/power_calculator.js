@@ -205,7 +205,7 @@ async function execute(interaction) {
     if (powerT5 > 90000) powerT5 = 90000;
     if (powerPops > 90000) powerPops = 90000;
 
-    let totalPower = powerCost + powerUpgrade + powerT5 + powerTotem;
+    let totalPower = powerCost + powerUpgrade + powerT5 + powerTotem + powerPops;
 
     powerCost = Number.isInteger(powerCost) ? powerCost : powerCost.toFixed(1);
     powerUpgrade = Number.isInteger(powerUpgrade) ? powerUpgrade : powerUpgrade.toFixed(1);
@@ -249,11 +249,10 @@ async function execute(interaction) {
         .addField(
             `**Total power: \`${Number.isInteger(totalPower) ? totalPower : totalPower.toFixed(1)}\`**`,
             `Power from money spent: \`${powerCost}\`
-                Power from upgrades: \`${powerUpgrade}\`
-                Power from T5: \`${powerT5}\`
-                Power from totems: \`${powerTotem}\`
-                Power from pops: \`${powerPops}\`
-                `
+            Power from upgrades: \`${powerUpgrade}\`
+            Power from T5: \`${powerT5}\`
+            Power from totems: \`${powerTotem}\`
+            Power from pops: \`${powerPops}\``
         )
         .setFooter({ text: `Difficulty: ${difficulty.toUpperCase()}` })
         .setColor(paragon);
@@ -265,9 +264,9 @@ async function execute(interaction) {
         embed.addField(
             '\u200b',
             `Power to next degree (${x + 2}): \`${Number.isInteger(powerDiff) ? powerDiff : powerDiff.toFixed(1)}\`
-                Power requirement for next degree: \`${reqs[x]}\`
-                Power to degree 100: \`${Number.isInteger(to100) ? to100 : to100.toFixed(1)}\`
-                Totems needed for degree 100: \`${totemsNeeded}\``
+            Power requirement for next degree: \`${reqs[x]}\`
+            Power to degree 100: \`${Number.isInteger(to100) ? to100 : to100.toFixed(1)}\`
+            Totems needed for degree 100: \`${totemsNeeded}\``
         );
     }
 

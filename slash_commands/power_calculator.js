@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
@@ -269,13 +269,17 @@ async function execute(interaction) {
         const powerDiff = reqs[x + 1] - totalPower;
         const to100 = 200000 - totalPower;
         const totemsNeeded = Math.ceil(to100 / 2000);
-        embed.addFields([{
-            name: '\u200b',
-            value: `Power to next degree (${x + 2}): \`${Number.isInteger(powerDiff) ? powerDiff : powerDiff.toFixed(1)}\`
+        embed.addFields([
+            {
+                name: '\u200b',
+                value: `Power to next degree (${x + 2}): \`${
+                    Number.isInteger(powerDiff) ? powerDiff : powerDiff.toFixed(1)
+                }\`
                 Power requirement for next degree: \`${reqs[x]}\`
                 Power to degree 100: \`${Number.isInteger(to100) ? to100 : to100.toFixed(1)}\`
                 Totems needed for degree 100: \`${totemsNeeded}\``
-        }]);
+            }
+        ]);
     }
 
     return await interaction.reply({

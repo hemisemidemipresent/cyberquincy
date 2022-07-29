@@ -197,6 +197,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                 { name: '# Combos', value: `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}` }
             ]);
 
+            let fields = [];
             if (mobile) {
                 // PADDING
                 let colWidths = [];
@@ -240,38 +241,34 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                     rowField += rowText + '\n';
                 }
 
-                // FINISH
-                if (rowField.length > 1024) {
-                    if (direction > 0) rightIndex--;
-                    if (direction < 0) leftIndex++;
-                    continue;
-                }
-                challengeEmbed.addFields([{ name: headerField, value: rowField, inline: true }]);
+                fields.push({ name: headerField, value: rowField, inline: true });
             } else {
-                let fields = [];
                 for (header in colData) {
                     const data = colData[header].slice(leftIndex, rightIndex + 1);
 
-                    let value = data.join('\n');
-
-                    fields.push({ name: gHelper.toTitleCase(header.split('_').join(' ')), value, inline: true });
+                    fields.push({
+                        name: gHelper.toTitleCase(header.split('_').join(' ')),
+                        value: data.join('\n'),
+                        inline: true
+                    });
                 }
-                if (fields.filter((e) => e.value.length > 1024).length) {
-                    if (direction > 0) rightIndex--;
-                    if (direction < 0) leftIndex++;
-                    continue;
-                }
-                challengeEmbed.addFields(fields);
             }
 
-            setCustomFields(challengeEmbed);
+            if (fields.every((field) => field.value.length <= 1024)) {
+                challengeEmbed.addFields(fields);
+                setCustomFields(challengeEmbed);
+                console.log(challengeEmbed);
+                return [challengeEmbed, numRows > maxNumRowsDisplayed];
+            }
 
-            return [challengeEmbed, numRows > maxNumRowsDisplayed];
+            if (direction > 0) rightIndex--;
+            if (direction < 0) leftIndex++;
         }
     }
 
     async function displayPages(direction = 1) {
         let [embed, multipage] = await createPage(direction);
+
         await interaction.editReply({
             embeds: [embed],
             components: multipage ? [multipageButtons] : [singlepageButtons]
@@ -297,7 +294,6 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
         });
 
         collector.on('collect', async (buttonInteraction) => {
-            console.log('collect');
             collector.stop();
             buttonInteraction.deferUpdate();
 

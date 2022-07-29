@@ -3,7 +3,7 @@ const {
     SlashCommandStringOption,
     SlashCommandIntegerOption,
     SlashCommandBooleanOption
-} = require('@discordjs/builders');
+} = require('discord.js');
 
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 
 const FBG = require('../jsons/freeplay.json');
 const json = require('../jsons/rounds_topper.json');

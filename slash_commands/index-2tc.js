@@ -25,7 +25,7 @@ const { orange, palered } = require('../jsons/colours.json');
 
 const { COLS } = require('../services/index/2tc_scraper');
 
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
 const entity1Option = new SlashCommandStringOption()
     .setName('entity1')

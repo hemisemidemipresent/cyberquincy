@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { isValidTempleSet } = require('../helpers/towers');
 
 const t = require('../jsons/temple.json');

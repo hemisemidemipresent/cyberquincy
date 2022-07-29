@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
 

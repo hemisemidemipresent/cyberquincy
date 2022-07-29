@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, MessageAttachment } = require('discord.js');
 
 const { default: axios } = require('axios');

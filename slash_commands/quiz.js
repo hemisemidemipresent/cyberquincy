@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const quiz = require('../jsons/quiz.json');
 const { cyber, orange, turq, magenta } = require('../jsons/colours.json');
 const { shuffle } = require('../helpers/general');

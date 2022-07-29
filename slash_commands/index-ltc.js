@@ -71,7 +71,7 @@ const COLS = {
     }
 };
 
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
 

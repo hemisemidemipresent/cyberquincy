@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { Bloonarius } = require('../jsons/boss.json');
 const { Lych } = require('../jsons/boss.json');
 const { Vortex } = require('../jsons/boss.json');

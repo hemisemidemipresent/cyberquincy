@@ -10,7 +10,7 @@ const Index = require('../helpers/index.js');
 
 const { paleorange } = require('../jsons/colours.json');
 
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
 const mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(false);
 

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const income = require('../jsons/income-normal.json');
 const abrincome = require('../jsons/income-abr.json');
 const gHelper = require('../helpers/general.js');

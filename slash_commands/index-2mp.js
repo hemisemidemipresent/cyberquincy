@@ -16,7 +16,7 @@ const TOWER_COLS = {
     LAST: 'Y'
 };
 
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 let entityOption = new SlashCommandStringOption().setName('entity').setDescription('Hero/Tower/Upgrade').setRequired(false);
 
@@ -333,7 +333,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     }
 
     if (mapsLeft.length > 0) {
-        challengeEmbed.addFields([{ name: 'Maps Left', inline: mapsLeft.join(', ') }]);
+        challengeEmbed.addFields([{ name: 'Maps Left', value: mapsLeft.join(', ') }]);
     }
 
     challengeEmbed.setFooter({ text: '----\nOG completion bolded' });

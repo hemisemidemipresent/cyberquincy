@@ -168,16 +168,16 @@ module.exports = {
                 `total trophies: ${obj.totalTrophiesEarned}`
             ];
             const popsInfo = `Total: ${obj.bloonsPopped}
-                ${camo} ${obj.camosPopped}
-                ${lead} ${obj.leadsPopped}
-                ${purple} ${obj.purplesPopped}
-                ${regrow} ${obj.regrowsPopped}
-                ${ceramic} ${obj.ceramicsPopped}
-                ${moab} ${obj.moabsPopped}
-                ${bfb} ${obj.bfbsPopped}
-                ${zomg} ${obj.zomgsPopped}
-                ${ddt} ${obj.ddtsPopped}
-                ${bad} ${obj.badsPopped}`;
+            ${camo} ${obj.camosPopped}
+            ${lead} ${obj.leadsPopped}
+            ${purple} ${obj.purplesPopped}
+            ${regrow} ${obj.regrowsPopped}
+            ${ceramic} ${obj.ceramicsPopped}
+            ${moab} ${obj.moabsPopped}
+            ${bfb} ${obj.bfbsPopped}
+            ${zomg} ${obj.zomgsPopped}
+            ${ddt} ${obj.ddtsPopped}
+            ${bad} ${obj.badsPopped}`;
 
             let ody = `total odysseys completed: ${obj.totalOdysseysCompleted}
             total odyssey stars: ${obj.totalOdysseyStars}`;

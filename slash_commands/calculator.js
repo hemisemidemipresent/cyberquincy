@@ -248,7 +248,7 @@ function costOfHero(hero, difficulty) {
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, i, difficulty) {
     if (!isNaN(t)) return Number(t);
-    else if ((round = CommandParser.parse([t], new RoundParser('IMPOPPABLE')).round)) {
+    else if ((round = CommandParser.parse([t], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (isTowerUpgradeCrosspath(t)) {
         // Catches tower upgrades with crosspaths like wiz#401

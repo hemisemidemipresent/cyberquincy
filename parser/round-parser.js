@@ -16,7 +16,7 @@ class RoundParser {
         var startRound = 1;
         var endRound = Infinity;
         if (difficulty) {
-            if (!['ALL', 'PREDET'].includes(difficulty)) {
+            if (!['ALL', 'PREDET', 'PREDET_CHIMPS'].includes(difficulty)) {
                 // "ALL" represents "ALL_ROUNDS"
                 // Translate difficulty into round numbers
                 this.translationParser = new DifficultyParser();

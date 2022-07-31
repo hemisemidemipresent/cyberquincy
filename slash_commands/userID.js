@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, MessageAttachment } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, AttachmentBuilder, ButtonStyle } = require('discord.js');
 
 const { default: axios } = require('axios');
 const nodefetch = require('node-fetch');
@@ -239,7 +238,7 @@ module.exports = {
         await interaction.update({
             embeds: [embed],
             components: [],
-            files: [new MessageAttachment(Buffer.from(JSON.stringify(obj, null, 1)), `${this.userID}.json`)]
+            files: [new AttachmentBuilder(Buffer.from(JSON.stringify(obj, null, 1)), `${this.userID}.json`)]
         });
     }
 };

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption, ComponentType } = require('discord.js');
 
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
@@ -330,7 +330,7 @@ function displayPages(interaction, pages, versionAdded, parsed) {
 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
-            componentType: 'BUTTON',
+            componentType: ComponentType.Button,
             time: 60000
         });
 

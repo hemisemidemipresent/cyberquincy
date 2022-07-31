@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption, ComponentType } = require('discord.js');
 
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
@@ -135,7 +135,7 @@ async function displayHeroPlacementRounds(interaction) {
         };
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
-            componentType: 'BUTTON',
+            componentType: ComponentType.Button,
             time: 20000
         });
 

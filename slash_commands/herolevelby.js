@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption, ComponentType, ButtonStyle } = require('discord.js');
 
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
@@ -107,7 +107,7 @@ async function displayHeroPlacementRounds(interaction) {
             );
             const displayedRightRound = Math.min(leftRound + 9, goalRound);
             label = `${displayedLeftRound}->${displayedRightRound}`;
-            buttons.addComponents(new Discord.ButtonBuilder().setLabel(label).setStyle('PRIMARY').setCustomId(label));
+            buttons.addComponents(new Discord.ButtonBuilder().setLabel(label).setStyle(ButtonStyle.Primary).setCustomId(label));
         }
         if (interaction.replied) {
             await interaction.editReply({
@@ -135,7 +135,7 @@ async function displayHeroPlacementRounds(interaction) {
         };
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
-            componentType: 'BUTTON',
+            componentType: ComponentType.Button,
             time: 20000
         });
 

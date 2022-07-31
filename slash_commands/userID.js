@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, AttachmentBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, AttachmentBuilder, ButtonStyle } = require('discord.js');
 
 const { default: axios } = require('axios');
 const nodefetch = require('node-fetch');

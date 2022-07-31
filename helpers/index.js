@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
 
 //////////////////////////////////////////////////////
 // Cacheing
@@ -289,7 +289,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
-            componentType: 'BUTTON',
+            componentType: ComponentType.Button,
             time: 20000
         });
 

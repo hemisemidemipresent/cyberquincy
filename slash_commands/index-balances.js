@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption, ComponentType } = require('discord.js');
 
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
@@ -282,7 +282,9 @@ function displayPages(interaction, pages, versionAdded, parsed) {
     if (pages.length <= 1) {
         includedButtons = [];
     } else if (pages.length < 5) {
-        includedButtons = multipageButtons.filter((b) => b.customId.endsWith('!') || b.style == 'SECONDARY');
+        includedButtons = multipageButtons.filter((b) => {
+            return b.data.custom_id.endsWith('!') || b.data.style == ButtonStyle.Secondary
+        });
     } else {
         includedButtons = multipageButtons.filter((b) => true);
     }
@@ -301,7 +303,7 @@ function displayPages(interaction, pages, versionAdded, parsed) {
         }
 
         if (includedButtons.length > 0) {
-            includedButtons.find((b) => b.disabled).setLabel(`${pageIdx + 1}/${pages.length}`);
+            includedButtons.find((b) => b.data.disabled).setLabel(`${pageIdx + 1}/${pages.length}`);
         }
 
         displayedButtons = new ActionRowBuilder().addComponents(...includedButtons);
@@ -328,7 +330,7 @@ function displayPages(interaction, pages, versionAdded, parsed) {
 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
-            componentType: 'BUTTON',
+            componentType: ComponentType.Button,
             time: 60000
         });
 

@@ -50,6 +50,30 @@
             "DoubleSilver": "<:top25percent:999263307292753940>",
             "Silver": "<:top50percent:999263344236187680>",
             "Bronze": "<:top75percent:999263362934378567>"
+        },
+        "towers": {
+            "DartMonkey": "<:DartMonkey:999481347234091099> ",
+            "BoomerangMonkey": "<:BoomerangMonkey:999481537793900665> ",
+            "BombShooter": "<:BombShooter:999481354846736484> ",
+            "TackShooter": "<:TackShooter:999481428670681098> ",
+            "IceMonkey": "<:IceMonkey:999488195467157555> ",
+            "GlueGunner": "<:GlueGunner:1000591168985374761> ",
+            "SniperMonkey": "<:SniperMonkey:1000591208831262781> ",
+            "MonkeySub": "<:MonkeySub:1000591261335560232> ",
+            "MonkeyBuccaneer": "<:MonkeyBuccaneer:1000591290855063593> ",
+            "MonkeyAce": "<:MonkeyAce:1000591341987844128> ",
+            "HeliPilot": "<:HeliPilot:1000591372836933702> ",
+            "MortarMonkey": "<:MortarMonkey:1000591429632000060> ",
+            "DartlingGunner": "<:DartlingGunner:1000591457146646539>",
+            "WizardMonkey": "<:WizardMonkey:1000591638239903836> ",
+            "SuperMonkey": "<:SuperMonkey:1000591681931976814> ",
+            "NinjaMonkey": "<:NinjaMonkey:1000591720884478033>",
+            "Alchemist": "<:Alchemist:1000591767357366312> ",
+            "Druid": "<:Druid:1000591809598197930>",
+            "BananaFarm": "<:BananaFarm:1000591848412303440> ",
+            "SpikeFactory": "<:SpikeFactory:1000591882948194326> ",
+            "MonkeyVillage": "<:MonkeyVillage:1000592115526553640> ",
+            "EngineerMonkey": "<:EngineerMonkey:1000592141401206794>"
         }
     },
     "543957081183617024": {

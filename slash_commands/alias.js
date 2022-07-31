@@ -1,3 +1,4 @@
+
 const { SlashCommandBuilder } = require('discord.js');
 const { cyber } = require('../jsons/colours.json');
 
@@ -26,17 +27,17 @@ async function execute(interaction) {
             }
         });
 
-        embed = new Discord.MessageEmbed()
+        embed = new Discord.EmbedBuilder()
             .setColor(cyber)
             .setTitle(`Aliases of \`${alias}\``)
             .setDescription(displayedAliases.join(', '))
-            .addField(
-                'Note',
-                '• `-` and `_` are interchangeable and can be left out entirely when entering slash commands\n' +
-                    '• Most slash commands even allow you to replace these separators with spaces, as in `spirit of the forest`'
+            .addFields(
+                [{name: 'Note',
+                value: '• `-` and `_` are interchangeable and can be left out entirely when entering slash commands\n' +
+                    '• Most slash commands even allow you to replace these separators with spaces, as in `spirit of the forest`'}]
             );
     } else {
-        embed = new Discord.MessageEmbed().setColor(cyber).setTitle(`No Aliases Found for \`${alias}\``);
+        embed = new Discord.EmbedBuilder().setColor(cyber).setTitle(`No Aliases Found for \`${alias}\``);
     }
 
     return await interaction.reply({ embeds: [embed] });

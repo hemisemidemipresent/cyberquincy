@@ -18,12 +18,8 @@ const builder = new SlashCommandBuilder()
             .setRequired(true)
     )
     .addIntegerOption((option) => option.setName('tier').setDescription('Tier of the boss').setRequired(true))
-    .addStringOption((option) =>
-        option
-            .setName('elite')
-            .setDescription('Whether the boss is elite or not')
-            .addChoices({ name: 'true', value: 'true' }, { name: 'false', value: 'false' })
-            .setRequired(true)
+    .addBooleanOption((option) =>
+        option.setName('elite').setDescription('Whether the boss is elite or not').setRequired(true)
     );
 
 function validateInput(interaction) {
@@ -40,7 +36,7 @@ async function execute(interaction) {
         });
     const tier = interaction.options.getInteger('tier');
     const boss = interaction.options.getString('name');
-    const isElite = interaction.options.getBoolean('isElite');
+    const isElite = interaction.options.getBoolean('elite');
 
     let embed;
     switch (boss) {
@@ -58,8 +54,7 @@ async function execute(interaction) {
 }
 
 function process(data, name, tier, isElite) {
-    let embed = new Discord.EmbedBuilder().setTitle(`${isElite ? '' : 'Elite'} ${name} Tier ${tier}`);
-
+    let embed = new Discord.MessageEmbed().setTitle(`${isElite ? 'Elite' : ''} ${name} Tier ${tier}`);
     let desc = data.desc + '\n' + isElite ? data.eliteDesc : normalDesc;
     let obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
     desc += `\n\n**Stats**:

@@ -210,7 +210,7 @@ async function execute(interaction) {
     if (powerT5 > 90000) powerT5 = 90000;
     if (powerPops > 90000) powerPops = 90000;
 
-    let totalPower = powerCost + powerUpgrade + powerT5 + powerTotem;
+    let totalPower = powerCost + powerUpgrade + powerT5 + powerTotem + powerPops;
 
     powerCost = Number.isInteger(powerCost) ? powerCost : powerCost.toFixed(1);
     powerUpgrade = Number.isInteger(powerUpgrade) ? powerUpgrade : powerUpgrade.toFixed(1);

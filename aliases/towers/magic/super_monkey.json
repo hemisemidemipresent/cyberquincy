@@ -1,14 +1,20 @@
 {
     "xyz": ["super", "super-monkey", "supermonkey", "sup"],
 
+    "100": ["laser_blasts", "lasers"],
+    "200": ["plasma_blasts", "plasma"],
     "300": ["sun_avatar", "sav", "savatar"],
     "400": ["sun_temple", "temple"],
     "500": ["true_sun_god", "tsg"],
 
+    "010": ["super_range"],
+    "020": ["epic_range", "epic"],
     "030": ["robo_monkey", "robo"],
     "040": ["tech_terror", "tt", "technological_terror", "technology", "tech"],
     "050": ["the_anti-bloon", "abloon", "anti", "anti-bloon", "killerrobotofdeath"],
 
+    "001": ["knockback", "kb"],
+    "002": ["ultravision", "uvision"],
     "003": ["dark_knight", "dk"],
     "004": ["dark_champion", "dch", "champ", "champion", "dark_champ", "dchamp"],
     "005": ["legend_of_the_night", "lotn", "portal"]

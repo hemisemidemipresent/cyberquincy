@@ -1,14 +1,20 @@
 {
     "xyz": ["dart","drt","dart-monkey","dm"],
 
+    "100": ["sharp_shots"],
+    "200": ["razor_sharp_shots"],
     "300": ["spike-o-pult","pult","cat","cata","cato","spikepult","spult"],
     "400": ["juggernaut","jugg","jug","naut"],
     "500": ["ultra-juggernaut","ultra_jugg","ultra","ujug","uj","ujugg"],
 
+    "010": ["quick_shots"],
+    "020": ["very_quick_shots"],
     "030": ["triple_shot","trip","tripshot","tdarts","tdart"],
     "040": ["super_monkey_fan_club","smfc","super_funky_man_club","sfmc"],
     "050": ["plasma_monkey_fan_club","pmfc"],
 
+    "001": ["long_range_darts"],
+    "002": ["enhanced_eyesight"],
     "003": ["crossbow","xbow"],
     "004": ["sharp_shooter","sharp","sharp_shot","sshot","sshoot","sharp_shitter"],
     "005": ["crossbow_master","xbow_master","xbm"]

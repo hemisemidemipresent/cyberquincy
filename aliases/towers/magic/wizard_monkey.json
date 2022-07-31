@@ -1,14 +1,20 @@
 {
     "xyz": ["wizard", "wizard_monkey", "apprentice", "wiz"],
 
+    "100": ["guided_magic", "guided", "gmagic"],
+    "200": ["arcane_blast", "ablast"],
     "300": ["arcane_mastery", "mastery", "amastery"],
     "400": ["arcane_spike", "aspike"],
     "500": ["archmage", "arch", "armchair", "arkmag", "hentai"],
 
+    "010": ["fireball"],
+    "020": ["wall_of_fire", "wof"],
     "030": ["dragon's_breath","dbreath","db", "dragon's", "breath"],
     "040": ["summon_phoenix", "sump", "phoenix", "summon"],
     "050": ["wizard_lord_phoenix", "wlp"],
 
+    "001": ["intense_magic", "intense", "imagic"],
+    "002": ["monkey_sense", "msense", "sense"],
     "003": ["shimmer", "shim"],
     "004": ["necromancer", "necromancer:_unpopped_army", "necro", "nec", "necr"],
     "005": ["prince_of_darkness", "pod", "prince"]

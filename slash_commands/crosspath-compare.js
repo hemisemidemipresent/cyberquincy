@@ -1,9 +1,9 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 const axios = require('axios');
-const costs = require('../jsons/costs.json');
 const Towers = require('../helpers/towers.js');
-const { discord, footer } = require('../aliases/misc.json');
+const { footer } = require('../aliases/misc.json');
+const { isValidEmbedField } = require('../helpers/discord')
 const { red, cyber } = require('../jsons/colours.json');
 
 const towerOption = new SlashCommandStringOption()
@@ -71,11 +71,9 @@ async function embedBloonology(towerName, upgrade) {
     const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
     const noCrosspathDescription = cleanDescription(
-        descriptions
-            .find((description) => description.substr(0, 3) == noCrosspathUpgrade)
+        descriptions.find((description) => description.substr(0, 3) == noCrosspathUpgrade))
             .substr(3)
             .split(/(?:__Changes from Previous Tier__)|(?:Changes from previous tier:)/i)[0]
-    );
 
     const crosspathDescriptions = crosspathUpgrades.map((u) =>
         cleanDescription(descriptions.find((description) => description.substr(0, 3) == u).substr(3))
@@ -94,6 +92,7 @@ async function embedBloonology(towerName, upgrade) {
         Towers.towerUpgradeFromTowerAndPathAndTier(towerName, ...Towers.pathTierFromUpgradeSet(noCrosspathUpgrade)) +
         ' Crosspathing Benefits';
 
+
     let embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
 
     crosspathUpgrades.forEach((u, idx) => {
@@ -104,10 +103,23 @@ async function embedBloonology(towerName, upgrade) {
         }
     });
 
-    embed.addFields([
-        { name: `${noCrosspathUpgrade} Stats`, value: noCrosspathDescription || 'Failed to parse description' }
-    ]);
 
+
+    if (isValidEmbedField(noCrosspathDescription) || !noCrosspathDescription) {
+        embed.addField(`${noCrosspathUpgrade} Stats`, noCrosspathDescription || 'Failed to parse description')
+    } else {
+        const descriptionLines = noCrosspathDescription.split("\n")
+        const splitPointIndex = descriptionLines.length / 2
+        // Please tell me descriptions won't need 3 fields lol
+        const descriptionParts = [
+            descriptionLines.slice(0, splitPointIndex).join("\n"),
+            descriptionLines.slice(splitPointIndex).join("\n"),
+        ]
+        embed.addFields([
+            { name: `${noCrosspathUpgrade} Stats`, value: descriptionParts[0] },
+            {name: '\u200b', value: descriptionParts[1]}
+        ]);
+    }
     return embed;
 }
 

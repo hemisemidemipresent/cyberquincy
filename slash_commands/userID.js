@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, MessageAttachment } = require('discord.js');
 
 const { default: axios } = require('axios');
@@ -81,7 +81,7 @@ module.exports = {
             .setColor(green);
 
         row = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId('stats').setLabel('See user statistics').setStyle('PRIMARY')
+            new ButtonBuilder().setCustomId('stats').setLabel('See user statistics').setStyle(ButtonStyle.Primary)
         );
         this.user = interaction.user;
         this.interaction = await interaction.reply({ embeds: [embed], components: [row] });

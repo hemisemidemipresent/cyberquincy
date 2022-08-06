@@ -35,17 +35,12 @@ module.exports = {
         let end = parsed.rounds[1];
 
         let longest = findLongest(start, end, lengths);
-        let sendTime =
-            (longest - start) * 0.2 + lengths[longest - 1] + 0.0167 - 0.2;
+        let sendTime = (longest - start) * 0.2 + lengths[longest - 1] + 0.0167 - 0.2;
         let finalStr = formatTime(time + sendTime);
         let sendStr = formatTime(time - sendTime);
         let str =
-            `It takes **${
-                Math.round((end - start) * 0.2 * 100) / 100
-            }s** to send **r${start}** - **r${end}**, ` +
-            `and r${longest} lasts **${formatTime(
-                lengths[longest - 1]
-            )}**\n\n` +
+            `It takes **${Math.round((end - start) * 0.2 * 100) / 100}s** to send **r${start}** - **r${end}**, ` +
+            `and r${longest} lasts **${formatTime(lengths[longest - 1])}**\n\n` +
             `If you fullsended at \`${ftime}\`, you will get a time of **\`${finalStr}\`**\n`;
         if (time - sendTime < 0) {
             str += `You **can't** get a time of \`${ftime}\``;
@@ -53,37 +48,31 @@ module.exports = {
             str += `If you want to get a time of \`${ftime}\`, you will have to fullsend at \`${sendStr}\``;
         }
 
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle(`If you fullsended from **r${start}** to **r${end}**:`)
             .setDescription(str)
             .setColor(green);
         return await message.channel.send({ embeds: [embed] });
-    },
+    }
 };
 
 async function helpMessage(message) {
-    let embed = new Discord.MessageEmbed()
+    let embed = new Discord.EmbedBuilder()
         .setTitle('q!rtime help')
         .setDescription(
             '`q!rtime <start round> <end round> <time> [mode]`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`\nWhat this shows is:\n1. If you starting sending `startround` to `endround` at `time`, what time you will get\n2. If you want to get `time`, at what time should you start sending `start` to `end`'
         )
-        .addField(
-            'examples',
-            ' • q!rtime 40 49 0:25\n • q!rtime 40 49 25\n • q!rtime 40 49 0:25 abr'
-        )
+        .addFields([{ name: 'examples', value: ' • q!rtime 40 49 0:25\n • q!rtime 40 49 25\n • q!rtime 40 49 0:25 abr' }])
         .setColor(grey);
     return await message.channel.send({ embeds: [embed] });
 }
 async function errorMessage(message, parsingErrors) {
-    let errorEmbed = new Discord.MessageEmbed()
+    let errorEmbed = new Discord.EmbedBuilder()
         .setTitle('ERROR')
         .setDescription(
             '`q!rtime <start round> <end round> <time> [mode]`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`\nWhat this shows is:\n1. If you starting sending `startround` to `endround` at `time`, what time you will get\n2. If you want to get `time`, at what time should you start sending `start` to `end`'
         )
-        .addField(
-            'Likely Cause(s)',
-            parsingErrors.map((msg) => ` • ${msg}`).join('\n')
-        )
+        .addFields([{ name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }])
         .setColor(red);
 
     return await message.channel.send({ embeds: [errorEmbed] });

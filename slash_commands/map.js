@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { cyber } = require('../jsons/colours.json');
 const map = require('../jsons/map.json');
 const { discord } = require('../aliases/misc.json');
@@ -24,18 +24,21 @@ async function execute(interaction) {
         thum =
             'https://vignette.wikia.nocookie.net/b__/images/0/0c/QuincyCyberPortraitLvl20.png/revision/latest/scale-to-width-down/179?cb=20190612022025&path-prefix=bloons';
 
-    const mapEmbed = new Discord.MessageEmbed()
+    const mapEmbed = new Discord.EmbedBuilder()
         .setTitle('Map info')
         .setDescription(`Here is your info for ${name}`)
         .setThumbnail(`${thum}`)
-        .addField('Map length(RBS)', `${m.lenStr}`, true)
-        .addField('Object count:', `${m.obj}`, true)
-        .addField('Total $ to clear out all the objects', `$${m.Cos}`, true)
-        .addField('Version added:', `${m.ver}`, true)
-        .addField('Water body percentage/Has water?', `${m['wa%']}`, true)
-        .addField('Entrances/Exits', `${m.e}`, true)
-        //.addField('Line of sight obstructions', `${m.los}`, true)
-        .addField('Bug reporting', `report [here](${discord})`, true)
+        .addFields([
+            { name: 'Map length(RBS)', value: `${m.lenStr}`, inline: true },
+            { name: 'Object count:', value: `${m.obj}`, inline: true },
+            { name: 'Total $ to clear out all the objects', value: `$${m.Cos}`, inline: true },
+            { name: 'Version added:', value: `${m.ver}`, inline: true },
+            { name: 'Water body percentage/Has water?', value: `${m['wa%']}`, inline: true },
+            { name: 'Entrances/Exits', value: `${m.e}`, inline: true },
+            { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
+            //'Line of sight obstructions', `${m.los}`, true)
+        ])
+
         .setColor(cyber);
     return await interaction.reply({ embeds: [mapEmbed] });
 }

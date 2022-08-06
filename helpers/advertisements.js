@@ -21,9 +21,11 @@ async function spin(message) {
 }
 
 function botOffline(message) {
-    const serverEmbed = new Discord.MessageEmbed()
+    const serverEmbed = new Discord.EmbedBuilder()
         .setTitle('Are you tired of the bot being offline?')
-        .addField('Join the discord server!', `Get notifications for new updates and bot status at ${discord}`)
+        .addFields([
+            { name: 'Join the discord server!', value: `Get notifications for new updates and bot status at ${discord}` }
+        ])
         .setColor(colours['blurple'])
         .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
 
@@ -31,12 +33,14 @@ function botOffline(message) {
 }
 
 function ownServer(message) {
-    const inviteEmbed = new Discord.MessageEmbed()
+    const inviteEmbed = new Discord.EmbedBuilder()
         .setTitle('Want to invite the bot to your own server?')
-        .addField(
-            'Please spread the word around!',
-            'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617'
-        )
+        .addFields([
+            {
+                name: 'Please spread the word around!',
+                value: 'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617'
+            }
+        ])
         .setColor(colours['turq'])
         .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
 
@@ -44,9 +48,9 @@ function ownServer(message) {
 }
 
 function bugReport(message) {
-    const bugEmbed = new Discord.MessageEmbed()
+    const bugEmbed = new Discord.EmbedBuilder()
         .setTitle('Want to suggest a new feature? Fix a typo? Report a bug?')
-        .addField('join the discord server!', `suggest a new feature and report a bug at ${discord}`)
+        .addFields([{ name: 'join the discord server!', value: `suggest a new feature and report a bug at ${discord}` }])
         .setColor(colours['turq'])
         .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
 
@@ -54,9 +58,11 @@ function bugReport(message) {
 }
 
 function upvoteBot(message) {
-    const upvoteEmbed = new Discord.MessageEmbed()
+    const upvoteEmbed = new Discord.EmbedBuilder()
         .setTitle('Help support the bot!')
-        .addField('upvote the bot!', '[discordbotlist link](https://discordbotlist.com/bots/cyber-quincy)');
+        .addFields([
+            { name: 'upvote the bot!', value: '[discordbotlist link](https://discordbotlist.com/bots/cyber-quincy)' }
+        ]);
 }
 
 module.exports = {

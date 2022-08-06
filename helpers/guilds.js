@@ -7,18 +7,20 @@ const { discord } = require('../aliases/misc.json');
 function enterGuild(guild) {
     let channeltosend = guild.channels.cache.find((channel) => channel.name.includes('general') === true);
     if (channeltosend) {
-        let helpEmbed = new Discord.MessageEmbed()
+        let helpEmbed = new Discord.EmbedBuilder()
             .setColor(colours['cyber'])
             .setDescription(`Hi! I am Cyber Quincy. I am a BTD6 discord bot.`)
-            .addField('General Info', `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})`)
-            .addField(
-                'Note',
-                "Quincy son of Quincy is property of Ninja Kiwi. Although they didn't develop this bot, Ninja Kiwi approved of its use and development."
-            )
-            .addField(
-                'You should know...',
-                `The most popular commands by far are those that describe towers, \`/tower\` (tower path format: \`010\`, \`420\`, etc)`
-            )
+            .addFields([
+                { name: 'General Info', value: `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})` },
+                {
+                    name: 'Note',
+                    value: "Quincy son of Quincy is property of Ninja Kiwi. Although they didn't develop this bot, Ninja Kiwi approved of its use and development."
+                },
+                {
+                    name: 'You should know...',
+                    value: `The most popular commands by far are those that describe towers, \`/tower\` (tower path format: \`010\`, \`420\`, etc)`
+                }
+            ])
             .setFooter({ text: `Use \`${prefix}info\` for more information` });
 
         channeltosend.send({ embeds: [helpEmbed] });

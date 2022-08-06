@@ -23,13 +23,15 @@ module.exports = {
         return await module.exports.showData(startround, endround, message.channel);
     },
     async errorMessage(message, errors) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle(`${errors.join('\n')}`)
-            .addField('find the RBE from round X to round Y', '**q!income <startround> <endround>**')
-            .addField(
-                'other difficulties',
-                '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes deflation, half cash, abr, apop is random)'
-            )
+            .addFields([
+                { name: 'find the RBE from round X to round Y', value: '**q!income <startround> <endround>**' },
+                {
+                    name: 'other difficulties',
+                    value: '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes deflation, half cash, abr, apop is random)'
+                }
+            ])
             .setColor(red);
         return await message.channel.send({ embeds: [errorEmbed] });
     },
@@ -38,7 +40,7 @@ module.exports = {
     },
     async showData(startround, endround, channel) {
         let totalpopcount = r[endround].cumulativeRBE - r[startround - 1].cumulativeRBE;
-        const dataEmbed = new Discord.MessageEmbed()
+        const dataEmbed = new Discord.EmbedBuilder()
             .setTitle(`<:PopIcon:755016023333404743>${totalpopcount}`)
             .setDescription(`from round ${startround} to ${endround}`)
             .setFooter({ text: 'note: towers may count pops differently due to bugs' })

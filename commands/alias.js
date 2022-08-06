@@ -53,10 +53,12 @@ module.exports = {
     aliasMessageArg(message, input, aliasStr, cmdStr) {
         let aliasEmbed = null;
 
-        aliasEmbed = new Discord.MessageEmbed()
+        aliasEmbed = new Discord.EmbedBuilder()
             .setTitle(`Aliases for \`${input}\`:`)
-            .addField('Arg alias', `${aliasStr}`)
-            .addField('Cmd alias', `${cmdStr}`)
+            .addFields([
+                { name: 'Arg alias', value: `${aliasStr}` },
+                { name: 'Cmd alias', value: `${cmdStr}` }
+            ])
             .setColor(colours['cyber'])
             .setFooter({
                 text: 'NOTE: FOR q!<tower> AND q!<hero>, THE ARGUMENTS WILL SHOW EVERYTHING THAT TRIGGERS q!<tower> and q!<hero> respectively'
@@ -66,17 +68,19 @@ module.exports = {
     },
 
     helpMessage(message) {
-        let messageEmbed = new Discord.MessageEmbed()
+        let messageEmbed = new Discord.EmbedBuilder()
             .setTitle(`q!alias <command>`)
-            .addField('Use', 'Learn all of the different ways to provide arguments/invoke commands')
-            .addField(
-                'Clarification',
-                'Some words can be both commands and arguments that you can provide to commands, such as `wizard'
-            )
-            .addField(
-                'Example: `q!wizard 300`; `q!2mp wizard`',
-                'Command aliases to invoke `q!wizard` might be different than argument aliases to invoke `q!2mp wizard`'
-            )
+            .addFields([
+                { name: 'Use', value: 'Learn all of the different ways to provide arguments/invoke commands' },
+                {
+                    name: 'Clarification',
+                    value: 'Some words can be both commands and arguments that you can provide to commands, such as `wizard'
+                },
+                {
+                    name: 'Example: `q!wizard 300`; `q!2mp wizard`',
+                    value: 'Command aliases to invoke `q!wizard` might be different than argument aliases to invoke `q!2mp wizard`'
+                }
+            ])
             .setFooter({ text: '"alias" = "synonym"; "argument" = "input"' })
             .setColor(colours['cyber']);
 
@@ -84,10 +88,12 @@ module.exports = {
     },
 
     errorMessage(message, errorMessages) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle('ERROR')
-            .addField('Cause(s)', errorMessages.join('\n'))
-            .addField('Type `q!alias` for help', '\u200b')
+            .addFields([
+                { name: 'Cause(s)', value: errorMessages.join('\n') },
+                { name: 'Type `q!alias` for help', value: '\u200b' }
+            ])
             .setColor(colours['orange']);
 
         return message.channel.send({ embeds: [errorEmbed] });

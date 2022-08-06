@@ -12,17 +12,12 @@ module.exports = {
             let emojisGuild = message.guild.emojis.array().join(' ');
             let emojisArray = Discord.splitMessage(emojisGuild, {
                 maxLength: 1024,
-                char: ' ',
+                char: ' '
             });
             if (typeof emojisArray === 'string') emojisArray = [emojisArray];
 
-            const emojiEmbed = new Discord.MessageEmbed()
-                .setTitle(
-                    'There Are ' +
-                        message.guild.emojis.size +
-                        ' Emojis on ' +
-                        message.guild.name
-                )
+            const emojiEmbed = new Discord.EmbedBuilder()
+                .setTitle('There Are ' + message.guild.emojis.size + ' Emojis on ' + message.guild.name)
                 .setColor(cyber)
                 .setDescription('These Are All The Emojis:')
                 .setThumbnail(message.guild.iconURL);
@@ -37,23 +32,15 @@ module.exports = {
             );
         } else if (args[0] == 'supermonkey') {
             if (args[1] == 'happy') {
-                message.channel.send(
-                    '<a:Supermonkey_Happy:408048296154628096>'
-                );
+                message.channel.send('<a:Supermonkey_Happy:408048296154628096>');
             } else if (args[1] == 'sleep') {
-                message.channel.send(
-                    '<a:Supermonkey_Sleepy:408048528146038784>'
-                );
+                message.channel.send('<a:Supermonkey_Sleepy:408048528146038784>');
             } else if (args[1] == 'dizzy') {
-                message.channel.send(
-                    '<a:Supermonkey_Dizzy:429614433019494410>'
-                );
+                message.channel.send('<a:Supermonkey_Dizzy:429614433019494410>');
             } else if (args[1] == 'cry') {
                 message.channel.send('<a:Supermonkey_Cry:429614578746261504>');
             } else if (args[1] == 'eyebrows') {
-                message.channel.send(
-                    '<a:Supermonkey_Eyebrows:429614648724291605>'
-                );
+                message.channel.send('<a:Supermonkey_Eyebrows:429614648724291605>');
             }
             //message.channel.send('<a:Supermonkey_Happy:408048296154628096>\n<a:Supermonkey_Sleepy:408048528146038784>\n<a:Supermonkey_Dizzy:429614433019494410>\n<a:Supermonkey_Cry:429614578746261504>\n<a:Supermonkey_Eyebrows:429614648724291605>')
         } else if (args[0].includes('dr')) {
@@ -65,23 +52,17 @@ module.exports = {
         } else if (args[0].includes('crouch')) {
             message.channel.send('<a:Crouching_Ninja:408047841563377664>');
         } else if (args[0] == 'bfb') {
-            message.channel.send(
-                '<a:rohan:408044760331452416><a:rohan2:408045435005960204>'
-            );
+            message.channel.send('<a:rohan:408044760331452416><a:rohan2:408045435005960204>');
         } else if (args[0] == 'cry') {
             message.channel.send('<a:cry:644398761409511434>');
         } else if (args[0] == 'wink') {
             message.channel.send('<a:wink:647313341340975108>');
         } else if (args[0] == 'ben') {
             if (!args[1]) {
-                return message.channel.send(
-                    '<a:BenjaminSpin:701683466181279784>'
-                );
+                return message.channel.send('<a:BenjaminSpin:701683466181279784>');
             }
             if (args[1] == 'fast') {
-                return message.channel.send(
-                    '<a:BenjaminSpinFAST:701683465958981683>'
-                );
+                return message.channel.send('<a:BenjaminSpinFAST:701683465958981683>');
             }
             message.channel.send('<a:ben:647819957861744718>');
         } else if (args[0] == 'thonk') {
@@ -91,9 +72,7 @@ module.exports = {
         } else if (args[0] == 'yes') {
             message.channel.send('<a:yes:647820009493626892>');
         } else if (args[0] == 'pink') {
-            message.channel.send(
-                '<a:pink1:647821652218085376> <a:pink2:647821634408939531> <a:pink3:647821621708587019>'
-            );
+            message.channel.send('<a:pink1:647821652218085376> <a:pink2:647821634408939531> <a:pink3:647821621708587019>');
         } else if (args[0] == 'marine') {
             if (args[1] == 'big') {
                 message.channel.send(
@@ -111,11 +90,9 @@ module.exports = {
                 );
             }
         } else if (args[0] == 'help') {
-            const helpembed = new Discord.MessageEmbed()
+            const helpembed = new Discord.EmbedBuilder()
                 .setTitle('Emoji help page')
-                .setDescription(
-                    'how to use it:\nthere are 2 types of text here'
-                )
+                .setDescription('how to use it:\nthere are 2 types of text here')
                 .addField('top text', 'bottom text')
                 .addField(
                     'usage:',
@@ -136,15 +113,11 @@ module.exports = {
             message.channel.send(helpembed);
         } else if (args[0] == 'rohan') {
             if (args[1]) {
-                return message.channel.send(
-                    '<a:RohanBounceFAST:701679547342520405>'
-                );
+                return message.channel.send('<a:RohanBounceFAST:701679547342520405>');
             }
             return message.channel.send('<a:RohanBounce:701679547405434940>');
         } else if (args[0].includes('str') || args[0].includes('jon')) {
-            return message.channel.send(
-                '<a:StrikerJonesScream:701658002364563497>'
-            );
+            return message.channel.send('<a:StrikerJonesScream:701658002364563497>');
         }
-    },
+    }
 };

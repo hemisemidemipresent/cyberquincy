@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 const axios = require('axios');
 const costs = require('../jsons/costs.json');
@@ -41,7 +41,7 @@ async function embedBloonology(towerName, upgrade) {
     try {
         res = await axios.get(link);
     } catch {
-        return new Discord.MessageEmbed().setColor(red).setTitle('Something went wrong while fetching the data');
+        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
     let body = res.data;
 
@@ -67,16 +67,19 @@ async function embedBloonology(towerName, upgrade) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
 
-    let embed = new Discord.MessageEmbed()
+    let embed = new Discord.EmbedBuilder()
         .setTitle(title)
-        .setDescription(upgradeDescription)
-        .addField(
-            'cost',
-            `${cost} - medium\n${Towers.hard(cost)} - hard\n` + `if this is wrong [yell at hemi here](${discord})`,
-            true
-        )
-        .addField('total cost', `${totalCost} - medium\n${hardTotalCost} - hard`, true)
-        .addField('Bug reporting', `report [here](${discord})`, true)
+        .setDescription(info)
+        .addFields([
+            {
+                name: 'cost',
+                value:
+                    `${cost} - medium\n${Towers.hard(cost)} - hard\n` + `if this is wrong [yell at hemi here](${discord})`,
+                inline: true
+            },
+            { name: 'total cost', value: `${totalCost} - medium\n${hardTotalCost} - hard`, inline: true },
+            { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
+        ])
         .setFooter({ text: footer })
         .setColor(cyber);
     return embed;

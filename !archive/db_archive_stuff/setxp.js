@@ -7,24 +7,15 @@ module.exports = {
     async execute(message, args) {
         user = message.author;
 
-        if (
-            ![DiscordUsers.RMLGAMING, DiscordUsers.HEMI].includes(
-                user.id.toString()
-            )
-        ) {
-            return message.channel.send(
-                'Must be a dev to use this command. It is for testing.'
-            );
+        if (![DiscordUsers.RMLGAMING, DiscordUsers.HEMI].includes(user.id.toString())) {
+            return message.channel.send('Must be a dev to use this command. It is for testing.');
         }
 
         if (!args[0] || isNaN(args[0]) || 'help'.startsWith(args[0])) {
             return module.exports.helpMessage(message);
         }
 
-        if (args[0] < 0)
-            return message.channel.send(
-                '`<xp>` must be above 0. Type `q!setxp` for more info'
-            );
+        if (args[0] < 0) return message.channel.send('`<xp>` must be above 0. Type `q!setxp` for more info');
 
         user = message.author;
 
@@ -37,8 +28,8 @@ module.exports = {
         }
         let tag = await Tags.findOne({
             where: {
-                name: user.id,
-            },
+                name: user.id
+            }
         });
 
         // No db record found
@@ -48,7 +39,7 @@ module.exports = {
                 xp: 0,
                 showAds: true,
                 showLevelUpMsg: true,
-                quiz: 0,
+                quiz: 0
             });
         }
 
@@ -57,25 +48,20 @@ module.exports = {
         // Pull from db just to make sure..
         tag = await Tags.findOne({
             where: {
-                name: user.id,
-            },
+                name: user.id
+            }
         });
 
-        whose_xp =
-            user.id === message.author.id ? 'Your' : `${user.username}'s`;
+        whose_xp = user.id === message.author.id ? 'Your' : `${user.username}'s`;
         whom = user.id == message.author.id ? 'you' : 'them;';
 
-        return message.channel.send(
-            `${whose_xp} xp is now ${
-                tag.xp
-            } making ${whom} level ${Xp.xpToLevel(tag.xp)}`
-        );
+        return message.channel.send(`${whose_xp} xp is now ${tag.xp} making ${whom} level ${Xp.xpToLevel(tag.xp)}`);
     },
 
     helpMessage(message) {
-        const hembed = new Discord.MessageEmbed()
+        const hembed = new Discord.EmbedBuilder()
             .setTitle('`q!setxp <xp> (<mention>)` Help')
             .setDescription('Can only be used by maintainers\nXp must be >0');
         return message.channel.send({ embeds: [hembed] });
-    },
+    }
 };

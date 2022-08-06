@@ -7,9 +7,7 @@ module.exports = {
     execute(message, args) {
         function meat(num) {
             let promise = new Promise((resolve, reject) => {
-                let url =
-                    'https://static-api.nkstatic.com/appdocs/11/dailyChallenges/' +
-                    num;
+                let url = 'https://static-api.nkstatic.com/appdocs/11/dailyChallenges/' + num;
                 // this website is in bytes, but because you are viewing it in a browser you see weird text. That is what { encoding : null } is for
                 request(url, { encoding: null }, (err, res, body) => {
                     if (err) {
@@ -22,11 +20,7 @@ module.exports = {
                         let embed = format(json);
                         resolve(embed);
                     } catch {
-                        resolve(
-                            new Discord.MessageEmbed().setTitle(
-                                'oops something went wrong - use q!daily <number>'
-                            )
-                        );
+                        resolve(new Discord.EmbedBuilder().setTitle('oops something went wrong - use q!daily <number>'));
                     }
                 });
             });
@@ -39,7 +33,7 @@ module.exports = {
             .catch((err) => {
                 console.log(err);
             });
-    },
+    }
 };
 function format(object) {
     let map = object.map;
@@ -55,9 +49,7 @@ function format(object) {
         object.difficulty
     }\nMode: ${mode}\nMap: ${map}\nMK: ${!object.disableMK}\nSelling: ${!object.disableSelling}\nPowers: ${
         object.disablePowers
-    }\nContinues: ${
-        object.noContinues
-    }\nInstamonkey Reward: ${!object.noInstaReward}`;
+    }\nContinues: ${object.noContinues}\nInstamonkey Reward: ${!object.noInstaReward}`;
 
     let startRulesObj = object.startRules;
     let lives = startRulesObj.lives;
@@ -93,10 +85,8 @@ function format(object) {
         }
     }
 
-    let embed = new Discord.MessageEmbed()
+    let embed = new Discord.EmbedBuilder()
         .setTitle(object.name)
-        .setDescription(
-            `${bloonMods}\n\n${settings}\n\n${startRules}\n\n${towers}`
-        );
+        .setDescription(`${bloonMods}\n\n${settings}\n\n${startRules}\n\n${towers}`);
     return embed;
 }

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
@@ -77,7 +77,7 @@ function lex(input, operator, value, difficulty) {
         if (c) {
             footer = '';
             if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
-            return new Discord.MessageEmbed()
+            return new Discord.EmbedBuilder()
                 .setTitle(`Unexpected character "${c}"`)
                 .setDescription(
                     `"${c}" is not a valid character in the expression. Type \`help\` into the \`expr\` for help.`
@@ -107,7 +107,7 @@ function lex(input, operator, value, difficulty) {
     } catch (e) {
         if (e instanceof UnrecognizedTokenError)
             // Catches nonsensical tokens
-            return new Discord.MessageEmbed()
+            return new Discord.EmbedBuilder()
                 .setTitle(e.message)
                 .setColor(red)
                 .setFooter({ text: 'due to manipulation, your full input will not be shown' });
@@ -116,13 +116,13 @@ function lex(input, operator, value, difficulty) {
 
     let output = stack.pop();
     if (isNaN(output))
-        return new Discord.MessageEmbed()
+        return new Discord.EmbedBuilder()
             .setTitle('Error processing expression. Did you add an extra operator?')
             .setDescription(`\`${input}\``)
             .setColor(red);
     //.setFooter({ text: 'Enter `q!calc` for help' })
     else if (stack.length > 0)
-        return new Discord.MessageEmbed()
+        return new Discord.EmbedBuilder()
             .setTitle('Error processing expression. Did you leave out an operator?')
             .setDescription(`\`${input}\``)
             .setColor(red);
@@ -139,20 +139,25 @@ async function execute(interaction) {
     if (expression === 'help')
         return await interaction.reply({
             embeds: [
-                new Discord.MessageEmbed()
+                new Discord.EmbedBuilder()
                     .setTitle('HELP')
                     .setDescription(
                         'Paragon degree calculator (in progress)\nNote that **The 3 original tier 5s SHOULD NOT BE TYPED IN**'
                     )
-                    .addField('`dart#420`, `boomer#500`', 'These represent the towers sacrificed')
-                    .addField('`ujugg`, `glord`', 'These are shorthands for `dart#500` and `boomer#500` respectively')
-                    .addField('`totem`', "Represents a Paragon Power Totem from Geraldo's shop")
-                    .addField(
-                        'Examples',
-                        `\`/test expr: dart#042 + dart#020\` Represents sacrificing a \`042\` dart monkey and a \`020\` dart monkey
+                    .addFields([
+                        { name: '`dart#420`, `boomer#500`', value: 'These represent the towers sacrificed' },
+                        {
+                            name: '`ujugg`, `glord`',
+                            value: 'These are shorthands for `dart#500` and `boomer#500` respectively'
+                        },
+                        { name: '`totem`', value: "Represents a Paragon Power Totem from Geraldo's shop" },
+                        {
+                            name: 'Examples',
+                            value: `\`/test expr: dart#042 + dart#020\` Represents sacrificing a \`042\` dart monkey and a \`020\` dart monkey
                         \`/test expr: dart#042 * 10\` Represents sacrificing 10 \`042\` dart monkeys
                         \`/test expr: dart#025 + totem * 10\` Represents sacrificing an **additional** \`025\` crossbow master and 10 Paragon Power Totems`
-                    )
+                        }
+                    ])
             ]
         });
 
@@ -235,7 +240,7 @@ async function execute(interaction) {
     }
     if (x === 100) x = 99; // off by one error
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
         .setTitle(`The paragon will be of degree **${x + 1}**`)
         .setDescription(
             `Input: \`expr: ${expression}\tpops: ${pops}\`
@@ -246,14 +251,17 @@ async function execute(interaction) {
                 }
             `
         )
-        .addField(
-            `**Total power: \`${Number.isInteger(totalPower) ? totalPower : totalPower.toFixed(1)}\`**`,
-            `Power from money spent: \`${powerCost}\`
-            Power from upgrades: \`${powerUpgrade}\`
-            Power from T5: \`${powerT5}\`
-            Power from totems: \`${powerTotem}\`
-            Power from pops: \`${powerPops}\``
-        )
+        .addFields([
+            {
+                name: `**Total power: \`${Number.isInteger(totalPower) ? totalPower : totalPower.toFixed(1)}\`**`,
+                value: `Power from money spent: \`${powerCost}\`
+                Power from upgrades: \`${powerUpgrade}\`
+                Power from T5: \`${powerT5}\`
+                Power from totems: \`${powerTotem}\`
+                Power from pops: \`${powerPops}\`
+                `
+            }
+        ])
         .setFooter({ text: `Difficulty: ${difficulty.toUpperCase()}` })
         .setColor(paragon);
 
@@ -261,13 +269,17 @@ async function execute(interaction) {
         const powerDiff = reqs[x + 1] - totalPower;
         const to100 = 200000 - totalPower;
         const totemsNeeded = Math.ceil(to100 / 2000);
-        embed.addField(
-            '\u200b',
-            `Power to next degree (${x + 2}): \`${Number.isInteger(powerDiff) ? powerDiff : powerDiff.toFixed(1)}\`
-            Power requirement for next degree: \`${reqs[x]}\`
-            Power to degree 100: \`${Number.isInteger(to100) ? to100 : to100.toFixed(1)}\`
-            Totems needed for degree 100: \`${totemsNeeded}\``
-        );
+        embed.addFields([
+            {
+                name: '\u200b',
+                value: `Power to next degree (${x + 2}): \`${
+                    Number.isInteger(powerDiff) ? powerDiff : powerDiff.toFixed(1)
+                }\`
+                Power requirement for next degree: \`${reqs[x]}\`
+                Power to degree 100: \`${Number.isInteger(to100) ? to100 : to100.toFixed(1)}\`
+                Totems needed for degree 100: \`${totemsNeeded}\``
+            }
+        ]);
     }
 
     return await interaction.reply({

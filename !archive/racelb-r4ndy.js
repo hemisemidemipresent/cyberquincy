@@ -45,15 +45,9 @@ module.exports = {
                 time = parsetime(time);
                 let md = scores[i].metadata.split(',');
                 let username;
-                if (
-                    message.author.id == '279126808455151628' ||
-                    message.author.id == '217726724752932864'
-                ) {
+                if (message.author.id == '279126808455151628' || message.author.id == '217726724752932864') {
                     let userid = scores[i].userID;
-                    if (
-                        userid == '5b7f82e318c7cbe32fa01e4e' ||
-                        userid == '5b2845abfcd0f8d9745e6cfe'
-                    ) {
+                    if (userid == '5b7f82e318c7cbe32fa01e4e' || userid == '5b2845abfcd0f8d9745e6cfe') {
                         username = md[0];
                     } else {
                         username = '???';
@@ -71,11 +65,9 @@ module.exports = {
                 output += row;
             }
             if (output.length > 4096) {
-                return module.exports.errorMessage(message, [
-                    'too many characters',
-                ]);
+                return module.exports.errorMessage(message, ['too many characters']);
             }
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`ID: ${data.leaderboardID}`)
                 .setURL(url)
                 .setDescription('```' + output + '```')
@@ -86,7 +78,7 @@ module.exports = {
         });
     },
     errorMessage(message, errors) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle(`${errors.join('\n')}`)
             .addField(
                 '**q!lb [startingPlacement] [endingPlacement]**',
@@ -96,7 +88,7 @@ module.exports = {
             .setColor(red);
 
         message.channel.send({ embeds: [errorEmbed] });
-    },
+    }
 };
 function addSpaces(str, max) {
     if (str == null || !str) {

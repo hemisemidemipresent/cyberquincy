@@ -25,7 +25,7 @@ const { orange, palered } = require('../jsons/colours.json');
 
 const { COLS } = require('../services/index/2tc_scraper');
 
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
 const entity1Option = new SlashCommandStringOption()
     .setName('entity1')
@@ -201,7 +201,7 @@ async function execute(interaction) {
     } catch (e) {
         if (e instanceof UserCommandError) {
             await interaction.editReply({
-                embeds: [new Discord.MessageEmbed().setTitle(e.message).setColor(orange)]
+                embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(orange)]
             });
         } else {
             throw e;
@@ -221,7 +221,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
     if (combos.length == 0) {
         return await interaction.editReply({
             embeds: [
-                new Discord.MessageEmbed()
+                new Discord.EmbedBuilder()
                     .setTitle(embedTitleNoCombos(parsed))
                     .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
                     .setColor(palered)
@@ -230,7 +230,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
     }
 
     if (combos.length == 1 && Object.keys(combos[0].MAPS).length == 1) {
-        let challengeEmbed = new Discord.MessageEmbed()
+        let challengeEmbed = new Discord.EmbedBuilder()
             .setTitle(embedTitle(parsed, combos))
             .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
             .setColor(palered);
@@ -240,10 +240,10 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
         const combo = orderCombo(clonedeep(strippedCombo));
 
         for (field in combo) {
-            challengeEmbed.addField(gHelper.toTitleCase(field), combo[field], true);
+            challengeEmbed.addFields([{ name: gHelper.toTitleCase(field), value: combo[field], inline: true }]);
         }
 
-        challengeEmbed.addField('OG?', flatCombo.OG ? 'OG' : 'ALT', true);
+        challengeEmbed.addFields([{ name: 'OG?', value: flatCombo.OG ? 'OG' : 'ALT', inline: true }]);
 
         if (flatCombo.OG && !(parsed.map || parsed.version || parsed.person)) {
             const allCompletedMaps = Object.keys(allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS);
@@ -251,7 +251,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
 
             let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, allCompletedMaps, isWaterEntityCombo(combos[0]));
 
-            challengeEmbed.addField('**Alt Maps**', completedAltMapsFields.field);
+            challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
             if (completedAltMapsFields.footer) {
                 challengeEmbed.setFooter({ text: completedAltMapsFields.footer });

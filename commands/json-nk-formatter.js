@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const hastebin = require('hastebin-gen');
 
-const { MessageAttachment, MessageEmbed } = require('discord.js');
+const { MessageAttachment, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'json',
@@ -32,7 +32,7 @@ module.exports = {
                 files: [file]
             });
         } else {
-            let embed = new MessageEmbed().setDescription(`\`\`\`json\n${res}\`\`\``);
+            let embed = new EmbedBuilder().setDescription(`\`\`\`json\n${res}\`\`\``);
             return await message.channel.send({ embeds: [embed] });
         }
     }

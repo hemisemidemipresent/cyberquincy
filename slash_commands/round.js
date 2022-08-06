@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 
 const FBG = require('../jsons/freeplay.json');
 const json = require('../jsons/rounds_topper.json');
@@ -42,26 +42,27 @@ function freeplay(round, isAbr) {
     let hRamping = enemyHelper.getHealthRamping(round);
     let sRamping = enemyHelper.getSpeedRamping(round);
     let bloonSets = getBloonSets(round);
-    const roundEmbed = new Discord.MessageEmbed()
+    const roundEmbed = new Discord.EmbedBuilder()
         .setTitle(`R${round}` + (isAbr ? ' ABR' : ''))
-        .addField('ramping', `health: ${hRamping}x\nspeed: ${Math.round(sRamping * 100) / 100}`)
         .setDescription(`all **POSSIBLE** bloon sets\n${bloonSets.join('\n')}`)
-        .addField(
-            `XP Earned on R${round}`,
-            `${gHelper.numberWithCommas(xp * 0.1)} (note this takes into the account freeplay xp reduction)`,
-            true
-        )
-        .addField(
-            'Total XP if You Started on R1',
-            `${gHelper.numberWithCommas(totalxp * 0.1)} (note this takes into the account freeplay xp reduction)`,
-            true
-        )
-        .addField(
-            '**Note:**',
 
-            ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
-        )
-
+        .addFields([
+            { name: 'ramping', value: `health: ${hRamping}x\nspeed: ${Math.round(sRamping * 100) / 100}` },
+            {
+                name: `XP Earned on R${round}`,
+                value: `${gHelper.numberWithCommas(xp * 0.1)} (note this takes into the account freeplay xp reduction)`,
+                inline: true
+            },
+            {
+                name: 'Total XP if You Started on R1',
+                value: `${gHelper.numberWithCommas(totalxp * 0.1)} (note this takes into the account freeplay xp reduction)`,
+                inline: true
+            },
+            {
+                name: '**Note:**',
+                value: ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
+            }
+        ])
         .setColor(cyber);
     return roundEmbed;
 }
@@ -145,25 +146,28 @@ async function execute(interaction) {
             roundCash = 'ABR cash data not available for R1/R2';
         }
     }
-    const roundEmbed = new Discord.MessageEmbed()
+    const roundEmbed = new Discord.EmbedBuilder()
         .setTitle(`R${round}` + (isAbr ? ' ABR' : ''))
         .setDescription(`${roundContent}`)
-        .addField('Round Length (seconds)', roundLength.toString(), true)
-        .addField('RBE', `${gHelper.numberWithCommas(roundRBE)}`, true)
-        .addField(`XP Earned on R${round}`, `${gHelper.numberWithCommas(xp)}`, true)
-        .addField(`Cash Earned from R${round}`, `${gHelper.numberAsCost(roundCash)}`, true)
-        .addField('Total XP if You Started on R1', `${gHelper.numberWithCommas(totalxp)}`)
-        .addField(
-            '**Note:**',
-            ' • If you are in freeplay (e.g. round 41 on easy mode), the xp value is 0.3 of what is displayed\n' +
-                ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
-        )
+        .addFields([
+            { name: 'Round Length (seconds)', value: roundLength.toString(), inline: true },
+            { name: 'RBE', value: `${gHelper.numberWithCommas(roundRBE)}`, inline: true },
+            { name: `XP Earned on R${round}`, value: `${gHelper.numberWithCommas(xp)}`, inline: true },
+            { name: `Cash Earned from R${round}`, value: `${gHelper.numberAsCost(roundCash)}`, inline: true },
+            { name: 'Total XP if You Started on R1', value: `${gHelper.numberWithCommas(totalxp)}` },
+            {
+                name: '**Note:**',
+                value:
+                    ' • If you are in freeplay (e.g. round 41 on easy mode), the xp value is 0.3 of what is displayed\n' +
+                    ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
+            }
+        ])
         .setFooter({ text: `For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\`` })
         .setColor(colours['cyber']);
     if (round > 80) {
         let hRamping = enemyHelper.getHealthRamping(round);
         let sRamping = enemyHelper.getSpeedRamping(round);
-        roundEmbed.addField('ramping', `health: ${hRamping}x\nspeed: ${sRamping}x`);
+        roundEmbed.addFields([{ name: 'ramping', value: `health: ${hRamping}x\nspeed: ${sRamping}x` }]);
     }
     return await interaction.reply({ embeds: [roundEmbed] });
 }

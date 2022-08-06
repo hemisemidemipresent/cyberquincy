@@ -1,5 +1,12 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageButton, MessageActionRow, MessageAttachment, MessageSelectMenu } = require('discord.js');
+const {
+    SlashCommandBuilder,
+    EmbedBuilder,
+    ButtonBuilder,
+    ActionRowBuilder,
+    AttachmentBuilder,
+    ButtonStyle,
+    SelectMenuBuilder
+} = require('discord.js');
 
 const { default: axios } = require('axios');
 const nodefetch = require('node-fetch');
@@ -46,17 +53,16 @@ module.exports = {
         let results = await request(objStr, 'https://api.ninjakiwi.com/utility/es/search');
         results = results.results[0];
         this.userID = results.owner;
-
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.EmbedBuilder()
             .setTitle('Success!')
             .setDescription(`The owner of the challenge's userID is \`${results.owner}\``)
-            .addField('challenge name', results.challengeName)
+            .addFields([{ name: 'challenge name', value: results.challengeName }])
             .setColor(green);
 
         // user statistics part
 
-        seeUserAction = new MessageActionRow().addComponents(
-            new MessageButton().setCustomId('stats').setLabel('See user statistics').setStyle('PRIMARY')
+        seeUserAction = new ActionRowBuilder().addComponents(
+            new ButtonBuilder().setCustomId('stats').setLabel('See user statistics').setStyle(ButtonStyle.Primary)
         );
         this.user = interaction.user;
         this.interaction = await interaction.reply({ embeds: [embed], components: [seeUserAction] });
@@ -73,7 +79,7 @@ module.exports = {
             } catch {
                 return await interaction.update({
                     embeds: [
-                        new Discord.MessageEmbed()
+                        new Discord.EmbedBuilder()
                             .setDescription('invalid user id associated with the challenge code!')
                             .setColor(palered)
                     ],
@@ -123,12 +129,12 @@ module.exports = {
                     options.push(option);
                 }
                 options.push({ label: 'Main page', value: 'mainPage' });
-                return new MessageSelectMenu()
+                return new SelectMenuBuilder()
                     .setCustomId('towerSelector')
                     .setPlaceholder('Nothing selected')
                     .addOptions(options);
             }
-            this.row = new MessageActionRow().addComponents(createSelector(this.obj));
+            this.row = new ActionRowBuilder().addComponents(createSelector(this.obj));
             await this.showStats(interaction); //
         }
     },
@@ -215,7 +221,6 @@ module.exports = {
             }
 
             // towers
-
             let towers = obj.towersPlacedData;
             sortable = [];
             for (let tower in towers) {
@@ -239,7 +244,7 @@ module.exports = {
             }
 
             let bossMedals = JSON.stringify(obj.bossMedals, null, 4);
-            let mainEmbed = new MessageEmbed();
+            let mainEmbed = new EmbedBuilder();
 
             // playerRank = obj.playerRank;
             // playerXp = obj.playerXp;
@@ -249,32 +254,32 @@ module.exports = {
             mainEmbed
                 .setTitle(`${name} (${rank})`)
                 .setDescription(desc.join('\n'))
-                .addField('Pops', popsInfo, true)
-                .addField('Hero placed stats', heroesPlacedData, true)
-                .addField('Tower placed stats', towersPlacedData, true)
-                .addField('Singleplayer medals', spMedals, true)
-                .addField('Coop medals', coopMedals, true)
-                .addField('Race medals', raceMedalsStr, true)
-                .addField('Boss medals', bossMedals, true)
-                .addField('Odyssey', ody, true)
+                .addFields([
+                    { name: 'Pops', value: popsInfo, inline: true },
+                    { name: 'Hero placed stats', value: heroesPlacedData, inline: true },
+                    { name: 'Tower placed stats', value: towersPlacedData, inline: true },
+                    { name: 'Singleplayer medals', value: spMedals, inline: true },
+                    { name: 'Coop medals', value: coopMedals, inline: true },
+                    { name: 'Race medals', value: raceMedalsStr, inline: true },
+                    { name: 'Boss medals', value: bossMedals, inline: true },
+                    { name: 'Odyssey', value: ody, inline: true }
+                ])
                 .setFooter({
-                    text: 'There is way too much data, this will all be polished slowly over time, before NK inevitably kills this OP system. btw this "datasniffing" has been around this entire time'
+                    text: 'There is way too much data, this will all be polished slowly over time. If emojis are not appearing for you, please enable the "use external emoji" permissions for _everyone_ because discord is weird.'
                 });
             return mainEmbed;
         }
 
         let embed = mainPage(obj);
-
         await interaction.update({
             embeds: [embed],
             components: [this.row],
-            files: [new MessageAttachment(Buffer.from(JSON.stringify(obj, null, 1)), `${this.userID}.json`)]
+            files: [new AttachmentBuilder(Buffer.from(JSON.stringify(obj, null, 1))).setName(`${this.userID}.json`)]
         });
     },
 
     async onSelectMenu(interaction) {
         let id = interaction.values[0];
-
         if (id === 'mainPage') {
             await this.showStats(interaction);
         } else {
@@ -284,7 +289,7 @@ module.exports = {
 
     async showTowerStats(interaction, tower) {
         let i = this.obj.namedMonkeyStats[tower];
-        let embed = new MessageEmbed();
+        let embed = new EmbedBuilder();
         if (i.name.length == 0) i.name = i.BaseTower;
         let desc = [
             `games won: ${i.gamesWon}`,
@@ -306,8 +311,11 @@ module.exports = {
         ${zomg} ${i.zomgsPopped || 0}
         ${ddt} ${i.ddtsPopped || 0}
         ${bad} ${i.badsPopped || 0}`;
-        embed.setTitle(`name: ${i.name}`).setDescription(desc.join('\n')).addField('Pops', popinfo);
-        return await interaction.update({ embeds: [embed], components: [this.row] });
+        embed
+            .setTitle(`name: ${i.name}`)
+            .setDescription(desc.join('\n'))
+            .addFields([{ name: 'Pops', value: popinfo }]);
+        return await interaction.update({ embeds: [embed], files: [], components: [this.row] });
     }
 };
 
@@ -333,7 +341,7 @@ async function request(objStr, url) {
         let res = await k.json();
         return JSON.parse(res.data);
     } catch (error) {
-        return new Discord.MessageEmbed()
+        return new Discord.EmbedBuilder()
             .setTitle('Invalid Challenge Code!')
             .addField('In case this is a valid challenge code:', `report it to the [discord server](${discord})`)
             .setColor(red);

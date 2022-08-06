@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const r = require('../jsons/income-normal.json');
 const abr = require('../jsons/income-abr.json');
 const gHelper = require('../helpers/general.js');
@@ -67,7 +67,7 @@ function normalIncome(startround, endround) {
     let startroundObject = r[startround - 1]; // thats just how it works
     let endroundObject = r[endround];
     let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
-    return new Discord.MessageEmbed()
+    return new Discord.EmbedBuilder()
         .setTitle(`$${Math.trunc(income * 100) / 100} earned in CHIMPS from rounds ${startround} to ${endround} inclusive`)
         .setColor(magenta)
         .setFooter({ text: 'not including starting cash' });
@@ -77,7 +77,7 @@ function halfIncome(startround, endround) {
     let startroundObject = r[startround - 1]; // thats just how it works
     let endroundObject = r[endround];
     let income = (endroundObject.cumulativeCash - startroundObject.cumulativeCash) / 2;
-    return new Discord.MessageEmbed()
+    return new Discord.EmbedBuilder()
         .setTitle(
             `$${
                 Math.trunc(income * 100) / 100
@@ -91,7 +91,7 @@ function abrIncome(startround, endround) {
     let startroundObject = abr[startround - 1];
     let endroundObject = abr[endround];
     let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
-    return new Discord.MessageEmbed()
+    return new Discord.EmbedBuilder()
         .setTitle(
             `$${Math.trunc(income * 100) / 100} earned in ABR CHIMPS from rounds ${startround} to ${endround} inclusive`
         )
@@ -124,31 +124,31 @@ function chincomeEmbed(mode, round) {
         }
     })(mode);
 
-    embed = new Discord.MessageEmbed()
+    embed = new Discord.EmbedBuilder()
         .setTitle(`${modeTitled} CHIMPS Incomes (R${round})`)
         .setColor(embedColour)
-        .addField(`R${round}`, `${incomes.rincome}`);
+        .addFields([{ name: `R${round}`, value: `${incomes.rincome}` }]);
 
     if (incomes.chincomeExclusive) {
-        embed.addField(`Start -> End R${round - 1}`, `${incomes.chincomeExclusive}`);
+        embed.addFields([{ name: `Start -> End R${round - 1}`, value: `${incomes.chincomeExclusive}` }]);
     }
 
-    embed.addField(`Start -> End R${round}`, `${incomes.chincomeInclusive}`);
+    embed.addFields([{ name: `Start -> End R${round}`, value: `${incomes.chincomeInclusive}` }]);
 
     if (round < 100) {
-        embed.addField(`Start R${round} -> End R100`, incomes.lincomeInclusive);
+        embed.addFields([{ name: `Start R${round} -> End R100`, value: incomes.lincomeInclusive }]);
     }
     if (round < 99) {
-        embed.addField(`Start R${round + 1} -> End R100`, incomes.lincomeExclusive);
+        embed.addFields([{ name: `Start R${round + 1} -> End R100`, value: incomes.lincomeExclusive }]);
     }
     if (round > 100) {
-        embed.addField(`Start R101 -> End R${round}`, incomes.superChincomeInclusive);
+        embed.addFields([{ name: `Start R101 -> End R${round}`, value: incomes.superChincomeInclusive }]);
     }
     if (mode !== 'abr') {
-        embed.addField(`Start R${round} -> End R140`, incomes.superLincomeInclusive);
+        embed.addFields([{ name: `Start R${round} -> End R140`, value: incomes.superLincomeInclusive }]);
     }
     if (round < 140 && mode !== 'abr') {
-        embed.addField(`Start R${round + 1} -> End R140`, incomes.superLincomeExclusive);
+        embed.addFields([{ name: `Start R${round + 1} -> End R140`, value: incomes.superLincomeExclusive }]);
     }
 
     if (round === 6 && mode !== 'abr') {

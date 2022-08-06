@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 
 const { footer } = require('../aliases/misc.json');
 const { paragon } = require('../jsons/colours.json');
@@ -185,7 +185,7 @@ async function execute(interaction) {
 
                 • Side note: money generated from Merchants count towards degree at a 4x more favorable rate than pops at $180 generated -> 4 power, both pops and money are for the same category so those combined still max at 90,000 power`;
     }
-    let messageEmbed = new Discord.MessageEmbed()
+    let messageEmbed = new Discord.EmbedBuilder()
         .setTitle(`\`${tower}\` paragon - level ${level}`)
         .setDescription(desc)
         .setFooter({ text: footer })

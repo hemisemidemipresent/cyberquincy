@@ -257,7 +257,6 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
             if (fields.every((field) => field.value.length <= 1024)) {
                 challengeEmbed.addFields(fields);
                 setCustomFields(challengeEmbed);
-                console.log(challengeEmbed);
                 return [challengeEmbed, numRows > maxNumRowsDisplayed];
             }
 

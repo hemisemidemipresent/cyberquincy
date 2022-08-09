@@ -24,7 +24,7 @@ const builder = new SlashCommandBuilder()
 
 function validateInput(interaction) {
     const towerPath = parseTowerPath(interaction);
-    if (!towerPath) return
+    if (!towerPath) return;
     if (isNaN(towerPath)) return "Tower path provided isn't `base` and contains non-numerical characters";
     if (!Towers.isValidUpgradeSet(towerPath)) return 'Invalid tower path provided!';
 }
@@ -69,7 +69,7 @@ async function embedBloonology(towerName, upgrade) {
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)
-        .setDescription(info)
+        .setDescription(upgradeDescription)
         .addFields([
             {
                 name: 'cost',
@@ -91,23 +91,23 @@ async function embedBloonologySummary(towerName) {
     try {
         res = await axios.get(link);
     } catch {
-        return new Discord.MessageEmbed().setColor(red).setTitle('Something went wrong while fetching the data');
+        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
     let body = res.data;
 
     const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
-    const tierUpgrades = []
-    let idx, tier
+    const tierUpgrades = [];
+    let idx, tier;
     for (tier = 1; tier <= 5; tier++) {
         for (idx = 0; idx < 3; idx++) {
-            tierUpgrades.push('000'.slice(0, idx) + `${tier}` + '000'.slice(idx+1))
+            tierUpgrades.push('000'.slice(0, idx) + `${tier}` + '000'.slice(idx + 1));
         }
     }
 
-    const pathDescriptions = tierUpgrades.map(u => cleanDescription(
-        descriptions.find(description => description.substr(0, 3) == u).substr(3)
-    ))
+    const pathDescriptions = tierUpgrades.map((u) =>
+        cleanDescription(descriptions.find((description) => description.substr(0, 3) == u).substr(3))
+    );
 
     const splitTexts = [
         '__Changes from 0-0-0__',
@@ -115,37 +115,43 @@ async function embedBloonologySummary(towerName) {
         '__Changes from Previous Tier__',
         'Changes from previous tier:',
         '__Crosspath Benefits__',
-        'Crosspath Benefits:',
-    ]
-    const splitTextsRegexStr = splitTexts.map(st => `(?:${st})`).join('|')
+        'Crosspath Benefits:'
+    ];
+    const splitTextsRegexStr = splitTexts.map((st) => `(?:${st})`).join('|');
 
-    const pathBenefits = pathDescriptions.map(desc => {
+    const pathBenefits = pathDescriptions.map((desc) => {
         // We're relying on Changes from Previous Tier being the first header after the upgrade details
-        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim()
-        return rawBenefits.split('\n').map(n => `⟴ ${n}`).join('\n')
-    })
+        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim();
+        return rawBenefits
+            .split('\n')
+            .map((n) => `⟴ ${n}`)
+            .join('\n');
+    });
 
-    const headers = tierUpgrades.map(u => {
+    const headers = tierUpgrades.map((u) => {
         const [path, tier] = Towers.pathTierFromUpgradeSet(u);
         const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
         return `${upgradeName} (${u})`;
-    })
+    });
 
-    const placedTowerDescription = cleanDescription(descriptions.find(description => description.substr(0, 3) == '000').substr(3))
+    const placedTowerDescription = cleanDescription(
+        descriptions.find((description) => description.substr(0, 3) == '000').substr(3)
+    );
 
-    const title = Aliases.toIndexNormalForm(towerName, '-') + ' Summary'
+    const title = Aliases.toIndexNormalForm(towerName, '-') + ' Summary';
 
-    const embed = new Discord.MessageEmbed()
-        .setTitle(title)
-        .setFooter({ text: footer })
-        .setColor(cyber);
+    const embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
 
     embed.addField(
         `Base Stats`,
-        placedTowerDescription.split(/(?:\n|\r)+/).map(s => s.trim().replace(/\u200E/g, '')).filter(s => s.length > 0).join(' ♦ ')
-    )
+        placedTowerDescription
+            .split(/(?:\n|\r)+/)
+            .map((s) => s.trim().replace(/\u200E/g, ''))
+            .filter((s) => s.length > 0)
+            .join(' ♦ ')
+    );
 
-    headers.forEach((header, idx) => embed.addField(header, pathBenefits[idx], true))
+    headers.forEach((header, idx) => embed.addField(header, pathBenefits[idx], true));
 
     return embed;
 }
@@ -166,7 +172,7 @@ async function execute(interaction) {
         embed = await embedBloonology(tower, towerPath);
         ephemeral = false;
     } else {
-        embed = await embedBloonologySummary(tower)
+        embed = await embedBloonologySummary(tower);
         ephemeral = true;
     }
 
@@ -175,7 +181,8 @@ async function execute(interaction) {
 
 // background info: there are 2 newlines present in the string: \n and \r. \n is preferred
 function cleanDescription(desc) {
-    return desc.toString()
+    return desc
+        .toString()
         .replace(/\n/g, '') // removes all newlines \n
         .replace(/\r \t/g, '\n') // removes all \r + tab
         .replace(/ \t-/g, '-    ') // removes remaining tabs

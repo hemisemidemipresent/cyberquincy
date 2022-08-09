@@ -13,7 +13,8 @@
         "push": "git push heroku master",
         "deploy": "npm run register && npm run commit && npm run push && npm run logs",
         "refresh": "del /f package-lock.json && npm install",
-        "logs": "heroku logs --tail"
+        "logs": "heroku logs --tail",
+        "update": "heroku stack:set heroku-22 -a cyberquincy"
     },
     "repository": {
         "type": "git",

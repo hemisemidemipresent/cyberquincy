@@ -232,6 +232,16 @@
         "los": "-",
         "e": "1/1"
     },
+    "quary": {
+        "ver": 32,
+        "len": 36.9,
+        "lenStr": 36.9,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "yes",
+        "los": "",
+        "e": "2/1"
+    },
     "moon_landing": {
         "ver": 6,
         "len": 35.5,

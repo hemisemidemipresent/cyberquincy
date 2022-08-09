@@ -21,7 +21,7 @@ module.exports = {
             const date = sheet.getCellByA1(`N${n + 7}`);
             const person = sheet.getCellByA1(`O${n + 7}`);
 
-            const challengeEmbed = new Discord.MessageEmbed()
+            const challengeEmbed = new Discord.EmbedBuilder()
                 .setTitle(`3tcrbs combo #${n}`)
                 .addField('tower 1', `${tower1.value}`, true)
                 .addField('tower 2', `${tower2.value}`, true)

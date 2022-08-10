@@ -10,8 +10,8 @@ module.exports = {
                 .setDescription('use **q!ap <question number>**. \ne.g. ``q!ap 1`` will answer question 1')
                 .addFields([
                     { name: 'q!ap 1', value: 'I dont understand what s,d,p,md,fd,cd,j,etc... means' },
-                    { name: 'q!ap 2', value: "i dont understad what is 'normal type','sharp type',etc... is" },
-                    { name: 'q!ap 3', value: 'i dont understand buffs' }
+                    { name: 'q!ap 2', value: "I dont understad what is 'normal type','sharp type',etc... is" },
+                    { name: 'q!ap 3', value: 'I dont understand buffs' }
                 ])
                 .setColor(cyber);
             return message.channel.send({ embeds: [choosemebed] });

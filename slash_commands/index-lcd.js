@@ -12,41 +12,36 @@ const COLS = {
     DATE: 'F',
     PERSON: 'G',
     LINK: 'I',
-    CURRENT: 'J',
+    CURRENT: 'J'
 };
 
 const { paleyellow } = require('../jsons/colours.json');
 
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
-let mapOption = 
-    new SlashCommandStringOption()
-        .setName('map')
-        .setDescription('Map')
-        .setRequired(true);
+let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
 
-builder = 
-    new SlashCommandBuilder()
-        .setName('lcd')
-        .setDescription('Search and Browse Completed LCD Index Combos')
-        .addStringOption(mapOption)
+builder = new SlashCommandBuilder()
+    .setName('lcc')
+    .setDescription('Search and Browse Completed LCC Index Combos')
+    .addStringOption(mapOption);
 
 async function execute(interaction) {
-    const mapArg = interaction.options.getString('map')
-    const canonicalMap = Aliases.getCanonicalForm(mapArg)
+    const mapArg = interaction.options.getString('map');
+    const canonicalMap = Aliases.getCanonicalForm(mapArg);
 
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 
     if (parsed.hasErrors()) {
-        return await interaction.reply("Map provided not valid");
+        return await interaction.reply('Map provided not valid');
     } else {
-        let challengeEmbed = await lcd(parsed.map)
-        return await interaction.reply({ embeds: [challengeEmbed] })
+        let challengeEmbed = await lcc(parsed.map);
+        return await interaction.reply({ embeds: [challengeEmbed] });
     }
 }
 
-async function lcd(btd6_map) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcd');
+async function lcc(btd6_map) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
 
     // Load the column containing the different maps
     await sheet.loadCells(`${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`); // loads all possible cells with map
@@ -58,17 +53,14 @@ async function lcd(btd6_map) {
     for (let row = 1; row <= MAX_ROW; row++) {
         var mapCandidate = sheet.getCellByA1(`${COLS.MAP}${row}`).value;
         // input is "in_the_loop" but needs to be compared to "In The Loop"
-        if (
-            mapCandidate &&
-            mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map
-        ) {
+        if (mapCandidate && mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map) {
             entryRow = row;
             break;
         }
     }
 
     if (!entryRow) {
-        throw `Something has gone horribly wrong; ${btd6_map} passed parsing validation but can't be found in the LCD spreadsheet`;
+        throw `Something has gone horribly wrong; ${btd6_map} passed parsing validation but can't be found in the LCC spreadsheet`;
     }
 
     // Load the row where the map was found
@@ -98,17 +90,13 @@ async function lcd(btd6_map) {
     }
 
     // Embed and send the message
-    var challengeEmbed = new Discord.MessageEmbed()
-        .setTitle(`${values.MAP} LCD Combo`)
-        .setColor(paleyellow);
+    var challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LCC Combo`).setColor(paleyellow);
 
     for (field in values) {
         if (values[field])
-            challengeEmbed = challengeEmbed.addField(
-                gHelper.toTitleCase(field),
-                values[field].toString(),
-                true
-            );
+            challengeEmbed = challengeEmbed.addFields([
+                { name: gHelper.toTitleCase(field), value: values[field].toString(), inline: true }
+            ]);
     }
 
     return challengeEmbed;

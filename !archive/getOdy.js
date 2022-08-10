@@ -75,7 +75,7 @@ function format(object) {
         }
     }
 
-    let embed = new Discord.MessageEmbed()
+    let embed = new Discord.EmbedBuilder()
         .setTitle(object.name)
         .setDescription(
             `${bloonMods}\n\n${settings}\n\n${startRules}\n\n${towers}`

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 
 const { cyber } = require('../jsons/colours.json');
 const { discord } = require('../aliases/misc.json');
@@ -14,20 +14,21 @@ async function execute(interaction) {
     const minutes = Math.floor(totalSeconds / 60);
     const uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 
-    const infoEmbed = new Discord.MessageEmbed()
+    const infoEmbed = new Discord.EmbedBuilder()
         .setColor(cyber)
         .setTitle('access help here')
         .setURL(`${discord}`)
         .setDescription(`Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons`)
-        .addField('ping:', `Response time: ${responseTime}ms`, true)
-
-        .addField('time since last restart:', `${uptime}`, true)
-        .addField(
-            'more data',
-            '[full bot statistics](https://statcord.com/bot/591922988832653313) - note users are inaccurate and servers might be inaccurate',
-            true
-        )
-        .addField('discord server, join for updates (happens pretty often)', `${discord}`, true)
+        .addFields([
+            { name: 'ping:', value: `Response time: ${responseTime}ms`, inline: true },
+            { name: 'time since last restart:', value: `${uptime}`, inline: true },
+            {
+                name: 'more data',
+                value: '[full bot statistics](https://statcord.com/bot/591922988832653313) - note users are inaccurate and servers might be inaccurate',
+                inline: true
+            },
+            { name: 'discord server, join for updates (happens pretty often)', value: `${discord}`, inline: true }
+        ])
         .setFooter({ text: 'thank you for using it! Please share!' });
     return await interaction.reply({
         embeds: [infoEmbed]

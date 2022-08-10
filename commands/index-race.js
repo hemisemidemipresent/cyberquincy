@@ -7,7 +7,7 @@ module.exports = {
 
     execute,
 
-    dependencies: ['btd6index'],
+    dependencies: ['btd6index']
 };
 
 async function execute(message, args) {
@@ -19,8 +19,7 @@ async function execute(message, args) {
     if (isNaN(args[0])) {
         let str = args.join(' ');
         return await findRaceByStr(str, message);
-    } else if (isNaN(args[0]) || args[0] < 1)
-        return await message.channel.send('please specify a valid race number');
+    } else if (isNaN(args[0]) || args[0] < 1) return await message.channel.send('please specify a valid race number');
     else {
         await findRaceByNum(parseInt(args[0]), message);
     }
@@ -39,9 +38,7 @@ async function findRaceByStr(str, message) {
             return findRaceByNum(i, message);
         }
     }
-    return await message.channel.send(
-        "Race isn't found. try a simpler phrase, you don't have to type the full name"
-    );
+    return await message.channel.send("Race isn't found. try a simpler phrase, you don't have to type the full name");
 }
 async function findRaceByNum(number, message) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'Races');
@@ -81,7 +78,7 @@ async function findRaceByNum(number, message) {
         secondPlaceTime.hyperlink,
         thirdPlaceTime.hyperlink,
         fourthPlaceTime.hyperlink,
-        fifthPlaceTime.hyperlink,
+        fifthPlaceTime.hyperlink
     ];
     let output = '';
     for (i = 0; i < 5; i++) {
@@ -92,19 +89,23 @@ async function findRaceByNum(number, message) {
         output += `${i + 1}:${hyperlink}\n`;
     }
 
-    let RaceEmbed = new Discord.MessageEmbed()
+    let RaceEmbed = new Discord.EmbedBuilder()
         .setTitle(`Race ${number}`)
         .setTitle(name.value.toString())
         .setDescription(`${info1.value}\n${info2.value}\n${info3.value}`)
-        .addField('Date', `${dates.value}`, true)
+        .addFields([
+            { name: 'Date', value: `${dates.value}`, inline: true },
+            { name: 'Links', value: `${output}`, inline: true },
+            { name: 'Players', value: `${players.value}`, inline: true }
+        ]);
 
-        .addField('Links', `${output}`, true)
-        .addField('Players', `${players.value}`, true);
-    if (number == 143) RaceEmbed.addField('Top 5', 'no');
+    if (number == 143) RaceEmbed.addFields([{ name: 'Top 5', value: 'no' }]);
     else
-        RaceEmbed.addField(
-            'Top 5',
-            `${firstPlaceNick} ${firstPlaceName} ${firstPlaceTime.value}\n${secondPlaceNick} ${secondPlaceName} ${secondPlaceTime.value}\n${thirdPlaceNick} ${thirdPlaceName} ${thirdPlaceTime.value}\n${fourthPlaceNick} ${fourthPlaceName} ${fourthPlaceTime.value}\n${fifthPlaceNick} ${fifthPlaceName} ${fifthPlaceTime.value}`
-        );
+        RaceEmbed.addFields([
+            {
+                name: 'Top 5',
+                value: `${firstPlaceNick} ${firstPlaceName} ${firstPlaceTime.value}\n${secondPlaceNick} ${secondPlaceName} ${secondPlaceTime.value}\n${thirdPlaceNick} ${thirdPlaceName} ${thirdPlaceTime.value}\n${fourthPlaceNick} ${fourthPlaceName} ${fourthPlaceTime.value}\n${fifthPlaceNick} ${fifthPlaceName} ${fifthPlaceTime.value}`
+            }
+        ]);
     return await message.channel.send({ embeds: [RaceEmbed] });
 }

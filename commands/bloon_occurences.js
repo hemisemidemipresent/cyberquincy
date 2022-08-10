@@ -68,13 +68,15 @@ module.exports = {
                 }
                 output += '}`';
             }
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`Occurences of ${bloonType}`)
                 .setDescription(output)
-                .addField(
-                    '"abbreviations"',
-                    'c-red - camo red; r-red - regrow red; f-moab - fortified moab; cr-red - camo regrow red'
-                )
+                .addFields([
+                    {
+                        name: '"abbreviations"',
+                        value: 'c-red - camo red; r-red - regrow red; f-moab - fortified moab; cr-red - camo regrow red'
+                    }
+                ])
                 .setFooter({ text: 'each space represents a different set of bloons. For more info use q!round <round>' })
                 .setColor(turq);
             return embed;
@@ -86,9 +88,9 @@ module.exports = {
         await message.channel.send({ embeds: [output] });
     },
     async errorMessage(message, parsingErrors) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle('ERROR')
-            .addField('Likely Cause(s)', parsingErrors.join('\n'))
+            .addFields([{ name: 'Likely Cause(s)', value: parsingErrors.join('\n') }])
             .setColor(cyber);
         return await message.channel.send({ embeds: [errorEmbed] });
     }

@@ -71,7 +71,7 @@ const COLS = {
     }
 };
 
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
 
@@ -176,10 +176,12 @@ async function getRowStandardData(entryRow, colset) {
         values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
 
-    var challengeEmbed = new Discord.MessageEmbed().setTitle(`${values.MAP} LTC Combo`).setColor(palegreen);
+    var challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LTC Combo`).setColor(palegreen);
 
     for (field in values) {
-        challengeEmbed = challengeEmbed.addField(gHelper.toTitleCase(field), values[field].toString(), true);
+        challengeEmbed = challengeEmbed.addFields([
+            { name: gHelper.toTitleCase(field), value: values[field].toString(), inline: true }
+        ]);
     }
 
     return challengeEmbed;
@@ -195,11 +197,13 @@ async function getRowAltData(entryRow, qualifier, colset) {
         return await getRowStandardData(entryRow, colset);
     }
 
-    var challengeEmbed = new Discord.MessageEmbed()
+    var challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`${gHelper.toTitleCase(qualifier)} ${mapCell.value} LTC Combo`)
         .setColor(palegreen)
-        .addField('Person', notes[qualifier].PERSON, true)
-        .addField('Link', notes[qualifier].LINK, true);
+        .addFields([
+            { name: 'Person', value: notes[qualifier].PERSON, inline: true },
+            { name: 'Link', value: notes[qualifier].LINK, inline: true }
+        ]);
 
     return challengeEmbed;
 }

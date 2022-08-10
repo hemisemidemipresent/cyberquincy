@@ -1,10 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-builder = new SlashCommandBuilder().setName('vrej').setDescription('vrej');
+builder = new SlashCommandBuilder().setName('feet').setDescription('Ace micro with foot');
 
 async function execute(interaction) {
     return await interaction.reply({
-        content: 'https://www.youtube.com/watch?v=PWkgMCtbnkM&'
+        content:
+            "https://youtu.be/vmjeHHm1pD4"
     });
 }
 

@@ -6,9 +6,7 @@ module.exports = {
     execute(message, args) {
         channel = message.channel;
         if (!channel.nsfw) {
-            return message.channel.send(
-                'This can only be used in an nsfw channel'
-            );
+            return message.channel.send('This can only be used in an nsfw channel');
         } else {
             let links = [
                 'https://www.youtube.com/watch?v=OifMU4B6uik',
@@ -16,13 +14,11 @@ module.exports = {
                 discord,
                 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 'https://discordbotlist.com/bots/cyber-quincy',
-                'https://top.gg/bot/482571244823117840',
+                'https://top.gg/bot/482571244823117840'
             ];
             int = Math.floor(Math.random() * links.length);
-            let embed = new Discord.MessageEmbed()
-                .setTitle('Here you go')
-                .setURL(links[int]);
+            let embed = new Discord.EmbedBuilder().setTitle('Here you go').setURL(links[int]);
             return message.channel.send({ embeds: [embed] });
         }
-    },
+    }
 };

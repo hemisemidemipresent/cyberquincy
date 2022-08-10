@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const income = require('../jsons/income-normal.json');
 const abrincome = require('../jsons/income-abr.json');
 const gHelper = require('../helpers/general.js');
@@ -70,7 +70,7 @@ function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
         round++;
 
         if (round > roundLimit)
-            return new Discord.MessageEmbed()
+            return new Discord.EmbedBuilder()
                 .setTitle(
                     `If you start popping at ${originalRound}, you can't get $${cashNeeded} from popping bloons before random freeplay`
                 )
@@ -78,7 +78,7 @@ function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
                 .setColor(orange);
     }
 
-    let embed = new Discord.MessageEmbed()
+    let embed = new Discord.EmbedBuilder()
         .setTitle(
             `If you start popping (saving up) at round ${originalRound}, you should get $${cashNeeded} DURING round ${--round} (BEFORE round ${++round}).`
         )

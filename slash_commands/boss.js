@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { Bloonarius } = require('../jsons/boss.json');
 const { Lych } = require('../jsons/boss.json');
 const { Vortex } = require('../jsons/boss.json');
@@ -54,8 +54,7 @@ async function execute(interaction) {
 }
 
 function process(data, name, tier, isElite) {
-    let embed = new Discord.MessageEmbed().setTitle(`${isElite ? 'Elite' : ''} ${name} Tier ${tier}`);
-
+    let embed = new Discord.EmbedBuilder().setTitle(`${isElite ? 'Elite' : ''} ${name} Tier ${tier}`);
     let desc = data.desc + '\n' + isElite ? data.eliteDesc : normalDesc;
     let obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
     desc += `\n\n**Stats**:

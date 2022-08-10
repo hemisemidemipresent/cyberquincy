@@ -90,18 +90,13 @@ module.exports = {
                 time = parsetime(time);
                 let md = scores[i].metadata.split(',');
                 let username = md[0];
-                let row = `${addSpaces(i + 1, 2)}|${addSpaces(
-                    username,
-                    maxLength
-                )}|${time}\n`;
+                let row = `${addSpaces(i + 1, 2)}|${addSpaces(username, maxLength)}|${time}\n`;
                 output += row;
             }
             if (output.length > 4000) {
-                return module.exports.errorMessage(message, [
-                    'too many characters',
-                ]);
+                return module.exports.errorMessage(message, ['too many characters']);
             }
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`ID: ${data.leaderboardID}`)
                 .setURL(url)
                 .setDescription('```' + output + '```')
@@ -112,7 +107,7 @@ module.exports = {
         });
     },
     errorMessage(message, errors) {
-        let errorEmbed = new Discord.MessageEmbed()
+        let errorEmbed = new Discord.EmbedBuilder()
             .setTitle(`${errors.join('\n')}`)
             .addField(
                 '**q!lb [startingPlacement] [endingPlacement]**',
@@ -122,7 +117,7 @@ module.exports = {
             .setColor(red);
 
         message.channel.send({ embeds: [errorEmbed] });
-    },
+    }
 };
 function addSpaces(str, max) {
     if (str == null || !str) {

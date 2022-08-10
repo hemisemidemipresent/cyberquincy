@@ -7,45 +7,33 @@ const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL = '702089126706544661';
 // Change this to a channel in your test guild when testing
 const TEST_SUBMISSIONS_CHANNEL = '737445888602931252';
 const IS_TESTING = require('../1/config.json')['testing'];
-const SUBMISSIONS_CHANNEL = IS_TESTING
-    ? TEST_SUBMISSIONS_CHANNEL
-    : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
+const SUBMISSIONS_CHANNEL = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
 
 const REAL_CYBER_QUINCY_USER_ID = '591922988832653313';
 const TEST_CYBER_QUINCY_USER_ID = '737094027400183868';
-const CYBER_QUINCY_USER_ID = IS_TESTING
-    ? TEST_CYBER_QUINCY_USER_ID
-    : REAL_CYBER_QUINCY_USER_ID;
+const CYBER_QUINCY_USER_ID = IS_TESTING ? TEST_CYBER_QUINCY_USER_ID : REAL_CYBER_QUINCY_USER_ID;
 const HELPER_ROLE_ID = '923076988607037470';
 
 DISCORD_LINK_REGEX = /https:\/\/discord.com\/channels\/(\d+)\/(\d+)\/(\d+)/i;
 
 async function unsubmit(message, url) {
-    const liveMode =
-        message.channel.guild.id == Guilds.BTD6_INDEX || IS_TESTING;
+    const liveMode = message.channel.guild.id == Guilds.BTD6_INDEX || IS_TESTING;
 
     let [, server_id, channel_id, message_id] = url.match(DISCORD_LINK_REGEX);
 
     if (!liveMode) {
-        return message.channel.send(
-            'Must be in BTD6 Index Channel to run this command'
-        );
+        return message.channel.send('Must be in BTD6 Index Channel to run this command');
     }
 
     if (!IS_TESTING && server_id != Guilds.BTD6_INDEX) {
-        return message.channel.send(
-            'Can only unsubmit from BTD6 Index Channel'
-        );
+        return message.channel.send('Can only unsubmit from BTD6 Index Channel');
     }
 
     if (channel_id != SUBMISSIONS_CHANNEL) {
-        return message.channel.send(
-            'Can only unsubmit messages in **#submissions**'
-        );
+        return message.channel.send('Can only unsubmit messages in **#submissions**');
     }
 
-    const SUBMISSIONS_CHANNEL_OBJ =
-        message.channel.guild.channels.cache.get(SUBMISSIONS_CHANNEL);
+    const SUBMISSIONS_CHANNEL_OBJ = message.channel.guild.channels.cache.get(SUBMISSIONS_CHANNEL);
     messages = await SUBMISSIONS_CHANNEL_OBJ.messages.fetch({ limit: 100 });
 
     if ((submission = messages.get(message_id))) {
@@ -57,8 +45,7 @@ async function unsubmit(message, url) {
         let submitterTag;
         if (submission.content == '') {
             // It's an imgur embedded submission
-            submitterTag =
-                submission.embeds[0].footer.text.match(/sent by (.*)/)[1];
+            submitterTag = submission.embeds[0].footer.text.match(/sent by (.*)/)[1];
         } else {
             // Inline
             submitterTag = submission.content.match(/Sent by (.*?)_$/)[1];
@@ -66,9 +53,7 @@ async function unsubmit(message, url) {
         if (submitterTag == message.author.tag || message.member.roles.cache.has(HELPER_ROLE_ID)) {
             try {
                 submission.delete();
-                return message.channel.send(
-                    'Your submission was successfully removed.'
-                );
+                return message.channel.send('Your submission was successfully removed.');
             } catch {
                 return message.channel.send('Failed to remove submission');
             }
@@ -83,15 +68,12 @@ async function unsubmit(message, url) {
 }
 
 function helpMessage() {
-    return new Discord.MessageEmbed()
+    return new Discord.EmbedBuilder()
         .setTitle('`q!index-unsubmit` help')
-        .setDescription(
-            '**Remove one of your submissions from `#submissions`**'
-        )
-        .addField(
-            '`q!isub <link_to_submission_message>`',
-            'Removes your submission if it is still there'
-        )
+        .setDescription('**Remove one of your submissions from `#submissions`**')
+        .addFields([
+            { name: '`q!isub <link_to_submission_message>`', value: 'Removes your submission if it is still there' }
+        ])
         .setColor(colours['black']);
 }
 
@@ -103,10 +85,7 @@ module.exports = {
             return message.channel.send(helpMessage());
         }
 
-        const parsed = CommandParser.parse(
-            args,
-            new RegexParser(DISCORD_LINK_REGEX)
-        );
+        const parsed = CommandParser.parse(args, new RegexParser(DISCORD_LINK_REGEX));
         if (parsed.hasErrors()) {
             return message.channel.send(
                 parsed.parsingErrors
@@ -122,5 +101,5 @@ module.exports = {
         }
 
         unsubmit(message, parsed.regex);
-    },
+    }
 };

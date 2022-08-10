@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { isValidTempleSet } = require('../helpers/towers');
 
 const t = require('../jsons/temple.json');
@@ -49,14 +49,16 @@ async function by_category(interaction) {
     let magic = interaction.options.getInteger('magic') || 0;
     let support = interaction.options.getInteger('support') || 0;
 
-    let embed = new Discord.MessageEmbed();
+    let embed = new Discord.EmbedBuilder();
     embed.setTitle('Temple stats');
     embed.setColor(yellow);
     // there is probably a better way
-    embed.addField(`Primary sacrifice ($${primary})`, t[0][0] + '\n' + levelToString(cashToLevel(primary), 0));
-    embed.addField(`Military sacrifice ($${military})`, t[1][0] + '\n' + levelToString(cashToLevel(military), 1));
-    embed.addField(`Magic sacrifice ($${magic})`, t[2][0] + '\n' + levelToString(cashToLevel(magic), 2));
-    embed.addField(`Support sacrifice ($${support})`, t[3][0] + '\n' + levelToString(cashToLevel(support), 3));
+    embed.addFields([
+        { name: `Primary sacrifice ($${primary})`, value: t[0][0] + '\n' + levelToString(cashToLevel(primary), 0) },
+        { name: `Military sacrifice ($${military})`, value: t[1][0] + '\n' + levelToString(cashToLevel(military), 1) },
+        { name: `Magic sacrifice ($${magic})`, value: t[2][0] + '\n' + levelToString(cashToLevel(magic), 2) },
+        { name: `Support sacrifice ($${support})`, value: t[3][0] + '\n' + levelToString(cashToLevel(support), 3) }
+    ]);
     return await interaction.reply({ embeds: [embed] });
 }
 
@@ -80,7 +82,7 @@ async function max_temple(interaction) {
         .split('')
         .map((x) => parseInt(x));
 
-    let embed = new Discord.MessageEmbed().setColor(yellow);
+    let embed = new Discord.EmbedBuilder().setColor(yellow);
     embed.setTitle(temple_set);
 
     for (let i = 0; i < 4; i++) {
@@ -99,10 +101,10 @@ function addSacrificeStats(embed, num, i) {
 
     if (num == 0) return;
     if (num == 1) {
-        return embed.addField(titles[i], `${t[i][0]}\n${t[i][9]}`);
+        return embed.addFields([{ name: titles[i], value: `${t[i][0]}\n${t[i][9]}` }]);
     }
     if (num == 2) {
-        return embed.addField(titles[i], `${t[i][0]}\n${t[i][9]}\n**TSG**:\n${t2[i]}`);
+        return embed.addFields([{ name: titles[i], value: `${t[i][0]}\n${t[i][9]}\n**TSG**:\n${t2[i]}` }]);
     }
 }
 

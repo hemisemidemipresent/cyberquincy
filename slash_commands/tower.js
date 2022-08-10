@@ -1,4 +1,11 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ComponentType,
+    SlashCommandBuilder,
+    SlashCommandStringOption
+} = require('discord.js');
 
 const axios = require('axios');
 const costs = require('../jsons/costs.json');
@@ -19,12 +26,12 @@ const builder = new SlashCommandBuilder()
     .setDescription('Find information for each tower')
     .addStringOption(towerOption)
     .addStringOption((option) =>
-        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(false)
+        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
     );
 
 function validateInput(interaction) {
     const towerPath = parseTowerPath(interaction);
-    if (!towerPath) return
+    if (!towerPath) return;
     if (isNaN(towerPath)) return "Tower path provided isn't `base` and contains non-numerical characters";
     if (!Towers.isValidUpgradeSet(towerPath)) return 'Invalid tower path provided!';
 }
@@ -35,13 +42,14 @@ function parseTowerPath(interaction) {
     else return tp;
 }
 
+// the function that creates the embed for bloonology that will get sent
 async function embedBloonology(towerName, upgrade) {
     let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
     let res;
     try {
         res = await axios.get(link);
     } catch {
-        return new Discord.MessageEmbed().setColor(red).setTitle('Something went wrong while fetching the data');
+        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
     let body = res.data;
 
@@ -67,16 +75,19 @@ async function embedBloonology(towerName, upgrade) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
 
-    let embed = new Discord.MessageEmbed()
+    let embed = new Discord.EmbedBuilder()
         .setTitle(title)
         .setDescription(upgradeDescription)
-        .addField(
-            'cost',
-            `${cost} - medium\n${Towers.hard(cost)} - hard\n` + `if this is wrong [yell at hemi here](${discord})`,
-            true
-        )
-        .addField('total cost', `${totalCost} - medium\n${hardTotalCost} - hard`, true)
-        .addField('Bug reporting', `report [here](${discord})`, true)
+        .addFields([
+            {
+                name: 'cost',
+                value:
+                    `${cost} - medium\n${Towers.hard(cost)} - hard\n` + `if this is wrong [yell at hemi here](${discord})`,
+                inline: true
+            },
+            { name: 'total cost', value: `${totalCost} - medium\n${hardTotalCost} - hard`, inline: true },
+            { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
+        ])
         .setFooter({ text: footer })
         .setColor(cyber);
     return embed;
@@ -88,23 +99,23 @@ async function embedBloonologySummary(towerName) {
     try {
         res = await axios.get(link);
     } catch {
-        return new Discord.MessageEmbed().setColor(red).setTitle('Something went wrong while fetching the data');
+        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
     let body = res.data;
 
     const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
-    const tierUpgrades = []
-    let idx, tier
+    const tierUpgrades = [];
+    let idx, tier;
     for (tier = 1; tier <= 5; tier++) {
         for (idx = 0; idx < 3; idx++) {
-            tierUpgrades.push('000'.slice(0, idx) + `${tier}` + '000'.slice(idx+1))
+            tierUpgrades.push('000'.slice(0, idx) + `${tier}` + '000'.slice(idx + 1));
         }
     }
 
-    const pathDescriptions = tierUpgrades.map(u => cleanDescription(
-        descriptions.find(description => description.substr(0, 3) == u).substr(3)
-    ))
+    const pathDescriptions = tierUpgrades.map((u) =>
+        cleanDescription(descriptions.find((description) => description.substr(0, 3) == u).substr(3))
+    );
 
     const splitTexts = [
         '__Changes from 0-0-0__',
@@ -112,37 +123,45 @@ async function embedBloonologySummary(towerName) {
         '__Changes from Previous Tier__',
         'Changes from previous tier:',
         '__Crosspath Benefits__',
-        'Crosspath Benefits:',
-    ]
-    const splitTextsRegexStr = splitTexts.map(st => `(?:${st})`).join('|')
+        'Crosspath Benefits:'
+    ];
+    const splitTextsRegexStr = splitTexts.map((st) => `(?:${st})`).join('|');
 
-    const pathBenefits = pathDescriptions.map(desc => {
+    const pathBenefits = pathDescriptions.map((desc) => {
         // We're relying on Changes from Previous Tier being the first header after the upgrade details
-        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim()
-        return rawBenefits.split('\n').map(n => `⟴ ${n}`).join('\n')
-    })
+        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim();
+        return rawBenefits
+            .split('\n')
+            .map((n) => `⟴ ${n}`)
+            .join('\n');
+    });
 
-    const headers = tierUpgrades.map(u => {
+    const headers = tierUpgrades.map((u) => {
         const [path, tier] = Towers.pathTierFromUpgradeSet(u);
         const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
         return `${upgradeName} (${u})`;
-    })
+    });
 
-    const placedTowerDescription = cleanDescription(descriptions.find(description => description.substr(0, 3) == '000').substr(3))
+    const placedTowerDescription = cleanDescription(
+        descriptions.find((description) => description.substr(0, 3) == '000').substr(3)
+    );
 
-    const title = Aliases.toIndexNormalForm(towerName, '-') + ' Summary'
+    const title = Aliases.toIndexNormalForm(towerName, '-') + ' Summary';
 
-    const embed = new Discord.MessageEmbed()
-        .setTitle(title)
-        .setFooter({ text: footer })
-        .setColor(cyber);
+    const embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
 
-    embed.addField(
-        `Base Stats`,
-        placedTowerDescription.split(/(?:\n|\r)+/).map(s => s.trim().replace(/\u200E/g, '')).filter(s => s.length > 0).join(' ♦ ')
-    )
+    embed.addFields([
+        {
+            name: `Base Stats`,
+            value: placedTowerDescription
+                .split(/(?:\n|\r)+/)
+                .map((s) => s.trim().replace(/\u200E/g, ''))
+                .filter((s) => s.length > 0)
+                .join(' ♦ ')
+        }
+    ]);
 
-    headers.forEach((header, idx) => embed.addField(header, pathBenefits[idx], true))
+    headers.forEach((header, idx) => embed.addFields([{ name: header, value: pathBenefits[idx], inline: true }]));
 
     return embed;
 }
@@ -158,28 +177,63 @@ async function execute(interaction) {
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);
 
-    let embed, ephemeral;
-    if (towerPath) {
-        embed = await embedBloonology(tower, towerPath);
-        ephemeral = false;
-    } else {
-        embed = await embedBloonologySummary(tower)
-        ephemeral = true;
-    }
+    let embed = await embedBloonology(tower, towerPath);
 
-    return await interaction.reply({ embeds: [embed], ephemeral: ephemeral });
-}
+    const summaryBtn = new ButtonBuilder()
+        .setCustomId('summary')
+        .setLabel('See summary of all upgrades')
+        .setStyle(ButtonStyle.Primary);
 
-// background info: there are 2 newlines present in the string: \n and \r. \n is preferred
-function cleanDescription(desc) {
-    return desc.toString()
-        .replace(/\n/g, '') // removes all newlines \n
-        .replace(/\r \t/g, '\n') // removes all \r + tab
-        .replace(/ \t-/g, '-    ') // removes remaining tabs
-        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
+    await interaction.reply({ embeds: [embed], components: [new ActionRowBuilder().addComponents(summaryBtn)] });
+
+    // collector filter
+    const filter = (selection) => {
+        // Ensure user clicking button is same as the user that started the interaction
+        if (selection.user.id !== interaction.user.id) return false;
+        // Ensure that the button press corresponds with this interaction and wasn't a button press on the previous interaction
+        if (selection.message.interaction.id !== interaction.id) return false;
+        return true;
+    };
+
+    const collector = interaction.channel.createMessageComponentCollector({
+        filter,
+        componentType: ComponentType.Button,
+        time: 20000
+    });
+
+    collector.on('collect', async (buttonInteraction) => {
+        collector.stop();
+        buttonInteraction.deferUpdate();
+
+        if (buttonInteraction.customId === 'summary') {
+            let summaryEmbed = await embedBloonologySummary(tower);
+            await interaction.editReply({
+                embeds: [summaryEmbed],
+                components: [],
+                ephemeral: true
+            });
+        }
+    });
+
+    collector.on('end', async (collected) => {
+        if (collected.size === 0)
+            await interaction.editReply({
+                embeds: [embed],
+                components: []
+            });
+    });
 }
 
 module.exports = {
     data: builder,
     execute
 };
+// background info: there are 2 newlines present in the string: \n and \r. \n is preferred
+function cleanDescription(desc) {
+    return desc
+        .toString()
+        .replace(/\n/g, '') // removes all newlines \n
+        .replace(/\r \t/g, '\n') // removes all \r + tab
+        .replace(/ \t-/g, '-    ') // removes remaining tabs
+        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
+}

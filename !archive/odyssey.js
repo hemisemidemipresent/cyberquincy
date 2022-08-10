@@ -28,31 +28,31 @@ module.exports = {
             const map1 = [
                 sheet.getCellByA1(`N${row1}`).value,
                 sheet.getCellByA1(`N${row2}`).value,
-                sheet.getCellByA1(`N${row3}`).value,
+                sheet.getCellByA1(`N${row3}`).value
             ];
             const map2 = [
                 sheet.getCellByA1(`P${row1}`).value,
                 sheet.getCellByA1(`P${row2}`).value,
-                sheet.getCellByA1(`P${row3}`).value,
+                sheet.getCellByA1(`P${row3}`).value
             ];
             const map3 = [
                 sheet.getCellByA1(`R${row1}`).value,
                 sheet.getCellByA1(`R${row2}`).value,
-                sheet.getCellByA1(`R${row3}`).value,
+                sheet.getCellByA1(`R${row3}`).value
             ];
             const map4 = [
                 sheet.getCellByA1(`T${row1}`).value,
                 sheet.getCellByA1(`T${row2}`).value,
-                sheet.getCellByA1(`T${row3}`).value,
+                sheet.getCellByA1(`T${row3}`).value
             ];
             const map5 = [
                 sheet.getCellByA1(`V${row1}`).value,
                 sheet.getCellByA1(`V${row2}`).value,
-                sheet.getCellByA1(`V${row3}`).value,
+                sheet.getCellByA1(`V${row3}`).value
             ];
             const date = sheet.getCellByA1(`E${row1}`).value;
 
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(name)
                 .setDescription(`${restrictions}\n${towers}\n${heroes}`)
                 .addField('1st map', `${map1[0]}\n${map1[1]}\n${map1[2]}`)
@@ -63,9 +63,7 @@ module.exports = {
                 .setFooter(`Date: ${date}`)
                 .setColor(lightgreen)
                 .setThumbnail(hardmodeodyssey)
-                .setFooter(
-                    'Unfortunately we only have data for hard mode odysseys'
-                );
+                .setFooter('Unfortunately we only have data for hard mode odysseys');
             message.channel.send({ embeds: [embed] });
         }
         try {
@@ -75,7 +73,7 @@ module.exports = {
         }
     },
     helpMessage(channel) {
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle('Odyssey info command')
             .addField('usage', 'q!odyssey <number>')
             .addField('example', '``q!odyssey 5 shows`` odyssey number 5')
@@ -83,15 +81,10 @@ module.exports = {
         channel.send({ embeds: [embed] });
     },
     errorMessage(channel) {
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle('Something went wrong!')
-            .setDescription(
-                'Did you try inputting an invalid odyssey number? You probably did.'
-            )
-            .addField(
-                'if this is an actual issue',
-                `[report this bug](${discord})`
-            );
+            .setDescription('Did you try inputting an invalid odyssey number? You probably did.')
+            .addField('if this is an actual issue', `[report this bug](${discord})`);
         channel.send({ embeds: [embed] });
-    },
+    }
 };

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 
 builder = new SlashCommandBuilder().setName('woor').setDescription('Ace micro term: Wiggle out of range');
 

@@ -3,7 +3,7 @@ const {
     SlashCommandStringOption,
     SlashCommandIntegerOption,
     SlashCommandBooleanOption
-} = require('@discordjs/builders');
+} = require('discord.js');
 
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
@@ -53,10 +53,10 @@ function generateHeroLevels(interaction) {
 
     heroLevels = Heroes.levelingCurve(hero, placementRound, mapDifficulty, energizerRound || Infinity);
     let res = table(gHelper.range(1, 20), heroLevels.slice(1));
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
         .setTitle(`${gHelper.toTitleCase(hero)} Leveling Chart`)
         .setDescription(description(placementRound, mapDifficulty, energizerRound))
-        .addField('\u200b', `${res}`)
+        .addFields([{ name: '\u200b', value: `${res}` }])
         .setColor(colours['cyber']);
     return embed;
 }

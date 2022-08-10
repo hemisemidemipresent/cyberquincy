@@ -7,28 +7,22 @@ module.exports = {
         const options = {
             max: 1,
             time: 10000,
-            errors: ['time'],
+            errors: ['time']
         };
-        const selectBankMsg =
-            'Please select which bank you are using\n3 - x3x bank\n4 - x4x bank\n5 - x5x bank';
-        const errorBankMsg =
-            'Sorry, please specify a bank type number from 3 to 5 next time. Run the command again';
+        const selectBankMsg = 'Please select which bank you are using\n3 - x3x bank\n4 - x4x bank\n5 - x5x bank';
+        const errorBankMsg = 'Sorry, please specify a bank type number from 3 to 5 next time. Run the command again';
         const selectMKMsg =
             'Type the number to select which Monkey Knowledge you are using\n0 - none\n1 - Flat Pack Buildings\n2 - Flat pack buildings + Bigger Banks';
-        const errorMKMsg =
-            'Sorry, please specify a valid option next time (0-2). Run the commands again';
+        const errorMKMsg = 'Sorry, please specify a valid option next time (0-2). Run the commands again';
         const selectBenjaminMsg =
             'Please select bank hack %:\n0 - no ben / ben is below lvl 5\n5 - ben lvl 5 to 8\n12 - ben lvl 9+';
-        const errorBenjaminMsg =
-            'sorry, please specify a valid value (0, 5, or 12). Run the command again';
+        const errorBenjaminMsg = 'sorry, please specify a valid value (0, 5, or 12). Run the command again';
         const selectCrosspathMsg =
             'Please select the crosspath by typing the number:\n0 - 03+x farm\n1 - 13+0 farm\n2 - 23+0 farm';
-        const errorCrosspathMsg =
-            'Please specify a valid crosspath option (0 - 2). Run the command again';
+        const errorCrosspathMsg = 'Please specify a valid crosspath option (0 - 2). Run the command again';
         const selectDiffMsg =
             'Please type the corresponding number to select the difficulty\n1 - easy\n2 - medium\n3 - hard\n4 - impoppable\n5 - half cash';
-        const errorDiffMsg =
-            'Please specify a correct number (1 - 5). Run the command again';
+        const errorDiffMsg = 'Please specify a correct number (1 - 5). Run the command again';
         message.channel.send(selectBankMsg);
         message.channel
             .awaitMessages(filter, options)
@@ -73,64 +67,34 @@ module.exports = {
                     if (!isValidHack(hackPercent)) {
                         return message.channel.send(errorBenjaminMsg);
                     }
-                    crosspath(
-                        bankTier,
-                        flatPackBuilding,
-                        BiggerBanks,
-                        hackPercent
-                    );
+                    crosspath(bankTier, flatPackBuilding, BiggerBanks, hackPercent);
                 })
                 .catch(() => {
                     tookTooLong(message);
                 });
         }
-        function crosspath(
-            bankTier,
-            flatPackBuilding,
-            BiggerBanks,
-            hackPercent
-        ) {
+        function crosspath(bankTier, flatPackBuilding, BiggerBanks, hackPercent) {
             message.channel.send(selectCrosspathMsg);
             message.channel
                 .awaitMessages(filter, options)
                 .then((collectt2) => {
                     let crosspathNum = collectt2.first().content;
-                    if (
-                        isNaN(crosspathNum) ||
-                        crosspathNum < 0 ||
-                        crosspathNum > 2
-                    ) {
+                    if (isNaN(crosspathNum) || crosspathNum < 0 || crosspathNum > 2) {
                         return message.channel.send(errorCrosspathMsg);
                     }
-                    findDifficulty(
-                        bankTier,
-                        flatPackBuilding,
-                        BiggerBanks,
-                        hackPercent,
-                        crosspathNum
-                    );
+                    findDifficulty(bankTier, flatPackBuilding, BiggerBanks, hackPercent, crosspathNum);
                 })
                 .catch(() => {
                     tookTooLong(message);
                 });
         }
-        function findDifficulty(
-            bankTier,
-            flatPackBuilding,
-            BiggerBanks,
-            hackPercent,
-            crosspathNum
-        ) {
+        function findDifficulty(bankTier, flatPackBuilding, BiggerBanks, hackPercent, crosspathNum) {
             message.channel.send(selectDiffMsg);
             message.channel
                 .awaitMessages(filter, options)
                 .then((collectt3) => {
                     let difficultyId = collectt3.first().content;
-                    if (
-                        isNaN(difficultyId) ||
-                        difficultyId < 0 ||
-                        difficultyId > 5
-                    ) {
+                    if (isNaN(difficultyId) || difficultyId < 0 || difficultyId > 5) {
                         return message.channel.send(errorDiffMsg);
                     }
                     const bankEmbed = calculate(
@@ -147,7 +111,7 @@ module.exports = {
                     tookTooLong(message);
                 });
         }
-    },
+    }
 };
 function tookTooLong(message) {
     return message.channel.send(`You took too long to answer!`);
@@ -158,14 +122,7 @@ function isValidHack(hackPercent) {
     }
     return false;
 }
-function calculate(
-    bankTier,
-    flatPackBuilding,
-    BiggerBanks,
-    hackPercent,
-    crosspathNum,
-    difficultyId
-) {
+function calculate(bankTier, flatPackBuilding, BiggerBanks, hackPercent, crosspathNum, difficultyId) {
     let maxCapacity = 0;
     if (bankTier == 3) {
         maxCapacity += 7000;
@@ -181,7 +138,7 @@ function calculate(
     let costs = [
         [4800, 5650, 6105, 6780, 6105],
         [11175, 12650, 14205, 15780, 14205],
-        [96175, 112650, 122205, 135780, 122205],
+        [96175, 112650, 122205, 135780, 122205]
     ];
 
     let onexx = [425, 500, 540, 625, 540];
@@ -197,8 +154,7 @@ function calculate(
         buildingCost += twoxx[difficultyId - 1];
     }
     //time to actually calculate this crap lol
-    let incomePerRound =
-        (230 + 40 * parseInt(crosspathNum)) * (1 + parseInt(hackPercent));
+    let incomePerRound = (230 + 40 * parseInt(crosspathNum)) * (1 + parseInt(hackPercent));
     let arr = [incomePerRound * (1.15 + hackPercent)];
     for (i = 0; i < 19; i++) {
         arr.push(Math.min((arr[i] + incomePerRound) * 1.15, maxCapacity));
@@ -225,16 +181,11 @@ function calculate(
     for (let i = 0; i < arr.length; i++) {
         resultArray.push(Math.round(arr[i]));
     }
-    let bankEmbed = new Discord.MessageEmbed()
+    let bankEmbed = new Discord.EmbedBuilder()
         .setTitle(`x${bankTier}x bank`)
-        .setDescription(
-            `**additional** cash in the bank for 20 rounds\n${resultArray}`
-        )
+        .setDescription(`**additional** cash in the bank for 20 rounds\n${resultArray}`)
         .addField('ideal collection', `${bestCollect}`)
-        .addField(
-            'round when full',
-            `${round} (round 1 is the round you place the bank)`
-        )
+        .addField('round when full', `${round} (round 1 is the round you place the bank)`)
         .addField(
             'income per round (Income before interest, this is how much money the Bank will add during the round)',
             `${incomePerRound}`

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
 
@@ -34,7 +34,7 @@ async function embedBloonology(heroName, level) {
     try {
         res = await axios.get(link);
     } catch {
-        return new Discord.MessageEmbed().setColor(red).setTitle('Something went wrong while fetching the data');
+        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
 
     const body = res.data;
@@ -44,14 +44,14 @@ async function embedBloonology(heroName, level) {
     const desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
     const descWithoutLevel = desc.split('\n').slice(1).join('\n');
     if (typeof desc != 'string') {
-        return new Discord.MessageEmbed().setColor(red).setTitle('The bloonology datapiece is missing');
+        return new Discord.EmbedBuilder().setColor(red).setTitle('The bloonology datapiece is missing');
     }
 
     const title = level
         ? `${Aliases.toIndexNormalForm(heroName)} (Level-${level})`
         : `${Aliases.toIndexNormalForm(heroName)} (All Levels)`;
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
         .setTitle(title)
         .setDescription(descWithoutLevel)
         .setColor(cyber)

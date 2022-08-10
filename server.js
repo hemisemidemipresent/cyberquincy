@@ -6,9 +6,9 @@ function main() {
     consoleBootup();
     googleSheetsInitialization();
     configureAliases();
-    commandCenter = configureCommands();
+    // commandCenter = configureCommands();
     slashCommandCenter = setupSlashCommandCenter();
-    generateCommandListeners(commandCenter, slashCommandCenter);
+    generateCommandListeners(slashCommandCenter);
     login();
 }
 
@@ -122,11 +122,11 @@ function configureAliases() {
     Aliases.asyncAliasFiles();
 }
 
-function configureCommands() {
-    commandCenter = require('./command_center');
-    commandCenter.configureCommands(client);
-    return commandCenter;
-}
+// function configureCommands() {
+//     commandCenter = require('./command_center');
+//     commandCenter.configureCommands(client);
+//     return commandCenter;
+// }
 
 function setupSlashCommandCenter() {
     slashCommandCenter = require('./slash_command_center');
@@ -134,7 +134,7 @@ function setupSlashCommandCenter() {
     return slashCommandCenter;
 }
 
-function generateCommandListeners(commandCenter, slashCommandCenter) {
+function generateCommandListeners(slashCommandCenter) {
     global.Guilds = require('./helpers/guilds.js');
 
     client.on('guildCreate', (guild) => {

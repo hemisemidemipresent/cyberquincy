@@ -34,7 +34,7 @@ function towerUpgradeToTower(towerUpgrade) {
 }
 
 function towerUpgradeToUpgrade(towerUpgrade) {
-    return towerUpgrade.split('#')[1]
+    return towerUpgrade.split('#')[1];
 }
 
 function allTowerUpgrades() {
@@ -59,7 +59,7 @@ function allTowerPaths() {
 }
 function allTempleSets() {
     let all = [];
-    // holy shit go outside
+    // aaaaaaaaa 4 levels of for loops
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
             for (let k = 0; k < 3; k++) {
@@ -147,13 +147,13 @@ function allWaterTowers() {
 function isWaterEntity(entity) {
     let entityToCompare;
     if (isTowerPath(entity)) {
-        entityToCompare = entity.split('#')[0]
+        entityToCompare = entity.split('#')[0];
     } else if (isTowerUpgrade(entity)) {
-        entityToCompare = towerUpgradeToTower(entity)
+        entityToCompare = towerUpgradeToTower(entity);
     } else if (Aliases.isHero(entity)) {
         entityToCompare = entity;
     } else if (isTower(entity)) {
-        entityToCompare = entity
+        entityToCompare = entity;
     } else {
         throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
     }
@@ -161,19 +161,20 @@ function isWaterEntity(entity) {
 }
 
 function towerPathtoPath(towerPath) {
-    return towerPath.split('#')[1]
+    return towerPath.split('#')[1];
 }
 
 function towerPathToTower(towerPath) {
-    return towerPath.split('#')[0]
+    return towerPath.split('#')[0];
 }
 
 function towerPathToIndexNormalForm(towerPath) {
     let [tower, path] = towerPath.split('#');
-    path = path.split('-')
-                .map((tk) => gHelper.toTitleCase(tk))
-                .join(' ');
-    return `${Aliases.toIndexNormalForm(tower)} (${path})`
+    path = path
+        .split('-')
+        .map((tk) => gHelper.toTitleCase(tk))
+        .join(' ');
+    return `${Aliases.toIndexNormalForm(tower)} (${path})`;
 }
 
 function towerUpgradeToIndexNormalForm(upgrade) {
@@ -236,15 +237,13 @@ function pathTierFromUpgradeSet(upgradeSet) {
 }
 
 function upgradesFromPath(path) {
-    const entityUpgrades = []
-    const entityPathIndex = ['top-path', 'middle-path', 'bottom-path'].indexOf(path)
+    const entityUpgrades = [];
+    const entityPathIndex = ['top-path', 'middle-path', 'bottom-path'].indexOf(path);
     let tier;
-    for(tier = 1; tier <= 5; tier++) {
-        entityUpgrades.push(
-            '0'.repeat(entityPathIndex) + `${tier}` + '0'.repeat(2 - entityPathIndex)
-        )
+    for (tier = 1; tier <= 5; tier++) {
+        entityUpgrades.push('0'.repeat(entityPathIndex) + `${tier}` + '0'.repeat(2 - entityPathIndex));
     }
-    return entityUpgrades
+    return entityUpgrades;
 }
 
 function crossPathTierFromUpgradeSet(upgradeSet) {
@@ -320,7 +319,7 @@ function getEntityType(entity) {
     if (isTower(entity)) {
         return 'TOWER';
     } else if (isTowerPath(entity)) {
-        return 'TOWER_PATH'
+        return 'TOWER_PATH';
     } else if (isTowerUpgrade(entity)) {
         return 'TOWER_UPGRADE';
     } else if (Aliases.isHero(entity)) {

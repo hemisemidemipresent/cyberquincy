@@ -1,4 +1,11 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ComponentType,
+    SlashCommandBuilder,
+    SlashCommandStringOption
+} = require('discord.js');
 
 const axios = require('axios');
 const costs = require('../jsons/costs.json');
@@ -19,7 +26,7 @@ const builder = new SlashCommandBuilder()
     .setDescription('Find information for each tower')
     .addStringOption(towerOption)
     .addStringOption((option) =>
-        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(false)
+        option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
     );
 
 function validateInput(interaction) {
@@ -35,6 +42,7 @@ function parseTowerPath(interaction) {
     else return tp;
 }
 
+// the function that creates the embed for bloonology that will get sent
 async function embedBloonology(towerName, upgrade) {
     let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
     let res;
@@ -142,16 +150,18 @@ async function embedBloonologySummary(towerName) {
 
     const embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
 
-    embed.addField(
-        `Base Stats`,
-        placedTowerDescription
-            .split(/(?:\n|\r)+/)
-            .map((s) => s.trim().replace(/\u200E/g, ''))
-            .filter((s) => s.length > 0)
-            .join(' ♦ ')
-    );
+    embed.addFields([
+        {
+            name: `Base Stats`,
+            value: placedTowerDescription
+                .split(/(?:\n|\r)+/)
+                .map((s) => s.trim().replace(/\u200E/g, ''))
+                .filter((s) => s.length > 0)
+                .join(' ♦ ')
+        }
+    ]);
 
-    headers.forEach((header, idx) => embed.addField(header, pathBenefits[idx], true));
+    headers.forEach((header, idx) => embed.addFields([{ name: header, value: pathBenefits[idx], inline: true }]));
 
     return embed;
 }
@@ -167,18 +177,57 @@ async function execute(interaction) {
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);
 
-    let embed, ephemeral;
-    if (towerPath) {
-        embed = await embedBloonology(tower, towerPath);
-        ephemeral = false;
-    } else {
-        embed = await embedBloonologySummary(tower);
-        ephemeral = true;
-    }
+    let embed = await embedBloonology(tower, towerPath);
 
-    return await interaction.reply({ embeds: [embed], ephemeral: ephemeral });
+    const summaryBtn = new ButtonBuilder()
+        .setCustomId('summary')
+        .setLabel('See summary of all upgrades')
+        .setStyle(ButtonStyle.Primary);
+
+    await interaction.reply({ embeds: [embed], components: [new ActionRowBuilder().addComponents(summaryBtn)] });
+
+    // collector filter
+    const filter = (selection) => {
+        // Ensure user clicking button is same as the user that started the interaction
+        if (selection.user.id !== interaction.user.id) return false;
+        // Ensure that the button press corresponds with this interaction and wasn't a button press on the previous interaction
+        if (selection.message.interaction.id !== interaction.id) return false;
+        return true;
+    };
+
+    const collector = interaction.channel.createMessageComponentCollector({
+        filter,
+        componentType: ComponentType.Button,
+        time: 20000
+    });
+
+    collector.on('collect', async (buttonInteraction) => {
+        collector.stop();
+        buttonInteraction.deferUpdate();
+
+        if (buttonInteraction.customId === 'summary') {
+            let summaryEmbed = await embedBloonologySummary(tower);
+            await interaction.editReply({
+                embeds: [summaryEmbed],
+                components: [],
+                ephemeral: true
+            });
+        }
+    });
+
+    collector.on('end', async (collected) => {
+        if (collected.size === 0)
+            await interaction.editReply({
+                embeds: [embed],
+                components: []
+            });
+    });
 }
 
+module.exports = {
+    data: builder,
+    execute
+};
 // background info: there are 2 newlines present in the string: \n and \r. \n is preferred
 function cleanDescription(desc) {
     return desc
@@ -188,8 +237,3 @@ function cleanDescription(desc) {
         .replace(/ \t-/g, '-    ') // removes remaining tabs
         .replace(/\r/g, '\n'); // switches back all remaining \r with \n
 }
-
-module.exports = {
-    data: builder,
-    execute
-};

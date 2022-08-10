@@ -1,10 +1,10 @@
 const fs = require('fs');
 const secrets_config = require('./1/config.json');
-const Advertisements = require('./helpers/advertisements.js');
+// const Advertisements = require('./helpers/advertisements.js');
 
 const PREFIX = secrets_config['prefix'];
 const cyberquincyServer = '598768024761139240';
-const XPCOMMANDS = ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'];
+// const XPCOMMANDS = ['level', 'setxp', 'deletexp', 'freezexp', 'resumexp'];
 
 const { discord } = require('./aliases/misc.json');
 
@@ -123,11 +123,11 @@ async function handleCommand(message) {
                 });
         }
 
-        /* let GLOBAL_COOLDOWN_REGEX = /gcd ?= ?(\d+)/;
-        regex_match = message.channel.topic.match(GLOBAL_COOLDOWN_REGEX);
-        if (regex_match) {
-            [_, cooldown] = regex_match;
-        }*/
+        //let GLOBAL_COOLDOWN_REGEX = /gcd ?= ?(\d+)/;
+        //regex_match = message.channel.topic.match(GLOBAL_COOLDOWN_REGEX);
+        //if (regex_match) {
+        //    [_, cooldown] = regex_match;
+        //}
     } catch (error) {
         // in case of command failures
         if (!error || !error.message) return;

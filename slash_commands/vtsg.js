@@ -5,8 +5,7 @@ builder = new SlashCommandBuilder().setName('invite').setDescription('Invite Cyb
 async function execute(interaction) {
     return await interaction.reply({
         content:
-            "Invite link of Cyber Quincy: https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617"
-
+        '555 super monkey has the following buffs compared to a TSG (use q!temple):\n• sunblast buffed: +25d\nall other attacks (including subtowers) buffed: ×2d (applied after additive buffs)'
     });
 }
 

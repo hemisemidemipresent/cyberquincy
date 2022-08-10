@@ -135,7 +135,7 @@ module.exports = {
                     .addOptions(options);
             }
             this.row = new ActionRowBuilder().addComponents(createSelector(this.obj));
-            await this.showStats(interaction); //
+            await this.showStats(interaction);
         }
     },
 

@@ -34,16 +34,7 @@ function globalRequirements() {
     global.AliasRepository = require('./alias-repository.js');
 
     global.Discord = require('discord.js');
-    global.client = new Client({
-        intents: [
-            GatewayIntentBits.GuildMessages,
-            GatewayIntentBits.GuildMessageReactions,
-            GatewayIntentBits.Guilds,
-            GatewayIntentBits.GuildEmojisAndStickers,
-            GatewayIntentBits.DirectMessages,
-            GatewayIntentBits.DirectMessageReactions
-        ]
-    });
+    global.client = new Client({ intents: GatewayIntentBits.Guilds });
 
     global.prefix = require('./1/config.json')['prefix'];
 

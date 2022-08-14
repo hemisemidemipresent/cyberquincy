@@ -101,7 +101,7 @@ async function execute(interaction) {
         });
     } catch (error) {
         console.log(error);
-        interaction.reply({ content: 'Something went wrong while searching for your guild', ephemeral: true });
+        await interaction.reply({ content: 'Something went wrong while searching for your guild', ephemeral: true });
     }
 }
 
@@ -125,6 +125,14 @@ module.exports = {
 async function showRank(guild) {
     let ranks = await getRank(guild.guildID);
     let ranksData = JSON.parse(ranks.data).ranks[0];
+
+    if (!ranksData)
+        return new Discord.EmbedBuilder()
+            .setTitle(guild.name)
+            .setDescription('There was an issue getting the ranks')
+            .setFooter({ text: `guild ID: ${guild.guildID}` });
+
+    console.log(ranks);
     ranksData.rank += 1;
     guild.lastUpdated = Math.round(guild.lastUpdated / 1000); // the timestamp is in milliseconds, we want to convert to seconds
 

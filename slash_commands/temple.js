@@ -7,8 +7,8 @@ const { yellow } = require('../jsons/colours.json');
 builder = new SlashCommandBuilder()
     .setName('temple')
     .setDescription('Show temple stats')
-    .addSubcommand((subcmd) =>
-        subcmd
+    .addSubcommand((subcommand) =>
+        subcommand
             .setName('by_category')
             .setDescription('Input the amount of money you sacrificed into the temple (you can get this with `/calc`)') //
             .addIntegerOption((option) =>

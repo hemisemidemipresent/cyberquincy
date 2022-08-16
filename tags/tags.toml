@@ -57,9 +57,9 @@ description = """
   - stuns bloons for 1s
   - stuns moabs for 0.25s
 
-  Frozen Over map only
-  requires 30 mortar shots (no matter the damage) to be freed from the ice
-  receives tier 0 overclock benefits
+Frozen Over map only
+requires 30 mortar shots (no matter the damage) to be freed from the ice
+receives tier 0 overclock benefits
 """
 
 [cave-monkey.embeds.footer]

@@ -1,11 +1,12 @@
 const {
-    SlashCommandBuilder,
-    EmbedBuilder,
-    ButtonBuilder,
     ActionRowBuilder,
     AttachmentBuilder,
+    ButtonBuilder,
     ButtonStyle,
-    SelectMenuBuilder
+    ComponentType,
+    EmbedBuilder,
+    SelectMenuBuilder,
+    SlashCommandBuilder
 } = require('discord.js');
 
 const { default: axios } = require('axios');
@@ -34,115 +35,150 @@ const deviceID = null;
 
 builder = new SlashCommandBuilder()
     .setName('userid')
-    .setDescription("Get your (or any other person's) user ID")
+    .setDescription("Get your (or any other person's) user ID, and see their stat's")
 
     .addStringOption((option) =>
         option
             .setName('challenge_code')
             .setDescription('A challenge code from the person whose user ID you want to find')
-            .setRequired(true)
+            .setRequired(false)
+    )
+    .addStringOption((option) =>
+        option.setName('user_id').setDescription('If you already know their user ID').setRequired(false)
     );
 
 module.exports = {
     data: builder,
-    // the "entry point" to the command
     async execute(interaction) {
-        const challengeCode = interaction.options.getString('challenge_code').toLowerCase();
+        let challengeCode = interaction.options.getString('challenge_code');
+        let userID = interaction.options.getString('user_id');
+        if (!challengeCode && userID) {
+            await interaction.reply(`loading userID ${userID}`);
+            await this.loadUserID(userID, interaction);
+        } else if (!challengeCode && !userID) {
+            await interaction.reply({
+                content: 'Please specify a challenge code (or a user ID if you already know their user ID)',
+                ephemeral: true
+            });
+        }
+        challengeCode = challengeCode.toLowerCase();
 
         const objStr = `{"index":"challenges","query":"id:${challengeCode}","limit":1,"offset":0,"hint":"single_challenge","options":{}}`;
         let results = await request(objStr, 'https://api.ninjakiwi.com/utility/es/search');
         results = results.results[0];
-        this.userID = results.owner;
+        userID = results.owner;
         const embed = new Discord.EmbedBuilder()
             .setTitle('Success!')
             .setDescription(`The owner of the challenge's userID is \`${results.owner}\``)
             .addFields([{ name: 'challenge name', value: results.challengeName }])
             .setColor(green);
 
-        // user statistics part
-
         seeUserAction = new ActionRowBuilder().addComponents(
             new ButtonBuilder().setCustomId('stats').setLabel('See user statistics').setStyle(ButtonStyle.Primary)
         );
-        this.user = interaction.user;
-        this.interaction = await interaction.reply({ embeds: [embed], components: [seeUserAction] });
-    },
+        await interaction.reply({ embeds: [embed], components: [seeUserAction] });
 
-    async onButtonClick(interaction) {
-        if (interaction.user.id != this.user.id) return;
-        if (interaction.customId == 'stats') {
-            // load data
-            let body;
-            let url = `https://priority-static-api.nkstatic.com/storage/static/11/${this.userID}/public-stats`;
-            try {
-                body = await axios.get(url, { headers: { 'User-Agent': UserAgent } });
-            } catch {
-                return await interaction.update({
-                    embeds: [
-                        new Discord.EmbedBuilder()
-                            .setDescription('invalid user id associated with the challenge code!')
-                            .setColor(palered)
-                    ],
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) return false;
+            // Ensure that the button press corresponds with this interaction and wasn't a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) return false;
+            return true;
+        };
+
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: ComponentType.Button,
+            time: 20000
+        });
+
+        collector.on('collect', async (buttonInteraction) => {
+            collector.stop();
+            buttonInteraction.deferUpdate();
+
+            if (buttonInteraction.customId === 'stats') {
+                await this.loadUserID(userID, interaction);
+            }
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size === 0)
+                await interaction.editReply({
+                    embeds: [embed],
                     components: []
                 });
-            }
-            let obj = body.data;
+        });
+    },
 
-            obj.playerName = await getUsernames([this.userID]); // add in username
-            this.obj = obj;
-
-            // create the tower selector
-            function createSelector(obj) {
-                const normalNames = [
-                    'Dart Monkey',
-                    'Boomerang Monkey',
-                    'Bomb Shooter',
-                    'Tack Shooter',
-                    'Ice Monkey',
-                    'Glue Gunner',
-                    'Sniper Monkey',
-                    'Monkey Sub',
-                    'Monkey Buccaneer',
-                    'Monkey Ace',
-                    'Heli Pilot',
-                    'Mortar Monkey',
-                    'Dartling Gunner',
-                    'Wizard Monkey',
-                    'Super Monkey',
-                    'Ninja Monkey',
-                    'Alchemist',
-                    'Druid',
-                    'Banana Farm',
-                    'Spike Factory',
-                    'Monkey Village',
-                    'Engineer Monkey'
-                ];
-                let options = [];
-                for (let i = 0; i < normalNames.length; i++) {
-                    let codeName = normalNames[i].replace(/ +/g, '') + '1';
-                    let monke = obj.namedMonkeyStats[`${codeName}`];
-                    option = {
-                        label: normalNames[i],
-                        value: codeName
-                    };
-                    if (monke.name) option.description = monke.name;
-                    options.push(option);
-                }
-                options.push({ label: 'Main page', value: 'mainPage' });
-                return new SelectMenuBuilder()
-                    .setCustomId('towerSelector')
-                    .setPlaceholder('Nothing selected')
-                    .addOptions(options);
-            }
-            this.row = new ActionRowBuilder().addComponents(createSelector(this.obj));
-            await this.showStats(interaction);
+    async loadUserID(userID, interaction) {
+        let body;
+        let url = `https://priority-static-api.nkstatic.com/storage/static/11/${userID}/public-stats`;
+        try {
+            body = await axios.get(url, { headers: { 'User-Agent': UserAgent } });
+        } catch {
+            return await interaction.editReply({
+                embeds: [
+                    new Discord.EmbedBuilder()
+                        .setDescription('invalid user id associated with the challenge code!')
+                        .setColor(palered)
+                ],
+                components: [],
+                ephemeral: true
+            });
         }
+        let obj = body.data;
+
+        obj.playerName = await getUsernames([userID]); // add in username
+
+        // create the tower selector
+        function createSelector(obj) {
+            const normalNames = [
+                'Dart Monkey',
+                'Boomerang Monkey',
+                'Bomb Shooter',
+                'Tack Shooter',
+                'Ice Monkey',
+                'Glue Gunner',
+                'Sniper Monkey',
+                'Monkey Sub',
+                'Monkey Buccaneer',
+                'Monkey Ace',
+                'Heli Pilot',
+                'Mortar Monkey',
+                'Dartling Gunner',
+                'Wizard Monkey',
+                'Super Monkey',
+                'Ninja Monkey',
+                'Alchemist',
+                'Druid',
+                'Banana Farm',
+                'Spike Factory',
+                'Monkey Village',
+                'Engineer Monkey'
+            ];
+            let options = [];
+            for (let i = 0; i < normalNames.length; i++) {
+                let codeName = normalNames[i].replace(/ +/g, '') + '1';
+                let monke = obj.namedMonkeyStats[`${codeName}`];
+                option = {
+                    label: normalNames[i],
+                    value: codeName
+                };
+                if (monke.name) option.description = monke.name;
+                options.push(option);
+            }
+            options.push({ label: 'Main page', value: 'mainPage' });
+            return new SelectMenuBuilder()
+                .setCustomId('towerSelector')
+                .setPlaceholder('Nothing selected')
+                .addOptions(options);
+        }
+        let row = new ActionRowBuilder().addComponents(createSelector(obj));
+        await this.showStats(interaction, row, obj);
     },
 
     // this function is in charge of the huge embed for the main user stats page
-    async showStats(interaction) {
-        let obj = this.obj;
-
+    async showStats(interaction, row, obj) {
         function mainPage(obj) {
             let name = obj.playerName;
             let winrate = Math.round((obj.gamesWon / obj.gameCount) * 100) / 100;
@@ -271,34 +307,55 @@ module.exports = {
         }
 
         let embed = mainPage(obj);
-        await interaction.update({
+        await interaction.editReply({
             embeds: [embed],
-            components: [this.row],
+            components: [row],
             files: [new AttachmentBuilder(Buffer.from(JSON.stringify(obj, null, 1))).setName(`${this.userID}.json`)]
+        });
+
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) return false;
+            // Ensure that the button press corresponds with this interaction and wasn't a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) return false;
+            return true;
+        };
+
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: ComponentType.SelectMenu,
+            time: 20000
+        });
+
+        collector.on('collect', async (selectInteraction) => {
+            collector.stop();
+            selectInteraction.deferUpdate();
+            let interactionId = selectInteraction.values[0];
+            if (interactionId === 'mainPage') await this.showStats(interaction, row, obj);
+            else await this.showTowerStats(interaction, interactionId, row, obj);
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size === 0)
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
         });
     },
 
-    async onSelectMenu(interaction) {
-        let id = interaction.values[0];
-        if (id === 'mainPage') {
-            await this.showStats(interaction);
-        } else {
-            await this.showTowerStats(interaction, id);
-        }
-    },
-
-    async showTowerStats(interaction, tower) {
-        let i = this.obj.namedMonkeyStats[tower];
+    async showTowerStats(interaction, tower, row, obj) {
+        let i = obj.namedMonkeyStats[tower];
         let embed = new EmbedBuilder();
-        if (i.name.length == 0) i.name = i.BaseTower;
-        let desc = [
-            `games won: ${i.gamesWon}`,
-            `highest round: ${i.highestRound}`,
-            `times placed ${i.timesPlaced}`,
-            `abilities used: ${i.abilitiesUsed}`,
-            `times upgraded: ${i.timesUpgraded}`,
-            `times sacrificed: ${i.timesSacrificed}`
-        ];
+        if (i.name.length === 0) i.name = i.BaseTower;
+
+        let desc = `games won: ${i.gamesWon}
+            highest round: ${i.highestRound}
+            times placed ${i.timesPlaced}
+            abilities used: ${i.abilitiesUsed}
+            times upgraded: ${i.timesUpgraded}
+            times sacrificed: ${i.timesSacrificed}`;
+
         let popinfo = `Total: ${i.totalPopCount || 0}
         Coop: ${i.totalCoopPopCount || 0}
         ${camo} ${i.camoBloonsPopped || 0}
@@ -313,13 +370,43 @@ module.exports = {
         ${bad} ${i.badsPopped || 0}`;
         embed
             .setTitle(`name: ${i.name}`)
-            .setDescription(desc.join('\n'))
+            .setDescription(desc)
             .addFields([{ name: 'Pops', value: popinfo }]);
-        return await interaction.update({ embeds: [embed], files: [], components: [this.row] });
+        await interaction.editReply({ embeds: [embed], files: [], components: [row] });
+
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) return false;
+            // Ensure that the button press corresponds with this interaction and wasn't a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) return false;
+            return true;
+        };
+
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: ComponentType.SelectMenu,
+            time: 20000
+        });
+
+        collector.on('collect', async (selectInteraction) => {
+            collector.stop();
+            selectInteraction.deferUpdate();
+            let interactionId = selectInteraction.values[0];
+            if (interactionId === 'mainPage') await this.showStats(interaction, row, obj);
+            else await this.showTowerStats(interaction, interactionId, row, obj);
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size === 0)
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
+        });
     }
 };
 
-// just a general "request" function
+// idk why this was encapsulated when it was only used once
 async function request(objStr, url) {
     const nonce = Math.random() * Math.pow(2, 63) + '';
     try {

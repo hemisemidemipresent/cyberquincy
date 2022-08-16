@@ -63,4 +63,4 @@ description = """
 """
 
 [cave-monkey.embeds.footer]
-text = "d:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE"
+text = "{credits}"

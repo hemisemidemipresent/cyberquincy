@@ -23,9 +23,6 @@ function execute(interaction) {
 	return interaction.reply({ content });
 }
 
-/**
- * @param  {AutocompleteInteraction} interaction
- */
 function onAutocomplete(interaction) {
 	const query = interaction.options.getFocused().toLowerCase();
 

@@ -1,11 +1,5 @@
 const { parse } = require('@ltd/j-toml');
-const {
-	SlashCommandBuilder,
-	Collection,
-	Formatters,
-	AutocompleteInteraction,
-	EmbedBuilder,
-} = require('discord.js');
+const { SlashCommandBuilder, Collection, Formatters, EmbedBuilder } = require('discord.js');
 const { readFileSync } = require('fs');
 const { cyber } = require('../jsons/colours.json');
 const cache = populateTagCache();
@@ -29,9 +23,7 @@ function execute(interaction) {
 	if (tag) {
 		options.content = tag.content;
 		options.embeds = tag.embeds;
-	}
-
-	options.content ??= `Couldn't find a tag with the name ${Formatters.bold(query)}.`;
+	} else options.content ??= `Couldn't find a tag with the name ${Formatters.bold(query)}.`;
 
 	return interaction.reply(options);
 }

@@ -1,0 +1,66 @@
+[vtsg]
+keywords = ["vengeful", "dark temple"]
+content = """
+555 super monkey has the following buffs compared to a TSG (use q!temple):
+• sunblast buffed: +25d
+all other attacks (including subtowers) buffed: ×2d (applied after additive buffs)
+"""
+
+[woor]
+keywords = ["wiggle"]
+content = """
+**woor** (short for _wiggle out of range_) is an ace micro technique discovered by e_to_the_pi_i. it basically makes your ace fly away from the pad in a straight line as far as more than twice the radius of figure circle without the need of centered path. https://youtu.be/o5muYjZRAsc is an example of a woor. more interestingly, the woor works in every single direction as long as the user errorn't controls it correctly.
+how it works: by alternating between tab and reverse tab in a consistent rhythm, you make the ace turn left and right and repeat, allowing it to move forward
+"""
+
+[golden-bloon]
+keywords = ["golden", "gbloon"]
+content = """
+This bloon does not have a certain HP value, but is popped after a certain number of hits. After each hit, it will enter a grace period, where it gets flown to a spot closer or further from the exit, and it speeds up. It is immune to all attacks during this period.
+Golden bloons start spawning on round 21 - 30, and in one round per block of 10 rounds. it always spawns at the start of the round.
+Golden bloons cannot spawn after you reach the victory screen. As the rounds get higher, the golden bloon will evolve, gaining more immunities and properties:
+```
+R21 - 30: Normal
+R31 - 40: Camo
+R41 - 50: Lead
+R51 - 60: Camo Lead
+R61 - 70: Camo Lead Fortified
+R71 - 80: Camo Lead Purple Fortified
+R81 -100: Camo Lead Purple Zebra Fortified
+```
+
+When popped, you gain extra Monkey Money based on the map difficulty:
+```
+             | normal | fortified
+    Beginner |      2 |         4
+Intermediate |      3 |         6
+    Advanced |      4 |         8
+      Expert |      5 |        10```
+"""
+
+[feet]
+keywords = ["foot"]
+content = "https://youtu.be/vmjeHHm1pD4"
+
+[vrej]
+keywords = ["bruh"]
+content = "https://www.youtube.com/watch?v=PWkgMCtbnkM&"
+
+[cave-monkey]
+keywords = ["cave"]
+
+[[cave-monkey.embeds]]
+title = "Cave Monkey"
+description = """
+24r
+  _bonk_- 1d, 5p, 1.1s, normal
+  - stuns bloons for 1s
+  - stuns moabs for 0.25s
+
+  Frozen Over map only
+  requires 30 mortar shots (no matter the damage) to be freed from the ice
+  receives tier 0 overclock benefits
+"""
+
+[cave-monkey.embeds.footer]
+text = "d:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE"

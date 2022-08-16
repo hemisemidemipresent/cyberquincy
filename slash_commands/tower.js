@@ -77,12 +77,11 @@ async function embedBloonology(towerName, upgrade) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
 
-    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
-
     const easyTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'easy');
     const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
     const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'hard');
     const impopTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'impoppable');
+    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)

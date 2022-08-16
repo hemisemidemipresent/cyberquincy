@@ -15,10 +15,21 @@ const eventID = 'l6efnn0e';
 
 builder = new SlashCommandBuilder()
     .setName('ct')
-    .setDescription("Get your guild's statistics")
-    .addStringOption((option) => option.setName('guild_name').setDescription('The name of your guild').setRequired(true));
+    .setDescription('Contested Territory statistics')
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName('guild_stats')
+            .setDescription("Get your guild's statistics")
+            .addStringOption((option) =>
+                option.setName('guild_name').setDescription('The name of your guild').setRequired(true)
+            )
+    );
 
 async function execute(interaction) {
+    if (interaction.options.getSubcommand() === 'guild_stats') await guild_stats(interaction);
+}
+
+async function guild_stats(interaction) {
     const guildName = interaction.options.getString('guild_name');
     let body = { searchQuery: `*${guildName}* AND NOT status:DISBANDED AND numMembers>0`, limit: 20, offset: 0 };
     let nonce = Math.random() * Math.pow(2, 63) + ''; // or any hentai code, but there are much less hentai than 64-bit integers (for now)

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-builder = new SlashCommandBuilder().setName('invite').setDescription('Invite Cyber Quincy to your server');
+builder = new SlashCommandBuilder().setName('vtsg').setDescription('Show stats for the Vengeful True Sun God');
 
 async function execute(interaction) {
     return await interaction.reply({

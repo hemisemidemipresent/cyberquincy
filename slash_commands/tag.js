@@ -2,7 +2,8 @@ const { parse } = require('@ltd/j-toml');
 const { SlashCommandBuilder, Collection, Formatters, EmbedBuilder } = require('discord.js');
 const { readFileSync } = require('fs');
 const { cyber } = require('../jsons/colours.json');
-const { footer } = require('../aliases/misc.json');
+const { templates } = require('../tags/templates');
+
 const cache = populateTagCache();
 
 builder = new SlashCommandBuilder()
@@ -52,10 +53,6 @@ function onAutocomplete(interaction) {
 }
 
 function resolveTemplateTags(str) {
-	const templates = {
-		credits: footer,
-	};
-
 	return str.replace(/{(\w+)}/g, (match, name) => templates[name] ?? match);
 }
 

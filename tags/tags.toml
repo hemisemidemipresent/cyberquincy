@@ -45,3 +45,22 @@ content = "https://youtu.be/vmjeHHm1pD4"
 [vrej]
 keywords = ["bruh"]
 content = "https://www.youtube.com/watch?v=PWkgMCtbnkM&"
+
+[cave-monkey]
+keywords = ["cave"]
+
+[[cave-monkey.embeds]]
+title = "Cave Monkey"
+description = """
+24r
+  _bonk_- 1d, 5p, 1.1s, normal
+  - stuns bloons for 1s
+  - stuns moabs for 0.25s
+
+  Frozen Over map only
+  requires 30 mortar shots (no matter the damage) to be freed from the ice
+  receives tier 0 overclock benefits
+"""
+
+[cave-monkey.embeds.footer]
+text = "d:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE"

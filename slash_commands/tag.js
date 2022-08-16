@@ -1,6 +1,13 @@
 const { parse } = require('@ltd/j-toml');
-const { SlashCommandBuilder, Collection, Formatters, AutocompleteInteraction } = require('discord.js');
+const {
+	SlashCommandBuilder,
+	Collection,
+	Formatters,
+	AutocompleteInteraction,
+	EmbedBuilder,
+} = require('discord.js');
 const { readFileSync } = require('fs');
+const { cyber } = require('../jsons/colours.json');
 const cache = populateTagCache();
 
 builder = new SlashCommandBuilder()
@@ -16,11 +23,17 @@ builder = new SlashCommandBuilder()
 
 function execute(interaction) {
 	const query = interaction.options.getString('query').toLowerCase();
-	let content = cache.get(query)?.content;
+	const tag = cache.get(query);
+	const options = {};
 
-	content ??= `Couldn't find a tag with the name ${Formatters.bold(query)}.`;
+	if (tag) {
+		options.content = tag.content;
+		options.embeds = tag.embeds;
+	}
 
-	return interaction.reply({ content });
+	options.content ??= `Couldn't find a tag with the name ${Formatters.bold(query)}.`;
+
+	return interaction.reply(options);
 }
 
 function onAutocomplete(interaction) {
@@ -51,6 +64,12 @@ function populateTagCache() {
 	const cache = new Collection();
 
 	for (const [key, value] of Object.entries(data)) {
+		value.embeds?.forEach(
+			(embed, i) => (value.embeds[i] = new EmbedBuilder(embed).setColor(embed.color ?? cyber))
+		);
+
+		value.content ??= '';
+
 		value.keywords?.push(key) ?? (value.keywords = [key]);
 		cache.set(key, value);
 	}

@@ -2,6 +2,8 @@ const { parse } = require('@ltd/j-toml');
 const { SlashCommandBuilder, Collection, Formatters, EmbedBuilder } = require('discord.js');
 const { readFileSync } = require('fs');
 const { cyber } = require('../jsons/colours.json');
+const { templates } = require('../tags/templates');
+
 const cache = populateTagCache();
 
 builder = new SlashCommandBuilder()
@@ -50,8 +52,12 @@ function onAutocomplete(interaction) {
 	return interaction.respond(responseArr);
 }
 
+function resolveTemplateTags(str) {
+	return str.replace(/{(\w+)}/g, (match, name) => templates[name] ?? match);
+}
+
 function populateTagCache() {
-	const file = readFileSync('./tags/tags.toml', 'utf8');
+	const file = resolveTemplateTags(readFileSync('./tags/tags.toml', 'utf8'));
 	const data = parse(file, '\n');
 	const cache = new Collection();
 

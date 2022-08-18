@@ -22,8 +22,8 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
 
 builder = new SlashCommandBuilder()
-    .setName('lcc')
-    .setDescription('Search and Browse Completed LCC Index Combos')
+    .setName('lcd')
+    .setDescription('Search and Browse Completed LCD Index Combos')
     .addStringOption(mapOption);
 
 async function execute(interaction) {
@@ -35,13 +35,13 @@ async function execute(interaction) {
     if (parsed.hasErrors()) {
         return await interaction.reply('Map provided not valid');
     } else {
-        let challengeEmbed = await lcc(parsed.map);
+        let challengeEmbed = await lcd(parsed.map);
         return await interaction.reply({ embeds: [challengeEmbed] });
     }
 }
 
-async function lcc(btd6_map) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcc');
+async function lcd(btd6_map) {
+    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'lcd');
 
     // Load the column containing the different maps
     await sheet.loadCells(`${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`); // loads all possible cells with map
@@ -60,7 +60,7 @@ async function lcc(btd6_map) {
     }
 
     if (!entryRow) {
-        throw `Something has gone horribly wrong; ${btd6_map} passed parsing validation but can't be found in the LCC spreadsheet`;
+        throw `Something has gone horribly wrong; ${btd6_map} passed parsing validation but can't be found in the LCD spreadsheet`;
     }
 
     // Load the row where the map was found
@@ -90,7 +90,7 @@ async function lcc(btd6_map) {
     }
 
     // Embed and send the message
-    var challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LCC Combo`).setColor(paleyellow);
+    var challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LCD Combo`).setColor(paleyellow);
 
     for (field in values) {
         if (values[field])

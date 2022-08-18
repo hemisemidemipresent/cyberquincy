@@ -2,13 +2,18 @@ const { parse } = require('@ltd/j-toml');
 const { Collection, EmbedBuilder, Formatters, SlashCommandBuilder } = require('discord.js');
 const { readFileSync } = require('fs');
 const { cyber } = require('../jsons/colours.json');
+const { templates } = require('../tags/templates');
 const cache = populateTagCache();
 
 builder = new SlashCommandBuilder()
     .setName('tag')
     .setDescription('Display a tag by its name or alias')
     .addStringOption((option) =>
-        option.setName('query').setDescription('The tag name or alias').setAutocomplete(true).setRequired(true)
+        option
+            .setName('query')
+            .setDescription('The tag name or alias')
+            .setAutocomplete(true)
+            .setRequired(true)
     );
 
 function execute(interaction) {
@@ -20,7 +25,7 @@ function execute(interaction) {
         options.content = tag.content;
         options.embeds = tag.embeds;
     } else {
-        options.content ??= `Couldn't find a tag with the name ${Formatters.bold(query)}.`;
+        options.content = `Couldn't find a tag with the name ${Formatters.bold(query)}.`;
         options.ephemeral = true;
     }
 
@@ -49,8 +54,12 @@ function onAutocomplete(interaction) {
     return interaction.respond(responseArr);
 }
 
+function resolveTemplateTags(str) {
+    return str.replace(/{(\w+)}/g, (match, name) => templates[name] ?? match);
+}
+
 function populateTagCache() {
-    const file = readFileSync('./tags/tags.toml', 'utf8');
+    const file = resolveTemplateTags(readFileSync('./tags/tags.toml', 'utf8'));
     const data = parse(file, '\n');
     const cache = new Collection();
 

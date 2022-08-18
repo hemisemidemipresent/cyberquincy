@@ -20,12 +20,15 @@ builder = new SlashCommandBuilder()
 function execute(interaction) {
 	const query = interaction.options.getString('query').toLowerCase();
 	const tag = cache.get(query);
-	const options = {};
+	const options = {
+		content: tag.content,
+		embeds: tag.embeds,
+	};
 
-	if (tag) {
-		options.content = tag.content;
-		options.embeds = tag.embeds;
-	} else options.content ??= `Couldn't find a tag with the name ${Formatters.bold(query)}.`;
+	if (!tag) {
+		options.content = `Couldn't find a tag with the name ${Formatters.bold(query)}.`;
+		options.ephemeral = true;
+	}
 
 	return interaction.reply(options);
 }

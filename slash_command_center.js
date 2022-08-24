@@ -62,11 +62,40 @@ async function handleSelectMenu(interaction) {
     }
 }
 
+function extendStructure(_class) {
+    const prototype = _class.prototype;
+
+    const deferReply = prototype.deferReply;
+    prototype.deferReply = async function (options = {}) {
+        options.ephemeral = this.options.getBoolean('hide') || Boolean(options.ephemeral);
+
+        return deferReply.call(this, options);
+    };
+
+    const reply = prototype.reply;
+    prototype.reply = async function (options) {
+        const ephemeral = this.options.getBoolean('hide') || Boolean(options.ephemeral);
+        options = {
+            ...(typeof options === 'object' ? options : { content: options }),
+            ephemeral,
+        };
+
+        const message = await (this.deferred || this.replied
+            ? this.followUp(options)
+            : reply.call(this, options));
+
+        this.replied = true;
+
+        return message;
+    };
+};
+
 module.exports = {
     commandFiles,
     configureCommands,
     handleCommand,
     handleButton,
     handleAutocomplete,
-    handleSelectMenu
+    handleSelectMenu,
+    extendStructure
 };

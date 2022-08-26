@@ -6,6 +6,8 @@ function commandFiles() {
 }
 
 function configureCommands(client) {
+    client.commands = new Discord.Collection();
+
     for (const command of commandFiles()) {
         // Set a new item in the commands Collection
         // With the key as the command name and the value as the exported module

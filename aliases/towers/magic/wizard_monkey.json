@@ -5,7 +5,7 @@
     "200": ["arcane_blast", "ablast"],
     "300": ["arcane_mastery", "mastery", "amastery"],
     "400": ["arcane_spike", "aspike"],
-    "500": ["archmage", "arch", "armchair", "arkmag", "hentai"],
+    "500": ["archmage", "arch", "armchair", "arkmag"],
 
     "010": ["fireball"],
     "020": ["wall_of_fire", "wof"],

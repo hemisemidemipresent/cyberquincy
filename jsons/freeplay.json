@@ -20,35 +20,11 @@
     {
         "bounds": [
             [
-                271,
-                9999
-            ]
-        ],
-        "bloon": "Bad",
-        "number": 1
-    },
-    {
-        "bounds": [
-            [
                 191,
                 199
             ],
             [
                 201,
-                262
-            ],
-            [
-                264,
-                9999
-            ]
-        ],
-        "bloon": "Bad",
-        "number": 1
-    },
-    {
-        "bounds": [
-            [
-                211,
                 262
             ],
             [
@@ -76,7 +52,21 @@
     {
         "bounds": [
             [
-                331,
+                291,
+                9999
+            ]
+        ],
+        "bloon": "Bad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                211,
+                262
+            ],
+            [
+                264,
                 9999
             ]
         ],
@@ -96,7 +86,7 @@
     {
         "bounds": [
             [
-                291,
+                271,
                 9999
             ]
         ],
@@ -106,7 +96,87 @@
     {
         "bounds": [
             [
+                331,
+                9999
+            ]
+        ],
+        "bloon": "Bad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                121,
+                162
+            ],
+            [
+                164,
+                199
+            ],
+            [
+                201,
+                225
+            ],
+            [
+                251,
+                262
+            ],
+            [
+                264,
+                350
+            ]
+        ],
+        "bloon": "Bad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
                 371,
+                9999
+            ]
+        ],
+        "bloon": "Bad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                141,
+                162
+            ],
+            [
+                164,
+                199
+            ],
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "Bad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                110,
+                162
+            ],
+            [
+                164,
+                199
+            ],
+            [
+                201,
+                262
+            ],
+            [
+                264,
                 9999
             ]
         ],
@@ -142,7 +212,7 @@
     {
         "bounds": [
             [
-                301,
+                276,
                 9999
             ]
         ],
@@ -152,7 +222,25 @@
     {
         "bounds": [
             [
+                151,
+                162
+            ],
+            [
+                164,
+                199
+            ],
+            [
                 201,
+                262
+            ]
+        ],
+        "bloon": "Bad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                241,
                 262
             ],
             [
@@ -166,7 +254,7 @@
     {
         "bounds": [
             [
-                276,
+                301,
                 9999
             ]
         ],
@@ -190,7 +278,7 @@
     {
         "bounds": [
             [
-                241,
+                201,
                 262
             ],
             [
@@ -238,7 +326,7 @@
     {
         "bounds": [
             [
-                361,
+                341,
                 9999
             ]
         ],
@@ -248,17 +336,7 @@
     {
         "bounds": [
             [
-                200,
-                200
-            ]
-        ],
-        "bloon": "BadFortified (R200 Custom)",
-        "number": 2
-    },
-    {
-        "bounds": [
-            [
-                341,
+                361,
                 9999
             ]
         ],
@@ -278,6 +356,64 @@
     {
         "bounds": [
             [
+                200,
+                200
+            ]
+        ],
+        "bloon": "BadFortified(R200Custom)",
+        "number": 2
+    },
+    {
+        "bounds": [
+            [
+                10000,
+                10000
+            ],
+            [
+                10006,
+                10133701
+            ]
+        ],
+        "bloon": "BadFortified(TheEnd)",
+        "number": 100
+    },
+    {
+        "bounds": [
+            [
+                10000,
+                10000
+            ],
+            [
+                10006,
+                10133701
+            ]
+        ],
+        "bloon": "BadFortified(TheagAind)",
+        "number": 100
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 10
+    },
+    {
+        "bounds": [
+            [
+                121,
+                130
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 10
+    },
+    {
+        "bounds": [
+            [
                 101,
                 120
             ]
@@ -288,30 +424,36 @@
     {
         "bounds": [
             [
-                10000,
-                10000
-            ],
-            [
-                10006,
-                1288555
+                141,
+                150
             ]
         ],
-        "bloon": "BadFortified (The End)",
-        "number": 100
+        "bloon": "Bfb",
+        "number": 11
     },
     {
         "bounds": [
             [
-                10000,
-                10000
-            ],
-            [
-                10006,
-                1288555
+                151,
+                160
             ]
         ],
-        "bloon": "BadFortified (The agAind)",
-        "number": 100
+        "bloon": "Bfb",
+        "number": 12
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 12
     },
     {
         "bounds": [
@@ -340,12 +482,12 @@
     {
         "bounds": [
             [
-                141,
-                150
+                121,
+                130
             ]
         ],
         "bloon": "Bfb",
-        "number": 11
+        "number": 24
     },
     {
         "bounds": [
@@ -360,22 +502,36 @@
     {
         "bounds": [
             [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 29
+    },
+    {
+        "bounds": [
+            [
+                151,
+                160
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 29
+    },
+    {
+        "bounds": [
+            [
                 131,
                 140
             ]
         ],
         "bloon": "Bfb",
         "number": 24
-    },
-    {
-        "bounds": [
-            [
-                141,
-                150
-            ]
-        ],
-        "bloon": "Bfb",
-        "number": 27
     },
     {
         "bounds": [
@@ -394,18 +550,38 @@
     {
         "bounds": [
             [
-                141,
-                150
+                121,
+                130
             ]
         ],
         "bloon": "Bfb",
-        "number": 6
+        "number": 5
     },
     {
         "bounds": [
             [
                 101,
                 120
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 5
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 27
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
             ]
         ],
         "bloon": "Bfb",
@@ -424,8 +600,94 @@
     {
         "bounds": [
             [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 8
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 8
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "Bfb",
+        "number": 6
+    },
+    {
+        "bounds": [
+            [
+                151,
+                160
+            ]
+        ],
+        "bloon": "BfbFortified",
+        "number": 10
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "BfbFortified",
+        "number": 10
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "BfbFortified",
+        "number": 10
+    },
+    {
+        "bounds": [
+            [
                 131,
                 140
+            ]
+        ],
+        "bloon": "BfbFortified",
+        "number": 12
+    },
+    {
+        "bounds": [
+            [
+                121,
+                130
             ]
         ],
         "bloon": "BfbFortified",
@@ -454,16 +716,26 @@
     {
         "bounds": [
             [
-                161,
-                162
-            ],
-            [
-                164,
-                199
+                151,
+                160
             ]
         ],
         "bloon": "BfbFortified",
-        "number": 10
+        "number": 14
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "BfbFortified",
+        "number": 14
     },
     {
         "bounds": [
@@ -482,8 +754,8 @@
     {
         "bounds": [
             [
-                101,
-                120
+                121,
+                130
             ]
         ],
         "bloon": "BfbFortified",
@@ -502,22 +774,22 @@
     {
         "bounds": [
             [
+                101,
+                120
+            ]
+        ],
+        "bloon": "BfbFortified",
+        "number": 8
+    },
+    {
+        "bounds": [
+            [
                 141,
                 150
             ]
         ],
         "bloon": "BfbFortified",
         "number": 9
-    },
-    {
-        "bounds": [
-            [
-                101,
-                110
-            ]
-        ],
-        "bloon": "CeramicFortifiedCamo",
-        "number": 104
     },
     {
         "bounds": [
@@ -546,6 +818,40 @@
     {
         "bounds": [
             [
+                101,
+                110
+            ]
+        ],
+        "bloon": "CeramicFortifiedCamo",
+        "number": 104
+    },
+    {
+        "bounds": [
+            [
+                111,
+                120
+            ],
+            [
+                163,
+                163
+            ]
+        ],
+        "bloon": "CeramicRegrowFortified",
+        "number": 104
+    },
+    {
+        "bounds": [
+            [
+                163,
+                163
+            ]
+        ],
+        "bloon": "CeramicRegrowFortified",
+        "number": 333
+    },
+    {
+        "bounds": [
+            [
                 163,
                 163
             ]
@@ -556,20 +862,6 @@
     {
         "bounds": [
             [
-                111,
-                120
-            ],
-            [
-                163,
-                163
-            ]
-        ],
-        "bloon": "CeramicRegrowFortifiedCamo",
-        "number": 104
-    },
-    {
-        "bounds": [
-            [
                 101,
                 110
             ]
@@ -588,78 +880,8 @@
                 163
             ]
         ],
-        "bloon": "CeramicRegrowFortified",
+        "bloon": "CeramicRegrowFortifiedCamo",
         "number": 104
-    },
-    {
-        "bounds": [
-            [
-                163,
-                163
-            ]
-        ],
-        "bloon": "CeramicRegrowFortified",
-        "number": 333
-    },
-    {
-        "bounds": [
-            [
-                163,
-                163
-            ]
-        ],
-        "bloon": "CeramicRegrowFortifiedCamo",
-        "number": 450
-    },
-    {
-        "bounds": [
-            [
-                101,
-                110
-            ]
-        ],
-        "bloon": "CeramicRegrowFortifiedCamo",
-        "number": 52
-    },
-    {
-        "bounds": [
-            [
-                163,
-                163
-            ]
-        ],
-        "bloon": "CeramicRegrowCamo",
-        "number": 1000
-    },
-    {
-        "bounds": [
-            [
-                163,
-                163
-            ]
-        ],
-        "bloon": "CeramicRegrowFortifiedCamo",
-        "number": 700
-    },
-    {
-        "bounds": [
-            [
-                10005,
-                10005
-            ]
-        ],
-        "bloon": "Ddt",
-        "number": 100
-    },
-    {
-        "bounds": [
-            [
-                151,
-                160
-            ]
-        ],
-        "bloon": "Ddt",
-        "number": 18
     },
     {
         "bounds": [
@@ -679,11 +901,75 @@
         "bounds": [
             [
                 101,
-                120
+                110
+            ]
+        ],
+        "bloon": "CeramicRegrowFortifiedCamo",
+        "number": 52
+    },
+    {
+        "bounds": [
+            [
+                121,
+                130
             ]
         ],
         "bloon": "Ddt",
-        "number": 2
+        "number": 18
+    },
+    {
+        "bounds": [
+            [
+                10005,
+                10005
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 100
+    },
+    {
+        "bounds": [
+            [
+                163,
+                163
+            ]
+        ],
+        "bloon": "CeramicRegrowFortifiedCamo",
+        "number": 450
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 18
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 18
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 18
     },
     {
         "bounds": [
@@ -693,7 +979,47 @@
             ]
         ],
         "bloon": "Ddt",
-        "number": 8
+        "number": 2
+    },
+    {
+        "bounds": [
+            [
+                151,
+                160
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 18
+    },
+    {
+        "bounds": [
+            [
+                163,
+                163
+            ]
+        ],
+        "bloon": "CeramicRegrowFortifiedCamo",
+        "number": 700
+    },
+    {
+        "bounds": [
+            [
+                163,
+                163
+            ]
+        ],
+        "bloon": "CeramicRegrowCamo",
+        "number": 1000
+    },
+    {
+        "bounds": [
+            [
+                263,
+                263
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 30
     },
     {
         "bounds": [
@@ -712,12 +1038,46 @@
     {
         "bounds": [
             [
-                263,
-                263
+                121,
+                130
             ]
         ],
         "bloon": "Ddt",
-        "number": 30
+        "number": 6
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 6
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 6
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 6
     },
     {
         "bounds": [
@@ -728,6 +1088,46 @@
         ],
         "bloon": "Ddt",
         "number": 6
+    },
+    {
+        "bounds": [
+            [
+                101,
+                120
+            ]
+        ],
+        "bloon": "Ddt",
+        "number": 8
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 12
+    },
+    {
+        "bounds": [
+            [
+                263,
+                263
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 10
+    },
+    {
+        "bounds": [
+            [
+                151,
+                160
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 14
     },
     {
         "bounds": [
@@ -752,12 +1152,40 @@
     {
         "bounds": [
             [
-                263,
-                263
+                161,
+                162
+            ],
+            [
+                164,
+                199
             ]
         ],
         "bloon": "DdtFortified",
         "number": 10
+    },
+    {
+        "bounds": [
+            [
+                121,
+                130
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 2
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 12
     },
     {
         "bounds": [
@@ -790,6 +1218,30 @@
     {
         "bounds": [
             [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 20
+    },
+    {
+        "bounds": [
+            [
+                121,
+                130
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 4
+    },
+    {
+        "bounds": [
+            [
                 101,
                 110
             ]
@@ -810,26 +1262,22 @@
     {
         "bounds": [
             [
-                201,
-                262
-            ],
-            [
-                264,
-                9999
+                141,
+                150
             ]
         ],
         "bloon": "DdtFortified",
-        "number": 20
+        "number": 4
     },
     {
         "bounds": [
             [
-                101,
-                120
+                121,
+                130
             ]
         ],
         "bloon": "DdtFortified",
-        "number": 8
+        "number": 6
     },
     {
         "bounds": [
@@ -844,12 +1292,56 @@
     {
         "bounds": [
             [
+                101,
+                120
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 8
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 6
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "DdtFortified",
+        "number": 8
+    },
+    {
+        "bounds": [
+            [
                 131,
                 140
             ]
         ],
         "bloon": "DdtFortified",
         "number": 8
+    },
+    {
+        "bounds": [
+            [
+                421,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 1
     },
     {
         "bounds": [
@@ -862,27 +1354,7 @@
                 9999
             ]
         ],
-        "bloon": "GuaranteedBad ",
-        "number": 1
-    },
-    {
-        "bounds": [
-            [
-                391,
-                9999
-            ]
-        ],
-        "bloon": "GuaranteedBad ",
-        "number": 1
-    },
-    {
-        "bounds": [
-            [
-                411,
-                9999
-            ]
-        ],
-        "bloon": "GuaranteedBad ",
+        "bloon": "GuaranteedBad",
         "number": 1
     },
     {
@@ -892,18 +1364,68 @@
                 9999
             ]
         ],
-        "bloon": "GuaranteedBad ",
+        "bloon": "GuaranteedBad",
         "number": 1
     },
     {
         "bounds": [
             [
-                421,
+                411,
                 9999
             ]
         ],
-        "bloon": "GuaranteedBad ",
+        "bloon": "GuaranteedBad",
         "number": 1
+    },
+    {
+        "bounds": [
+            [
+                431,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                391,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                441,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                451,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 2
+    },
+    {
+        "bounds": [
+            [
+                481,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 2
     },
     {
         "bounds": [
@@ -912,28 +1434,18 @@
                 9999
             ]
         ],
-        "bloon": "GuaranteedBad ",
+        "bloon": "GuaranteedBad",
         "number": 2
     },
     {
         "bounds": [
             [
-                501,
+                491,
                 9999
             ]
         ],
-        "bloon": "GuaranteedBad ",
+        "bloon": "GuaranteedBad",
         "number": 3
-    },
-    {
-        "bounds": [
-            [
-                511,
-                9999
-            ]
-        ],
-        "bloon": "GuaranteedBad ",
-        "number": 5
     },
     {
         "bounds": [
@@ -946,7 +1458,47 @@
                 9999
             ]
         ],
-        "bloon": "GuaranteedBadFortified ",
+        "bloon": "GuaranteedBadFortified",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                471,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 2
+    },
+    {
+        "bounds": [
+            [
+                501,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 3
+    },
+    {
+        "bounds": [
+            [
+                511,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBad",
+        "number": 5
+    },
+    {
+        "bounds": [
+            [
+                411,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBadFortified",
         "number": 1
     },
     {
@@ -956,18 +1508,18 @@
                 9999
             ]
         ],
-        "bloon": "GuaranteedBadFortified ",
+        "bloon": "GuaranteedBadFortified",
         "number": 1
     },
     {
         "bounds": [
             [
-                451,
+                421,
                 9999
             ]
         ],
-        "bloon": "GuaranteedBadFortified ",
-        "number": 2
+        "bloon": "GuaranteedBadFortified",
+        "number": 1
     },
     {
         "bounds": [
@@ -976,7 +1528,7 @@
                 9999
             ]
         ],
-        "bloon": "GuaranteedBadFortified ",
+        "bloon": "GuaranteedBadFortified",
         "number": 1
     },
     {
@@ -986,18 +1538,28 @@
                 9999
             ]
         ],
-        "bloon": "GuaranteedBadFortified ",
+        "bloon": "GuaranteedBadFortified",
         "number": 1
     },
     {
         "bounds": [
             [
-                511,
+                431,
                 9999
             ]
         ],
-        "bloon": "GuaranteedBadFortified ",
-        "number": 5
+        "bloon": "GuaranteedBadFortified",
+        "number": 1
+    },
+    {
+        "bounds": [
+            [
+                481,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBadFortified",
+        "number": 3
     },
     {
         "bounds": [
@@ -1006,8 +1568,58 @@
                 9999
             ]
         ],
-        "bloon": "GuaranteedBadFortified ",
+        "bloon": "GuaranteedBadFortified",
         "number": 3
+    },
+    {
+        "bounds": [
+            [
+                461,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBadFortified",
+        "number": 2
+    },
+    {
+        "bounds": [
+            [
+                511,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBadFortified",
+        "number": 5
+    },
+    {
+        "bounds": [
+            [
+                501,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBadFortified",
+        "number": 3
+    },
+    {
+        "bounds": [
+            [
+                451,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBadFortified",
+        "number": 2
+    },
+    {
+        "bounds": [
+            [
+                471,
+                9999
+            ]
+        ],
+        "bloon": "GuaranteedBadFortified",
+        "number": 2
     },
     {
         "bounds": [
@@ -1026,7 +1638,7 @@
                 163
             ]
         ],
-        "bloon": "LeadRegrowCamo",
+        "bloon": "LeadRegrowFortifiedCamo",
         "number": 100
     },
     {
@@ -1036,7 +1648,7 @@
                 163
             ]
         ],
-        "bloon": "LeadRegrowFortifiedCamo",
+        "bloon": "LeadRegrowCamo",
         "number": 100
     },
     {
@@ -1082,16 +1694,6 @@
     {
         "bounds": [
             [
-                151,
-                160
-            ]
-        ],
-        "bloon": "Moab",
-        "number": 24
-    },
-    {
-        "bounds": [
-            [
                 121,
                 130
             ]
@@ -1102,12 +1704,134 @@
     {
         "bounds": [
             [
+                141,
+                150
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 20
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 20
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 24
+    },
+    {
+        "bounds": [
+            [
+                151,
+                160
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 24
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 24
+    },
+    {
+        "bounds": [
+            [
                 263,
                 263
             ]
         ],
         "bloon": "Moab",
         "number": 36
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 48
+    },
+    {
+        "bounds": [
+            [
+                101,
+                120
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 48
+    },
+    {
+        "bounds": [
+            [
+                151,
+                160
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 48
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 48
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 48
+    },
+    {
+        "bounds": [
+            [
+                121,
+                130
+            ]
+        ],
+        "bloon": "Moab",
+        "number": 48
     },
     {
         "bounds": [
@@ -1130,18 +1854,66 @@
                 120
             ]
         ],
-        "bloon": "Moab",
-        "number": 48
+        "bloon": "MoabFortified",
+        "number": 10
     },
     {
         "bounds": [
             [
-                101,
-                120
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 12
+    },
+    {
+        "bounds": [
+            [
+                121,
+                130
             ]
         ],
         "bloon": "MoabFortified",
         "number": 10
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 10
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 11
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 12
     },
     {
         "bounds": [
@@ -1161,7 +1933,37 @@
             ]
         ],
         "bloon": "MoabFortified",
-        "number": 10
+        "number": 20
+    },
+    {
+        "bounds": [
+            [
+                101,
+                120
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 20
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 20
+    },
+    {
+        "bounds": [
+            [
+                101,
+                120
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 24
     },
     {
         "bounds": [
@@ -1176,12 +1978,36 @@
     {
         "bounds": [
             [
-                101,
-                120
+                151,
+                160
             ]
         ],
         "bloon": "MoabFortified",
-        "number": 20
+        "number": 24
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 24
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 24
     },
     {
         "bounds": [
@@ -1191,47 +2017,21 @@
             ]
         ],
         "bloon": "MoabFortified",
-        "number": 20
-    },
-    {
-        "bounds": [
-            [
-                141,
-                150
-            ]
-        ],
-        "bloon": "MoabFortified",
-        "number": 11
-    },
-    {
-        "bounds": [
-            [
-                101,
-                120
-            ]
-        ],
-        "bloon": "MoabFortified",
         "number": 24
     },
     {
         "bounds": [
             [
-                151,
-                160
+                201,
+                262
+            ],
+            [
+                264,
+                9999
             ]
         ],
         "bloon": "MoabFortified",
         "number": 24
-    },
-    {
-        "bounds": [
-            [
-                151,
-                160
-            ]
-        ],
-        "bloon": "MoabFortified",
-        "number": 28
     },
     {
         "bounds": [
@@ -1246,12 +2046,40 @@
     {
         "bounds": [
             [
-                263,
-                263
+                151,
+                160
             ]
         ],
         "bloon": "MoabFortified",
-        "number": 36
+        "number": 28
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 28
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "MoabFortified",
+        "number": 28
     },
     {
         "bounds": [
@@ -1271,17 +2099,17 @@
             ]
         ],
         "bloon": "MoabFortified",
-        "number": 72
+        "number": 36
     },
     {
         "bounds": [
             [
-                101,
-                120
+                263,
+                263
             ]
         ],
-        "bloon": "Purple",
-        "number": 1110
+        "bloon": "MoabFortified",
+        "number": 72
     },
     {
         "bounds": [
@@ -1306,6 +2134,36 @@
     {
         "bounds": [
             [
+                101,
+                120
+            ]
+        ],
+        "bloon": "Purple",
+        "number": 1110
+    },
+    {
+        "bounds": [
+            [
+                101,
+                120
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 12
+    },
+    {
+        "bounds": [
+            [
+                121,
+                130
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 12
+    },
+    {
+        "bounds": [
+            [
                 10004,
                 10004
             ]
@@ -1321,13 +2179,13 @@
             ]
         ],
         "bloon": "Zomg",
-        "number": 18
+        "number": 13
     },
     {
         "bounds": [
             [
-                101,
-                120
+                131,
+                140
             ]
         ],
         "bloon": "Zomg",
@@ -1336,8 +2194,12 @@
     {
         "bounds": [
             [
-                151,
-                160
+                161,
+                162
+            ],
+            [
+                164,
+                199
             ]
         ],
         "bloon": "Zomg",
@@ -1356,12 +2218,36 @@
     {
         "bounds": [
             [
-                131,
-                140
+                151,
+                160
             ]
         ],
         "bloon": "Zomg",
-        "number": 12
+        "number": 13
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 13
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 18
     },
     {
         "bounds": [
@@ -1376,8 +2262,46 @@
     {
         "bounds": [
             [
+                131,
+                140
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 16
+    },
+    {
+        "bounds": [
+            [
                 151,
                 160
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 20
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 20
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
             ]
         ],
         "bloon": "Zomg",
@@ -1406,6 +2330,50 @@
     {
         "bounds": [
             [
+                131,
+                140
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 6
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 7
+    },
+    {
+        "bounds": [
+            [
+                151,
+                160
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 7
+    },
+    {
+        "bounds": [
+            [
+                161,
+                162
+            ],
+            [
+                164,
+                199
+            ]
+        ],
+        "bloon": "Zomg",
+        "number": 7
+    },
+    {
+        "bounds": [
+            [
                 101,
                 120
             ]
@@ -1416,8 +2384,12 @@
     {
         "bounds": [
             [
-                141,
-                150
+                201,
+                262
+            ],
+            [
+                264,
+                9999
             ]
         ],
         "bloon": "Zomg",
@@ -1436,12 +2408,42 @@
     {
         "bounds": [
             [
+                151,
+                160
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 12
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 10
+    },
+    {
+        "bounds": [
+            [
                 141,
                 150
             ]
         ],
         "bloon": "ZomgFortified",
         "number": 11
+    },
+    {
+        "bounds": [
+            [
+                101,
+                120
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 6
     },
     {
         "bounds": [
@@ -1460,6 +2462,74 @@
     {
         "bounds": [
             [
+                121,
+                130
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 6
+    },
+    {
+        "bounds": [
+            [
+                141,
+                150
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 7
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 12
+    },
+    {
+        "bounds": [
+            [
+                201,
+                262
+            ],
+            [
+                264,
+                9999
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 7
+    },
+    {
+        "bounds": [
+            [
+                131,
+                140
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 6
+    },
+    {
+        "bounds": [
+            [
+                151,
+                160
+            ]
+        ],
+        "bloon": "ZomgFortified",
+        "number": 7
+    },
+    {
+        "bounds": [
+            [
                 161,
                 162
             ],
@@ -1470,26 +2540,6 @@
         ],
         "bloon": "ZomgFortified",
         "number": 7
-    },
-    {
-        "bounds": [
-            [
-                101,
-                120
-            ]
-        ],
-        "bloon": "ZomgFortified",
-        "number": 6
-    },
-    {
-        "bounds": [
-            [
-                121,
-                130
-            ]
-        ],
-        "bloon": "ZomgFortified",
-        "number": 6
     },
     {
         "bounds": [

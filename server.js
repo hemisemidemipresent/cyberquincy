@@ -6,9 +6,9 @@ function main() {
     consoleBootup();
     googleSheetsInitialization();
     configureAliases();
-    commandCenter = configureCommands();
+    // commandCenter = configureCommands();
     slashCommandCenter = setupSlashCommandCenter();
-    generateCommandListeners(commandCenter, slashCommandCenter);
+    generateCommandListeners(slashCommandCenter);
     login();
 }
 
@@ -35,14 +35,7 @@ function globalRequirements() {
 
     global.Discord = require('discord.js');
     global.client = new Client({
-        intents: [
-            GatewayIntentBits.GuildMessages,
-            GatewayIntentBits.GuildMessageReactions,
-            GatewayIntentBits.Guilds,
-            GatewayIntentBits.GuildEmojisAndStickers,
-            GatewayIntentBits.DirectMessages,
-            GatewayIntentBits.DirectMessageReactions
-        ]
+        intents: [GatewayIntentBits.Guilds]
     });
 
     global.prefix = require('./1/config.json')['prefix'];
@@ -122,11 +115,11 @@ function configureAliases() {
     Aliases.asyncAliasFiles();
 }
 
-function configureCommands() {
-    commandCenter = require('./command_center');
-    commandCenter.configureCommands(client);
-    return commandCenter;
-}
+// function configureCommands() {
+//     commandCenter = require('./command_center');
+//     commandCenter.configureCommands(client);
+//     return commandCenter;
+// }
 
 function setupSlashCommandCenter() {
     slashCommandCenter = require('./slash_command_center');
@@ -134,17 +127,19 @@ function setupSlashCommandCenter() {
     return slashCommandCenter;
 }
 
-function generateCommandListeners(commandCenter, slashCommandCenter) {
+function generateCommandListeners(slashCommandCenter) {
     global.Guilds = require('./helpers/guilds.js');
 
     client.on('guildCreate', (guild) => {
         return Guilds.enterGuild(guild);
     });
 
-    // q! commands
-    client.on('messageCreate', async (message) => {
-        commandCenter.handleCommand(message);
-    });
+    // q! commands - no longer exist as of August 2022 due to Discord making bots changes to slash commands
+    // and this bot doesnt have a valid reason to be using message content so we do not have this intent
+    // * https://support-dev.discord.com/hc/en-us/articles/4404772028055-Message-Content-Privileged-Intent-FAQ
+    // client.on('messageCreate', async (message) => {
+    //    commandCenter.handleCommand(message);
+    // });
 
     // slash commands
     client.on('interactionCreate', async (interaction) => {

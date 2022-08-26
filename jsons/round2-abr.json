@@ -1,0 +1,799 @@
+[
+    {
+        "round": 0,
+        "rbe": 0,
+        "cashThisRound": 650,
+        "cumulativeRBE": 0,
+        "cumulativeCash": 650
+    },
+    {
+        "round": 1
+    },
+    {
+        "round": 2
+    },
+    {
+        "round": 3,
+        "rbe": 37,
+        "cashThisRound": 140,
+        "Bloons": 26,
+        "cumulativeRBE": 37,
+        "cumulativeCash": 790
+    },
+    {
+        "round": 4,
+        "rbe": 76,
+        "cashThisRound": 180,
+        "Bloons": 69,
+        "cumulativeRBE": 113,
+        "cumulativeCash": 970
+    },
+    {
+        "round": 5,
+        "rbe": 52,
+        "cashThisRound": 157,
+        "Bloons": 100,
+        "cumulativeRBE": 165,
+        "cumulativeCash": 1127
+    },
+    {
+        "round": 6,
+        "rbe": 59,
+        "cashThisRound": 165,
+        "Bloons": 123,
+        "cumulativeRBE": 224,
+        "cumulativeCash": 1292
+    },
+    {
+        "round": 7,
+        "rbe": 90,
+        "cashThisRound": 197,
+        "Bloons": 156,
+        "cumulativeRBE": 314,
+        "cumulativeCash": 1489
+    },
+    {
+        "round": 8,
+        "rbe": 85,
+        "cashThisRound": 193,
+        "Bloons": 181,
+        "cumulativeRBE": 399,
+        "cumulativeCash": 1682
+    },
+    {
+        "round": 9,
+        "rbe": 90,
+        "cashThisRound": 199,
+        "Bloons": 211,
+        "cumulativeRBE": 489,
+        "cumulativeCash": 1881
+    },
+    {
+        "round": 10,
+        "rbe": 210,
+        "cashThisRound": 320,
+        "Bloons": 275,
+        "cumulativeRBE": 699,
+        "cumulativeCash": 2201
+    },
+    {
+        "round": 11,
+        "rbe": 109,
+        "cashThisRound": 220,
+        "Bloons": 318,
+        "cumulativeRBE": 808,
+        "cumulativeCash": 2421
+    },
+    {
+        "round": 12,
+        "rbe": 73,
+        "cashThisRound": 185,
+        "Bloons": 347,
+        "cumulativeRBE": 881,
+        "cumulativeCash": 2606
+    },
+    {
+        "round": 13,
+        "rbe": 172,
+        "cashThisRound": 285,
+        "Bloons": 415,
+        "cumulativeRBE": 1053,
+        "cumulativeCash": 2891
+    },
+    {
+        "round": 14,
+        "rbe": 144,
+        "cashThisRound": 258,
+        "Bloons": 487,
+        "cumulativeRBE": 1197,
+        "cumulativeCash": 3149
+    },
+    {
+        "round": 15,
+        "rbe": 216,
+        "cashThisRound": 331,
+        "Bloons": 547,
+        "cumulativeRBE": 1413,
+        "cumulativeCash": 3480
+    },
+    {
+        "round": 16,
+        "rbe": 165,
+        "cashThisRound": 281,
+        "Bloons": 602,
+        "cumulativeRBE": 1578,
+        "cumulativeCash": 3761
+    },
+    {
+        "round": 17,
+        "rbe": 60,
+        "cashThisRound": 177,
+        "Bloons": 614,
+        "cumulativeRBE": 1638,
+        "cumulativeCash": 3938
+    },
+    {
+        "round": 18,
+        "rbe": 330,
+        "cashThisRound": 448,
+        "Bloons": 704,
+        "cumulativeRBE": 1968,
+        "cumulativeCash": 4386
+    },
+    {
+        "round": 19,
+        "rbe": 132,
+        "cashThisRound": 251,
+        "Bloons": 736,
+        "cumulativeRBE": 2100,
+        "cumulativeCash": 4637
+    },
+    {
+        "round": 20,
+        "rbe": 66,
+        "cashThisRound": 186,
+        "Bloons": 742,
+        "cumulativeRBE": 2166,
+        "cumulativeCash": 4823
+    },
+    {
+        "round": 21,
+        "rbe": 58,
+        "cashThisRound": 179,
+        "Bloons": 796,
+        "cumulativeRBE": 2224,
+        "cumulativeCash": 5002
+    },
+    {
+        "round": 22,
+        "rbe": 176,
+        "cashThisRound": 298,
+        "Bloons": 812,
+        "cumulativeRBE": 2400,
+        "cumulativeCash": 5300
+    },
+    {
+        "round": 23,
+        "rbe": 235,
+        "cashThisRound": 358,
+        "Bloons": 829,
+        "cumulativeRBE": 2635,
+        "cumulativeCash": 5658
+    },
+    {
+        "round": 24,
+        "rbe": 23,
+        "cashThisRound": 147,
+        "Bloons": 830,
+        "cumulativeRBE": 2658,
+        "cumulativeCash": 5805
+    },
+    {
+        "round": 25,
+        "rbe": 220,
+        "cashThisRound": 345,
+        "Bloons": 862,
+        "cumulativeRBE": 2878,
+        "cumulativeCash": 6150
+    },
+    {
+        "round": 26,
+        "rbe": 328,
+        "cashThisRound": 454,
+        "Bloons": 882,
+        "cumulativeRBE": 3206,
+        "cumulativeCash": 6604
+    },
+    {
+        "round": 27,
+        "rbe": 535,
+        "cashThisRound": 662,
+        "Bloons": 1132,
+        "cumulativeRBE": 3741,
+        "cumulativeCash": 7266
+    },
+    {
+        "round": 28,
+        "rbe": 138,
+        "cashThisRound": 266,
+        "Bloons": 1138,
+        "cumulativeRBE": 3879,
+        "cumulativeCash": 7532
+    },
+    {
+        "round": 29,
+        "rbe": 338,
+        "cashThisRound": 467,
+        "Bloons": 1196,
+        "cumulativeRBE": 4217,
+        "cumulativeCash": 7999
+    },
+    {
+        "round": 30,
+        "rbe": 207,
+        "cashThisRound": 337,
+        "Bloons": 1205,
+        "cumulativeRBE": 4424,
+        "cumulativeCash": 8336
+    },
+    {
+        "round": 31,
+        "rbe": 475,
+        "cashThisRound": 606,
+        "Bloons": 1234,
+        "cumulativeRBE": 4899,
+        "cumulativeCash": 8942
+    },
+    {
+        "round": 32,
+        "rbe": 657,
+        "cashThisRound": 762,
+        "Bloons": 1252,
+        "cumulativeRBE": 5556,
+        "cumulativeCash": 9704
+    },
+    {
+        "round": 33,
+        "rbe": 46,
+        "cashThisRound": 179,
+        "Bloons": 1285,
+        "cumulativeRBE": 5602,
+        "cumulativeCash": 9883
+    },
+    {
+        "round": 34,
+        "rbe": 882,
+        "cashThisRound": 1016,
+        "Bloons": 1491,
+        "cumulativeRBE": 6484,
+        "cumulativeCash": 10899
+    },
+    {
+        "round": 35,
+        "rbe": 1192,
+        "cashThisRound": 1300,
+        "Bloons": 1574,
+        "cumulativeRBE": 7676,
+        "cumulativeCash": 12199
+    },
+    {
+        "round": 36,
+        "rbe": 638,
+        "cashThisRound": 756,
+        "Bloons": 1666,
+        "cumulativeRBE": 8314,
+        "cumulativeCash": 12955
+    },
+    {
+        "round": 37,
+        "rbe": 1271,
+        "cashThisRound": 1408,
+        "Bloons": 1751,
+        "cumulativeRBE": 9585,
+        "cumulativeCash": 14363
+    },
+    {
+        "round": 38,
+        "rbe": 1404,
+        "cashThisRound": 1533,
+        "Bloons": 1832,
+        "cumulativeRBE": 10989,
+        "cumulativeCash": 15896
+    },
+    {
+        "round": 39,
+        "rbe": 1369,
+        "cashThisRound": 1508,
+        "Bloons": 1879,
+        "cumulativeRBE": 12358,
+        "cumulativeCash": 17404
+    },
+    {
+        "round": 40,
+        "rbe": 856,
+        "cashThisRound": 521,
+        "Bloons": 1880,
+        "cumulativeRBE": 13214,
+        "cumulativeCash": 17925
+    },
+    {
+        "round": 41,
+        "rbe": 2270,
+        "cashThisRound": 2411,
+        "Bloons": 2010,
+        "cumulativeRBE": 15484,
+        "cumulativeCash": 20336
+    },
+    {
+        "round": 42,
+        "rbe": 517,
+        "cashThisRound": 659,
+        "Bloons": 2021,
+        "cumulativeRBE": 16001,
+        "cumulativeCash": 20995
+    },
+    {
+        "round": 43,
+        "rbe": 1702,
+        "cashThisRound": 1375,
+        "Bloons": 2033,
+        "cumulativeRBE": 17703,
+        "cumulativeCash": 22370
+    },
+    {
+        "round": 44,
+        "rbe": 1180,
+        "cashThisRound": 1294,
+        "Bloons": 2083,
+        "cumulativeRBE": 18883,
+        "cumulativeCash": 23664
+    },
+    {
+        "round": 45,
+        "rbe": 1854,
+        "cashThisRound": 1897,
+        "Bloons": 2227,
+        "cumulativeRBE": 20737,
+        "cumulativeCash": 25561
+    },
+    {
+        "round": 46,
+        "rbe": 912,
+        "cashThisRound": 906,
+        "Bloons": 2235,
+        "cumulativeRBE": 21649,
+        "cumulativeCash": 26467
+    },
+    {
+        "round": 47,
+        "rbe": 2198,
+        "cashThisRound": 1640,
+        "Bloons": 2308,
+        "cumulativeRBE": 23847,
+        "cumulativeCash": 28107
+    },
+    {
+        "round": 48,
+        "rbe": 1942,
+        "cashThisRound": 1988,
+        "Bloons": 2436,
+        "cumulativeRBE": 25789,
+        "cumulativeCash": 30095
+    },
+    {
+        "round": 49,
+        "rbe": 3826,
+        "cashThisRound": 3849,
+        "Bloons": 2780,
+        "cumulativeRBE": 29615,
+        "cumulativeCash": 33944
+    },
+    {
+        "round": 50,
+        "rbe": 4384,
+        "cashThisRound": 2620,
+        "Bloons": 2794,
+        "cumulativeRBE": 33999,
+        "cumulativeCash": 36564
+    },
+    {
+        "round": 51,
+        "rbe": 3422,
+        "cashThisRound": 1596,
+        "Bloons": 2832,
+        "cumulativeRBE": 37421,
+        "cumulativeCash": 38160
+    },
+    {
+        "round": 52,
+        "rbe": 4207,
+        "cashThisRound": 1830.5,
+        "Bloons": 2879,
+        "cumulativeRBE": 41628,
+        "cumulativeCash": 39990.5
+    },
+    {
+        "round": 53,
+        "rbe": 3168,
+        "cashThisRound": 1024.5,
+        "Bloons": 3002,
+        "cumulativeRBE": 44796,
+        "cumulativeCash": 41015
+    },
+    {
+        "round": 54,
+        "rbe": 4165,
+        "cashThisRound": 1299.5,
+        "Bloons": 3039,
+        "cumulativeRBE": 48961,
+        "cumulativeCash": 42314.5
+    },
+    {
+        "round": 55,
+        "rbe": 5536,
+        "cashThisRound": 2483,
+        "Bloons": 3085,
+        "cumulativeRBE": 54497,
+        "cumulativeCash": 44797.5
+    },
+    {
+        "round": 56,
+        "rbe": 3520,
+        "cashThisRound": 1328.5,
+        "Bloons": 3130,
+        "cumulativeRBE": 58017,
+        "cumulativeCash": 46126
+    },
+    {
+        "round": 57,
+        "rbe": 7476,
+        "cashThisRound": 2488,
+        "Bloons": 3158,
+        "cumulativeRBE": 65493,
+        "cumulativeCash": 48614
+    },
+    {
+        "round": 58,
+        "rbe": 8860,
+        "cashThisRound": 3250.5,
+        "Bloons": 3193,
+        "cumulativeRBE": 74353,
+        "cumulativeCash": 51864.5
+    },
+    {
+        "round": 59,
+        "rbe": 4605,
+        "cashThisRound": 2271.5,
+        "Bloons": 3288,
+        "cumulativeRBE": 78958,
+        "cumulativeCash": 54136
+    },
+    {
+        "round": 60,
+        "rbe": 4824,
+        "cashThisRound": 922.5,
+        "Bloons": 3289,
+        "cumulativeRBE": 83782,
+        "cumulativeCash": 55058.5
+    },
+    {
+        "round": 61,
+        "rbe": 10780,
+        "cashThisRound": 1603,
+        "Bloons": 3369,
+        "cumulativeRBE": 94562,
+        "cumulativeCash": 56661.5
+    },
+    {
+        "round": 62,
+        "rbe": 13748,
+        "cashThisRound": 1772,
+        "Bloons": 3641,
+        "cumulativeRBE": 108310,
+        "cumulativeCash": 58433.5
+    },
+    {
+        "round": 63,
+        "rbe": 14820,
+        "cashThisRound": 2634,
+        "Bloons": 3756,
+        "cumulativeRBE": 123130,
+        "cumulativeCash": 61067.5
+    },
+    {
+        "round": 64,
+        "rbe": 11464,
+        "cashThisRound": 1231.2,
+        "Bloons": 3764,
+        "cumulativeRBE": 134594,
+        "cumulativeCash": 62298.7
+    },
+    {
+        "round": 65,
+        "rbe": 21050,
+        "cashThisRound": 2916.6,
+        "Bloons": 3890,
+        "cumulativeRBE": 155644,
+        "cumulativeCash": 65215.3
+    },
+    {
+        "round": 66,
+        "rbe": 13188,
+        "cashThisRound": 1538.2,
+        "Bloons": 3899,
+        "cumulativeRBE": 168832,
+        "cumulativeCash": 66753.5
+    },
+    {
+        "round": 67,
+        "rbe": 9400,
+        "cashThisRound": 1309,
+        "Bloons": 3929,
+        "cumulativeRBE": 178232,
+        "cumulativeCash": 68062.5
+    },
+    {
+        "round": 68,
+        "rbe": 7288,
+        "cashThisRound": 777.8,
+        "Bloons": 3934,
+        "cumulativeRBE": 185520,
+        "cumulativeCash": 68840.3
+    },
+    {
+        "round": 69,
+        "rbe": 6080,
+        "cashThisRound": 1295,
+        "Bloons": 4064,
+        "cumulativeRBE": 191600,
+        "cumulativeCash": 70135.3
+    },
+    {
+        "round": 70,
+        "rbe": 14536,
+        "cashThisRound": 2507.2,
+        "Bloons": 4270,
+        "cumulativeRBE": 206136,
+        "cumulativeCash": 72642.5
+    },
+    {
+        "round": 71,
+        "rbe": 11980,
+        "cashThisRound": 1503,
+        "Bloons": 4310,
+        "cumulativeRBE": 218116,
+        "cumulativeCash": 74145.5
+    },
+    {
+        "round": 72,
+        "rbe": 12320,
+        "cashThisRound": 1504,
+        "Bloons": 4350,
+        "cumulativeRBE": 230436,
+        "cumulativeCash": 75649.5
+    },
+    {
+        "round": 73,
+        "rbe": 16496,
+        "cashThisRound": 1392.6,
+        "Bloons": 4360,
+        "cumulativeRBE": 246932,
+        "cumulativeCash": 77042.1
+    },
+    {
+        "round": 74,
+        "rbe": 8774,
+        "cashThisRound": 1174,
+        "Bloons": 4486,
+        "cumulativeRBE": 255706,
+        "cumulativeCash": 78216.1
+    },
+    {
+        "round": 75,
+        "rbe": 33570,
+        "cashThisRound": 3214.2,
+        "Bloons": 4562,
+        "cumulativeRBE": 289276,
+        "cumulativeCash": 81430.3
+    },
+    {
+        "round": 76,
+        "rbe": 31640,
+        "cashThisRound": 3226,
+        "Bloons": 4572,
+        "cumulativeRBE": 320916,
+        "cumulativeCash": 84656.3
+    },
+    {
+        "round": 77,
+        "rbe": 33536,
+        "cashThisRound": 2540.2,
+        "Bloons": 4588,
+        "cumulativeRBE": 354452,
+        "cumulativeCash": 87196.5
+    },
+    {
+        "round": 78,
+        "rbe": 23482,
+        "cashThisRound": 3857,
+        "Bloons": 4951,
+        "cumulativeRBE": 377934,
+        "cumulativeCash": 91053.5
+    },
+    {
+        "round": 79,
+        "rbe": 59452,
+        "cashThisRound": 7319.2,
+        "Bloons": 5456,
+        "cumulativeRBE": 437386,
+        "cumulativeCash": 98372.7
+    },
+    {
+        "round": 80,
+        "rbe": 33312,
+        "cashThisRound": 2620.4,
+        "Bloons": 5458,
+        "cumulativeRBE": 470698,
+        "cumulativeCash": 100993.1
+    },
+    {
+        "round": 81,
+        "rbe": 57670,
+        "cashThisRound": 6280,
+        "Bloons": 5493,
+        "cumulativeRBE": 528368,
+        "cumulativeCash": 107273.1
+    },
+    {
+        "round": 82,
+        "rbe": 95816,
+        "cashThisRound": 8417.2,
+        "Bloons": 5517,
+        "cumulativeRBE": 624184,
+        "cumulativeCash": 115690.3
+    },
+    {
+        "round": 83,
+        "rbe": 29280,
+        "cashThisRound": 3987,
+        "Bloons": 5657,
+        "cumulativeRBE": 653464,
+        "cumulativeCash": 119677.3
+    },
+    {
+        "round": 84,
+        "rbe": 103720,
+        "cashThisRound": 8569,
+        "Bloons": 5722,
+        "cumulativeRBE": 757184,
+        "cumulativeCash": 128246.3
+    },
+    {
+        "round": 85,
+        "rbe": 46056,
+        "cashThisRound": 3845.6,
+        "Bloons": 5725,
+        "cumulativeRBE": 803240,
+        "cumulativeCash": 132091.9
+    },
+    {
+        "round": 86,
+        "rbe": 43264,
+        "cashThisRound": 1406,
+        "Bloons": 5733,
+        "cumulativeRBE": 846504,
+        "cumulativeCash": 133497.9
+    },
+    {
+        "round": 87,
+        "rbe": 78760,
+        "cashThisRound": 3237.5,
+        "Bloons": 5738,
+        "cumulativeRBE": 925264,
+        "cumulativeCash": 136735.4
+    },
+    {
+        "round": 88,
+        "rbe": 50784,
+        "cashThisRound": 2703.8,
+        "Bloons": 5768,
+        "cumulativeRBE": 976048,
+        "cumulativeCash": 139439.2
+    },
+    {
+        "round": 89,
+        "rbe": 81816,
+        "cashThisRound": 2590.5,
+        "Bloons": 5795,
+        "cumulativeRBE": 1057864,
+        "cumulativeCash": 142029.7
+    },
+    {
+        "round": 90,
+        "rbe": 9408,
+        "cashThisRound": 817.4,
+        "Bloons": 5849,
+        "cumulativeRBE": 1067272,
+        "cumulativeCash": 142847.1
+    },
+    {
+        "round": 91,
+        "rbe": 98420,
+        "cashThisRound": 3428.5,
+        "Bloons": 5964,
+        "cumulativeRBE": 1165692,
+        "cumulativeCash": 146275.6
+    },
+    {
+        "round": 92,
+        "rbe": 120480,
+        "cashThisRound": 4689.8,
+        "Bloons": 6022,
+        "cumulativeRBE": 1286172,
+        "cumulativeCash": 150965.4
+    },
+    {
+        "round": 93,
+        "rbe": 109716,
+        "cashThisRound": 3052.2,
+        "Bloons": 6046,
+        "cumulativeRBE": 1395888,
+        "cumulativeCash": 154017.6
+    },
+    {
+        "round": 94,
+        "rbe": 212416,
+        "cashThisRound": 8887.3,
+        "Bloons": 6079,
+        "cumulativeRBE": 1608304,
+        "cumulativeCash": 162904.9
+    },
+    {
+        "round": 95,
+        "rbe": 57720,
+        "cashThisRound": 2781,
+        "Bloons": 6639,
+        "cumulativeRBE": 1666024,
+        "cumulativeCash": 165685.9
+    },
+    {
+        "round": 96,
+        "rbe": 342032,
+        "cashThisRound": 11100.1,
+        "Bloons": 6700,
+        "cumulativeRBE": 2008056,
+        "cumulativeCash": 176786
+    },
+    {
+        "round": 97,
+        "rbe": 82656,
+        "cashThisRound": 1722,
+        "Bloons": 6710,
+        "cumulativeRBE": 2090712,
+        "cumulativeCash": 178508
+    },
+    {
+        "round": 98,
+        "rbe": 320032,
+        "cashThisRound": 9959.1,
+        "Bloons": 6741,
+        "cumulativeRBE": 2410744,
+        "cumulativeCash": 188467.1
+    },
+    {
+        "round": 99,
+        "rbe": 97360,
+        "cashThisRound": 3019.5,
+        "Bloons": 6781,
+        "cumulativeRBE": 2508104,
+        "cumulativeCash": 191486.6
+    },
+    {
+        "round": 100,
+        "rbe": 133280,
+        "cashThisRound": 1534.6,
+        "Bloons": 6782,
+        "cumulativeRBE": 2641384,
+        "cumulativeCash": 193021.2
+    }
+]

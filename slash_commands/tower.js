@@ -8,8 +8,12 @@ const {
 } = require('discord.js');
 
 const axios = require('axios');
+
 const costs = require('../jsons/costs.json');
 const Towers = require('../helpers/towers.js');
+
+const bHelper = require('../helpers/bloons-general');
+
 const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colours.json');
 
@@ -55,9 +59,7 @@ async function embedBloonology(towerName, upgrade) {
 
     const tower = costs[towerName];
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
-    const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
-    const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostHard(costs, towerName, upgrade);
-    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
+
     const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
     const upgradeDescription = cleanDescription(
@@ -75,6 +77,12 @@ async function embedBloonology(towerName, upgrade) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
 
+    const easyTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'easy');
+    const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
+    const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'hard');
+    const impopTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'impoppable');
+    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
+
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)
         .setDescription(upgradeDescription)
@@ -82,10 +90,22 @@ async function embedBloonology(towerName, upgrade) {
             {
                 name: 'cost',
                 value:
-                    `${cost} - medium\n${Towers.hard(cost)} - hard\n` + `if this is wrong [yell at hemi here](${discord})`,
+                    `${bHelper.difficultyPriceMult(cost, 'easy')} - easy\n` +
+                    `${cost} - medium\n` +
+                    `${bHelper.difficultyPriceMult(cost, 'hard')} - hard\n` +
+                    `${bHelper.difficultyPriceMult(cost, 'impoppable')} - impoppable\n` +
+                    `if this is wrong [yell at hemi here](${discord})`,
                 inline: true
             },
-            { name: 'total cost', value: `${totalCost} - medium\n${hardTotalCost} - hard`, inline: true },
+            {
+                name: 'total cost',
+                value:
+                    `${easyTotalCost} - easy\n` +
+                    `${totalCost} - medium\n` +
+                    `${hardTotalCost} - hard\n` +
+                    `${impopTotalCost} - impoppable\n`,
+                inline: true
+            },
             { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
         ])
         .setFooter({ text: footer })

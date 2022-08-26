@@ -48,7 +48,7 @@ async function onAutocomplete(interaction) {
     const map_name_partial = hoistedOptions.find((option) => option.name == 'map_name'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = map_name_partial.value;
 
-    fs = FuzzySet(Aliases.allMaps());
+    let fs = FuzzySet(Aliases.allMaps());
     const values = fs.get(value, null, 0.2);
     responseArr = [];
     values.forEach((value, index) => {
@@ -56,6 +56,7 @@ async function onAutocomplete(interaction) {
     });
     await interaction.respond(responseArr);
 }
+
 module.exports = {
     data: builder,
     execute,

@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, InteractionType } = require('discord.js');
+const { Client, GatewayIntentBits, InteractionType, ChatInputCommandInteraction } = require('discord.js');
 
 function main() {
     pingHeroku();
@@ -124,6 +124,7 @@ function configureAliases() {
 function setupSlashCommandCenter() {
     slashCommandCenter = require('./slash_command_center');
     slashCommandCenter.configureCommands(client);
+    slashCommandCenter.extendStructure(ChatInputCommandInteraction);
     return slashCommandCenter;
 }
 

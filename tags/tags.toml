@@ -64,3 +64,10 @@ receives tier 0 overclock benefits
 
 [cave-monkey.embeds.footer]
 text = "{credits}"
+
+[aqoa]
+keywords = ["annulling quantum ouroboric annulet", "ace lock in place"]
+content = """
+**aqoa** (short for _annulling quantum ouroboric annulet_) is an ace micro technique (bug?) by `無名#1337` that essentially locks your plane in place.
+A demonstration can be shown at: https://youtu.be/0S0933s3m1s?t=63
+"""

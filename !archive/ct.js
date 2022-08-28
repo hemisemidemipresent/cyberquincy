@@ -11,7 +11,7 @@ const { getUsernames } = require('../helpers/usernames');
 const { blue } = require('../jsons/colours.json');
 const { CTPointsIcon } = require('../jsons/emojis.json')['614111055890612225'].misc;
 
-const eventID = 'l6efnn0e';
+const eventID = 'l76rtr72';
 
 builder = new SlashCommandBuilder()
     .setName('ct')
@@ -32,7 +32,7 @@ async function execute(interaction) {
 async function guild_stats(interaction) {
     const guildName = interaction.options.getString('guild_name');
     let body = { searchQuery: `*${guildName}* AND NOT status:DISBANDED AND numMembers>0`, limit: 20, offset: 0 };
-    let nonce = Math.random() * Math.pow(2, 63) + ''; // or any hentai code, but there are much less hentai than 64-bit integers (for now)
+    let nonce = Math.random() * Math.pow(2, 63) + '';
     let bodyString = JSON.stringify(body);
     let sig = nksku.signonce.sign(body, nonce, sessionID);
 

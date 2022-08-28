@@ -46,6 +46,13 @@ content = "https://youtu.be/vmjeHHm1pD4"
 keywords = ["bruh"]
 content = "https://www.youtube.com/watch?v=PWkgMCtbnkM&"
 
+[aqoa]
+keywords = ["annulling quantum ouroboric annulet", "ace lock in place"]
+content = """
+**aqoa** (short for _annulling quantum ouroboric annulet_) is an ace micro technique made by `無名#1337` that essentially locks your plane in place.
+A demonstration can be shown at: https://youtu.be/0S0933s3m1s?t=63
+"""
+
 [cave-monkey]
 keywords = ["cave"]
 

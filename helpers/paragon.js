@@ -18,23 +18,20 @@ module.exports = {
      * @param {int} md ADDITIONAL moab damage at degree 1
      * @param {int} bd ADDITIONAL boss damage at degree 1
      * @param {int} x degree
-     * @param {boolean} isDot whether projectile is a Damage over Time projectile
+     * @param {boolean} isDot whether attack does damage over time
      */
     getDamages(d, md = 0, bd = 0, x, isDot = false) {
-        let d_x = this.getDmg(d, x);
-        let md_x;
-        if (md) md_x = this.getDmg(md, x);
-        else md_x = 0;
-        let bd_x = this.getDmg(bd, x);
+        const d_x = this.getDmg(d, x);
+        const md_x = md ? this.getDmg(md, x) : 0;
+        const bd_x = this.getDmg(bd, x);
 
-        let bd_tot;
-        if (isDot) bd_tot = (d_x + md_x + bd_x) * (1 + Math.floor(x / 20) * 0.2);
-        else bd_tot = (d_x + md_x + 2 * bd_x) * (1 + Math.floor(x / 20) * 0.2) - bd_x;
+        const mult = 1 + Math.floor(x / 20) * 0.2;
 
-        let ed_tot;
-        if (x < 20) ed_tot = 2 * (d_x + md_x + bd_x);
-        // for x < 20 Math.floor(x/20)*0.2 goes to 0 so the * (1 + Math.floor(x / 20) * 0.2) is basically just a *1
-        else ed_tot = 2 * (d_x + md_x + 2 * bd_x) * (1 + Math.floor(x / 20) * 0.2) - bd_x;
+        const cum_d = d_x + md_x + bd_x; // cumulative damage to boss bloons
+        const cum_d2 = d_x + md_x + 2 * bd_x; // some elite / DoT dmg stats use this instead for some reason, then minusing the boss dmg
+
+        const bd_tot = isDot ? cum_d * mult : cum_d2 * mult - bd_x;
+        const ed_tot = x < 20 ? 2 * cum_d : 2 * cum_d2 * mult - bd_x;
 
         return {
             d: Math.round(d_x * 100) / 100,

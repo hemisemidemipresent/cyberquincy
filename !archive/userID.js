@@ -160,6 +160,7 @@ module.exports = {
             for (let i = 0; i < normalNames.length; i++) {
                 let codeName = normalNames[i].replace(/ +/g, '') + '1';
                 let monke = obj.namedMonkeyStats[`${codeName}`];
+                if (!monke) continue;
                 option = {
                     label: normalNames[i],
                     value: codeName

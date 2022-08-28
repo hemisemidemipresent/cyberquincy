@@ -5,7 +5,7 @@ const skuID = 35;
 const skuSignature = 'A26308E242742374';
 const sessionID = null;
 
-const deviceID = 'no_link428482bf0b696dcf8ded17e53910b84f9bc99f53';
+const deviceID = null;
 
 const { UserAgent } = require('../1/config.json');
 module.exports = {
@@ -32,6 +32,7 @@ module.exports = {
         for (let res of results) {
             if (!res) continue;
             let data = JSON.parse(res.data);
+            console.log(data);
             for (let j in data.users) {
                 let user = data.users[j];
                 // ensure all objects have correct userName string

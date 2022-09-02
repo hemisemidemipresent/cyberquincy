@@ -40,14 +40,6 @@ module.exports = {
             ed: Math.round(ed_tot * 100) / 100
         };
     },
-    getDamagesObj(obj, x, isDot = false) {
-        let res;
-        if (obj.damage) res = this.getDamages(obj.damage, obj.md, obj.bd, x, isDot);
-        if (obj.pierce) res.p = this.getPiece(obj.pierce, x);
-
-        if (obj.rate) res.s = this.getSpeed(obj.rate, x);
-        return res;
-    },
     getPiece(p, x) {
         x--;
         let p_x = p * (1 + x * 0.01) + x;
@@ -57,5 +49,24 @@ module.exports = {
         x--;
         let s_x = s / (1 + Math.sqrt(x * 50) * 0.01);
         return Math.round(s_x * 100) / 100;
+    },
+    /**
+     *
+     * @param {Object} obj The original object for damages
+     * @param {int} x degree
+     * @param {boolean} isDot whether attack does damage over time
+     * @returns
+     */
+    getLevelledObj(obj, x) {
+        let res = this.getDamages(obj.damage, obj.md, obj.bd, x, obj.isDot);
+
+        // ceramic damage is total, while fortified damage is handled as an additive.
+        // this is because fortified can stack with normal bloons (lead), ceramics, and moab-class bloons
+        if (obj.cd) res.cd = this.getDmg(obj.cd, x) + res.d;
+        if (obj.fd) res.fd = this.getDmg(obj.fd, x);
+
+        if (obj.pierce) res.p = this.getPiece(obj.pierce, x);
+        if (obj.rate) res.s = this.getSpeed(obj.rate, x);
+        return res;
     }
 };

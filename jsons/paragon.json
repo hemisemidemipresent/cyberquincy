@@ -32,13 +32,14 @@
             "rate": 2.5,
             "pierce": 300
         },
-        "pressExplosion": {
+        "explosion": {
             "damage": 2500,
             "bd": 5000,
             "pierce": 20
         },
         "burn": {
-            "damage": 500
+            "damage": 500,
+            "isDot": true
         }
     },
     "ninja_monkey": {
@@ -97,6 +98,58 @@
             "bd": 200,
             "pierce": 10,
             "rate": 1.5
+        }
+    },
+    "engineer_monkey": {
+        "nailGuns": {
+            "damage": 100,
+            "bd": 100,
+            "pierce": 15,
+            "rate": 0.3
+        },
+        "endpoint": {
+            "damage": 100,
+            "bd": 250,
+            "pierce": 10,
+            "rate": 0.2
+        },
+        "beam": {
+            "damage": 20,
+            "bd": 30,
+            "pierce": 10,
+            "rate": 0.2
+        },
+        "plasma": {
+            "damage": 5,
+            "bd": 4,
+            "pierce": 10,
+            "rate": 0.05
+        },
+        "missile": {
+            "damage": 3,
+            "md": 747,
+            "pierce": 20,
+            "rate": 0.5
+        },
+        "explosion": {
+            "damage": 3,
+            "md": 2,
+            "pierce": 20
+        },
+        "sell": {
+            "damage": 30000,
+            "bd": 40000,
+            "pierce": 100
+        },
+        "mod_plasma": {
+            "damage": 4,
+            "bd": 2,
+            "pierce": 5,
+            "rate": 0.06
+        },
+        "mod_sell": {
+            "damage": 30000,
+            "pierce": 50
         }
     }
 }

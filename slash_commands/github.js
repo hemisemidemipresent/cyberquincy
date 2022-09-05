@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-builder = new SlashCommandBuilder().setName('github').setDescription('Links the cyberquincy github repository');
+builder = new SlashCommandBuilder()
+    .setName('github')
+    .setDescription('Links the cyberquincy github repository');
 
 async function execute(interaction) {
     let embed = new Discord.EmbedBuilder().setDescription(

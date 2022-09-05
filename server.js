@@ -1,4 +1,9 @@
-const { Client, GatewayIntentBits, InteractionType, ChatInputCommandInteraction } = require('discord.js');
+const {
+    Client,
+    GatewayIntentBits,
+    InteractionType,
+    ChatInputCommandInteraction
+} = require('discord.js');
 
 function main() {
     pingHeroku();
@@ -144,7 +149,8 @@ function generateCommandListeners(slashCommandCenter) {
 
     // slash commands
     client.on('interactionCreate', async (interaction) => {
-        if (interaction.type === InteractionType.ApplicationCommand) slashCommandCenter.handleCommand(interaction);
+        if (interaction.type === InteractionType.ApplicationCommand)
+            slashCommandCenter.handleCommand(interaction);
         if (interaction.isButton()) slashCommandCenter.handleButton(interaction);
         if (interaction.type === InteractionType.ApplicationCommandAutocomplete)
             slashCommandCenter.handleAutocomplete(interaction);

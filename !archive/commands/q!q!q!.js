@@ -20,5 +20,5 @@ module.exports = {
                 '\n' +
                 'You hate children so much so stop acting like one'
         );
-    },
+    }
 };

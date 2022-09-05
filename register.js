@@ -24,7 +24,7 @@ function addHideOptions(options) {
         options.push({
             name: 'hide',
             description: 'Whether to hide the response',
-            type: ApplicationCommandOptionType.Boolean,
+            type: ApplicationCommandOptionType.Boolean
         });
 }
 
@@ -49,7 +49,9 @@ async function registerCommands() {
             //.filter((file) => !file.beta)
             .map(getCommandBody);
         await rest
-            .put(Routes.applicationGuildCommands(activeClientID(), testingGuild), { body: commands })
+            .put(Routes.applicationGuildCommands(activeClientID(), testingGuild), {
+                body: commands
+            })
             .then(() => console.log('Successfully registered application commands for test guild.'))
             .catch(console.error);
     } else {
@@ -67,7 +69,9 @@ async function registerCommands() {
             .filter((file) => file.beta)
             .map(getCommandBody);
         await rest
-            .put(Routes.applicationGuildCommands(activeClientID(), testingGuild), { body: betaCommands })
+            .put(Routes.applicationGuildCommands(activeClientID(), testingGuild), {
+                body: betaCommands
+            })
             .then(() => console.log('Successfully registered beta commands for test guild.'))
             .catch(console.error);
     }

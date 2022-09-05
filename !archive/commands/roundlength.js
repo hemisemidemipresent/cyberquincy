@@ -70,7 +70,9 @@ async function errorMessage(message, parsingErrors) {
         .setDescription(
             'q!roundlength <round> (shows the length of one round)\nq!roundlength <start round> <end round> (shows the longest round from startRound to endRound)\nq!roundlength <start round> <end round> -t (total)'
         )
-        .addFields([{ name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }])
+        .addFields([
+            { name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+        ])
         .setColor(red);
 
     return await message.channel.send({ embeds: [errorEmbed] });

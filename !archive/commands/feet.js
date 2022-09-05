@@ -3,5 +3,5 @@ module.exports = {
     aliases: ['foot'],
     execute(message) {
         return message.channel.send('https://youtu.be/vmjeHHm1pD4');
-    },
+    }
 };

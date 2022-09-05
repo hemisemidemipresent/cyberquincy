@@ -9,7 +9,7 @@ module.exports = class TowerParser {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
             Towers.allTowers(),
-            permitted_towers.map(d => d.toLowerCase()),
+            permitted_towers.map((d) => d.toLowerCase())
         );
     }
 

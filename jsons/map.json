@@ -210,10 +210,7 @@
     },
     "quiet_street": {
         "ver": 29,
-        "len": [
-            24.4,
-            25.2
-        ],
+        "len": [24.4, 25.2],
         "lenStr": "24.4 - normal\n25.2 - moab",
         "obj": 0,
         "Cos": "N/A",
@@ -277,10 +274,7 @@
     },
     "firing_range": {
         "ver": 2,
-        "len": [
-            29.9,
-            29.7
-        ],
+        "len": [29.9, 29.7],
         "lenStr": "29.9 Left\n29.7 Right",
         "obj": 1,
         "Cos": "1000",
@@ -291,10 +285,7 @@
     },
     "adora's_temple": {
         "ver": 14,
-        "len": [
-            30.2,
-            27.8
-        ],
+        "len": [30.2, 27.8],
         "lenStr": "30.2 Horizontal\n27.8 Vertical",
         "obj": 0,
         "Cos": "N/A",
@@ -338,10 +329,7 @@
     },
     "spring_spring": {
         "ver": 10,
-        "len": [
-            24.8,
-            24.7
-        ],
+        "len": [24.8, 24.7],
         "lenStr": "24.8 Top\n24.7 Bottom",
         "obj": 0,
         "Cos": "N/A",
@@ -352,10 +340,7 @@
     },
     "bloonarius_prime": {
         "ver": 27,
-        "len": [
-            17.4,
-            21.5
-        ],
+        "len": [17.4, 21.5],
         "lenStr": "17.4 Prime\n21.5 Composite",
         "obj": 0,
         "Cos": "N/A",
@@ -410,10 +395,7 @@
     },
     "chutes": {
         "ver": 1,
-        "len": [
-            16.2,
-            16.1
-        ],
+        "len": [16.2, 16.1],
         "lenStr": "16.2 Left\n16.1 Right",
         "obj": 2,
         "Cos": "700",
@@ -424,10 +406,7 @@
     },
     "rake": {
         "ver": 1,
-        "len": [
-            15.7,
-            16.2
-        ],
+        "len": [15.7, 16.2],
         "lenStr": "15.7 Left\n16.2 Top",
         "obj": 1,
         "Cos": "1000",
@@ -449,12 +428,7 @@
     },
     "spillway": {
         "ver": 12,
-        "len": [
-            22.3,
-            23.6,
-            23.6,
-            22.5
-        ],
+        "len": [22.3, 23.6, 23.6, 22.5],
         "lenStr": "22.3 Top Left\n23.6 Top Right\n23.6 Bottom Left\n22.5 Bottom Right",
         "obj": 4,
         "Cos": "8000",
@@ -465,10 +439,7 @@
     },
     "high_finance": {
         "ver": 3,
-        "len": [
-            27.6,
-            15.6
-        ],
+        "len": [27.6, 15.6],
         "lenStr": "27.6 S-Shape\n15.6 U-Shape",
         "obj": 15,
         "Cos": "12550",
@@ -512,10 +483,7 @@
     },
     "pat's_pond": {
         "ver": 9,
-        "len": [
-            13.8,
-            14.4
-        ],
+        "len": [13.8, 14.4],
         "lenStr": "13.8 Left\n14.4 Right",
         "obj": 4,
         "Cos": "2000",
@@ -570,10 +538,7 @@
     },
     "cargo": {
         "ver": 11,
-        "len": [
-            13.9,
-            11.7
-        ],
+        "len": [13.9, 11.7],
         "lenStr": "13.9 Bloon Path\n11.7 Blimp Path",
         "obj": 2,
         "Cos": "1000",
@@ -584,10 +549,7 @@
     },
     "mesa": {
         "ver": 20,
-        "len": [
-            14.5,
-            11.1
-        ],
+        "len": [14.5, 11.1],
         "lenStr": "14.5 Left\n11.1 Right",
         "obj": 3,
         "Cos": "1500",
@@ -598,10 +560,7 @@
     },
     "infernal": {
         "ver": 15,
-        "len": [
-            19.6,
-            19.1
-        ],
+        "len": [19.6, 19.1],
         "lenStr": "19.6 Top\n19.1 Bottom",
         "obj": 0,
         "Cos": "0",
@@ -612,10 +571,7 @@
     },
     "workshop": {
         "ver": 12,
-        "len": [
-            6.8,
-            5.7
-        ],
+        "len": [6.8, 5.7],
         "lenStr": "Bloon Path:6.8\n10.2 with motor\n18.4 with extensions\n27.7 with motor and extensions\nMoab Path:5.7\n8.5 with motor\n11.6 with extensions\n17.3 with motor and extensions",
         "obj": 2,
         "Cos": "$0 - $?",
@@ -626,12 +582,7 @@
     },
     "quad": {
         "ver": 6,
-        "len": [
-            9.2,
-            9.2,
-            9.3,
-            9.7
-        ],
+        "len": [9.2, 9.2, 9.3, 9.7],
         "lenStr": "Top:\n9.2 with both overhangs\n10.1 with first overhang\n10.4 with second overhang\n11.3 without overhangs\n\nBottom:\n9.2 with both overhangs\n10.3 with first overhang\n10.1 with second overhang\n11.3 without overhangs\n\nLeft:\n9.3 with both overhangs\n10.8 with first overhang\n10.7 with second overhang\n12.1 without overhangs\n\nRight:\n9.7 with both overhangs\n10.9 with first overhang\n11.1 with second overhang\n12.3 without overhangs",
         "obj": 4,
         "Cos": "6000",
@@ -642,12 +593,7 @@
     },
     "muddy_puddles": {
         "ver": 1,
-        "len": [
-            9.7,
-            9.7,
-            9.7,
-            9.8
-        ],
+        "len": [9.7, 9.7, 9.7, 9.8],
         "lenStr": "9.7 Left, Left Middle, Right Middle\n9.8 Right",
         "obj": 0,
         "Cos": "N/A",
@@ -658,10 +604,7 @@
     },
     "#ouch": {
         "ver": 1,
-        "len": [
-            8.0,
-            10.2
-        ],
+        "len": [8.0, 10.2],
         "lenStr": "8.0 Vertical\n10.2 Horizontal",
         "obj": 1,
         "Cos": "1000",
@@ -683,12 +626,7 @@
     },
     "dark_castle": {
         "ver": 5,
-        "len": [
-            7.5,
-            7.1,
-            7.1,
-            7.2
-        ],
+        "len": [7.5, 7.1, 7.1, 7.2],
         "lenStr": "Top:\n7.5 with trees\n10 without trees\n\nMiddle (x2):\n7.1 with trees\n9.1 without trees\n\nBottom:\n7.2 with trees",
         "obj": 4,
         "Cos": "4000",

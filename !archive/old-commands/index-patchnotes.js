@@ -41,7 +41,7 @@ module.exports = {
             message.channel.send(output.substr(3998, 5997));
         }
         message.channel.send(output);
-    },
+    }
 };
 function addSpaces(str, max) {
     if (str == null || !str) {

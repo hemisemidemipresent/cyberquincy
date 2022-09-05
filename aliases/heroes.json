@@ -1,30 +1,7 @@
 {
-    "adora": [
-        "ad",
-        "ador",
-        "ado",
-        "dora",
-        "priestess",
-        "highpriestess",
-        "odour",
-        "odoura"
-    ],
-    "benjamin": [
-        "dj",
-        "ben",
-        "benj",
-        "benny",
-        "boi",
-        "benjammin",
-        "yeet",
-        "boy"
-    ],
-    "brickell": [
-        "admiral-brickell",
-        "admiral",
-        "brick",
-        "bri"
-    ],
+    "adora": ["ad", "ador", "ado", "dora", "priestess", "highpriestess", "odour", "odoura"],
+    "benjamin": ["dj", "ben", "benj", "benny", "boi", "benjammin", "yeet", "boy"],
+    "brickell": ["admiral-brickell", "admiral", "brick", "bri"],
     "churchill": [
         "captain-churchill",
         "captain_churchill",
@@ -36,57 +13,13 @@
         "hill",
         "cap"
     ],
-    "etienne": [
-        "et",
-        "eti"
-    ],
-    "ezili": [
-        "voodo",
-        "vm",
-        "ezi",
-        "ezil",
-        "voodoo"
-    ],
-    "geraldo": [
-        "ger",
-        "gerry",
-        "morshu",
-        "gerald"
-    ],
-    "gwen": [
-        "gwendolin",
-        "gwendolyn",
-        "scientist",
-        "gwendolin",
-        "gwend",
-        "gwendo",
-        "fire"
-    ],
-    "jones": [
-        "striker_jones",
-        "striker-jones",
-        "SJ",
-        "sj",
-        "striker",
-        "bones",
-        "biker"
-    ],
-    "obyn": [
-        "obyn-greenfoot",
-        "obiwan",
-        "obi",
-        "oby",
-        "obeyn"
-    ],
-    "pat": [
-        "pat-fusty",
-        "pf",
-        "fu",
-        "patfu",
-        "pat_fu",
-        "fro",
-        "snowman"
-    ],
+    "etienne": ["et", "eti"],
+    "ezili": ["voodo", "vm", "ezi", "ezil", "voodoo"],
+    "geraldo": ["ger", "gerry", "morshu", "gerald"],
+    "gwen": ["gwendolin", "gwendolyn", "scientist", "gwendolin", "gwend", "gwendo", "fire"],
+    "jones": ["striker_jones", "striker-jones", "SJ", "sj", "striker", "bones", "biker"],
+    "obyn": ["obyn-greenfoot", "obiwan", "obi", "oby", "obeyn"],
+    "pat": ["pat-fusty", "pf", "fu", "patfu", "pat_fu", "fro", "snowman"],
     "quincy": [
         "quin",
         "cyberquincy",
@@ -99,13 +32,6 @@
         "cq",
         "uincy"
     ],
-    "sauda": [
-        "saud",
-        "sau"
-    ],
-    "psi": [
-        "psy",
-        "Ψ",
-        "sigh"
-    ]
+    "sauda": ["saud", "sau"],
+    "psi": ["psy", "Ψ", "sigh"]
 }

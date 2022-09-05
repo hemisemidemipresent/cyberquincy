@@ -9,12 +9,9 @@ module.exports = {
         }
 
         let data = await Tags.destroy({
-            where: { name: message.author.id },
+            where: { name: message.author.id }
         });
-        if (data)
-            return message.channel.send(
-                `Your xp is now 0. I don't know why you did that.`
-            );
+        if (data) return message.channel.send(`Your xp is now 0. I don't know why you did that.`);
         else return message.channel.send('I dont have any data stored of you!');
     },
 
@@ -22,5 +19,5 @@ module.exports = {
         return message.channel.send(
             'Type `q!deletexp confirm` to delete your own xp. This cannot be undone'
         );
-    },
+    }
 };

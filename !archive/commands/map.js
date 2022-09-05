@@ -50,10 +50,14 @@ async function displayMapDifficultyRBS(message, mapDifficulty) {
         .setColor(cyber);
 
     mapToRbsSorted.forEach(([map, mapLength]) => {
-        infoEmbed.addFields([{ name: Aliases.toIndexNormalForm(map), value: mapLength.toFixed(1) }]);
+        infoEmbed.addFields([
+            { name: Aliases.toIndexNormalForm(map), value: mapLength.toFixed(1) }
+        ]);
     });
 
-    infoEmbed.setFooter({ text: 'average of all paths with no obstacles removed and no map mechanics' });
+    infoEmbed.setFooter({
+        text: 'average of all paths with no obstacles removed and no map mechanics'
+    });
 
     return await message.channel.send({ embeds: [infoEmbed] });
 }
@@ -63,7 +67,10 @@ async function helpMessage(message) {
         .setTitle('`q!map` HELP')
         .addFields([
             { name: '`q!map <map>`', value: 'Map Info' },
-            { name: '`q!map <map_difficulty>`', value: 'RBSs (sorted) of all maps of the given map difficulty' }
+            {
+                name: '`q!map <map_difficulty>`',
+                value: 'RBSs (sorted) of all maps of the given map difficulty'
+            }
         ])
         .setColor(cyber);
 
@@ -75,7 +82,9 @@ async function errorMessage(message, parsingErrors) {
         .setAuthor(`Sent by ${message.author.tag}`)
 
         .setTitle('ERROR')
-        .addFields([{ name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }])
+        .addFields([
+            { name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+        ])
         .setColor(cyber);
 
     return await message.channel.send({ embeds: [errorEmbed] });
@@ -91,7 +100,10 @@ module.exports = {
             return helpMessage(message);
         }
         let arr = [args[0]];
-        const parsed = CommandParser.parse(arr, new OrParser(new MapParser(), new MapDifficultyParser()));
+        const parsed = CommandParser.parse(
+            arr,
+            new OrParser(new MapParser(), new MapDifficultyParser())
+        );
         if (parsed.hasErrors()) {
             return await errorMessage(message, parsed.parsingErrors);
         }

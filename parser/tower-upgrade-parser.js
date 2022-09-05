@@ -9,7 +9,7 @@ class TowerUpgradeParser {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
             Towers.allTowerUpgrades(),
-            permittedTowerUpgrades.map(d => d.toLowerCase()),
+            permittedTowerUpgrades.map((d) => d.toLowerCase())
         );
     }
 

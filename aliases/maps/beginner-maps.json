@@ -1,120 +1,22 @@
 {
-    "logs": [
-        "l",
-        "log"
-    ],
-    "resort": [
-        "rs",
-        "res",
-        "reso"
-    ],
-    "cubism": [
-        "c",
-        "cub",
-        "cube",
-        "cubi",
-        "cubism"
-    ],
-    "candy_falls": [
-        "cy",
-        "candy",
-        "cfalls",
-        "falls"
-    ],
-    "carved": [
-        "cv",
-        "cvd",
-        "carve"
-    ],
-    "in_the_loop": [
-        "il",
-        "itl",
-        "loop",
-        "in",
-        "in_the"
-    ],
-    "tree_stump": [
-        "ts",
-        "tree",
-        "stump"
-    ],
-    "hedge": [
-        "h",
-        "hdg",
-        "hej"
-    ],
-    "skates": [
-        "s",
-        "skate",
-        "sk"
-    ],
-    "four_circles": [
-        "fc",
-        "4c",
-        "circle",
-        "four"
-    ],
-    "winter_park": [
-        "wp",
-        "winter"
-    ],
-    "frozen_over": [
-        "fo",
-        "frozen",
-        "frover"
-    ],
-    "park_path": [
-        "pk",
-        "park",
-        "ppath"
-    ],
-    "lotus_island": [
-        "li",
-        "lotus",
-        "lot",
-        "island"
-    ],
-    "alpine_run": [
-        "ar",
-        "alpine",
-        "alp",
-        "run"
-    ],
-    "town_center": [
-        "tc",
-        "town",
-        "center"
-    ],
-    "monkey_meadow": [
-        "mm",
-        "m_meadow",
-        "monkey_meadows",
-        "meadow",
-        "monkey"
-    ],
-    "end_of_the_road": [
-        "er",
-        "road",
-        "endroad",
-        "end_road",
-        "end",
-        "road",
-        "eotr"
-    ],
-    "the_cabin": [
-        "cb",
-        "cbt",
-        "cab",
-        "cabin",
-        "le_cabin"
-    ],
-    "scrapyard": [
-        "sy",
-        "scrap",
-        "scr",
-        "scraps",
-        "yard",
-        "syard",
-        "scyard"
-    ]
+    "logs": ["l", "log"],
+    "resort": ["rs", "res", "reso"],
+    "cubism": ["c", "cub", "cube", "cubi", "cubism"],
+    "candy_falls": ["cy", "candy", "cfalls", "falls"],
+    "carved": ["cv", "cvd", "carve"],
+    "in_the_loop": ["il", "itl", "loop", "in", "in_the"],
+    "tree_stump": ["ts", "tree", "stump"],
+    "hedge": ["h", "hdg", "hej"],
+    "skates": ["s", "skate", "sk"],
+    "four_circles": ["fc", "4c", "circle", "four"],
+    "winter_park": ["wp", "winter"],
+    "frozen_over": ["fo", "frozen", "frover"],
+    "park_path": ["pk", "park", "ppath"],
+    "lotus_island": ["li", "lotus", "lot", "island"],
+    "alpine_run": ["ar", "alpine", "alp", "run"],
+    "town_center": ["tc", "town", "center"],
+    "monkey_meadow": ["mm", "m_meadow", "monkey_meadows", "meadow", "monkey"],
+    "end_of_the_road": ["er", "road", "endroad", "end_road", "end", "road", "eotr"],
+    "the_cabin": ["cb", "cbt", "cab", "cabin", "le_cabin"],
+    "scrapyard": ["sy", "scrap", "scr", "scraps", "yard", "syard", "scyard"]
 }

@@ -77,7 +77,9 @@ module.exports = {
                         value: 'c-red - camo red; r-red - regrow red; f-moab - fortified moab; cr-red - camo regrow red'
                     }
                 ])
-                .setFooter({ text: 'each space represents a different set of bloons. For more info use q!round <round>' })
+                .setFooter({
+                    text: 'each space represents a different set of bloons. For more info use q!round <round>'
+                })
                 .setColor(turq);
             return embed;
         }

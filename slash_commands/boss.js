@@ -17,7 +17,9 @@ const builder = new SlashCommandBuilder()
             )
             .setRequired(true)
     )
-    .addIntegerOption((option) => option.setName('tier').setDescription('Tier of the boss').setRequired(true))
+    .addIntegerOption((option) =>
+        option.setName('tier').setDescription('Tier of the boss').setRequired(true)
+    )
     .addBooleanOption((option) =>
         option.setName('elite').setDescription('Whether the boss is elite or not').setRequired(true)
     );
@@ -54,7 +56,9 @@ async function execute(interaction) {
 }
 
 function process(data, name, tier, isElite) {
-    let embed = new Discord.EmbedBuilder().setTitle(`${isElite ? 'Elite' : ''} ${name} Tier ${tier}`);
+    let embed = new Discord.EmbedBuilder().setTitle(
+        `${isElite ? 'Elite' : ''} ${name} Tier ${tier}`
+    );
     let desc = data.desc + '\n' + isElite ? data.eliteDesc : normalDesc;
     let obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
     desc += `\n\n**Stats**:

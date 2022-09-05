@@ -18,13 +18,21 @@ module.exports = {
                 'Please type the second path upgrade (3/4/5) number in the chat'
             ),
             new SingleTextParser(
-                new LimitedStringSetValuesParser('true/false', ['true', 'false'], ['true', 'false']),
+                new LimitedStringSetValuesParser(
+                    'true/false',
+                    ['true', 'false'],
+                    ['true', 'false']
+                ),
                 'flatPackBuildings',
                 undefined,
                 'Please type the whether you have Flat Pack Buildings monkey knowledge (true/false).'
             ),
             new SingleTextParser(
-                new LimitedStringSetValuesParser('true/false', ['true', 'false'], ['true', 'false']),
+                new LimitedStringSetValuesParser(
+                    'true/false',
+                    ['true', 'false'],
+                    ['true', 'false']
+                ),
                 'biggerBanks',
                 undefined,
                 'Please type the whether you have Bigger Banks monkey knowledge (true/false).'
@@ -88,7 +96,14 @@ function getBenjaminBankHack(level) {
     if (level < 9) return 5;
     return 12;
 }
-function calculate(bankTier, flatPackBuilding, BiggerBanks, hackPercent, crosspathNum, difficultyId) {
+function calculate(
+    bankTier,
+    flatPackBuilding,
+    BiggerBanks,
+    hackPercent,
+    crosspathNum,
+    difficultyId
+) {
     if (!crosspathNum) crosspathNum = 0;
     hackPercent = hackPercent / 100;
     let maxCapacity = 0;

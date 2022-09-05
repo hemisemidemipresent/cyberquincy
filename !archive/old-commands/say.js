@@ -10,5 +10,5 @@ module.exports = {
             await message.channel.send(args.join(' '));
             await message.channel.send(args.join(' '));
         }
-    },
+    }
 };

@@ -6,5 +6,5 @@ module.exports = {
             return await message.channel.send('its !suggest not q!suggest');
         }
         await message.channel.send(`suggest stuff at ${discord}`);
-    },
+    }
 };

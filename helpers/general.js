@@ -7,9 +7,9 @@ function is_fn(f) {
 }
 
 function numberWithCommas(x) {
-    let [ones, decimals] = x.toString().split('.')
-    ones = ones.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-    return decimals ? `${ones}.${decimals}` : ones
+    let [ones, decimals] = x.toString().split('.');
+    ones = ones.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    return decimals ? `${ones}.${decimals}` : ones;
 }
 
 function numberAsCost(x) {
@@ -55,14 +55,9 @@ function permutatePaddings(arr, newLength) {
 
     for (var i = 0; i < arr.length + 1; i++) {
         endArr = arr.slice(i);
-        const recursiveResults = permutatePaddings(
-            endArr,
-            endArr.length + numPads - 1
-        );
+        const recursiveResults = permutatePaddings(endArr, endArr.length + numPads - 1);
         for (var j = 0; j < recursiveResults.length; j++) {
-            results.push(
-                arr.slice(0, i).concat(null).concat(recursiveResults[j])
-            );
+            results.push(arr.slice(0, i).concat(null).concat(recursiveResults[j]));
         }
     }
 
@@ -131,11 +126,7 @@ function chunk(array, size) {
 }
 
 function arraysEqual(_arr1, _arr2) {
-    if (
-        !Array.isArray(_arr1) ||
-        !Array.isArray(_arr2) ||
-        _arr1.length !== _arr2.length
-    )
+    if (!Array.isArray(_arr1) || !Array.isArray(_arr2) || _arr1.length !== _arr2.length)
         return false;
 
     var arr1 = _arr1.concat().sort();
@@ -183,21 +174,21 @@ function timeSince(date) {
 
     let interval = seconds / 86400;
     if (interval > 1) {
-      return Math.floor(interval) + " days";
+        return Math.floor(interval) + ' days';
     }
     interval = seconds / 3600;
     if (interval > 1) {
-      return Math.floor(interval) + " hours";
+        return Math.floor(interval) + ' hours';
     }
     interval = seconds / 60;
     if (interval > 1) {
-      return Math.floor(interval) + " minutes";
+        return Math.floor(interval) + ' minutes';
     }
-    return Math.floor(seconds) + " seconds";
+    return Math.floor(seconds) + ' seconds';
 }
 
-function round(num, numDigitsAfterDecimal=0) {
-    return Math.round(num * 10**numDigitsAfterDecimal) / 10**numDigitsAfterDecimal
+function round(num, numDigitsAfterDecimal = 0) {
+    return Math.round(num * 10 ** numDigitsAfterDecimal) / 10 ** numDigitsAfterDecimal;
 }
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
@@ -226,5 +217,5 @@ module.exports = {
     round,
     HEAVY_CHECK_MARK,
     WHITE_HEAVY_CHECK_MARK,
-    RED_X,
+    RED_X
 };

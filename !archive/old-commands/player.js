@@ -102,10 +102,7 @@ class Player {
     zeroFill(number, width) {
         width -= number.toString().length;
         if (width > 0) {
-            return (
-                new Array(width + (/\./.test(number) ? 2 : 1)).join('0') +
-                number
-            );
+            return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number;
         }
         return number + ''; // always return a string
     }
@@ -114,7 +111,7 @@ class Player {
         let url = `https://fast-static-api.nkstatic.com/storage/static/11/${this.userID}/public-stats`;
 
         let body = await axios.get(url, {
-            headers: { 'User-Agent': UserAgent },
+            headers: { 'User-Agent': UserAgent }
         });
         let obj = body.data;
         let medals = obj.raceMedals;
@@ -128,17 +125,7 @@ class Player {
         let fiftyp = medals['Silver'] ?? 0;
         let seveny = medals['Bronze'] ?? 0;
 
-        this.medals = [
-            first,
-            second,
-            third,
-            fifty,
-            one,
-            ten,
-            twfive,
-            fiftyp,
-            seveny,
-        ];
+        this.medals = [first, second, third, fifty, one, ten, twfive, fiftyp, seveny];
     }
 
     async formatMedals() {
@@ -151,14 +138,11 @@ class Player {
             'GoldSilver',
             'DoubleSilver',
             'Silver',
-            'Bronze',
+            'Bronze'
         ];
         let res = [];
         for (let i = 0; i < emojiNames.length; i++) {
-            res.push(
-                this.getEmojiFromId(raceEmojis[emojiNames[i]]) +
-                    `: ${this.medals[i]}`
-            );
+            res.push(this.getEmojiFromId(raceEmojis[emojiNames[i]]) + `: ${this.medals[i]}`);
         }
 
         return res.join('\n');

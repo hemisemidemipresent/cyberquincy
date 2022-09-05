@@ -46,9 +46,7 @@ function getTimeNeeded(command, message) {
     if (!isNaN(command.cooldown)) {
         cooldown = command.cooldown;
     } else if (message.channel.topic) {
-        let regex_match = message.channel.topic.match(
-            CHANNEL_TOPIC_COOLDOWN_REGEX
-        );
+        let regex_match = message.channel.topic.match(CHANNEL_TOPIC_COOLDOWN_REGEX);
         if (regex_match) {
             cooldown = regex_match[1];
         }
@@ -73,5 +71,5 @@ async function notifyUser(command, secondsLeft, message) {
 }
 
 module.exports = {
-    handleCooldown,
+    handleCooldown
 };

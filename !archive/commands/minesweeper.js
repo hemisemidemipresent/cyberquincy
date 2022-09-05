@@ -8,7 +8,10 @@ module.exports = {
     aliases: ['mine', 'ms', 'sweeper'],
 
     async execute(message, args) {
-        const parsed = CommandParser.parse(args, new OptionalParser(new NaturalNumberParser(1, 20)));
+        const parsed = CommandParser.parse(
+            args,
+            new OptionalParser(new NaturalNumberParser(1, 20))
+        );
         let mines = 8;
         if (parsed.hasErrors()) {
             let mebed = new Discord.EmbedBuilder().addFields([

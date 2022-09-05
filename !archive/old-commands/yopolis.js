@@ -7,7 +7,10 @@ module.exports = {
     name: 'monkeyopolis',
     aliases: ['mp', 'yopolis', '005'],
     async execute(message, args) {
-        let parsed = CommandParser.parse(args, new AnyOrderParser(new CashParser(), new NaturalNumberParser(1, 69)));
+        let parsed = CommandParser.parse(
+            args,
+            new AnyOrderParser(new CashParser(), new NaturalNumberParser(1, 69))
+        );
         if (parsed.hasErrors()) {
             return await module.exports.errorMessage(message.channel, parsed.parsingErrors);
         }

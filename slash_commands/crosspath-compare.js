@@ -36,7 +36,9 @@ async function embedBloonology(towerName, upgrade) {
     try {
         res = await axios.get(link);
     } catch {
-        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
+        return new Discord.EmbedBuilder()
+            .setColor(red)
+            .setTitle('Something went wrong while fetching the data');
     }
     let body = res.data;
 
@@ -77,7 +79,9 @@ async function embedBloonology(towerName, upgrade) {
         .split(/(?:__Changes from Previous Tier__)|(?:Changes from previous tier:)/i)[0];
 
     const crosspathDescriptions = crosspathUpgrades.map((u) =>
-        cleanDescription(descriptions.find((description) => description.substr(0, 3) == u).substr(3))
+        cleanDescription(
+            descriptions.find((description) => description.substr(0, 3) == u).substr(3)
+        )
     );
 
     const crosspathBenefits = crosspathDescriptions.map((desc) =>
@@ -90,10 +94,15 @@ async function embedBloonology(towerName, upgrade) {
     );
 
     const title =
-        Towers.towerUpgradeFromTowerAndPathAndTier(towerName, ...Towers.pathTierFromUpgradeSet(noCrosspathUpgrade)) +
-        ' Crosspathing Benefits';
+        Towers.towerUpgradeFromTowerAndPathAndTier(
+            towerName,
+            ...Towers.pathTierFromUpgradeSet(noCrosspathUpgrade)
+        ) + ' Crosspathing Benefits';
 
-    let embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
+    let embed = new Discord.EmbedBuilder()
+        .setTitle(title)
+        .setFooter({ text: footer })
+        .setColor(cyber);
 
     crosspathUpgrades.forEach((u, idx) => {
         embed.addFields([{ name: u, value: crosspathBenefits[idx] || '\u200b', inline: true }]);

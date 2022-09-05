@@ -55,7 +55,10 @@ class RoundParser {
         if (isNaN(arg)) {
             var result = arg.match(/(?:round|r)(\d+)/);
             if (result) return result[1];
-            else throw new UserCommandError(`Round must be of form \`15\`, \`R15\` or \`round15\` (Got \`${arg}\` instead)`);
+            else
+                throw new UserCommandError(
+                    `Round must be of form \`15\`, \`R15\` or \`round15\` (Got \`${arg}\` instead)`
+                );
         } else {
             return arg;
         }

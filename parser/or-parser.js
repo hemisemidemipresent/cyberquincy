@@ -1,4 +1,4 @@
-const DeveloperCommandError = require("../exceptions/developer-command-error");
+const DeveloperCommandError = require('../exceptions/developer-command-error');
 
 // to allow various ways to use parse arguments and ultimately use a command
 class OrParser {
@@ -24,7 +24,7 @@ class OrParser {
     }
 
     parse() {
-        throw `Must not parse directly from the OrParser. Must parse argument list parsers instead`
+        throw `Must not parse directly from the OrParser. Must parse argument list parsers instead`;
     }
 }
 

@@ -99,11 +99,9 @@ class BossLeaderboard {
         let playerObj = {
             userID: obj.userID,
             time: 1000000000 - obj.score,
-            isNew: obj.isNew,
+            isNew: obj.isNew
         };
-        playerObj.fTime = new Date(playerObj.time)
-            .toISOString()
-            .substring(14, 23);
+        playerObj.fTime = new Date(playerObj.time).toISOString().substring(14, 23);
         let user = userIDs.find((user) => {
             return user.userID == playerObj.userID;
         });

@@ -12,7 +12,8 @@ module.exports = {
             new RoundParser('PREDET'),
             new OrParser(new RoundParser('PREDET'), new EmptyParser())
         );
-        if (parsed.hasErrors()) return await module.exports.errorMessage(message, parsed.parsingErrors);
+        if (parsed.hasErrors())
+            return await module.exports.errorMessage(message, parsed.parsingErrors);
 
         let rounds = parsed.rounds.sort((a, b) => a - b);
         const startround = rounds[0];
@@ -26,7 +27,10 @@ module.exports = {
         let errorEmbed = new Discord.EmbedBuilder()
             .setTitle(`${errors.join('\n')}`)
             .addFields([
-                { name: 'find the RBE from round X to round Y', value: '**q!income <startround> <endround>**' },
+                {
+                    name: 'find the RBE from round X to round Y',
+                    value: '**q!income <startround> <endround>**'
+                },
                 {
                     name: 'other difficulties',
                     value: '**q!income <startround> <endround> <difficulty>**\n(<difficulty> includes deflation, half cash, abr, apop is random)'
@@ -36,7 +40,9 @@ module.exports = {
         return await message.channel.send({ embeds: [errorEmbed] });
     },
     async oneRound(startround, channel) {
-        return await channel.send(`Round ${startround} has a rbe(pop count) of ${r[startround].rbe}`);
+        return await channel.send(
+            `Round ${startround} has a rbe(pop count) of ${r[startround].rbe}`
+        );
     },
     async showData(startround, endround, channel) {
         let totalpopcount = r[endround].cumulativeRBE - r[startround - 1].cumulativeRBE;

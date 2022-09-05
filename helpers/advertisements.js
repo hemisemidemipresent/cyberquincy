@@ -24,10 +24,15 @@ function botOffline(message) {
     const serverEmbed = new Discord.EmbedBuilder()
         .setTitle('Are you tired of the bot being offline?')
         .addFields([
-            { name: 'Join the discord server!', value: `Get notifications for new updates and bot status at ${discord}` }
+            {
+                name: 'Join the discord server!',
+                value: `Get notifications for new updates and bot status at ${discord}`
+            }
         ])
         .setColor(colours['blurple'])
-        .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
+        .setFooter({
+            text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+        });
 
     message.channel.send({ embeds: [serverEmbed] });
 }
@@ -42,7 +47,9 @@ function ownServer(message) {
             }
         ])
         .setColor(colours['turq'])
-        .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
+        .setFooter({
+            text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+        });
 
     message.channel.send(inviteEmbed);
 }
@@ -50,19 +57,27 @@ function ownServer(message) {
 function bugReport(message) {
     const bugEmbed = new Discord.EmbedBuilder()
         .setTitle('Want to suggest a new feature? Fix a typo? Report a bug?')
-        .addFields([{ name: 'join the discord server!', value: `suggest a new feature and report a bug at ${discord}` }])
+        .addFields([
+            {
+                name: 'join the discord server!',
+                value: `suggest a new feature and report a bug at ${discord}`
+            }
+        ])
         .setColor(colours['turq'])
-        .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
+        .setFooter({
+            text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help'
+        });
 
     message.channel.send(bugEmbed);
 }
 
 function upvoteBot(message) {
-    const upvoteEmbed = new Discord.EmbedBuilder()
-        .setTitle('Help support the bot!')
-        .addFields([
-            { name: 'upvote the bot!', value: '[discordbotlist link](https://discordbotlist.com/bots/cyber-quincy)' }
-        ]);
+    const upvoteEmbed = new Discord.EmbedBuilder().setTitle('Help support the bot!').addFields([
+        {
+            name: 'upvote the bot!',
+            value: '[discordbotlist link](https://discordbotlist.com/bots/cyber-quincy)'
+        }
+    ]);
 }
 
 module.exports = {

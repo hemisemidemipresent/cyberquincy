@@ -15,7 +15,8 @@ module.exports = {
         // The command being queried can either be a command name
         // or a command alias
         let command =
-            client.commands.get(args[0]) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(args[0]));
+            client.commands.get(args[0]) ||
+            client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(args[0]));
 
         if (command) {
             return this.aliasMessage(message, command);
@@ -38,7 +39,9 @@ module.exports = {
         } else {
             aliasEmbed = new Discord.EmbedBuilder()
                 .setTitle(`There are no command-aliases for \`q!${command.name}\``)
-                .setDescription('The full list of commands can be found at https://cq.netify.app/docs/#')
+                .setDescription(
+                    'The full list of commands can be found at https://cq.netify.app/docs/#'
+                )
                 .setColor(colours['cyber']);
         }
 

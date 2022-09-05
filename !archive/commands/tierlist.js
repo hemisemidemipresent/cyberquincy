@@ -25,5 +25,5 @@ module.exports = {
         return await message.channel.send(
             'Please specify a proper version! not every version has a tier list! (12.0+ only)'
         );
-    },
+    }
 };

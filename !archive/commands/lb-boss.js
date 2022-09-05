@@ -23,7 +23,10 @@ module.exports = {
             return await module.exports.helpMessage(message);
         }
 
-        const parsed = CommandParser.parse(args, new OptionalParser(new NaturalNumberParser(1, ids.length)));
+        const parsed = CommandParser.parse(
+            args,
+            new OptionalParser(new NaturalNumberParser(1, ids.length))
+        );
         if (parsed.hasErrors()) {
             return await this.errorMessage(message, parsed.parsingErrors);
         }
@@ -78,7 +81,8 @@ module.exports = {
             content: 'Select which leaderboard you want to see',
             components: [row]
         });
-        const filter = (interaction) => interaction.customId === 'type' && interaction.user.id == message.author.id; //  nothing basically
+        const filter = (interaction) =>
+            interaction.customId === 'type' && interaction.user.id == message.author.id; //  nothing basically
         const collector = await message.channel.createMessageComponentCollector({
             filter,
             time: 5000
@@ -90,7 +94,9 @@ module.exports = {
         });
         collector.on('end', async (collected) => {
             if (!collected.first()) {
-                let errorEmbed = new Discord.EmbedBuilder().setTitle(`You took too long to select`).setColor(magenta);
+                let errorEmbed = new Discord.EmbedBuilder()
+                    .setTitle(`You took too long to select`)
+                    .setColor(magenta);
                 return await message.channel.send({ embeds: [errorEmbed] });
             }
         });
@@ -124,7 +130,10 @@ module.exports = {
                         '`q!blb 1 50` - shows lb from 1st place to 50th place\n' +
                         `\`q!blb 5\` - shows lb for the 5th boss event\n`
                 },
-                { name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+                {
+                    name: 'Likely Cause(s)',
+                    value: parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+                }
             ])
             .setColor(red);
 
@@ -140,7 +149,10 @@ module.exports = {
                         '`q!blb 1 50` - shows lb from 1st place to 50th place\n' +
                         `\`q!blb 5\` - shows lb for the 5th boss event\n`
                 },
-                { name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+                {
+                    name: 'Likely Cause(s)',
+                    value: parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+                }
             ])
             .setColor(red);
 
@@ -162,7 +174,8 @@ module.exports = {
         let lb = new BossLeaderboard(data, obj);
         await lb.init();
         let output = '';
-        if (parsed.natural_numbers) output = lb.getWall(parsed.natural_numbers[0], parsed.natural_numbers[1]);
+        if (parsed.natural_numbers)
+            output = lb.getWall(parsed.natural_numbers[0], parsed.natural_numbers[1]);
         else output = lb.getWall();
         if (output.length > 4096) {
             return await module.exports.errorMessageI(interaction, ['too many characters']);
@@ -172,7 +185,9 @@ module.exports = {
             .setURL(race.getBossURL(bossID, obj))
             .setDescription('```' + output + '```')
 
-            .setFooter({ text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)' })
+            .setFooter({
+                text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)'
+            })
             .setColor(cyber)
             .setTimestamp();
         await interaction.update({

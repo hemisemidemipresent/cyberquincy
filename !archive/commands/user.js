@@ -1,12 +1,32 @@
 const { default: axios } = require('axios');
-const { EmbedBuilder, SelectMenuBuilder, ActionRowBuilder, MessageAttachment } = require('discord.js');
+const {
+    EmbedBuilder,
+    SelectMenuBuilder,
+    ActionRowBuilder,
+    MessageAttachment
+} = require('discord.js');
 const { palered } = require('../jsons/colours.json');
 const { UserAgent } = require('../1/config.json');
 const { getUsernames } = require('../helpers/usernames');
 const Emojis = require('../jsons/emojis.json');
-const { camo, lead, purple, regrow, ceramic, moab, bfb, zomg, ddt, bad } = Emojis['614111055890612225'].bloon;
-const { adora, benjamin, brickell, churchill, etienne, ezili, geraldo, gwen, jones, obyn, pat, psi, quincy, sauda } =
-    Emojis['614111055890612225'].hero;
+const { camo, lead, purple, regrow, ceramic, moab, bfb, zomg, ddt, bad } =
+    Emojis['614111055890612225'].bloon;
+const {
+    adora,
+    benjamin,
+    brickell,
+    churchill,
+    etienne,
+    ezili,
+    geraldo,
+    gwen,
+    jones,
+    obyn,
+    pat,
+    psi,
+    quincy,
+    sauda
+} = Emojis['614111055890612225'].hero;
 const raceEmojis = Emojis['753449196132237425'].race;
 
 module.exports = {
@@ -33,7 +53,9 @@ module.exports = {
             });
         } catch {
             return await message.channel.send({
-                embeds: [new Discord.EmbedBuilder().setDescription('invalid user id').setColor(palered)]
+                embeds: [
+                    new Discord.EmbedBuilder().setDescription('invalid user id').setColor(palered)
+                ]
             });
         }
         let obj = body.data;
@@ -48,7 +70,12 @@ module.exports = {
             this.botMessage = await message.channel.send({
                 embeds: [embed],
                 components: [this.row],
-                files: [new MessageAttachment(Buffer.from(JSON.stringify(obj, null, 1)), userID + '.json')]
+                files: [
+                    new MessageAttachment(
+                        Buffer.from(JSON.stringify(obj, null, 1)),
+                        userID + '.json'
+                    )
+                ]
             });
             await this.createCollector(message);
         } else
@@ -293,7 +320,10 @@ function createSelector(obj) {
         if (monke.name) option.description = monke.name;
         options.push(option);
     }
-    return new SelectMenuBuilder().setCustomId('towerSelector').setPlaceholder('Nothing selected').addOptions(options);
+    return new SelectMenuBuilder()
+        .setCustomId('towerSelector')
+        .setPlaceholder('Nothing selected')
+        .addOptions(options);
 }
 function isEmpty(obj) {
     for (var key in obj) {

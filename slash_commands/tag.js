@@ -64,7 +64,9 @@ function populateTagCache() {
     const cache = new Collection();
 
     for (const [key, value] of Object.entries(data)) {
-        value.embeds?.forEach((embed, i) => (value.embeds[i] = new EmbedBuilder(embed).setColor(embed.color ?? cyber)));
+        value.embeds?.forEach(
+            (embed, i) => (value.embeds[i] = new EmbedBuilder(embed).setColor(embed.color ?? cyber))
+        );
 
         value.content ??= '';
 

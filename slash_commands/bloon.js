@@ -43,7 +43,9 @@ builder = new SlashCommandBuilder()
             .setRequired(false)
             .addChoices({ name: 'yes', value: 'Yes' })
     )
-    .addIntegerOption((option) => option.setName('round').setDescription('Round the bloon is on').setRequired(false));
+    .addIntegerOption((option) =>
+        option.setName('round').setDescription('Round the bloon is on').setRequired(false)
+    );
 
 function validateInput(interaction) {
     const round = interaction.options.getInteger('round');
@@ -89,13 +91,24 @@ async function execute(interaction) {
             { name: 'Health Factor', value: `${healthRampingText}`, inline: true },
             { name: 'Direct Children', value: `${enemy.children(true)}`, inline: true },
             { name: 'Cash Earned', value: `${enemy.cash(true)}`, inline: true },
-            { name: 'Cash Factor', value: `${roundHelper.cashFactorForRound(round)}`, inline: true },
-            { name: `Normal Round Appearances${ignoringSuper}`, value: `${enemy.roundAppearances('r', true)}` },
-            { name: `ABR Round Appearances${ignoringSuper}`, value: `${enemy.roundAppearances('ar', true)}` }
+            {
+                name: 'Cash Factor',
+                value: `${roundHelper.cashFactorForRound(round)}`,
+                inline: true
+            },
+            {
+                name: `Normal Round Appearances${ignoringSuper}`,
+                value: `${enemy.roundAppearances('r', true)}`
+            },
+            {
+                name: `ABR Round Appearances${ignoringSuper}`,
+                value: `${enemy.roundAppearances('ar', true)}`
+            }
         ]);
 
     const notes = enemy.notes();
-    if (notes.length > 0) embed.addFields([{ name: 'Notes', value: `${notes.map((n) => ` • ${n}`).join('\n')}` }]);
+    if (notes.length > 0)
+        embed.addFields([{ name: 'Notes', value: `${notes.map((n) => ` • ${n}`).join('\n')}` }]);
 
     return await interaction.reply({
         embeds: [embed]

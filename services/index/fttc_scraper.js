@@ -64,7 +64,7 @@ function sheetFTTC() {
 }
 
 async function scrapeAllFTTCCombos() {
-    const sheet = sheetFTTC()
+    const sheet = sheetFTTC();
 
     await sheet.loadCells(`${COLS['SIX+'].MAP}${1}:${COLS['SIX+'].CURRENT}${sheet.rowCount}`);
 
@@ -92,7 +92,10 @@ async function scrapeAllFTTCCombos() {
 
 function sectionHeader(mapRow, sheet) {
     // Looks for "One|Two|...|Five|Six+ Towers"
-    headerRegex = new RegExp(`(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`, 'i');
+    headerRegex = new RegExp(
+        `(${Object.keys(COLS).join('|').replace('+', '\\+')}) Tower Types?`,
+        'i'
+    );
 
     // Check cell to see if it's a header indicating the number of towers
     let candidateHeaderCell = sheet.getCellByA1(`${COLS['ONE'].MAP}${mapRow}`);
@@ -129,7 +132,11 @@ async function getRowStandardData(entryRow, colset) {
             });
     } else {
         for (var i = 0; i < colset['TOWERS'].length; i++) {
-            values.TOWERS.push(Aliases.getCanonicalForm(sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value));
+            values.TOWERS.push(
+                Aliases.getCanonicalForm(
+                    sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value
+                )
+            );
         }
     }
 
@@ -158,7 +165,7 @@ async function getRowStandardData(entryRow, colset) {
 }
 
 async function getRowAltData(entryRow, colset) {
-    const sheet = sheetFTTC()
+    const sheet = sheetFTTC();
     mapCell = sheet.getCellByA1(`${colset.MAP}${entryRow}`);
 
     notes = mapCell.note;
@@ -180,4 +187,4 @@ async function getRowAltData(entryRow, colset) {
         });
 }
 
-module.exports = { scrapeAllFTTCCombos }
+module.exports = { scrapeAllFTTCCombos };

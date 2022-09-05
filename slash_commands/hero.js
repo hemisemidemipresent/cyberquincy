@@ -18,7 +18,10 @@ const builder = new SlashCommandBuilder()
     .setDescription('Find information for each hero')
     .addStringOption(heroOption)
     .addIntegerOption((option) =>
-        option.setName('hero_lvl').setDescription('The hero level that you want the information for').setRequired(false)
+        option
+            .setName('hero_lvl')
+            .setDescription('The hero level that you want the information for')
+            .setRequired(false)
     );
 
 function validateInput(interaction) {
@@ -34,7 +37,9 @@ async function embedBloonology(heroName, level) {
     try {
         res = await axios.get(link);
     } catch {
-        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
+        return new Discord.EmbedBuilder()
+            .setColor(red)
+            .setTitle('Something went wrong while fetching the data');
     }
 
     const body = res.data;
@@ -44,7 +49,9 @@ async function embedBloonology(heroName, level) {
     const desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
     const descWithoutLevel = desc.split('\n').slice(1).join('\n');
     if (typeof desc != 'string') {
-        return new Discord.EmbedBuilder().setColor(red).setTitle('The bloonology datapiece is missing');
+        return new Discord.EmbedBuilder()
+            .setColor(red)
+            .setTitle('The bloonology datapiece is missing');
     }
 
     const title = level

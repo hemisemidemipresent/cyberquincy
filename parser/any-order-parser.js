@@ -8,7 +8,7 @@ class AnyOrderParser {
     }
 
     parse() {
-        throw `Must not parse directly from the AnyOrderParser. Must parse argument list parsers instead`
+        throw `Must not parse directly from the AnyOrderParser. Must parse argument list parsers instead`;
     }
 }
 

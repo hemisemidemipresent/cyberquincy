@@ -95,12 +95,16 @@ async function calc(interaction) {
         c = e.message.match(/Unexpected character at index \d+: (.)/)[1];
         if (c) {
             footer = '';
-            if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
+            if (c === '<')
+                footer =
+                    "Did you try to tag another discord user? That's definitely not allowed here.";
             return await interaction.reply({
                 embeds: [
                     new Discord.EmbedBuilder()
                         .setTitle(`Unexpected character "${c}"`)
-                        .setDescription(`"${c}" is not a valid character in the \`/calc\` expression.`)
+                        .setDescription(
+                            `"${c}" is not a valid character in the \`/calc\` expression.`
+                        )
                         .setColor(red)
                         .setFooter({ text: footer })
                 ],
@@ -158,10 +162,9 @@ async function calc(interaction) {
             // Catches nonsensical tokens
             return await interaction.reply({
                 embeds: [
-                    new Discord.EmbedBuilder()
-                        .setTitle(e.message)
-                        .setColor(red)
-                        .setFooter({ text: 'due to manipulation, your full input will not be shown' })
+                    new Discord.EmbedBuilder().setTitle(e.message).setColor(red).setFooter({
+                        text: 'due to manipulation, your full input will not be shown'
+                    })
                 ]
             });
         } else console.log(e);
@@ -193,7 +196,9 @@ async function calc(interaction) {
         return await interaction.reply({
             embeds: [
                 new Discord.EmbedBuilder()
-                    .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
+                    .setTitle(
+                        gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))
+                    ) // At MOST 1 decimal place
                     .setDescription(`\`${expression}\``)
                     .setColor(colours['cyber'])
             ]
@@ -207,7 +212,10 @@ function isTowerUpgradeCrosspath(t) {
 
     let [tower, upgrades] = t.split(/[!#]/);
 
-    return Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) && Towers.isValidUpgradeSet(upgrades);
+    return (
+        Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) &&
+        Towers.isValidUpgradeSet(upgrades)
+    );
 }
 
 function costOfTowerUpgradeCrosspath(t, difficulty) {
@@ -226,7 +234,12 @@ function costOfTowerUpgradeCrosspath(t, difficulty) {
     let cost = 0;
     if (t.includes('#') || upgrades == '000') {
         // Total cost
-        cost = Towers.totalTowerUpgradeCrosspathCostMult(costs, jsonTowerName, upgrades, difficulty);
+        cost = Towers.totalTowerUpgradeCrosspathCostMult(
+            costs,
+            jsonTowerName,
+            upgrades,
+            difficulty
+        );
     } else if (t.includes('!')) {
         // Individual upgrade cost
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
@@ -270,7 +283,9 @@ function parseAndValueToken(t, i, difficulty) {
         } else {
             s = t.charAt(0) + t.charAt(1) + '...';
         }
-        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${s}" of length ${t.length}`);
+        throw new UnrecognizedTokenError(
+            `at input ${i}: Unrecognized token "${s}" of length ${t.length}`
+        );
     }
 }
 

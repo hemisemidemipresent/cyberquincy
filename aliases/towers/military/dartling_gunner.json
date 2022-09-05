@@ -4,7 +4,15 @@
     "100": ["focused_firing", "focused"],
     "200": ["laser_shock", "lshock"],
     "300": ["laser_cannon", "lcan"],
-    "400": ["plasma_accelerator", "accelerator", "acc", "accel", "accelerate", "paccel", "plasmacc"],
+    "400": [
+        "plasma_accelerator",
+        "accelerator",
+        "acc",
+        "accel",
+        "accelerate",
+        "paccel",
+        "plasmacc"
+    ],
     "500": ["ray_of_doom", "rod", "ray", "ray_of_disappointment"],
 
     "010": ["advanced_targeting", "atargeting"],

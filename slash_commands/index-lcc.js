@@ -19,7 +19,10 @@ const { paleyellow } = require('../jsons/colours.json');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
-let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
+let mapOption = new SlashCommandStringOption()
+    .setName('map')
+    .setDescription('Map')
+    .setRequired(true);
 
 builder = new SlashCommandBuilder()
     .setName('lcc')
@@ -90,7 +93,9 @@ async function lcc(btd6_map) {
     }
 
     // Embed and send the message
-    var challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LCC Combo`).setColor(paleyellow);
+    var challengeEmbed = new Discord.EmbedBuilder()
+        .setTitle(`${values.MAP} LCC Combo`)
+        .setColor(paleyellow);
 
     for (field in values) {
         if (values[field])

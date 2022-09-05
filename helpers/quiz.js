@@ -15,7 +15,7 @@ module.exports = {
 
             return `Streak: ${streak}`;
         } else return 'No Streak Currently';
-    },
+    }
 };
 function checkIfStreak(userID) {
     // returns boolean whether use has a streak or not

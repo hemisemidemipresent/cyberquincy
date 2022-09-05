@@ -1,4 +1,4 @@
-const EnemyHelper = require('../helpers/enemies')
+const EnemyHelper = require('../helpers/enemies');
 
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
 // we want to only maintain an alias of unmodified bloon names but we also want to be able to parse things like fmoab, cceramic, rrainbow, etc...

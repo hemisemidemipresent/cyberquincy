@@ -40,7 +40,9 @@ async function handleCommand(message) {
 
         // ...and have no following space (it's a common mistake)
         if (c.startsWith(PREFIX + ' ')) {
-            return await message.channel.send('There isnt supposed to be a space between q! and the command name.');
+            return await message.channel.send(
+                'There isnt supposed to be a space between q! and the command name.'
+            );
         }
 
         // Command tokens are space(or newline)-separated tokens starting immediately after the `!`
@@ -105,7 +107,9 @@ async function handleCommand(message) {
         }
 
         if (command.beta && message.channel.guild.id != cyberquincyServer) {
-            return message.channel.send(`This command is in beta, join ${discord} to beta test the command`);
+            return message.channel.send(
+                `This command is in beta, join ${discord} to beta test the command`
+            );
         }
         await command.execute(message, canonicalArgs, commandName);
 
@@ -138,7 +142,12 @@ async function handleCommand(message) {
             const errorEmbed = new Discord.EmbedBuilder()
                 .setColor(colours['red'])
                 .setDescription('Oh no! Something went wrong!')
-                .addFields([{ name: '~~I got bonked by a DDT again~~', value: `Please [report the bug](${discord})` }]);
+                .addFields([
+                    {
+                        name: '~~I got bonked by a DDT again~~',
+                        value: `Please [report the bug](${discord})`
+                    }
+                ]);
             return await message.channel.send({ embeds: [errorEmbed] });
         } catch {
             // missing perms, probably

@@ -1,17 +1,19 @@
-const UserCommandError = require("../exceptions/user-command-error");
+const UserCommandError = require('../exceptions/user-command-error');
 
 // Parses a user listed in the BTD6 Index
 class PersonParser {
     type() {
-        return "person";
+        return 'person';
     }
 
     parse(arg) {
-        const result = arg.match(/user#(.*)/)
+        const result = arg.match(/user#(.*)/);
         if (result) {
             return result[1];
         } else {
-            throw new UserCommandError(`Username must start with \`user#\` or \`u#\` but got ${arg} instead`)
+            throw new UserCommandError(
+                `Username must start with \`user#\` or \`u#\` but got ${arg} instead`
+            );
         }
     }
 }

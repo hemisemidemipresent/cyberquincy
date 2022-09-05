@@ -10,18 +10,28 @@ builder = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName('by_category')
-            .setDescription('Input the amount of money you sacrificed into the temple (you can get this with `/calc`)') //
+            .setDescription(
+                'Input the amount of money you sacrificed into the temple (you can get this with `/calc`)'
+            ) //
             .addIntegerOption((option) =>
-                option.setName('primary').setDescription('Total amount of money in PRIMARY towers sacrificed')
+                option
+                    .setName('primary')
+                    .setDescription('Total amount of money in PRIMARY towers sacrificed')
             )
             .addIntegerOption((option) =>
-                option.setName('military').setDescription('Total amount of money in MILITARY towers sacrificed')
+                option
+                    .setName('military')
+                    .setDescription('Total amount of money in MILITARY towers sacrificed')
             )
             .addIntegerOption((option) =>
-                option.setName('magic').setDescription('Total amount of money in MAGIC towers sacrificed')
+                option
+                    .setName('magic')
+                    .setDescription('Total amount of money in MAGIC towers sacrificed')
             )
             .addIntegerOption((option) =>
-                option.setName('support').setDescription('amt of money in SUPPORT towers sacrificed')
+                option
+                    .setName('support')
+                    .setDescription('amt of money in SUPPORT towers sacrificed')
             )
     )
     .addSubcommand((subcommand) =>
@@ -54,10 +64,22 @@ async function by_category(interaction) {
     embed.setColor(yellow);
     // there is probably a better way
     embed.addFields([
-        { name: `Primary sacrifice ($${primary})`, value: t[0][0] + '\n' + levelToString(cashToLevel(primary), 0) },
-        { name: `Military sacrifice ($${military})`, value: t[1][0] + '\n' + levelToString(cashToLevel(military), 1) },
-        { name: `Magic sacrifice ($${magic})`, value: t[2][0] + '\n' + levelToString(cashToLevel(magic), 2) },
-        { name: `Support sacrifice ($${support})`, value: t[3][0] + '\n' + levelToString(cashToLevel(support), 3) }
+        {
+            name: `Primary sacrifice ($${primary})`,
+            value: t[0][0] + '\n' + levelToString(cashToLevel(primary), 0)
+        },
+        {
+            name: `Military sacrifice ($${military})`,
+            value: t[1][0] + '\n' + levelToString(cashToLevel(military), 1)
+        },
+        {
+            name: `Magic sacrifice ($${magic})`,
+            value: t[2][0] + '\n' + levelToString(cashToLevel(magic), 2)
+        },
+        {
+            name: `Support sacrifice ($${support})`,
+            value: t[3][0] + '\n' + levelToString(cashToLevel(support), 3)
+        }
     ]);
     return await interaction.reply({ embeds: [embed] });
 }
@@ -97,14 +119,21 @@ module.exports = {
 };
 
 function addSacrificeStats(embed, num, i) {
-    const titles = ['Primary sacrifice', 'Military sacrifice', 'Magic sacrifice', 'Support sacrifice'];
+    const titles = [
+        'Primary sacrifice',
+        'Military sacrifice',
+        'Magic sacrifice',
+        'Support sacrifice'
+    ];
 
     if (num == 0) return;
     if (num == 1) {
         return embed.addFields([{ name: titles[i], value: `${t[i][0]}\n${t[i][9]}` }]);
     }
     if (num == 2) {
-        return embed.addFields([{ name: titles[i], value: `${t[i][0]}\n${t[i][9]}\n**TSG**:\n${t2[i]}` }]);
+        return embed.addFields([
+            { name: titles[i], value: `${t[i][0]}\n${t[i][9]}\n**TSG**:\n${t2[i]}` }
+        ]);
     }
 }
 

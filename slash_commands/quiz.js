@@ -6,9 +6,16 @@ const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { discord } = require('../aliases/misc.json');
 const Quiz = require('../helpers/quiz.js');
 let numbers = [0, 1, 2, 3];
-const emojis = [':regional_indicator_a:', ':regional_indicator_b:', ':regional_indicator_c:', ':regional_indicator_d:'];
+const emojis = [
+    ':regional_indicator_a:',
+    ':regional_indicator_b:',
+    ':regional_indicator_c:',
+    ':regional_indicator_d:'
+];
 
-builder = new SlashCommandBuilder().setName('quiz').setDescription('test your knowledge in all things bloons-related');
+builder = new SlashCommandBuilder()
+    .setName('quiz')
+    .setDescription('test your knowledge in all things bloons-related');
 const time = 10000;
 
 async function execute(interaction) {
@@ -42,7 +49,10 @@ async function loadQuestion(interaction) {
         .setTitle(`${item.question}`)
         .addFields([
             { name: 'options', value: string },
-            { name: 'please contribute', value: `join [this server](${discord}) to suggest a question` }
+            {
+                name: 'please contribute',
+                value: `join [this server](${discord}) to suggest a question`
+            }
         ])
         .setColor(cyber);
 

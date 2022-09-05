@@ -18,15 +18,26 @@ const TOWER_COLS = {
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
-let entityOption = new SlashCommandStringOption().setName('entity').setDescription('Hero/Tower/Upgrade').setRequired(false);
+let entityOption = new SlashCommandStringOption()
+    .setName('entity')
+    .setDescription('Hero/Tower/Upgrade')
+    .setRequired(false);
 
-let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map/Difficulty').setRequired(false);
+let mapOption = new SlashCommandStringOption()
+    .setName('map')
+    .setDescription('Map/Difficulty')
+    .setRequired(false);
 
-let userOption = new SlashCommandStringOption().setName('person').setDescription('Person').setRequired(false);
+let userOption = new SlashCommandStringOption()
+    .setName('person')
+    .setDescription('Person')
+    .setRequired(false);
 
 const reloadOption = new SlashCommandStringOption()
     .setName('reload')
-    .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
+    .setDescription(
+        'Do you need to reload completions from the index but for a much slower runtime?'
+    )
     .setRequired(false)
     .addChoices({ name: 'Yes', value: 'yes' });
 
@@ -70,7 +81,9 @@ async function execute(interaction) {
     if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
         const entity = parsed.hero || Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade);
         const entityFormatted = Aliases.toIndexNormalForm(entity);
-        const combo = allCombos.find((c) => c.ENTITY.toLowerCase() == entityFormatted.toLowerCase());
+        const combo = allCombos.find(
+            (c) => c.ENTITY.toLowerCase() == entityFormatted.toLowerCase()
+        );
 
         let challengeEmbed;
 
@@ -141,7 +154,11 @@ const UserCommandError = require('../exceptions/user-command-error.js');
 const DeveloperCommandError = require('../exceptions/developer-command-error.js');
 
 function parseEntity(interaction) {
-    const entityParser = new OrParser(new TowerParser(), new TowerUpgradeParser(), new HeroParser());
+    const entityParser = new OrParser(
+        new TowerParser(),
+        new TowerUpgradeParser(),
+        new HeroParser()
+    );
     const entity = interaction.options.getString('entity');
     if (entity) {
         const canonicalEntity = Aliases.canonicizeArg(entity);
@@ -150,16 +167,14 @@ function parseEntity(interaction) {
             // Alias tier 1 and 2 towers to base tower
             if (parsed.tower_upgrade) {
                 const [, tier] = Towers.pathTierFromUpgradeSet(
-                    Towers.towerUpgradeToUpgrade(
-                        parsed.tower_upgrade
-                    )
-                )
+                    Towers.towerUpgradeToUpgrade(parsed.tower_upgrade)
+                );
                 if (tier < 3) {
-                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade)
-                    parsed = CommandParser.parse([`${tower}#222`], entityParser)
+                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade);
+                    parsed = CommandParser.parse([`${tower}#222`], entityParser);
                 }
             }
-            return parsed
+            return parsed;
         } else {
             const parsed = new Parsed();
             parsed.addError('Canonical not found');
@@ -198,18 +213,28 @@ function embed2MPOG(combo) {
     const comboToEmbed = orderAndFlatten2MPOGCompletion(combo);
 
     // Embed and send the message
-    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${comboToEmbed.ENTITY} 2MPC Combo`).setColor(paleblue);
+    let challengeEmbed = new Discord.EmbedBuilder()
+        .setTitle(`${comboToEmbed.ENTITY} 2MPC Combo`)
+        .setColor(paleblue);
 
     for (const field in comboToEmbed) {
         challengeEmbed.addFields([
-            { name: gHelper.toTitleCase(field.replace('_', ' ')), value: comboToEmbed[field], inline: true }
+            {
+                name: gHelper.toTitleCase(field.replace('_', ' ')),
+                value: comboToEmbed[field],
+                inline: true
+            }
         ]);
     }
 
     challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
     const ogMapAbbr = ogCombo(combo)[0];
-    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), isWaterEntityCombo(combo));
+    let completedAltMapsFields = Index.altMapsFields(
+        ogMapAbbr,
+        Object.keys(combo.MAPS),
+        isWaterEntityCombo(combo)
+    );
 
     challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
@@ -252,7 +277,9 @@ function embed2MPAlt(combo, map) {
     const altCombo = combo.MAPS[mapAbbr];
 
     if (!altCombo) {
-        throw new UserCommandError(`\`${combo.ENTITY}\` hasn't been completed yet on \`${mapFormatted}\``);
+        throw new UserCommandError(
+            `\`${combo.ENTITY}\` hasn't been completed yet on \`${mapFormatted}\``
+        );
     }
 
     // Display OG map as if map weren't in the query
@@ -281,14 +308,18 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
 
     // Get all map abbreviations for the specified map difficulty
-    const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) => Aliases.mapToIndexAbbreviation(map));
+    const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) =>
+        Aliases.mapToIndexAbbreviation(map)
+    );
 
     const relevantMaps = Object.keys(combo.MAPS).filter((m) => permittedMapAbbrs.includes(m));
 
     const numCombosCompleted = relevantMaps.length;
 
     if (numCombosCompleted == 0) {
-        throw new UserCommandError(`\`${combo.ENTITY}\` has not yet been completed on any \`${mapDifficulty}\` maps`);
+        throw new UserCommandError(
+            `\`${combo.ENTITY}\` has not yet been completed on any \`${mapDifficulty}\` maps`
+        );
     }
 
     // Format 3 columns: map, person, link
@@ -328,12 +359,18 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     if (mapsLeft.length > 0) {
         possiblePhrasing = impossibleMaps.length > 0 ? ' (that are possible)' : '';
         challengeEmbed.addFields([
-            { name: `Combos${possiblePhrasing}`, value: `**${numCombosCompleted}**/${numCombosPossible}` }
+            {
+                name: `Combos${possiblePhrasing}`,
+                value: `**${numCombosCompleted}**/${numCombosPossible}`
+            }
         ]);
     } else {
         possiblePhrasing = impossibleMaps.length > 0 ? ' possible' : '';
         challengeEmbed.addFields([
-            { name: `All${possiblePhrasing} ${mapDifficulty} maps completed`, value: '-'.repeat(40) }
+            {
+                name: `All${possiblePhrasing} ${mapDifficulty} maps completed`,
+                value: '-'.repeat(40)
+            }
         ]);
     }
 
@@ -553,7 +590,9 @@ async function display2MPTowerStatistics(tower) {
         for (var path = 1; path <= 3; path++) {
             towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
             upgradeCompletionMarking = await getCompletionMarking(entryRow, path, tier);
-            challengeEmbed.addFields([{ name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }]);
+            challengeEmbed.addFields([
+                { name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }
+            ]);
         }
     }
 
@@ -581,7 +620,9 @@ async function findTowerRow(tower) {
     }
 
     if (!entryRow) {
-        throw new UserCommandError(`Tower \`${Aliases.toIndexNormalForm(tower)}\` doesn't yet have a 2MP completion`);
+        throw new UserCommandError(
+            `Tower \`${Aliases.toIndexNormalForm(tower)}\` doesn't yet have a 2MP completion`
+        );
     }
 
     return entryRow;

@@ -72,8 +72,8 @@ const ROUNDING_ERRORS = {
     111: [BAD],
     114: [MOAB, BFB, DDT],
     119: [MOAB, BFB, DDT],
-    124: [BFB],
-}
+    124: [BFB]
+};
 
 class Enemy {
     constructor(name, round = 80, fortified = false, camo = false, regrow = false) {
@@ -313,11 +313,15 @@ class Enemy {
         if (this.isBloon()) {
             // Green_Bloon, Ceramic_Bloon, etc.
             // https://bloons.fandom.com/wiki/Green_Bloon
-            bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true).split(' ').join('_')}`;
+            bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true)
+                .split(' ')
+                .join('_')}`;
             const selectorKey = `${fortified}${camo}${regrow}${this.formatName()}.png`;
             bloonSelectors = [selectorKey, `BTD6${selectorKey}`];
             if (regrow) {
-                bloonSelectors = bloonSelectors.concat(bloonSelectors.map((search) => search.replace(/Regrow/, 'Regrowth')));
+                bloonSelectors = bloonSelectors.concat(
+                    bloonSelectors.map((search) => search.replace(/Regrow/, 'Regrowth'))
+                );
             }
         } else if (this.isMOAB()) {
             // https://bloons.fandom.com/wiki/M.O.A.B.
@@ -325,9 +329,16 @@ class Enemy {
             // i.e. /MOAB would bring you to a disambiguation
             bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true)}`;
             const selectorKey = `${fortified}${this.formatName()}.png`;
-            bloonSelectors = [`BTD63D${selectorKey}`, `3D${selectorKey}`, `BTD3D${selectorKey}`, `BTD6${selectorKey}`];
+            bloonSelectors = [
+                `BTD63D${selectorKey}`,
+                `3D${selectorKey}`,
+                `BTD3D${selectorKey}`,
+                `BTD6${selectorKey}`
+            ];
             if (fortified) {
-                bloonSelectors = bloonSelectors.concat(bloonSelectors.map((search) => search.replace(/Fortified/, 'F')));
+                bloonSelectors = bloonSelectors.concat(
+                    bloonSelectors.map((search) => search.replace(/Fortified/, 'F'))
+                );
             }
         }
         const response = await axios.get(bloonPageLink);
@@ -365,19 +376,25 @@ class Enemy {
 
         if (this.onlyExistsInChallengeEditor()) {
             notes.push(
-                "Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)"
+                'Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)'
             );
         }
 
         if (this.name == DDT) {
-            notes.push("DDTs have the camgrow property by default (meaning they release camgrow ceramics)");
+            notes.push(
+                'DDTs have the camgrow property by default (meaning they release camgrow ceramics)'
+            );
         }
 
-        const buggedLayers = ROUNDING_ERRORS[this.round]
+        const buggedLayers = ROUNDING_ERRORS[this.round];
         if (buggedLayers) {
             notes.push(
-                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers.map(l => formatName(l, true)).join(', ')}} ` + 
-                "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
+                `On r${
+                    this.round
+                }, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers
+                    .map((l) => formatName(l, true))
+                    .join(', ')}} ` +
+                    "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
             );
         }
 

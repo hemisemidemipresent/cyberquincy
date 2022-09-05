@@ -76,7 +76,9 @@ function lex(input, operator, value, difficulty) {
         c = e.message.match(/Unexpected character at index \d+: (.)/)[1];
         if (c) {
             footer = '';
-            if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
+            if (c === '<')
+                footer =
+                    "Did you try to tag another discord user? That's definitely not allowed here.";
             return new Discord.EmbedBuilder()
                 .setTitle(`Unexpected character "${c}"`)
                 .setDescription(
@@ -145,12 +147,18 @@ async function execute(interaction) {
                         'Paragon degree calculator (in progress)\nNote that **The 3 original tier 5s SHOULD NOT BE TYPED IN**'
                     )
                     .addFields([
-                        { name: '`dart#420`, `boomer#500`', value: 'These represent the towers sacrificed' },
+                        {
+                            name: '`dart#420`, `boomer#500`',
+                            value: 'These represent the towers sacrificed'
+                        },
                         {
                             name: '`ujugg`, `glord`',
                             value: 'These are shorthands for `dart#500` and `boomer#500` respectively'
                         },
-                        { name: '`totem`', value: "Represents a Paragon Power Totem from Geraldo's shop" },
+                        {
+                            name: '`totem`',
+                            value: "Represents a Paragon Power Totem from Geraldo's shop"
+                        },
                         {
                             name: 'Examples',
                             value: `\`/test expr: dart#042 + dart#020\` Represents sacrificing a \`042\` dart monkey and a \`020\` dart monkey
@@ -168,13 +176,17 @@ async function execute(interaction) {
         // addition must only be between 2 monkey-values, and raw numbers should be thrown out
         '+': function (a, b) {
             if (typeof a === 'object' || typeof b === 'object')
-                throw new UnrecognizedTokenError('Addition must only be between monkeys/totems and not numbers');
+                throw new UnrecognizedTokenError(
+                    'Addition must only be between monkeys/totems and not numbers'
+                );
             return a + b;
         },
         // multiplication must only be between a monkey-value and a number (i.e. their types must be different)
         '*': function (a, b) {
             if (typeof a === typeof b)
-                throw new UnrecognizedTokenError('Multiplication must only be between a monkey/totem and a numbers');
+                throw new UnrecognizedTokenError(
+                    'Multiplication must only be between a monkey/totem and a numbers'
+                );
             let res = typeof a === 'object' ? a.value * b : a * b.value;
             return res;
         }
@@ -190,7 +202,8 @@ async function execute(interaction) {
     };
 
     let totalMoneySpent = lex(expression, operator, valueByCost, difficulty);
-    if (isNaN(totalMoneySpent)) return await interaction.reply({ embeds: [totalMoneySpent], ephemeral: true });
+    if (isNaN(totalMoneySpent))
+        return await interaction.reply({ embeds: [totalMoneySpent], ephemeral: true });
 
     let totalUpgradeCount = lex(expression, operator, valueByUpgrade, difficulty);
     let totalT5 = lex(expression, operator, valueByT5, difficulty);
@@ -253,7 +266,9 @@ async function execute(interaction) {
         )
         .addFields([
             {
-                name: `**Total power: \`${Number.isInteger(totalPower) ? totalPower : totalPower.toFixed(1)}\`**`,
+                name: `**Total power: \`${
+                    Number.isInteger(totalPower) ? totalPower : totalPower.toFixed(1)
+                }\`**`,
                 value: `Power from money spent: \`${powerCost}\`
                 Power from upgrades: \`${powerUpgrade}\`
                 Power from T5: \`${powerT5}\`
@@ -293,7 +308,10 @@ function isTowerUpgradeCrosspath(t) {
 
     let [tower, upgrades] = t.split('#');
 
-    return Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) && Towers.isValidUpgradeSet(upgrades);
+    return (
+        Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) &&
+        Towers.isValidUpgradeSet(upgrades)
+    );
 }
 
 function costOfTowerUpgradeCrosspath(t, difficulty) {
@@ -309,7 +327,12 @@ function costOfTowerUpgradeCrosspath(t, difficulty) {
     let cost = 0;
     if (t.includes('#') || upgrades === '000') {
         // Total cost
-        cost = Towers.totalTowerUpgradeCrosspathCostMult(costs, jsonTowerName, upgrades, difficulty);
+        cost = Towers.totalTowerUpgradeCrosspathCostMult(
+            costs,
+            jsonTowerName,
+            upgrades,
+            difficulty
+        );
     } else {
         throw 'No # found in tower cost calc';
     }
@@ -322,9 +345,11 @@ function valueByCost(t, i, difficulty) {
     // Catches tower upgrades with crosspaths like wiz#401
     if (isTowerUpgradeCrosspath(t)) return costOfTowerUpgradeCrosspath(t, difficulty);
     // Catches all other tower ugprades
-    else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(t))) return costOfTowerUpgradeCrosspath(t, difficulty);
+    else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(t)))
+        return costOfTowerUpgradeCrosspath(t, difficulty);
     // Catches base tower names/aliases
-    else if (Towers.isTower(Aliases.getCanonicalForm(t))) return costOfTowerUpgradeCrosspath(`${t}#000`, difficulty);
+    else if (Towers.isTower(Aliases.getCanonicalForm(t)))
+        return costOfTowerUpgradeCrosspath(`${t}#000`, difficulty);
     else if (t.toLowerCase() === 'totem') return 0; // totem
     else throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
 }

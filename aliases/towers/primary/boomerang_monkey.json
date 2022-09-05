@@ -1,5 +1,16 @@
 {
-    "xyz": ["boomer", "boomerang-monkey","boomerang","bm","rang","bomerang","boo","bomer","rangs","bomerrang"],
+    "xyz": [
+        "boomer",
+        "boomerang-monkey",
+        "boomerang",
+        "bm",
+        "rang",
+        "bomerang",
+        "boo",
+        "bomer",
+        "rangs",
+        "bomerrang"
+    ],
 
     "100": ["improved_rangs"],
     "200": ["glaives", "glaive"],

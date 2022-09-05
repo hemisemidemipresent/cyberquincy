@@ -59,7 +59,11 @@ module.exports = {
         if (bodyString.length > 1024 * 1024) {
             let length = 1024 * 1024;
 
-            md5 = 'W/' + length + '/' + hex_md5(sessionID + skuSignature + bodyString.substr(0, length) + nonce);
+            md5 =
+                'W/' +
+                length +
+                '/' +
+                hex_md5(sessionID + skuSignature + bodyString.substr(0, length) + nonce);
         } else if (sessionID != null) {
             md5 = hex_md5(sessionID + skuSignature + bodyString + nonce);
         } else {
@@ -162,9 +166,14 @@ module.exports = {
 
                 /* Encode output as utf-8 */
                 if (x <= 0x7f) output += String.fromCharCode(x);
-                else if (x <= 0x7ff) output += String.fromCharCode(0xc0 | ((x >>> 6) & 0x1f), 0x80 | (x & 0x3f));
+                else if (x <= 0x7ff)
+                    output += String.fromCharCode(0xc0 | ((x >>> 6) & 0x1f), 0x80 | (x & 0x3f));
                 else if (x <= 0xffff)
-                    output += String.fromCharCode(0xe0 | ((x >>> 12) & 0x0f), 0x80 | ((x >>> 6) & 0x3f), 0x80 | (x & 0x3f));
+                    output += String.fromCharCode(
+                        0xe0 | ((x >>> 12) & 0x0f),
+                        0x80 | ((x >>> 6) & 0x3f),
+                        0x80 | (x & 0x3f)
+                    );
                 else if (x <= 0x1fffff)
                     output += String.fromCharCode(
                         0xf0 | ((x >>> 18) & 0x07),
@@ -183,7 +192,8 @@ module.exports = {
         function rstr2binl(input) {
             var output = Array(input.length >> 2);
             for (var i = 0; i < output.length; i++) output[i] = 0;
-            for (var i = 0; i < input.length * 8; i += 8) output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32;
+            for (var i = 0; i < input.length * 8; i += 8)
+                output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32;
             return output;
         }
 
@@ -192,7 +202,8 @@ module.exports = {
          */
         function binl2rstr(input) {
             var output = '';
-            for (var i = 0; i < input.length * 32; i += 8) output += String.fromCharCode((input[i >> 5] >>> i % 32) & 0xff);
+            for (var i = 0; i < input.length * 32; i += 8)
+                output += String.fromCharCode((input[i >> 5] >>> i % 32) & 0xff);
             return output;
         }
 

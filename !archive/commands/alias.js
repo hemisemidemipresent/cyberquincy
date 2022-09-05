@@ -31,7 +31,8 @@ module.exports = {
         }
         // search up command alias db
         let command =
-            client.commands.get(alias) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(alias));
+            client.commands.get(alias) ||
+            client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(alias));
 
         if (command && command.aliases) {
             commandAliases = command.aliases;
@@ -71,7 +72,10 @@ module.exports = {
         let messageEmbed = new Discord.EmbedBuilder()
             .setTitle(`q!alias <command>`)
             .addFields([
-                { name: 'Use', value: 'Learn all of the different ways to provide arguments/invoke commands' },
+                {
+                    name: 'Use',
+                    value: 'Learn all of the different ways to provide arguments/invoke commands'
+                },
                 {
                     name: 'Clarification',
                     value: 'Some words can be both commands and arguments that you can provide to commands, such as `wizard'

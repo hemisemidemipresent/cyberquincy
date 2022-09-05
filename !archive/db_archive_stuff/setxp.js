@@ -15,7 +15,8 @@ module.exports = {
             return module.exports.helpMessage(message);
         }
 
-        if (args[0] < 0) return message.channel.send('`<xp>` must be above 0. Type `q!setxp` for more info');
+        if (args[0] < 0)
+            return message.channel.send('`<xp>` must be above 0. Type `q!setxp` for more info');
 
         user = message.author;
 
@@ -55,7 +56,9 @@ module.exports = {
         whose_xp = user.id === message.author.id ? 'Your' : `${user.username}'s`;
         whom = user.id == message.author.id ? 'you' : 'them;';
 
-        return message.channel.send(`${whose_xp} xp is now ${tag.xp} making ${whom} level ${Xp.xpToLevel(tag.xp)}`);
+        return message.channel.send(
+            `${whose_xp} xp is now ${tag.xp} making ${whom} level ${Xp.xpToLevel(tag.xp)}`
+        );
     },
 
     helpMessage(message) {

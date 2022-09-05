@@ -9,7 +9,7 @@ class ModeParser {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
             Aliases.allModes(),
-            permitted_modes.map(d => d.toLowerCase()),
+            permitted_modes.map((d) => d.toLowerCase())
         );
     }
 

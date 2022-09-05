@@ -6,10 +6,16 @@ const { cyber, orange } = require('../jsons/colours.json');
 
 builder = new SlashCommandBuilder()
     .setName('cash')
-    .setDescription('Find out when you can get a certain amount of cash if you start saving up at a certain round')
+    .setDescription(
+        'Find out when you can get a certain amount of cash if you start saving up at a certain round'
+    )
 
-    .addIntegerOption((option) => option.setName('cash_needed').setDescription('How much cash you need').setRequired(true))
-    .addIntegerOption((option) => option.setName('round').setDescription('The round you start saving up').setRequired(true))
+    .addIntegerOption((option) =>
+        option.setName('cash_needed').setDescription('How much cash you need').setRequired(true)
+    )
+    .addIntegerOption((option) =>
+        option.setName('round').setDescription('The round you start saving up').setRequired(true)
+    )
     .addStringOption((option) =>
         option
             .setName('game_mode')
@@ -31,7 +37,8 @@ function validateInput(interaction) {
     if (cash_needed < 1) return `Must enter positive numbers for cash_needed (${cash_needed})`;
 
     if (round < 1) return `Must enter positive numbers for round (${round})`;
-    if (round > 140) return `R${round} is random (not predetermined); therefore the calculation won't be consistent`;
+    if (round > 140)
+        return `R${round} is random (not predetermined); therefore the calculation won't be consistent`;
 
     if (mode == 'abr') {
         if (round < 3) return 'There is no support for rounds 1 and 2 abr income calculations';

@@ -27,5 +27,5 @@ module.exports = {
     isMention,
     getDiscordUserFromId,
     getDiscordUserFromMention,
-    getMentionFromDiscordUser,
+    getMentionFromDiscordUser
 };

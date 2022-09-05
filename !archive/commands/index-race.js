@@ -19,7 +19,8 @@ async function execute(message, args) {
     if (isNaN(args[0])) {
         let str = args.join(' ');
         return await findRaceByStr(str, message);
-    } else if (isNaN(args[0]) || args[0] < 1) return await message.channel.send('please specify a valid race number');
+    } else if (isNaN(args[0]) || args[0] < 1)
+        return await message.channel.send('please specify a valid race number');
     else {
         await findRaceByNum(parseInt(args[0]), message);
     }
@@ -38,7 +39,9 @@ async function findRaceByStr(str, message) {
             return findRaceByNum(i, message);
         }
     }
-    return await message.channel.send("Race isn't found. try a simpler phrase, you don't have to type the full name");
+    return await message.channel.send(
+        "Race isn't found. try a simpler phrase, you don't have to type the full name"
+    );
 }
 async function findRaceByNum(number, message) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'Races');

@@ -38,10 +38,7 @@ class LimitedStringSetValuesParser {
         // Ensure that the permitted values provided by the developer are a subset of all possible values
         if (this.permittedValues && this.permittedValues.length > 0) {
             for (let i = 0; i < this.permittedValues.length; i++) {
-                if (
-                    this.possibleValues &&
-                    !this.possibleValues.includes(this.permittedValues[i])
-                ) {
+                if (this.possibleValues && !this.possibleValues.includes(this.permittedValues[i])) {
                     throw new DeveloperCommandError(
                         `${this.permittedValues[i]} is not a valid ${this.supertype}`
                     );
@@ -52,9 +49,7 @@ class LimitedStringSetValuesParser {
             this.permittedValues = [...this.possibleValues];
         }
 
-        this.delegateParser = new StringSetValuesParser(
-            ...this.permittedValues
-        );
+        this.delegateParser = new StringSetValuesParser(...this.permittedValues);
     }
 
     parse(arg) {
@@ -84,9 +79,7 @@ class LimitedStringSetValuesParser {
 
         let msg = '';
         msg += `\`${badValue}\` is neither an accepted ${this.supertype} nor a ${this.supertype} alias for this command. `;
-        msg += `Valid examples include ${exampleValues
-            .map((v) => `\`${v}\``)
-            .join(', ')}${etc}. `;
+        msg += `Valid examples include ${exampleValues.map((v) => `\`${v}\``).join(', ')}${etc}. `;
         msg += `Use \`q!alias <proper_${this.supertype}_name>\` (i.e. \`q!alias ${exampleValues[0]}\`) `;
         msg += `to learn shorthands for various ${pluralize(this.supertype)}.`;
         return msg;

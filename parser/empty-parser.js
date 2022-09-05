@@ -1,4 +1,4 @@
-const DeveloperCommandError = require("../exceptions/developer-command-error");
+const DeveloperCommandError = require('../exceptions/developer-command-error');
 
 // parses nothing
 class EmptyParser {

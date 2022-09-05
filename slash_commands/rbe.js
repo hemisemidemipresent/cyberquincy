@@ -9,8 +9,12 @@ builder = new SlashCommandBuilder()
     .setName('rbe')
     .setDescription('Calculate rbe for rounds')
 
-    .addIntegerOption((option) => option.setName('start_round').setDescription('Only/Starting Round').setRequired(true))
-    .addIntegerOption((option) => option.setName('end_round').setDescription('End Round').setRequired(false))
+    .addIntegerOption((option) =>
+        option.setName('start_round').setDescription('Only/Starting Round').setRequired(true)
+    )
+    .addIntegerOption((option) =>
+        option.setName('end_round').setDescription('End Round').setRequired(false)
+    )
     .addStringOption((option) =>
         option
             .setName('game_mode')
@@ -26,7 +30,9 @@ function validateInput(interaction) {
 
     // Validations
     if (startround < 1 || endround < 1) {
-        return `Must enter positive numbers for rounds (${endround < startround ? endround : startround})`;
+        return `Must enter positive numbers for rounds (${
+            endround < startround ? endround : startround
+        })`;
     }
     if (endround < startround) {
         return `You entered a lower end round than start round`;

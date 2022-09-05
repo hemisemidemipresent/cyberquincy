@@ -10,7 +10,10 @@ function extractImageInfo(msgAttachments, msgArgs) {
         image = msgArgs.shift();
     }
 
-    if (!image) throw new ImgurAttachmentError('Must attach an image or provide an image link as first argument');
+    if (!image)
+        throw new ImgurAttachmentError(
+            'Must attach an image or provide an image link as first argument'
+        );
 
     return [image, msgArgs.join(' ')];
 }

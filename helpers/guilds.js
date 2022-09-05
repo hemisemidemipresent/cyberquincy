@@ -5,13 +5,18 @@ const EMOJIS_SERVER = '614111055890612225';
 
 const { discord } = require('../aliases/misc.json');
 function enterGuild(guild) {
-    let channeltosend = guild.channels.cache.find((channel) => channel.name.includes('general') === true);
+    let channeltosend = guild.channels.cache.find(
+        (channel) => channel.name.includes('general') === true
+    );
     if (channeltosend) {
         let helpEmbed = new Discord.EmbedBuilder()
             .setColor(colours['cyber'])
             .setDescription(`Hi! I am Cyber Quincy. I am a BTD6 discord bot.`)
             .addFields([
-                { name: 'General Info', value: `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})` },
+                {
+                    name: 'General Info',
+                    value: `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})`
+                },
                 {
                     name: 'Note',
                     value: "Quincy son of Quincy is property of Ninja Kiwi. Although they didn't develop this bot, Ninja Kiwi approved of its use and development."

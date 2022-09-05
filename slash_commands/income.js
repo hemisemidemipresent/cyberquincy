@@ -8,8 +8,12 @@ builder = new SlashCommandBuilder()
     .setName('income')
     .setDescription('Calculate round income(s) for different gamemodes')
 
-    .addIntegerOption((option) => option.setName('start_round').setDescription('Only/Starting Round').setRequired(true))
-    .addIntegerOption((option) => option.setName('end_round').setDescription('End Round').setRequired(false))
+    .addIntegerOption((option) =>
+        option.setName('start_round').setDescription('Only/Starting Round').setRequired(true)
+    )
+    .addIntegerOption((option) =>
+        option.setName('end_round').setDescription('End Round').setRequired(false)
+    )
     .addStringOption((option) =>
         option
             .setName('game_mode')
@@ -29,7 +33,9 @@ function validateInput(interaction) {
 
     // Validations
     if (startround < 1 || endround < 1) {
-        return `Must enter positive numbers for rounds (${endround < startround ? endround : startround})`;
+        return `Must enter positive numbers for rounds (${
+            endround < startround ? endround : startround
+        })`;
     }
     if (endround < startround) {
         return `You entered a lower end round than start round`;
@@ -68,7 +74,11 @@ function normalIncome(startround, endround) {
     let endroundObject = r[endround];
     let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
     return new Discord.EmbedBuilder()
-        .setTitle(`$${Math.trunc(income * 100) / 100} earned in CHIMPS from rounds ${startround} to ${endround} inclusive`)
+        .setTitle(
+            `$${
+                Math.trunc(income * 100) / 100
+            } earned in CHIMPS from rounds ${startround} to ${endround} inclusive`
+        )
         .setColor(magenta)
         .setFooter({ text: 'not including starting cash' });
 }
@@ -93,7 +103,9 @@ function abrIncome(startround, endround) {
     let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
     return new Discord.EmbedBuilder()
         .setTitle(
-            `$${Math.trunc(income * 100) / 100} earned in ABR CHIMPS from rounds ${startround} to ${endround} inclusive`
+            `$${
+                Math.trunc(income * 100) / 100
+            } earned in ABR CHIMPS from rounds ${startround} to ${endround} inclusive`
         )
         .setColor(yellow)
         .setFooter({ text: 'not including starting cash' });
@@ -130,7 +142,9 @@ function chincomeEmbed(mode, round) {
         .addFields([{ name: `R${round}`, value: `${incomes.rincome}` }]);
 
     if (incomes.chincomeExclusive) {
-        embed.addFields([{ name: `Start -> End R${round - 1}`, value: `${incomes.chincomeExclusive}` }]);
+        embed.addFields([
+            { name: `Start -> End R${round - 1}`, value: `${incomes.chincomeExclusive}` }
+        ]);
     }
 
     embed.addFields([{ name: `Start -> End R${round}`, value: `${incomes.chincomeInclusive}` }]);
@@ -139,16 +153,24 @@ function chincomeEmbed(mode, round) {
         embed.addFields([{ name: `Start R${round} -> End R100`, value: incomes.lincomeInclusive }]);
     }
     if (round < 99) {
-        embed.addFields([{ name: `Start R${round + 1} -> End R100`, value: incomes.lincomeExclusive }]);
+        embed.addFields([
+            { name: `Start R${round + 1} -> End R100`, value: incomes.lincomeExclusive }
+        ]);
     }
     if (round > 100) {
-        embed.addFields([{ name: `Start R101 -> End R${round}`, value: incomes.superChincomeInclusive }]);
+        embed.addFields([
+            { name: `Start R101 -> End R${round}`, value: incomes.superChincomeInclusive }
+        ]);
     }
     if (mode !== 'abr') {
-        embed.addFields([{ name: `Start R${round} -> End R140`, value: incomes.superLincomeInclusive }]);
+        embed.addFields([
+            { name: `Start R${round} -> End R140`, value: incomes.superLincomeInclusive }
+        ]);
     }
     if (round < 140 && mode !== 'abr') {
-        embed.addFields([{ name: `Start R${round + 1} -> End R140`, value: incomes.superLincomeExclusive }]);
+        embed.addFields([
+            { name: `Start R${round + 1} -> End R140`, value: incomes.superLincomeExclusive }
+        ]);
     }
 
     if (round === 6 && mode !== 'abr') {
@@ -196,7 +218,8 @@ function calculateAbrChincomes(round) {
     incomes.chincomeExclusive = abr[index - 1].cumulativeCash;
 
     incomes.chincomeInclusive = abr[index].cumulativeCash;
-    if (round < 100) incomes.lincomeInclusive = abr[100].cumulativeCash - abr[index - 1].cumulativeCash;
+    if (round < 100)
+        incomes.lincomeInclusive = abr[100].cumulativeCash - abr[index - 1].cumulativeCash;
 
     if (round < 99) incomes.lincomeExclusive = abr[100].cumulativeCash - abr[index].cumulativeCash;
 
@@ -224,17 +247,20 @@ function calculateNormalChincomes(round) {
     index = round;
 
     incomes.rincome = r[index].cashThisRound;
-    if (round > 6) incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
+    if (round > 6)
+        incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
 
     incomes.chincomeInclusive = r[index].cumulativeCash - r[5].cumulativeCash + 650;
     if (round < 100) incomes.lincomeInclusive = r[100].cumulativeCash - r[index - 1].cumulativeCash;
 
     if (round < 99) incomes.lincomeExclusive = r[100].cumulativeCash - r[index].cumulativeCash;
 
-    if (round > 100) incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash;
+    if (round > 100)
+        incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash;
 
     incomes.superLincomeInclusive = r[140].cumulativeCash - r[index - 1].cumulativeCash;
-    if (round < 140) incomes.superLincomeExclusive = r[140].cumulativeCash - r[index].cumulativeCash;
+    if (round < 140)
+        incomes.superLincomeExclusive = r[140].cumulativeCash - r[index].cumulativeCash;
 
     return incomes;
 }

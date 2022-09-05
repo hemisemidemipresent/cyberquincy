@@ -1,7 +1,7 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
 const gHelper = require('../helpers/general.js');
-const heroes = require('../jsons/heroes.json')
+const heroes = require('../jsons/heroes.json');
 
 BASE_XP_TO_GET_LEVEL = [
     null, // Slot for non-existent level-0
@@ -24,14 +24,14 @@ BASE_XP_TO_GET_LEVEL = [
     19260,
     20700,
     16470,
-    17280,
+    17280
 ];
 
 LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     BEGINNER: 1,
     INTERMEDIATE: 1.1,
     ADVANCED: 1.2,
-    EXPERT: 1.3,
+    EXPERT: 1.3
 };
 
 const HERO_NAME_TO_BLOONOLOGY_LINK = {
@@ -51,13 +51,8 @@ const HERO_NAME_TO_BLOONOLOGY_LINK = {
     geraldo: 'https://pastebin.com/raw/rksZWhTV'
 };
 
-function accumulatedXpCurve(
-    startingRound,
-    mapDifficulty,
-    energizerAcquiredRound
-) {
-    mapSpecificLevelingMultiplier =
-        LEVELING_MAP_DIFFICULTY_MODIFIERS[mapDifficulty.toUpperCase()];
+function accumulatedXpCurve(startingRound, mapDifficulty, energizerAcquiredRound) {
+    mapSpecificLevelingMultiplier = LEVELING_MAP_DIFFICULTY_MODIFIERS[mapDifficulty.toUpperCase()];
 
     xpGains = [];
     for (round = 0; round < 100; round++) {
@@ -80,26 +75,21 @@ function accumulatedXpCurve(
         } else if (round < startingRound) {
             xpGains.push(null);
         } else {
-            xpGains.push(
-                baseXpGainGain * mapSpecificLevelingMultiplier * energizerFactor
-            );
+            xpGains.push(baseXpGainGain * mapSpecificLevelingMultiplier * energizerFactor);
         }
     }
 
     acc = 0;
-    return xpGains.map((xpGain) =>
-        xpGain == null ? null : (acc = acc + xpGain)
-    );
+    return xpGains.map((xpGain) => (xpGain == null ? null : (acc = acc + xpGain)));
 }
 
 function heroLevelXpRequirements(hero) {
     heroSpecificLevelingMultiplier = heroes[hero]['levelModifier'];
-    if (!heroSpecificLevelingMultiplier) throw `${hero} does not have "levelModifier" entry in heroes.json`
+    if (!heroSpecificLevelingMultiplier)
+        throw `${hero} does not have "levelModifier" entry in heroes.json`;
     acc = 0;
     return BASE_XP_TO_GET_LEVEL.map((bxp) => {
-        return bxp == null
-            ? null
-            : (acc = acc + Math.round(bxp * heroSpecificLevelingMultiplier));
+        return bxp == null ? null : (acc = acc + Math.round(bxp * heroSpecificLevelingMultiplier));
         //: (acc = acc + Math.ceil(bxp * heroSpecificLevelingMultiplier));
     });
 }
@@ -117,17 +107,8 @@ function levelingChart(hero, startingRound, mapDifficulty) {
     );
 }
 
-function levelingCurve(
-    hero,
-    startingRound,
-    mapDifficulty,
-    energizerAcquiredRound = Infinity
-) {
-    accumulatedXp = accumulatedXpCurve(
-        startingRound,
-        mapDifficulty,
-        energizerAcquiredRound
-    );
+function levelingCurve(hero, startingRound, mapDifficulty, energizerAcquiredRound = Infinity) {
+    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty, energizerAcquiredRound);
 
     return heroLevelXpRequirements(hero).map((txp) => {
         if (txp == null) return null;
@@ -138,14 +119,12 @@ function levelingCurve(
             }) + 1;
 
         // findIndex returns -1 if not found, so +1 is 0, which is falsy
-        return acquiredRound
-            ? acquiredRound
-            : gHelper.numberAsCost(txp - accumulatedXp[99]);
+        return acquiredRound ? acquiredRound : gHelper.numberAsCost(txp - accumulatedXp[99]);
     });
 }
 
 module.exports = {
     HERO_NAME_TO_BLOONOLOGY_LINK,
     levelingCurve,
-    levelingChart,
+    levelingChart
 };

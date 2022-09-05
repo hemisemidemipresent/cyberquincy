@@ -6,5 +6,5 @@ module.exports = {
         );
     },
 
-    dependencies: ['btd6index'],
+    dependencies: ['btd6index']
 };

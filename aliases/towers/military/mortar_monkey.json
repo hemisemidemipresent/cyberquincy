@@ -10,12 +10,12 @@
     "010": ["faster_reload_(mortar_monkey)"],
     "020": ["rapid_reload"],
     "030": ["heavy_shells", "heavy"],
-    "040": ["artillery_battery", "art", "artillery", "battery", "abat","abattery","artbat"],
+    "040": ["artillery_battery", "art", "artillery", "battery", "abat", "abattery", "artbat"],
     "050": ["pop_and_awe", "paa"],
 
     "001": ["increased_accuracy", "accuracy"],
     "002": ["burny_stuff"],
     "003": ["signal_flare", "signal", "flare"],
     "004": ["shattering_shells", "sshells", "shattering", "shatt", "shat", "shatter"],
-    "005": ["blooncineration", "blooncin", "bcin","cin"]
+    "005": ["blooncineration", "blooncin", "bcin", "cin"]
 }

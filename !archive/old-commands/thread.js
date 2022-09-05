@@ -14,7 +14,11 @@ module.exports = {
         if (thread.joinable) {
             await thread.join();
             return message.channel.send({
-                embeds: [new Discord.EmbedBuilder().setColor(palepurple).setDescription(`joined thread ${thread.name}`)]
+                embeds: [
+                    new Discord.EmbedBuilder()
+                        .setColor(palepurple)
+                        .setDescription(`joined thread ${thread.name}`)
+                ]
             });
         } else return message.channel.send('thread is not joinable');
     },

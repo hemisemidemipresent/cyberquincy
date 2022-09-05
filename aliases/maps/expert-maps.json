@@ -1,64 +1,13 @@
 {
-    "infernal": [
-        "if",
-        "i",
-        "inf",
-        "fireymap"
-    ],
-    "workshop": [
-        "w",
-        "ws",
-        "wk",
-        "work",
-        "shop"
-    ],
-    "quad": [
-        "q",
-        "qd",
-        "kwad"
-    ],
-    "muddy_puddles": [
-        "mp",
-        "muddles",
-        "mpuddles",
-        "muddy",
-        "cuddles"
-    ],
-    "#ouch": [
-        "ou",
-        "#o",
-        "o",
-        "couch",
-        "ouch"
-    ],
-    "bloody_puddles": [
-        "bp",
-        "bloodles",
-        "bloody"
-    ],
-    "flooded_valley": [
-        "fv",
-        "flooded",
-        "valley"
-    ],
-    "dark_castle": [
-        "dc",
-        "dca",
-        "dank_castle",
-        "dank",
-        "castle"
-    ],
-    "ravine": [
-        "rv",
-        "rav"
-    ],
-    "blons": [
-        "bl",
-        "corner",
-        "slons"
-    ],
-    "sanctuary": [
-        "sa",
-        "sanc"
-    ]
+    "infernal": ["if", "i", "inf", "fireymap"],
+    "workshop": ["w", "ws", "wk", "work", "shop"],
+    "quad": ["q", "qd", "kwad"],
+    "muddy_puddles": ["mp", "muddles", "mpuddles", "muddy", "cuddles"],
+    "#ouch": ["ou", "#o", "o", "couch", "ouch"],
+    "bloody_puddles": ["bp", "bloodles", "bloody"],
+    "flooded_valley": ["fv", "flooded", "valley"],
+    "dark_castle": ["dc", "dca", "dank_castle", "dank", "castle"],
+    "ravine": ["rv", "rav"],
+    "blons": ["bl", "corner", "slons"],
+    "sanctuary": ["sa", "sanc"]
 }

@@ -51,15 +51,24 @@ module.exports = {
             .addFields([
                 {
                     name: 'Race event',
-                    value: `_New one starts_ in ${getDiff(date, raceStart)}\n_Ends_ in ${getDiff(date, raceEnd)}`
+                    value: `_New one starts_ in ${getDiff(date, raceStart)}\n_Ends_ in ${getDiff(
+                        date,
+                        raceEnd
+                    )}`
                 },
                 {
                     name: 'Odyssey event',
-                    value: `_New one starts_ in ${getDiff(date, odysseyStart)}\n_Ends_ in ${getDiff(date, odysseyEnd)}`
+                    value: `_New one starts_ in ${getDiff(date, odysseyStart)}\n_Ends_ in ${getDiff(
+                        date,
+                        odysseyEnd
+                    )}`
                 },
                 {
                     name: 'Boss event',
-                    value: `_New one starts_ in ${getDiff(date, bossStart)}\n_Ends_ in ${getDiff(date, bossEnd)}`
+                    value: `_New one starts_ in ${getDiff(date, bossStart)}\n_Ends_ in ${getDiff(
+                        date,
+                        bossEnd
+                    )}`
                 }
             ])
 
@@ -92,7 +101,11 @@ function parseTime(time) {
     return `${days}d ${hours}h ${minutes}m and ${parseInt(time)}s`;
 }
 function convertTZ(date, tzString) {
-    return new Date((typeof date === 'string' ? new Date(date) : date).toLocaleString('en-US', { timeZone: tzString }))
+    return new Date(
+        (typeof date === 'string' ? new Date(date) : date).toLocaleString('en-US', {
+            timeZone: tzString
+        })
+    )
         .toString()
         .substr(0, 24);
 }

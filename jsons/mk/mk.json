@@ -28,45 +28,31 @@
                     "knowledges": [
                         {
                             "id": "PoppyBlades",
-                            "prerequisites": [
-                                "HardTacks"
-                            ]
+                            "prerequisites": ["HardTacks"]
                         },
                         {
                             "id": "HardTacks",
-                            "prerequisites": [
-                                "FastTackAttacks"
-                            ]
+                            "prerequisites": ["FastTackAttacks"]
                         },
                         {
                             "id": "FastGlue",
-                            "prerequisites": [
-                                "FastTackAttacks"
-                            ]
+                            "prerequisites": ["FastTackAttacks"]
                         },
                         {
                             "id": "CheapRangs",
-                            "prerequisites": [
-                                "IncreasedLifespan"
-                            ]
+                            "prerequisites": ["IncreasedLifespan"]
                         },
                         {
                             "id": "FraggyFrags",
-                            "prerequisites": [
-                                "IncreasedLifespan"
-                            ]
+                            "prerequisites": ["IncreasedLifespan"]
                         },
                         {
                             "id": "CheapRangs",
-                            "prerequisites": [
-                                "IncreasedLifespan"
-                            ]
+                            "prerequisites": ["IncreasedLifespan"]
                         },
                         {
                             "id": "CrossbowReach",
-                            "prerequisites": [
-                                "ExtraDartPops"
-                            ]
+                            "prerequisites": ["ExtraDartPops"]
                         }
                     ]
                 }
@@ -82,51 +68,35 @@
                     "knowledges": [
                         {
                             "id": "BigInferno",
-                            "prerequisites": [
-                                "PoppyBlades"
-                            ]
+                            "prerequisites": ["PoppyBlades"]
                         },
                         {
                             "id": "IcyChill",
-                            "prerequisites": [
-                                "HardTacks"
-                            ]
+                            "prerequisites": ["HardTacks"]
                         },
                         {
                             "id": "MoreSplattyGlue",
-                            "prerequisites": [
-                                "FastGlue"
-                            ]
+                            "prerequisites": ["FastGlue"]
                         },
                         {
                             "id": "BudgetClusters",
-                            "prerequisites": [
-                                "FraggyFrags"
-                            ]
+                            "prerequisites": ["FraggyFrags"]
                         },
                         {
                             "id": "ExtraBounce",
-                            "prerequisites": [
-                                "CheapRangs"
-                            ]
+                            "prerequisites": ["CheapRangs"]
                         },
                         {
                             "id": "4And4",
-                            "prerequisites": [
-                                "CrossbowReach"
-                            ]
+                            "prerequisites": ["CrossbowReach"]
                         },
                         {
                             "id": "ForceVsForce",
-                            "prerequisites": [
-                                "CrossbowReach"
-                            ]
+                            "prerequisites": ["CrossbowReach"]
                         },
                         {
                             "id": "AmbidextrousRangs",
-                            "prerequisites": [
-                                "ExtraBounce"
-                            ]
+                            "prerequisites": ["ExtraBounce"]
                         }
                     ]
                 }
@@ -142,34 +112,23 @@
                     "knowledges": [
                         {
                             "id": "SoCold",
-                            "prerequisites": [
-                                "IcyChill"
-                            ]
+                            "prerequisites": ["IcyChill"]
                         },
                         {
                             "id": "AviationGradeGlue",
-                            "prerequisites": [
-                                "MoreSplattyGlue"
-                            ]
+                            "prerequisites": ["MoreSplattyGlue"]
                         },
                         {
                             "id": "MegaMauler",
-                            "prerequisites": [
-                                "AviationGradeGlue",
-                                "HardPress"
-                            ]
+                            "prerequisites": ["AviationGradeGlue", "HardPress"]
                         },
                         {
                             "id": "HardPress",
-                            "prerequisites": [
-                                "ExtraBounce"
-                            ]
+                            "prerequisites": ["ExtraBounce"]
                         },
                         {
                             "id": "MasterDoubleCross",
-                            "prerequisites": [
-                                "4And4"
-                            ]
+                            "prerequisites": ["4And4"]
                         }
                     ]
                 }
@@ -185,45 +144,31 @@
                     "knowledges": [
                         {
                             "id": "BigCryoBlast",
-                            "prerequisites": [
-                                "SoCold"
-                            ]
+                            "prerequisites": ["SoCold"]
                         },
                         {
                             "id": "Hypothermia",
-                            "prerequisites": [
-                                "SoCold"
-                            ]
+                            "prerequisites": ["SoCold"]
                         },
                         {
                             "id": "CheaperSolution",
-                            "prerequisites": [
-                                "AviationGradeGlue"
-                            ]
+                            "prerequisites": ["AviationGradeGlue"]
                         },
                         {
                             "id": "ViolentImpact",
-                            "prerequisites": [
-                                "BudgetClusters"
-                            ]
+                            "prerequisites": ["BudgetClusters"]
                         },
                         {
                             "id": "BonusMonkey",
-                            "prerequisites": [
-                                "MasterDoubleCross"
-                            ]
+                            "prerequisites": ["MasterDoubleCross"]
                         },
                         {
                             "id": "LongTurbo",
-                            "prerequisites": [
-                                "HardPress"
-                            ]
+                            "prerequisites": ["HardPress"]
                         },
                         {
                             "id": "ComeOnEverybody",
-                            "prerequisites": [
-                                "BonusMonkey"
-                            ]
+                            "prerequisites": ["BonusMonkey"]
                         }
                     ]
                 },
@@ -233,10 +178,7 @@
                     "knowledges": [
                         {
                             "id": "MoreCash",
-                            "prerequisites": [
-                                "CheaperSolution",
-                                "BonusMonkey"
-                            ]
+                            "prerequisites": ["CheaperSolution", "BonusMonkey"]
                         }
                     ]
                 }
@@ -272,21 +214,15 @@
                     "knowledges": [
                         {
                             "id": "BigBunch",
-                            "prerequisites": [
-                                "NavalUpgrades"
-                            ]
+                            "prerequisites": ["NavalUpgrades"]
                         },
                         {
                             "id": "AcceleratedAerodarts",
-                            "prerequisites": [
-                                "AirforceUpgrades"
-                            ]
+                            "prerequisites": ["AirforceUpgrades"]
                         },
                         {
                             "id": "CeramicShock",
-                            "prerequisites": [
-                                "EliteMilitaryTraining"
-                            ]
+                            "prerequisites": ["EliteMilitaryTraining"]
                         }
                     ]
                 }
@@ -302,33 +238,23 @@
                     "knowledges": [
                         {
                             "id": "BreakingBallistic",
-                            "prerequisites": [
-                                "NavalUpgrades"
-                            ]
+                            "prerequisites": ["NavalUpgrades"]
                         },
                         {
                             "id": "FasterTakedowns",
-                            "prerequisites": [
-                                "BigBunch"
-                            ]
+                            "prerequisites": ["BigBunch"]
                         },
                         {
                             "id": "TargetedPineapples",
-                            "prerequisites": [
-                                "AcceleratedAerodarts"
-                            ]
+                            "prerequisites": ["AcceleratedAerodarts"]
                         },
                         {
                             "id": "RapidRazors",
-                            "prerequisites": [
-                                "AirforceUpgrades"
-                            ]
+                            "prerequisites": ["AirforceUpgrades"]
                         },
                         {
                             "id": "CheaperMaiming",
-                            "prerequisites": [
-                                "CeramicShock"
-                            ]
+                            "prerequisites": ["CeramicShock"]
                         },
                         {
                             "id": "ExtraBurnyStuff",
@@ -348,27 +274,19 @@
                     "knowledges": [
                         {
                             "id": "QuadBurst",
-                            "prerequisites": [
-                                "BreakingBallistic"
-                            ]
+                            "prerequisites": ["BreakingBallistic"]
                         },
                         {
                             "id": "TradeAgreements",
-                            "prerequisites": [
-                                "FasterTakedowns"
-                            ]
+                            "prerequisites": ["FasterTakedowns"]
                         },
                         {
                             "id": "GunCoolant",
-                            "prerequisites": [
-                                "TargetedPineapples"
-                            ]
+                            "prerequisites": ["TargetedPineapples"]
                         },
                         {
                             "id": "PaintStripper",
-                            "prerequisites": [
-                                "ExtraBurnyStuff"
-                            ]
+                            "prerequisites": ["ExtraBurnyStuff"]
                         }
                     ]
                 },
@@ -378,33 +296,23 @@
                     "knowledges": [
                         {
                             "id": "ChargedChinooks",
-                            "prerequisites": [
-                                "RapidRazors"
-                            ]
+                            "prerequisites": ["RapidRazors"]
                         },
                         {
                             "id": "AeronauticSubsidy",
-                            "prerequisites": [
-                                "GunCoolant"
-                            ]
+                            "prerequisites": ["GunCoolant"]
                         },
                         {
                             "id": "MasterDefender",
-                            "prerequisites": [
-                                "CheaperMaiming"
-                            ]
+                            "prerequisites": ["CheaperMaiming"]
                         },
                         {
                             "id": "BudgetBattery",
-                            "prerequisites": [
-                                "PaintStripper"
-                            ]
+                            "prerequisites": ["PaintStripper"]
                         },
                         {
                             "id": "Wingmonkey",
-                            "prerequisites": [
-                                "AeronauticSubsidy"
-                            ]
+                            "prerequisites": ["AeronauticSubsidy"]
                         }
                     ]
                 }
@@ -420,35 +328,23 @@
                     "knowledges": [
                         {
                             "id": "SubAdmiral",
-                            "prerequisites": [
-                                "QuadBurst"
-                            ]
+                            "prerequisites": ["QuadBurst"]
                         },
                         {
                             "id": "MilitaryConscription",
-                            "prerequisites": [
-                                "TradeAgreements"
-                            ]
+                            "prerequisites": ["TradeAgreements"]
                         },
                         {
                             "id": "AdvancedLogistics",
-                            "prerequisites": [
-                                "AeronauticSubsidy",
-                                "DoorGunner"
-                            ]
+                            "prerequisites": ["AeronauticSubsidy", "DoorGunner"]
                         },
                         {
                             "id": "BigBloonSabotage",
-                            "prerequisites": [
-                                "SubAdmiral",
-                                "MasterDefender"
-                            ]
+                            "prerequisites": ["SubAdmiral", "MasterDefender"]
                         },
                         {
                             "id": "DoorGunner",
-                            "prerequisites": [
-                                "ChargedChinooks"
-                            ]
+                            "prerequisites": ["ChargedChinooks"]
                         }
                     ]
                 }

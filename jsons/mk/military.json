@@ -27,21 +27,15 @@
                 "knowledges": [
                     {
                         "id": "BigBunch",
-                        "prerequisites": [
-                            "NavalUpgrades"
-                        ]
+                        "prerequisites": ["NavalUpgrades"]
                     },
                     {
                         "id": "AcceleratedAerodarts",
-                        "prerequisites": [
-                            "AirforceUpgrades"
-                        ]
+                        "prerequisites": ["AirforceUpgrades"]
                     },
                     {
                         "id": "CeramicShock",
-                        "prerequisites": [
-                            "EliteMilitaryTraining"
-                        ]
+                        "prerequisites": ["EliteMilitaryTraining"]
                     }
                 ]
             }
@@ -57,33 +51,23 @@
                 "knowledges": [
                     {
                         "id": "BreakingBallistic",
-                        "prerequisites": [
-                            "NavalUpgrades"
-                        ]
+                        "prerequisites": ["NavalUpgrades"]
                     },
                     {
                         "id": "FasterTakedowns",
-                        "prerequisites": [
-                            "BigBunch"
-                        ]
+                        "prerequisites": ["BigBunch"]
                     },
                     {
                         "id": "TargetedPineapples",
-                        "prerequisites": [
-                            "AcceleratedAerodarts"
-                        ]
+                        "prerequisites": ["AcceleratedAerodarts"]
                     },
                     {
                         "id": "RapidRazors",
-                        "prerequisites": [
-                            "AirforceUpgrades"
-                        ]
+                        "prerequisites": ["AirforceUpgrades"]
                     },
                     {
                         "id": "CheaperMaiming",
-                        "prerequisites": [
-                            "CeramicShock"
-                        ]
+                        "prerequisites": ["CeramicShock"]
                     },
                     {
                         "id": "ExtraBurnyStuff",
@@ -103,27 +87,19 @@
                 "knowledges": [
                     {
                         "id": "QuadBurst",
-                        "prerequisites": [
-                            "BreakingBallistic"
-                        ]
+                        "prerequisites": ["BreakingBallistic"]
                     },
                     {
                         "id": "TradeAgreements",
-                        "prerequisites": [
-                            "FasterTakedowns"
-                        ]
+                        "prerequisites": ["FasterTakedowns"]
                     },
                     {
                         "id": "GunCoolant",
-                        "prerequisites": [
-                            "TargetedPineapples"
-                        ]
+                        "prerequisites": ["TargetedPineapples"]
                     },
                     {
                         "id": "PaintStripper",
-                        "prerequisites": [
-                            "ExtraBurnyStuff"
-                        ]
+                        "prerequisites": ["ExtraBurnyStuff"]
                     }
                 ]
             },
@@ -133,33 +109,23 @@
                 "knowledges": [
                     {
                         "id": "ChargedChinooks",
-                        "prerequisites": [
-                            "RapidRazors"
-                        ]
+                        "prerequisites": ["RapidRazors"]
                     },
                     {
                         "id": "AeronauticSubsidy",
-                        "prerequisites": [
-                            "GunCoolant"
-                        ]
+                        "prerequisites": ["GunCoolant"]
                     },
                     {
                         "id": "MasterDefender",
-                        "prerequisites": [
-                            "CheaperMaiming"
-                        ]
+                        "prerequisites": ["CheaperMaiming"]
                     },
                     {
                         "id": "BudgetBattery",
-                        "prerequisites": [
-                            "PaintStripper"
-                        ]
+                        "prerequisites": ["PaintStripper"]
                     },
                     {
                         "id": "Wingmonkey",
-                        "prerequisites": [
-                            "AeronauticSubsidy"
-                        ]
+                        "prerequisites": ["AeronauticSubsidy"]
                     }
                 ]
             }
@@ -175,35 +141,23 @@
                 "knowledges": [
                     {
                         "id": "SubAdmiral",
-                        "prerequisites": [
-                            "QuadBurst"
-                        ]
+                        "prerequisites": ["QuadBurst"]
                     },
                     {
                         "id": "MilitaryConscription",
-                        "prerequisites": [
-                            "TradeAgreements"
-                        ]
+                        "prerequisites": ["TradeAgreements"]
                     },
                     {
                         "id": "AdvancedLogistics",
-                        "prerequisites": [
-                            "AeronauticSubsidy",
-                            "DoorGunner"
-                        ]
+                        "prerequisites": ["AeronauticSubsidy", "DoorGunner"]
                     },
                     {
                         "id": "BigBloonSabotage",
-                        "prerequisites": [
-                            "SubAdmiral",
-                            "MasterDefender"
-                        ]
+                        "prerequisites": ["SubAdmiral", "MasterDefender"]
                     },
                     {
                         "id": "DoorGunner",
-                        "prerequisites": [
-                            "ChargedChinooks"
-                        ]
+                        "prerequisites": ["ChargedChinooks"]
                     }
                 ]
             }

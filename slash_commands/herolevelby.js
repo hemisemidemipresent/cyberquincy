@@ -9,7 +9,10 @@ const {
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
 
-let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
+let heroOption = new SlashCommandStringOption()
+    .setName('hero')
+    .setDescription('Hero')
+    .setRequired(true);
 Aliases.allHeroes().forEach((hero) => {
     heroOption.addChoices({ name: gHelper.toTitleCase(hero), value: hero });
 });
@@ -34,7 +37,9 @@ Aliases.allMapDifficulties().forEach((difficulty) => {
 
 builder = new SlashCommandBuilder()
     .setName('herolevelby')
-    .setDescription('See how late you can place a hero to reach a specified level by a specified round')
+    .setDescription(
+        'See how late you can place a hero to reach a specified level by a specified round'
+    )
     .addStringOption(heroOption)
     .addIntegerOption(desiredLevelOption)
     .addIntegerOption(goalRoundOption)
@@ -46,7 +51,12 @@ async function displayHeroPlacementRounds(interaction) {
     goalRound = interaction.options.getInteger('goal_round');
     mapDifficulty = interaction.options.getString('map_difficulty');
 
-    const heroPlacementRound = calculateHeroPlacementRound(hero, goalRound, desiredLevel, mapDifficulty);
+    const heroPlacementRound = calculateHeroPlacementRound(
+        hero,
+        goalRound,
+        desiredLevel,
+        mapDifficulty
+    );
 
     let startingRounds = [];
     if (heroPlacementRound == -Infinity)
@@ -114,7 +124,10 @@ async function displayHeroPlacementRounds(interaction) {
             const displayedRightRound = Math.min(leftRound + 9, goalRound);
             label = `${displayedLeftRound}->${displayedRightRound}`;
             buttons.addComponents(
-                new Discord.ButtonBuilder().setLabel(label).setStyle(ButtonStyle.Primary).setCustomId(label)
+                new Discord.ButtonBuilder()
+                    .setLabel(label)
+                    .setStyle(ButtonStyle.Primary)
+                    .setCustomId(label)
             );
         }
         if (interaction.replied) {
@@ -155,7 +168,9 @@ async function displayHeroPlacementRounds(interaction) {
             //   * https://stackoverflow.com/questions/68841237/discord-js-bot-cant-handle-multiple-buttons-in-the-same-channel-version-13
             buttonInteraction.deferUpdate();
 
-            const [leftRound, rightRound] = buttonInteraction.customId.split(/->/).map((r) => parseInt(r));
+            const [leftRound, rightRound] = buttonInteraction.customId
+                .split(/->/)
+                .map((r) => parseInt(r));
             startingRounds = gHelper.range(leftRound, rightRound);
             await displayHeroLevels();
         });
@@ -187,7 +202,13 @@ function calculateHeroPlacementRound(hero, goalRound, desiredHeroLevel, mapDiffi
     return roundForLevelUpTo;
 }
 
-function calculateLaterPlacementRounds(hero, startingRounds, goalRound, desiredHeroLevel, mapDifficulty) {
+function calculateLaterPlacementRounds(
+    hero,
+    startingRounds,
+    goalRound,
+    desiredHeroLevel,
+    mapDifficulty
+) {
     placementRounds = {};
     for (var i = 0; i < startingRounds.length; i++) {
         placementRounds[startingRounds[i]] = costToUpgrade(

@@ -9,7 +9,7 @@ class TowerPathParser {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
             Towers.allTowerPaths(),
-            permittedValues.map(pv => pv.toLowerCase())
+            permittedValues.map((pv) => pv.toLowerCase())
         );
     }
 

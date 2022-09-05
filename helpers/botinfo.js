@@ -14,7 +14,7 @@ function statcord() {
             key: key,
             postCpuStatistics: false /* Whether to post memory statistics or not, defaults to true */,
             postMemStatistics: false /* Whether to post memory statistics or not, defaults to true */,
-            postNetworkStatistics: false /* Whether to post memory statistics or not, defaults to true */,
+            postNetworkStatistics: false /* Whether to post memory statistics or not, defaults to true */
         });
         statcord.on('autopost-start', () => {
             // Emitted when statcord autopost starts
@@ -39,5 +39,5 @@ function statcord() {
 }
 
 module.exports = {
-    statcord,
+    statcord
 };

@@ -1,58 +1,58 @@
 {
-	"adora": {
-		"cost": 1000,
-		"levelModifier": 1.71
-	},
-	"benjamin": {
-		"cost": 1200,
-		"levelModifier": 1.5
-	},
-	"brickell": {
-		"cost": 750,
-		"levelModifier": 1.425
-	},
-	"churchill": {
-		"cost": 2000,
-		"levelModifier": 1.71
-	},
-	"etienne": {
-		"cost": 850,
-		"levelModifier": 1
-	},
-	"ezili": {
-		"cost": 600,
-		"levelModifier": 1.425
-	},
+    "adora": {
+        "cost": 1000,
+        "levelModifier": 1.71
+    },
+    "benjamin": {
+        "cost": 1200,
+        "levelModifier": 1.5
+    },
+    "brickell": {
+        "cost": 750,
+        "levelModifier": 1.425
+    },
+    "churchill": {
+        "cost": 2000,
+        "levelModifier": 1.71
+    },
+    "etienne": {
+        "cost": 850,
+        "levelModifier": 1
+    },
+    "ezili": {
+        "cost": 600,
+        "levelModifier": 1.425
+    },
     "geraldo": {
         "cost": 600,
         "levelModifier": 1
     },
-	"gwen": {
-		"cost": 900,
-		"levelModifier": 1
-	},
-	"jones": {
-		"cost": 750,
-		"levelModifier": 1
-	},
-	"obyn": {
-		"cost": 650,
-		"levelModifier": 1
-	},
-	"pat": {
-		"cost": 800,
-		"levelModifier": 1.425
-	},
-	"psi": {
-		"cost": 800,
-		"levelModifier": 1.5
-	},
-	"quincy": {
-		"cost": 540,
-		"levelModifier": 1
-	},
-	"sauda": {
-		"cost": 600,
-		"levelModifier": 1.425
-	}
+    "gwen": {
+        "cost": 900,
+        "levelModifier": 1
+    },
+    "jones": {
+        "cost": 750,
+        "levelModifier": 1
+    },
+    "obyn": {
+        "cost": 650,
+        "levelModifier": 1
+    },
+    "pat": {
+        "cost": 800,
+        "levelModifier": 1.425
+    },
+    "psi": {
+        "cost": 800,
+        "levelModifier": 1.5
+    },
+    "quincy": {
+        "cost": 540,
+        "levelModifier": 1
+    },
+    "sauda": {
+        "cost": 600,
+        "levelModifier": 1.425
+    }
 }

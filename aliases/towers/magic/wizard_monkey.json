@@ -9,7 +9,7 @@
 
     "010": ["fireball"],
     "020": ["wall_of_fire", "wof"],
-    "030": ["dragon's_breath","dbreath","db", "dragon's", "breath"],
+    "030": ["dragon's_breath", "dbreath", "db", "dragon's", "breath"],
     "040": ["summon_phoenix", "sump", "phoenix", "summon"],
     "050": ["wizard_lord_phoenix", "wlp"],
 

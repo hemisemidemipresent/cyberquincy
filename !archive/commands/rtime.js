@@ -39,7 +39,9 @@ module.exports = {
         let finalStr = formatTime(time + sendTime);
         let sendStr = formatTime(time - sendTime);
         let str =
-            `It takes **${Math.round((end - start) * 0.2 * 100) / 100}s** to send **r${start}** - **r${end}**, ` +
+            `It takes **${
+                Math.round((end - start) * 0.2 * 100) / 100
+            }s** to send **r${start}** - **r${end}**, ` +
             `and r${longest} lasts **${formatTime(lengths[longest - 1])}**\n\n` +
             `If you fullsended at \`${ftime}\`, you will get a time of **\`${finalStr}\`**\n`;
         if (time - sendTime < 0) {
@@ -62,7 +64,12 @@ async function helpMessage(message) {
         .setDescription(
             '`q!rtime <start round> <end round> <time> [mode]`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`\nWhat this shows is:\n1. If you starting sending `startround` to `endround` at `time`, what time you will get\n2. If you want to get `time`, at what time should you start sending `start` to `end`'
         )
-        .addFields([{ name: 'examples', value: ' • q!rtime 40 49 0:25\n • q!rtime 40 49 25\n • q!rtime 40 49 0:25 abr' }])
+        .addFields([
+            {
+                name: 'examples',
+                value: ' • q!rtime 40 49 0:25\n • q!rtime 40 49 25\n • q!rtime 40 49 0:25 abr'
+            }
+        ])
         .setColor(grey);
     return await message.channel.send({ embeds: [embed] });
 }
@@ -72,7 +79,9 @@ async function errorMessage(message, parsingErrors) {
         .setDescription(
             '`q!rtime <start round> <end round> <time> [mode]`\ntime must be of format `mm:ss`, `hh:mm:ss`, `mm:ss.xxx`, `hh:mm:ss.xxx`\nWhat this shows is:\n1. If you starting sending `startround` to `endround` at `time`, what time you will get\n2. If you want to get `time`, at what time should you start sending `start` to `end`'
         )
-        .addFields([{ name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }])
+        .addFields([
+            { name: 'Likely Cause(s)', value: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+        ])
         .setColor(red);
 
     return await message.channel.send({ embeds: [errorEmbed] });

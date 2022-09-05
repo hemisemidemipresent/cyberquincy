@@ -157,7 +157,9 @@ removeEmptyParser = function (parsers) {
     }
 
     // Just remove the EmptyParser if it exists
-    moreConcreteParsers = parsers.slice(0, emptyParserIndex).concat(parsers.slice(emptyParserIndex + 1));
+    moreConcreteParsers = parsers
+        .slice(0, emptyParserIndex)
+        .concat(parsers.slice(emptyParserIndex + 1));
 
     // No values were parsed in the OrParser concretization process
     return [{ parsers: moreConcreteParsers, parsed: new Parsed() }];
@@ -266,7 +268,9 @@ function parseConcreteArgsParsersAligned(args, parsers) {
         if (!arg && arg != 0) {
             parsed.addError(
                 new UserCommandError(
-                    `Command is missing ${gHelper.toOrdinalSuffix(argPosition)} argument of type \`${parsers[i].type()}\``
+                    `Command is missing ${gHelper.toOrdinalSuffix(
+                        argPosition
+                    )} argument of type \`${parsers[i].type()}\``
                 )
             );
             continue;
@@ -274,7 +278,9 @@ function parseConcreteArgsParsersAligned(args, parsers) {
 
         // If there is an missing parser (i.e. extra argument) in the position
         if (!parser) {
-            parsed.addError(new UserCommandError(`Extra argument \`${args[i]}\` at position ${argPosition}`));
+            parsed.addError(
+                new UserCommandError(`Extra argument \`${args[i]}\` at position ${argPosition}`)
+            );
             continue;
         }
 

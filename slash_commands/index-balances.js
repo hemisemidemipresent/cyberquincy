@@ -1,4 +1,9 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption, ComponentType } = require('discord.js');
+const {
+    SlashCommandBuilder,
+    SlashCommandStringOption,
+    SlashCommandIntegerOption,
+    ComponentType
+} = require('discord.js');
 
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
@@ -29,11 +34,16 @@ const version1Option = new SlashCommandIntegerOption()
     .setDescription('Exact or Starting Version')
     .setRequired(false);
 
-const version2Option = new SlashCommandIntegerOption().setName('version2').setDescription('End Version').setRequired(false);
+const version2Option = new SlashCommandIntegerOption()
+    .setName('version2')
+    .setDescription('End Version')
+    .setRequired(false);
 
 const reloadOption = new SlashCommandStringOption()
     .setName('reload')
-    .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
+    .setDescription(
+        'Do you need to reload completions from the index but for a much slower runtime?'
+    )
     .setRequired(false)
     .addChoices({ name: 'Yes', value: 'yes' });
 
@@ -52,7 +62,9 @@ const filterOption = new SlashCommandStringOption()
 
 builder = new SlashCommandBuilder()
     .setName('balance')
-    .setDescription('Check balance history of all towers/heroes throughout versions according to index records')
+    .setDescription(
+        'Check balance history of all towers/heroes throughout versions according to index records'
+    )
     .addStringOption(entityOption)
     .addIntegerOption(version1Option)
     .addIntegerOption(version2Option)
@@ -67,7 +79,12 @@ const BALANCE_TYPE_MAPPINGS = {
 };
 
 function parseEntity(interaction) {
-    const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
+    const entityParser = new OrParser(
+        new TowerParser(),
+        new TowerPathParser(),
+        new TowerUpgradeParser(),
+        new HeroParser()
+    );
     const entity = interaction.options.getString('entity');
     if (entity) {
         const canonicalEntity = Aliases.canonicizeArg(entity);
@@ -90,7 +107,10 @@ function parseVersion(interaction, num) {
 
 function parseFilter(interaction) {
     const parsed = new Parsed();
-    adjustedTypeFilter = interaction.options.getString('type_filter')?.replace('🟡', '⚠️')?.replace('🟦', '↔');
+    adjustedTypeFilter = interaction.options
+        .getString('type_filter')
+        ?.replace('🟡', '⚠️')
+        ?.replace('🟦', '↔');
     parsed.addField('balance_filter', adjustedTypeFilter);
     return parsed;
 }
@@ -104,7 +124,12 @@ function parseAll(interaction) {
 }
 
 function validateInput(interaction) {
-    entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
+    entityParser = new OrParser(
+        new TowerParser(),
+        new TowerPathParser(),
+        new TowerUpgradeParser(),
+        new HeroParser()
+    );
 
     let [parsedEntity, parsedVersion1, parsedVersion2, parsedFilter] = parseAll(interaction);
 
@@ -269,7 +294,11 @@ function hasEntity(parsed) {
 const multipageButtons = [
     new ButtonBuilder().setCustomId('first').setLabel('⏪').setStyle(ButtonStyle.Primary),
     new ButtonBuilder().setCustomId('prev!').setLabel('⬅️').setStyle(ButtonStyle.Primary),
-    new ButtonBuilder().setCustomId('pg').setLabel('FILL_ME_IN').setStyle(ButtonStyle.Secondary).setDisabled(true),
+    new ButtonBuilder()
+        .setCustomId('pg')
+        .setLabel('FILL_ME_IN')
+        .setStyle(ButtonStyle.Secondary)
+        .setDisabled(true),
     new ButtonBuilder().setCustomId('next!').setLabel('➡️').setStyle(ButtonStyle.Primary),
     new ButtonBuilder().setCustomId('last').setLabel('⏩').setStyle(ButtonStyle.Primary)
 ];
@@ -283,7 +312,7 @@ function displayPages(interaction, pages, versionAdded, parsed) {
         includedButtons = [];
     } else if (pages.length < 5) {
         includedButtons = multipageButtons.filter((b) => {
-            return b.data.custom_id.endsWith('!') || b.data.style == ButtonStyle.Secondary
+            return b.data.custom_id.endsWith('!') || b.data.style == ButtonStyle.Secondary;
         });
     } else {
         includedButtons = multipageButtons.filter((b) => true);
@@ -384,7 +413,9 @@ function title(parsed, hasResults = true) {
     if (!hasResults) title += ' Found';
 
     if (hasEntity(parsed)) {
-        title += ` for ${Towers.formatEntity(parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path)}`;
+        title += ` for ${Towers.formatEntity(
+            parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path
+        )}`;
     }
 
     if (parsed.versions?.length == 1) {
@@ -432,10 +463,14 @@ function matchesEntity(noteEntity, noteUpgrade, parsed) {
     }
 
     const entityPathTiers = entityUpgrades.map((u) => Towers.pathTierFromUpgradeSet(u));
-    const notePathTiers = noteUpgrades.map((u) => Towers.pathTierFromUpgradeSet(u.replace(/x/g, '0')));
+    const notePathTiers = noteUpgrades.map((u) =>
+        Towers.pathTierFromUpgradeSet(u.replace(/x/g, '0'))
+    );
 
     // Comparing path/tiers instead of upgrades in order to ignore crosspathing in the balance notes
-    return entityPathTiers.some((pt) => notePathTiers.some((npt) => pt[0] == npt[0] && pt[1] == npt[1]));
+    return entityPathTiers.some((pt) =>
+        notePathTiers.some((npt) => pt[0] == npt[0] && pt[1] == npt[1])
+    );
 }
 
 function matchesVersions(noteVersion, parsed) {
@@ -445,7 +480,10 @@ function matchesVersions(noteVersion, parsed) {
         return parseInt(noteVersion) == parseInt(parsed.version);
     }
 
-    return parseInt(noteVersion) >= parseInt(parsed.versions[0]) && parseInt(noteVersion) <= parseInt(parsed.versions[1]);
+    return (
+        parseInt(noteVersion) >= parseInt(parsed.versions[0]) &&
+        parseInt(noteVersion) <= parseInt(parsed.versions[1])
+    );
 }
 
 function matchesBalanceType(noteSymbol, parsed) {
@@ -470,7 +508,11 @@ function upgradesFromUpgradeNotation(upgradeNotation) {
 
     let tier;
     for (tier = parseInt(upgradeNotation[plusIndex - 1]); tier <= 5; tier++) {
-        upgrades.push(upgradeNotation.slice(0, plusIndex - 1) + `${tier}` + upgradeNotation.slice(plusIndex + 1));
+        upgrades.push(
+            upgradeNotation.slice(0, plusIndex - 1) +
+                `${tier}` +
+                upgradeNotation.slice(plusIndex + 1)
+        );
     }
 
     return upgrades;

@@ -20,7 +20,11 @@ module.exports = {
                         let embed = format(json);
                         resolve(embed);
                     } catch {
-                        resolve(new Discord.EmbedBuilder().setTitle('oops something went wrong - use q!daily <number>'));
+                        resolve(
+                            new Discord.EmbedBuilder().setTitle(
+                                'oops something went wrong - use q!daily <number>'
+                            )
+                        );
                     }
                 });
             });

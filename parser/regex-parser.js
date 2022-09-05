@@ -7,9 +7,7 @@ class RegexParser {
     constructor(regex) {
         // Validate that the regex to match against is valid
         if (!(regex instanceof RegExp)) {
-            throw new DeveloperCommandError(
-                `"${regex}" is not a regular expression`
-            );
+            throw new DeveloperCommandError(`"${regex}" is not a regular expression`);
         }
 
         this.regex = regex;

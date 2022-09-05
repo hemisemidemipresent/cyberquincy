@@ -8,5 +8,5 @@ module.exports = {
         await message.channel.send(
             `Join this discord server to get notifications on bot updates, downtime, report bugs and to suggest features: ${discord}`
         );
-    },
+    }
 };

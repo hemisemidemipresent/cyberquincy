@@ -9,7 +9,7 @@ class MapParser {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
             Aliases.allMaps(),
-            permitted_maps.map(d => d.toLowerCase()),
+            permitted_maps.map((d) => d.toLowerCase())
         );
     }
 

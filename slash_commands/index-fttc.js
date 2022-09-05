@@ -10,24 +10,42 @@ const Index = require('../helpers/index.js');
 
 const { paleorange } = require('../jsons/colours.json');
 
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+const {
+    SlashCommandBuilder,
+    SlashCommandStringOption,
+    SlashCommandIntegerOption
+} = require('discord.js');
 
-const mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(false);
+const mapOption = new SlashCommandStringOption()
+    .setName('map')
+    .setDescription('Map')
+    .setRequired(false);
 
-const tower1Option = new SlashCommandStringOption().setName('tower1').setDescription('A Tower').setRequired(false);
+const tower1Option = new SlashCommandStringOption()
+    .setName('tower1')
+    .setDescription('A Tower')
+    .setRequired(false);
 
-const tower2Option = new SlashCommandStringOption().setName('tower2').setDescription('A Tower').setRequired(false);
+const tower2Option = new SlashCommandStringOption()
+    .setName('tower2')
+    .setDescription('A Tower')
+    .setRequired(false);
 
 const numTowerTypesOption = new SlashCommandIntegerOption()
     .setName('num_tower_types')
     .setDescription('Number of tower types')
     .setRequired(false);
 
-const personOption = new SlashCommandStringOption().setName('person').setDescription('Completer').setRequired(false);
+const personOption = new SlashCommandStringOption()
+    .setName('person')
+    .setDescription('Completer')
+    .setRequired(false);
 
 const reloadOption = new SlashCommandStringOption()
     .setName('reload')
-    .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
+    .setDescription(
+        'Do you need to reload completions from the index but for a much slower runtime?'
+    )
     .setRequired(false)
     .addChoices({ name: 'Yes', value: 'yes' });
 
@@ -66,7 +84,9 @@ async function execute(interaction) {
     let filteredCombos = filterResults(allCombos, parsed);
 
     if (filteredCombos.length == 0) {
-        const noCombosEmbed = new Discord.EmbedBuilder().setTitle(titleNoCombos(parsed)).setColor(paleorange);
+        const noCombosEmbed = new Discord.EmbedBuilder()
+            .setTitle(titleNoCombos(parsed))
+            .setColor(paleorange);
 
         return interaction.editReply({ embeds: [noCombosEmbed] });
     } else {
@@ -152,9 +172,9 @@ function validateInput(interaction) {
     const parsedTowers = parsedTower1.merge(parsedTower2);
     if (parsedTowers.towers && parsedTowers.towers.length > parsedNumTowerTypes.natural_number) {
         const formattedTowers = parsedTowers.towers.map((t) => Aliases.toIndexNormalForm(t));
-        return `You searched more towers (${formattedTowers.join(', ')}) than the number of tower types you specified (${
-            parsedNumTowerTypes.natural_number
-        })`;
+        return `You searched more towers (${formattedTowers.join(
+            ', '
+        )}) than the number of tower types you specified (${parsedNumTowerTypes.natural_number})`;
     }
 
     if (parsedMap.map && parsedNumTowerTypes.hasAny()) {
@@ -175,12 +195,17 @@ function filterResults(allCombos, parsed) {
 
     if (parsed.person) {
         results = results.filter((combo) => {
-            return combo.PERSON.toLowerCase().split(' ').join('_') === parsed.person.toLowerCase().split(' ').join('_');
+            return (
+                combo.PERSON.toLowerCase().split(' ').join('_') ===
+                parsed.person.toLowerCase().split(' ').join('_')
+            );
         });
     }
 
     if (parsed.towers) {
-        results = results.filter((combo) => parsed.towers.every((specifiedTower) => combo.TOWERS.includes(specifiedTower)));
+        results = results.filter((combo) =>
+            parsed.towers.every((specifiedTower) => combo.TOWERS.includes(specifiedTower))
+        );
     }
 
     if (keepOnlyOG(parsed) || !parsed.hasAny()) {
@@ -244,7 +269,8 @@ async function embedOneOrMultiplePages(interaction, parsed, combos, mtime) {
                     combo[col].map((tower) => {
                         if (tower) {
                             const towerCanonical = Aliases.getCanonicalForm(tower);
-                            const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
+                            const towerAbbreviation =
+                                FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
                             return parsed.towers && parsed.towers.includes(towerCanonical)
                                 ? `**${towerAbbreviation}**`
                                 : towerAbbreviation;
@@ -299,7 +325,8 @@ function embedTitle(parsed, combos) {
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${combos[0].MAP} `;
     if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
-    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
+    if (parsed.towers && parsed.towers[1])
+        t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 
@@ -309,7 +336,8 @@ function titleNoCombos(parsed) {
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
     if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
-    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
+    if (parsed.towers && parsed.towers[1])
+        t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 

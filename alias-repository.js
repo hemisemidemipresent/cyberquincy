@@ -12,20 +12,14 @@ class AliasRepository extends Array {
         // {source_directory: handling function}
         const SPECIAL_HANDLING_CASES = {
             './aliases/towers': this.loadTowerAliasFile,
-            './aliases/raceid.json': this.loadRaceAlias,
+            './aliases/raceid.json': this.loadRaceAlias
         };
 
-        for await (const absolutePath of filesHelper.getFiles('./aliases', [
-            '.json',
-        ])) {
+        for await (const absolutePath of filesHelper.getFiles('./aliases', ['.json'])) {
             let fpath = filepath.create(absolutePath);
             let tokens = fpath.split();
 
-            let relPath =
-                './' +
-                tokens
-                    .slice(tokens.findIndex((i) => i === 'aliases'))
-                    .join('/');
+            let relPath = './' + tokens.slice(tokens.findIndex((i) => i === 'aliases')).join('/');
 
             // Determine the function that will handle the alias file
 
@@ -35,8 +29,7 @@ class AliasRepository extends Array {
             // See if the file has a special handler
             for (const specialRelPath in SPECIAL_HANDLING_CASES) {
                 if (relPath.startsWith(specialRelPath)) {
-                    handlingFunction =
-                        SPECIAL_HANDLING_CASES[specialRelPath];
+                    handlingFunction = SPECIAL_HANDLING_CASES[specialRelPath];
                     break;
                 }
             }
@@ -53,7 +46,7 @@ class AliasRepository extends Array {
             const nextAliasGroup = {
                 canonical: canonical,
                 aliases: nextAliases[canonical],
-                sourcefile: f,
+                sourcefile: f
             };
             this.addAliasGroup(nextAliasGroup);
         }
@@ -72,12 +65,11 @@ class AliasRepository extends Array {
             // which is not exactly synonymous with the 000 tower.
             // The canonical form of the xyz tower is tower_name
             // whereas the canonical form of a specific upgrade is tower_name#ddd where d=digit
-            const canonical =
-                upgrade == 'xyz' ? `${baseName}` : `${baseName}#${upgrade}`;
+            const canonical = upgrade == 'xyz' ? `${baseName}` : `${baseName}#${upgrade}`;
             const nextAliasGroup = {
                 canonical: canonical,
                 aliases: towerUpgrades[upgrade],
-                sourcefile: f,
+                sourcefile: f
             };
             this.addAliasGroup(nextAliasGroup);
 
@@ -87,8 +79,9 @@ class AliasRepository extends Array {
                     canonical: `${baseName}#222`,
                     aliases: towerUpgrades['xyz']
                         .concat(baseName)
-                        .map((al) => [`base_${al}`, `b_${al}`]).flat(),
-                    sourcefile: f,
+                        .map((al) => [`base_${al}`, `b_${al}`])
+                        .flat(),
+                    sourcefile: f
                 };
                 this.addAliasGroup(baseTowerAliasGroup);
             }
@@ -106,7 +99,7 @@ class AliasRepository extends Array {
             const nextAliasGroup = {
                 canonical: canonical,
                 aliases: aliases,
-                sourcefile: f,
+                sourcefile: f
             };
             this.addAliasGroup(nextAliasGroup);
         }
@@ -159,9 +152,7 @@ class AliasRepository extends Array {
                 let new_aliases = [];
                 for (var j = 0; j < aliases.length; j++) {
                     for (var k = 0; k < JOIN_TOKENS.length; k++) {
-                        new_aliases.push(
-                            aliases[j] + JOIN_TOKENS[k] + tokens[i]
-                        );
+                        new_aliases.push(aliases[j] + JOIN_TOKENS[k] + tokens[i]);
                     }
                 }
                 aliases = [...new_aliases];
@@ -191,12 +182,8 @@ class AliasRepository extends Array {
         const suffix = w.slice(sepIndex + 1);
         const sep = w[sepIndex];
 
-        const useits = this.forgetRecursive(suffix, chars).map(
-            (sfx) => prefix + sep + sfx
-        );
-        const loseits = this.forgetRecursive(suffix, chars).map(
-            (sfx) => prefix + sfx
-        );
+        const useits = this.forgetRecursive(suffix, chars).map((sfx) => prefix + sep + sfx);
+        const loseits = this.forgetRecursive(suffix, chars).map((sfx) => prefix + sfx);
 
         return useits.concat(loseits);
     }
@@ -207,12 +194,8 @@ class AliasRepository extends Array {
         for (let i = 0; i < this.length; i++) {
             const existingAliasGroup = this[i];
 
-            let nextAliasSet = nextAliasGroup.aliases.concat(
-                nextAliasGroup.canonical
-            );
-            let existingAliasSet = existingAliasGroup.aliases.concat(
-                existingAliasGroup.canonical
-            );
+            let nextAliasSet = nextAliasGroup.aliases.concat(nextAliasGroup.canonical);
+            let existingAliasSet = existingAliasGroup.aliases.concat(existingAliasGroup.canonical);
 
             let sharedAliasMembers = nextAliasSet.filter((aliasMember) =>
                 existingAliasSet.includes(aliasMember)
@@ -223,9 +206,7 @@ class AliasRepository extends Array {
                     `Aliases members [${sharedAliasMembers.map(
                         (a) => `"${a}"`
                     )}] clash among existing group ` +
-                        `${this.formatAliasGroup(
-                            existingAliasGroup
-                        )} and new group ` +
+                        `${this.formatAliasGroup(existingAliasGroup)} and new group ` +
                         `${this.formatAliasGroup(nextAliasGroup)}`
                 );
             }
@@ -242,8 +223,8 @@ class AliasRepository extends Array {
 
     // Converts a member of an alias group to its canonical form
     getCanonicalForm(aliasMember) {
-        if (!aliasMember) return null
-        aliasMember = aliasMember.replace(/ /g, '_')
+        if (!aliasMember) return null;
+        aliasMember = aliasMember.replace(/ /g, '_');
         let ag = this.getAliasGroup(aliasMember.toLowerCase());
         if (ag) return ag.canonical;
         else return null;
@@ -253,8 +234,7 @@ class AliasRepository extends Array {
     // in which aliasMember is found
     getAliasGroup(aliasMember) {
         let ags = this.filter(
-            (ag) =>
-                ag.canonical == aliasMember || ag.aliases.includes(aliasMember)
+            (ag) => ag.canonical == aliasMember || ag.aliases.includes(aliasMember)
         );
         if (!ags || ags.length == 0) {
             return null;
@@ -263,9 +243,7 @@ class AliasRepository extends Array {
         } else {
             throw (
                 `Multiple alises groups found sharing a given alias member` +
-                `(something went horribly wrong): ${ags.map(
-                    (ag) => ag.canonical
-                )}`
+                `(something went horribly wrong): ${ags.map((ag) => ag.canonical)}`
             );
         }
     }
@@ -281,9 +259,7 @@ class AliasRepository extends Array {
     getAliasGroupsFromSameFileAs(aliasMember) {
         aliasMember = aliasMember.toLowerCase();
         let ag = this.getAliasGroup(aliasMember);
-        let result = this.filter(
-            (otherAliasGroup) => otherAliasGroup.sourcefile === ag.sourcefile
-        );
+        let result = this.filter((otherAliasGroup) => otherAliasGroup.sourcefile === ag.sourcefile);
         return result;
     }
 
@@ -312,28 +288,14 @@ class AliasRepository extends Array {
     }
 
     allWaterMaps() {
-        return this.allMaps().filter(
-            (m) => !this.allNonWaterMaps().includes(m)
-        );
+        return this.allMaps().filter((m) => !this.allNonWaterMaps().includes(m));
     }
 
     // TODO: rewrite this involving the q!map command results rather than hardcoding it
     allNonWaterMaps() {
-        return [
-            'SY',
-            'TS',
-            'H',
-            'AR',
-            'MM',
-            'ML',
-            'KD',
-            'CF',
-            'GD',
-            'UG',
-            'MS',
-            'W',
-            'XF',
-        ].map((m) => this.getCanonicalForm(m.toLowerCase()));
+        return ['SY', 'TS', 'H', 'AR', 'MM', 'ML', 'KD', 'CF', 'GD', 'UG', 'MS', 'W', 'XF'].map(
+            (m) => this.getCanonicalForm(m.toLowerCase())
+        );
     }
 
     allMapsFromMapDifficulty(mapDifficulty) {
@@ -352,32 +314,23 @@ class AliasRepository extends Array {
     }
 
     beginnerMaps() {
-        return this.getAliasGroupsFromSameFileAs('LOGS').map(
-            (ag) => ag.canonical
-        );
+        return this.getAliasGroupsFromSameFileAs('LOGS').map((ag) => ag.canonical);
     }
 
     intermediateMaps() {
-        return this.getAliasGroupsFromSameFileAs('HAUNTED').map(
-            (ag) => ag.canonical
-        );
+        return this.getAliasGroupsFromSameFileAs('HAUNTED').map((ag) => ag.canonical);
     }
 
     advancedMaps() {
-        return this.getAliasGroupsFromSameFileAs('CORNFIELD').map(
-            (ag) => ag.canonical
-        );
+        return this.getAliasGroupsFromSameFileAs('CORNFIELD').map((ag) => ag.canonical);
     }
 
     expertMaps() {
-        return this.getAliasGroupsFromSameFileAs('INFERNAL').map(
-            (ag) => ag.canonical
-        );
+        return this.getAliasGroupsFromSameFileAs('INFERNAL').map((ag) => ag.canonical);
     }
 
     allMapDifficulties() {
-        const map_difficulties =
-            this.getAliasGroupsFromSameFileAs('INTERMEDIATE');
+        const map_difficulties = this.getAliasGroupsFromSameFileAs('INTERMEDIATE');
 
         return map_difficulties.map((ag) => ag.canonical);
     }
@@ -413,17 +366,13 @@ class AliasRepository extends Array {
     }
 
     indexMapAbbreviationToMap(mapAbbr) {
-        const set = this.getAliasSet(
-            mapAbbr.toLowerCase()
-        );
+        const set = this.getAliasSet(mapAbbr.toLowerCase());
         if (!set) return null;
         return set[0];
     }
 
     indexMapAbbreviationToNormalForm(mapAbbr) {
-        return this.toIndexNormalForm(
-            this.indexMapAbbreviationToMap(mapAbbr)
-        );
+        return this.toIndexNormalForm(this.indexMapAbbreviationToMap(mapAbbr));
     }
 
     toAliasNormalForm(indexForm) {
@@ -431,10 +380,10 @@ class AliasRepository extends Array {
     }
 
     toAliasCanonical(indexForm) {
-        return this.getCanonicalForm(this.toAliasNormalForm(indexForm))
+        return this.getCanonicalForm(this.toAliasNormalForm(indexForm));
     }
 
-    toIndexNormalForm(canonical, separator='_') {
+    toIndexNormalForm(canonical, separator = '_') {
         return canonical
             .split(separator)
             .map((tk) => gHelper.toTitleCase(tk))
@@ -443,9 +392,7 @@ class AliasRepository extends Array {
     }
 
     allRaces() {
-        let arr = this.getAliasGroupsFromSameFileAs('2018-12-13').map(
-            (ag) => ag.canonical
-        );
+        let arr = this.getAliasGroupsFromSameFileAs('2018-12-13').map((ag) => ag.canonical);
         return arr;
     }
 

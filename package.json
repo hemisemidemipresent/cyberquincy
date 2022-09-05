@@ -14,7 +14,8 @@
         "deploy": "npm run register && npm run commit && npm run push && npm run logs",
         "refresh": "del /f package-lock.json && npm install",
         "logs": "heroku logs --tail",
-        "update": "heroku stack:set heroku-22 -a cyberquincy"
+        "update": "heroku stack:set heroku-22 -a cyberquincy",
+        "format": "prettier --write --tab-width 4 './**/*.{json,js}'"
     },
     "repository": {
         "type": "git",
@@ -61,5 +62,14 @@
         "statcord.js": "^3.2.0",
         "utf-8-validate": "^5.0.2",
         "zlib": "^1.0.5"
+    },
+    "devDependencies": {
+        "prettier": "^2.7.1"
+    },
+    "prettier": {
+        "printWidth": 100,
+        "trailingComma": "none",
+        "singleQuote": true,
+        "tabWidth": 4
     }
 }

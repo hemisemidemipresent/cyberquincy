@@ -89,7 +89,7 @@
             {
                 "tier": 3,
                 "hp": 245000,
-                "speed": 0.10,
+                "speed": 0.1,
                 "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 7900\nLych-Soul Life Steal (per 4 seconds): 5"
             },
             {

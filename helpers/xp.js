@@ -59,7 +59,10 @@ function levelUpMessage(message, newLevel) {
 
     levelUpEmbed = new Discord.EmbedBuilder()
         .setTitle(`Level Up!`)
-        .addField(`Congratulations ${user.username}#${user.discriminator}!`, `You have advanced to level ${newLevel}`)
+        .addField(
+            `Congratulations ${user.username}#${user.discriminator}!`,
+            `You have advanced to level ${newLevel}`
+        )
         .setFooter({ text: 'Type `q!level` for more information' })
         .setColor(colours['green']);
 
@@ -73,7 +76,9 @@ async function levelUpRole(user, newLevel) {
         .find((m) => m.id === user.id);
     if (!guildmember) {
         if (newLevel == 3 || newLevel == 10) {
-            let roleEmbed = new Discord.EmbedBuilder().setTitle(`You can now get a role in the discord server: ${discord}`);
+            let roleEmbed = new Discord.EmbedBuilder().setTitle(
+                `You can now get a role in the discord server: ${discord}`
+            );
             return message.channel.send(roleEmbed);
         }
     }

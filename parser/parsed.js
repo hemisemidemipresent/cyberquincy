@@ -46,9 +46,7 @@ class Parsed extends Object {
             this.__mergeField(type, parsed, otherParsed);
         }
 
-        parsed.parsingErrors = this.parsingErrors.concat(
-            otherParsed.parsingErrors
-        );
+        parsed.parsingErrors = this.parsingErrors.concat(otherParsed.parsingErrors);
 
         return parsed;
     }

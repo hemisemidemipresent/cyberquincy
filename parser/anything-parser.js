@@ -1,7 +1,7 @@
 // Parses anything!
 class AnythingParser {
     type() {
-        return "anything";
+        return 'anything';
     }
 
     parse(arg) {

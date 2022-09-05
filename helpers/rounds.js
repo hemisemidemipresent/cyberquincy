@@ -7,24 +7,24 @@ const PREDET_CHIMPS_ROUNDS = [6, 140];
 const ALL_ROUNDS = [1, 1288555]; // will explain later
 
 function isValidRound(r) {
-    return Number.isInteger(r) && r >= ALL_ROUNDS[0] && r <= ALL_ROUNDS[1]
+    return Number.isInteger(r) && r >= ALL_ROUNDS[0] && r <= ALL_ROUNDS[1];
 }
 
 function cashFactorForRound(r) {
     if (!isValidRound(r)) {
-        return `${r} is not a valid round`
+        return `${r} is not a valid round`;
     }
 
     if (r <= 50) {
-        return 1
+        return 1;
     } else if (r <= 60) {
-        return 0.5
+        return 0.5;
     } else if (r <= 85) {
-        return 0.2
+        return 0.2;
     } else if (r <= 100) {
-        return 0.1
+        return 0.1;
     } else {
-        return 0.02
+        return 0.02;
     }
 }
 
@@ -38,5 +38,5 @@ module.exports = {
     ALL_ROUNDS,
 
     isValidRound,
-    cashFactorForRound,
-}
+    cashFactorForRound
+};

@@ -89,7 +89,8 @@ module.exports = {
             return await message.channel.send({ embeds: [embed] });
         } else {
             let output = '';
-            if (parsed.natural_numbers) output = lb.getWall(parsed.natural_numbers[0], parsed.natural_numbers[1]);
+            if (parsed.natural_numbers)
+                output = lb.getWall(parsed.natural_numbers[0], parsed.natural_numbers[1]);
             else output = lb.getWall();
             if (output.length > 4096) {
                 return await module.exports.errorMessage(message, ['too many characters']);
@@ -104,9 +105,14 @@ module.exports = {
                         name: 'Timestamps are known to be inaccurate for certain versions',
                         value: 'see [this video](https://youtu.be/IGE155tCmss)'
                     },
-                    { name: 'Individual info', value: 'to see how to get individual (more detailed) stats use `q!lb help`' }
+                    {
+                        name: 'Individual info',
+                        value: 'to see how to get individual (more detailed) stats use `q!lb help`'
+                    }
                 ])
-                .setFooter({ text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)' })
+                .setFooter({
+                    text: 'this is what everyone outside top 100 sees the leaderboard as (updated every 15 mins)'
+                })
                 .setColor(cyber)
                 .setTimestamp()
                 .setThumbnail(raceImg);
@@ -146,7 +152,10 @@ module.exports = {
 \`q!lb ${id}\` - shows lb for given race ID. For list of race IDs see <#846647839312445451> in [this server](${discord})
 \`q!lb u#tsp\` - shows user placement`
                 },
-                { name: 'Likely Cause(s)', values: parsingErrors.map((msg) => ` • ${msg}`).join('\n') }
+                {
+                    name: 'Likely Cause(s)',
+                    values: parsingErrors.map((msg) => ` • ${msg}`).join('\n')
+                }
             ])
             .setColor(red);
 

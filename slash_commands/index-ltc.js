@@ -73,7 +73,10 @@ const COLS = {
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
-let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
+let mapOption = new SlashCommandStringOption()
+    .setName('map')
+    .setDescription('Map')
+    .setRequired(true);
 
 let comboModifierOption = new SlashCommandStringOption()
     .setName('modifier')
@@ -152,7 +155,10 @@ async function getRowStandardData(entryRow, colset) {
 
         for (var i = 0; i < colset['TOWERS'].length; i++) {
             values[`Tower ${i + 1}`] =
-                sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value + ' (' + upgrades[i] + ')';
+                sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value +
+                ' (' +
+                upgrades[i] +
+                ')';
         }
     }
 
@@ -176,7 +182,9 @@ async function getRowStandardData(entryRow, colset) {
         values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
 
-    var challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LTC Combo`).setColor(palegreen);
+    var challengeEmbed = new Discord.EmbedBuilder()
+        .setTitle(`${values.MAP} LTC Combo`)
+        .setColor(palegreen);
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addFields([

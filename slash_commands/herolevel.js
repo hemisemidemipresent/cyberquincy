@@ -8,7 +8,10 @@ const {
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
 
-const heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
+const heroOption = new SlashCommandStringOption()
+    .setName('hero')
+    .setDescription('Hero')
+    .setRequired(true);
 Aliases.allHeroes().forEach((hero) => {
     heroOption.addChoices({ name: gHelper.toTitleCase(hero), value: hero });
 });
@@ -38,7 +41,9 @@ const ephemeralOption = new SlashCommandBooleanOption()
 
 builder = new SlashCommandBuilder()
     .setName('herolevel')
-    .setDescription('See how heroes level based on your inputted parameters (optionally with energizer)')
+    .setDescription(
+        'See how heroes level based on your inputted parameters (optionally with energizer)'
+    )
     .addStringOption(heroOption)
     .addIntegerOption(heroLevelOption)
     .addStringOption(mapDifficultyOption)
@@ -51,7 +56,12 @@ function generateHeroLevels(interaction) {
     mapDifficulty = interaction.options.getString('map_difficulty');
     energizerRound = interaction.options.getInteger('energizer_placement_round');
 
-    heroLevels = Heroes.levelingCurve(hero, placementRound, mapDifficulty, energizerRound || Infinity);
+    heroLevels = Heroes.levelingCurve(
+        hero,
+        placementRound,
+        mapDifficulty,
+        energizerRound || Infinity
+    );
     let res = table(gHelper.range(1, 20), heroLevels.slice(1));
     const embed = new Discord.EmbedBuilder()
         .setTitle(`${gHelper.toTitleCase(hero)} Leveling Chart`)

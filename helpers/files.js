@@ -22,5 +22,5 @@ async function* getFiles(dir, fileTypes) {
 }
 
 module.exports = {
-    getFiles,
+    getFiles
 };

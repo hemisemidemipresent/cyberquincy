@@ -18,7 +18,10 @@ async function execute(interaction) {
     imgur
         .uploadUrl(image)
         .then(async (json) => {
-            const embed = new Discord.EmbedBuilder().setDescription(`${json.link}`).setColor(cyber).setImage(`${json.link}`);
+            const embed = new Discord.EmbedBuilder()
+                .setDescription(`${json.link}`)
+                .setColor(cyber)
+                .setImage(`${json.link}`);
             await interaction.reply({ embeds: [embed], ephemeral: true });
         })
         .catch(async (e) => {

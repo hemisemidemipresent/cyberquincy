@@ -22,9 +22,24 @@ const { red, green } = require('../jsons/colours.json');
 
 const Emojis = require('../jsons/emojis.json');
 
-const { camo, lead, purple, regrow, ceramic, moab, bfb, zomg, ddt, bad } = Emojis['614111055890612225'].bloon;
-const { adora, benjamin, brickell, churchill, etienne, ezili, geraldo, gwen, jones, obyn, pat, psi, quincy, sauda } =
-    Emojis['614111055890612225'].hero;
+const { camo, lead, purple, regrow, ceramic, moab, bfb, zomg, ddt, bad } =
+    Emojis['614111055890612225'].bloon;
+const {
+    adora,
+    benjamin,
+    brickell,
+    churchill,
+    etienne,
+    ezili,
+    geraldo,
+    gwen,
+    jones,
+    obyn,
+    pat,
+    psi,
+    quincy,
+    sauda
+} = Emojis['614111055890612225'].hero;
 const raceEmojis = Emojis['753449196132237425'].race;
 const towerEmojis = Emojis['753449196132237425'].towers;
 
@@ -44,7 +59,10 @@ builder = new SlashCommandBuilder()
             .setRequired(false)
     )
     .addStringOption((option) =>
-        option.setName('user_id').setDescription('If you already know their user ID').setRequired(false)
+        option
+            .setName('user_id')
+            .setDescription('If you already know their user ID')
+            .setRequired(false)
     );
 
 module.exports = {
@@ -57,7 +75,8 @@ module.exports = {
             await this.loadUserID(userID, interaction);
         } else if (!challengeCode && !userID) {
             await interaction.reply({
-                content: 'Please specify a challenge code (or a user ID if you already know their user ID)',
+                content:
+                    'Please specify a challenge code (or a user ID if you already know their user ID)',
                 ephemeral: true
             });
         }
@@ -74,7 +93,10 @@ module.exports = {
             .setColor(green);
 
         seeUserAction = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId('stats').setLabel('See user statistics').setStyle(ButtonStyle.Primary)
+            new ButtonBuilder()
+                .setCustomId('stats')
+                .setLabel('See user statistics')
+                .setStyle(ButtonStyle.Primary)
         );
         await interaction.reply({ embeds: [embed], components: [seeUserAction] });
 
@@ -287,7 +309,10 @@ module.exports = {
             // playerXp = obj.playerXp;
             // veteran_rank = obj.veteranRank;
             // veteran_xp = obj.veteranXp;
-            let rank = obj.playerRank == 155 ? `Veteran Level ${obj.veteranRank}` : `Level ${obj.playerRank}`;
+            let rank =
+                obj.playerRank == 155
+                    ? `Veteran Level ${obj.veteranRank}`
+                    : `Level ${obj.playerRank}`;
             mainEmbed
                 .setTitle(`${name} (${rank})`)
                 .setDescription(desc.join('\n'))
@@ -311,7 +336,11 @@ module.exports = {
         await interaction.editReply({
             embeds: [embed],
             components: [row],
-            files: [new AttachmentBuilder(Buffer.from(JSON.stringify(obj, null, 1))).setName(`${this.userID}.json`)]
+            files: [
+                new AttachmentBuilder(Buffer.from(JSON.stringify(obj, null, 1))).setName(
+                    `${this.userID}.json`
+                )
+            ]
         });
 
         const filter = (selection) => {
@@ -431,7 +460,10 @@ async function request(objStr, url) {
     } catch (error) {
         return new Discord.EmbedBuilder()
             .setTitle('Invalid Challenge Code!')
-            .addField('In case this is a valid challenge code:', `report it to the [discord server](${discord})`)
+            .addField(
+                'In case this is a valid challenge code:',
+                `report it to the [discord server](${discord})`
+            )
             .setColor(red);
     }
 }

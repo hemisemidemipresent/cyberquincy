@@ -39,7 +39,10 @@ module.exports = {
                 .addField('date', `${date.value}`, true)
                 .addField('person', `${note} ${person.value}`, true);
             message.channel.send({ embeds: [challengeEmbed] });
-            if (isNaN(args[0])) return message.channel.send('Please specify a proper 2 towers chimps combo **number**');
+            if (isNaN(args[0]))
+                return message.channel.send(
+                    'Please specify a proper 2 towers chimps combo **number**'
+                );
         }
         access(parseInt(args[0]));
     }

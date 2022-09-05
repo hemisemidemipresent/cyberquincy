@@ -9,7 +9,7 @@
 
     "010": ["night_vision_goggles", "nvg", "goggles", "night_vision"],
     "020": ["shrapnel_shot", "shrapnel"],
-    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb","bbullet"],
+    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb", "bbullet"],
     "040": ["supply_drop", "supplydrop", "supply", "sd"],
     "050": ["elite_sniper", "es", "esniper", "elitesniper"],
 

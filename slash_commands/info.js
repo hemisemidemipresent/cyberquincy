@@ -3,7 +3,9 @@ const { SlashCommandBuilder } = require('discord.js');
 const { cyber } = require('../jsons/colours.json');
 const { discord } = require('../aliases/misc.json');
 
-builder = new SlashCommandBuilder().setName('info').setDescription('Information and Stats about this bot');
+builder = new SlashCommandBuilder()
+    .setName('info')
+    .setDescription('Information and Stats about this bot');
 
 async function execute(interaction) {
     const responseTime = Math.round(Date.now() - interaction.createdTimestamp);
@@ -27,7 +29,11 @@ async function execute(interaction) {
                 value: '[full bot statistics](https://statcord.com/bot/591922988832653313) - note users are inaccurate and servers might be inaccurate',
                 inline: true
             },
-            { name: 'discord server, join for updates (happens pretty often)', value: `${discord}`, inline: true }
+            {
+                name: 'discord server, join for updates (happens pretty often)',
+                value: `${discord}`,
+                inline: true
+            }
         ])
         .setFooter({ text: 'thank you for using it! Please share!' });
     return await interaction.reply({

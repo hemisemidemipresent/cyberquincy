@@ -4,7 +4,12 @@ const appID = 11;
 const skuID = 35;
 const { sessionID, UserAgent } = require('../1/config.json'); // getting the session ID is kinda sus
 const deviceID = null;
-const { ActionRowBuilder, ComponentType, SelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
+const {
+    ActionRowBuilder,
+    ComponentType,
+    SelectMenuBuilder,
+    SlashCommandBuilder
+} = require('discord.js');
 
 const { getUsernames } = require('../helpers/usernames');
 
@@ -21,7 +26,10 @@ builder = new SlashCommandBuilder()
             .setName('guild_stats')
             .setDescription("Get your guild's statistics")
             .addStringOption((option) =>
-                option.setName('guild_name').setDescription('The name of your guild').setRequired(true)
+                option
+                    .setName('guild_name')
+                    .setDescription('The name of your guild')
+                    .setRequired(true)
             )
     );
 
@@ -31,7 +39,11 @@ async function execute(interaction) {
 
 async function guild_stats(interaction) {
     const guildName = interaction.options.getString('guild_name');
-    let body = { searchQuery: `*${guildName}* AND NOT status:DISBANDED AND numMembers>0`, limit: 20, offset: 0 };
+    let body = {
+        searchQuery: `*${guildName}* AND NOT status:DISBANDED AND numMembers>0`,
+        limit: 20,
+        offset: 0
+    };
     let nonce = Math.random() * Math.pow(2, 63) + '';
     let bodyString = JSON.stringify(body);
     let sig = nksku.signonce.sign(body, nonce, sessionID);
@@ -61,7 +73,10 @@ async function guild_stats(interaction) {
         let guilds = data.guilds;
 
         if (guilds.length === 0)
-            return await interaction.reply({ content: `No guilds found with name ${guildName}`, ephemeral: true });
+            return await interaction.reply({
+                content: `No guilds found with name ${guildName}`,
+                ephemeral: true
+            });
         if (guilds.length === 1) {
             try {
                 let embed = await showRank(guilds[0], interaction);
@@ -112,7 +127,10 @@ async function guild_stats(interaction) {
         });
     } catch (error) {
         console.log(error);
-        await interaction.reply({ content: 'Something went wrong while searching for your guild', ephemeral: true });
+        await interaction.reply({
+            content: 'Something went wrong while searching for your guild',
+            ephemeral: true
+        });
     }
 }
 
@@ -125,7 +143,10 @@ function createSelector(guilds) {
             value: index.toString()
         });
     });
-    return new SelectMenuBuilder().setCustomId('guildSelector').setPlaceholder('Nothing selected').addOptions(options);
+    return new SelectMenuBuilder()
+        .setCustomId('guildSelector')
+        .setPlaceholder('Nothing selected')
+        .addOptions(options);
 }
 
 module.exports = {
@@ -152,7 +173,9 @@ async function showRank(guild) {
     const percent = (ranksData.rank / ranksData.total) * 100;
 
     const desc =
-        `rank: **#${ranksData.rank} out of ${ranksData.total}** (top ${percent.toPrecision(2)}%)\n` +
+        `rank: **#${ranksData.rank} out of ${ranksData.total}** (top ${percent.toPrecision(
+            2
+        )}%)\n` +
         `score: **${ranksData.score}**${CTPointsIcon}\n` +
         `owner: ${owner} (${guild.owner})\n` +
         `members: ${guild.numMembers}/${guild.maximumMembers} (${guild.numMembersPending} pending)\n` +

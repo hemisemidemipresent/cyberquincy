@@ -123,7 +123,9 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
         aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
     );
 
-    const altMapGroups = mapDifficultyGroups.map((mapGroup) => mapGroup.filter((map) => completedAltMaps.includes(map)));
+    const altMapGroups = mapDifficultyGroups.map((mapGroup) =>
+        mapGroup.filter((map) => completedAltMaps.includes(map))
+    );
     const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
         mapGroup.filter((map) => !completedAltMaps.concat(ogMapAbbr).includes(map))
     );
@@ -138,7 +140,9 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
             return `All ${mapDifficulty}${waterTowerAsterisk}`;
         } else if (unCompletedAltMapGroups[i].length < 5) {
             wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
+            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[i].join(
+                ', '
+            )}}`;
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {
@@ -190,11 +194,18 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
     async function createPage(direction = 1) {
         // The number of rows to be displayed is variable depending on the characters in each link
         // Try 15 and decrement every time it doesn't work.
-        for (maxNumRowsDisplayed = rightIndex + 1 - leftIndex; maxNumRowsDisplayed > 0; maxNumRowsDisplayed--) {
+        for (
+            maxNumRowsDisplayed = rightIndex + 1 - leftIndex;
+            maxNumRowsDisplayed > 0;
+            maxNumRowsDisplayed--
+        ) {
             let challengeEmbed = new Discord.EmbedBuilder();
 
             challengeEmbed.addFields([
-                { name: '# Combos', value: `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}` }
+                {
+                    name: '# Combos',
+                    value: `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}`
+                }
             ]);
 
             let fields = [];
@@ -214,7 +225,9 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                 }
                 let headerField = headers
                     .map((header, colIndex) =>
-                        header == 'LINK' ? header.padEnd(15, ' ') : header.padEnd(colWidths[colIndex], ' ')
+                        header == 'LINK'
+                            ? header.padEnd(15, ' ')
+                            : header.padEnd(colWidths[colIndex], ' ')
                     )
                     .join(' | ');
                 headerField = `\`${headerField}\``;

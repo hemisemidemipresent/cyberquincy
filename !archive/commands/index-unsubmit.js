@@ -7,7 +7,9 @@ const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL = '702089126706544661';
 // Change this to a channel in your test guild when testing
 const TEST_SUBMISSIONS_CHANNEL = '737445888602931252';
 const IS_TESTING = require('../1/config.json')['testing'];
-const SUBMISSIONS_CHANNEL = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
+const SUBMISSIONS_CHANNEL = IS_TESTING
+    ? TEST_SUBMISSIONS_CHANNEL
+    : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
 
 const REAL_CYBER_QUINCY_USER_ID = '591922988832653313';
 const TEST_CYBER_QUINCY_USER_ID = '737094027400183868';
@@ -72,7 +74,10 @@ function helpMessage() {
         .setTitle('`q!index-unsubmit` help')
         .setDescription('**Remove one of your submissions from `#submissions`**')
         .addFields([
-            { name: '`q!isub <link_to_submission_message>`', value: 'Removes your submission if it is still there' }
+            {
+                name: '`q!isub <link_to_submission_message>`',
+                value: 'Removes your submission if it is still there'
+            }
         ])
         .setColor(colours['black']);
 }

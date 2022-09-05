@@ -15,5 +15,4 @@ function getHeroObject(name, json, level) {
     return object;
 }
 
-module.exports = {
-};
+module.exports = {};

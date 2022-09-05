@@ -63,7 +63,20 @@ const aliases = [
         'spact',
         'spactory'
     ],
-    ['monkey-village', 'vill', 'vil', 'villi', 'town', 'house', 'energy', 'building', 'hut', 'circle', 'fort', 'village'],
+    [
+        'monkey-village',
+        'vill',
+        'vil',
+        'villi',
+        'town',
+        'house',
+        'energy',
+        'building',
+        'hut',
+        'circle',
+        'fort',
+        'village'
+    ],
     ['engineer-monkey', 'engineer', 'engie', 'engi', 'eng', 'overclock', 'engie']
 ];
 

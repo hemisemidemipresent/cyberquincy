@@ -24,7 +24,10 @@ async function handleCommand(interaction) {
     } catch (error) {
         console.error(error);
         try {
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+            await interaction.reply({
+                content: 'There was an error while executing this command!',
+                ephemeral: true
+            });
         } catch {
             // Unknown Interaction
         }
@@ -77,7 +80,7 @@ function extendStructure(_class) {
         const ephemeral = this.options.getBoolean('hide') || Boolean(options.ephemeral);
         options = {
             ...(typeof options === 'object' ? options : { content: options }),
-            ephemeral,
+            ephemeral
         };
 
         const message = await (this.deferred || this.replied
@@ -88,7 +91,7 @@ function extendStructure(_class) {
 
         return message;
     };
-};
+}
 
 module.exports = {
     commandFiles,

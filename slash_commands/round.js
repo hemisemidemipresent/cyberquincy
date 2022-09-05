@@ -16,14 +16,20 @@ builder = new SlashCommandBuilder()
     .setName('round')
     .setDescription('Gets information for a round')
     .addIntegerOption((option) =>
-        option.setName('round').setDescription('The round you want information for').setRequired(true)
+        option
+            .setName('round')
+            .setDescription('The round you want information for')
+            .setRequired(true)
     )
     .addStringOption((option) =>
         option
             .setName('game_mode')
             .setDescription('the game mode')
             .setRequired(false)
-            .addChoices({ name: 'normal', value: 'chimps' }, { name: 'Alternate Bloon Rounds (ABR)', value: 'abr' })
+            .addChoices(
+                { name: 'normal', value: 'chimps' },
+                { name: 'Alternate Bloon Rounds (ABR)', value: 'abr' }
+            )
     );
 
 function validateInput(interaction) {
@@ -47,15 +53,22 @@ function freeplay(round, isAbr) {
         .setDescription(`all **POSSIBLE** bloon sets\n${bloonSets.join('\n')}`)
 
         .addFields([
-            { name: 'ramping', value: `health: ${hRamping}x\nspeed: ${Math.round(sRamping * 100) / 100}` },
+            {
+                name: 'ramping',
+                value: `health: ${hRamping}x\nspeed: ${Math.round(sRamping * 100) / 100}`
+            },
             {
                 name: `XP Earned on R${round}`,
-                value: `${gHelper.numberWithCommas(xp * 0.1)} (note this takes into the account freeplay xp reduction)`,
+                value: `${gHelper.numberWithCommas(
+                    xp * 0.1
+                )} (note this takes into the account freeplay xp reduction)`,
                 inline: true
             },
             {
                 name: 'Total XP if You Started on R1',
-                value: `${gHelper.numberWithCommas(totalxp * 0.1)} (note this takes into the account freeplay xp reduction)`,
+                value: `${gHelper.numberWithCommas(
+                    totalxp * 0.1
+                )} (note this takes into the account freeplay xp reduction)`,
                 inline: true
             },
             {
@@ -152,9 +165,20 @@ async function execute(interaction) {
         .addFields([
             { name: 'Round Length (seconds)', value: roundLength.toString(), inline: true },
             { name: 'RBE', value: `${gHelper.numberWithCommas(roundRBE)}`, inline: true },
-            { name: `XP Earned on R${round}`, value: `${gHelper.numberWithCommas(xp)}`, inline: true },
-            { name: `Cash Earned from R${round}`, value: `${gHelper.numberAsCost(roundCash)}`, inline: true },
-            { name: 'Total XP if You Started on R1', value: `${gHelper.numberWithCommas(totalxp)}` },
+            {
+                name: `XP Earned on R${round}`,
+                value: `${gHelper.numberWithCommas(xp)}`,
+                inline: true
+            },
+            {
+                name: `Cash Earned from R${round}`,
+                value: `${gHelper.numberAsCost(roundCash)}`,
+                inline: true
+            },
+            {
+                name: 'Total XP if You Started on R1',
+                value: `${gHelper.numberWithCommas(totalxp)}`
+            },
             {
                 name: '**Note:**',
                 value:
@@ -162,12 +186,16 @@ async function execute(interaction) {
                     ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
             }
         ])
-        .setFooter({ text: `For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\`` })
+        .setFooter({
+            text: `For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\``
+        })
         .setColor(colours['cyber']);
     if (round > 80) {
         let hRamping = enemyHelper.getHealthRamping(round);
         let sRamping = enemyHelper.getSpeedRamping(round);
-        roundEmbed.addFields([{ name: 'ramping', value: `health: ${hRamping}x\nspeed: ${sRamping}x` }]);
+        roundEmbed.addFields([
+            { name: 'ramping', value: `health: ${hRamping}x\nspeed: ${sRamping}x` }
+        ]);
     }
     return await interaction.reply({ embeds: [roundEmbed] });
 }

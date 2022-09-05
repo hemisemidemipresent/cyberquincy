@@ -25,12 +25,15 @@ builder = new SlashCommandBuilder()
                 { name: 'Engineer Monkey (Master Builder)', value: 'engineer_monkey' }
             )
     )
-    .addIntegerOption((option) => option.setName('level').setDescription('The level of the paragon').setRequired(true));
+    .addIntegerOption((option) =>
+        option.setName('level').setDescription('The level of the paragon').setRequired(true)
+    );
 
 function validateInput(interaction) {
     level = interaction.options.getInteger('level');
 
-    if (level < 1 || level > 100) return `Level for paragon must be between 1 and 100 inclusive (inputted: ${level})`;
+    if (level < 1 || level > 100)
+        return `Level for paragon must be between 1 and 100 inclusive (inputted: ${level})`;
 }
 
 async function execute(interaction) {

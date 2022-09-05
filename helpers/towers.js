@@ -47,7 +47,11 @@ function allTowerUpgrades() {
 
 // Gets all 0-0-0 tower names
 function allTowers() {
-    return [].concat(allPrimaryTowers()).concat(allMilitaryTowers()).concat(allMagicTowers()).concat(allSupportTowers());
+    return []
+        .concat(allPrimaryTowers())
+        .concat(allMilitaryTowers())
+        .concat(allMagicTowers())
+        .concat(allSupportTowers());
 }
 
 function allTowerPaths() {
@@ -137,7 +141,9 @@ GROUP_TO_TOWER = {
 };
 
 function allGroupTowerCanonicals(group) {
-    return Aliases.getAliasGroupsFromSameImmediateDirectoryAs(GROUP_TO_TOWER[group]).map((ag) => ag.canonical);
+    return Aliases.getAliasGroupsFromSameImmediateDirectoryAs(GROUP_TO_TOWER[group]).map(
+        (ag) => ag.canonical
+    );
 }
 
 function allWaterTowers() {
@@ -241,7 +247,9 @@ function upgradesFromPath(path) {
     const entityPathIndex = ['top-path', 'middle-path', 'bottom-path'].indexOf(path);
     let tier;
     for (tier = 1; tier <= 5; tier++) {
-        entityUpgrades.push('0'.repeat(entityPathIndex) + `${tier}` + '0'.repeat(2 - entityPathIndex));
+        entityUpgrades.push(
+            '0'.repeat(entityPathIndex) + `${tier}` + '0'.repeat(2 - entityPathIndex)
+        );
     }
     return entityUpgrades;
 }
@@ -305,7 +313,10 @@ function formatEntity(entity) {
         return Aliases.toIndexNormalForm(entity);
     } else if (isTowerPath(entity)) {
         [towerName, path] = entity.split('#');
-        return `${gHelper.toTitleCase(path.split('-').join(' '))} ` + `${Aliases.toIndexNormalForm(towerName)}`;
+        return (
+            `${gHelper.toTitleCase(path.split('-').join(' '))} ` +
+            `${Aliases.toIndexNormalForm(towerName)}`
+        );
     } else if (isTowerUpgrade(entity)) {
         return towerUpgradeToIndexNormalForm(entity);
     } else if (Aliases.isHero(entity)) {

@@ -46,5 +46,5 @@ module.exports = {
         }
         let factInfo = fact[randex];
         message.channel.send(`${factInfo}`);
-    },
+    }
 };

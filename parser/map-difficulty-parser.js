@@ -9,7 +9,7 @@ class MapDifficultyParser {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
             Aliases.allMapDifficulties(),
-            permitted_map_difficulties.map(d => d.toLowerCase()),
+            permitted_map_difficulties.map((d) => d.toLowerCase())
         );
     }
 

@@ -1,16 +1,25 @@
 const { cyber } = require('../jsons/colours.json');
 module.exports = {
     name: 'ap',
-    description: 'tells you about the abr rounds (below 100 cos freeplay abr is the same as normal)',
+    description:
+        'tells you about the abr rounds (below 100 cos freeplay abr is the same as normal)',
     aliases: ['popology'],
     execute(message, args) {
         if (!args.length) {
             const choosemebed = new Discord.EmbedBuilder()
                 .setTitle('What can i help you with?')
-                .setDescription('use **q!ap <question number>**. \ne.g. ``q!ap 1`` will answer question 1')
+                .setDescription(
+                    'use **q!ap <question number>**. \ne.g. ``q!ap 1`` will answer question 1'
+                )
                 .addFields([
-                    { name: 'q!ap 1', value: 'I dont understand what s,d,p,md,fd,cd,j,etc... means' },
-                    { name: 'q!ap 2', value: "I dont understad what is 'normal type','sharp type',etc... is" },
+                    {
+                        name: 'q!ap 1',
+                        value: 'I dont understand what s,d,p,md,fd,cd,j,etc... means'
+                    },
+                    {
+                        name: 'q!ap 2',
+                        value: "I dont understad what is 'normal type','sharp type',etc... is"
+                    },
                     { name: 'q!ap 3', value: 'I dont understand buffs' }
                 ])
                 .setColor(cyber);
@@ -33,7 +42,9 @@ module.exports = {
                 message.channel.send({ embeds: [damageembed] });
             } else if (args[1] == 'md' || args[1] == 'cd' || args[1] == 'fd') {
                 const additionaldamageEmbed = new Discord.EmbedBuilder()
-                    .setTitle('Some attacks do additional damage to ceramic bloons, MOAB-class bloons, or fortified bloons.')
+                    .setTitle(
+                        'Some attacks do additional damage to ceramic bloons, MOAB-class bloons, or fortified bloons.'
+                    )
                     .setDescription(
                         'These will be indicated by cd, md, and fd respectively, and the total damage will be written in parentheses for convenience, eg "2d, 1md (3)". Other bonuses are possible, but will not be abbreviated due to how uncommon they are.'
                     )
@@ -104,7 +115,9 @@ module.exports = {
             } else {
                 const mainpropembed = new Discord.EmbedBuilder()
                     .setTitle('which of the following letters do you not understand?')
-                    .setDescription('use **q!ap 1 <whichever funny letter you want elaboration>** from the list below:')
+                    .setDescription(
+                        'use **q!ap 1 <whichever funny letter you want elaboration>** from the list below:'
+                    )
                     .addFields([
                         { name: '**d**', value: 'Damage', inline: true },
                         {
@@ -114,7 +127,11 @@ module.exports = {
                         },
                         { name: '**p**', value: 'Pierce', inline: true },
                         { name: '**r**', value: 'range', inline: true },
-                        { name: '**s**', value: 'seconds per attack/cooldown/reload', inline: true },
+                        {
+                            name: '**s**',
+                            value: 'seconds per attack/cooldown/reload',
+                            inline: true
+                        },
                         { name: '**j**', value: 'projectile count', inline: true }
                     ])
                     .setColor(cyber);
@@ -122,7 +139,9 @@ module.exports = {
             }
         } else if (args[0] == 2) {
             const typembed = new Discord.EmbedBuilder()
-                .setImage('https://cdn.discordapp.com/attachments/594348433922457610/646631295346278412/Screenshot_70.png')
+                .setImage(
+                    'https://cdn.discordapp.com/attachments/594348433922457610/646631295346278412/Screenshot_70.png'
+                )
                 .addFields([
                     {
                         name: 'Attacks can have special effects other than dealing damage, which may be triggered in one of several ways:',

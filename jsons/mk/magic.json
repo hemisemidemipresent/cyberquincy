@@ -27,33 +27,23 @@
                 "knowledges": [
                     {
                         "id": "CheaperDoubles",
-                        "prerequisites": [
-                            "SuperRange"
-                        ]
+                        "prerequisites": ["SuperRange"]
                     },
                     {
                         "id": "HeavyKnockback",
-                        "prerequisites": [
-                            "SuperRange"
-                        ]
+                        "prerequisites": ["SuperRange"]
                     },
                     {
                         "id": "HotMagic",
-                        "prerequisites": [
-                            "LingeringMagic"
-                        ]
+                        "prerequisites": ["LingeringMagic"]
                     },
                     {
                         "id": "SpeedyBrewing",
-                        "prerequisites": [
-                            "MagicTricks"
-                        ]
+                        "prerequisites": ["MagicTricks"]
                     },
                     {
                         "id": "MoMonkeyMoney",
-                        "prerequisites": [
-                            "SpeedyBrewing"
-                        ]
+                        "prerequisites": ["SpeedyBrewing"]
                     }
                 ]
             }
@@ -69,34 +59,23 @@
                 "knowledges": [
                     {
                         "id": "DiversionTactics",
-                        "prerequisites": [
-                            "CheaperDoubles"
-                        ]
+                        "prerequisites": ["CheaperDoubles"]
                     },
                     {
                         "id": "StrikeDownTheFalse",
-                        "prerequisites": [
-                            "HeavyKnockback"
-                        ]
+                        "prerequisites": ["HeavyKnockback"]
                     },
                     {
                         "id": "WarmOak",
-                        "prerequisites": [
-                            "HotMagic"
-                        ]
+                        "prerequisites": ["HotMagic"]
                     },
                     {
                         "id": "FlameJet",
-                        "prerequisites": [
-                            "MagicTricks",
-                            "HotMagic"
-                        ]
+                        "prerequisites": ["MagicTricks", "HotMagic"]
                     },
                     {
                         "id": "StrongTonic",
-                        "prerequisites": [
-                            "SpeedyBrewing"
-                        ]
+                        "prerequisites": ["SpeedyBrewing"]
                     }
                 ]
             },
@@ -106,21 +85,15 @@
                 "knowledges": [
                     {
                         "id": "ArcaneImpale",
-                        "prerequisites": [
-                            "FlameJet"
-                        ]
+                        "prerequisites": ["FlameJet"]
                     },
                     {
                         "id": "AcidStability",
-                        "prerequisites": [
-                            "StrongTonic"
-                        ]
+                        "prerequisites": ["StrongTonic"]
                     },
                     {
                         "id": "ColdFront",
-                        "prerequisites": [
-                            "WarmOak"
-                        ]
+                        "prerequisites": ["WarmOak"]
                     }
                 ]
             }
@@ -136,21 +109,15 @@
                 "knowledges": [
                     {
                         "id": "DeadlyTranquility",
-                        "prerequisites": [
-                            "DiversionTactics"
-                        ]
+                        "prerequisites": ["DiversionTactics"]
                     },
                     {
                         "id": "ThereCanBeOnlyOne",
-                        "prerequisites": [
-                            "StrikeDownTheFalse"
-                        ]
+                        "prerequisites": ["StrikeDownTheFalse"]
                     },
                     {
                         "id": "VineRupture",
-                        "prerequisites": [
-                            "ColdFront"
-                        ]
+                        "prerequisites": ["ColdFront"]
                     }
                 ]
             },
@@ -160,17 +127,11 @@
                 "knowledges": [
                     {
                         "id": "ManaShield",
-                        "prerequisites": [
-                            "ArcaneImpale"
-                        ]
+                        "prerequisites": ["ArcaneImpale"]
                     },
                     {
                         "id": "TinyTornadoes",
-                        "prerequisites": [
-                            "DeadlyTranquility",
-                            "ColdFront",
-                            "VineRupture"
-                        ]
+                        "prerequisites": ["DeadlyTranquility", "ColdFront", "VineRupture"]
                     }
                 ]
             }

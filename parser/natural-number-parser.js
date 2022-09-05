@@ -15,16 +15,12 @@ class NaturalNumberParser {
 
     validateValues(low, high) {
         if (!this.isNaturalNumber(low)) {
-            throw new DeveloperCommandError(
-                `\`low\` must be a counting number`
-            );
+            throw new DeveloperCommandError(`\`low\` must be a counting number`);
         }
 
         if (high !== Infinity) {
             if (!this.isNaturalNumber(high)) {
-                throw new DeveloperCommandError(
-                    `\`high\` must be a counting number`
-                );
+                throw new DeveloperCommandError(`\`high\` must be a counting number`);
             }
         }
     }

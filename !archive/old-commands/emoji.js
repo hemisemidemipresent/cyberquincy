@@ -17,7 +17,9 @@ module.exports = {
             if (typeof emojisArray === 'string') emojisArray = [emojisArray];
 
             const emojiEmbed = new Discord.EmbedBuilder()
-                .setTitle('There Are ' + message.guild.emojis.size + ' Emojis on ' + message.guild.name)
+                .setTitle(
+                    'There Are ' + message.guild.emojis.size + ' Emojis on ' + message.guild.name
+                )
                 .setColor(cyber)
                 .setDescription('These Are All The Emojis:')
                 .setThumbnail(message.guild.iconURL);
@@ -72,7 +74,9 @@ module.exports = {
         } else if (args[0] == 'yes') {
             message.channel.send('<a:yes:647820009493626892>');
         } else if (args[0] == 'pink') {
-            message.channel.send('<a:pink1:647821652218085376> <a:pink2:647821634408939531> <a:pink3:647821621708587019>');
+            message.channel.send(
+                '<a:pink1:647821652218085376> <a:pink2:647821634408939531> <a:pink3:647821621708587019>'
+            );
         } else if (args[0] == 'marine') {
             if (args[1] == 'big') {
                 message.channel.send(

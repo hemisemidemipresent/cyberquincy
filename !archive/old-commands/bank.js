@@ -9,17 +9,22 @@ module.exports = {
             time: 10000,
             errors: ['time']
         };
-        const selectBankMsg = 'Please select which bank you are using\n3 - x3x bank\n4 - x4x bank\n5 - x5x bank';
-        const errorBankMsg = 'Sorry, please specify a bank type number from 3 to 5 next time. Run the command again';
+        const selectBankMsg =
+            'Please select which bank you are using\n3 - x3x bank\n4 - x4x bank\n5 - x5x bank';
+        const errorBankMsg =
+            'Sorry, please specify a bank type number from 3 to 5 next time. Run the command again';
         const selectMKMsg =
             'Type the number to select which Monkey Knowledge you are using\n0 - none\n1 - Flat Pack Buildings\n2 - Flat pack buildings + Bigger Banks';
-        const errorMKMsg = 'Sorry, please specify a valid option next time (0-2). Run the commands again';
+        const errorMKMsg =
+            'Sorry, please specify a valid option next time (0-2). Run the commands again';
         const selectBenjaminMsg =
             'Please select bank hack %:\n0 - no ben / ben is below lvl 5\n5 - ben lvl 5 to 8\n12 - ben lvl 9+';
-        const errorBenjaminMsg = 'sorry, please specify a valid value (0, 5, or 12). Run the command again';
+        const errorBenjaminMsg =
+            'sorry, please specify a valid value (0, 5, or 12). Run the command again';
         const selectCrosspathMsg =
             'Please select the crosspath by typing the number:\n0 - 03+x farm\n1 - 13+0 farm\n2 - 23+0 farm';
-        const errorCrosspathMsg = 'Please specify a valid crosspath option (0 - 2). Run the command again';
+        const errorCrosspathMsg =
+            'Please specify a valid crosspath option (0 - 2). Run the command again';
         const selectDiffMsg =
             'Please type the corresponding number to select the difficulty\n1 - easy\n2 - medium\n3 - hard\n4 - impoppable\n5 - half cash';
         const errorDiffMsg = 'Please specify a correct number (1 - 5). Run the command again';
@@ -82,13 +87,25 @@ module.exports = {
                     if (isNaN(crosspathNum) || crosspathNum < 0 || crosspathNum > 2) {
                         return message.channel.send(errorCrosspathMsg);
                     }
-                    findDifficulty(bankTier, flatPackBuilding, BiggerBanks, hackPercent, crosspathNum);
+                    findDifficulty(
+                        bankTier,
+                        flatPackBuilding,
+                        BiggerBanks,
+                        hackPercent,
+                        crosspathNum
+                    );
                 })
                 .catch(() => {
                     tookTooLong(message);
                 });
         }
-        function findDifficulty(bankTier, flatPackBuilding, BiggerBanks, hackPercent, crosspathNum) {
+        function findDifficulty(
+            bankTier,
+            flatPackBuilding,
+            BiggerBanks,
+            hackPercent,
+            crosspathNum
+        ) {
             message.channel.send(selectDiffMsg);
             message.channel
                 .awaitMessages(filter, options)
@@ -122,7 +139,14 @@ function isValidHack(hackPercent) {
     }
     return false;
 }
-function calculate(bankTier, flatPackBuilding, BiggerBanks, hackPercent, crosspathNum, difficultyId) {
+function calculate(
+    bankTier,
+    flatPackBuilding,
+    BiggerBanks,
+    hackPercent,
+    crosspathNum,
+    difficultyId
+) {
     let maxCapacity = 0;
     if (bankTier == 3) {
         maxCapacity += 7000;

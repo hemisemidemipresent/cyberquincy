@@ -1,6 +1,6 @@
 const Minesweeper = require('discord.js-minesweeper');
 const Discord = require('discord.js');
-const { green } = require('../jsons/colours.json');
+const { green } = require('../jsons/colors.json');
 const NaturalNumberParser = require('../parser/natural-number-parser');
 const OptionalParser = require('../parser/optional-parser');
 module.exports = {

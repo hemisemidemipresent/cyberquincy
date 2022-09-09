@@ -8,7 +8,7 @@ const RaceParser = require('../parser/raceid-parser.js');
 
 const race = require('../helpers/race');
 
-const { red, cyber, green } = require('../jsons/colours.json');
+const { red, cyber, green } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');
 
 const Leaderboard = require('../helpers/race/leaderboard.js');

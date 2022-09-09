@@ -1,5 +1,5 @@
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
-const { lightgreen, red } = require('../jsons/colours.json');
+const { lightgreen, red } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');
 
 const hardmodeodyssey =

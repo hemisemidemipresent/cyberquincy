@@ -72,8 +72,8 @@ const ROUNDING_ERRORS = {
     111: [BAD],
     114: [MOAB, BFB, DDT],
     119: [MOAB, BFB, DDT],
-    124: [BFB],
-}
+    124: [BFB]
+};
 
 class Enemy {
     constructor(name, round = 80, fortified = false, camo = false, regrow = false) {
@@ -365,19 +365,21 @@ class Enemy {
 
         if (this.onlyExistsInChallengeEditor()) {
             notes.push(
-                "Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)"
+                'Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)'
             );
         }
 
         if (this.name == DDT) {
-            notes.push("DDTs have the camgrow property by default (meaning they release camgrow ceramics)");
+            notes.push('DDTs have the camgrow property by default (meaning they release camgrow ceramics)');
         }
 
-        const buggedLayers = ROUNDING_ERRORS[this.round]
+        const buggedLayers = ROUNDING_ERRORS[this.round];
         if (buggedLayers) {
             notes.push(
-                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers.map(l => formatName(l, true)).join(', ')}} ` + 
-                "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
+                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers
+                    .map((l) => formatName(l, true))
+                    .join(', ')}} ` +
+                    "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
             );
         }
 
@@ -586,7 +588,6 @@ function getSpeedRamping(r) {
 module.exports = {
     BASE_RED_BLOON_SECONDS_PER_SECOND,
     ENEMIES_THAT_CAN_BE_SUPER,
-
     ENEMIES,
     BLOONS,
     MOABS,

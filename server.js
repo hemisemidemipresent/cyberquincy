@@ -29,7 +29,7 @@ function pingHeroku() {
     app.listen(process.env.PORT || 3000);
 }
 function globalRequirements() {
-    global.colours = require('./jsons/colours.json');
+    global.colours = require('./jsons/colors.json');
     global.Towers = require('./helpers/towers.js');
     global.AliasRepository = require('./alias-repository.js');
 

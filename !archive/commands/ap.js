@@ -1,4 +1,4 @@
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 module.exports = {
     name: 'ap',
     description: 'tells you about the abr rounds (below 100 cos freeplay abr is the same as normal)',

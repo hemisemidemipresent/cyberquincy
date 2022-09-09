@@ -21,7 +21,7 @@ const clonedeep = require('lodash.clonedeep');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 
-const { orange, palered } = require('../jsons/colours.json');
+const { orange, palered } = require('../jsons/colors.json');
 
 const { COLS } = require('../services/index/2tc_scraper');
 
@@ -74,17 +74,13 @@ function parseEntity(interaction, num) {
             let parsed = CommandParser.parse([canonicalEntity], entityParser);
             // Alias tier 1 and 2 towers to base tower
             if (parsed.tower_upgrade) {
-                const [, tier] = Towers.pathTierFromUpgradeSet(
-                    Towers.towerUpgradeToUpgrade(
-                        parsed.tower_upgrade
-                    )
-                )
+                const [, tier] = Towers.pathTierFromUpgradeSet(Towers.towerUpgradeToUpgrade(parsed.tower_upgrade));
                 if (tier < 3) {
-                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade)
-                    parsed = CommandParser.parse([`${tower}#222`], entityParser)
+                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade);
+                    parsed = CommandParser.parse([`${tower}#222`], entityParser);
                 }
             }
-            return parsed
+            return parsed;
         } else {
             const parsed = new Parsed();
             parsed.addError('Canonical not found');

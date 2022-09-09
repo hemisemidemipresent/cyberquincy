@@ -1,6 +1,6 @@
 const RegexParser = require('../parser/regex-parser');
 
-const colours = require('../jsons/colours.json');
+const colours = require('../jsons/colors.json');
 
 const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL = '702089126706544661';
 // Fill this in when you want to test this in your own server

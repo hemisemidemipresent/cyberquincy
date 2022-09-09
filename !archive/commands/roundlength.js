@@ -1,6 +1,6 @@
 const roundlength = require('../jsons/roundlength.json');
 
-const { red, lightgrey, grey } = require('../jsons/colours.json');
+const { red, lightgrey, grey } = require('../jsons/colors.json');
 
 const RoundParser = require('../parser/round-parser');
 const OptionalParser = require('../parser/optional-parser');

@@ -14,17 +14,15 @@ async function loadAliases() {
 function addHideOptions(options) {
     const hasSubcommand = options.some(
         ({ type }) =>
-            type === ApplicationCommandOptionType.SubcommandGroup ||
-            type === ApplicationCommandOptionType.Subcommand
+            type === ApplicationCommandOptionType.SubcommandGroup || type === ApplicationCommandOptionType.Subcommand
     );
 
-    if (hasSubcommand)
-        options.forEach((option) => ((option.options ??= []), addHideOptions(option.options)));
+    if (hasSubcommand) options.forEach((option) => ((option.options ??= []), addHideOptions(option.options)));
     else
         options.push({
             name: 'hide',
             description: 'Whether to hide the response',
-            type: ApplicationCommandOptionType.Boolean,
+            type: ApplicationCommandOptionType.Boolean
         });
 }
 
@@ -44,10 +42,7 @@ async function registerCommands() {
 
     const rest = new REST({ version: '9' }).setToken(activeToken());
     if (testing) {
-        const commands = slashCommandCenter
-            .commandFiles()
-            //.filter((file) => !file.beta)
-            .map(getCommandBody);
+        const commands = slashCommandCenter.commandFiles().map(getCommandBody);
         await rest
             .put(Routes.applicationGuildCommands(activeClientID(), testingGuild), { body: commands })
             .then(() => console.log('Successfully registered application commands for test guild.'))

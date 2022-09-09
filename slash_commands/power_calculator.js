@@ -5,7 +5,7 @@ const Lexer = require('lex');
 
 const LexicalParser = require('../helpers/calculator/lexical_parser');
 
-const { red, paragon } = require('../jsons/colours.json');
+const { red, paragon } = require('../jsons/colors.json');
 
 const costs = require('../jsons/costs.json');
 const reqs = require('../jsons/power_degree_req.json');

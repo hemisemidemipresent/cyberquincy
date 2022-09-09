@@ -8,7 +8,7 @@ const {
     getHealthRamping
 } = require('../helpers/enemies');
 const roundHelper = require('../helpers/rounds');
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 
 const enemyOption = new SlashCommandStringOption()
     .setName('bloon')

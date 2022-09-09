@@ -1,4 +1,4 @@
-const { green } = require('../jsons/colours.json');
+const { green } = require('../jsons/colors.json');
 let bossStart = {
     day: 6,
     hour: 8,

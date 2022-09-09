@@ -25,6 +25,7 @@ function addHideOptions(options) {
             name: 'hide',
             description: 'Whether to hide the response',
             type: ApplicationCommandOptionType.Boolean,
+            choices: [{ name: 'Yes', value: 1 }]
         });
 }
 

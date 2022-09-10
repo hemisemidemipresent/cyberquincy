@@ -10,9 +10,9 @@ const BTD6_INDEX_SERVER_ID = '661812833771847700';
 
 // Fill this in when you want to test this in your own server
 // Change this to a channel in your test guild when testing
-const TEST_SUBMISSIONS_CHANNEL = '69';
-const TEST_GUILD = '420';
-const IS_TESTING = require('../1/config.json')['testing'];
+const TEST_SUBMISSIONS_CHANNEL = '420';
+const TEST_GUILD = '69';
+const IS_TESTING = require('../1/config.json').testing;
 const SUBMISSIONS_CHANNEL = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
 const SUBMISSIONS_CHANNEL_2 = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL_2;
 const SUBMISSIONS_GUILD = IS_TESTING ? TEST_GUILD : BTD6_INDEX_SERVER_ID;
@@ -28,13 +28,16 @@ async function execute(interaction) {
     let messageAttachment = interaction.options.getAttachment('img');
     image = messageAttachment.url;
     let currentGuild = interaction.guild.id;
-    if (currentGuild != SUBMISSIONS_GUILD){
+    if (currentGuild != SUBMISSIONS_GUILD) {
         let wrongGuildErr = 'Submission Preview (you may only submit from within the BTD6 Index Channel)';
         imgur
             .uploadUrl(image)
             .then(async (json) => {
-                const embed = new Discord.EmbedBuilder().setDescription(`${json.link}`).setColor(cyber).setImage(`${json.link}`);
-                await interaction.reply({content: wrongGuildErr, embeds: [embed], ephemeral: true});
+                const embed = new Discord.EmbedBuilder()
+                    .setDescription(`${json.link}`)
+                    .setColor(cyber)
+                    .setImage(`${json.link}`);
+                await interaction.reply({ content: wrongGuildErr, embeds: [embed], ephemeral: true });
             })
             .catch(async (e) => {
                 console.log(e);
@@ -46,14 +49,18 @@ async function execute(interaction) {
             });
         return;
     }
-    console.log(interaction.guild.id);
+    await interaction.deferReply();
     imgur
         .uploadUrl(image)
         .then(async (json) => {
-            const embed = new Discord.EmbedBuilder().setDescription(`${json.link}`).setColor(cyber).setImage(`${json.link}`).setFooter({text: `sent by ${interaction.user.tag}` });
-            const {url} = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send({embeds: [embed]});
-            await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send({embeds: [embed]});
+            const embed = new Discord.EmbedBuilder()
+                .setDescription(`${json.link}`)
+                .setColor(cyber)
+                .setImage(`${json.link}`)
+                .setFooter({ text: `sent by ${interaction.user.tag}` });
+            const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send({ embeds: [embed] });
             await interaction.reply({ content: 'Submitted: ' + url });
+            await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send({ embeds: [embed] });
         })
         .catch(async (e) => {
             console.log(e);
@@ -63,7 +70,6 @@ async function execute(interaction) {
             );
             return await interaction.reply({ content: errMsg, ephemeral: false });
         });
-    
 }
 
 module.exports = {

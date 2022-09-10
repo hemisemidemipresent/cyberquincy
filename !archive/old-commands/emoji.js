@@ -1,4 +1,4 @@
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 module.exports = {
     name: 'emote',
     description: 'emojis',

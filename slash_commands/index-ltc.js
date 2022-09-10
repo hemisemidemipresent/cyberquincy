@@ -6,7 +6,7 @@ const gHelper = require('../helpers/general.js');
 const MIN_ROW = 1;
 const MAX_ROW = 100;
 
-const { palegreen } = require('../jsons/colours.json');
+const { palegreen } = require('../jsons/colors.json');
 
 const COLS = {
     ONE: {

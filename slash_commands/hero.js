@@ -4,7 +4,7 @@ const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
 
 const axios = require('axios');
 const { footer } = require('../aliases/misc.json');
-const { red, cyber } = require('../jsons/colours.json');
+const { red, cyber } = require('../jsons/colors.json');
 
 const heroOption = new SlashCommandStringOption()
     .setName('hero')
@@ -73,7 +73,7 @@ async function execute(interaction) {
 
     const embed = await embedBloonology(heroName, heroLevel);
 
-    return await interaction.reply({ embeds: [embed], ephemeral: false });
+    return await interaction.reply({ embeds: [embed] });
 }
 
 module.exports = {

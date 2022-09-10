@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 const { footer } = require('../aliases/misc.json');
-const { paragon } = require('../jsons/colours.json');
+const { paragon } = require('../jsons/colors.json');
 
 const pHelp = require('../helpers/paragon');
 const paragonStats = require('../jsons/paragon.json');

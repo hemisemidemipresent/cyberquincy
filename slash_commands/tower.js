@@ -15,7 +15,7 @@ const Towers = require('../helpers/towers.js');
 const bHelper = require('../helpers/bloons-general');
 
 const { discord, footer } = require('../aliases/misc.json');
-const { red, cyber } = require('../jsons/colours.json');
+const { red, cyber } = require('../jsons/colors.json');
 
 const towerOption = new SlashCommandStringOption()
     .setName('tower')

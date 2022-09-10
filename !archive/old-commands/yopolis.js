@@ -1,4 +1,4 @@
-const { cyber, red } = require('../jsons/colours.json');
+const { cyber, red } = require('../jsons/colors.json');
 const CashParser = require('../parser/cash-parser');
 const NaturalNumberParser = require('../parser/natural-number-parser');
 const AnyOrderParser = require('../parser/any-order-parser');

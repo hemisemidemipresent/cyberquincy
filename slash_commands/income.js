@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const r = require('../jsons/income-normal.json');
 const abr = require('../jsons/income-abr.json');
 const gHelper = require('../helpers/general.js');
-const { red, magenta, yellow } = require('../jsons/colours.json');
+const { red, magenta, yellow } = require('../jsons/colors.json');
 
 builder = new SlashCommandBuilder()
     .setName('income')

@@ -10,7 +10,7 @@ const roundHelper = require('../helpers/rounds');
 const enemyHelper = require('../helpers/enemies');
 const gHelper = require('../helpers/general');
 
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 
 builder = new SlashCommandBuilder()
     .setName('round')

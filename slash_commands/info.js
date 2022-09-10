@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');
 
 builder = new SlashCommandBuilder().setName('info').setDescription('Information and Stats about this bot');

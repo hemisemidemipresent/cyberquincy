@@ -1,5 +1,5 @@
 const { DiscordAPIError } = require('discord.js');
-const { cyber, palepurple } = require('../jsons/colours.json');
+const { cyber, palepurple } = require('../jsons/colors.json');
 
 module.exports = {
     name: 'jointhread',

@@ -9,7 +9,7 @@ const LexicalParser = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round2.json');
 const RoundParser = require('../parser/round-parser');
 
-const { red } = require('../jsons/colours.json');
+const { red } = require('../jsons/colors.json');
 
 const costs = require('../jsons/costs.json');
 const heroes = require('../jsons/heroes.json');

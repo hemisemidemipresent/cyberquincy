@@ -4,7 +4,7 @@ const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
 
-const { paleblue } = require('../jsons/colours.json');
+const { paleblue } = require('../jsons/colors.json');
 
 const Parsed = require('../parser/parsed.js');
 
@@ -149,17 +149,13 @@ function parseEntity(interaction) {
             let parsed = CommandParser.parse([canonicalEntity], entityParser);
             // Alias tier 1 and 2 towers to base tower
             if (parsed.tower_upgrade) {
-                const [, tier] = Towers.pathTierFromUpgradeSet(
-                    Towers.towerUpgradeToUpgrade(
-                        parsed.tower_upgrade
-                    )
-                )
+                const [, tier] = Towers.pathTierFromUpgradeSet(Towers.towerUpgradeToUpgrade(parsed.tower_upgrade));
                 if (tier < 3) {
-                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade)
-                    parsed = CommandParser.parse([`${tower}#222`], entityParser)
+                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade);
+                    parsed = CommandParser.parse([`${tower}#222`], entityParser);
                 }
             }
-            return parsed
+            return parsed;
         } else {
             const parsed = new Parsed();
             parsed.addError('Canonical not found');

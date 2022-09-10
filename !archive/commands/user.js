@@ -1,6 +1,6 @@
 const { default: axios } = require('axios');
 const { EmbedBuilder, SelectMenuBuilder, ActionRowBuilder, MessageAttachment } = require('discord.js');
-const { palered } = require('../jsons/colours.json');
+const { palered } = require('../jsons/colors.json');
 const { UserAgent } = require('../1/config.json');
 const { getUsernames } = require('../helpers/usernames');
 const Emojis = require('../jsons/emojis.json');

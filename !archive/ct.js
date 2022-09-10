@@ -8,7 +8,7 @@ const { ActionRowBuilder, ComponentType, SelectMenuBuilder, SlashCommandBuilder 
 
 const { getUsernames } = require('../helpers/usernames');
 
-const { blue } = require('../jsons/colours.json');
+const { blue } = require('../jsons/colors.json');
 const { CTPointsIcon } = require('../jsons/emojis.json')['614111055890612225'].misc;
 
 const eventID = 'l76rtr72';

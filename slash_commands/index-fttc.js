@@ -8,7 +8,7 @@ const Parsed = require('../parser/parsed');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 
-const { paleorange } = require('../jsons/colours.json');
+const { paleorange } = require('../jsons/colors.json');
 
 const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 

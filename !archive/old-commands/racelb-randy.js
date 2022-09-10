@@ -3,7 +3,7 @@ const AnyOrderParser = require('../parser/any-order-parser.js');
 const NaturalNumberParser = require('../parser/natural-number-parser.js');
 const OptionalParser = require('../parser/optional-parser.js');
 const AnythingParser = require('../parser/anything-parser');
-const { red, cyber } = require('../jsons/colours.json');
+const { red, cyber } = require('../jsons/colors.json');
 const raceImg =
     'https://static.wikia.nocookie.net/b__/images/4/40/EventRaceIcon.png/revision/latest/scale-to-width-down/340?cb=20200616225307&path-prefix=bloons';
 module.exports = {

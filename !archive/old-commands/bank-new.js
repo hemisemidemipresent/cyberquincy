@@ -1,4 +1,4 @@
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 const ReactionChain = require('../helpers/reactor/reaction_chain');
 const SingleTextParser = require('../helpers/reactor/single_text_parser');
 const LimitedStringSetValuesParser = require('../parser/limited-string-set-values-parser');

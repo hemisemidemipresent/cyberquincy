@@ -1,6 +1,6 @@
 const income = require('../jsons/income-normal.json');
 const abrincome = require('../jsons/income-abr.json');
-const { cyber, orange } = require('../jsons/colours.json');
+const { cyber, orange } = require('../jsons/colors.json');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
 const RoundParser = require('../parser/round-parser');

@@ -3,7 +3,7 @@
  * THIS IS ONLY FOR COPY PASTING CODE
  */
 
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 
 const OptionalParser = require('../parser/optional-parser');
 const UpgradeSetParser = require('../parser/upgrade-set-parser');

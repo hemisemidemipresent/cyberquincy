@@ -67,14 +67,14 @@ function extendStructure(_class) {
 
     const deferReply = prototype.deferReply;
     prototype.deferReply = async function (options = {}) {
-        options.ephemeral = this.options.getBoolean('hide') || Boolean(options.ephemeral);
+        options.ephemeral = this.options.getInteger('hide') ?? Boolean(options.ephemeral);
 
         return deferReply.call(this, options);
     };
 
     const reply = prototype.reply;
     prototype.reply = async function (options) {
-        const ephemeral = this.options.getBoolean('hide') || Boolean(options.ephemeral);
+        const ephemeral = this.options.getInteger('hide') ?? Boolean(options.ephemeral);
         options = {
             ...(typeof options === 'object' ? options : { content: options }),
             ephemeral,

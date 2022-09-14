@@ -25,8 +25,13 @@ builder = new SlashCommandBuilder()
     );
 
 async function execute(interaction) {
-    let messageAttachment = interaction.options.getAttachment('img');
-    image = messageAttachment.url;
+    const { url: image, contentType } = interaction.options.getAttachment('img');
+
+    if (!contentType.startsWith('image/')) return interaction.reply({
+        content: 'The provided attachment is not an image.',
+        ephemeral: true
+    });
+
     let currentGuild = interaction.guild.id;
     if (currentGuild != SUBMISSIONS_GUILD) {
         let wrongGuildErr = 'Submission Preview (you may only submit from within the BTD6 Index Channel)';

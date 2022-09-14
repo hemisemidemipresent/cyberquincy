@@ -6,7 +6,7 @@ builder = new SlashCommandBuilder()
     .setDescription('Shows the CT Leaderboard! (not copied frmom minecool at all)');
 
 async function execute(interaction) {
-    await interaction.reply('Getting Leaderboard...');
+    await interaction.deferReply();
     let a = await nodefetch(
         'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_l7i90j39_guilds.json'
     );
@@ -41,7 +41,7 @@ async function execute(interaction) {
             .setDescription(desc + '```')
             .setColor(black);
 
-        await interaction.editReply({ content: '', embeds: [embed], components: [actionRow] });
+        await interaction.editReply({ embeds: [embed], components: [actionRow] });
 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,

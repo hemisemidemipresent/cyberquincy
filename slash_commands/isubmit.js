@@ -21,20 +21,35 @@ builder = new SlashCommandBuilder()
     .setName('isubmit')
     .setDescription('Submit an image to the BTD6 Index')
     .addAttachmentOption((option) =>
-        option.setName('img').setDescription('the image that you want to upload').setRequired(true)
+        option.setName('img').setDescription('the image that you want to upload').setRequired(false)
+    )
+    .addStringOption((option) => 
+        option.setName('text').setDescription('text to add to the submission').setRequired(false)
     );
 
 async function execute(interaction) {
     let messageAttachment = interaction.options.getAttachment('img');
+    let text = interaction.options.getString('text');
+    if (!text && !messageAttachment){
+        return await interaction.reply({content: 'No content submitted', ephemeral: true});
+    }
+    if (!text){
+        text = '';
+    }
     image = messageAttachment.url;
     let currentGuild = interaction.guild.id;
     if (currentGuild != SUBMISSIONS_GUILD) {
         let wrongGuildErr = 'Submission Preview (you may only submit from within the BTD6 Index Channel)';
+        if (!messageAttachment){
+            return await interaction.reply({content: `${wrongGuildErr}\n${text}\n——————————————————————\n*Sent by ${interaction.user.tag}*`, ephemeral: true});
+        }
+        let subText = text ? `${json.link}\n${text}` : `${json.link}`;
+        await interaction.deferReply();
         imgur
             .uploadUrl(image)
             .then(async (json) => {
                 const embed = new Discord.EmbedBuilder()
-                    .setDescription(`${json.link}`)
+                    .setDescription(subText)
                     .setColor(cyber)
                     .setImage(`${json.link}`);
                 await interaction.reply({ content: wrongGuildErr, embeds: [embed], ephemeral: true });
@@ -49,12 +64,19 @@ async function execute(interaction) {
             });
         return;
     }
+    if (!messageAttachment){
+        const { url }= await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send(`${text}\n——————————————————————\n*Sent by ${interaction.user.tag}*`);
+        await interaction.reply({ content: 'Submitted: ' + url });
+        await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send(`${text}\n——————————————————————\n*Sent by ${interaction.user.tag}*`);
+        return;
+    }
     await interaction.deferReply();
+    let subText = text ? `${json.link}\n${text}` : `${json.link}`;
     imgur
         .uploadUrl(image)
         .then(async (json) => {
             const embed = new Discord.EmbedBuilder()
-                .setDescription(`${json.link}`)
+                .setDescription(`${subText}`)
                 .setColor(cyber)
                 .setImage(`${json.link}`)
                 .setFooter({ text: `sent by ${interaction.user.tag}` });

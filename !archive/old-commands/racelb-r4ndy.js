@@ -1,5 +1,5 @@
 const request = require('request');
-const { red, cyber } = require('../jsons/colours.json');
+const { red, cyber } = require('../jsons/colors.json');
 const raceImg =
     'https://static.wikia.nocookie.net/b__/images/4/40/EventRaceIcon.png/revision/latest/scale-to-width-down/340?cb=20200616225307&path-prefix=bloons';
 module.exports = {

@@ -1,10 +1,8 @@
 const CYBER_SUPPORT = '598768024761139240';
 const BTD6_INDEX = '661812833771847700';
-const RACE_SERVER = '543957081183617024';
-const EMOJIS_SERVER = '614111055890612225';
 
 const { discord } = require('../aliases/misc.json');
-function enterGuild(guild) {
+async function enterGuild(guild) {
     let channeltosend = guild.channels.cache.find((channel) => channel.name.includes('general') === true);
     if (channeltosend) {
         let helpEmbed = new Discord.EmbedBuilder()
@@ -21,16 +19,14 @@ function enterGuild(guild) {
                     value: `The most popular commands by far are those that describe towers, \`/tower\` (tower path format: \`010\`, \`420\`, etc)`
                 }
             ])
-            .setFooter({ text: `Use \`${prefix}info\` for more information` });
+            .setFooter({ text: `Use \`/help\` for more information` });
 
-        channeltosend.send({ embeds: [helpEmbed] });
+        await channeltosend.send({ embeds: [helpEmbed] });
     }
 }
 
 module.exports = {
     enterGuild,
     CYBER_SUPPORT,
-    BTD6_INDEX,
-    RACE_SERVER,
-    EMOJIS_SERVER
+    BTD6_INDEX
 };

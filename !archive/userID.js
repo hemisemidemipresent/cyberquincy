@@ -18,7 +18,7 @@ const { getUsernames } = require('../helpers/usernames');
 const { UserAgent } = require('../1/config.json');
 const { discord } = require('../aliases/misc.json');
 
-const { red, green } = require('../jsons/colours.json');
+const { red, green } = require('../jsons/colors.json');
 
 const Emojis = require('../jsons/emojis.json');
 
@@ -95,10 +95,8 @@ module.exports = {
         collector.on('collect', async (buttonInteraction) => {
             collector.stop();
             buttonInteraction.deferUpdate();
-
-            if (buttonInteraction.customId === 'stats') {
-                await this.loadUserID(userID, interaction);
-            }
+            if (isNaN(buttonInteraction.customId)) return;
+            let pageID = parseInt(buttonInteraction.customId);
         });
 
         collector.on('end', async (collected) => {

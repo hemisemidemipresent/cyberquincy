@@ -108,31 +108,31 @@
         "elite": [
             {
                 "tier": 1,
-                "hp": 14000,
+                "hp": 30000,
                 "speed": 0.1,
                 "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 1600\nLych-Soul Life Steal (per 4 seconds): 11"
             },
             {
                 "tier": 2,
-                "hp": 52500,
+                "hp": 180000,
                 "speed": 0.108,
                 "desc": "Reanimated Blimp Stats: **1.9x** speed and **8x** health\nLych-Soul Health: 5600\nLych-Soul Life Steal (per 4 seconds): 12"
             },
             {
                 "tier": 3,
-                "hp": 245000,
+                "hp": 1200000,
                 "speed": 0.116,
                 "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 27000\nLych-Soul Life Steal (per 4 seconds): 15"
             },
             {
                 "tier": 4,
-                "hp": 525000,
+                "hp": 4800000,
                 "speed": 0.12,
                 "desc": "Reanimated Blimp Stats: **2.1x** speed and **10x** health\nLych-Soul Health: 100000\nLych-Soul Life Steal (per 4 seconds): 20"
             },
             {
                 "tier": 5,
-                "hp": 2100000,
+                "hp": 24000000,
                 "speed": 0.124,
                 "desc": "Reanimated Blimp Stats: **2.2x** speed and **12x** health\nLych-Soul Health: 485000\nLych-Soul Life Steal (per 4 seconds): 27"
             }

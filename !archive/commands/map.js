@@ -1,4 +1,4 @@
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 const gHelper = require('../helpers/general.js');
 const map = require('../jsons/map.json');
 const OrParser = require('../parser/or-parser');

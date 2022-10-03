@@ -10,7 +10,7 @@ const roundHelper = require('../helpers/rounds');
 const enemyHelper = require('../helpers/enemies');
 const gHelper = require('../helpers/general');
 
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 
 builder = new SlashCommandBuilder()
     .setName('round')
@@ -51,11 +51,6 @@ function freeplay(round, isAbr) {
             {
                 name: `XP Earned on R${round}`,
                 value: `${gHelper.numberWithCommas(xp * 0.1)} (note this takes into the account freeplay xp reduction)`,
-                inline: true
-            },
-            {
-                name: 'Total XP if You Started on R1',
-                value: `${gHelper.numberWithCommas(totalxp * 0.1)} (note this takes into the account freeplay xp reduction)`,
                 inline: true
             },
             {
@@ -159,6 +154,7 @@ async function execute(interaction) {
                 name: '**Note:**',
                 value:
                     ' • If you are in freeplay (e.g. round 41 on easy mode), the xp value is 0.3 of what is displayed\n' +
+                    ' • And in freeplay past r100 you earn xp at 0.1x\n' +
                     ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
             }
         ])

@@ -15,7 +15,7 @@ const COLS = {
     CURRENT: 'J'
 };
 
-const { paleyellow } = require('../jsons/colours.json');
+const { paleyellow } = require('../jsons/colors.json');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 

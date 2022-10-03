@@ -72,8 +72,8 @@ const ROUNDING_ERRORS = {
     111: [BAD],
     114: [MOAB, BFB, DDT],
     119: [MOAB, BFB, DDT],
-    124: [BFB],
-}
+    124: [BFB]
+};
 
 class Enemy {
     constructor(name, round = 80, fortified = false, camo = false, regrow = false) {
@@ -126,14 +126,15 @@ class Enemy {
     }
 
     /**
-     * @returns The `round_contents.json`-formatted string for the bloon's appearances
+     * @returns Regex pattern that matches `round_contents.json`-formatted strings
+     * This means a camo ceramic will also match with regrow camo ceramic, and any further fortified ones, but will not match with a normal ceramic
      */
-    roundAppearanceDescription() {
-        const camo = this.camo && this.name != DDT ? 'Camo ' : '';
-        const regrow = this.regrow && this.name != DDT ? 'Regrowth ' : '';
-        const fortified = this.fortified ? 'Fortified ' : '';
-        const name = this.formatName(this.isMOAB()) + ' ';
-        return `${fortified}${name}${camo}${regrow}`.trim();
+    roundAppearanceDescriptionPattern() {
+        const camo = this.camo && this.name != DDT ? ' Camo' : '( Camo)*';
+        const regrow = this.regrow && this.name != DDT ? ' Regrowth' : '( Regrowth)*';
+        const fortified = this.fortified ? 'Fortified ' : '(Fortified )*';
+        const name = this.formatName(this.isMOAB());
+        return new RegExp(`(\\d+) ${fortified}${name}${camo}${regrow}(?:,|$)`);
     }
 
     isFreeplay() {
@@ -172,9 +173,8 @@ class Enemy {
         }
 
         const roundAppearances = {};
-        // It's looking for a number followed by the bloon descriptor followed by either a comma or end of string
-        // The match call below captures the number and is returned in the [1] slot in the array
-        const pattern = new RegExp(`(\\d+) ${this.roundAppearanceDescription()}(?:,|$)`);
+
+        const pattern = this.roundAppearanceDescriptionPattern();
 
         for (const r in roundContents) {
             if (!r.startsWith(mode)) continue;
@@ -365,19 +365,21 @@ class Enemy {
 
         if (this.onlyExistsInChallengeEditor()) {
             notes.push(
-                "Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)"
+                'Non-DDT MOABs can only acquire the camgrow property through challenge editor settings (meaning they release camgrow ceramics)'
             );
         }
 
         if (this.name == DDT) {
-            notes.push("DDTs have the camgrow property by default (meaning they release camgrow ceramics)");
+            notes.push('DDTs have the camgrow property by default (meaning they release camgrow ceramics)');
         }
 
-        const buggedLayers = ROUNDING_ERRORS[this.round]
+        const buggedLayers = ROUNDING_ERRORS[this.round];
         if (buggedLayers) {
             notes.push(
-                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers.map(l => formatName(l, true)).join(', ')}} ` + 
-                "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
+                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers
+                    .map((l) => formatName(l, true))
+                    .join(', ')}} ` +
+                    "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
             );
         }
 
@@ -586,7 +588,6 @@ function getSpeedRamping(r) {
 module.exports = {
     BASE_RED_BLOON_SECONDS_PER_SECOND,
     ENEMIES_THAT_CAN_BE_SUPER,
-
     ENEMIES,
     BLOONS,
     MOABS,

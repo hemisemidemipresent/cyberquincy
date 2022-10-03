@@ -4,7 +4,7 @@ const axios = require('axios');
 const FuzzySet = require('fuzzyset.js');
 
 const { discord, footer } = require('../aliases/misc.json');
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 
 let cachedRelics = {};
 let relicNames = [];

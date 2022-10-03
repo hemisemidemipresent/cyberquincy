@@ -9,7 +9,7 @@ const LexicalParser = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round2.json');
 const RoundParser = require('../parser/round-parser');
 
-const { red } = require('../jsons/colours.json');
+const { red } = require('../jsons/colors.json');
 
 const costs = require('../jsons/costs.json');
 const heroes = require('../jsons/heroes.json');
@@ -88,6 +88,37 @@ async function calc(interaction) {
     // Get the original command arguments string back (other than the command name)
     const expression = interaction.options.getString('expr');
     const difficulty = interaction.options.getString('difficulty') || 'hard';
+
+    if (expression === 'help') {
+        let helpEmbed = new Discord.EmbedBuilder()
+            .setTitle('`/calc` HELP')
+            .setDescription('**Cash Calculator**')
+            .addFields([
+                { name: '`r52`,`R100`', value: 'Cumulative cash earned after specified round (6-100)' },
+                { name: '`33.21`, `69.4201`', value: 'Literally just numbers work' },
+                {
+                    name: '`wiz!420`, `super!100`, `dart` (same as `dart!000`), `wlp` (same as `wiz!050`)',
+                    value: 'INDIVIDUAL COST of tower!upgradeSet'
+                },
+                { name: '`wiz#420`, `super#000`', value: 'TOTAL COST of tower#upgradeSet' },
+                { name: '`adora`, `brick`', value: 'Base cost of hero (no leveling cost calculations included)' },
+                { name: 'Operators', value: '`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power)' },
+                {
+                    name: 'Examples',
+                    value: `\`/calc expr:r99 - wiz#025 - super#052\` (2tc test)
+                            \`/calc expr:ninja#502 + ninja#030 * 20 * 0.85\` (GMN + single-discounted shinobi army)
+                            \`/calc expr:vil#002 + (vill#302 + vill#020)*0.85 + vill!400\` (camo-mentoring double discount village setup)`
+                },
+                {
+                    name: 'Notes',
+                    value: ` • For ambiguous tokens like \`wiz!220\` and \`super!101\` (there is no path/crosspath), the upgrade is assumed to be the leftmost non-zero digit
+                             • You can use this calculator for non-cash-related calculations as well. Just ignore the dollar sign in the result.`
+                }
+            ])
+            .setColor(colours['black']);
+        return await interaction.reply({ embeds: [helpEmbed] });
+    }
+
     try {
         parsed = parse(expression);
     } catch (e) {

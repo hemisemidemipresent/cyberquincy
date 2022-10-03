@@ -6,7 +6,7 @@ const OptionalParser = require('../parser/optional-parser.js');
 const gHelper = require('../helpers/general.js');
 const race = require('../helpers/race.js');
 
-const { red, cyber, green, magenta } = require('../jsons/colours.json');
+const { red, cyber, green, magenta } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');
 
 const BossLeaderboard = require('../helpers/boss/leaderboard-boss.js');

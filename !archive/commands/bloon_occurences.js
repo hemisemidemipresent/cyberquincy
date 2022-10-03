@@ -1,10 +1,10 @@
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 const round = require('../jsons/rounds_topper.json');
 const BloonParser = require('../parser/bloon-parser');
 const OptionalParser = require('../parser/optional-parser');
 const ModeParser = require('../parser/mode-parser');
 const AnyOrderParser = require('../parser/any-order-parser');
-const { turq } = require('../jsons/colours.json');
+const { turq } = require('../jsons/colors.json');
 module.exports = {
     name: 'bloon',
     aliases: ['bln'],

@@ -1,4 +1,4 @@
-const { cyber, black } = require('../jsons/colours.json');
+const { cyber, black } = require('../jsons/colors.json');
 const imgur = require('imgur');
 const ImgurHelper = require('../helpers/imgur');
 

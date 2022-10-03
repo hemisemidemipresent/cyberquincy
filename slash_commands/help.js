@@ -16,6 +16,10 @@ async function execute(interaction) {
             {
                 name: 'Upvote the bot',
                 value: '[top.gg](https://top.gg/bot/591922988832653313)\n[discordbotlist](https://discordbotlist.com/bots/cyber-quincy)'
+            },
+            {
+                name: 'List of commands',
+                value: 'This bot uses slash commands, scroll through the slash commands to find any command you want!'
             }
         ]);
     return await interaction.reply({

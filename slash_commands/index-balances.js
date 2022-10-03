@@ -2,7 +2,7 @@ const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption
 
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 
 const Index = require('../helpers/index.js');
 
@@ -283,7 +283,7 @@ function displayPages(interaction, pages, versionAdded, parsed) {
         includedButtons = [];
     } else if (pages.length < 5) {
         includedButtons = multipageButtons.filter((b) => {
-            return b.data.custom_id.endsWith('!') || b.data.style == ButtonStyle.Secondary
+            return b.data.custom_id.endsWith('!') || b.data.style == ButtonStyle.Secondary;
         });
     } else {
         includedButtons = multipageButtons.filter((b) => true);

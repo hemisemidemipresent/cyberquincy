@@ -1,7 +1,7 @@
 const { parse } = require('@ltd/j-toml');
 const { Collection, EmbedBuilder, Formatters, SlashCommandBuilder } = require('discord.js');
 const { readFileSync } = require('fs');
-const { cyber } = require('../jsons/colours.json');
+const { cyber } = require('../jsons/colors.json');
 const { templates } = require('../tags/templates');
 const cache = populateTagCache();
 
@@ -9,11 +9,7 @@ builder = new SlashCommandBuilder()
     .setName('tag')
     .setDescription('Display a tag by its name or alias')
     .addStringOption((option) =>
-        option
-            .setName('query')
-            .setDescription('The tag name or alias')
-            .setAutocomplete(true)
-            .setRequired(true)
+        option.setName('query').setDescription('The tag name or alias').setAutocomplete(true).setRequired(true)
     );
 
 function execute(interaction) {

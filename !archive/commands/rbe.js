@@ -1,5 +1,5 @@
 const r = require('../jsons/round2.json');
-const { red, magenta } = require('../jsons/colours.json');
+const { red, magenta } = require('../jsons/colors.json');
 const OrParser = require('../parser/or-parser');
 const RoundParser = require('../parser/round-parser');
 const EmptyParser = require('../parser/empty-parser');

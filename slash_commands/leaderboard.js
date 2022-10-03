@@ -43,7 +43,7 @@ async function execute(interaction) {
             .setDescription(desc + '```')
             .setColor(black);
 
-        await interaction.editReply({ content: '', embeds: [embed], components: [actionRow] });
+        await interaction.editReply({ embeds: [embed], components: [actionRow] });
 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,

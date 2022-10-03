@@ -170,7 +170,7 @@ async function displayHeroPlacementRounds(interaction) {
         });
     }
 
-    displayHeroLevels();
+    await displayHeroLevels();
 }
 
 function calculateHeroPlacementRound(hero, goalRound, desiredHeroLevel, mapDifficulty) {

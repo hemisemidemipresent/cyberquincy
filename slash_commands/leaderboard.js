@@ -1,16 +1,18 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ComponentType } = require('discord.js');
 const nodefetch = require('node-fetch');
 const { black } = require('../jsons/colors.json');
+
 builder = new SlashCommandBuilder()
     .setName('leaderboard')
     .setDescription('Shows the CT Leaderboard! (not copied frmom minecool at all)');
 
 async function execute(interaction) {
-    await interaction.deferReply();
-    let a = await nodefetch(
-        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_l7i90j39_guilds.json'
+    await interaction.reply('Getting Leaderboard...');
+    let fetch = await nodefetch(
+        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_l884uw8u_guilds.json',
+        { headers: { 'User-Agent': '' } }
     );
-    body = await a.json();
+    body = await fetch.json();
     let rawData = JSON.parse(body.data).scores.equal;
     let data = rawData.map((obj) => {
         md = obj.metadata.split(/[;|,]/);

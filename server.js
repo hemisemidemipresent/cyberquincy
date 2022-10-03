@@ -131,8 +131,12 @@ function setupSlashCommandCenter() {
 function generateCommandListeners(slashCommandCenter) {
     global.Guilds = require('./helpers/guilds.js');
 
-    client.on('guildCreate', (guild) => {
-        return Guilds.enterGuild(guild);
+    client.on('guildCreate', async (guild) => {
+        try {
+            return await Guilds.enterGuild(guild);
+        } catch (e) {
+            return; // probably Missing Permissions
+        }
     });
 
     // q! commands - no longer exist as of August 2022 due to Discord making bots changes to slash commands

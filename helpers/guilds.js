@@ -11,10 +11,6 @@ async function enterGuild(guild) {
             .addFields([
                 { name: 'General Info', value: `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})` },
                 {
-                    name: 'Note',
-                    value: "Quincy son of Quincy is property of Ninja Kiwi. Although they didn't develop this bot, Ninja Kiwi approved of its use and development."
-                },
-                {
                     name: 'You should know...',
                     value: `The most popular commands by far are those that describe towers, \`/tower\` (tower path format: \`010\`, \`420\`, etc)`
                 }

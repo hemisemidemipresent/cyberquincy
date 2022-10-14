@@ -9,8 +9,8 @@ builder = new SlashCommandBuilder()
 async function execute(interaction) {
     await interaction.reply('Getting Leaderboard...');
     let fetch = await nodefetch(
-        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_l884uw8u_guilds.json',
-        { headers: { 'User-Agent': '' } }
+        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_l8t9h7wa_guilds.json',
+        { headers: { 'User-Agent': 'btd6-windowsplayer-32.4' } }
     );
     body = await fetch.json();
     let rawData = JSON.parse(body.data).scores.equal;
@@ -43,7 +43,7 @@ async function execute(interaction) {
             .setDescription(desc + '```')
             .setColor(black);
 
-        await interaction.editReply({ embeds: [embed], components: [actionRow] });
+        await interaction.editReply({ content: '', embeds: [embed], components: [actionRow] });
 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,

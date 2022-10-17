@@ -23,6 +23,8 @@ function cashFactorForRound(r) {
         return 0.2
     } else if (r <= 100) {
         return 0.1
+    } else if (r <= 120) {
+        return 0.05
     } else {
         return 0.02
     }

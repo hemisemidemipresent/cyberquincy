@@ -31,7 +31,7 @@ async function execute(interaction) {
 	let messageAttachment = interaction.options.getAttachment('img');
 	let text = interaction.options.getString('text');
 	let currentGuild = interaction.guild.id;
-	let wrongGuildErr = 'Yyou may only submit from within the BTD6 Index Discord Server';
+	let wrongGuildErr = 'You may only submit from within the BTD6 Index Discord Server';
 	let image = '';
 
 

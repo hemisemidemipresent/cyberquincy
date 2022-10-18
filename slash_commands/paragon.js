@@ -99,7 +99,8 @@ async function paragon_stats(interaction) {
     let desc = '';
 
     if (tower === 'dart_monkey') {
-        let paragon = paragonStats.dart_monkey;
+        let paragon = JSON.parse(JSON.stringify(paragonStats.dart_monkey));
+
         let { d, cd, bd, ed, p, s } = pHelp.getLevelledObj(paragon, x);
 
         desc = `85r
@@ -110,7 +111,8 @@ async function paragon_stats(interaction) {
                 • projectiles can rehit target
                 **mini juggernaut** - identical to **juggernaut**`;
     } else if (tower === 'boomerang_monkey') {
-        let pa = paragonStats.boomerang_monkey; // short for paragon
+        let pa = JSON.parse(JSON.stringify(paragonStats.boomerang_monkey));
+
         let attacks = Object.keys(pa);
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x))); // apply levelling to all stats
 
@@ -130,7 +132,8 @@ async function paragon_stats(interaction) {
                 • 0.25s stun after each rehit
                 • knocks back moabs 3 units, bfbs 1.5 units, ddts and zomgs 0.75 units`;
     } else if (tower === 'ninja_monkey') {
-        let pa = paragonStats.ninja_monkey;
+        let pa = JSON.parse(JSON.stringify(paragonStats.ninja_monkey));
+
         let attacks = Object.keys(pa);
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
 
@@ -144,11 +147,12 @@ async function paragon_stats(interaction) {
                 • main target: ${pa.sbomb.d}d, ${pa.sbomb.bd}bd, ${pa.sbomb.ed}ed, ${pa.sbomb.p}p
                 • area of effect: ${pa.sbombsplash.d}d, ${pa.sbombsplash.bd}bd, ${pa.sbombsplash.ed}ed, ${pa.sbombsplash.p}p`;
     } else if (tower == 'monkey_buccaneer') {
-        let pa = paragonStats.monkey_buccaneer;
+        let pa = JSON.parse(JSON.stringify(paragonStats.monkey_buccaneer));
+
         let attacks = Object.keys(pa);
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
 
-        desc = `**Activated Ability** - Hook the strongest target on screen, works on BADs and generates 2x normal cash. 20s cooldown, maxes at 2 uses per round. [degree independent]
+        desc = `**Activated Ability** - Hook the strongest target on screen, works on BADs and generates 2x normal cash. ${pa.ability.cooldown}s cooldown, maxes at 2 uses per round.
                 **Rapid Fire Hooks** - Has 10 hooks “stored”, MOABs, BFBs, and DDTs use 1 hook while ZOMGs use 2 hooks, 1s between each pull, generates 2x normal cash, 10s to replenish [cooldown _might_ be shorter with higher degree]
 
                 **Main ship:**
@@ -167,7 +171,8 @@ async function paragon_stats(interaction) {
 
                 • Side note: money generated from Merchants count towards degree at a 4x more favorable rate than pops at $180 generated -> 4 power, both pops and money are for the same category so those combined still max at 90,000 power`;
     } else if (tower === 'engineer_monkey') {
-        let pa = paragonStats.engineer_monkey;
+        let pa = JSON.parse(JSON.stringify(paragonStats.engineer_monkey));
+
         let attacks = Object.keys(pa);
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
 

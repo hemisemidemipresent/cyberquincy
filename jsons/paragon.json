@@ -4,7 +4,7 @@
         "damage": 20,
         "cd": 30,
         "bd": 80,
-        "rate": 0.3
+        "rate": 0.35
     },
     "boomerang_monkey": {
         "main": {

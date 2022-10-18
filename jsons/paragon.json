@@ -73,6 +73,9 @@
         }
     },
     "monkey_buccaneer": {
+        "ability": {
+            "cooldown": 30
+        },
         "plasmaDarts": {
             "damage": 25,
             "md": 30,

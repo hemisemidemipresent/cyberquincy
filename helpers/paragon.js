@@ -67,6 +67,8 @@ module.exports = {
 
         if (obj.pierce) res.p = this.getPiece(obj.pierce, x);
         if (obj.rate) res.s = this.getSpeed(obj.rate, x);
+
+        if (obj.cooldown) res.cooldown = this.getSpeed(obj.cooldown, x);
         return res;
     }
 };

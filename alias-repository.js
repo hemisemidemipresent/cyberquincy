@@ -333,6 +333,7 @@ class AliasRepository extends Array {
             'MS',
             'W',
             'XF',
+            'MN',
         ].map((m) => this.getCanonicalForm(m.toLowerCase()));
     }
 

@@ -10,3 +10,7 @@ function difficultyPriceMult(mediumCost, difficulty) {
     let round = (mediumCost * PRICE_MULTS[difficulty] * 10) % 100 == 25 ? Math.floor : Math.round;
     return round((mediumCost * PRICE_MULTS[difficulty]) / 5) * 5;
 }
+
+module.exports = {
+    difficultyPriceMult,
+};

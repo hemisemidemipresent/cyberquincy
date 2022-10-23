@@ -1,17 +1,28 @@
 // conventions: topper conventions, x = deg
-
+const { round } = require('../helpers/general');
 module.exports = {
     /**
      * returns the new damage for specified degree
      * @param {int} d damage at degree 1
      * @param {int} x degree
      * @returns damage for that degree
-     * also works for addtional cd and fd
      */
     getDmg(d, x) {
         x--;
         let d_x = d * (1 + x * 0.01) + Math.floor(x / 10);
-        return Math.floor(d_x * 100) / 100;
+        return round(d_x, 1);
+    },
+    /**
+     * returns the new additional damage modifier for specified degree
+     * @param {int} d additional damage at degree 1
+     * @param {int} x degree
+     * @returns additional damage modifier for that degree
+     * works for stuff like addtional cd, md and fd
+     */
+    getDmgMod(d, x) {
+        x--;
+        let d_x = d * (1 + x * 0.01);
+        return round(d_x, 1);
     },
     /**
      * @param {int} d damage at degree 1
@@ -22,7 +33,7 @@ module.exports = {
      */
     getDamages(d, md = 0, bd = 0, x, isDot = false) {
         const d_x = this.getDmg(d, x);
-        const md_x = md ? this.getDmg(md, x) : 0;
+        const md_x = md ? this.getDmgMod(md, x) : 0;
         const bd_x = this.getDmg(bd, x);
 
         const mult = 1 + Math.floor(x / 20) * 0.2;
@@ -31,7 +42,7 @@ module.exports = {
         const cum_d2 = d_x + md_x + 2 * bd_x; // some elite / DoT dmg stats use this instead for some reason, then minusing the boss dmg
 
         const bd_tot = isDot ? cum_d * mult : cum_d2 * mult - bd_x;
-        const ed_tot = x < 20 ? 2 * cum_d : 2 * cum_d2 * mult - bd_x;
+        const ed_tot = x < 20 || isDot ? 2 * cum_d : 2 * cum_d2 * mult - bd_x;
 
         return {
             d: Math.round(d_x * 100) / 100,
@@ -43,12 +54,12 @@ module.exports = {
     getPiece(p, x) {
         x--;
         let p_x = p * (1 + x * 0.01) + x;
-        return Math.round(p_x * 100) / 100;
+        return round(p_x, 1);
     },
     getSpeed(s, x) {
         x--;
         let s_x = s / (1 + Math.sqrt(x * 50) * 0.01);
-        return Math.round(s_x * 100) / 100;
+        return round(s_x, 1);
     },
     /**
      *
@@ -62,12 +73,12 @@ module.exports = {
 
         // ceramic damage is total, while fortified damage is handled as an additive.
         // this is because fortified can stack with normal bloons (lead), ceramics, and moab-class bloons
-        if (obj.cd) res.cd = this.getDmg(obj.cd, x) + res.d;
-        if (obj.fd) res.fd = this.getDmg(obj.fd, x);
+        if (obj.cd) res.cd = this.getDmgMod(obj.cd, x) + res.d;
+        if (obj.fd) res.fd = this.getDmgMod(obj.fd, x);
 
         if (obj.pierce) res.p = this.getPiece(obj.pierce, x);
         if (obj.rate) res.s = this.getSpeed(obj.rate, x);
-
+        // coodown uses the same scaling formula as seconds between attacks
         if (obj.cooldown) res.cooldown = this.getSpeed(obj.cooldown, x);
         return res;
     }

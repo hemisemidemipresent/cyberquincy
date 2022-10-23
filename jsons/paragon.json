@@ -154,5 +154,37 @@
             "damage": 30000,
             "pierce": 50
         }
+    },
+    "monkey_ace": {
+        "radial": {
+            "damage": 200,
+            "bd": 200,
+            "pierce": 50,
+            "rate": 0.6666666666666666
+        },
+        "seeking": {
+            "damage": 200,
+            "bd": 200,
+            "pierce": 1,
+            "rate": 0.6666666666666666
+        },
+        "explosion": {
+            "damage": 200,
+            "bd": 200,
+            "pierce": 50,
+            "rate": 0.6666666666666666
+        },
+        "forward": {
+            "damage": 300,
+            "bd": 300,
+            "pierce": 50,
+            "rate": 0.1111111111111111
+        },
+        "carpet": {
+            "cooldown": 40,
+            "damage": 20000,
+            "bd": 20000,
+            "pierce": 50
+        }
     }
 }

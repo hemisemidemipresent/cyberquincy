@@ -205,12 +205,26 @@ async function execute(interaction) {
     }
 }
 
-function isWaterEntityCombo(combo) {
-    return [1, 2].some((entityNum) => {
+function mapsNotPossible(combo) {
+    const hasWaterTower = [1, 2].some((entityNum) => {
         const indexEntity = combo[`TOWER_${entityNum}`].NAME;
-        const entity = Aliases.getCanonicalForm(Aliases.toAliasNormalForm(indexEntity));
+        const entity = Aliases.toAliasCanonical(indexEntity);
         return Towers.isWaterEntity(entity);
     });
+
+    const hasHeli = [1, 2].some((entityNum) => {
+        const indexEntity = combo[`TOWER_${entityNum}`].NAME;
+        const entity = Aliases.toAliasCanonical(indexEntity);
+        return entity.split('#')[0] === 'heli_pilot';
+    });
+
+    if (hasWaterTower) {
+        return Aliases.allNonWaterMaps().map((m) => Aliases.mapToIndexAbbreviation(m));
+    } else if (hasHeli) {
+        return ['MN']
+    } else {
+        return []
+    }
 }
 
 async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
@@ -246,7 +260,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
             const ogMapAbbr = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(combo.MAP));
 
             // TODO: Midnight Mansion no heli in 2tc? Probably will never happen though
-            let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, allCompletedMaps, isWaterEntityCombo(combos[0]));
+            let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, allCompletedMaps, mapsNotPossible(combos[0]));
 
             challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 

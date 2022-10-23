@@ -158,7 +158,7 @@ async function execute(interaction) {
                     ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
             }
         ])
-        .setFooter({ text: `For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\`` })
+        .setFooter({ text: `For more data on round incomes use \`/income${isAbr ? ' abr' : ''} <round>\`` })
         .setColor(colours['cyber']);
     if (round > 80) {
         let hRamping = enemyHelper.getHealthRamping(round);

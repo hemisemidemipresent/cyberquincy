@@ -9,7 +9,7 @@ builder = new SlashCommandBuilder()
 async function execute(interaction) {
     await interaction.reply('Getting Leaderboard...');
     let fetch = await nodefetch(
-        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_l8t9h7wa_guilds.json',
+        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_l9dkq0ma_guilds.json',
         { headers: { 'User-Agent': 'btd6-windowsplayer-32.4' } }
     );
     body = await fetch.json();

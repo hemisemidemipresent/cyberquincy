@@ -245,6 +245,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
             const allCompletedMaps = Object.keys(allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS);
             const ogMapAbbr = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(combo.MAP));
 
+            // TODO: Midnight Mansion no heli in 2tc? Probably will never happen though
             let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, allCompletedMaps, isWaterEntityCombo(combos[0]));
 
             challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);

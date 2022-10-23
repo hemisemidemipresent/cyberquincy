@@ -84,5 +84,11 @@
     ],
     "quarry": [
         "qu"
+    ],
+    "covered_garden": [
+        "ga",
+        "covered",
+        "garden",
+        "cgar"
     ]
 }

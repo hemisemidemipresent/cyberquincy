@@ -312,6 +312,9 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
         impossibleMaps = mapsLeft.filter((m) => nonWaterMaps.includes(m));
 
         mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
+    } else if (Aliases.toAliasCanonical(combo.ENTITY).split('#')[0] == 'heli_pilot') {
+        impossibleMaps = mapsLeft.filter((m) => m === 'MN')
+        mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
     }
 
     // Embed and send the message
@@ -380,9 +383,8 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
             };
 
             if (!canonicalCompletion.MAP) {
-                throw new DeveloperCommandError(
-                    `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`
-                );
+                interaction.reply({content: `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`})
+                continue
             }
 
             if (!filterCombo(canonicalCompletion, parsed)) {

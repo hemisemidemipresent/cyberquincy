@@ -3,6 +3,7 @@ const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
+const Maps = require('../helpers/maps')
 
 const { paleblue } = require('../jsons/colors.json');
 
@@ -220,7 +221,7 @@ function orderAndFlatten2MPOGCompletion(combo) {
     let [ogMap, ogCompletion] = ogCombo(combo);
     combo = {
         ...combo,
-        OG_MAP: Aliases.indexMapAbbreviationToNormalForm(ogMap),
+        OG_MAP: Maps.indexMapAbbreviationToNormalForm(ogMap),
         PERSON: ogCompletion.PERSON,
         LINK: ogCompletion.LINK
     };
@@ -243,7 +244,7 @@ function ogCombo(combo) {
 
 function embed2MPAlt(combo, map) {
     const mapFormatted = Aliases.toIndexNormalForm(map);
-    const mapAbbr = Aliases.mapToIndexAbbreviation(map);
+    const mapAbbr = Maps.mapToIndexAbbreviation(map);
 
     const altCombo = combo.MAPS[mapAbbr];
 
@@ -277,7 +278,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
 
     // Get all map abbreviations for the specified map difficulty
-    const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) => Aliases.mapToIndexAbbreviation(map));
+    const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) => Maps.mapToIndexAbbreviation(map));
 
     const relevantMaps = Object.keys(combo.MAPS).filter((m) => permittedMapAbbrs.includes(m));
 
@@ -294,7 +295,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     for (const mapAbbr of relevantMaps) {
         const bold = combo.MAPS[mapAbbr].OG ? '**' : '';
 
-        mapColumn.push(`${bold}${Aliases.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`);
+        mapColumn.push(`${bold}${Maps.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`);
         personColumn.push(`${bold}${combo.MAPS[mapAbbr].PERSON}${bold}`);
         linkColumn.push(`${bold}${combo.MAPS[mapAbbr].LINK}${bold}`);
     }
@@ -367,7 +368,7 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
 
             const canonicalCompletion = {
                 ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
-                MAP: Aliases.indexMapAbbreviationToMap(map),
+                MAP: Maps.indexMapAbbreviationToMap(map),
                 PERSON: mapCompletion.PERSON,
                 LINK: mapCompletion.LINK,
                 OG: mapCompletion.OG || false
@@ -444,7 +445,7 @@ function filterCombo(c, parsed) {
 
     let matchesMap = true;
     if (parsed.map_difficulty) {
-        matchesMap = Aliases.allMapsFromMapDifficulty(parsed.map_difficulty).includes(c.MAP);
+        matchesMap = Maps.allMapsFromMapDifficulty(parsed.map_difficulty).includes(c.MAP);
     } else if (parsed.map) {
         // Map
         matchesMap = parsed.map == c.MAP;
@@ -605,7 +606,7 @@ async function getCompletionMarking(entryRow, path, tier) {
 function mapsNotPossible(combo) {
     const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY);
     if (Towers.isWaterEntity(canonicalEntity)) {
-        return Aliases.allNonWaterMaps().map((m) => Aliases.mapToIndexAbbreviation(m));
+        return Maps.allNonWaterMaps().map((m) => Maps.mapToIndexAbbreviation(m));
     } else if (canonicalEntity.split('#')[0] === 'heli_pilot') {
         return ['MN']
     } else {

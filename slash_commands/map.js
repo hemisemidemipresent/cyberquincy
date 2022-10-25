@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { cyber } = require('../jsons/colors.json');
 const map = require('../jsons/map.json');
 const { discord } = require('../aliases/misc.json');
+const Maps = require('../helpers/maps')
 
 const FuzzySet = require('fuzzyset.js');
 
@@ -48,7 +49,7 @@ async function onAutocomplete(interaction) {
     const map_name_partial = hoistedOptions.find((option) => option.name == 'map_name'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = map_name_partial.value;
 
-    let fs = FuzzySet(Aliases.allMaps());
+    let fs = FuzzySet(Maps.allMaps());
     const values = fs.get(value, null, 0.2);
     responseArr = [];
     values.forEach((value, index) => {

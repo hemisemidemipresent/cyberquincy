@@ -205,7 +205,7 @@ function embed2MPOG(combo) {
     challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
     const ogMapAbbr = ogCombo(combo)[0];
-    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), isWaterEntityCombo(combo));
+    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), mapsNotPossible(combo));
 
     challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
@@ -305,17 +305,8 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     let mapsLeft = permittedMapAbbrs.filter((m) => !Object.keys(combo.MAPS).includes(m));
 
     // Check if tower is water tower
-    let impossibleMaps = [];
-    if (isWaterEntityCombo(combo)) {
-        // Calculate impossible maps (those that do not contain any water)
-        nonWaterMaps = Aliases.allNonWaterMaps().map((m) => Aliases.mapToIndexAbbreviation(m));
-        impossibleMaps = mapsLeft.filter((m) => nonWaterMaps.includes(m));
-
-        mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
-    } else if (Aliases.toAliasCanonical(combo.ENTITY).split('#')[0] == 'heli_pilot') {
-        impossibleMaps = mapsLeft.filter((m) => m === 'MN')
-        mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
-    }
+    const impossibleMaps = mapsNotPossible(combo).filter(m => permittedMapAbbrs.includes(m))
+    mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
 
     // Embed and send the message
     let challengeEmbed = new Discord.EmbedBuilder()
@@ -611,9 +602,15 @@ async function getCompletionMarking(entryRow, path, tier) {
 // General Helpers
 ////////////////////////////////////////////////////////////
 
-function isWaterEntityCombo(combo) {
+function mapsNotPossible(combo) {
     const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY);
-    return Towers.isWaterEntity(canonicalEntity);
+    if (Towers.isWaterEntity(canonicalEntity)) {
+        return Aliases.allNonWaterMaps().map((m) => Aliases.mapToIndexAbbreviation(m));
+    } else if (canonicalEntity.split('#')[0] === 'heli_pilot') {
+        return ['MN']
+    } else {
+        return []
+    }
 }
 
 function err(e) {

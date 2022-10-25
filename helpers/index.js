@@ -105,7 +105,7 @@ function parseMapNotes(notes) {
 // Formatting
 //////////////////////////////////////////////////////
 
-function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
+function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, impossibleMaps) {
     const completedAltMaps = allCompletedMapAbbrs.filter((m) => m != ogMapAbbr);
 
     let mapDifficultyGroups = [
@@ -114,17 +114,15 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
         Aliases.advancedMaps(),
         Aliases.expertMaps()
     ];
-    if (isWaterEntity) {
-        mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
-        );
-    }
     mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
         aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
     );
+    const possibleMapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
+        aliases.filter((map) => !impossibleMaps.includes(map))
+    );
 
-    const altMapGroups = mapDifficultyGroups.map((mapGroup) => mapGroup.filter((map) => completedAltMaps.includes(map)));
-    const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
+    const altMapGroups = possibleMapDifficultyGroups.map((mapGroup) => mapGroup.filter((map) => completedAltMaps.includes(map)));
+    const unCompletedAltMapGroups = possibleMapDifficultyGroups.map((mapGroup) =>
         mapGroup.filter((map) => !completedAltMaps.concat(ogMapAbbr).includes(map))
     );
 
@@ -132,13 +130,14 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
 
     const displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
         mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
-        waterTowerAsterisk = isWaterEntity ? '*' : '';
+        existsImpossibleMapInGroup = mapDifficultyGroups[i].some(m => impossibleMaps.includes(m))
+        possibleAsterisk = impossibleMaps.length > 0 && existsImpossibleMapInGroup ? '*' : '';
         if (unCompletedAltMapGroups[i] == 0) {
             wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk}`;
+            return `All ${mapDifficulty}${possibleAsterisk}`;
         } else if (unCompletedAltMapGroups[i].length < 5) {
             wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
+            return `All ${mapDifficulty}${possibleAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {
@@ -157,7 +156,7 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
         completedAltMapsString = 'None';
     }
 
-    completedAltMapsFooter = isWaterEntity && wordAllIncluded ? '*with water' : null;
+    completedAltMapsFooter = impossibleMaps.length > 0 && wordAllIncluded ? '*that are possible' : null;
 
     return {
         field: completedAltMapsString,

@@ -109,10 +109,10 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, impossibleMaps) {
     const completedAltMaps = allCompletedMapAbbrs.filter((m) => m != ogMapAbbr);
 
     let mapDifficultyGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps()
+        Maps.beginnerMaps(),
+        Maps.intermediateMaps(),
+        Maps.advancedMaps(),
+        Maps.expertMaps()
     ];
     mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
         aliases.map((alias) => Maps.mapToIndexAbbreviation(alias))

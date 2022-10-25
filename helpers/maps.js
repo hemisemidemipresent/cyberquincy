@@ -32,47 +32,47 @@ function allNonWaterMaps() {
 }
 
 function allMapsFromMapDifficulty(mapDifficulty) {
-    switch (mapDifficulty) {
+    switch (mapDifficulty.toLowerCase()) {
         case 'beginner':
-            return this.beginnerMaps();
+            return beginnerMaps();
         case 'intermediate':
-            return this.intermediateMaps();
+            return intermediateMaps();
         case 'advanced':
-            return this.advancedMaps();
+            return advancedMaps();
         case 'expert':
-            return this.expertMaps();
+            return expertMaps();
         default:
             throw `${mapDifficulty} is not a map difficulty`;
     }
 }
 
 function beginnerMaps() {
-    return this.getAliasGroupsFromSameFileAs('LOGS').map(
+    return Aliases.getAliasGroupsFromSameFileAs('LOGS').map(
         (ag) => ag.canonical
     );
 }
 
 function intermediateMaps() {
-    return this.getAliasGroupsFromSameFileAs('HAUNTED').map(
+    return Aliases.getAliasGroupsFromSameFileAs('HAUNTED').map(
         (ag) => ag.canonical
     );
 }
 
 function advancedMaps() {
-    return this.getAliasGroupsFromSameFileAs('CORNFIELD').map(
+    return Aliases.getAliasGroupsFromSameFileAs('CORNFIELD').map(
         (ag) => ag.canonical
     );
 }
 
 function expertMaps() {
-    return this.getAliasGroupsFromSameFileAs('INFERNAL').map(
+    return Aliases.getAliasGroupsFromSameFileAs('INFERNAL').map(
         (ag) => ag.canonical
     );
 }
 
 function allMapDifficulties() {
     const map_difficulties =
-        this.getAliasGroupsFromSameFileAs('INTERMEDIATE');
+        Aliases.getAliasGroupsFromSameFileAs('INTERMEDIATE');
 
     return map_difficulties.map((ag) => ag.canonical);
 }

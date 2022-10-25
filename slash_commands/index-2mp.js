@@ -278,7 +278,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
 
     // Get all map abbreviations for the specified map difficulty
-    const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) => Maps.mapToIndexAbbreviation(map));
+    const permittedMapAbbrs = Maps.allMapsFromMapDifficulty(mapDifficulty).map((map) => Maps.mapToIndexAbbreviation(map));
 
     const relevantMaps = Object.keys(combo.MAPS).filter((m) => permittedMapAbbrs.includes(m));
 

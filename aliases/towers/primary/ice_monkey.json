@@ -10,7 +10,7 @@
     "010": ["enhanced_freeze", "enhanced"],
     "020": ["deep_freeze"],
     "030": ["arctic_wind", "wind", "arctic", "awind"],
-    "040": ["snowstorm", "snow"],
+    "040": ["snowstorm", "snow", "snorm"],
     "050": ["absolute_zero", "az"],
 
     "001": ["larger_radius"],

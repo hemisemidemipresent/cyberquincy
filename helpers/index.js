@@ -156,7 +156,7 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, impossibleMaps) {
         completedAltMapsString = 'None';
     }
 
-    completedAltMapsFooter = impossibleMaps.length > 0 && wordAllIncluded ? '*that are possible' : null;
+    completedAltMapsFooter = impossibleMaps.length > 0 && wordAllIncluded ? '*where placement is possible' : null;
 
     return {
         field: completedAltMapsString,
@@ -193,7 +193,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
             let challengeEmbed = new Discord.EmbedBuilder();
 
             challengeEmbed.addFields([
-                { name: '# Combos', value: `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}` }
+                { name: '# Results', value: `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}` }
             ]);
 
             let fields = [];

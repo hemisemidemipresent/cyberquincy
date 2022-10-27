@@ -57,22 +57,28 @@ async function execute(interaction) {
 
     if (stat === TOWER_COMPLETION) {
         const counts = allCombos
-            .map(combo => [combo.ENTITY, Object.keys(combo.MAPS)])
-            .sort((c1, c2) => c1[1].length < c2[1].length ? 1 : -1)
+            .map(combo => { return { ENTITY: combo.ENTITY, MAPS: Object.keys(combo.MAPS) } })
+            .sort((c1, c2) => c1.MAPS.length < c2.MAPS.length ? 1 : -1)
 
         const allMaps = Maps.allMaps().map(m => Maps.mapToIndexAbbreviation(m))
 
         const colData = {
-            ENTITY: counts.map(c => c[0]),
-            COUNT: counts.map(c => c[1].length),
+            ENTITY: counts.map(c => c.ENTITY),
+            COUNT: counts.map(c => c.MAPS.length),
             MAPS_LEFT: counts.map(c => {
-                const unCompletedMaps = allMaps.filter(m => !c[1].includes(m))
-                console.log(c[0], unCompletedMaps)
-                if (unCompletedMaps.length > 5) {
-                    return unCompletedMaps.splice(0, 3).join(', ') + ` (+ ${unCompletedMaps.length - 3} more)`
+                const impossibleMaps = Maps.mapsNotPossible(c.ENTITY)
+                const allPossibleMaps = allMaps.filter(m => !impossibleMaps.includes(m))
+                const unCompletedMaps = allPossibleMaps.filter(m => !c.MAPS.includes(m))
+
+                let mapsLeft;
+                if (unCompletedMaps.length === 0) {
+                    mapsLeft = 'Ø'
+                } else if (unCompletedMaps.length > 5) {
+                    mapsLeft = unCompletedMaps.slice(0, 3).join(', ') + ` (+ ${unCompletedMaps.length - 3} more)`
                 } else {
-                    return unCompletedMaps.join(', ')
+                    mapsLeft = unCompletedMaps.join(', ')
                 }
+                return impossibleMaps.length > 0 ? `${mapsLeft}*` : mapsLeft
             })
         }
 
@@ -81,6 +87,10 @@ async function execute(interaction) {
                 .setTitle('2 Million Pops Tower Completion Rankings')
                 .setColor(paleblue)
                 .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
+
+            if (challengeEmbed.data.fields.find(field => field.name === 'Maps Left').value.includes('*')) {
+                challengeEmbed.setFooter({ text: '*where placement is possible' })
+            }
         }
 
         Index.displayOneOrMultiplePages(interaction, colData, setOtherDisplayFields)

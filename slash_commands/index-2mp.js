@@ -206,7 +206,7 @@ function embed2MPOG(combo) {
     challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
     const ogMapAbbr = ogCombo(combo)[0];
-    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), mapsNotPossible(combo));
+    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), Maps.mapsNotPossible(combo.ENTITY));
 
     challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
@@ -306,7 +306,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     let mapsLeft = permittedMapAbbrs.filter((m) => !Object.keys(combo.MAPS).includes(m));
 
     // Check if tower is water tower
-    const impossibleMaps = mapsNotPossible(combo).filter(m => permittedMapAbbrs.includes(m))
+    const impossibleMaps = Maps.mapsNotPossible(combo.ENTITY).filter(m => permittedMapAbbrs.includes(m))
     mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
 
     // Embed and send the message
@@ -602,17 +602,6 @@ async function getCompletionMarking(entryRow, path, tier) {
 ////////////////////////////////////////////////////////////
 // General Helpers
 ////////////////////////////////////////////////////////////
-
-function mapsNotPossible(combo) {
-    const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY);
-    if (Towers.isWaterEntity(canonicalEntity)) {
-        return Maps.allNonWaterMaps().map((m) => Maps.mapToIndexAbbreviation(m));
-    } else if (canonicalEntity.split('#')[0] === 'heli_pilot') {
-        return ['MN']
-    } else {
-        return []
-    }
-}
 
 function err(e) {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors

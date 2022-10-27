@@ -1,3 +1,5 @@
+const Towers = require('./towers')
+
 function allMaps() {
     return beginnerMaps()
         .concat(intermediateMaps())
@@ -104,6 +106,20 @@ function indexNormalFormToMapAbbreviation(map) {
     );
 }
 
+function mapsNotPossible(entity) {
+    const canonicalEntity = Aliases.toAliasCanonical(entity);
+
+    let impossibleMaps = []
+    if (Towers.isWaterEntity(canonicalEntity)) {
+        impossibleMaps = impossibleMaps.concat(
+            allNonWaterMaps().map((m) => mapToIndexAbbreviation(m))
+        );
+    } else if (Towers.isOfTower(canonicalEntity, 'heli_pilot')) {
+        impossibleMaps.push('MN')
+    }
+
+    return impossibleMaps;
+}
 
 module.exports = {
     allMaps,
@@ -114,6 +130,7 @@ module.exports = {
     intermediateMaps,
     advancedMaps,
     expertMaps,
+    mapsNotPossible,
     allMapDifficulties,
     mapToIndexAbbreviation,
     indexMapAbbreviationToMap,

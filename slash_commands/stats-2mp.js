@@ -1,6 +1,6 @@
 const { SlashCommandStringOption, SlashCommandBuilder } = require("discord.js");
 const Index = require('../helpers/index.js');
-
+const Maps = require('../helpers/maps')
 
 const STATS = [
     TOWER_COMPLETION = 'tower_completion',
@@ -51,14 +51,12 @@ async function execute(interaction) {
 
     const stat = interaction.options.getString('stat')
     const mapDifficulty = interaction.options.getString('map_difficulty')
-    const mapDifficulties = mapDifficulty ? [mapDifficulty] : Aliases.allMapDifficulties()
-
-    console.log(allCombos[0].MAPS)
+    const mapDifficulties = mapDifficulty ? [mapDifficulty] : Maps.allMapDifficulties()
 
     if (stat === TOWER_COMPLETION) {
         const results = allCombos
-            .map(combo => [combo.ENTITY, Object.keys(combo.MAPS).length])
-            .sort((c1, c2) => c1[1] > c2[1] ? c1 : c2)
+            .map(combo => [combo.ENTITY, Object.keys(combo.MAPS)])
+            .sort((c1, c2) => c1[1].length < c2[1].length ? 1 : -1)
     }
 }
 

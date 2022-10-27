@@ -7,7 +7,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require(
 const fs = require('fs');
 const resolve = require('path').resolve;
 const gHelper = require('../helpers/general');
-const discordHelper = require('../helpers/discord.js');
+const Maps = require('../helpers/maps')
 
 DIR1 = 'cache';
 DIR2 = 'index';
@@ -109,13 +109,13 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, impossibleMaps) {
     const completedAltMaps = allCompletedMapAbbrs.filter((m) => m != ogMapAbbr);
 
     let mapDifficultyGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps()
+        Maps.beginnerMaps(),
+        Maps.intermediateMaps(),
+        Maps.advancedMaps(),
+        Maps.expertMaps()
     ];
     mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+        aliases.map((alias) => Maps.mapToIndexAbbreviation(alias))
     );
     const possibleMapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
         aliases.filter((map) => !impossibleMaps.includes(map))

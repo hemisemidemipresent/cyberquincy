@@ -7,6 +7,7 @@ const {
 
 const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
+const Maps = require('../helpers/maps')
 
 const heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Aliases.allHeroes().forEach((hero) => {
@@ -22,7 +23,7 @@ const mapDifficultyOption = new SlashCommandStringOption()
     .setName('map_difficulty')
     .setDescription('Map Difficulty')
     .setRequired(true);
-Aliases.allMapDifficulties().forEach((difficulty) => {
+Maps.allMapDifficulties().forEach((difficulty) => {
     mapDifficultyOption.addChoices({ name: gHelper.toTitleCase(difficulty), value: difficulty });
 });
 

@@ -20,6 +20,7 @@ const clonedeep = require('lodash.clonedeep');
 
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
+const Maps = require('../helpers/maps')
 
 const { orange, palered } = require('../jsons/colors.json');
 
@@ -219,7 +220,7 @@ function mapsNotPossible(combo) {
     });
 
     if (hasWaterTower) {
-        return Aliases.allNonWaterMaps().map((m) => Aliases.mapToIndexAbbreviation(m));
+        return Maps.allNonWaterMaps().map((m) => Maps.mapToIndexAbbreviation(m));
     } else if (hasHeli) {
         return ['MN']
     } else {
@@ -257,7 +258,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
 
         if (flatCombo.OG && !(parsed.map || parsed.version || parsed.person)) {
             const allCompletedMaps = Object.keys(allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS);
-            const ogMapAbbr = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(combo.MAP));
+            const ogMapAbbr = Maps.mapToIndexAbbreviation(Aliases.toAliasNormalForm(combo.MAP));
 
             // TODO: Midnight Mansion no heli in 2tc? Probably will never happen though
             let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, allCompletedMaps, mapsNotPossible(combos[0]));
@@ -402,7 +403,7 @@ function flattenCombo(combo, map) {
 
     let flattenedCombo = combo;
 
-    flattenedCombo.MAP = Aliases.indexMapAbbreviationToNormalForm(map);
+    flattenedCombo.MAP = Maps.indexMapAbbreviationToNormalForm(map);
     flattenedCombo.PERSON = subcombo.PERSON;
     flattenedCombo.LINK = subcombo.LINK;
     flattenedCombo.OG = subcombo.OG;
@@ -427,7 +428,7 @@ function embedTitle(parsed, combos) {
     if (parsed.natural_number) title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
     else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
     if (parsed.person) title += `by ${sampleCombo.MAPS[sampleMap].PERSON} `;
-    if (parsed.map) title += `on ${Aliases.indexMapAbbreviationToNormalForm(parsed.map)} `;
+    if (parsed.map) title += `on ${Maps.indexMapAbbreviationToNormalForm(parsed.map)} `;
     if (parsed.map_difficulty) title += `on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} Maps `;
     for (var i = 0; i < towers.length; i++) {
         const tower = towers[i];
@@ -511,7 +512,7 @@ function filterCombos(filteredCombos, parsed) {
     }
 
     if (parsed.map) {
-        const mapAbbr = Aliases.mapToIndexAbbreviation(parsed.map);
+        const mapAbbr = Maps.mapToIndexAbbreviation(parsed.map);
         function mapFilter(map, _) {
             return map == mapAbbr;
         }
@@ -520,8 +521,8 @@ function filterCombos(filteredCombos, parsed) {
 
     if (parsed.map_difficulty) {
         function mapDifficultyFilter(map, _) {
-            const mapCanonical = Aliases.toAliasNormalForm(Aliases.getCanonicalForm(map));
-            return Aliases.allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical);
+            const mapCanonical = Aliases.toAliasCanonical(map);
+            return Maps.allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical);
         }
         filteredCombos = filterByCompletion(mapDifficultyFilter, filteredCombos);
     }

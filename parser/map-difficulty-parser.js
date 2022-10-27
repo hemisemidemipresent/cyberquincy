@@ -1,4 +1,6 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
+const Maps = require('../helpers/maps')
+
 
 class MapDifficultyParser {
     type() {
@@ -8,7 +10,7 @@ class MapDifficultyParser {
     constructor(...permitted_map_difficulties) {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
-            Aliases.allMapDifficulties(),
+            Maps.allMapDifficulties(),
             permitted_map_difficulties.map(d => d.toLowerCase()),
         );
     }

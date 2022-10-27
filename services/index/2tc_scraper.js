@@ -1,5 +1,6 @@
 const GoogleSheetsHelper = require('../../helpers/google-sheets.js');
 const gHelper = require('../../helpers/general.js');
+const Maps = require('../../helpers/maps')
 
 const COLS = {
     NUMBER: 'B',
@@ -117,9 +118,7 @@ function parseMapCompletions(row) {
         OG: true,
     }
 
-    const ogMapAbbr = Aliases.mapToIndexAbbreviation(
-        Aliases.toAliasNormalForm(ogCells.MAP.value)
-    );
+    const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogCells.MAP.value)
  
     // Circular Dependency
     const { parseMapNotes } = require('../../helpers/index')

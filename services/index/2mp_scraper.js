@@ -85,7 +85,6 @@ function parseMapCompletions(row) {
     const sheet = sheet2MP();
 
     const ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
-    console.log(ogMapCell.value)
     const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogMapCell.value)
     const ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
     const ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);

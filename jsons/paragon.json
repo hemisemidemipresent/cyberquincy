@@ -160,25 +160,25 @@
             "damage": 200,
             "bd": 200,
             "pierce": 50,
-            "rate": 0.6666666666666666
+            "rate": 0.66
         },
         "seeking": {
             "damage": 200,
             "bd": 200,
             "pierce": 1,
-            "rate": 0.6666666666666666
+            "rate": 0.66
         },
         "explosion": {
             "damage": 200,
             "bd": 200,
             "pierce": 50,
-            "rate": 0.6666666666666666
+            "rate": 0.66
         },
         "forward": {
             "damage": 300,
             "bd": 300,
             "pierce": 50,
-            "rate": 0.1111111111111111
+            "rate": 0.11
         },
         "carpet": {
             "cooldown": 40,

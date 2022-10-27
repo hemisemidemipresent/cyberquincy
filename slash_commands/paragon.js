@@ -212,12 +212,10 @@ async function paragon_stats(interaction) {
                 When expired: ${pa.mod_sell.d}d, ${pa.mod_sell.p}p within a 50r blast 
                 `;
     } else if (tower === 'monkey_ace') {
-        let pa = JSON.parse(JSON.stringify(paragonStats.engineer_monkey));
+        let pa = JSON.parse(JSON.stringify(paragonStats.monkey_ace));
         let attacks = Object.keys(pa);
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
-        desc = `Degree 1 Goliath Doomship Stats:
-
-        **Radial Darts** (purple trail)
+        desc = `**Radial Darts** (purple trail)
         • ${pa.radial.d}d, ${pa.radial.bd}bd, ${pa.radial.ed}ed, ${pa.radial.p}p, 16j, ${pa.radial.s}s
         
         Seeking Missiles (green trail)
@@ -238,7 +236,7 @@ async function paragon_stats(interaction) {
     }
     let messageEmbed = new Discord.EmbedBuilder()
         .setTitle(`\`${tower}\` paragon - level ${level}`)
-        .setDescription(desc)
+        .setDescription(desc.replace(/\t/g, ''))
         .setFooter({ text: footer })
         .setColor(paragon);
     return await interaction.reply({ embeds: [messageEmbed] });

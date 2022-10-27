@@ -1,4 +1,5 @@
 const GoogleSheetsHelper = require('../../helpers/google-sheets.js');
+const Maps = require('../../helpers/maps')
 
 const COLS = {
     NUMBER: 'B',
@@ -84,9 +85,7 @@ function parseMapCompletions(row) {
     const sheet = sheet2MP();
 
     const ogMapCell = sheet.getCellByA1(`${COLS.OG_MAP}${row}`);
-    const ogMapAbbr = Aliases.mapToIndexAbbreviation(
-        Aliases.toAliasNormalForm(ogMapCell.value)
-    );
+    const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogMapCell.value)
     const ogPerson = sheet.getCellByA1(`${COLS.PERSON}${row}`).value;
     const ogLinkCell = sheet.getCellByA1(`${COLS.LINK}${row}`);
 

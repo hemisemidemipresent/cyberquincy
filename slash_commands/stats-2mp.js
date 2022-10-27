@@ -1,6 +1,8 @@
 const { SlashCommandStringOption, SlashCommandBuilder } = require("discord.js");
 const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps')
+const { paleblue } = require('../jsons/colors.json');
+const gHelper = require('../helpers/general')
 
 const STATS = [
     TOWER_COMPLETION = 'tower_completion',
@@ -54,9 +56,34 @@ async function execute(interaction) {
     const mapDifficulties = mapDifficulty ? [mapDifficulty] : Maps.allMapDifficulties()
 
     if (stat === TOWER_COMPLETION) {
-        const results = allCombos
+        const counts = allCombos
             .map(combo => [combo.ENTITY, Object.keys(combo.MAPS)])
             .sort((c1, c2) => c1[1].length < c2[1].length ? 1 : -1)
+
+        const allMaps = Maps.allMaps().map(m => Maps.mapToIndexAbbreviation(m))
+
+        const colData = {
+            ENTITY: counts.map(c => c[0]),
+            COUNT: counts.map(c => c[1].length),
+            MAPS_LEFT: counts.map(c => {
+                const unCompletedMaps = allMaps.filter(m => !c[1].includes(m))
+                console.log(c[0], unCompletedMaps)
+                if (unCompletedMaps.length > 5) {
+                    return unCompletedMaps.splice(0, 3).join(', ') + ` (+ ${unCompletedMaps.length - 3} more)`
+                } else {
+                    return unCompletedMaps.join(', ')
+                }
+            })
+        }
+
+        function setOtherDisplayFields(challengeEmbed) {
+            challengeEmbed
+                .setTitle('2 Million Pops Tower Completion Rankings')
+                .setColor(paleblue)
+                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
+        }
+
+        Index.displayOneOrMultiplePages(interaction, colData, setOtherDisplayFields)
     }
 }
 

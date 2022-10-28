@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { cyber } = require('../jsons/colors.json');
 const map = require('../jsons/map.json');
 const { discord } = require('../aliases/misc.json');
-const Maps = require('../helpers/maps')
+const Maps = require('../helpers/maps');
 
 const FuzzySet = require('fuzzyset.js');
 
@@ -50,8 +50,14 @@ async function onAutocomplete(interaction) {
     const value = map_name_partial.value;
 
     let fs = FuzzySet(Maps.allMaps());
-    const values = fs.get(value, null, 0.2);
+    let values = fs.get(value, null, 0.2);
     responseArr = [];
+    if (!values)
+        responseArr = Aliases.allMaps()
+            .slice(0, 25) // discord only allows like 25 options at a time
+            .map((map) => {
+                return { name: map, value: map };
+            });
     values.forEach((value, index) => {
         if (index < 25) responseArr.push({ name: value[1], value: value[1] });
     });

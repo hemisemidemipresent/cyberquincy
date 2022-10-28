@@ -10,7 +10,7 @@ module.exports = {
     getDmg(d, x) {
         x--;
         let d_x = d * (1 + x * 0.01) + Math.floor(x / 10);
-        return round(d_x, 1);
+        return d_x;
     },
     /**
      * returns the new additional damage modifier for specified degree
@@ -22,7 +22,7 @@ module.exports = {
     getDmgMod(d, x) {
         x--;
         let d_x = d * (1 + x * 0.01);
-        return round(d_x, 1);
+        return d_x;
     },
     /**
      * @param {int} d damage at degree 1
@@ -34,7 +34,7 @@ module.exports = {
     getDamages(d, md = 0, bd = 0, x, isDot = false) {
         const d_x = this.getDmg(d, x);
         const md_x = md ? this.getDmgMod(md, x) : 0;
-        const bd_x = this.getDmg(bd, x);
+        const bd_x = this.getDmgMod(bd, x);
 
         const mult = 1 + Math.floor(x / 20) * 0.2;
 
@@ -45,21 +45,21 @@ module.exports = {
         const ed_tot = x < 20 || isDot ? 2 * cum_d : 2 * cum_d2 * mult - bd_x;
 
         return {
-            d: Math.round(d_x * 100) / 100,
-            md: d_x + md_x,
-            bd: Math.round(bd_tot * 100) / 100,
-            ed: Math.round(ed_tot * 100) / 100
+            d: round(d_x, 1),
+            md: round(d_x + md_x, 1),
+            bd: round(bd_tot, 1),
+            ed: round(ed_tot, 1)
         };
     },
     getPiece(p, x) {
         x--;
         let p_x = p * (1 + x * 0.01) + x;
-        return round(p_x, 1);
+        return p_x;
     },
     getSpeed(s, x) {
         x--;
         let s_x = s / (1 + Math.sqrt(x * 50) * 0.01);
-        return round(s_x, 1);
+        return s_x;
     },
     /**
      *
@@ -73,13 +73,13 @@ module.exports = {
 
         // ceramic damage is total, while fortified damage is handled as an additive.
         // this is because fortified can stack with normal bloons (lead), ceramics, and moab-class bloons
-        if (obj.cd) res.cd = this.getDmgMod(obj.cd, x) + res.d;
-        if (obj.fd) res.fd = this.getDmgMod(obj.fd, x);
+        if (obj.cd) res.cd = round(this.getDmgMod(obj.cd, x) + res.d, 1);
+        if (obj.fd) res.fd = round(this.getDmgMod(obj.fd, x), 1);
 
-        if (obj.pierce) res.p = this.getPiece(obj.pierce, x);
-        if (obj.rate) res.s = this.getSpeed(obj.rate, x);
+        if (obj.pierce) res.p = round(this.getPiece(obj.pierce, x), 1);
+        if (obj.rate) res.s = round(this.getSpeed(obj.rate, x), 4); // secomds between attack needs more precision
         // coodown uses the same scaling formula as seconds between attacks
-        if (obj.cooldown) res.cooldown = this.getSpeed(obj.cooldown, x);
+        if (obj.cooldown) res.cooldown = round(this.getSpeed(obj.cooldown, x), 1);
         return res;
     }
 };

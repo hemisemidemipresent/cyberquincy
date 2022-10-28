@@ -88,7 +88,7 @@ async function execute(interaction) {
                 .setColor(paleblue)
                 .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
 
-            if (challengeEmbed.data.fields.find(field => field.name === 'Maps Left').value.includes('*')) {
+            if (challengeEmbed.data.fields.find(field => field.name.includes('Maps Left'))?.value?.includes('*')) {
                 challengeEmbed.setFooter({ text: '*where placement is possible' })
             }
         }

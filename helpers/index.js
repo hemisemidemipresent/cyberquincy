@@ -203,7 +203,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                 for (header in colData) {
                     const data = colData[header].slice(leftIndex, rightIndex + 1);
 
-                    colWidths.push(Math.max(...data.concat(header).map((row) => row.length)));
+                    colWidths.push(Math.max(...data.concat(header).map((row) => `${row}`.length)));
                 }
 
                 // HEADER
@@ -212,9 +212,12 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                     throw 'LINK column cannot appear anywhere but the last column for mobile formatting purposes';
                 }
                 let headerField = headers
-                    .map((header, colIndex) =>
-                        header == 'LINK' ? header.padEnd(15, ' ') : header.padEnd(colWidths[colIndex], ' ')
-                    )
+                    .map((header, colIndex) => {
+                        formattedHeader = gHelper.toTitleCase(header.split('_').join(' '))
+                        return formattedHeader == 'Link' ?
+                            formattedHeader.padEnd(15, ' ') :
+                            formattedHeader.padEnd(colWidths[colIndex], ' ')
+                    })
                     .join(' | ');
                 headerField = `\`${headerField}\``;
 
@@ -231,7 +234,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                             if (headers[colIndex] == 'LINK') {
                                 return `\`${cellData}`;
                             } else {
-                                text = cellData.padEnd(colWidths[colIndex], ' ');
+                                text = `${cellData}`.padEnd(colWidths[colIndex], ' ');
                                 if (colIndex == rowData.length - 1) text += '`';
                                 return text;
                             }

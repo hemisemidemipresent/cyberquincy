@@ -207,25 +207,12 @@ async function execute(interaction) {
 }
 
 function mapsNotPossible(combo) {
-    const hasWaterTower = [1, 2].some((entityNum) => {
-        const indexEntity = combo[`TOWER_${entityNum}`].NAME;
-        const entity = Aliases.toAliasCanonical(indexEntity);
-        return Towers.isWaterEntity(entity);
-    });
+    const impossibleMapsPerTower = [1, 2].map((entityNum) => {
+        const entity = combo[`TOWER_${entityNum}`].NAME;
+        return Maps.mapsNotPossible(entity)
+    })
 
-    const hasHeli = [1, 2].some((entityNum) => {
-        const indexEntity = combo[`TOWER_${entityNum}`].NAME;
-        const entity = Aliases.toAliasCanonical(indexEntity);
-        return entity.split('#')[0] === 'heli_pilot';
-    });
-
-    if (hasWaterTower) {
-        return Maps.allNonWaterMaps().map((m) => Maps.mapToIndexAbbreviation(m));
-    } else if (hasHeli) {
-        return ['MN']
-    } else {
-        return []
-    }
+    return [...new Set(impossibleMapsPerTower.flat())]
 }
 
 async function displayCombos(interaction, combos, parsed, allCombos, mtime) {

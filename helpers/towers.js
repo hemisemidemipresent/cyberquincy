@@ -160,6 +160,10 @@ function isWaterEntity(entity) {
     return allWaterTowers().includes(entityToCompare);
 }
 
+function isOfTower(entity, tower) {
+    return entity.split('#')[0] === tower
+}
+
 function towerPathtoPath(towerPath) {
     return towerPath.split('#')[1];
 }
@@ -414,6 +418,7 @@ module.exports = {
     isTowerPath,
     allWaterTowers,
     isWaterEntity,
+    isOfTower,
     towerPathToTower,
     towerPathtoPath,
     towerPathToIndexNormalForm,

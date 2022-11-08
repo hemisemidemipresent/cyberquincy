@@ -47,7 +47,7 @@ async function execute(interaction) {
 				.uploadUrl(image)
 				.then(async (json) => {
 					const embed = new Discord.EmbedBuilder()
-						.setDescription(`${text} ${json.link}`)
+						.setDescription(`${json.link}\n${text}`)
 						.setColor(cyber)
 						.setImage(`${json.link}`)
 						.setFooter({ text: `sent by ${interaction.user.tag}` });
@@ -74,7 +74,7 @@ async function execute(interaction) {
 				.uploadUrl(image)
 				.then(async (json) => {
 					const embed = new Discord.EmbedBuilder()
-						.setDescription(`${text} ${json.link}`)
+						.setDescription(`${json.link}\n${text}`)
 						.setColor(cyber)
 						.setImage(`${json.link}`)
 						.setFooter({ text: `sent by ${interaction.user.tag}` });

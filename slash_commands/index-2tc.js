@@ -397,7 +397,11 @@ function flattenCombo(combo, map) {
     delete flattenedCombo.MAPS;
 
     for (var tn = 1; tn <= 2; tn++) {
-        flattenedCombo[`TOWER_${tn}`] = `${flattenedCombo[`TOWER_${tn}`].NAME} (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`;
+        if (combo.OG) {
+            flattenedCombo[`TOWER_${tn}`] = `${flattenedCombo[`TOWER_${tn}`].NAME} (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`;
+        } else {
+            flattenedCombo[`TOWER_${tn}`] = flattenedCombo[`TOWER_${tn}`].NAME
+        }
     }
 
     return flattenedCombo;

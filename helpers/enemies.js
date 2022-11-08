@@ -134,7 +134,7 @@ class Enemy {
         const regrow = this.regrow && this.name != DDT ? ' Regrowth' : '( Regrowth)*';
         const fortified = this.fortified ? 'Fortified ' : '(Fortified )*';
         const name = this.formatName(this.isMOAB());
-        return new RegExp(`(\\d+) ${fortified}${name}${camo}${regrow}(?:,|$)`);
+        return new RegExp(`(\\d+) ${fortified}${name}${camo}${regrow}(?:,|$)`, 'g');
     }
 
     isFreeplay() {
@@ -179,7 +179,11 @@ class Enemy {
         for (const r in roundContents) {
             if (!r.startsWith(mode)) continue;
 
-            const numAppearances = parseInt(roundContents[r].match(pattern)?.[1] || '0');
+            const appearances = roundContents[r].match(pattern);
+            let numAppearances = 0;
+            if (appearances) {
+                appearances.forEach((str) => (numAppearances += parseInt(str)));
+            }
 
             if (numAppearances > 0) {
                 roundAppearances[r.replace(mode, 'r')] = parseInt(numAppearances);

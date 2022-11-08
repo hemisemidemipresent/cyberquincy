@@ -218,25 +218,24 @@ async function paragon_stats(interaction) {
         desc = `**Radial Darts** (purple trail)
         • ${pa.radial.d}d, ${pa.radial.bd}bd, ${pa.radial.ed}ed, ${pa.radial.p}p, 16j, ${pa.radial.s}s
         
-        Seeking Missiles (green trail)
+        **Seeking Missiles** (green trail)
         • ${pa.seeking.d}d, ${pa.seeking.bd}bd, ${pa.seeking.ed}ed, ${pa.seeking.p}p, 4j, ${pa.seeking.s}s, on last hit: creates explosion
            
-        explosion - ${pa.explosion.d}d, ${pa.explosion.bd}bd, ${pa.explosion.ed}ed, ${pa.explosion.p}p
+        **explosion** - ${pa.explosion.d}d, ${pa.explosion.bd}bd, ${pa.explosion.ed}ed, ${pa.explosion.p}p
         
-        Forward Firing Darts (no trail)
+        **Forward Firing Darts** (no trail)
         • ${pa.forward.d}d, ${pa.forward.bd}bd, ${pa.forward.ed}ed, ${pa.forward.p}p, 2j, ${pa.forward.s}s 
         • only fires when the ace is facing a bloon
         
-        Activated Ability — Carpet Bomb 
+        Activated Ability - **Carpet Bomb**
         • ${pa.carpet.cooldown}s cooldown
-        • ~3s after activation, 8 carpet bombs are deployed along the selected path (more details at the bottom) 
-        • carpet-bombs - ${pa.carpet.d}d, ${pa.carpet.bd}bd, ${pa.carpet.ed}ed, ${pa.carpet.p}p, 50 blast radius each 
-           
-        if the hit does not pop the bloon: stun for 8s`;
+        • ~3s after activation, 8 **carpet-bomb**s are deployed along the selected path
+        • **carpet-bomb** - ${pa.carpet.d}d, ${pa.carpet.bd}bd, ${pa.carpet.ed}ed, ${pa.carpet.p}p, 50 blast radius each 
+        • if the hit does not pop the bloon: stun for 8s`;
     }
     let messageEmbed = new Discord.EmbedBuilder()
         .setTitle(`\`${tower}\` paragon - level ${level}`)
-        .setDescription(desc.replace(/\t/g, ''))
+        .setDescription(desc.replace(/    /g, ''))
         .setFooter({ text: footer })
         .setColor(paragon);
     return await interaction.reply({ embeds: [messageEmbed] });

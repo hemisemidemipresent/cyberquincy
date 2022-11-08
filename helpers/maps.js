@@ -101,7 +101,7 @@ function indexMapAbbreviationToNormalForm(mapAbbr) {
 }
 
 function indexNormalFormToMapAbbreviation(map) {
-    mapToIndexAbbreviation(
+    return mapToIndexAbbreviation(
         Aliases.toAliasNormalForm(map)
     );
 }

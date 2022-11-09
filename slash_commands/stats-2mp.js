@@ -39,7 +39,7 @@ const builder = new SlashCommandBuilder()
     .setName('stats-2mp')
     .setDescription('See Overall Stats for Completed 2MP Index Combos')
     .addStringOption(statOption)
-    .addStringOption(mapDifficultyOption)
+    // .addStringOption(mapDifficultyOption)
     .addStringOption(reloadOption);
 
 async function execute(interaction) {
@@ -53,7 +53,6 @@ async function execute(interaction) {
 
     const stat = interaction.options.getString('stat')
     const mapDifficulty = interaction.options.getString('map_difficulty')
-    const mapDifficulties = mapDifficulty ? [mapDifficulty] : Maps.allMapDifficulties()
 
     if (stat === TOWER_COMPLETION) {
         const counts = allCombos

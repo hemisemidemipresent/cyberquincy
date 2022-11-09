@@ -58,7 +58,7 @@ async function execute(interaction) {
     if (stat === TOWER_COMPLETION) {
         const counts = allCombos
             .map(combo => { return { ENTITY: combo.ENTITY, MAPS: Object.keys(combo.MAPS) } })
-            .sort((c1, c2) => c1.MAPS.length < c2.MAPS.length ? 1 : -1)
+            .sort((c1, c2) => c2.MAPS.length - c1.MAPS.length)
 
         const allMaps = Maps.allMaps().map(m => Maps.mapToIndexAbbreviation(m))
 
@@ -91,6 +91,42 @@ async function execute(interaction) {
             if (challengeEmbed.data.fields.find(field => field.name.includes('Maps Left'))?.value?.includes('*')) {
                 challengeEmbed.setFooter({ text: '*where placement is possible' })
             }
+        }
+
+        Index.displayOneOrMultiplePages(interaction, colData, setOtherDisplayFields)
+    } else if (stat === PERSON_COMPLETION) {
+        const counts = {}
+        allCombos.forEach(combo => {
+            Object.keys(combo.MAPS).forEach(complMap => {
+                const compl = combo.MAPS[complMap]
+                counts[compl.PERSON] ||= []
+                counts[compl.PERSON].push(complMap)
+            })
+        })
+
+        const sortedStats = 
+            Object.entries(counts)
+                .map(cnt =>  {
+                    return { 
+                        PERSON: cnt[0], 
+                        MAPS: cnt[1],
+                        FAVORITE_MAP: gHelper.mostCommonElement(cnt[1]),
+                        FAVORITE_DIFFICULTY: gHelper.mostCommonElement(cnt[1].map(m => Maps.mapToMapDifficulty(m))).substring(0, 3).toUpperCase()
+                    } 
+                })
+                .sort((c1, c2) => c2.MAPS.length - c1.MAPS.length)
+        
+        const colData = {
+            PERSON: sortedStats.map(c => c.PERSON),
+            COUNT: sortedStats.map(c => c.MAPS.length),
+            'MAP_/_DIFF._FAVS.': sortedStats.map(c => `${c.FAVORITE_MAP} / ${c.FAVORITE_DIFFICULTY}`)
+        }
+
+        function setOtherDisplayFields(challengeEmbed) {
+            challengeEmbed
+                .setTitle('2 Million Pops Person Completion Rankings')
+                .setColor(paleblue)
+                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
         }
 
         Index.displayOneOrMultiplePages(interaction, colData, setOtherDisplayFields)

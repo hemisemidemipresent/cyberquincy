@@ -7,6 +7,7 @@ const gHelper = require('../helpers/general')
 const STATS = [
     TOWER_COMPLETION = 'tower_completion',
     PERSON_COMPLETION = 'person_completion',
+    PERSON_UNIQUE_COMPLETION = 'person_unique_completion'
 ]
 
 const statOption = new SlashCommandStringOption()
@@ -16,6 +17,7 @@ const statOption = new SlashCommandStringOption()
     .addChoices(
         { name: 'Tower Completion of Maps', value: TOWER_COMPLETION },
         { name: 'Person Completion of Maps', value: PERSON_COMPLETION },
+        { name: 'Person Completion of Unique Maps', value: PERSON_UNIQUE_COMPLETION },
     )
 
 const mapDifficultyOption = new SlashCommandStringOption()
@@ -124,6 +126,51 @@ async function execute(interaction) {
         function setOtherDisplayFields(challengeEmbed) {
             challengeEmbed
                 .setTitle('2 Million Pops Person Completion Rankings')
+                .setColor(paleblue)
+                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
+        }
+
+        Index.displayOneOrMultiplePages(interaction, colData, setOtherDisplayFields)
+    } else if (stat === PERSON_UNIQUE_COMPLETION) {
+        const counts = {}
+        allCombos.forEach(combo => {
+            Object.keys(combo.MAPS).forEach(complMap => {
+                const compl = combo.MAPS[complMap]
+                counts[compl.PERSON] ||= new Set()
+                counts[compl.PERSON].add(complMap)
+            })
+        })
+
+        const sortedStats =
+            Object.entries(counts)
+                .map(cnt =>  {
+                    return {
+                        PERSON: cnt[0],
+                        MAPS: Array.from(cnt[1]),
+                    }
+                })
+                .sort((c1, c2) => c2.MAPS.length - c1.MAPS.length)
+
+        const allMaps = Maps.allMaps().map(m => Maps.mapToIndexAbbreviation(m))
+
+        const colData = {
+            PERSON: sortedStats.map(c => c.PERSON),
+            COUNT: sortedStats.map(c => c.MAPS.length),
+            'MAPS_LEFT': sortedStats.map(c => {
+                const unCompletedMaps = allMaps.filter(m => !c.MAPS.includes(m))
+                if (unCompletedMaps.length === 0) {
+                    return 'Ø'
+                } else if (unCompletedMaps.length > 5) {
+                    return unCompletedMaps.slice(0, 3).join(', ') + ` (+ ${unCompletedMaps.length - 3} more)`
+                } else {
+                    return unCompletedMaps.join(', ')
+                }
+            })
+        }
+
+        function setOtherDisplayFields(challengeEmbed) {
+            challengeEmbed
+                .setTitle('2 Million Pops Person Unique Completion Rankings')
                 .setColor(paleblue)
                 .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
         }

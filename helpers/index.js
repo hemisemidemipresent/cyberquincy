@@ -291,7 +291,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
             componentType: ComponentType.Button,
-            time: 20000
+            time: 60000
         });
 
         collector.on('collect', async (buttonInteraction) => {

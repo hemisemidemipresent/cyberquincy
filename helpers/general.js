@@ -200,6 +200,27 @@ function round(num, numDigitsAfterDecimal=0) {
     return Math.round(num * 10**numDigitsAfterDecimal) / 10**numDigitsAfterDecimal
 }
 
+function mostCommonElement(arr) {
+    if(arr.length == 0)
+        return null;
+    var modeMap = {};
+    var maxEl = arr[0], maxCount = 1;
+    for(var i = 0; i < arr.length; i++)
+    {
+        var el = arr[i];
+        if(modeMap[el] == null)
+            modeMap[el] = 1;
+        else
+            modeMap[el]++;  
+        if(modeMap[el] > maxCount)
+        {
+            maxEl = el;
+            maxCount = modeMap[el];
+        }
+    }
+    return maxEl;
+}
+
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 RED_X = String.fromCharCode(10060);
@@ -224,6 +245,7 @@ module.exports = {
     addSpaces,
     timeSince,
     round,
+    mostCommonElement,
     HEAVY_CHECK_MARK,
     WHITE_HEAVY_CHECK_MARK,
     RED_X,

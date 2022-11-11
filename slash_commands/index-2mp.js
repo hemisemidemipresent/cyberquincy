@@ -317,7 +317,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     const numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
     let possiblePhrasing;
     if (mapsLeft.length > 0) {
-        possiblePhrasing = impossibleMaps.length > 0 ? ' (that are possible)' : '';
+        possiblePhrasing = impossibleMaps.length > 0 ? ' (where placement is possible)' : '';
         challengeEmbed.addFields([
             { name: `Combos${possiblePhrasing}`, value: `**${numCombosCompleted}**/${numCombosPossible}` }
         ]);

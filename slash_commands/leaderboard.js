@@ -2,9 +2,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, Compo
 const nodefetch = require('node-fetch');
 const { black } = require('../jsons/colors.json');
 
-builder = new SlashCommandBuilder()
-    .setName('leaderboard')
-    .setDescription('Shows the CT Leaderboard! (not copied frmom minecool at all)');
+builder = new SlashCommandBuilder().setName('leaderboard').setDescription('Shows the CT Leaderboard!');
 
 async function execute(interaction) {
     await interaction.reply('Getting Leaderboard...');

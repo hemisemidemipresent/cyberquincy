@@ -8,6 +8,7 @@ module.exports = {
      * @returns damage for that degree
      */
     getDmg(d, x) {
+        if (x === 100) return d * 2 + 10;
         x--;
         let d_x = d * (1 + x * 0.01) + Math.floor(x / 10);
         return d_x;

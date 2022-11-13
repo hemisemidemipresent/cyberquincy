@@ -98,6 +98,8 @@ async function execute(interaction) {
         allCombos.forEach(combo => {
             Object.keys(combo.MAPS).forEach(complMap => {
                 const compl = combo.MAPS[complMap]
+                if (isOG && !compl.OG) return // continue
+
                 const towers = [combo.TOWER_1.NAME, combo.TOWER_2.NAME]
                 
                 counts[compl.PERSON] ||= []
@@ -124,7 +126,12 @@ async function execute(interaction) {
         const colData = {
             PERSON: sortedStats.map(c => c.PERSON),
             COUNT: sortedStats.map(c => c.COUNT),
-            'MAP_/_TOWER_FAVS.': sortedStats.map(c => `${c.FAVORITE_MAP} / ${c.FAVORITE_TOWER}`)
+        }
+
+        if (isOG) {
+            colData['TOWER FAV.'] = sortedStats.map(c => c.FAVORITE_TOWER)
+        } else {
+            colData['MAP_/_TOWER_FAVS.'] = sortedStats.map(c => `${c.FAVORITE_MAP} / ${c.FAVORITE_TOWER}`)
         }
 
         function setOtherDisplayFields(challengeEmbed) {

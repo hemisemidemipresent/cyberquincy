@@ -230,6 +230,18 @@
         "Cos": "N/A",
         "wa%": "-",
         "los": "-",
+        "thu": "",
+        "e": "1/1"
+    },
+    "covered_garden": {
+        "ver": 33,
+        "len": 19.8,
+        "lenStr": 19.8,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "yes",
+        "los": "",
+        "thu": "",
         "e": "1/1"
     },
     "quary": {
@@ -434,6 +446,17 @@
         "wa%": "4%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920494976925696/RakeBTD6.png",
+        "e": "2/2"
+    },
+    "midnight_mansion": {
+        "ver": 33,
+        "len": 18,
+        "lenStr": 18,
+        "obj": 2,
+        "Cos": "500",
+        "wa%": "-",
+        "los": "",
+        "thu": "",
         "e": "2/2"
     },
     "cornfield": {

@@ -6,7 +6,7 @@ const gHelper = require('../helpers/general.js');
 const bHelper = require('../helpers/bloons-general');
 
 const LexicalParser = require('../helpers/calculator/lexical_parser');
-const chimps = require('../jsons/round2.json');
+const chimps = require('../jsons/income-normal.json');
 const RoundParser = require('../parser/round-parser');
 
 const { red } = require('../jsons/colors.json');

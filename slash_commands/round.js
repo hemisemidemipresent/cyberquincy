@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const FBG = require('../jsons/freeplay.json');
 const json = require('../jsons/rounds_topper.json');
 const roundContents = require('../jsons/round_contents.json');
-const rounds2 = require('../jsons/round2.json');
+const cashChimps = require('../jsons/income-normal.json');
 const cashAbr = require('../jsons/income-abr.json');
 
 const roundHelper = require('../helpers/rounds');
@@ -132,8 +132,8 @@ async function execute(interaction) {
     let roundInfo = isAbr ? json.alt : json.reg;
     let roundLength = getLength(round, roundInfo);
     let roundContent = roundContents[`${isAbr ? 'a' : ''}r${round}`].split(',').join('\n');
-    let roundRBE = isAbr ? cashAbr[round].rbe : rounds2[round].rbe;
-    let roundCash = rounds2[round].cashThisRound;
+    let roundRBE = isAbr ? cashAbr[round].rbe : cashChimps[round].rbe;
+    let roundCash = cashChimps[round].cashThisRound;
     if (isAbr) {
         if (round > 2) {
             roundCash = cashAbr[round].cashThisRound;

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const r = require('../jsons/round2.json');
-const abr = require('../jsons/round2-abr.json');
+const r = require('../jsons/income-normal.json');
+const abr = require('../jsons/income-abr.json');
 
 const gHelper = require('../helpers/general.js');
 const { red, magenta, yellow } = require('../jsons/colors.json');

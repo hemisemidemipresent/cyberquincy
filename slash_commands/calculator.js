@@ -47,24 +47,21 @@ async function calc(interaction) {
         return lexeme; // symbols
     });
 
-    lexer.addRule(/[\(\+\-\*\/%\^\)]/, function (lexeme) {
+    lexer.addRule(/[\(\+\-\*\/%\^\)']/, function (lexeme) {
         return lexeme; // punctuation and operators
     });
 
     // Set up operators and operator precedence to interpret the parsed tree
     var power = {
         precedence: 3,
-        associativity: 'left'
     };
 
     var factor = {
         precedence: 2,
-        associativity: 'left'
     };
 
     var term = {
         precedence: 1,
-        associativity: 'left'
     };
 
     var parser = new LexicalParser({
@@ -123,7 +120,7 @@ async function calc(interaction) {
         parsed = parse(expression);
     } catch (e) {
         // Catches bad character inputs
-        c = e.message.match(/Unexpected character at index \d+: (.)/)[1];
+        c = e.message.match(/Unexpected character at index \d+: (.)/)?.[1];
         if (c) {
             footer = '';
             if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
@@ -137,7 +134,7 @@ async function calc(interaction) {
                 ],
                 components: []
             });
-        } else console.log(e);
+        } else throw e
     }
 
     var stack = [];
@@ -270,28 +267,33 @@ function costOfTowerUpgradeCrosspath(t, difficulty) {
 }
 
 // TODO: Use hero json
-function costOfHero(hero, difficulty) {
+function costOfHero(hero, difficulty, numDiscounts) {
     const mediumCost = heroes[hero]['cost'];
     if (!mediumCost) throw `${hero} does not have entry in heroes.json`;
-    return bHelper.difficultyPriceMult(mediumCost, difficulty);
+    return bHelper.discountPriceMult(
+        bHelper.difficultyPriceMult(mediumCost, difficulty),
+        numDiscounts
+    );
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, i, difficulty) {
-    if (!isNaN(t)) return Number(t);
-    else if ((round = CommandParser.parse([t], new RoundParser('PREDET_CHIMPS')).round)) {
+    const undiscountedToken = t.replace(/'*$/, '')
+    const numDiscounts = t.match(/'*$/)?.[0]?.length
+    if (!isNaN(undiscountedToken)) return Number(t);
+    else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
-    } else if (isTowerUpgradeCrosspath(t)) {
+    } else if (isTowerUpgradeCrosspath(undiscountedToken)) {
         // Catches tower upgrades with crosspaths like wiz#401
-        return costOfTowerUpgradeCrosspath(t, difficulty);
-    } else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(t))) {
+        return costOfTowerUpgradeCrosspath(t, difficulty, numDiscounts);
+    } else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(undiscountedToken))) {
         // Catches all other tower ugprades
-        return costOfTowerUpgradeCrosspath(t, difficulty);
-    } else if (Towers.isTower(Aliases.getCanonicalForm(t))) {
+        return costOfTowerUpgradeCrosspath(t, difficulty, numDiscounts);
+    } else if (Towers.isTower(Aliases.getCanonicalForm(undiscountedToken))) {
         // Catches base tower names/aliases
-        return costOfTowerUpgradeCrosspath(`${t}#000`, difficulty);
-    } else if (Aliases.isHero(Aliases.getCanonicalForm(t))) {
-        return costOfHero(Aliases.getCanonicalForm(t), difficulty);
+        return costOfTowerUpgradeCrosspath(`${t}#000`, difficulty, numDiscounts);
+    } else if (Aliases.isHero(Aliases.getCanonicalForm(undiscountedToken))) {
+        return costOfHero(Aliases.getCanonicalForm(t), difficulty, numDiscounts);
     } else {
         s = '';
         if (t.length == 1) {

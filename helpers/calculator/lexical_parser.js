@@ -24,11 +24,8 @@ LexicalParser.prototype.parse = function (input) {
                 else output.push(token);
             }
 
-            if (token !== "(") {
-                console.log(token)
-                console.log(output)
+            if (token !== "(")
                 throw new Error("Mismatched parentheses.");
-            }
             break;
         case "'": // discount operator gets distributed FIRST and stuck on the operands
             let numOperands = 0,
@@ -70,8 +67,6 @@ LexicalParser.prototype.parse = function (input) {
         if (token !== "(") output.push(token);
         else throw new Error("Mismatched parentheses.");
     }
-
-    console.log("final",output)
 
     return output;
 };

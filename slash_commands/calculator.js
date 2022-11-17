@@ -238,7 +238,7 @@ function isTowerUpgradeCrosspath(t) {
     return Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) && Towers.isValidUpgradeSet(upgrades);
 }
 
-function costOfTowerUpgradeCrosspath(t, difficulty) {
+function costOfTowerUpgradeCrosspath(t, difficulty, numDiscounts) {
     // Checking for tower aliases of the form wlp, gz, etc.
     if (!['!', '#'].some((sep) => t.includes(sep))) {
         // Alias tokens like wlp as wiz!050
@@ -254,12 +254,15 @@ function costOfTowerUpgradeCrosspath(t, difficulty) {
     let cost = 0;
     if (t.includes('#') || upgrades == '000') {
         // Total cost
-        cost = Towers.totalTowerUpgradeCrosspathCostMult(costs, jsonTowerName, upgrades, difficulty);
+        cost = Towers.totalTowerUpgradeCrosspathCostMult(costs, jsonTowerName, upgrades, difficulty, numDiscounts);
     } else if (t.includes('!')) {
         // Individual upgrade cost
         let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
         const mediumCost = costs[jsonTowerName].upgrades[`${path}`][tier - 1];
         cost = bHelper.difficultyPriceMult(mediumCost, difficulty);
+        if (tier <= 3) {
+            cost = bHelper.discountPriceMult(cost, numDiscounts)
+        }
     } else {
         throw 'No # or ! found in tower cost calc';
     }

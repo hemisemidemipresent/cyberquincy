@@ -354,25 +354,35 @@ function totalTowerUpgradeCrosspathCost(json, towerName, upgrade) {
     return totalCost;
 }
 
-function totalTowerUpgradeCrosspathCostMult(json, towerName, upgrade, difficulty) {
+function totalTowerUpgradeCrosspathCostMult(json, towerName, upgrade, difficulty, numDiscounts=0) {
     // uses different json format found in ../jsons/costs.json
 
     let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
     let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgrade);
     let tower = json[`${towerName}`];
     let totalCost = bHelper.difficultyPriceMult(tower.cost, difficulty); // base cost of tower
+    let upgradeCost;
 
-    for (let i = 0; i < tier; i++) {
-        // main path of tower
-        totalCost += bHelper.difficultyPriceMult(tower.upgrades[`${path}`][i], difficulty);
+    // main path of tower
+    for (let subTier = 1; subTier <= tier; subTier++) {
+        upgradeCost = bHelper.difficultyPriceMult(tower.upgrades[`${path}`][subTier - 1], difficulty);
+        if (subTier <= 3) {
+            upgradeCost = gHelper.discountPriceMult(upgradeCost, numDiscounts)
+        }
+        totalCost += upgradeCost
     }
 
-    for (let i = 0; i < crossTier; i++) {
-        // cross path of tower
-        totalCost += bHelper.difficultyPriceMult(tower.upgrades[`${crossPath}`][i], difficulty);
+    // cross path of tower
+    for (let subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
+        upgradeCost = bHelper.difficultyPriceMult(tower.upgrades[`${crossPath}`][subCrossTier - 1], difficulty);
+        if (subCrossTier <= 3) {
+            upgradeCost = gHelper.discountPriceMult(upgradeCost, numDiscounts)
+        }
+        totalCost += upgradeCost
     }
     return totalCost;
 }
+
 function upgradeCost(tower, path, tier) {
     let totalCost = 0;
     for (let i = 1; i <= tier; i++) {
@@ -386,25 +396,6 @@ function hard(cost) {
     return Math.round((cost * 1.08) / 5) * 5;
 }
 
-function totalTowerUpgradeCrosspathCostHard(json, towerName, upgrade) {
-    // uses different json format found in ../jsons/costs.json
-
-    let [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
-    let [crossPath, crossTier] = Towers.crossPathTierFromUpgradeSet(upgrade);
-    let tower = json[`${towerName}`];
-    let totalCost = hard(tower.cost); // base cost of tower
-
-    for (let i = 0; i < tier; i++) {
-        // main path of tower
-        totalCost += hard(tower.upgrades[`${path}`][i]);
-    }
-
-    for (let i = 0; i < crossTier; i++) {
-        // cross path of tower
-        totalCost += hard(tower.upgrades[`${crossPath}`][i]);
-    }
-    return totalCost;
-}
 module.exports = {
     JSON_TOWER_NAME_TO_BLOONOLOGY_LINK,
     towerUpgradeToTower,
@@ -432,7 +423,6 @@ module.exports = {
     formatEntity,
     getEntityType,
     totalTowerUpgradeCrosspathCost,
-    totalTowerUpgradeCrosspathCostHard,
     totalTowerUpgradeCrosspathCostMult,
     upgradeCost,
     hard

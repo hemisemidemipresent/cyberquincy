@@ -22,7 +22,9 @@ function discountPriceMult(cost, numDiscounts) {
         throw `Cannot apply ${numDiscounts} discounts (must be between 0 and 3)`
     }
     const unroundedDiscountPrice = cost * discountFactor
-    return Math.round(unroundedDiscountPrice / 5) * 5;
+
+    // NK rounds 0.5 down so we must too, hence the 0.001
+    return Math.round(unroundedDiscountPrice / 5 - 0.001) * 5;
 }
 
 module.exports = {

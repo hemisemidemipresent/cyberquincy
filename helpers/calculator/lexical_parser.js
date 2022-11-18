@@ -72,7 +72,7 @@ class LexicalParser {
         }
 
         return output;
-    };
+    }
 }
 
 module.exports = LexicalParser

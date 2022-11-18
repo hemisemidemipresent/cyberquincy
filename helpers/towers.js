@@ -316,7 +316,7 @@ function formatEntity(entity) {
         return Aliases.toIndexNormalForm(entity);
     } else if (isTowerPath(entity)) {
         [towerName, path] = entity.split('#');
-        return `${gHelper.toTitleCase(path.split('-').join(' '))} ` + `${Aliases.toIndexNormalForm(towerName)}`;
+        return `${gHelper.toTitleCase(path.split('_').join(' '))} ` + `${Aliases.toIndexNormalForm(towerName)}`;
     } else if (isTowerUpgrade(entity)) {
         return towerUpgradeToIndexNormalForm(entity);
     } else if (Aliases.isHero(entity)) {
@@ -379,6 +379,7 @@ module.exports = {
     allTowerUpgrades,
     allTowers,
     allTowerPaths,
+    allPaths,
     allTempleSets,
     isTowerUpgrade,
     isTowerUpgradeSet,

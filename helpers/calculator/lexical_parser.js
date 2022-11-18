@@ -35,7 +35,7 @@ class LexicalParser {
                 // distributing the discount operator to all operands along the way.
                 // I figured empirically/logically that the start is reached when the # of
                 // operands reaches 1 + the # of operators when counting backwards
-                for (idx = output.length - 1; idx >= 0; idx--) {
+                for (var idx = output.length - 1; idx >= 0; idx--) {
                     var outputToken = output[idx]
                     if (table.hasOwnProperty(outputToken)) {
                         numOperators += 1

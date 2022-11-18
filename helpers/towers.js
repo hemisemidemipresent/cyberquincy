@@ -206,11 +206,6 @@ function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
         throw 'First argument must be a tower';
     }
 
-    // Validate path
-    if (!allPaths().includes(path)) {
-        throw 'Second argument `path` must be top-path, middle-path, or bottom-path';
-    }
-
     // Validate tier
     if (!tier) {
         return towerUpgradeToIndexNormalForm(`${tower}#222`);
@@ -227,6 +222,11 @@ function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
 
     if (tier < 0 || tier > 5) {
         throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
+    }
+
+    // Validate path
+    if (!allPaths().includes(path)) {
+        throw 'Second argument `path` must be top-path, middle-path, or bottom-path';
     }
 
     // Convert path + tier to appropriate upgrade string like 003 or 400

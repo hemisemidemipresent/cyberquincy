@@ -11,7 +11,6 @@ const RoundParser = require('../parser/round-parser');
 
 const { red } = require('../jsons/colors.json');
 
-const costs = require('../jsons/costs.json');
 const heroes = require('../jsons/heroes.json');
 
 const exprOption = new SlashCommandStringOption()
@@ -47,7 +46,7 @@ async function calc(interaction) {
         return lexeme; // symbols
     });
 
-    lexer.addRule(/[\(\+\-\*\/%\^\)']/, function (lexeme) {
+    lexer.addRule(/[\(\+\-\*\/%\^\)'"]/, function (lexeme) {
         return lexeme; // punctuation and operators
     });
 
@@ -83,7 +82,7 @@ async function calc(interaction) {
     }
 
     // Get the original command arguments string back (other than the command name)
-    const expression = interaction.options.getString('expr');
+    const expression = interaction.options.getString('expr').replace(/"/, "''").toLowerCase();
     const difficulty = interaction.options.getString('difficulty') || 'hard';
 
     if (expression === 'help') {
@@ -192,6 +191,14 @@ async function calc(interaction) {
                         .setFooter({ text: 'due to manipulation, your full input will not be shown' })
                 ]
             });
+        } else if (e instanceof bHelper.DiscountError) {
+            return await interaction.reply({
+                embeds: [
+                    new Discord.EmbedBuilder()
+                        .setTitle(e.message)
+                        .setColor(red)
+                ]
+            });
         } else console.log(e);
     }
 
@@ -229,74 +236,38 @@ async function calc(interaction) {
     }
 }
 
-// wiz!300 or wiz#300 e.g.
-function isTowerUpgradeCrosspath(t) {
-    if (!/[a-z]+[#!]\d{3}/.test(t)) return false;
-
-    let [tower, upgrades] = t.split(/[!#]/);
-
-    return Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) && Towers.isValidUpgradeSet(upgrades);
-}
-
-function costOfTowerUpgradeCrosspath(t, difficulty, numDiscounts) {
-    // Checking for tower aliases of the form wlp, gz, etc.
-    if (!['!', '#'].some((sep) => t.includes(sep))) {
-        // Alias tokens like wlp as wiz!050
-        t = Aliases.getCanonicalForm(t).replace('#', '!');
-    }
-
-    let [tower, upgrades] = t.split(/[!#]/);
-
-    jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-');
-    if (jsonTowerName === 'druid-monkey') jsonTowerName = 'druid';
-    if (jsonTowerName === 'engineer') jsonTowerName = 'engineer-monkey';
-
-    let cost = 0;
-    if (t.includes('#') || upgrades == '000') {
-        // Total cost
-        cost = Towers.totalTowerUpgradeCrosspathCostMult(costs, jsonTowerName, upgrades, difficulty, numDiscounts);
-    } else if (t.includes('!')) {
-        // Individual upgrade cost
-        let [path, tier] = Towers.pathTierFromUpgradeSet(upgrades);
-        const mediumCost = costs[jsonTowerName].upgrades[`${path}`][tier - 1];
-        cost = bHelper.difficultyPriceMult(mediumCost, difficulty);
-        if (tier <= 3) {
-            cost = bHelper.discountPriceMult(cost, numDiscounts)
-        }
-    } else {
-        throw 'No # or ! found in tower cost calc';
-    }
-    return cost;
-}
-
 // TODO: Use hero json
 function costOfHero(hero, difficulty, numDiscounts) {
-    const mediumCost = heroes[hero]['cost'];
+    const mediumCost = heroes[hero].cost;
     if (!mediumCost) throw `${hero} does not have entry in heroes.json`;
-    return bHelper.discountPriceMult(
-        bHelper.difficultyPriceMult(mediumCost, difficulty),
-        numDiscounts
-    );
+    return bHelper.difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts)
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, i, difficulty) {
     const undiscountedToken = t.replace(/'*$/, '')
     const numDiscounts = t.match(/'*$/)?.[0]?.length
+    const tokenCanonical = Aliases.getCanonicalForm(undiscountedToken)
+
     if (!isNaN(undiscountedToken)) return Number(t);
     else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
-    } else if (isTowerUpgradeCrosspath(undiscountedToken)) {
+    } else if (Towers.isTowerUpgradeSet(undiscountedToken)) {
+        let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken).split('#');
         // Catches tower upgrades with crosspaths like wiz#401
-        return costOfTowerUpgradeCrosspath(t, difficulty, numDiscounts);
-    } else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(undiscountedToken))) {
+        return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts);
+    } else if (Towers.isTowerUpgradeSet(tokenCanonical.replace('!', '#'))) {
         // Catches all other tower ugprades
-        return costOfTowerUpgradeCrosspath(t, difficulty, numDiscounts);
-    } else if (Towers.isTower(Aliases.getCanonicalForm(undiscountedToken))) {
+        let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken).split('!');
+        return Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts);
+    } else if (Towers.isTowerUpgrade(tokenCanonical)) {
+        let [tower, upgrade] = Aliases.canonicizeArg(undiscountedToken).split('#');
+        return Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts);
+    } else if (Towers.isTower(tokenCanonical)) {
         // Catches base tower names/aliases
-        return costOfTowerUpgradeCrosspath(`${t}#000`, difficulty, numDiscounts);
+        return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts);
     } else if (Aliases.isHero(Aliases.getCanonicalForm(undiscountedToken))) {
-        return costOfHero(Aliases.getCanonicalForm(t), difficulty, numDiscounts);
+        return costOfHero(Aliases.getCanonicalForm(undiscountedToken), difficulty, numDiscounts);
     } else {
         s = '';
         if (t.length == 1) {

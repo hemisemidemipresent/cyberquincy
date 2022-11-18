@@ -1,0 +1,14 @@
+{
+    "top-path": [
+        "top"
+    ],
+    "middle-path": [
+        "middle",
+        "mid",
+        "mid_path"
+    ],
+    "bottom-path": [
+        "bottom",
+        "bot"
+    ]
+}

@@ -77,11 +77,15 @@ async function embedBloonology(towerName, upgrade) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
 
-    const easyTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'easy');
-    const totalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'medium');
-    const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'hard');
-    const impopTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'impoppable');
-    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
+    const easyTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'easy');
+    const totalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium');
+    const hardTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'hard');
+    const impopTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'impoppable');
+    
+    const easyCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'easy');
+    const mediumCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'medium');
+    const hardCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'hard');
+    const impopCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'impoppable');
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)
@@ -90,10 +94,10 @@ async function embedBloonology(towerName, upgrade) {
             {
                 name: 'cost',
                 value:
-                    `${bHelper.difficultyPriceMult(cost, 'easy')} - easy\n` +
-                    `${cost} - medium\n` +
-                    `${bHelper.difficultyPriceMult(cost, 'hard')} - hard\n` +
-                    `${bHelper.difficultyPriceMult(cost, 'impoppable')} - impoppable\n` +
+                    `${easyCost} - easy\n` +
+                    `${mediumCost} - medium\n` +
+                    `${hardCost} - hard\n` +
+                    `${impopCost} - impoppable\n` +
                     `if this is wrong [yell at hemi here](${discord})`,
                 inline: true
             },

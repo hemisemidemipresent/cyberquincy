@@ -3,27 +3,27 @@ const bHelper = require('./bloons-general')
 const costs = require('../jsons/costs.json')
 
 const TOWER_NAME_TO_BLOONOLOGY_LINK = {
-    'dart-monkey': 'https://pastebin.com/raw/FK4a9ZSi',
-    'boomerang-monkey': 'https://pastebin.com/raw/W2x9dvPs',
-    'bomb-shooter': 'https://pastebin.com/raw/XaR4JafN',
-    'tack-shooter': 'https://pastebin.com/raw/ywGCyWdT',
-    'ice-monkey': 'https://pastebin.com/raw/3VKx3upE',
-    'glue-gunner': 'https://pastebin.com/raw/cg8af3pj',
-    'sniper-monkey': 'https://pastebin.com/raw/8uQuKygM',
-    'monkey-sub': 'https://pastebin.com/raw/F9i5vPX9',
-    'monkey-buccaneer': 'https://pastebin.com/raw/EuiGUBWs',
-    'monkey-ace': 'https://pastebin.com/raw/hACdmBFa',
-    'heli-pilot': 'https://pastebin.com/raw/dfwcqzDT',
-    'mortar-monkey': 'https://pastebin.com/raw/64s0RqaZ',
-    'dartling-gunner': 'https://pastebin.com/raw/DDkmKP6n',
-    'wizard-monkey': 'https://pastebin.com/raw/4MsYDjFx',
-    'super-monkey': 'https://pastebin.com/raw/SUxZg6Dk',
-    'ninja-monkey': 'https://pastebin.com/raw/kPAF2hqw',
+    'dart_monkey': 'https://pastebin.com/raw/FK4a9ZSi',
+    'boomerang_monkey': 'https://pastebin.com/raw/W2x9dvPs',
+    'bomb_shooter': 'https://pastebin.com/raw/XaR4JafN',
+    'tack_shooter': 'https://pastebin.com/raw/ywGCyWdT',
+    'ice_monkey': 'https://pastebin.com/raw/3VKx3upE',
+    'glue_gunner': 'https://pastebin.com/raw/cg8af3pj',
+    'sniper_monkey': 'https://pastebin.com/raw/8uQuKygM',
+    'monkey_sub': 'https://pastebin.com/raw/F9i5vPX9',
+    'monkey_buccaneer': 'https://pastebin.com/raw/EuiGUBWs',
+    'monkey_ace': 'https://pastebin.com/raw/hACdmBFa',
+    'heli_pilot': 'https://pastebin.com/raw/dfwcqzDT',
+    'mortar_monkey': 'https://pastebin.com/raw/64s0RqaZ',
+    'dartling_gunner': 'https://pastebin.com/raw/DDkmKP6n',
+    'wizard_monkey': 'https://pastebin.com/raw/4MsYDjFx',
+    'super_monkey': 'https://pastebin.com/raw/SUxZg6Dk',
+    'ninja_monkey': 'https://pastebin.com/raw/kPAF2hqw',
     alchemist: 'https://pastebin.com/raw/76m7ATYF',
-    'druid-monkey': 'https://pastebin.com/raw/4egsjcpa',
-    'banana-farm': 'https://pastebin.com/raw/Es0nVqt1',
-    'spike-factory': 'https://pastebin.com/raw/tTHZWiSi',
-    'monkey-village': 'https://pastebin.com/raw/e2QHaQSD',
+    'druid_monkey': 'https://pastebin.com/raw/4egsjcpa',
+    'banana_farm': 'https://pastebin.com/raw/Es0nVqt1',
+    'spike_factory': 'https://pastebin.com/raw/tTHZWiSi',
+    'monkey_village': 'https://pastebin.com/raw/e2QHaQSD',
     engineer: 'https://pastebin.com/raw/rTHT0L21'
 };
 
@@ -361,7 +361,6 @@ function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts=0
     let totalCost = 0
     subUpgrades.forEach(subUpgrade => {
         totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts)
-        console.log(subUpgrade, totalCost)
     })
     return totalCost
 }

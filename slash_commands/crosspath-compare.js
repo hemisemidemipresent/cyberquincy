@@ -11,7 +11,7 @@ const towerOption = new SlashCommandStringOption()
     .setDescription('The tower you are finding information for')
     .setRequired(true);
 Object.keys(Towers.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
-    towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower, '-'), value: tower });
+    towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
 });
 
 const UUU = ['3xx', '4xx', '5xx', 'x3x', 'x4x', 'x5x', 'xx3', 'xx4', 'xx5'];

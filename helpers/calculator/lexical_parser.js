@@ -31,6 +31,10 @@ LexicalParser.prototype.parse = function (input) {
             let numOperands = 0,
                 numOperators = 0;
 
+            // Navigate to the start of the most recent parenthetical statement,
+            // distributing the discount operator to all operands along the way.
+            // I figured empirically/logically that the start is reached when the # of
+            // operands reaches 1 + the # of operators when counting backwards
             let idx
             for (idx = output.length - 1; idx >= 0; idx--) {
                 let outputToken = output[idx]

@@ -249,7 +249,7 @@ function parseAndValueToken(t, i, difficulty) {
     const numDiscounts = t.match(/'*$/)?.[0]?.length
     const tokenCanonical = Aliases.getCanonicalForm(undiscountedToken)
 
-    if (!isNaN(undiscountedToken)) return Number(t);
+    if (!isNaN(undiscountedToken)) return Number(undiscountedToken);
     else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (Towers.isTowerUpgradeSet(undiscountedToken)) {

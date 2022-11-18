@@ -4,40 +4,38 @@ class LexicalParser {
     }
     
     parse(input) {
-        var length = input.length,
-            table = this.table,
-            output = [],
-            stack = [],
-            index = 0;
+        const output = [];
+        const stack = [];
+        let index;
 
-        while (index < length) {
-            var token = input[index++];
+        for (index = 0; index < input.length; index++) {
+            let token = input[index];
 
-            switch (token) {
-            case "(":
+            if (token === '(') {
                 stack.unshift(token);
-                break;
-            case ")":
+            } else if (token === ')') {
+                let stackToken;
                 while (stack.length) {
-                    var token = stack.shift();
-                    if (token === "(") break;
-                    else output.push(token);
+                    stackToken = stack.shift();
+                    if (stackToken === "(") break;
+                    else output.push(stackToken);
                 }
 
-                if (token !== "(")
+                if (stackToken !== "(") {
                     throw new Error("Mismatched parentheses.");
-                break;
-            case "'": // discount operator gets distributed FIRST and stuck on the operands
-                var numOperands = 0,
-                    numOperators = 0;
+                }
+            } else if (token === "'") { // discount operator gets distributed FIRST and stuck on the operands
+                let numOperands = 0;
+                let numOperators = 0;
+                let idx;
 
                 // Navigate to the start of the most recent parenthetical statement,
                 // distributing the discount operator to all operands along the way.
                 // I figured empirically/logically that the start is reached when the # of
                 // operands reaches 1 + the # of operators when counting backwards
-                for (var idx = output.length - 1; idx >= 0; idx--) {
-                    var outputToken = output[idx]
-                    if (table.hasOwnProperty(outputToken)) {
+                for (idx = output.length - 1; idx >= 0; idx--) {
+                    let outputToken = output[idx]
+                    if (this.table.hasOwnProperty(outputToken)) {
                         numOperators += 1
                     } else {
                         numOperands += 1
@@ -45,16 +43,15 @@ class LexicalParser {
                         if (numOperands > numOperators) break
                     }
                 }
-                break;
-            default:
-                if (table.hasOwnProperty(token)) { // is an operator
+            } else {
+                if (this.table.hasOwnProperty(token)) { // is an operator
                     while (stack.length) {
-                        var punctuator = stack[0];
+                        let punctuator = stack[0];
 
                         if (punctuator === "(") break;
 
-                        var precedence = table[token].precedence,
-                            antecedence = table[punctuator].precedence;
+                        let precedence = this.table[token].precedence
+                        let antecedence = this.table[punctuator].precedence;
 
                         if (precedence > antecedence) break;
                         else output.push(stack.shift());
@@ -66,7 +63,7 @@ class LexicalParser {
         }
 
         while (stack.length) {
-            var token = stack.shift();
+            let token = stack.shift();
             if (token !== "(") output.push(token);
             else throw new Error("Mismatched parentheses.");
         }

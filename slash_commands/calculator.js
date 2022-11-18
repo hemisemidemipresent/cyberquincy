@@ -98,12 +98,12 @@ async function calc(interaction) {
                 },
                 { name: '`wiz#420`, `super#000`', value: 'TOTAL COST of tower#upgradeSet' },
                 { name: '`adora`, `brick`', value: 'Base cost of hero (no leveling cost calculations included)' },
-                { name: 'Operators', value: '`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power)' },
+                { name: 'Operators', value: '`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power), `\'` (discount operator)' },
                 {
                     name: 'Examples',
                     value: `\`/calc expr:r99 - wiz#025 - super#052\` (2tc test)
-                            \`/calc expr:ninja#502 + ninja#030 * 20 * 0.85\` (GMN + single-discounted shinobi army)
-                            \`/calc expr:vil#002 + (vill#302 + vill#020)*0.85 + vill!400\` (camo-mentoring double discount village setup)`
+                            \`/calc expr:ninja#502 + ninja#030' * 20\` (GMN + single-discounted shinobi army)
+                            \`/calc expr:vil#002 + (vill#302 + vill#020)' + vill!400\` (camo-mentoring double discount village setup)`
                 },
                 {
                     name: 'Notes',

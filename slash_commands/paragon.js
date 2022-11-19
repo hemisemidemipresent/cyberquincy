@@ -7,7 +7,6 @@ const LexicalParser = require('../helpers/calculator/lexical_parser');
 const { footer } = require('../aliases/misc.json');
 const { red, paragon } = require('../jsons/colors.json');
 
-const costs = require('../jsons/costs.json');
 const reqs = require('../jsons/power_degree_req.json');
 const pHelp = require('../helpers/paragon');
 const paragonStats = require('../jsons/paragon.json');
@@ -408,7 +407,7 @@ function lex(input, operator, value, difficulty) {
     lexer.addRule(/\s+/, () => {});
 
     // symbols
-    lexer.addRule(/[a-zA-Z#!0-9\.]+/, (lexme) => lexme);
+    lexer.addRule(/[a-zA-Z#0-5\.]+/, (lexme) => lexme);
     // punctuation and operators
     lexer.addRule(/[\(\+\*\)]/, (lexme) => lexme);
 
@@ -493,84 +492,59 @@ function lex(input, operator, value, difficulty) {
             .setFooter({ text: 'Enter /paragon degree expr: help pops: 0 for help' });
     return output;
 }
-// wiz!300 or wiz#300 e.g.
-function isTowerUpgradeCrosspath(t) {
-    if (!/[a-z]+#\d{3}/.test(t)) return false;
-
-    let [tower, upgrades] = t.split('#');
-
-    return Towers.allTowers().includes(Aliases.getCanonicalForm(tower)) && Towers.isValidUpgradeSet(upgrades);
-}
-
-function costOfTowerUpgradeCrosspath(t, difficulty) {
-    // Checking for tower aliases of the form wlp, gz, etc.
-    if (!t.includes('#')) t = Aliases.getCanonicalForm(t);
-
-    let [tower, upgrades] = t.split('#');
-
-    jsonTowerName = Aliases.getCanonicalForm(tower).replace(/_/, '-');
-    if (jsonTowerName === 'druid-monkey') jsonTowerName = 'druid';
-    if (jsonTowerName === 'engineer') jsonTowerName = 'engineer-monkey';
-
-    let cost = 0;
-    if (t.includes('#') || upgrades === '000') {
-        // Total cost
-        cost = Towers.totalTowerUpgradeCrosspathCostMult(costs, jsonTowerName, upgrades, difficulty);
-    } else {
-        throw 'No # found in tower cost calc';
-    }
-    return cost;
-}
 
 // Decipher what type of operand it is, and convert to cost accordingly
 function valueByCost(t, i, difficulty) {
-    if (!isNaN(t)) return { value: Number(t), type: 'number' };
-    // Catches tower upgrades with crosspaths like wiz#401
-    if (isTowerUpgradeCrosspath(t)) return costOfTowerUpgradeCrosspath(t, difficulty);
-    // Catches all other tower ugprades
-    else if (Towers.isTowerUpgrade(Aliases.getCanonicalForm(t))) return costOfTowerUpgradeCrosspath(t, difficulty);
-    // Catches base tower names/aliases
-    else if (Towers.isTower(Aliases.getCanonicalForm(t))) return costOfTowerUpgradeCrosspath(`${t}#000`, difficulty);
-    else if (t.toLowerCase() === 'totem') return 0; // totem
-    else throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
+    const canonicalToken = Aliases.canonicizeArg(t)
+
+    if (Towers.isTower(canonicalToken)) {
+        return Towers.costOfTowerUpgrade(canonicalToken, '000', difficulty)
+    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+        let [tower, upgradeSet] = canonicalToken.split('#');
+        return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty)
+    } else if (t.toLowerCase() === 'totem') {
+        return 0; // totem
+    } else {
+        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
+    }
 }
 
 // returns number of upgrades
 function valueByUpgrade(t, i) {
-    if (!isNaN(t)) return { value: Number(t), type: 'number' };
-    // Catches tower upgrades with crosspaths like wiz#401 || Catches all other tower ugprades
-    if (isTowerUpgradeCrosspath(t) || Towers.isTowerUpgrade(Aliases.getCanonicalForm(t))) {
-        if (!t.includes('#')) t = Aliases.getCanonicalForm(t);
-        let arr = t
-            .split('#')[1]
+    const canonicalToken = Aliases.canonicizeArg(t)
+
+    if (Towers.isTower(canonicalToken)) {
+        return 0
+    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+        let arr = Towers
+            .towerUpgradeToUpgrade(canonicalToken)
             .split('')
             .map((e) => parseInt(e));
         if (arr.includes(5)) return 0;
         else return arr.reduce((a, b) => a + b);
+    } else if (t.toLowerCase() === 'totem') {
+        return 0; // totem
+    } else {
+        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }
-    // Catches base tower names/aliases
-    else if (Towers.isTower(Aliases.getCanonicalForm(t))) return 0;
-    else if (t.toLowerCase() === 'totem') return 0; // totem
 }
 
 function valueByT5(t, i) {
-    if (!isNaN(t)) return { value: Number(t), type: 'number' };
-    // Catches tower upgrades with crosspaths like wiz#401 || Catches all other tower ugprades
-    if (isTowerUpgradeCrosspath(t) || Towers.isTowerUpgrade(Aliases.getCanonicalForm(t))) {
-        if (!t.includes('#')) t = Aliases.getCanonicalForm(t);
-        if (t.includes('5')) return 1;
-        else return 0;
+    const canonicalToken = Aliases.canonicizeArg(t)
+
+    if (Towers.isTower(canonicalToken)) {
+        return 0
+    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+        return canonicalToken.includes('5') ? 1 : 0
+    } else if (t.toLowerCase() === 'totem') {
+        return 0; // totem
+    } else {
+        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }
-    // Catches base tower names/aliases
-    else if (Towers.isTower(Aliases.getCanonicalForm(t))) return 0;
-    else if (t.toLowerCase() === 'totem') return 0; // totem
 }
 
-function valueByTotem(t, i) {
-    if (!isNaN(t)) return { value: Number(t), type: 'number' };
-    if (t.toLowerCase() === 'totem') return 1;
-    return 0;
-    // honestly I think the checks should be done by now
+function valueByTotem(t) {
+    return t.toLowerCase() === 'totem' ? 1 : 0;
 }
 
 function valueByPop(t, i) {

@@ -21,7 +21,7 @@ const towerOption = new SlashCommandStringOption()
     .setName('tower')
     .setDescription('The tower you are finding information for')
     .setRequired(true);
-Object.keys(Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
+Object.keys(Towers.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
     towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower, '-'), value: tower });
 });
 
@@ -48,7 +48,7 @@ function parseTowerPath(interaction) {
 
 // the function that creates the embed for bloonology that will get sent
 async function embedBloonology(towerName, upgrade) {
-    let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+    let link = Towers.TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
     let res;
     try {
         res = await axios.get(link);
@@ -77,11 +77,15 @@ async function embedBloonology(towerName, upgrade) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
 
-    const easyTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'easy');
-    const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
-    const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'hard');
-    const impopTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'impoppable');
-    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
+    const easyTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'easy');
+    const totalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium');
+    const hardTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'hard');
+    const impopTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'impoppable');
+    
+    const easyCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'easy');
+    const mediumCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'medium');
+    const hardCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'hard');
+    const impopCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'impoppable');
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)
@@ -90,10 +94,10 @@ async function embedBloonology(towerName, upgrade) {
             {
                 name: 'cost',
                 value:
-                    `${bHelper.difficultyPriceMult(cost, 'easy')} - easy\n` +
-                    `${cost} - medium\n` +
-                    `${bHelper.difficultyPriceMult(cost, 'hard')} - hard\n` +
-                    `${bHelper.difficultyPriceMult(cost, 'impoppable')} - impoppable\n` +
+                    `${easyCost} - easy\n` +
+                    `${mediumCost} - medium\n` +
+                    `${hardCost} - hard\n` +
+                    `${impopCost} - impoppable\n` +
                     `if this is wrong [yell at hemi here](${discord})`,
                 inline: true
             },
@@ -114,7 +118,7 @@ async function embedBloonology(towerName, upgrade) {
 }
 
 async function embedBloonologySummary(towerName) {
-    let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+    let link = Towers.TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
     let res;
     try {
         res = await axios.get(link);

@@ -10,8 +10,8 @@ const towerOption = new SlashCommandStringOption()
     .setName('tower')
     .setDescription('The tower you are finding information for')
     .setRequired(true);
-Object.keys(Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
-    towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower, '-'), value: tower });
+Object.keys(Towers.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
+    towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
 });
 
 const UUU = ['3xx', '4xx', '5xx', 'x3x', 'x4x', 'x5x', 'xx3', 'xx4', 'xx5'];
@@ -31,7 +31,7 @@ const builder = new SlashCommandBuilder()
     .addStringOption(pathOption);
 
 async function embedBloonology(towerName, upgrade) {
-    let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+    let link = Towers.TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
     let res;
     try {
         res = await axios.get(link);

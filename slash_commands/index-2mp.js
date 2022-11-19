@@ -52,14 +52,6 @@ async function execute(interaction) {
         new Parsed()
     );
 
-    // Not cached
-    if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
-        const challengeEmbed = await display2MPTowerStatistics(parsed.tower);
-        return await interaction.reply({
-            embeds: [challengeEmbed]
-        });
-    }
-
     await interaction.deferReply();
 
     const forceReload = interaction.options.getString('reload') ? true : false;
@@ -68,7 +60,12 @@ async function execute(interaction) {
 
     const mtime = Index.getLastCacheModified('2mp');
 
-    if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
+    if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
+        const challengeEmbed = embed2MPTowerStatistics(allCombos, parsed.tower);
+        return await interaction.reply({
+            embeds: [challengeEmbed]
+        });
+    } else if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
         const entity = parsed.hero || Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade);
         const entityFormatted = Aliases.toIndexNormalForm(entity);
         const combo = allCombos.find((c) => c.ENTITY.toLowerCase() == entityFormatted.toLowerCase());
@@ -513,92 +510,35 @@ function determineExcludedColumns(parsed) {
 // Tower Statistics
 ////////////////////////////////////////////////////////////
 
-// TODO: Extract parsing to 2mp_scraper
-
 // Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier
 // Displays base centered above grid
-async function display2MPTowerStatistics(tower) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    entryRow = await findTowerRow(tower);
-
-    // Load the row where the map was found
-    await sheet.loadCells(`${TOWER_COLS.TOWER}${entryRow}:${TOWER_COLS.LAST}${entryRow}`);
-
-    // Check or X
-    baseTowerCompletionMarking = await getCompletionMarking(entryRow, null, 2);
-
+function embed2MPTowerStatistics(combos, tower) {
     const towerFormatted = Aliases.toIndexNormalForm(tower);
+
+    const completedComboEntities = combos.map(c => c.ENTITY.toLowerCase())
+
+    const baseTowerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower)
+    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName.toLowerCase()) ? gHelper.WHITE_HEAVY_CHECK_MARK : gHelper.RED_X
 
     let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
         .setColor(paleblue)
         .addFields([
-            { name: '\u200b', value: '\u200b', inline: true },
-            { name: 'Base Tower', value: baseTowerCompletionMarking, inline: true },
-            { name: '\u200b', value: '\u200b', inline: true }
-        ]); // Left column placeholder
-    // Base tower
-    // Right column placeholder
+            { name: '\u200b', value: '\u200b', inline: true }, // Left column placeholder
+            { name: 'Base Tower', value: baseTowerCompletionMarking, inline: true }, // Tower
+            { name: '\u200b', value: '\u200b', inline: true } // Right column placeholder
+        ]);
 
-    for (var tier = 3; tier <= 5; tier++) {
-        for (var path = 1; path <= 3; path++) {
-            towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
-            upgradeCompletionMarking = await getCompletionMarking(entryRow, path, tier);
+    let tier;
+    for (tier = 3; tier <= 5; tier++) {
+        Towers.allPaths().forEach(path => {
+            let towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
+            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName.toLowerCase()) ? gHelper.WHITE_HEAVY_CHECK_MARK : gHelper.RED_X
             challengeEmbed.addFields([{ name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }]);
-        }
+        })
     }
 
     return challengeEmbed;
-}
-
-async function findTowerRow(tower) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    // Load the column containing the different towers
-    await sheet.loadCells(`${TOWER_COLS.TOWER}1:${TOWER_COLS.TOWER}${sheet.rowCount}`);
-
-    entryRow = null;
-
-    // Search for the row in all "possible" rows
-    for (let row = 1; row <= sheet.rowCount; row++) {
-        let towerCandidate = sheet.getCellByA1(`${TOWER_COLS.TOWER}${row}`).value;
-
-        if (!towerCandidate) continue;
-
-        if (Towers.towerUpgradeToIndexNormalForm(tower) == towerCandidate) {
-            entryRow = row;
-            break;
-        }
-    }
-
-    if (!entryRow) {
-        throw new UserCommandError(`Tower \`${Aliases.toIndexNormalForm(tower)}\` doesn't yet have a 2MP completion`);
-    }
-
-    return entryRow;
-}
-
-// Converts the Index's marking of whether a tower's path/tier has been completed
-// to symbols that are recognizable on the discord embed level
-async function getCompletionMarking(entryRow, path, tier) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    upgradeCol = null;
-
-    if (tier == 2) {
-        upgradeCol = TOWER_COLS.BASE;
-    } else {
-        upgradeCol = String.fromCharCode(TOWER_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2);
-    }
-
-    completion = sheet.getCellByA1(`${upgradeCol}${entryRow}`).value.trim();
-
-    if (completion == gHelper.HEAVY_CHECK_MARK) {
-        return gHelper.WHITE_HEAVY_CHECK_MARK;
-    } else {
-        return gHelper.RED_X;
-    }
 }
 
 ////////////////////////////////////////////////////////////

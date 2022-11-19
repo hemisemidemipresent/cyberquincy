@@ -130,11 +130,11 @@ class Enemy {
      * This means a camo ceramic will also match with regrow camo ceramic, and any further fortified ones, but will not match with a normal ceramic
      */
     roundAppearanceDescriptionPattern() {
-        const camo = this.camo && this.name != DDT ? ' Camo' : '( Camo)*';
-        const regrow = this.regrow && this.name != DDT ? ' Regrowth' : '( Regrowth)*';
-        const fortified = this.fortified ? 'Fortified ' : '(Fortified )*';
+        const camo = this.camo && this.name != DDT ? ' Camo' : '(?<camo> Camo)?';
+        const regrow = this.regrow && this.name != DDT ? ' Regrowth' : '(?<regrowth> Regrowth)?';
+        const fortified = this.fortified ? 'Fortified ' : '(?<fortified>Fortified )?';
         const name = this.formatName(this.isMOAB());
-        return new RegExp(`(\\d+) ${fortified}${name}${camo}${regrow}(?:,|$)`, 'g');
+        return new RegExp(`(?<number>\\d+) ${fortified}${name}${camo}${regrow}(?:,|$)`, 'g');
     }
 
     isFreeplay() {
@@ -179,14 +179,21 @@ class Enemy {
         for (const r in roundContents) {
             if (!r.startsWith(mode)) continue;
 
-            const appearances = roundContents[r].match(pattern);
-            let numAppearances = 0;
-            if (appearances) {
-                appearances.forEach((str) => (numAppearances += parseInt(str)));
+            const appearances = roundContents[r].matchAll(pattern);
+
+            let appearancesStrs = [];
+            for (const appearance of appearances) {
+                let number = appearance.groups.number
+                let fortified = appearance.groups.fortified ? 'f' : ''
+                let camo = appearance.groups.camo ? 'c' : ''
+                let regrowth = appearance.groups.regrowth ? 'r' : ''
+                appearancesStrs.push(
+                    `${number}${fortified}${camo}${regrowth}`
+                )
             }
 
-            if (numAppearances > 0) {
-                roundAppearances[r.replace(mode, 'r')] = parseInt(numAppearances);
+            if (appearancesStrs.length > 0) {
+                roundAppearances[r.replace(mode, 'r')] = appearancesStrs.join('+');
             }
         }
 

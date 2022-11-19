@@ -137,7 +137,6 @@ const PersonParser = require('../parser/person-parser.js');
 
 const UserCommandError = require('../exceptions/user-command-error.js');
 const DeveloperCommandError = require('../exceptions/developer-command-error.js');
-const { forEach } = require('lodash');
 
 function parseEntity(interaction) {
     const entityParser = new OrParser(new TowerParser(), new TowerUpgradeParser(), new HeroParser());

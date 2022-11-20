@@ -1,9 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const { cyber } = require('../jsons/colors.json');
-//const { discord } = require('../aliases/misc.json');
-const imgur = require('imgur');
-
 const BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL = '702089126706544661';
 const BTD6_INDEX_SERVER_ID = '661812833771847700';
 
@@ -11,6 +7,7 @@ const BTD6_INDEX_SERVER_ID = '661812833771847700';
 // Change this to a channel in your test guild when testing
 const TEST_SUBMISSIONS_CHANNEL = '420';
 const TEST_GUILD = '69';
+
 const IS_TESTING = require('../1/config.json').testing;
 const SUBMISSIONS_CHANNEL = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
 const SUBMISSIONS_GUILD = IS_TESTING ? TEST_GUILD : BTD6_INDEX_SERVER_ID;

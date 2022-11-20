@@ -141,7 +141,9 @@ async function paragon_stats(interaction) {
         desc = `All Bloons on screen (excluding BADs and Bosses) are permanently slowed to 50%  speed.
                 **main shuriken** - ${pa.shuriken.d}d, ${pa.shuriken.bd}bd, ${pa.shuriken.ed}ed, ${pa.shuriken.p}p, 8j, ${pa.shuriken.s}s, 70r
                 • 15% chance to distract, decamos
-                **blue shuriken** - ${pa.blues.d}d, ${pa.blues.bd}bd, ${pa.blues.ed}ed, ${pa.blues.p}p, 3j
+
+                **flash bomb** - $${pa.fbomb.d}d, ${pa.fbomb.bd}bd, ${pa.fbomb.ed}ed, ${pa.fbomb.p}p, 5j, ${pa.fbomb.s}s, 70r, emites **blue shurikens** on impact
+                **blue shurikens** - ${pa.blues.d}d, ${pa.blues.bd}bd, ${pa.blues.ed}ed, ${pa.blues.p}p, 3j
                 • 15% chance to distract, decamos
                 **sticky bomb** - 3?s to detonate, ∞r, ${pa.sbomb.s}s
                 • damage can soak through moab layers
@@ -157,12 +159,12 @@ async function paragon_stats(interaction) {
                 **Rapid Fire Hooks** - Has 10 hooks “stored”, MOABs, BFBs, and DDTs use 1 hook while ZOMGs use 2 hooks, 1s between each pull, generates 2x normal cash, 10s to replenish [cooldown _might_ be shorter with higher degree]
 
                 **Main ship:**
-                **plasma dart**? - ${pa.plasmaDarts.d}d, ${pa.plasmaDarts.md}md, ${pa.plasmaDarts.bd}bd, ${pa.plasmaDarts.ed}ed, ${pa.plasmaDarts.p}p, ${pa.plasmaDarts.s}s, 10j (per set of 3 cannons, so effectively 30j per side)
-                **cannonball** - ${pa.cannonball.d}d, ${pa.cannonball.md}md, ${pa.cannonball.bd}bd, ${pa.cannonball.ed}ed, ${pa.cannonball.p}p, ${pa.cannonball.s}s, 3j (per set of 3 cannons, effectively 9j each side)
+                **plasma dart**? - ${pa.plasmaDarts.d}d, ${pa.plasmaDarts.md}md, ${pa.plasmaDarts.bd}bd, ${pa.plasmaDarts.ed}ed, ${pa.plasmaDarts.p}p, ${pa.plasmaDarts.s}s, 60r, 10j (per set of 3 cannons, so effectively 30j per side)
+                **cannonball** - ${pa.cannonball.d}d, ${pa.cannonball.md}md, ${pa.cannonball.bd}bd, ${pa.cannonball.ed}ed, ${pa.cannonball.p}p, ${pa.cannonball.s}s, 60r, 3j (per set of 3 cannons, effectively 9j each side)
                 
                 **Fighter Planes:**
                 **dart** - ${pa.darts.d}d,  ${pa.darts.bd}bd, ${pa.darts.ed}ed, ${pa.darts.p}p, ${pa.darts.s}s
-                **anti-MOAB missile** - ${pa.antiMOAB.d}md,  ${pa.antiMOAB.bd}bd, ${pa.antiMOAB.ed}ed, ${pa.antiMOAB.p}p, ${pa.antiMOAB.s}s
+                **anti-MOAB missile** - ${pa.antiMOAB.d}md,  ${pa.antiMOAB.bd}bd, ${pa.antiMOAB.ed}ed, ${pa.antiMOAB.p}p, ${pa.antiMOAB.s}s, 4j
                 
                 **buffs**
                 [degree independent]

@@ -129,7 +129,7 @@ async function calc(interaction) {
                         .setTitle(`Unexpected character "${c}"`)
                         .setDescription(`"${c}" is not a valid character in the \`/calc\` expression.`)
                         .setColor(red)
-                        .setFooter({ text: footer })
+                        .setFooter(footer ? { text: footer } : null)
                 ],
                 components: []
             });

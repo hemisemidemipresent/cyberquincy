@@ -92,7 +92,8 @@ async function execute(interaction) {
             { name: 'Cash Factor', value: `${roundHelper.cashFactorForRound(round)}`, inline: true },
             { name: `Normal Round Appearances${ignoringSuper}`, value: `${enemy.roundAppearances('r', true)}` },
             { name: `ABR Round Appearances${ignoringSuper}`, value: `${enemy.roundAppearances('ar', true)}` }
-        ]);
+        ])
+        .setFooter({ text: 'vertical health is the amount of damage required to one-shot the bloon' });
 
     const notes = enemy.notes();
     if (notes.length > 0) embed.addFields([{ name: 'Notes', value: `${notes.map((n) => ` • ${n}`).join('\n')}` }]);

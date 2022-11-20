@@ -20,15 +20,11 @@ builder = new SlashCommandBuilder()
 async function execute(interaction) {
     let name = interaction.options.getString('map_name');
     let m = map[name];
-    let thum = m.thu;
-    if (!thum)
-        thum =
-            'https://vignette.wikia.nocookie.net/b__/images/0/0c/QuincyCyberPortraitLvl20.png/revision/latest/scale-to-width-down/179?cb=20190612022025&path-prefix=bloons';
 
-    const mapEmbed = new Discord.EmbedBuilder()
+    let mapEmbed = new Discord.EmbedBuilder()
         .setTitle('Map info')
         .setDescription(`Here is your info for ${name}`)
-        .setThumbnail(`${thum}`)
+        .setColor(cyber)
         .addFields([
             { name: 'Map length(RBS)', value: `${m.lenStr}`, inline: true },
             { name: 'Object count:', value: `${m.obj}`, inline: true },
@@ -38,9 +34,9 @@ async function execute(interaction) {
             { name: 'Entrances/Exits', value: `${m.e}`, inline: true },
             { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
             //'Line of sight obstructions', `${m.los}`, true)
-        ])
+        ]);
+    if (thum) mapEmbed.setThumbnail(m.thu);
 
-        .setColor(cyber);
     return await interaction.reply({ embeds: [mapEmbed] });
 }
 

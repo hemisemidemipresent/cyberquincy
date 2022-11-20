@@ -129,7 +129,7 @@ async function calc(interaction) {
                         .setTitle(`Unexpected character "${c}"`)
                         .setDescription(`"${c}" is not a valid character in the \`/calc\` expression.`)
                         .setColor(red)
-                        .setFooter(footer ? { text: footer } : null)
+                        .setFooter({ text: footer })
                 ],
                 components: []
             });
@@ -247,27 +247,27 @@ function costOfHero(hero, difficulty, numDiscounts) {
 function parseAndValueToken(t, i, difficulty) {
     const undiscountedToken = t.replace(/'*$/, '')
     const numDiscounts = t.match(/'*$/)?.[0]?.length
-    const tokenCanonical = Aliases.getCanonicalForm(undiscountedToken)
+    const tokenCanonical = Aliases.canonicizeArg(undiscountedToken)
 
     if (!isNaN(undiscountedToken)) return Number(undiscountedToken);
     else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (Towers.isTowerUpgradeSet(undiscountedToken)) {
-        let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken).split('#');
+        let [tower, upgradeSet] = tokenCanonical.split('#');
         // Catches tower upgrades with crosspaths like wiz#401
         return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts);
-    } else if (Towers.isTowerUpgradeSet(tokenCanonical.replace('!', '#'))) {
+    } else if (Towers.isTowerUpgradeSet(undiscountedToken.replace('!', '#'))) {
         // Catches all other tower ugprades
-        let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken).split('!');
+        let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken.replace('!', '#')).split('#');
         return Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts);
     } else if (Towers.isTowerUpgrade(tokenCanonical)) {
-        let [tower, upgrade] = Aliases.canonicizeArg(undiscountedToken).split('#');
+        let [tower, upgrade] = tokenCanonical.split('#');
         return Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts);
     } else if (Towers.isTower(tokenCanonical)) {
         // Catches base tower names/aliases
         return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts);
-    } else if (Aliases.isHero(Aliases.getCanonicalForm(undiscountedToken))) {
-        return costOfHero(Aliases.getCanonicalForm(undiscountedToken), difficulty, numDiscounts);
+    } else if (Aliases.isHero(tokenCanonical)) {
+        return costOfHero(tokenCanonical, difficulty, numDiscounts);
     } else {
         s = '';
         if (t.length == 1) {

@@ -605,11 +605,10 @@ function entityMatch(combo, entity, excludeMatch) {
                     if (!t) return null;
                     upgradeArray = t.UPGRADE.split('-').map((u) => parseInt(u));
                     pathIndex = upgradeArray.indexOf(Math.max(...upgradeArray));
-                    path = pathIndex == 0 ? 'top' : pathIndex == 1 ? 'middle' : 'bottom';
 
                     towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
                     towerBase = Towers.towerUpgradeToTower(towerUpgrade);
-                    return `${towerBase}#${path}-path`;
+                    return `${towerBase}#${Towers.allPaths()[pathIndex]}`;
                 })
                 .indexOf(entity.NAME) + 1
         );

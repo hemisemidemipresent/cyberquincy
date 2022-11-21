@@ -263,7 +263,7 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
     let crossPath = paths[upgrades.findIndex((u) => u == crossTier)];
 
     if (sortedUpgrades[1] == sortedUpgrades[2]) {
-        upgrades[paths.findIndex(crossPath)] = 0;
+        upgrades[paths.findIndex((u) => u === crossPath)] = 0;
         crossPath = paths[upgrades.findIndex((u) => u == crossTier)];
     }
 

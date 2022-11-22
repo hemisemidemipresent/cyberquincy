@@ -251,7 +251,7 @@ function pathTierFromUpgradeSet(upgradeSet) {
     const upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
     const tier = sortedUpgrades[2];
-    const path = allPaths()[upgrades.findIndex((u) => u == tier)];
+    const path = allPaths()[upgrades.indexOf(tier)];
     return [path, tier];
 }
 
@@ -260,11 +260,11 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
     const upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
     let crossTier = sortedUpgrades[1];
-    let crossPath = paths[upgrades.findIndex((u) => u == crossTier)];
+    let crossPath = paths[upgrades.indexOf(crossTier)];
 
     if (sortedUpgrades[1] == sortedUpgrades[2]) {
-        upgrades[paths.findIndex(crossPath)] = 0;
-        crossPath = paths[upgrades.findIndex((u) => u == crossTier)];
+        upgrades[paths.indexOf(crossPath)] = 0;
+        crossPath = paths[upgrades.indexOf(crossTier)];
     }
 
     return [crossPath, crossTier];

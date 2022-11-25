@@ -35,7 +35,7 @@ async function execute(interaction) {
             { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
             //'Line of sight obstructions', `${m.los}`, true)
         ]);
-    if (thum) mapEmbed.setThumbnail(m.thu);
+    if (m.thu) mapEmbed.setThumbnail(m.thu);
 
     return await interaction.reply({ embeds: [mapEmbed] });
 }
@@ -49,7 +49,7 @@ async function onAutocomplete(interaction) {
     let values = fs.get(value, null, 0.2);
     responseArr = [];
     if (!values)
-        responseArr = Aliases.allMaps()
+        responseArr = Maps.allMaps()
             .slice(0, 25) // discord only allows like 25 options at a time
             .map((map) => {
                 return { name: map, value: map };

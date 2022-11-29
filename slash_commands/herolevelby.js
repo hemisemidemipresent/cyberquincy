@@ -10,9 +10,11 @@ const gHelper = require('../helpers/general.js');
 const Heroes = require('../helpers/heroes');
 const Maps = require('../helpers/maps')
 
+const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
+
 let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
-Heroes.allHeroes().forEach((hero) => {
-    heroOption.addChoices({ name: gHelper.toTitleCase(hero), value: hero });
+Object.keys(HERO_NAME_TO_BLOONOLOGY_LINK).forEach((hero) => {
+    heroOption.addChoices({ name: gHelper.toTitleCase(hero.split('_').join(' ')), value: hero });
 });
 
 const desiredLevelOption = new SlashCommandIntegerOption()

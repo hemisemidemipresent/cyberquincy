@@ -14,7 +14,7 @@ const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
 
 let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Object.keys(HERO_NAME_TO_BLOONOLOGY_LINK).forEach((hero) => {
-    heroOption.addChoices({ name: gHelper.toTitleCase(hero.split('_').join(' ')), value: hero });
+    heroOption.addChoices({ name: Aliases.toIndexNormalForm(hero), value: hero });
 });
 
 const desiredLevelOption = new SlashCommandIntegerOption()

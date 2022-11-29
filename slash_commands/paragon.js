@@ -501,7 +501,7 @@ function valueByCost(t, i, difficulty) {
 
     if (Towers.isTower(canonicalToken)) {
         return Towers.costOfTowerUpgrade(canonicalToken, '000', difficulty)
-    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
         let [tower, upgradeSet] = canonicalToken.split('#');
         return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty)
     } else if (t.toLowerCase() === 'totem') {
@@ -517,7 +517,7 @@ function valueByUpgrade(t, i) {
 
     if (Towers.isTower(canonicalToken)) {
         return 0
-    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
         let arr = Towers
             .towerUpgradeToUpgrade(canonicalToken)
             .split('')
@@ -536,7 +536,7 @@ function valueByT5(t, i) {
 
     if (Towers.isTower(canonicalToken)) {
         return 0
-    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
         return canonicalToken.includes('5') ? 1 : 0
     } else if (t.toLowerCase() === 'totem') {
         return 0; // totem

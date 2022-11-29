@@ -255,11 +255,11 @@ function parseAndValueToken(t, i, difficulty) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (Heroes.isGerrysShopItem(tokenCanonical)) {
         return gerrysShop[tokenCanonical]
-    } else if (Towers.isTowerUpgradeSet(undiscountedToken)) {
+    } else if (Towers.isTowerUpgrade(undiscountedToken, true)) {
         let [tower, upgradeSet] = tokenCanonical.split('#');
         // Catches tower upgrades with crosspaths like wiz#401
         return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts);
-    } else if (Towers.isTowerUpgradeSet(undiscountedToken.replace('!', '#'))) {
+    } else if (Towers.isTowerUpgrade(undiscountedToken.replace('!', '#'), true)) {
         // Catches all other tower ugprades
         let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken.replace('!', '#')).split('#');
         return Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts);

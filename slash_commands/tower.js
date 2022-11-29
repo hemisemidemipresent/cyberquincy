@@ -10,6 +10,7 @@ const {
 const axios = require('axios');
 
 const costs = require('../jsons/costs.json');
+const Towers = require('../helpers/towers.js');
 
 const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colors.json');

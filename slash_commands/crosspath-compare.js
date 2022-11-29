@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 const axios = require('axios');
+const Towers = require('../helpers/towers.js');
 const { footer } = require('../aliases/misc.json');
 const { isValidEmbedField } = require('../helpers/discord');
 const { red, cyber } = require('../jsons/colors.json');

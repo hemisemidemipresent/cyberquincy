@@ -78,19 +78,13 @@ function allTempleSets() {
     return all;
 }
 
-// Warning: Slow! Use isHero instead or avoid reusing this method many times
-function isTowerUpgrade(candidate) {
-    if (!candidate || !gHelper.is_str(candidate)) return false;
-    return allTowerUpgrades().includes(candidate.toLowerCase());
-}
-
-function isTowerUpgradeSet(candidate) {
+function isTowerUpgrade(candidate, allowCrosspath=false) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     if (!/[a-z]+#\d{3}/.test(candidate)) return false;
 
     let [tower, upgradeSet] = Aliases.canonicizeArg(candidate).split('#');
 
-    return allTowers().includes(tower) && isValidUpgradeSet(upgradeSet);
+    return isTower(tower) && isValidUpgradeSet(upgradeSet, allowCrosspath);
 }
 
 function isTower(candidate) {
@@ -270,7 +264,7 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
     return [crossPath, crossTier];
 }
 
-function isValidUpgradeSet(u) {
+function isValidUpgradeSet(u, allowCrosspath) {
     if (!gHelper.is_str(u) || u.length !== 3) return false;
 
     if (isNaN(u)) return false;
@@ -283,7 +277,7 @@ function isValidUpgradeSet(u) {
 
     if (uSorted[0] !== 0) return false;
 
-    if (uSorted[1] > 2) return false;
+    if (uSorted[1] > allowCrosspath ? 2 : 0) return false;
 
     if (uSorted[2] > 5) return false;
 
@@ -382,7 +376,6 @@ module.exports = {
     allPaths,
     allTempleSets,
     isTowerUpgrade,
-    isTowerUpgradeSet,
     isTower,
     isTowerPath,
     allWaterTowers,

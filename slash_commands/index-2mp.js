@@ -2,7 +2,6 @@ const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
-const Towers = require('../helpers/towers');
 const Maps = require('../helpers/maps')
 
 const { paleblue } = require('../jsons/colors.json');
@@ -432,7 +431,7 @@ function filterCombo(c, parsed) {
 
     let matchesEntity = true;
     if (parsed.tower) {
-        if (Aliases.isHero(c.ENTITY)) {
+        if (Heroes.isHero(c.ENTITY)) {
             matchesEntity = false;
         } else {
             matchesEntity = Towers.towerUpgradeToTower(c.ENTITY) == parsed.tower;

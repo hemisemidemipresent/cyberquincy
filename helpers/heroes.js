@@ -144,8 +144,34 @@ function levelingCurve(
     });
 }
 
+function isHero(candidate) {
+    if (!candidate || !gHelper.is_str(candidate)) return false;
+    return allHeroes().includes(candidate.toLowerCase());
+}
+
+function allHeroes() {
+    const heroes = Aliases.getAliasGroupsFromSameFileAs('EZILI');
+
+    return heroes.map((ag) => ag.canonical);
+}
+
+function isGerrysShopItem(candidate) {
+    if (!candidate || !gHelper.is_str(candidate)) return false;
+    return allGerrysShopItems().includes(candidate.toLowerCase());
+}
+
+function allGerrysShopItems() {
+    const items = Aliases.getAliasGroupsFromSameFileAs('FERTILIZER');
+
+    return items.map((ag) => ag.canonical);
+}
+
 module.exports = {
     HERO_NAME_TO_BLOONOLOGY_LINK,
     levelingCurve,
     levelingChart,
+    isHero,
+    allHeroes,
+    allGerrysShopItems,
+    isGerrysShopItem,
 };

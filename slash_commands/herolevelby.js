@@ -11,7 +11,7 @@ const Heroes = require('../helpers/heroes');
 const Maps = require('../helpers/maps')
 
 let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
-Aliases.allHeroes().forEach((hero) => {
+Heroes.allHeroes().forEach((hero) => {
     heroOption.addChoices({ name: gHelper.toTitleCase(hero), value: hero });
 });
 

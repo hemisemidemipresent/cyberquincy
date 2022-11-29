@@ -316,17 +316,6 @@ class AliasRepository extends Array {
         return modes.map((ag) => ag.canonical);
     }
 
-    isHero(candidate) {
-        if (!candidate || !gHelper.is_str(candidate)) return false;
-        return this.allHeroes().includes(candidate.toLowerCase());
-    }
-
-    allHeroes() {
-        const heroes = this.getAliasGroupsFromSameFileAs('EZILI');
-
-        return heroes.map((ag) => ag.canonical);
-    }
-
     toAliasNormalForm(indexForm) {
         return indexForm.toLowerCase().split(' ').join('_');
     }

@@ -12,6 +12,7 @@ const RoundParser = require('../parser/round-parser');
 const { red } = require('../jsons/colors.json');
 
 const heroes = require('../jsons/heroes.json');
+const gerrysShop = require('../jsons/geraldos_shop.json')
 
 const exprOption = new SlashCommandStringOption()
     .setName('expr')
@@ -252,6 +253,8 @@ function parseAndValueToken(t, i, difficulty) {
     if (!isNaN(undiscountedToken)) return Number(undiscountedToken);
     else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
+    } else if (Heroes.isGerrysShopItem(tokenCanonical)) {
+        return gerrysShop[tokenCanonical]
     } else if (Towers.isTowerUpgradeSet(undiscountedToken)) {
         let [tower, upgradeSet] = tokenCanonical.split('#');
         // Catches tower upgrades with crosspaths like wiz#401
@@ -266,7 +269,7 @@ function parseAndValueToken(t, i, difficulty) {
     } else if (Towers.isTower(tokenCanonical)) {
         // Catches base tower names/aliases
         return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts);
-    } else if (Aliases.isHero(tokenCanonical)) {
+    } else if (Heroes.isHero(tokenCanonical)) {
         return costOfHero(tokenCanonical, difficulty, numDiscounts);
     } else {
         s = '';

@@ -164,7 +164,7 @@ function isWaterEntity(entity) {
         entityToCompare = entity.split('#')[0];
     } else if (isTowerUpgrade(entity)) {
         entityToCompare = towerUpgradeToTower(entity);
-    } else if (Aliases.isHero(entity)) {
+    } else if (Heroes.isHero(entity)) {
         entityToCompare = entity;
     } else if (isTower(entity)) {
         entityToCompare = entity;
@@ -319,7 +319,7 @@ function formatEntity(entity) {
         return `${gHelper.toTitleCase(path.split('_').join(' '))} ` + `${Aliases.toIndexNormalForm(towerName)}`;
     } else if (isTowerUpgrade(entity)) {
         return towerUpgradeToIndexNormalForm(entity);
-    } else if (Aliases.isHero(entity)) {
+    } else if (Heroes.isHero(entity)) {
         return gHelper.toTitleCase(entity);
     } else {
         throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
@@ -333,7 +333,7 @@ function getEntityType(entity) {
         return 'TOWER_PATH';
     } else if (isTowerUpgrade(entity)) {
         return 'TOWER_UPGRADE';
-    } else if (Aliases.isHero(entity)) {
+    } else if (Heroes.isHero(entity)) {
         return 'HERO';
     } else {
         throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;

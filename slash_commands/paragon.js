@@ -2,7 +2,7 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
-const LexicalParser = require('../helpers/calculator/lexical_parser');
+const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 
 const { footer } = require('../aliases/misc.json');
 const { red, paragon } = require('../jsons/colors.json');
@@ -438,7 +438,7 @@ function lex(input, operator, value, difficulty) {
         parsed = parser.parse(tokens);
     } catch (e) {
         // Catches bad character inputs
-        c = e.message.match(/Unexpected character at index \d+: (.)/)[1];
+        c = e.message.match(/Unexpected character at index \d+: (.)/)?.[1];
         if (c) {
             footer = '';
             if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
@@ -449,6 +449,11 @@ function lex(input, operator, value, difficulty) {
                 )
                 .setColor(red)
                 .setFooter({ text: footer });
+        } else if (e instanceof LexicalParseError) {
+            return new Discord.EmbedBuilder()
+                        .setTitle(e.message)
+                        .setDescription(`\`${input}\``)
+                        .setColor(red)
         } else console.log(e);
     }
 

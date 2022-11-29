@@ -5,7 +5,7 @@ const Lexer = require('lex');
 const gHelper = require('../helpers/general.js');
 const bHelper = require('../helpers/bloons-general');
 
-const LexicalParser = require('../helpers/calculator/lexical_parser');
+const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round2.json');
 const RoundParser = require('../parser/round-parser');
 
@@ -134,6 +134,15 @@ async function calc(interaction) {
                 ],
                 components: []
             });
+        } else if (e instanceof LexicalParseError) {
+            return await interaction.reply({
+                embeds: [
+                    new Discord.EmbedBuilder()
+                        .setTitle(e.message)
+                        .setDescription(`\`${expression}\``)
+                        .setColor(red)
+                ]
+            })
         } else throw e
     }
 

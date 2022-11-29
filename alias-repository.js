@@ -324,9 +324,9 @@ class AliasRepository extends Array {
         return this.getCanonicalForm(this.toAliasNormalForm(indexForm))
     }
 
-    toIndexNormalForm(canonical, separator='_') {
+    toIndexNormalForm(canonical) {
         return canonical
-            .split(separator)
+            .split('_')
             .map((tk) => gHelper.toTitleCase(tk))
             .join(' ')
             .replace(/ \(.*\)/, ''); // Parentheticals are used to avoid clashing aliases (e.g. double shot) but are filtered out when displayed

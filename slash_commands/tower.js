@@ -55,7 +55,6 @@ async function embedBloonology(towerName, upgrade) {
     }
     let body = res.data;
 
-    const tower = costs[towerName];
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
     const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
@@ -65,7 +64,7 @@ async function embedBloonology(towerName, upgrade) {
     );
 
     const formattedUpgrade = upgrade.split('').join('-');
-    const formattedTowerName = Aliases.toIndexNormalForm(towerName, '-');
+    const formattedTowerName = Aliases.toIndexNormalForm(towerName);
 
     let title;
     if (tier == 0) {
@@ -168,7 +167,7 @@ async function embedBloonologySummary(towerName) {
         descriptions.find((description) => description.substr(0, 3) == '000').substr(3)
     );
 
-    const title = Aliases.toIndexNormalForm(towerName, '-') + ' Summary';
+    const title = Aliases.toIndexNormalForm(towerName) + ' Summary';
 
     const embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
 

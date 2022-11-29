@@ -264,7 +264,7 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
     return [crossPath, crossTier];
 }
 
-function isValidUpgradeSet(u, allowCrosspath) {
+function isValidUpgradeSet(u, allowCrosspath=true) {
     if (!gHelper.is_str(u) || u.length !== 3) return false;
 
     if (isNaN(u)) return false;

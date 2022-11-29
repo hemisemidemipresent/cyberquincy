@@ -80,7 +80,7 @@ function allTempleSets() {
 
 function isTowerUpgrade(candidate, allowCrosspath=false) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
-    if (!/[a-z]+#\d{3}/.test(candidate)) return false;
+    if (!/[a-z]+#\d{3}/.test(candidate.toLowerCase())) return false;
 
     let [tower, upgradeSet] = Aliases.canonicizeArg(candidate).split('#');
 
@@ -277,7 +277,7 @@ function isValidUpgradeSet(u, allowCrosspath) {
 
     if (uSorted[0] !== 0) return false;
 
-    if (uSorted[1] > allowCrosspath ? 2 : 0) return false;
+    if (uSorted[1] > (allowCrosspath ? 2 : 0)) return false;
 
     if (uSorted[2] > 5) return false;
 

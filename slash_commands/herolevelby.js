@@ -8,6 +8,7 @@ const {
 
 const gHelper = require('../helpers/general.js');
 const Maps = require('../helpers/maps')
+const Heroes = require('../helpers/heroes')
 
 let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Heroes.allHeroes().forEach((hero) => {

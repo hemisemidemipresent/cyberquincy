@@ -6,7 +6,6 @@ const {
 } = require('discord.js');
 
 const gHelper = require('../helpers/general.js');
-const Heroes = require('../helpers/heroes');
 const Maps = require('../helpers/maps')
 
 const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');

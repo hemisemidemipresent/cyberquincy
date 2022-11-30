@@ -9,10 +9,8 @@ const {
 const gHelper = require('../helpers/general.js');
 const Maps = require('../helpers/maps')
 
-const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
-
 let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
-Object.keys(HERO_NAME_TO_BLOONOLOGY_LINK).forEach((hero) => {
+Heroes.allHeroes().forEach((hero) => {
     heroOption.addChoices({ name: Aliases.toIndexNormalForm(hero), value: hero });
 });
 

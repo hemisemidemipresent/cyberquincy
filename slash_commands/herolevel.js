@@ -8,10 +8,8 @@ const {
 const gHelper = require('../helpers/general.js');
 const Maps = require('../helpers/maps')
 
-const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
-
 const heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
-Object.keys(HERO_NAME_TO_BLOONOLOGY_LINK).forEach((hero) => {
+Heroes.allHeroes().forEach((hero) => {
     heroOption.addChoices({ name: Aliases.toIndexNormalForm(hero), value: hero });
 });
 
@@ -33,11 +31,6 @@ const energizerRoundOption = new SlashCommandIntegerOption()
     .setDescription('Optional Round Energizer was Placed')
     .setRequired(false);
 
-const ephemeralOption = new SlashCommandBooleanOption()
-    .setName('ephemeral')
-    .setDescription('Whether you want this to be viewed only by you or by everyone')
-    .setRequired(false);
-
 builder = new SlashCommandBuilder()
     .setName('herolevel')
     .setDescription('See how heroes level based on your inputted parameters (optionally with energizer)')
@@ -45,7 +38,6 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(heroLevelOption)
     .addStringOption(mapDifficultyOption)
     .addIntegerOption(energizerRoundOption);
-//    .addBooleanOption(ephemeralOption);
 
 function generateHeroLevels(interaction) {
     hero = interaction.options.getString('hero');

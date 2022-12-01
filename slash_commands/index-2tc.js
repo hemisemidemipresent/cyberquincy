@@ -26,6 +26,8 @@ const { orange, palered } = require('../jsons/colors.json');
 
 const { COLS } = require('../services/index/2tc_scraper');
 
+BANNED_HEROES = ['sauda', 'geraldo']
+
 const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
 const entity1Option = new SlashCommandStringOption()
@@ -459,6 +461,10 @@ function filterCombos(filteredCombos, parsed) {
             throw new UserCommandError(
                 `Combo cannot have more than 1 hero (${gHelper.toTitleCase(parsed.heroes.join(' + '))})`
             );
+        }
+
+        if (BANNED_HEROES.includes(parsed.hero)) {
+            throw new UserCommandError(`${gHelper.toTitleCase(parsed.hero)} is banned from 2TC`)
         }
 
         const providedEntities = parsedProvidedEntities(parsed);

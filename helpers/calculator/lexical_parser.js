@@ -22,7 +22,7 @@ class LexicalParser {
                 }
 
                 if (stackToken !== "(") {
-                    throw new Error("Mismatched parentheses.");
+                    throw new LexicalParseError("Mismatched parentheses.");
                 }
             } else if (token === "'") { // discount operator gets distributed FIRST and stuck on the operands
                 let numOperands = 0;
@@ -65,11 +65,16 @@ class LexicalParser {
         while (stack.length) {
             let token = stack.shift();
             if (token !== "(") output.push(token);
-            else throw new Error("Mismatched parentheses.");
+            else throw new LexicalParseError("Mismatched parentheses.");
         }
 
         return output;
     }
 }
 
-module.exports = LexicalParser
+class LexicalParseError extends Error {}
+
+module.exports = {
+    LexicalParser,
+    LexicalParseError,
+}

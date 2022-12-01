@@ -8,7 +8,7 @@ class HeroParser {
     constructor(...permitted_heroes) {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
-            Aliases.allHeroes(),
+            Heroes.allHeroes(),
             permitted_heroes.map(d => d.toLowerCase()),
         );
     }

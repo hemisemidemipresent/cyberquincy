@@ -2,7 +2,7 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
-const LexicalParser = require('../helpers/calculator/lexical_parser');
+const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 
 const { footer } = require('../aliases/misc.json');
 const { red, paragon } = require('../jsons/colors.json');
@@ -438,7 +438,7 @@ function lex(input, operator, value, difficulty) {
         parsed = parser.parse(tokens);
     } catch (e) {
         // Catches bad character inputs
-        c = e.message.match(/Unexpected character at index \d+: (.)/)[1];
+        c = e.message.match(/Unexpected character at index \d+: (.)/)?.[1];
         if (c) {
             footer = '';
             if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
@@ -449,6 +449,11 @@ function lex(input, operator, value, difficulty) {
                 )
                 .setColor(red)
                 .setFooter({ text: footer });
+        } else if (e instanceof LexicalParseError) {
+            return new Discord.EmbedBuilder()
+                        .setTitle(e.message)
+                        .setDescription(`\`${input}\``)
+                        .setColor(red)
         } else console.log(e);
     }
 
@@ -501,7 +506,7 @@ function valueByCost(t, i, difficulty) {
 
     if (Towers.isTower(canonicalToken)) {
         return Towers.costOfTowerUpgrade(canonicalToken, '000', difficulty)
-    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
         let [tower, upgradeSet] = canonicalToken.split('#');
         return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty)
     } else if (t.toLowerCase() === 'totem') {
@@ -517,7 +522,7 @@ function valueByUpgrade(t, i) {
 
     if (Towers.isTower(canonicalToken)) {
         return 0
-    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
         let arr = Towers
             .towerUpgradeToUpgrade(canonicalToken)
             .split('')
@@ -536,7 +541,7 @@ function valueByT5(t, i) {
 
     if (Towers.isTower(canonicalToken)) {
         return 0
-    } else if (Towers.isTowerUpgradeSet(canonicalToken)) {
+    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
         return canonicalToken.includes('5') ? 1 : 0
     } else if (t.toLowerCase() === 'totem') {
         return 0; // totem

@@ -1,5 +1,3 @@
-const Towers = require('./towers')
-
 function allMaps() {
     return beginnerMaps()
         .concat(intermediateMaps())

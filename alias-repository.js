@@ -316,17 +316,6 @@ class AliasRepository extends Array {
         return modes.map((ag) => ag.canonical);
     }
 
-    isHero(candidate) {
-        if (!candidate || !gHelper.is_str(candidate)) return false;
-        return this.allHeroes().includes(candidate.toLowerCase());
-    }
-
-    allHeroes() {
-        const heroes = this.getAliasGroupsFromSameFileAs('EZILI');
-
-        return heroes.map((ag) => ag.canonical);
-    }
-
     toAliasNormalForm(indexForm) {
         return indexForm.toLowerCase().split(' ').join('_');
     }
@@ -335,9 +324,9 @@ class AliasRepository extends Array {
         return this.getCanonicalForm(this.toAliasNormalForm(indexForm))
     }
 
-    toIndexNormalForm(canonical, separator='_') {
+    toIndexNormalForm(canonical) {
         return canonical
-            .split(separator)
+            .split('_')
             .map((tk) => gHelper.toTitleCase(tk))
             .join(' ')
             .replace(/ \(.*\)/, ''); // Parentheticals are used to avoid clashing aliases (e.g. double shot) but are filtered out when displayed

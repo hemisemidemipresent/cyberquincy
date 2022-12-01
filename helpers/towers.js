@@ -78,19 +78,13 @@ function allTempleSets() {
     return all;
 }
 
-// Warning: Slow! Use isHero instead or avoid reusing this method many times
-function isTowerUpgrade(candidate) {
+function isTowerUpgrade(candidate, allowCrosspath=false) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
-    return allTowerUpgrades().includes(candidate.toLowerCase());
-}
-
-function isTowerUpgradeSet(candidate) {
-    if (!candidate || !gHelper.is_str(candidate)) return false;
-    if (!/[a-z]+#\d{3}/.test(candidate)) return false;
+    if (!/[a-z]+#\d{3}/.test(candidate.toLowerCase())) return false;
 
     let [tower, upgradeSet] = Aliases.canonicizeArg(candidate).split('#');
 
-    return allTowers().includes(tower) && isValidUpgradeSet(upgradeSet);
+    return isTower(tower) && isValidUpgradeSet(upgradeSet, allowCrosspath);
 }
 
 function isTower(candidate) {
@@ -164,7 +158,7 @@ function isWaterEntity(entity) {
         entityToCompare = entity.split('#')[0];
     } else if (isTowerUpgrade(entity)) {
         entityToCompare = towerUpgradeToTower(entity);
-    } else if (Aliases.isHero(entity)) {
+    } else if (Heroes.isHero(entity)) {
         entityToCompare = entity;
     } else if (isTower(entity)) {
         entityToCompare = entity;
@@ -270,7 +264,7 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
     return [crossPath, crossTier];
 }
 
-function isValidUpgradeSet(u) {
+function isValidUpgradeSet(u, allowCrosspath=true) {
     if (!gHelper.is_str(u) || u.length !== 3) return false;
 
     if (isNaN(u)) return false;
@@ -283,7 +277,7 @@ function isValidUpgradeSet(u) {
 
     if (uSorted[0] !== 0) return false;
 
-    if (uSorted[1] > 2) return false;
+    if (uSorted[1] > (allowCrosspath ? 2 : 0)) return false;
 
     if (uSorted[2] > 5) return false;
 
@@ -319,7 +313,7 @@ function formatEntity(entity) {
         return `${gHelper.toTitleCase(path.split('_').join(' '))} ` + `${Aliases.toIndexNormalForm(towerName)}`;
     } else if (isTowerUpgrade(entity)) {
         return towerUpgradeToIndexNormalForm(entity);
-    } else if (Aliases.isHero(entity)) {
+    } else if (Heroes.isHero(entity)) {
         return gHelper.toTitleCase(entity);
     } else {
         throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
@@ -333,7 +327,7 @@ function getEntityType(entity) {
         return 'TOWER_PATH';
     } else if (isTowerUpgrade(entity)) {
         return 'TOWER_UPGRADE';
-    } else if (Aliases.isHero(entity)) {
+    } else if (Heroes.isHero(entity)) {
         return 'HERO';
     } else {
         throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
@@ -382,7 +376,6 @@ module.exports = {
     allPaths,
     allTempleSets,
     isTowerUpgrade,
-    isTowerUpgradeSet,
     isTower,
     isTowerPath,
     allWaterTowers,

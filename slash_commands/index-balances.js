@@ -17,8 +17,6 @@ const VersionParser = require('../parser/version-parser');
 
 const Parsed = require('../parser/parsed');
 
-const Towers = require('../helpers/towers');
-
 const entityOption = new SlashCommandStringOption()
     .setName('entity')
     .setDescription('Tower/Path/Upgrade/Hero')

@@ -7,7 +7,7 @@ builder = new SlashCommandBuilder().setName('leaderboard').setDescription('Shows
 async function execute(interaction) {
     await interaction.reply('Getting Leaderboard...');
     let fetch = await nodefetch(
-        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_labw9mm1_guilds.json',
+        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_lau3vdb5_guilds.json',
         { headers: { 'User-Agent': 'btd6-windowsplayer-32.4' } }
     );
     body = await fetch.json();

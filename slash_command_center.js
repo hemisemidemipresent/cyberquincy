@@ -11,7 +11,11 @@ function configureCommands(client) {
     for (const command of commandFiles()) {
         // Set a new item in the commands Collection
         // With the key as the command name and the value as the exported module
-        client.commands.set(command.data.name, command);
+        try {
+            client.commands.set(command.data.name, command);
+        } catch (e) {
+            console.log('Error setting slash command: you probably have an invalid .js file in ./slash_commands/');
+        }
     }
 }
 

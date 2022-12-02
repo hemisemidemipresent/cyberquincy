@@ -8,7 +8,7 @@ async function execute(interaction) {
     await interaction.reply('Getting Leaderboard...');
     let fetch = await nodefetch(
         'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_lau3vdb5_guilds.json',
-        { headers: { 'User-Agent': 'btd6-windowsplayer-32.4' } }
+        { headers: { 'User-Agent': 'btd6-windowsplayer-33.2' } }
     );
     body = await fetch.json();
     let rawData = JSON.parse(body.data).scores.equal;

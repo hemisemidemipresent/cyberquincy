@@ -52,15 +52,54 @@ function validateInput(interaction) {
     return null;
 }
 
-function incomeEmbed(mode, startround, endround) {
+function incomeEmbed(mode, start, end) {
+    let roundset = r;
+    let multiplier = 1;
+    let modeName = 'CHIMPS';
     switch (mode) {
         case 'halfcash':
-            return halfIncome(startround, endround);
-        case 'chimps':
-            return normalIncome(startround, endround);
+            multiplier = 0.5;
+            modeName = 'Half Cash CHIMPS';
+            break;
         case 'abr':
-            return abrIncome(startround, endround);
+            roundset = abr;
+            modeName = 'ABR CHIMPS';
+            break;
+        case 'chimps':
+            break;
     }
+
+    // single-round data
+    if (start === end) {
+        let cashThisRound = roundset[start].cashThisRound * multiplier;
+        return new Discord.EmbedBuilder()
+            .setTitle(`$${gHelper.round(cashThisRound)} earned in ${modeName} in round ${start}`)
+            .setColor(magenta)
+            .setFooter({ text: 'not including starting cash btw' });
+    }
+    // multiple-round data
+    // list them all out in a table
+    let table = '```\nstart | $0\n';
+    let ellipsisUsed = false;
+    for (let i = start; i <= end; i++) {
+        if (i - start > 2 && end - i > 2) {
+            if (!ellipsisUsed) table += '⋮\n';
+            ellipsisUsed = true;
+            continue;
+        }
+
+        let cumCash = roundset[i].cumulativeCash - roundset[start - 1].cumulativeCash;
+        cumCash *= multiplier;
+        table += `${`r${i}`.padEnd(6)}| $${cumCash}\n`;
+    }
+    table += '```';
+    let income = roundset[end].cumulativeCash - roundset[start - 1].cumulativeCash;
+    income *= multiplier;
+    return new Discord.EmbedBuilder()
+        .setTitle(`You will earn $${gHelper.round(income)} earned in ${modeName} from r${start}-r${end}`)
+        .setDescription(table)
+        .setColor(magenta)
+        .setFooter({ text: 'not including starting cash btw' });
 }
 
 function normalIncome(startround, endround) {

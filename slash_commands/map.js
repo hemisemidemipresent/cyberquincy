@@ -50,13 +50,14 @@ async function onAutocomplete(interaction) {
     responseArr = [];
     if (!values)
         responseArr = Maps.allMaps()
-            .slice(0, 25) // discord only allows like 25 options at a time
+            .slice(0, 25) // discord only allows 25 options at a time
             .map((map) => {
-                return { name: map, value: map };
+                return { name: map, value: map }; // cant inline because we are returning an object :(
             });
-    values.forEach((value, index) => {
-        if (index < 25) responseArr.push({ name: value[1], value: value[1] });
-    });
+    else
+        values.forEach((value, index) => {
+            if (index < 25) responseArr.push({ name: value[1], value: value[1] });
+        });
     await interaction.respond(responseArr);
 }
 

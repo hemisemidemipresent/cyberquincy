@@ -269,6 +269,8 @@ function isValidUpgradeSet(u, allowCrosspath=true) {
 
     if (isNaN(u)) return false;
 
+    if (!allowCrosspath && u === '222') return true
+
     // Get array of 3 digits, sorted in ascending order
     uSorted = u
         .split('')

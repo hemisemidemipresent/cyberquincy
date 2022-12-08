@@ -116,5 +116,9 @@
         "yard",
         "syard",
         "scyard"
+    ],
+    "one_two_tree": [
+        "ot",
+        "ott"
     ]
 }

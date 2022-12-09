@@ -184,7 +184,7 @@
             "cooldown": 40,
             "damage": 20000,
             "bd": 20000,
-            "pierce": 50
+            "pierce": 150
         }
     }
 }

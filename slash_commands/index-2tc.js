@@ -369,7 +369,6 @@ function stripCombo(combo, parsed) {
     if (parsed.map) delete combo.MAP;
     if (parsed.person) delete combo.PERSON;
 
-    if (!combo.OG) delete combo.CURRENT;
     if (!combo.OG) delete combo.DATE;
 
     delete combo.OG;

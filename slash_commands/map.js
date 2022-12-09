@@ -19,7 +19,7 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     let name = interaction.options.getString('map_name');
-    let m = map[name];
+    let m = map[name]; // map object
 
     let mapEmbed = new Discord.EmbedBuilder()
         .setTitle('Map info')

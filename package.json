@@ -4,17 +4,11 @@
     "description": "A discord bot for btd6",
     "main": "server.js",
     "scripts": {
-        "logout": "heroku logout",
-        "login": "heroku login -i",
-        "connect": "heroku git:remote -a cyberquincy",
         "register": "node register",
         "test": "npm run register && node server.js",
         "commit": "git add . && git commit -m p",
-        "push": "git push heroku master",
         "deploy": "npm run register && npm run commit && npm run push && npm run logs",
-        "refresh": "del /f package-lock.json && npm install",
-        "logs": "heroku logs --tail",
-        "update": "heroku stack:set heroku-22 -a cyberquincy"
+        "refresh": "del /f package-lock.json && npm install"
     },
     "repository": {
         "type": "git",

@@ -1,29 +1,29 @@
 const gHelper = require('./general.js');
-const bHelper = require('./bloons-general')
-const costs = require('../jsons/costs.json')
+const bHelper = require('./bloons-general');
+const costs = require('../jsons/costs.json');
 
 const TOWER_NAME_TO_BLOONOLOGY_LINK = {
-    'dart_monkey': 'https://pastebin.com/raw/FK4a9ZSi',
-    'boomerang_monkey': 'https://pastebin.com/raw/W2x9dvPs',
-    'bomb_shooter': 'https://pastebin.com/raw/XaR4JafN',
-    'tack_shooter': 'https://pastebin.com/raw/ywGCyWdT',
-    'ice_monkey': 'https://pastebin.com/raw/3VKx3upE',
-    'glue_gunner': 'https://pastebin.com/raw/cg8af3pj',
-    'sniper_monkey': 'https://pastebin.com/raw/8uQuKygM',
-    'monkey_sub': 'https://pastebin.com/raw/F9i5vPX9',
-    'monkey_buccaneer': 'https://pastebin.com/raw/EuiGUBWs',
-    'monkey_ace': 'https://pastebin.com/raw/hACdmBFa',
-    'heli_pilot': 'https://pastebin.com/raw/dfwcqzDT',
-    'mortar_monkey': 'https://pastebin.com/raw/64s0RqaZ',
-    'dartling_gunner': 'https://pastebin.com/raw/DDkmKP6n',
-    'wizard_monkey': 'https://pastebin.com/raw/4MsYDjFx',
-    'super_monkey': 'https://pastebin.com/raw/SUxZg6Dk',
-    'ninja_monkey': 'https://pastebin.com/raw/kPAF2hqw',
+    dart_monkey: 'https://pastebin.com/raw/FK4a9ZSi',
+    boomerang_monkey: 'https://pastebin.com/raw/W2x9dvPs',
+    bomb_shooter: 'https://pastebin.com/raw/XaR4JafN',
+    tack_shooter: 'https://pastebin.com/raw/ywGCyWdT',
+    ice_monkey: 'https://pastebin.com/raw/3VKx3upE',
+    glue_gunner: 'https://pastebin.com/raw/cg8af3pj',
+    sniper_monkey: 'https://pastebin.com/raw/8uQuKygM',
+    monkey_sub: 'https://pastebin.com/raw/F9i5vPX9',
+    monkey_buccaneer: 'https://pastebin.com/raw/EuiGUBWs',
+    monkey_ace: 'https://pastebin.com/raw/hACdmBFa',
+    heli_pilot: 'https://pastebin.com/raw/dfwcqzDT',
+    mortar_monkey: 'https://pastebin.com/raw/64s0RqaZ',
+    dartling_gunner: 'https://pastebin.com/raw/DDkmKP6n',
+    wizard_monkey: 'https://pastebin.com/raw/4MsYDjFx',
+    super_monkey: 'https://pastebin.com/raw/SUxZg6Dk',
+    ninja_monkey: 'https://pastebin.com/raw/kPAF2hqw',
     alchemist: 'https://pastebin.com/raw/76m7ATYF',
-    'druid_monkey': 'https://pastebin.com/raw/4egsjcpa',
-    'banana_farm': 'https://pastebin.com/raw/Es0nVqt1',
-    'spike_factory': 'https://pastebin.com/raw/tTHZWiSi',
-    'monkey_village': 'https://pastebin.com/raw/e2QHaQSD',
+    druid_monkey: 'https://pastebin.com/raw/4egsjcpa',
+    banana_farm: 'https://pastebin.com/raw/Es0nVqt1',
+    spike_factory: 'https://pastebin.com/raw/tTHZWiSi',
+    monkey_village: 'https://pastebin.com/raw/e2QHaQSD',
     engineer: 'https://pastebin.com/raw/rTHT0L21'
 };
 
@@ -52,10 +52,12 @@ function allTowers() {
 }
 
 function allTowerPaths() {
-    const paths = allPaths()
-    return allTowers().map(tower => {
-        return paths.map(path => `${tower}#${path}`)
-    }).flat();
+    const paths = allPaths();
+    return allTowers()
+        .map((tower) => {
+            return paths.map((path) => `${tower}#${path}`);
+        })
+        .flat();
 }
 
 function allPaths() {
@@ -78,7 +80,7 @@ function allTempleSets() {
     return all;
 }
 
-function isTowerUpgrade(candidate, allowCrosspath=false) {
+function isTowerUpgrade(candidate, allowCrosspath = false) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     if (!/[a-z]+#\d{3}/.test(candidate.toLowerCase())) return false;
 
@@ -169,7 +171,7 @@ function isWaterEntity(entity) {
 }
 
 function isOfTower(entity, tower) {
-    return entity.split('#')[0] === tower
+    return entity.split('#')[0] === tower;
 }
 
 function towerPathtoPath(towerPath) {
@@ -201,30 +203,23 @@ function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
     }
 
     // Validate tier
-    if (!tier) {
-        return towerUpgradeToIndexNormalForm(`${tower}#222`);
-    }
+    if (!tier) return towerUpgradeToIndexNormalForm(`${tower}#222`);
 
-    if (isNaN(tier)) {
-        throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
-    }
+    if (isNaN(tier)) throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
+
     try {
         tier = parseInt(tier);
     } catch (e) {
         throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
     }
 
-    if (tier < 0 || tier > 5) {
-        throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
-    }
+    if (tier < 0 || tier > 5) throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
 
     // Validate path
-    if (!allPaths().includes(path)) {
-        throw 'Second argument `path` must be top-path, middle-path, or bottom-path';
-    }
+    if (!allPaths().includes(path)) throw 'Second argument `path` must be top-path, middle-path, or bottom-path';
 
     // Convert path + tier to appropriate upgrade string like 003 or 400
-    const pathNum = allPaths().indexOf(path) + 1
+    const pathNum = allPaths().indexOf(path) + 1;
     const upgradeInt = tier * Math.pow(10, 3 - pathNum);
     const upgradeStr = upgradeInt.toString().padStart(3, '0');
 
@@ -233,12 +228,12 @@ function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
 }
 
 function upgradesFromPath(path) {
-    return [1, 2, 3, 4, 5].map(tier => upgradeFromPathAndTier(path, tier))
+    return [1, 2, 3, 4, 5].map((tier) => upgradeFromPathAndTier(path, tier));
 }
 
 function upgradeFromPathAndTier(path, tier) {
     const entityPathIndex = allPaths().indexOf(path);
-    return '0'.repeat(entityPathIndex) + `${tier}` + '0'.repeat(2 - entityPathIndex)
+    return '0'.repeat(entityPathIndex) + `${tier}` + '0'.repeat(2 - entityPathIndex);
 }
 
 function pathTierFromUpgradeSet(upgradeSet) {
@@ -250,7 +245,7 @@ function pathTierFromUpgradeSet(upgradeSet) {
 }
 
 function crossPathTierFromUpgradeSet(upgradeSet) {
-    const paths = allPaths()
+    const paths = allPaths();
     const upgrades = upgradeSet.split('');
     let sortedUpgrades = [...upgrades].sort();
     let crossTier = sortedUpgrades[1];
@@ -264,12 +259,26 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
     return [crossPath, crossTier];
 }
 
-function isValidUpgradeSet(u, allowCrosspath=true) {
+/**
+ * upgrade set is the "300" in "300 supermonkey"
+ *
+ * There are two modes: allowCrosspath=true (default) and allowCrosspath=false
+ *
+ * allowCrosspath=true, the default, is the usual stuff, you see in the game, i.e. "022", "012", "205" etc
+ * allowCrosspath=false is different, it only accepts those that specifically point to an upgrade,
+ * e.g. "100", "200", "500", "030", "004", but not "024"
+ * In addition, allowCrosspath=false also accepts "222" to mean "base tower"
+ *
+ * @param {string} u upgradeSet
+ * @param {boolean} allowCrosspath
+ * @returns
+ */
+function isValidUpgradeSet(u, allowCrosspath = true) {
     if (!gHelper.is_str(u) || u.length !== 3) return false;
 
     if (isNaN(u)) return false;
 
-    if (!allowCrosspath && u === '222') return true
+    if (!allowCrosspath && u === '222') return true;
 
     // Get array of 3 digits, sorted in ascending order
     uSorted = u
@@ -277,7 +286,7 @@ function isValidUpgradeSet(u, allowCrosspath=true) {
         .map((c) => parseInt(c))
         .sort();
 
-    if (uSorted[0] !== 0) return false;
+    if (uSorted[0] !== 0) return false; // you can only go with 2 upgrade paths at a time, so the smallest number has to be 0
 
     if (uSorted[1] > (allowCrosspath ? 2 : 0)) return false;
 
@@ -285,6 +294,20 @@ function isValidUpgradeSet(u, allowCrosspath=true) {
 
     return true;
 }
+
+/**
+ * Function to test if a certain string is accepted as a (max) "temple sacrifice set".
+ * Effectively 4 numbers representing which type of sacrifices were used.
+ * e.g. 1110 if support was skipped, 1101 if magic was skipped, etc.
+ * (When sacrificing towers to a Sun Temple, only 3 categories count)
+ * (If four categories are sacrificed then the cheapest is ignored.)
+ *
+ * For the True Sun God which benefits from sacrifices in almost exactly the same way as a Temple:
+ * a 1110 with all 4 tower types becomes a 2221, 1101 becomes 2212, etc.
+ *
+ * @param {string} str the temple sacrifice set string to be check if it is valid
+ * @returns {boolean}
+ */
 function isValidTempleSet(str) {
     if (!gHelper.is_str) return false;
     let upgrades = [];
@@ -293,17 +316,15 @@ function isValidTempleSet(str) {
         upgrades = str.split('/');
     } else if (str.length !== 4) return false;
     else upgrades = str.split('');
-    upgrades = upgrades.map(function (x) {
-        return parseInt(x);
-    }); // converts arr of string to arr of ints
+    upgrades = upgrades.map((x) => parseInt(x)); // converts arr of string to arr of ints
     let sum = 0;
     upgrades.forEach((element) => {
         sum += element;
     }); // finds sum of elements
-    if (isNaN(sum)) return false; // all strings will be yeeted out here, since the sum will be a NaN
+    if (isNaN(sum)) return false; // all strings will be yeeted out here, since the sum will be a NaN (summation may concatenate strings)
     if (sum > 7) return false; // stuff like 2222 gets thrown out
     upgrades.sort();
-    if (upgrades[3] > 2) return false; // stuff like 3300 gets thrown out
+    if (upgrades[3] > 2) return false; // stuff with numbers greater than 2, like "3300" gets thrown out
     return true;
 }
 
@@ -342,30 +363,30 @@ function subUpgradesFromUpgradeSet(upgradeSet) {
 
     let subTier, subCrossTier;
 
-    const subUpgrades = ['000']
+    const subUpgrades = ['000'];
     for (subTier = 1; subTier <= tier; subTier++) {
-        subUpgrades.push(upgradeFromPathAndTier(path, subTier))
+        subUpgrades.push(upgradeFromPathAndTier(path, subTier));
     }
     for (subCrossTier = 1; subCrossTier <= crossTier; subCrossTier++) {
-        subUpgrades.push(upgradeFromPathAndTier(crossPath, subCrossTier))
+        subUpgrades.push(upgradeFromPathAndTier(crossPath, subCrossTier));
     }
-    return subUpgrades
+    return subUpgrades;
 }
 
-function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts=0) {
-    const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet)
-    let totalCost = 0
-    subUpgrades.forEach(subUpgrade => {
-        totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts)
-    })
-    return totalCost
+function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0) {
+    const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet);
+    let totalCost = 0;
+    subUpgrades.forEach((subUpgrade) => {
+        totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts);
+    });
+    return totalCost;
 }
 
-function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts=0) {
+function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0) {
     let [path, tier] = pathTierFromUpgradeSet(upgrade);
-    const tower = costs[towerName]
-    const baseCost = upgrade === '000' ? tower.cost : tower.upgrades[path][`${tier}`]
-    return bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0)
+    const tower = costs[towerName];
+    const baseCost = upgrade === '000' ? tower.cost : tower.upgrades[path][`${tier}`];
+    return bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0);
 }
 
 module.exports = {
@@ -396,5 +417,5 @@ module.exports = {
     formatEntity,
     getEntityType,
     costOfTowerUpgrade,
-    costOfTowerUpgradeSet,
+    costOfTowerUpgradeSet
 };

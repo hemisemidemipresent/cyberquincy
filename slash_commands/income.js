@@ -90,7 +90,7 @@ function incomeEmbed(mode, start, end) {
 
         let cumCash = roundset[i].cumulativeCash - roundset[start - 1].cumulativeCash;
         cumCash *= multiplier;
-        table += `${`r${i}`.padEnd(6)}| $${cumCash}\n`;
+        table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}\n`;
     }
     table += '```';
     let income = roundset[end].cumulativeCash - roundset[start - 1].cumulativeCash;

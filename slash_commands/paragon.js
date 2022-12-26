@@ -313,8 +313,6 @@ async function paragon_degree(interaction) {
     let popCount = lex(pops, pop_operator, valueByPop, difficulty);
     if (isNaN(popCount)) return await interaction.reply({ embeds: [popCount], ephemeral: true });
 
-    console.log(totems);
-
     let powerCost = totalMoneySpent / 25;
     let powerUpgrade = totalUpgradeCount * 100;
     let powerT5 = totalT5 * 10000;

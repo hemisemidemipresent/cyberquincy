@@ -288,7 +288,7 @@ async function paragon_degree(interaction) {
         // multiplication must only be between a monkey-value and a number (i.e. their types must be different)
         '*': function (a, b) {
             if (typeof a === typeof b)
-                throw new UnrecognizedTokenError('Multiplication must only be between a monkey/totem and a numbers');
+                throw new UnrecognizedTokenError('Multiplication must only be between a monkey/totem and a number');
             let res = typeof a === 'object' ? a.value * b : a * b.value;
             return res;
         }
@@ -312,6 +312,8 @@ async function paragon_degree(interaction) {
 
     let popCount = lex(pops, pop_operator, valueByPop, difficulty);
     if (isNaN(popCount)) return await interaction.reply({ embeds: [popCount], ephemeral: true });
+
+    console.log(totems);
 
     let powerCost = totalMoneySpent / 25;
     let powerUpgrade = totalUpgradeCount * 100;
@@ -450,10 +452,7 @@ function lex(input, operator, value, difficulty) {
                 .setColor(red)
                 .setFooter({ text: footer });
         } else if (e instanceof LexicalParseError) {
-            return new Discord.EmbedBuilder()
-                        .setTitle(e.message)
-                        .setDescription(`\`${input}\``)
-                        .setColor(red)
+            return new Discord.EmbedBuilder().setTitle(e.message).setDescription(`\`${input}\``).setColor(red);
         } else console.log(e);
     }
 
@@ -502,15 +501,17 @@ function lex(input, operator, value, difficulty) {
 
 // Decipher what type of operand it is, and convert to cost accordingly
 function valueByCost(t, i, difficulty) {
-    const canonicalToken = Aliases.canonicizeArg(t)
+    const canonicalToken = Aliases.canonicizeArg(t);
 
     if (Towers.isTower(canonicalToken)) {
-        return Towers.costOfTowerUpgrade(canonicalToken, '000', difficulty)
+        return Towers.costOfTowerUpgrade(canonicalToken, '000', difficulty);
     } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
         let [tower, upgradeSet] = canonicalToken.split('#');
-        return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty)
+        return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty);
     } else if (t.toLowerCase() === 'totem') {
         return 0; // totem
+    } else if (!isNaN(t)) {
+        return { value: Number(t), type: 'number' };
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }
@@ -518,39 +519,43 @@ function valueByCost(t, i, difficulty) {
 
 // returns number of upgrades
 function valueByUpgrade(t, i) {
-    const canonicalToken = Aliases.canonicizeArg(t)
+    const canonicalToken = Aliases.canonicizeArg(t);
 
     if (Towers.isTower(canonicalToken)) {
-        return 0
+        return 0;
     } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
-        let arr = Towers
-            .towerUpgradeToUpgrade(canonicalToken)
+        let arr = Towers.towerUpgradeToUpgrade(canonicalToken)
             .split('')
             .map((e) => parseInt(e));
         if (arr.includes(5)) return 0;
         else return arr.reduce((a, b) => a + b);
     } else if (t.toLowerCase() === 'totem') {
         return 0; // totem
+    } else if (!isNaN(t)) {
+        return { value: Number(t), type: 'number' };
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }
 }
 
 function valueByT5(t, i) {
-    const canonicalToken = Aliases.canonicizeArg(t)
+    const canonicalToken = Aliases.canonicizeArg(t);
 
     if (Towers.isTower(canonicalToken)) {
-        return 0
+        return 0;
     } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
-        return canonicalToken.includes('5') ? 1 : 0
+        return canonicalToken.includes('5') ? 1 : 0;
     } else if (t.toLowerCase() === 'totem') {
         return 0; // totem
+    } else if (!isNaN(t)) {
+        return { value: Number(t), type: 'number' };
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }
 }
 
 function valueByTotem(t) {
+    if (!isNaN(t)) return { value: Number(t), type: 'number' };
     return t.toLowerCase() === 'totem' ? 1 : 0;
 }
 

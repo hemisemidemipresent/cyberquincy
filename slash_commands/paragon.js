@@ -141,7 +141,7 @@ async function paragon_stats(interaction) {
                 **main shuriken** - ${pa.shuriken.d}d, ${pa.shuriken.bd}bd, ${pa.shuriken.ed}ed, ${pa.shuriken.p}p, 8j, ${pa.shuriken.s}s, 70r
                 • 15% chance to distract, decamos
 
-                **flash bomb** - $${pa.fbomb.d}d, ${pa.fbomb.bd}bd, ${pa.fbomb.ed}ed, ${pa.fbomb.p}p, 5j, ${pa.fbomb.s}s, 70r, emites **blue shurikens** on impact
+                **flash bomb** - ${pa.fbomb.d}d, ${pa.fbomb.bd}bd, ${pa.fbomb.ed}ed, ${pa.fbomb.p}p, 5j, ${pa.fbomb.s}s, 70r, emites **blue shurikens** on impact
                 **blue shurikens** - ${pa.blues.d}d, ${pa.blues.bd}bd, ${pa.blues.ed}ed, ${pa.blues.p}p, 3j
                 • 15% chance to distract, decamos
                 **sticky bomb** - 3?s to detonate, ∞r, ${pa.sbomb.s}s

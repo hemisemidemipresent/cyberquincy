@@ -32,7 +32,7 @@ module.exports = {
         for (let res of results) {
             if (!res) continue;
             let data = JSON.parse(res.data);
-            console.log(data);
+            // console.log(data);
             for (let j in data.users) {
                 let user = data.users[j];
                 // ensure all objects have correct userName string

@@ -53,7 +53,7 @@ async function onAutocomplete(interaction) {
     const hoistedOptions = interaction.options._hoistedOptions; // array of the previous thing, each for each autocomplete field
     const relic_name_partial = hoistedOptions.find((option) => option.name == 'relic_name'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = relic_name_partial.value;
-    console.log(hoistedOptions, relic_name_partial, value);
+    // console.log(hoistedOptions, relic_name_partial, value);
     let fs = FuzzySet(relicNames);
     const values = fs.get(value, null, 0.2);
     responseArr = [];

@@ -1,7 +1,6 @@
 class ImgurAttachmentError extends Error {}
 
 function extractImageInfo(msgAttachments, msgArgs) {
-    console.log(msgAttachments);
     let image;
     if (msgAttachments.size > 0) {
         let attachement_image = msgAttachments.first();

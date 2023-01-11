@@ -63,7 +63,7 @@ function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
     let cashSoFar = 0;
     let originalRound = round;
 
-    while (cashSoFar <= cashNeeded) {
+    while (Math.round(cashSoFar) < cashNeeded) {
         addToTotal = parseInt(r[round].cashThisRound);
         cashSoFar += addToTotal * incomeMultiplier;
         addToTotal = 0;

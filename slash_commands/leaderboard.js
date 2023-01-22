@@ -6,16 +6,9 @@ builder = new SlashCommandBuilder().setName('leaderboard').setDescription('Shows
 
 async function execute(interaction) {
     await interaction.reply('Getting Leaderboard...');
-    let fetch = await nodefetch(
-        'https://fast-static-api.nkstatic.com/storage/static/appdocs/11/leaderboards/ct_lau3vdb5_guilds.json',
-        { headers: { 'User-Agent': 'btd6-windowsplayer-33.2' } }
-    );
-    body = await fetch.json();
-    let rawData = JSON.parse(body.data).scores.equal;
-    let data = rawData.map((obj) => {
-        md = obj.metadata.split(/[;|,]/);
-        return { name: md[3], score: obj.score };
-    });
+    let fetch = await nodefetch('https://artistic-waiter-oregano.glitch.me/');
+    let data = await fetch.json();
+
     const actionRow = new ActionRowBuilder().addComponents([
         new ButtonBuilder().setCustomId('1').setLabel('Page 1').setStyle(ButtonStyle.Secondary),
         new ButtonBuilder().setCustomId('2').setLabel('Page 2').setStyle(ButtonStyle.Secondary),
@@ -58,11 +51,11 @@ async function execute(interaction) {
         });
 
         collector.on('end', async (collected) => {
-            if (collected.size === 0)
-                await interaction.editReply({
-                    embeds: [embed],
-                    components: []
-                });
+            if (collected.size !== 0) return;
+            await interaction.editReply({
+                embeds: [embed],
+                components: []
+            });
         });
     }
 

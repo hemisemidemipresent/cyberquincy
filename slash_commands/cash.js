@@ -72,7 +72,7 @@ function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
         if (round > roundLimit)
             return new Discord.EmbedBuilder()
                 .setTitle(
-                    `If you start popping at ${originalRound}, you can't get $${cashNeeded} from popping bloons before random freeplay`
+                    `If you start popping at ${originalRound}, you can't get ${gHelper.numberAsCost(cashNeeded)} from popping bloons before random freeplay`
                 )
                 .setFooter({ text: 'freeplay rounds are random, hence cash is random' })
                 .setColor(orange);

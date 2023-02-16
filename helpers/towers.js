@@ -26,6 +26,35 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     monkey_village: 'https://pastebin.com/raw/e2QHaQSD',
     engineer: 'https://pastebin.com/raw/rTHT0L21'
 };
+const TOWER_NAME_TO_BLOONOLOGY_LINK_B2 = {
+    dart_monkey: 'https://pastebin.com/raw/E4sjy0RY',
+    boomerang_monkey: 'https://pastebin.com/raw/C5ZB2zFf',
+    bomb_shooter: 'https://pastebin.com/raw/KnRACEau',
+    tack_shooter: 'https://pastebin.com/raw/VLmsXZTc',
+    ice_monkey: 'https://pastebin.com/raw/m3dYQm2v',
+    glue_gunner: 'https://pastebin.com/raw/5anNnsHm',
+    sniper_monkey: 'https://pastebin.com/raw/athJ9mmM',
+    monkey_sub: 'https://pastebin.com/raw/4RvDMd4R',
+    monkey_buccaneer: 'https://pastebin.com/raw/hxMcDEyv',
+    monkey_ace: 'https://pastebin.com/raw/2AqFKp6X',
+    heli_pilot: 'https://pastebin.com/raw/VwfCvPdH',
+    mortar_monkey: 'https://pastebin.com/raw/htTpLUK1',
+    dartling_gunner: 'https://pastebin.com/raw/kZ0S1258',
+    wizard_monkey: 'https://pastebin.com/raw/MJ34tpHv',
+    super_monkey: 'https://pastebin.com/raw/kJ2NQFJM',
+    ninja_monkey: 'https://pastebin.com/raw/AQgwfKvC',
+    alchemist: 'https://pastebin.com/raw/w85rRVjV',
+    druid_monkey: 'https://pastebin.com/raw/KNXR24g2',
+    banana_farm: 'https://pastebin.com/raw/H2UEFh0E',
+    spike_factory: 'https://pastebin.com/raw/pAy8v9Ge',
+    monkey_village: 'https://pastebin.com/raw/h28ruxxd',
+    engineer: 'https://pastebin.com/raw/NPGKFNEv'
+};
+
+function towerNameToBloonologyLink(towerName, isB2) {
+    let array = isB2 ? TOWER_NAME_TO_BLOONOLOGY_LINK_B2 : TOWER_NAME_TO_BLOONOLOGY_LINK;
+    return array[towerName];
+}
 
 function towerUpgradeToTower(towerUpgrade) {
     if (!towerUpgrade) return null;
@@ -391,6 +420,7 @@ function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0) {
 
 module.exports = {
     TOWER_NAME_TO_BLOONOLOGY_LINK,
+    towerNameToBloonologyLink,
     towerUpgradeToTower,
     towerUpgradeToUpgrade,
     allTowerUpgrades,

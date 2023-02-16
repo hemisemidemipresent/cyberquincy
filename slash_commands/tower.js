@@ -29,7 +29,8 @@ const builder = new SlashCommandBuilder()
     .addStringOption(towerOption)
     .addStringOption((option) =>
         option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
-    );
+    )
+    .addBooleanOption((option) => option.setName('battles2').setDescription('Is this for battles 2?').setRequired(false));
 
 function validateInput(interaction) {
     const towerPath = parseTowerPath(interaction);
@@ -45,8 +46,8 @@ function parseTowerPath(interaction) {
 }
 
 // the function that creates the embed for bloonology that will get sent
-async function embedBloonology(towerName, upgrade) {
-    let link = Towers.TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+async function embedBloonology(towerName, upgrade, isB2) {
+    let link = Towers.towerNameToBloonologyLink(towerName, isB2);
     let res;
     try {
         res = await axios.get(link);
@@ -58,7 +59,7 @@ async function embedBloonology(towerName, upgrade) {
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
     const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
-
+    console.log(allUpgradeDescriptions.length);
     const upgradeDescription = cleanDescription(
         allUpgradeDescriptions.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3)
     );
@@ -78,7 +79,7 @@ async function embedBloonology(towerName, upgrade) {
     const totalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium');
     const hardTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'hard');
     const impopTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'impoppable');
-    
+
     const easyCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'easy');
     const mediumCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'medium');
     const hardCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'hard');
@@ -114,8 +115,8 @@ async function embedBloonology(towerName, upgrade) {
     return embed;
 }
 
-async function embedBloonologySummary(towerName) {
-    let link = Towers.TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+async function embedBloonologySummary(towerName, isB2) {
+    let link = Towers.towerNameToBloonologyLink(towerName, isB2);
     let res;
     try {
         res = await axios.get(link);
@@ -197,8 +198,9 @@ async function execute(interaction) {
 
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);
+    const isB2 = interaction.options.getBoolean('battles2') || false;
 
-    let embed = await embedBloonology(tower, towerPath);
+    let embed = await embedBloonology(tower, towerPath, isB2);
 
     const summaryBtn = new ButtonBuilder()
         .setCustomId('summary')
@@ -227,7 +229,7 @@ async function execute(interaction) {
         buttonInteraction.deferUpdate();
 
         if (buttonInteraction.customId === 'summary') {
-            let summaryEmbed = await embedBloonologySummary(tower);
+            let summaryEmbed = await embedBloonologySummary(tower, isB2);
             await interaction.editReply({
                 embeds: [summaryEmbed],
                 components: [],

@@ -73,11 +73,11 @@ function incomeEmbed(mode, start, end) {
     if (start === end) {
         let cashThisRound = roundset[start].cashThisRound * multiplier;
         return new Discord.EmbedBuilder()
-            .setTitle(`$${gHelper.round(cashThisRound)} earned in ${modeName} in round ${start}`)
-            .setColor(magenta)
-            .setFooter({ text: 'not including starting cash btw' });
+            .setTitle(`You earn $${gHelper.round(cashThisRound)} in ${modeName} on round ${start}`)
+            .setColor(magenta);
     }
     // multiple-round data
+
     // list them all out in a table
     let table = '```\nstart | $0\n';
     let ellipsisUsed = false;
@@ -87,55 +87,19 @@ function incomeEmbed(mode, start, end) {
             ellipsisUsed = true;
             continue;
         }
-
         let cumCash = roundset[i].cumulativeCash - roundset[start - 1].cumulativeCash;
         cumCash *= multiplier;
         table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}\n`;
     }
     table += '```';
+
+    // form embed
     let income = roundset[end].cumulativeCash - roundset[start - 1].cumulativeCash;
     income *= multiplier;
     return new Discord.EmbedBuilder()
         .setTitle(`You will earn $${gHelper.round(income)} earned in ${modeName} from r${start}-r${end}`)
         .setDescription(table)
-        .setColor(magenta)
-        .setFooter({ text: 'not including starting cash btw' });
-}
-
-function normalIncome(startround, endround) {
-    let startroundObject = r[startround - 1]; // thats just how it works
-    let endroundObject = r[endround];
-    let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
-    return new Discord.EmbedBuilder()
-        .setTitle(`$${Math.trunc(income * 100) / 100} earned in CHIMPS from rounds ${startround} to ${endround} inclusive`)
-        .setColor(magenta)
-        .setFooter({ text: 'not including starting cash' });
-}
-
-function halfIncome(startround, endround) {
-    let startroundObject = r[startround - 1]; // thats just how it works
-    let endroundObject = r[endround];
-    let income = (endroundObject.cumulativeCash - startroundObject.cumulativeCash) / 2;
-    return new Discord.EmbedBuilder()
-        .setTitle(
-            `$${
-                Math.trunc(income * 100) / 100
-            } earned in Half Cash CHIMPS from rounds ${startround} to ${endround} inclusive`
-        )
-        .setColor(red)
-        .setFooter({ text: 'not including starting cash' });
-}
-
-function abrIncome(startround, endround) {
-    let startroundObject = abr[startround - 1];
-    let endroundObject = abr[endround];
-    let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
-    return new Discord.EmbedBuilder()
-        .setTitle(
-            `$${Math.trunc(income * 100) / 100} earned in ABR CHIMPS from rounds ${startround} to ${endround} inclusive`
-        )
-        .setColor(yellow)
-        .setFooter({ text: 'not including starting cash' });
+        .setColor(magenta);
 }
 
 function chincomeEmbed(mode, round) {

@@ -58,13 +58,13 @@
                 "tier": 4,
                 "hp": 8000000,
                 "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **25 camo regrow fortified ceramics**\nfor every 12.5% of HP lost spawns **2 fortified BADs and 20 fortified DDTs**"
+                "desc": "for every 1% of HP lost spawns **12 MOABs**\nfor every 12.5% of HP lost spawns **2 fortified BADs and 20 fortified DDTs**"
             },
             {
                 "tier": 5,
                 "hp": 40000000,
                 "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **8 MOABs**\nfor every 25% of HP lost spawns **4 fortified BAD**"
+                "desc": "for every 1% of HP lost spawns **8 DDTs**\nfor every 25% of HP lost spawns **4 fortified BAD**"
             }
         ],
         "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs\nR120|+8 fMOABs, +4 BFBs, +4 ZOMGs"
@@ -88,9 +88,9 @@
             },
             {
                 "tier": 3,
-                "hp": 245000,
+                "hp": 220000,
                 "speed": 0.10,
-                "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 7900\nLych-Soul Life Steal (per 4 seconds): 5"
+                "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 7000\nLych-Soul Life Steal (per 4 seconds): 5"
             },
             {
                 "tier": 4,
@@ -120,9 +120,9 @@
             },
             {
                 "tier": 3,
-                "hp": 1200000,
+                "hp": 1100000,
                 "speed": 0.116,
-                "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 27,000\nLych-Soul Life Steal (per 4 seconds): 15"
+                "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 25,000\nLych-Soul Life Steal (per 4 seconds): 15"
             },
             {
                 "tier": 4,

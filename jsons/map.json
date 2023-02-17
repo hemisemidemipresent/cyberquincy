@@ -32,6 +32,17 @@
         "thu": "",
         "e": "1/1"
     },
+    "middle_of_the_road": {
+        "ver": 35,
+        "len": 40.2,
+        "lenStr": "40.2",
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "yes",
+        "los": "yes",
+        "thu": "",
+        "e": "1/1"
+    },
     "carved": {
         "ver": 13,
         "len": 39.3,
@@ -672,6 +683,22 @@
         "wa%": "5%",
         "los": "",
         "thu": "https://cdn.discordapp.com/attachments/604437039328395325/616920434809765908/Quad.png",
+        "e": "4/4"
+    },
+    "dark_dungeons": {
+        "ver": 35,
+        "len": [
+            10,
+            10.5,
+            11.6,
+            13.6
+        ],
+        "lenStr": "Top: 13.6 \nLeft: 11.6\n Middle: 10\nRight: 10.5",
+        "obj": 4,
+        "Cos": "$50000 - $300000",
+        "wa%": "yes",
+        "los": "yes",
+        "thu": "",
         "e": "4/4"
     },
     "muddy_puddles": {

@@ -60,14 +60,14 @@
         "sa",
         "sanc"
     ],
-	"dark_dungeons": [
-		"dd",
-		"dark",
-		"dungeon",
-		"dungeons",
-		"darkdungeon",
-		"darkdungeons",
-		"dark_dungeon",
-		"dark_dungeons",
-	]
+    "dark_dungeons": [
+        "dd",
+        "dark",
+        "dungeon",
+        "dungeons",
+        "darkdungeon",
+        "darkdungeons",
+        "dark_dungeon",
+        "dark_dungeons"
+    ]
 }

@@ -1,5 +1,5 @@
 {
-    "xyz": ["dart","drt","dart-monkey","dm"],
+    "xyz": ["dart","drt","dart-monkey","dm", "bart"],
 
     "100": ["sharp_shots"],
     "200": ["razor_sharp_shots"],
@@ -17,5 +17,5 @@
     "002": ["enhanced_eyesight"],
     "003": ["crossbow","xbow"],
     "004": ["sharp_shooter","sharp","sharp_shot","sshot","sshoot","sharp_shitter"],
-    "005": ["crossbow_master","xbow_master","xbm"]
+    "005": ["crossbow_master","xbow_master","xbm", "cbm"]
 }

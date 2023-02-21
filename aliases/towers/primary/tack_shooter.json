@@ -1,11 +1,11 @@
 {
-    "xyz": ["tack", "tack-shooter", "tac", "tak", "ta", "tacc"],
+    "xyz": ["tack", "tack-shooter", "tac", "tak", "ta", "tacc", "back"],
 
     "100": ["faster_shooting_(tack_shooter)"],
     "200": ["even_faster_shooting"],
     "300": ["hot_shots", "hshots", "hot"],
     "400": ["ring_of_fire", "rof"],
-    "500": ["inferno_ring", "inferno", "iring", "ir"],
+    "500": ["inferno_ring", "inferno", "iring", "ir", "bigrof"],
 
     "010": ["long_range_tacks"],
     "020": ["super_range_tacks"],

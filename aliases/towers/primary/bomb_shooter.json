@@ -1,9 +1,9 @@
 {
-    "xyz": ["bomb", "bmb", "bomb-shooter", "bs", "can", "💣","boom","💥"],
+    "xyz": ["bomb", "bmb", "bomb-shooter", "bs", "can", "💣","boom","💥", "bbomb"],
 
     "100": ["bigger_bombs"],
     "200": ["heavy_bombs"],
-    "300": ["really_big_bombs", "idk_some_sort_of_alias"],
+    "300": ["really_big_bombs", "idk_some_sort_of_alias", "rbb"],
     "400": ["bloon_impact", "impact", "blimpact"],
     "500": ["bloon_crush", "crush", "crunch", "bcrush", "crunchy"],
 

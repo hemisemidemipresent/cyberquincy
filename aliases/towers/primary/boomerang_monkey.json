@@ -1,10 +1,10 @@
 {
-    "xyz": ["boomer", "boomerang-monkey","boomerang","bm","rang","bomerang","boo","bomer","rangs","bomerrang"],
+    "xyz": ["boomer", "boomerang-monkey","boomerang","bm","rang","bomerang","boo","bomer","rangs","bomerrang", "bboomer"],
 
     "100": ["improved_rangs"],
     "200": ["glaives", "glaive"],
     "300": ["glaive_ricochet", "ricochet", "rich", "rick", "ricoshit"],
-    "400": ["m.o.a.r_glaives", "moar", "more"],
+    "400": ["m.o.a.r_glaives", "moar", "more", "m.o.a.r"],
     "500": ["glaive_lord", "glord", "gl"],
 
     "010": ["faster_throwing_(boomerang_monkey)"],

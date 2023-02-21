@@ -4,14 +4,14 @@
     "100": ["glue_soak", "gl_soak", "g_soak"],
     "200": ["corrosive_glue", "corrosive"],
     "300": ["bloon_dissolver", "diss", "dissolver"],
-    "400": ["bloon_liquefier", "liq","liquefier", "liquid"],
+    "400": ["bloon_liquefier", "liq","liquefier", "liquid", "bliq"],
     "500": ["the_bloon_solver", "bsol", "solv", "solver", "solve"],
 
     "010": ["bigger_globs", "globs"],
     "020": ["glue_splatter", "splatter"],
     "030": ["glue_hose", "hose", "ghose", "glose"],
     "040": ["glue_strike", "gstr", "gstrike", "glike"],
-    "050": ["glue_storm", "gs", "glorm"],
+    "050": ["glue_storm", "gs", "glorm", "bettermib"],
 
     "001": ["stickier_glue", "stickier"],
     "002": ["stronger_glue"],

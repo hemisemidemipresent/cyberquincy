@@ -1,5 +1,5 @@
 {
-    "xyz": ["ice", "ice-monkey", "im"],
+    "xyz": ["ice", "ice-monkey", "im", "bice"],
 
     "100": ["permafrost", "p_frost"],
     "200": ["cold_snap"],
@@ -17,5 +17,5 @@
     "002": ["re-freeze"],
     "003": ["cryo_cannon", "cryo"],
     "004": ["icicles", "icy"],
-    "005": ["icicle_impale", "impale", "iimpale", "impa"]
+    "005": ["icicle_impale", "impale", "iimpale", "impa", "inhale"]
 }

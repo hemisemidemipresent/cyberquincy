@@ -1,5 +1,5 @@
 {
-    "xyz": ["mortar", "mortar-monkey", "mor"],
+    "xyz": ["mortar", "mortar-monkey", "mor", "bortar"],
 
     "100": ["bigger_blast"],
     "200": ["bloon_buster", "buster"],
@@ -10,7 +10,7 @@
     "010": ["faster_reload_(mortar_monkey)"],
     "020": ["rapid_reload"],
     "030": ["heavy_shells", "heavy"],
-    "040": ["artillery_battery", "art", "artillery", "battery", "abat","abattery","artbat"],
+    "040": ["artillery_battery", "art", "artillery", "battery", "abat","abattery","artbat", "abatt"],
     "050": ["pop_and_awe", "paa"],
 
     "001": ["increased_accuracy", "accuracy"],

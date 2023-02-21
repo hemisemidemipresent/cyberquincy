@@ -1,5 +1,5 @@
 {
-    "xyz": ["dartling", "gunner", "dlg", "dartl"],
+    "xyz": ["dartling", "gunner", "dlg", "dartl", "bartling"],
 
     "100": ["focused_firing", "focused"],
     "200": ["laser_shock", "lshock"],
@@ -10,8 +10,8 @@
     "010": ["advanced_targeting", "atargeting"],
     "020": ["faster_barrel_spin", "faster_spin"],
     "030": ["hydra_rocket_pods", "hydra", "pods", "hrp", "hrps", "hyde", "hyd", "hy"],
-    "040": ["rocket_storm", "rstorm"],
-    "050": ["m.a.d", "m_a_d", "moab_assured_destroyer"],
+    "040": ["rocket_storm", "rstorm", "rorm"],
+    "050": ["m.a.d", "m_a_d", "moab_assured_destroyer", "mad"],
 
     "001": ["faster_swivel"],
     "002": ["powerful_darts"],

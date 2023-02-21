@@ -1,5 +1,5 @@
 {
-    "xyz": ["sub", "monkey-sub", "submarine", "u-boat"],
+    "xyz": ["sub", "monkey-sub", "submarine", "u-boat", "bub"],
 
     "100": ["longer_range"],
     "200": ["advanced_intel", "intel"],
@@ -11,7 +11,7 @@
     "020": ["heat-tipped_darts"],
     "030": ["ballistic_missile", "balm", "bmiss", "ballistic"],
     "040": ["first_strike_capability", "first_strike", "fs", "fstrike", "fsc"],
-    "050": ["pre-emptive_strike", "pre", "preemp", "prestrike", "pstrike", "preemptive"],
+    "050": ["pre-emptive_strike", "pre", "preemp", "prestrike", "pstrike", "preemptive", "pre-emp"],
 
     "001": ["twin_guns", "twin", "twins"],
     "002": ["airburst_darts", "airburst"],

@@ -1,5 +1,5 @@
 {
-    "xyz": ["bucc","monkey-buccaneer","boat","buc","buccaneer"],
+    "xyz": ["bucc","monkey-buccaneer","boat","buc","buccaneer", "bbucc", "bboat"],
 
     "100": ["faster_shooting_(buccaneer)"],
     "200": ["double_shot_(buccaneer)"],
@@ -10,12 +10,12 @@
     "010": ["grape_shot", "grapes", "grapes"],
     "020": ["hot_shot"],
     "030": ["cannon_ship","cannon"],
-    "040": ["monkey_pirates","mirates","mpir","hook"],
+    "040": ["monkey_pirates","mirates","mpir","hook", "pirates"],
     "050": ["pirate_lord","plord","pl"],
 
     "001": ["long_range"],
     "002": ["crow's_nest"],
     "003": ["merchantman","merchant","merch"],
     "004": ["favored_trades","flavored","flavored_trades","fave","trades"],
-    "005": ["trade_empire","empire","emp","trempire"]
+    "005": ["trade_empire","empire","emp","trempire", "tremp"]
 }

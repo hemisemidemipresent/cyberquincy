@@ -1,5 +1,5 @@
 {
-    "xyz": ["ninja", "ninja-monkey", "n", "ninj", "shuriken", "nin", "samurai"],
+    "xyz": ["ninja", "ninja-monkey", "n", "ninj", "shuriken", "nin", "samurai", "binja"],
 
     "100": ["ninja_discipline", "discipline"],
     "200": ["sharp_shurikens", "shurikens"],
@@ -16,6 +16,6 @@
     "001": ["seeking_shuriken", "seeking"],
     "002": ["caltrops", "trops"],
     "003": ["flash_bomb", "flash", "fbomb"],
-    "004": ["sticky_bomb", "sticky", "stick"],
+    "004": ["sticky_bomb", "sticky", "stick", "stinky"],
     "005": ["master_bomber", "mb", "mbomber"]
 }

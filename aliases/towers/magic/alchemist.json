@@ -9,7 +9,8 @@
         "beer",
         "wine",
         "liquor",
-        "intoxicant"
+        "intoxicant",
+        "balch"
     ],
 
     "100": ["larger_potions"],
@@ -26,7 +27,7 @@
 
     "001": ["faster_throwing_(alchemist)"],
     "002": ["acid_pool", "acid_pools", "pools", "pool"],
-    "003": ["lead_to_gold", "ltg"],
-    "004": ["rubber_to_gold", "rtg"],
+    "003": ["lead_to_gold", "ltg", "l2g"],
+    "004": ["rubber_to_gold", "rtg", "r2g"],
     "005": ["bloon_master_alchemist","bma","bloon_master"]
 }

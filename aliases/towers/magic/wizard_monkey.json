@@ -1,5 +1,5 @@
 {
-    "xyz": ["wizard", "wizard_monkey", "apprentice", "wiz"],
+    "xyz": ["wizard", "wizard_monkey", "apprentice", "wiz", "biz"],
 
     "100": ["guided_magic", "guided", "gmagic"],
     "200": ["arcane_blast", "ablast"],

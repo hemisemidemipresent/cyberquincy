@@ -1,8 +1,8 @@
 {
-    "xyz": ["village", "monkey_village", "vil", "vill", "mvil"],
+    "xyz": ["village", "monkey_village", "vil", "vill", "mvil", "billage"],
 
     "100": ["bigger_radius", "bradius"],
-    "200": ["jungle_drums", "drums", "jdrums"],
+    "200": ["jungle_drums", "drums", "jdrums", "jd"],
     "300": ["primary_training", "ptraining", "ptrain", "training"],
     "400": ["primary_mentoring", "pment", "pmentoring", "mentoring"],
     "500": ["primary_expertise", "pe", "primex", "expertise", "pex", "pexpertise"],

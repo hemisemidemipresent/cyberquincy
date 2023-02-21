@@ -1,5 +1,5 @@
 {
-    "xyz": ["spact","factory","spike","spac","spak","spanc","spikes","spi","spk","sf","spacc","spike_shooter","spactory"],
+    "xyz": ["spact","factory","spike","spac","spak","spanc","spikes","spi","spk","sf","spacc","spike_shooter","spactory", "bspac", "backt"],
 
     "100": ["bigger_stacks"],
     "200": ["white_hot_spikes", "white_hot"],
@@ -9,7 +9,7 @@
 
     "010": ["faster_production"],
     "020": ["even_faster_production"],
-    "030": ["moab_shredr", "moab_shredder"],
+    "030": ["moab_shredr", "moab_shredder", "shredr"],
     "040": ["spike_storm", "sporm"],
     "050": ["carpet_of_spikes", "cos", "carpet"],
 

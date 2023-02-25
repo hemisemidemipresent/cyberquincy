@@ -55,7 +55,7 @@ async function execute(interaction) {
     let prevScore;
     decay.forEach((obj) => {
         let decayedScore = obj.mult * num_score;
-        let formattedDecayedScore = isNaN(score) ? secondsToTime(decayedScore) : Math.floor(decayedScore);
+        let formattedDecayedScore = isNaN(score) ? secondsToTime(decayedScore) : Math.round(decayedScore);
 
         if (formattedDecayedScore !== prevScore) {
             table += `${obj.h < 10 ? '0' + obj.h : obj.h} | ${formattedDecayedScore}\n`;

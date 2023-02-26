@@ -10,9 +10,9 @@ const BTD6_INDEX_SERVER_ID = '661812833771847700';
 
 // Fill this in when you want to test this in your own server
 // Change this to a channel in your test guild when testing
-const TEST_SUBMISSIONS_CHANNEL = '1031960962586132490';
-const TEST_SUBMISSIONS_CHANNEL_2 = '1031960986149728296';
-const TEST_GUILD = '435959457411760151';
+const TEST_SUBMISSIONS_CHANNEL = '420';
+const TEST_SUBMISSIONS_CHANNEL_2 = '69';
+const TEST_GUILD = '8008';
 
 const IS_TESTING = require('../1/config.json').testing;
 const SUBMISSIONS_CHANNEL = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL : BTD6_INDEX_SERVER_SUBMISSIONS_CHANNEL;
@@ -41,9 +41,9 @@ async function execute(interaction) {
 			return await interaction.reply({ content: 'No content submitted.', ephemeral: true });
 		} else if (!messageAttachment && text) {
 			let temp = `${text}\n——————————————————————\nSent by ${interaction.user.tag}`;
-			const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send(temp);
+			await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send(temp);
+			const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send(temp);
 			await interaction.reply({ content: 'Submitted: ' + url });
-			await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send(temp);
 		} else if (messageAttachment) {
 			if (!text) text = '';
 			let image = messageAttachment.url;

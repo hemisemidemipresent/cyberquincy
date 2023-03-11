@@ -13,7 +13,7 @@ const decay = require('../jsons/decay.json');
 
 builder = new SlashCommandBuilder()
     .setName('decay')
-    .setDescription('Calculate score decays')
+    .setDescription('Calculate CT tile score decays')
     .addStringOption((option) => option.setName('score').setDescription('Score of a tile').setRequired(true))
     .addIntegerOption((option) =>
         option.setName('remaining_hours').setDescription('remaining hours left on the tile').setRequired(false)

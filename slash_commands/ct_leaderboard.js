@@ -12,11 +12,19 @@ builder = new SlashCommandBuilder()
     .addIntegerOption((option) => option.setName('ct_event').setDescription("Which event's leaderboard").setRequired(false))
     .addIntegerOption((option) => option.setName('page').setDescription('Which page of the leaderboard').setRequired(false));
 
-function validateInput(interaction, length) {
-    ct_event = interaction.options.getInteger('ct_event') || length + 10;
+function getCurrentCT() {
+    const firstCT = new Date('Tue, 26 Jul 2022 22:00:00 GMT');
+    const twoWeeks = 1209600000;
+    return Math.floor((Date.now() - firstCT) / twoWeeks);
+}
+
+function validateInput(interaction) {
+    const currentCT = getCurrentCT();
+    ct_event = interaction.options.getInteger('ct_event') || currentCT;
     if (ct_event < 1) return `Please enter a positive integer`;
-    if (ct_event < 11) return `older events like CT event ${ct_event} aren't available on the official Ninja Kiwi API`;
-    if (ct_event > length + 10) return `CT event ${ct_event} isn't available on the official Ninja Kiwi API`;
+    if (ct_event <= currentCT - 5)
+        return `older events like CT event ${ct_event} aren't available on the official Ninja Kiwi API`;
+    if (ct_event > currentCT) return `CT event ${ct_event} isn't available on the official Ninja Kiwi API`;
 
     page = interaction.options.getInteger('page') || 1;
     if (page < 1) return `${page} isn't a valid page number`;
@@ -24,7 +32,7 @@ function validateInput(interaction, length) {
 async function execute(interaction) {
     const events = (await axios.get('https://data.ninjakiwi.com/btd6/ct')).data.body;
 
-    validationFailure = validateInput(interaction, events.length);
+    validationFailure = validateInput(interaction);
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
@@ -41,8 +49,9 @@ async function execute(interaction) {
         return true;
     };
 
-    let eventNo = interaction.options.getInteger('ct_event') || events.length + 10;
-    let event = events[10 + events.length - eventNo];
+    const currentCT = getCurrentCT();
+    const eventNo = interaction.options.getInteger('ct_event') || currentCT;
+    const event = events[currentCT - eventNo];
 
     let page = interaction.options.getInteger('page') || 1;
 
@@ -65,7 +74,9 @@ async function execute(interaction) {
             // placement and related padding
             let placement = SCORES_PER_PAGE * (page - 1) + i + 1;
             placement = placement.toString();
-            placement = placement.padStart((SCORES_PER_PAGE * page).toString().length); // 50*page is "lowest placement in the page"
+            placement = placement.padStart((SCORES_PER_PAGE * page).toString().length, '0'); // 50*page is "lowest placement in the page"
+
+            if (name.length > 25) name = name.slice(0, 25);
 
             desc += `${placement} ${name.padEnd(25)}${obj.score.toString().padStart(6)}\n`;
         }

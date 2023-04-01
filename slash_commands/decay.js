@@ -80,9 +80,7 @@ function timeToSeconds(time) {
         .split(':')
         .reverse()
         .map((key) => parseFloat(key));
-    console.log(keys);
     return keys.reduce((accumulator, value, index) => {
-        console.log(accumulator, value, index);
         return accumulator + value * Math.pow(60, index);
     });
 }

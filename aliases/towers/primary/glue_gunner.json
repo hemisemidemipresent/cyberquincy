@@ -11,7 +11,7 @@
     "020": ["glue_splatter", "splatter"],
     "030": ["glue_hose", "hose", "ghose", "glose"],
     "040": ["glue_strike", "gstr", "gstrike", "glike"],
-    "050": ["glue_storm", "gs", "glorm"],
+    "050": ["glue_storm", "gs", "glorm", "bettermib"],
 
     "001": ["stickier_glue", "stickier"],
     "002": ["stronger_glue"],

@@ -1,5 +1,5 @@
 {
-    "xyz": ["tack", "tack-shooter", "tac", "tak", "ta", "tacc", "back"],
+    "xyz": ["tack", "tack-shooter", "tac", "tak", "ta", "tacc"],
 
     "100": ["faster_shooting_(tack_shooter)"],
     "200": ["even_faster_shooting"],

@@ -72,7 +72,7 @@ async function execute(interaction) {
             // placement and related padding
             let placement = SCORES_PER_PAGE * (page - 1) + i + 1;
             placement = placement.toString();
-            placement = placement.padStart((SCORES_PER_PAGE * page).toString().length); // find lowest placement in the page, then find its length
+            placement = placement.padStart((SCORES_PER_PAGE * page).toString().length, '0'); // find lowest placement in the page, then find its length
 
             // score processing
             let minutes = Math.floor(ms / 60000);

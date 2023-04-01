@@ -153,7 +153,7 @@ function generateCommandListeners(slashCommandCenter) {
         if (interaction.isButton()) slashCommandCenter.handleButton(interaction);
         if (interaction.type === InteractionType.ApplicationCommandAutocomplete)
             slashCommandCenter.handleAutocomplete(interaction);
-        if (interaction.isSelectMenu()) slashCommandCenter.handleSelectMenu(interaction);
+        if (interaction.isStringSelectMenu()) slashCommandCenter.handleSelectMenu(interaction);
     });
 }
 

@@ -1,5 +1,5 @@
 {
-    "xyz": ["super", "super-monkey", "supermonkey", "sup", "buper"],
+    "xyz": ["super", "super-monkey", "supermonkey", "sup"],
 
     "100": ["laser_blasts", "lasers"],
     "200": ["plasma_blasts", "plasma"],
@@ -15,7 +15,7 @@
 
     "001": ["knockback", "kb"],
     "002": ["ultravision", "uvision"],
-    "003": ["dark_knight", "dk"],
+    "003": ["dark_knight", "dk", "donkey_kong"],
     "004": ["dark_champion", "dch", "champ", "champion", "dark_champ", "dchamp"],
     "005": ["legend_of_the_night", "lotn", "portal"]
 }

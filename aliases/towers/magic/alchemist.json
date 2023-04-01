@@ -9,8 +9,7 @@
         "beer",
         "wine",
         "liquor",
-        "intoxicant",
-        "balch"
+        "intoxicant"
     ],
 
     "100": ["larger_potions"],

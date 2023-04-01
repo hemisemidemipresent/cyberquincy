@@ -16,6 +16,6 @@
     "001": ["seeking_shuriken", "seeking"],
     "002": ["caltrops", "trops"],
     "003": ["flash_bomb", "flash", "fbomb"],
-    "004": ["sticky_bomb", "sticky", "stick", "stinky"],
+    "004": ["sticky_bomb", "sticky", "stick"],
     "005": ["master_bomber", "mb", "mbomber"]
 }

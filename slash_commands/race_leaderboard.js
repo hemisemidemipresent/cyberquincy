@@ -80,7 +80,7 @@ async function execute(interaction) {
             let mseconds = ms % 1000;
 
             seconds = seconds.toString().padStart(2, '0');
-            mseconds = mseconds.toString().padEnd(3, '0');
+            mseconds = mseconds.toString().padStart(3, '0');
             let time = seconds === '60' ? `${minutes + 1}:00.000` : `${minutes}:${seconds}.${mseconds}`;
 
             desc += `${placement} ${name.padEnd(20)}${time}\n`;

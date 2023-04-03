@@ -85,10 +85,10 @@ async function embedBloonology(towerName, upgrade, isB2) {
         cost = `${easyCost} - easy\n${mediumCost} - medium\n${hardCost} - hard\n${impopCost} - impoppable\n`;
 
         const easyTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'easy');
-        const totalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium');
+        const mediumTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium');
         const hardTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'hard');
         const impopTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'impoppable');
-        totalCost = `${easyTotalCost} - easy\n${totalCost} - medium\n${hardTotalCost} - hard\n${impopTotalCost} - impoppable\n`;
+        totalCost = `${easyTotalCost} - easy\n${mediumTotalCost} - medium\n${hardTotalCost} - hard\n${impopTotalCost} - impoppable\n`;
     }
     if (isB2) {
         cost = `${Towers.costOfTowerUpgrade(towerName, upgrade, 'medium', undefined, isB2)} - battles2\n`;
@@ -134,7 +134,7 @@ async function embedBloonologySummary(towerName, isB2) {
         for (idx = 0; idx < 3; idx++) {
             tierUpgrades.push('000'.slice(0, idx) + `${tier}` + '000'.slice(idx + 1));
         }
-    } 
+    }
 
     const pathDescriptions = tierUpgrades.map((u) =>
         cleanDescription(descriptions.find((description) => description.substr(0, 3) == u).substr(3))

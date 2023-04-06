@@ -443,6 +443,17 @@
         "thu": "https://media.discordapp.net/attachments/770247322633633792/1091540787436732526/haunted.png",
         "e": "2/2"
     },
+    "polyphemus": {
+        "ver": 36,
+        "len": 19.3,
+        "lenStr": 19.3,
+        "obj": 9,
+        "Cos": "0 - $?",
+        "wa%": "yes",
+        "los": "",
+        "thu": "",
+        "e": "2/2"
+    },
     "chutes": {
         "ver": 1,
         "len": [
@@ -664,7 +675,7 @@
         ],
         "lenStr": "Bloon Path:6.8\n10.2 with motor\n18.4 with extensions\n27.7 with motor and extensions\nMoab Path:5.7\n8.5 with motor\n11.6 with extensions\n17.3 with motor and extensions",
         "obj": 2,
-        "Cos": "$0 - $?",
+        "Cos": "0 - $?",
         "wa%": "-",
         "los": "",
         "thu": "https://media.discordapp.net/attachments/770247322633633792/1091540874397237258/worksho.png",

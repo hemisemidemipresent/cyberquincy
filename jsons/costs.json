@@ -572,7 +572,7 @@
         }
     },
     "beast_handler": {
-        "cost": ,
+        "cost": 250,
         "upgrades": {
             "top_path": {
                 "1": 160,

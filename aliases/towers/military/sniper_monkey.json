@@ -3,15 +3,16 @@
 
     "100": ["full_metal_jacket", "fmj"],
     "200": ["larger_calibre", "larger_caliber"],
+
     "300": ["deadly_precision", "dprecision", "precision", "dprec"],
-    "400": ["maim_moab", "maim", "maimoab", "maimmoab", "mainmoan"],
-    "500": ["cripple_moab", "cripple", "cripplemoab"],
+    "400": ["maim_moab", "maim", "maimoab", "mainmoan"],
+    "500": ["cripple_moab", "cripple"],
 
     "010": ["night_vision_goggles", "nvg", "goggles", "night_vision"],
     "020": ["shrapnel_shot", "shrapnel"],
     "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb","bbullet"],
-    "040": ["supply_drop", "supplydrop", "supply", "sd"],
-    "050": ["elite_sniper", "es", "esniper", "elitesniper"],
+    "040": ["supply_drop", "supply", "sd"],
+    "050": ["elite_sniper", "es", "esniper"],
 
     "001": ["fast_firing"],
     "002": ["even_faster_firing"],

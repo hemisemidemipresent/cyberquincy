@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const gHelper = require('../helpers/general');
 const { lightgreen } = require('../jsons/colors.json');
 const decayMult = [
     1, 1, 1, 1, 1, 1.0514814, 1.1057236, 1.1628803, 1.2231139, 1.2865961, 1.3535084, 1.4240429, 1.4984032, 1.5768039,
@@ -14,7 +13,7 @@ const decay = require('../jsons/decay.json');
 
 builder = new SlashCommandBuilder()
     .setName('decay')
-    .setDescription('Calculate score decays')
+    .setDescription('Calculate CT tile score decays')
     .addStringOption((option) => option.setName('score').setDescription('Score of a tile').setRequired(true))
     .addIntegerOption((option) =>
         option.setName('remaining_hours').setDescription('remaining hours left on the tile').setRequired(false)
@@ -55,7 +54,7 @@ async function execute(interaction) {
     let prevScore;
     decay.forEach((obj) => {
         let decayedScore = obj.mult * num_score;
-        let formattedDecayedScore = isNaN(score) ? secondsToTime(decayedScore) : Math.floor(decayedScore);
+        let formattedDecayedScore = isNaN(score) ? secondsToTime(decayedScore) : Math.round(decayedScore);
 
         if (formattedDecayedScore !== prevScore) {
             table += `${obj.h < 10 ? '0' + obj.h : obj.h} | ${formattedDecayedScore}\n`;
@@ -81,9 +80,7 @@ function timeToSeconds(time) {
         .split(':')
         .reverse()
         .map((key) => parseFloat(key));
-    console.log(keys);
     return keys.reduce((accumulator, value, index) => {
-        console.log(accumulator, value, index);
         return accumulator + value * Math.pow(60, index);
     });
 }

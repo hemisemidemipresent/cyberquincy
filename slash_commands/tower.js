@@ -9,7 +9,6 @@ const {
 
 const axios = require('axios');
 
-const costs = require('../jsons/costs.json');
 const Towers = require('../helpers/towers.js');
 
 const { discord, footer } = require('../aliases/misc.json');
@@ -59,7 +58,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
     const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
-    console.log(allUpgradeDescriptions.length);
+
     const upgradeDescription = cleanDescription(
         allUpgradeDescriptions.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3)
     );
@@ -74,16 +73,27 @@ async function embedBloonology(towerName, upgrade, isB2) {
         const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
+    if (isB2) title += ' (battles2)';
 
-    const easyTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'easy');
-    const totalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium');
-    const hardTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'hard');
-    const impopTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'impoppable');
+    let cost = '';
+    let totalCost = '';
+    if (!isB2) {
+        const easyCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'easy');
+        const mediumCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'medium');
+        const hardCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'hard');
+        const impopCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'impoppable');
+        cost = `${easyCost} - easy\n${mediumCost} - medium\n${hardCost} - hard\n${impopCost} - impoppable\n`;
 
-    const easyCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'easy');
-    const mediumCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'medium');
-    const hardCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'hard');
-    const impopCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'impoppable');
+        const easyTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'easy');
+        const mediumTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium');
+        const hardTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'hard');
+        const impopTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'impoppable');
+        totalCost = `${easyTotalCost} - easy\n${mediumTotalCost} - medium\n${hardTotalCost} - hard\n${impopTotalCost} - impoppable\n`;
+    }
+    if (isB2) {
+        cost = `${Towers.costOfTowerUpgrade(towerName, upgrade, 'medium', undefined, isB2)} - battles2\n`;
+        totalCost = `${Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium', undefined, isB2)} - battles2\n`;
+    }
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)
@@ -91,21 +101,12 @@ async function embedBloonology(towerName, upgrade, isB2) {
         .addFields([
             {
                 name: 'cost',
-                value:
-                    `${easyCost} - easy\n` +
-                    `${mediumCost} - medium\n` +
-                    `${hardCost} - hard\n` +
-                    `${impopCost} - impoppable\n` +
-                    `if this is wrong [yell at hemi here](${discord})`,
+                value: cost,
                 inline: true
             },
             {
                 name: 'total cost',
-                value:
-                    `${easyTotalCost} - easy\n` +
-                    `${totalCost} - medium\n` +
-                    `${hardTotalCost} - hard\n` +
-                    `${impopTotalCost} - impoppable\n`,
+                value: totalCost,
                 inline: true
             },
             { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }

@@ -1,6 +1,7 @@
 const gHelper = require('./general.js');
 const bHelper = require('./bloons-general');
 const costs = require('../jsons/costs.json');
+const costs_b2 = require('../jsons/costs_b2.json');
 
 const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     dart_monkey: 'https://pastebin.com/raw/FK4a9ZSi',
@@ -402,20 +403,22 @@ function subUpgradesFromUpgradeSet(upgradeSet) {
     return subUpgrades;
 }
 
-function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0) {
+function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, battles2 = false) {
     const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet);
     let totalCost = 0;
     subUpgrades.forEach((subUpgrade) => {
-        totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts);
+        totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, battles2);
     });
     return totalCost;
 }
 
-function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0) {
+function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, battles2 = false) {
     let [path, tier] = pathTierFromUpgradeSet(upgrade);
-    const tower = costs[towerName];
-    const baseCost = upgrade === '000' ? tower.cost : tower.upgrades[path][`${tier}`];
-    return bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0);
+    const costData = battles2 ? costs_b2 : costs;
+    const tower = costData[towerName];
+    const isBaseTower = upgrade === '000';
+    const baseCost = isBaseTower ? tower.cost : tower.upgrades[path][`${tier}`];
+    return bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, isBaseTower);
 }
 
 module.exports = {

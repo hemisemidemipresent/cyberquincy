@@ -63,18 +63,6 @@ const BASE_LAYER_RBES = {
     [BAD]: 20000
 };
 
-const ROUNDING_ERRORS = {
-    83: [MOAB, BFB, DDT],
-    89: [MOAB, BFB, DDT],
-    95: [BFB],
-    96: [BFB, ZOMG],
-    104: MOABS,
-    111: [BAD],
-    114: [MOAB, BFB, DDT],
-    119: [MOAB, BFB, DDT],
-    124: [BFB]
-};
-
 class Enemy {
     constructor(name, round = 80, fortified = false, camo = false, regrow = false) {
         if (!ENEMIES.includes(name)) {
@@ -382,16 +370,6 @@ class Enemy {
 
         if (this.name == DDT) {
             notes.push('DDTs have the camgrow property by default (meaning they release camgrow ceramics)');
-        }
-
-        const buggedLayers = ROUNDING_ERRORS[this.round];
-        if (buggedLayers) {
-            notes.push(
-                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers
-                    .map((l) => formatName(l, true))
-                    .join(', ')}} ` +
-                    "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
-            );
         }
 
         if (this.name == BAD && this.round < 100) {

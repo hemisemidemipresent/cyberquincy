@@ -31,7 +31,7 @@ function pingHeroku() {
 function globalRequirements() {
     global.colours = require('./jsons/colors.json');
     global.Towers = require('./helpers/towers.js');
-    global.Heroes = require('./helpers/heroes.js')
+    global.Heroes = require('./helpers/heroes.js');
     global.AliasRepository = require('./alias-repository.js');
 
     global.Discord = require('discord.js');
@@ -153,7 +153,7 @@ function generateCommandListeners(slashCommandCenter) {
         if (interaction.isButton()) slashCommandCenter.handleButton(interaction);
         if (interaction.type === InteractionType.ApplicationCommandAutocomplete)
             slashCommandCenter.handleAutocomplete(interaction);
-        if (interaction.isSelectMenu()) slashCommandCenter.handleSelectMenu(interaction);
+        if (interaction.isStringSelectMenu()) slashCommandCenter.handleSelectMenu(interaction);
     });
 }
 

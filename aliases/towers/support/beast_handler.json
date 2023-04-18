@@ -1,20 +1,20 @@
 {
-    "xyz": ["beast","handler","bh", "bst"],
+    "xyz": ["beast", "beast_handler", "handler", "bh", "bst"],
 
     "100": ["piranha"],
     "200": ["barracuda", "cuda"],
     "300": ["great_white","gw", "shark"],
     "400": ["orca"],
-    "500": ["megalodon", "mega"],
+    "500": ["megalodon", "mega"], 
 
     "010": ["microraptor", "mrap", "mraptor"],
     "020": ["adasaurus", "ada"],
     "030": ["velociraptor", "vrap", "vraptor"],
     "040": ["tyrannosaurus_rex", "t-rex"],
-    "050": ["giganotosaurus", "gsaur", "giganto", "giganoto", "gsaurus", "gs", "giga"],
+    "050": ["giganotosaurus", "gsaur", "giganto", "giganoto", "gsaurus", "giga"],
     "001": ["gyrfalcon", "falcon", "falc", "gyr"],
     "002": ["horned_owl", "horned", "owl", "howl"],
     "003": ["golden_eagle", "golden", "eagle", "geagle"],
-    "004": ["giant_condor","condor","cond","gcond", "gcondor"],
-    "005": ["pouākai","pouakai", "pou", "kai", "ā"]
+    "004": ["giant_condor", "condor", "cond", "gcond", "gcondor"],
+    "005": ["pouākai", "pouakai", "pou", "kai", "ā"]
 }

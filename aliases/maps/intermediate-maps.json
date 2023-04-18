@@ -90,5 +90,9 @@
         "covered",
         "garden",
         "cgar"
+    ],
+    "polyphemus": [
+        "py",
+        "poly"
     ]
 }

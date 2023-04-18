@@ -219,7 +219,8 @@ const FTTC_TOWER_ABBREVIATIONS = {
     druid_monkey: 'dru',
     spike_factory: 'spk',
     monkey_village: 'vil',
-    engineer: 'eng'
+    engineer: 'eng',
+    beast_handler: 'bst'
 };
 
 async function embedOneOrMultiplePages(interaction, parsed, combos, mtime) {

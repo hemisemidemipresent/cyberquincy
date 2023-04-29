@@ -168,12 +168,18 @@ async function getRowAltData(entryRow, colset) {
         .trim()
         .split('\n')
         .map((entry) => {
-            let towers, person, bitly;
-            [towers, person, bitly] = entry.split('|').map((t) => t.replace(/ /g, ''));
+            let towers, person, link;
+            [towers, person, link] = entry.split('|').map((t) => t.replace(/ /g, ''));
+            if (link.includes('bit.ly')) {
+                link = `[${link}](http://${link})`
+            } else if (link.includes('drive.google.com')) {
+                link = `[Drive Image](${link})`
+            } // Otherwise keep the link the same
+
             return {
                 TOWERS: towers.split(',').map((t) => Aliases.getCanonicalForm(t.trim())),
                 PERSON: person,
-                LINK: `[${bitly}](http://${bitly})`,
+                LINK: link,
                 MAP: mapCell.value,
                 OG: false
             };

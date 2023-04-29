@@ -1,5 +1,4 @@
 const GoogleSheetsHelper = require('../../helpers/google-sheets.js');
-const gHelper = require('../../helpers/general.js');
 const Maps = require('../../helpers/maps')
 
 const COLS = {

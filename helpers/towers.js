@@ -115,7 +115,11 @@ function isTowerUpgrade(candidate, allowCrosspath = false) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     if (!/[a-z]+#\d{3}/.test(candidate.toLowerCase())) return false;
 
-    let [tower, upgradeSet] = Aliases.canonicizeArg(candidate).split('#');
+    let [tower, upgradeSet, anotherUpgradeSet] = Aliases.canonicizeArg(candidate).split('#');
+
+    // If candidate is sotf#100, canonicize arg will return druid#050#100 which doesn't make sense.
+    // We catch this by ensuring that we only have tower#upgradeSet.
+    if (anotherUpgradeSet) return false;
 
     return isTower(tower) && isValidUpgradeSet(upgradeSet, allowCrosspath);
 }

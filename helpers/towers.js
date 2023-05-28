@@ -26,7 +26,7 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     spike_factory: 'https://pastebin.com/raw/tTHZWiSi',
     monkey_village: 'https://pastebin.com/raw/e2QHaQSD',
     engineer: 'https://pastebin.com/raw/rTHT0L21',
-    beast_handler: 'https://pastebin.com/raw/cCP3ug4K'
+    beast_handler: 'https://pastebin.com/raw/B3VF2rRq'
 };
 const TOWER_NAME_TO_BLOONOLOGY_LINK_B2 = {
     dart_monkey: 'https://pastebin.com/raw/E4sjy0RY',
@@ -115,7 +115,11 @@ function isTowerUpgrade(candidate, allowCrosspath = false) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     if (!/[a-z]+#\d{3}/.test(candidate.toLowerCase())) return false;
 
-    let [tower, upgradeSet] = Aliases.canonicizeArg(candidate).split('#');
+    let [tower, upgradeSet, anotherUpgradeSet] = Aliases.canonicizeArg(candidate).split('#');
+
+    // If candidate is sotf#100, canonicize arg will return druid#050#100 which doesn't make sense.
+    // We catch this by ensuring that we only have tower#upgradeSet.
+    if (anotherUpgradeSet) return false;
 
     return isTower(tower) && isValidUpgradeSet(upgradeSet, allowCrosspath);
 }

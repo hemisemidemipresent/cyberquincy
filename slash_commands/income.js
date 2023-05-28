@@ -97,7 +97,7 @@ function incomeEmbed(mode, start, end) {
     let income = roundset[end].cumulativeCash - roundset[start - 1].cumulativeCash;
     income *= multiplier;
     return new Discord.EmbedBuilder()
-        .setTitle(`You will earn $${gHelper.round(income)} earned in ${modeName} from r${start}-r${end}`)
+        .setTitle(`You will earn $${gHelper.round(income)} in ${modeName} from r${start}-r${end}`)
         .setDescription(table)
         .setColor(magenta);
 }

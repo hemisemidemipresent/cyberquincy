@@ -87,14 +87,20 @@ function parseMapNotes(notes) {
             .trim()
             .split('\n')
             .map((n) => {
-                let altmap, altperson, altbitly;
-                [altmap, altperson, altbitly] = n.split(/[,:]/).map((t) => t.replace(/ /g, ''));
+                let altmap, altperson, link;
+                [altmap, altperson, link] = n.split(/,|(?::(?!\/))/).map((t) => t.replace(/ /g, ''));
+
+                if (link.includes('bit.ly')) {
+                    link = `[${link}](http://${link})`
+                } else if (link.includes('drive.google.com')) {
+                    link = `[Drive Image](${link})`
+                } // Otherwise keep the link the same
 
                 return [
                     altmap,
                     {
                         PERSON: altperson,
-                        LINK: `[${altbitly}](http://${altbitly})`
+                        LINK: link,
                     }
                 ];
             })

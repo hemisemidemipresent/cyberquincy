@@ -409,7 +409,7 @@ function lex(input, operator, value, difficulty) {
     lexer.addRule(/\s+/, () => {});
 
     // symbols
-    lexer.addRule(/[a-zA-Z#0-5\.]+/, (lexme) => lexme);
+    lexer.addRule(/[a-zA-Z#0-9\.]+/, (lexme) => lexme);
     // punctuation and operators
     lexer.addRule(/[\(\+\*\)]/, (lexme) => lexme);
 
@@ -440,15 +440,15 @@ function lex(input, operator, value, difficulty) {
         // Catches bad character inputs
         c = e.message.match(/Unexpected character at index \d+: (.)/)?.[1];
         if (c) {
-            footer = '';
-            if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
-            return new Discord.EmbedBuilder()
+            let embed = new Discord.EmbedBuilder()
                 .setTitle(`Unexpected character "${c}"`)
                 .setDescription(
                     `"${c}" is not a valid character in the expression. Use \`/paragon degree expr: help pops: 0\` for help.`
                 )
-                .setColor(red)
-                .setFooter({ text: footer });
+                .setColor(red);
+            if (c === '<')
+                embed.setFooter({ text: "Did you try to tag another discord user? That's definitely not allowed here." });
+            return embed;
         } else if (e instanceof LexicalParseError) {
             return new Discord.EmbedBuilder().setTitle(e.message).setDescription(`\`${input}\``).setColor(red);
         } else console.log(e);
@@ -474,10 +474,7 @@ function lex(input, operator, value, difficulty) {
     } catch (e) {
         if (e instanceof UnrecognizedTokenError)
             // Catches nonsensical tokens
-            return new Discord.EmbedBuilder()
-                .setTitle(e.message)
-                .setColor(red)
-                .setFooter({ text: 'due to manipulation, your full input will not be shown' });
+            return new Discord.EmbedBuilder().setTitle(e.message).setColor(red);
         else console.log(e);
     }
 

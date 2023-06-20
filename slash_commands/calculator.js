@@ -12,7 +12,7 @@ const RoundParser = require('../parser/round-parser');
 const { red } = require('../jsons/colors.json');
 
 const heroes = require('../jsons/heroes.json');
-const gerrysShop = require('../jsons/geraldos_shop.json')
+const gerrysShop = require('../jsons/geraldos_shop.json');
 
 const exprOption = new SlashCommandStringOption()
     .setName('expr')
@@ -53,15 +53,15 @@ async function calc(interaction) {
 
     // Set up operators and operator precedence to interpret the parsed tree
     var power = {
-        precedence: 3,
+        precedence: 3
     };
 
     var factor = {
-        precedence: 2,
+        precedence: 2
     };
 
     var term = {
-        precedence: 1,
+        precedence: 1
     };
 
     var parser = new LexicalParser({
@@ -99,7 +99,10 @@ async function calc(interaction) {
                 },
                 { name: '`wiz#420`, `super#000`', value: 'TOTAL COST of tower#upgradeSet' },
                 { name: '`adora`, `brick`', value: 'Base cost of hero (no leveling cost calculations included)' },
-                { name: 'Operators', value: '`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power), `\'` (discount operator)' },
+                {
+                    name: 'Operators',
+                    value: "`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power), `'` (discount operator)"
+                },
                 {
                     name: 'Examples',
                     value: `\`/calc expr:r99 - wiz#025 - super#052\` (2tc test)
@@ -128,7 +131,9 @@ async function calc(interaction) {
                 embeds: [
                     new Discord.EmbedBuilder()
                         .setTitle(`Unexpected character "${c}"`)
-                        .setDescription(`"${c}" is not a valid character in the \`/calc\` expression.`)
+                        .setDescription(
+                            `"\`${c}\`" is not a valid character in the \`/calc\` expression.\nUse \`/calc expr: help\` to see the help page`
+                        )
                         .setColor(red)
                         .setFooter(footer ? { text: footer } : null)
                 ],
@@ -139,11 +144,11 @@ async function calc(interaction) {
                 embeds: [
                     new Discord.EmbedBuilder()
                         .setTitle(e.message)
-                        .setDescription(`\`${expression}\``)
+                        .setDescription(`\`${expression}\`\nUse \`/calc expr: help\` to see the help page`)
                         .setColor(red)
                 ]
-            })
-        } else throw e
+            });
+        } else throw e;
     }
 
     var stack = [];
@@ -194,20 +199,11 @@ async function calc(interaction) {
         if (e instanceof UnrecognizedTokenError) {
             // Catches nonsensical tokens
             return await interaction.reply({
-                embeds: [
-                    new Discord.EmbedBuilder()
-                        .setTitle(e.message)
-                        .setColor(red)
-                        .setFooter({ text: 'due to manipulation, your full input will not be shown' })
-                ]
+                embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red)]
             });
         } else if (e instanceof bHelper.DiscountError) {
             return await interaction.reply({
-                embeds: [
-                    new Discord.EmbedBuilder()
-                        .setTitle(e.message)
-                        .setColor(red)
-                ]
+                embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red)]
             });
         } else console.log(e);
     }
@@ -220,7 +216,7 @@ async function calc(interaction) {
             embeds: [
                 new Discord.EmbedBuilder()
                     .setTitle('Error processing expression. Did you add an extra operator?')
-                    .setDescription(`\`${expression}\``)
+                    .setDescription(`\`${expression}\`\nUse \`/calc expr: help\` to see the help page`)
                     .setColor(red)
             ]
         });
@@ -229,7 +225,7 @@ async function calc(interaction) {
             embeds: [
                 new Discord.EmbedBuilder()
                     .setTitle('Error processing expression. Did you leave out an operator?')
-                    .setDescription(`\`${expression}\``)
+                    .setDescription(`\`${expression}\`\nUse \`/calc expr: help\` to see the help page`)
                     .setColor(red)
             ]
         });
@@ -250,20 +246,20 @@ async function calc(interaction) {
 function costOfHero(hero, difficulty, numDiscounts) {
     const mediumCost = heroes[hero].cost;
     if (!mediumCost) throw `${hero} does not have entry in heroes.json`;
-    return bHelper.difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts)
+    return bHelper.difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts);
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, i, difficulty) {
-    const undiscountedToken = t.replace(/'*$/, '')
-    const numDiscounts = t.match(/'*$/)?.[0]?.length
-    const tokenCanonical = Aliases.canonicizeArg(undiscountedToken)
+    const undiscountedToken = t.replace(/'*$/, '');
+    const numDiscounts = t.match(/'*$/)?.[0]?.length;
+    const tokenCanonical = Aliases.canonicizeArg(undiscountedToken);
 
     if (!isNaN(undiscountedToken)) return Number(undiscountedToken);
     else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (Heroes.isGerrysShopItem(tokenCanonical)) {
-        return gerrysShop[tokenCanonical]
+        return gerrysShop[tokenCanonical];
     } else if (Towers.isTowerUpgrade(undiscountedToken, true)) {
         let [tower, upgradeSet] = tokenCanonical.split('#');
         // Catches tower upgrades with crosspaths like wiz#401
@@ -281,15 +277,7 @@ function parseAndValueToken(t, i, difficulty) {
     } else if (Heroes.isHero(tokenCanonical)) {
         return costOfHero(tokenCanonical, difficulty, numDiscounts);
     } else {
-        s = '';
-        if (t.length == 1) {
-            s = t;
-        } else if (t.length == 2) {
-            s = t.charAt(0) + t.charAt(1);
-        } else {
-            s = t.charAt(0) + t.charAt(1) + '...';
-        }
-        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${s}" of length ${t.length}`);
+        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${s}"`);
     }
 }
 

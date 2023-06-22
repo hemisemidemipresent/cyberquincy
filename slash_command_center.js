@@ -11,7 +11,11 @@ function configureCommands(client) {
     for (const command of commandFiles()) {
         // Set a new item in the commands Collection
         // With the key as the command name and the value as the exported module
-        client.commands.set(command.data.name, command);
+        try {
+            client.commands.set(command.data.name, command);
+        } catch (e) {
+            console.log('Error setting slash command: you probably have an invalid .js file in ./slash_commands/');
+        }
     }
 }
 
@@ -67,28 +71,26 @@ function extendStructure(_class) {
 
     const deferReply = prototype.deferReply;
     prototype.deferReply = async function (options = {}) {
-        options.ephemeral = this.options.getBoolean('hide') || Boolean(options.ephemeral);
+        options.ephemeral = this.options.getBoolean('hide') ?? Boolean(options.ephemeral);
 
         return deferReply.call(this, options);
     };
 
     const reply = prototype.reply;
     prototype.reply = async function (options) {
-        const ephemeral = this.options.getBoolean('hide') || Boolean(options.ephemeral);
+        const ephemeral = this.options.getBoolean('hide') ?? Boolean(options.ephemeral);
         options = {
             ...(typeof options === 'object' ? options : { content: options }),
-            ephemeral,
+            ephemeral
         };
 
-        const message = await (this.deferred || this.replied
-            ? this.followUp(options)
-            : reply.call(this, options));
+        const message = await (this.deferred || this.replied ? this.followUp(options) : reply.call(this, options));
 
         this.replied = true;
 
         return message;
     };
-};
+}
 
 module.exports = {
     commandFiles,

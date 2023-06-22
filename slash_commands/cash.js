@@ -59,11 +59,13 @@ async function execute(interaction) {
 
     await interaction.reply({ embeds: [embed] });
 }
+
 function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
+    // "r" is the roundset array
     let cashSoFar = 0;
     let originalRound = round;
 
-    while (cashSoFar <= cashNeeded) {
+    while (Math.round(cashSoFar) < cashNeeded) {
         addToTotal = parseInt(r[round].cashThisRound);
         cashSoFar += addToTotal * incomeMultiplier;
         addToTotal = 0;
@@ -72,16 +74,36 @@ function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
         if (round > roundLimit)
             return new Discord.EmbedBuilder()
                 .setTitle(
-                    `If you start popping at ${originalRound}, you can't get $${cashNeeded} from popping bloons before random freeplay`
+                    `If you start popping at ${originalRound}, you can't get ${gHelper.numberAsCost(
+                        cashNeeded
+                    )} from popping bloons before random freeplay`
                 )
                 .setFooter({ text: 'freeplay rounds are random, hence cash is random' })
                 .setColor(orange);
     }
+    round--;
+    // list them in a table
+    let start = originalRound;
+    let end = round;
+    let table = '```\nstart | $0\n';
+    let ellipsisUsed = false;
+    for (let i = start; i <= end; i++) {
+        if (i - start > 2 && end - i > 2) {
+            if (!ellipsisUsed) table += '⋮\n';
+            ellipsisUsed = true;
+            continue;
+        }
+        let cumCash = r[i].cumulativeCash - r[start - 1].cumulativeCash;
+        cumCash *= incomeMultiplier;
+        table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}\n`;
+    }
+    table += '```';
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(
-            `If you start popping (saving up) at round ${originalRound}, you should get $${cashNeeded} DURING round ${--round} (BEFORE round ${++round}).`
+            `If you start popping (saving up) at round ${originalRound}, you should get $${cashNeeded} during round ${round}`
         )
+        .setDescription(table)
         .setColor(cyber);
     return embed;
 }

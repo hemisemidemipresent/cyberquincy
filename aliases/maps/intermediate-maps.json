@@ -83,6 +83,16 @@
         "quiet"
     ],
     "quarry": [
-        "qu"
+        "qy"
+    ],
+    "covered_garden": [
+        "ga",
+        "covered",
+        "garden",
+        "cgar"
+    ],
+    "polyphemus": [
+        "py",
+        "poly"
     ]
 }

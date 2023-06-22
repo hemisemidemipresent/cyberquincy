@@ -9,10 +9,7 @@ const {
 
 const axios = require('axios');
 
-const costs = require('../jsons/costs.json');
 const Towers = require('../helpers/towers.js');
-
-const bHelper = require('../helpers/bloons-general');
 
 const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colors.json');
@@ -21,8 +18,8 @@ const towerOption = new SlashCommandStringOption()
     .setName('tower')
     .setDescription('The tower you are finding information for')
     .setRequired(true);
-Object.keys(Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
-    towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower, '-'), value: tower });
+Object.keys(Towers.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
+    towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
 });
 
 const builder = new SlashCommandBuilder()
@@ -31,7 +28,8 @@ const builder = new SlashCommandBuilder()
     .addStringOption(towerOption)
     .addStringOption((option) =>
         option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
-    );
+    )
+    .addBooleanOption((option) => option.setName('battles2').setDescription('Is this for battles 2?').setRequired(false));
 
 function validateInput(interaction) {
     const towerPath = parseTowerPath(interaction);
@@ -47,8 +45,8 @@ function parseTowerPath(interaction) {
 }
 
 // the function that creates the embed for bloonology that will get sent
-async function embedBloonology(towerName, upgrade) {
-    let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+async function embedBloonology(towerName, upgrade, isB2) {
+    let link = Towers.towerNameToBloonologyLink(towerName, isB2);
     let res;
     try {
         res = await axios.get(link);
@@ -57,7 +55,6 @@ async function embedBloonology(towerName, upgrade) {
     }
     let body = res.data;
 
-    const tower = costs[towerName];
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
     const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
@@ -67,7 +64,7 @@ async function embedBloonology(towerName, upgrade) {
     );
 
     const formattedUpgrade = upgrade.split('').join('-');
-    const formattedTowerName = Aliases.toIndexNormalForm(towerName, '-');
+    const formattedTowerName = Aliases.toIndexNormalForm(towerName);
 
     let title;
     if (tier == 0) {
@@ -76,12 +73,27 @@ async function embedBloonology(towerName, upgrade) {
         const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
+    if (isB2) title += ' (battles2)';
 
-    const easyTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'easy');
-    const totalCost = Towers.totalTowerUpgradeCrosspathCost(costs, towerName, upgrade);
-    const hardTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'hard');
-    const impopTotalCost = Towers.totalTowerUpgradeCrosspathCostMult(costs, towerName, upgrade, 'impoppable');
-    const cost = upgrade == '000' ? totalCost : tower.upgrades[`${path}`][tier - 1];
+    let cost = '';
+    let totalCost = '';
+    if (!isB2) {
+        const easyCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'easy');
+        const mediumCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'medium');
+        const hardCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'hard');
+        const impopCost = Towers.costOfTowerUpgrade(towerName, upgrade, 'impoppable');
+        cost = `${easyCost} - easy\n${mediumCost} - medium\n${hardCost} - hard\n${impopCost} - impoppable\n`;
+
+        const easyTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'easy');
+        const mediumTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium');
+        const hardTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'hard');
+        const impopTotalCost = Towers.costOfTowerUpgradeSet(towerName, upgrade, 'impoppable');
+        totalCost = `${easyTotalCost} - easy\n${mediumTotalCost} - medium\n${hardTotalCost} - hard\n${impopTotalCost} - impoppable\n`;
+    }
+    if (isB2) {
+        cost = `${Towers.costOfTowerUpgrade(towerName, upgrade, 'medium', undefined, isB2)} - battles2\n`;
+        totalCost = `${Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium', undefined, isB2)} - battles2\n`;
+    }
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)
@@ -89,21 +101,12 @@ async function embedBloonology(towerName, upgrade) {
         .addFields([
             {
                 name: 'cost',
-                value:
-                    `${bHelper.difficultyPriceMult(cost, 'easy')} - easy\n` +
-                    `${cost} - medium\n` +
-                    `${bHelper.difficultyPriceMult(cost, 'hard')} - hard\n` +
-                    `${bHelper.difficultyPriceMult(cost, 'impoppable')} - impoppable\n` +
-                    `if this is wrong [yell at hemi here](${discord})`,
+                value: cost,
                 inline: true
             },
             {
                 name: 'total cost',
-                value:
-                    `${easyTotalCost} - easy\n` +
-                    `${totalCost} - medium\n` +
-                    `${hardTotalCost} - hard\n` +
-                    `${impopTotalCost} - impoppable\n`,
+                value: totalCost,
                 inline: true
             },
             { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
@@ -113,8 +116,8 @@ async function embedBloonology(towerName, upgrade) {
     return embed;
 }
 
-async function embedBloonologySummary(towerName) {
-    let link = Towers.JSON_TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+async function embedBloonologySummary(towerName, isB2) {
+    let link = Towers.towerNameToBloonologyLink(towerName, isB2);
     let res;
     try {
         res = await axios.get(link);
@@ -166,7 +169,7 @@ async function embedBloonologySummary(towerName) {
         descriptions.find((description) => description.substr(0, 3) == '000').substr(3)
     );
 
-    const title = Aliases.toIndexNormalForm(towerName, '-') + ' Summary';
+    const title = Aliases.toIndexNormalForm(towerName) + ' Summary';
 
     const embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
 
@@ -196,8 +199,9 @@ async function execute(interaction) {
 
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);
+    const isB2 = interaction.options.getBoolean('battles2') || false;
 
-    let embed = await embedBloonology(tower, towerPath);
+    let embed = await embedBloonology(tower, towerPath, isB2);
 
     const summaryBtn = new ButtonBuilder()
         .setCustomId('summary')
@@ -226,7 +230,7 @@ async function execute(interaction) {
         buttonInteraction.deferUpdate();
 
         if (buttonInteraction.customId === 'summary') {
-            let summaryEmbed = await embedBloonologySummary(tower);
+            let summaryEmbed = await embedBloonologySummary(tower, isB2);
             await interaction.editReply({
                 embeds: [summaryEmbed],
                 components: [],

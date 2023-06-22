@@ -54,11 +54,6 @@ function freeplay(round, isAbr) {
                 inline: true
             },
             {
-                name: 'Total XP if You Started on R1',
-                value: `${gHelper.numberWithCommas(totalxp * 0.1)} (note this takes into the account freeplay xp reduction)`,
-                inline: true
-            },
-            {
                 name: '**Note:**',
                 value: ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
             }
@@ -159,10 +154,11 @@ async function execute(interaction) {
                 name: '**Note:**',
                 value:
                     ' • If you are in freeplay (e.g. round 41 on easy mode), the xp value is 0.3 of what is displayed\n' +
+                    ' • And in freeplay past r100 you earn xp at 0.1x\n' +
                     ' • Map difficulty xp multipliers are {beginner: 1, intermediate 1.1, advanced 1.2, expert 1.3}'
             }
         ])
-        .setFooter({ text: `For more data on round incomes use \`q!income${isAbr ? ' abr' : ''} <round>\`` })
+        .setFooter({ text: `For more data on round incomes use \`/income${isAbr ? ' abr' : ''} <round>\`` })
         .setColor(colours['cyber']);
     if (round > 80) {
         let hRamping = enemyHelper.getHealthRamping(round);

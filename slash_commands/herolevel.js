@@ -6,11 +6,12 @@ const {
 } = require('discord.js');
 
 const gHelper = require('../helpers/general.js');
-const Heroes = require('../helpers/heroes');
+const Maps = require('../helpers/maps')
+const Heroes = require('../helpers/heroes')
 
 const heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
-Aliases.allHeroes().forEach((hero) => {
-    heroOption.addChoices({ name: gHelper.toTitleCase(hero), value: hero });
+Heroes.allHeroes().forEach((hero) => {
+    heroOption.addChoices({ name: Aliases.toIndexNormalForm(hero), value: hero });
 });
 
 const heroLevelOption = new SlashCommandIntegerOption()
@@ -22,18 +23,13 @@ const mapDifficultyOption = new SlashCommandStringOption()
     .setName('map_difficulty')
     .setDescription('Map Difficulty')
     .setRequired(true);
-Aliases.allMapDifficulties().forEach((difficulty) => {
+Maps.allMapDifficulties().forEach((difficulty) => {
     mapDifficultyOption.addChoices({ name: gHelper.toTitleCase(difficulty), value: difficulty });
 });
 
 const energizerRoundOption = new SlashCommandIntegerOption()
     .setName('energizer_placement_round')
     .setDescription('Optional Round Energizer was Placed')
-    .setRequired(false);
-
-const ephemeralOption = new SlashCommandBooleanOption()
-    .setName('ephemeral')
-    .setDescription('Whether you want this to be viewed only by you or by everyone')
     .setRequired(false);
 
 builder = new SlashCommandBuilder()
@@ -43,7 +39,6 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(heroLevelOption)
     .addStringOption(mapDifficultyOption)
     .addIntegerOption(energizerRoundOption);
-//    .addBooleanOption(ephemeralOption);
 
 function generateHeroLevels(interaction) {
     hero = interaction.options.getString('hero');

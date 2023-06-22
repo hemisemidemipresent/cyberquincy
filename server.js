@@ -31,6 +31,7 @@ function pingHeroku() {
 function globalRequirements() {
     global.colours = require('./jsons/colors.json');
     global.Towers = require('./helpers/towers.js');
+    global.Heroes = require('./helpers/heroes.js');
     global.AliasRepository = require('./alias-repository.js');
 
     global.Discord = require('discord.js');
@@ -131,8 +132,12 @@ function setupSlashCommandCenter() {
 function generateCommandListeners(slashCommandCenter) {
     global.Guilds = require('./helpers/guilds.js');
 
-    client.on('guildCreate', (guild) => {
-        return Guilds.enterGuild(guild);
+    client.on('guildCreate', async (guild) => {
+        try {
+            return await Guilds.enterGuild(guild);
+        } catch (e) {
+            return; // probably Missing Permissions
+        }
     });
 
     // q! commands - no longer exist as of August 2022 due to Discord making bots changes to slash commands
@@ -148,7 +153,7 @@ function generateCommandListeners(slashCommandCenter) {
         if (interaction.isButton()) slashCommandCenter.handleButton(interaction);
         if (interaction.type === InteractionType.ApplicationCommandAutocomplete)
             slashCommandCenter.handleAutocomplete(interaction);
-        if (interaction.isSelectMenu()) slashCommandCenter.handleSelectMenu(interaction);
+        if (interaction.isStringSelectMenu()) slashCommandCenter.handleSelectMenu(interaction);
     });
 }
 

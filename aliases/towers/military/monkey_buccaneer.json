@@ -9,7 +9,7 @@
 
     "010": ["grape_shot", "grapes", "grapes"],
     "020": ["hot_shot"],
-    "030": ["cannon_ship","cannon"],
+    "030": ["cannon_ship","cship", "can_ship", "chip"],
     "040": ["monkey_pirates","mirates","mpir","hook"],
     "050": ["pirate_lord","plord","pl"],
 

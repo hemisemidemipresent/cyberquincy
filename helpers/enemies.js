@@ -63,18 +63,6 @@ const BASE_LAYER_RBES = {
     [BAD]: 20000
 };
 
-const ROUNDING_ERRORS = {
-    83: [MOAB, BFB, DDT],
-    89: [MOAB, BFB, DDT],
-    95: [BFB],
-    96: [BFB, ZOMG],
-    104: MOABS,
-    111: [BAD],
-    114: [MOAB, BFB, DDT],
-    119: [MOAB, BFB, DDT],
-    124: [BFB]
-};
-
 class Enemy {
     constructor(name, round = 80, fortified = false, camo = false, regrow = false) {
         if (!ENEMIES.includes(name)) {
@@ -126,14 +114,15 @@ class Enemy {
     }
 
     /**
-     * @returns The `round_contents.json`-formatted string for the bloon's appearances
+     * @returns Regex pattern that matches `round_contents.json`-formatted strings
+     * This means a camo ceramic will also match with regrow camo ceramic, and any further fortified ones, but will not match with a normal ceramic
      */
-    roundAppearanceDescription() {
-        const camo = this.camo && this.name != DDT ? 'Camo ' : '';
-        const regrow = this.regrow && this.name != DDT ? 'Regrowth ' : '';
-        const fortified = this.fortified ? 'Fortified ' : '';
-        const name = this.formatName(this.isMOAB()) + ' ';
-        return `${fortified}${name}${camo}${regrow}`.trim();
+    roundAppearanceDescriptionPattern() {
+        const camo = this.camo && this.name != DDT ? ' Camo' : '(?<camo> Camo)?';
+        const regrow = this.regrow && this.name != DDT ? ' Regrowth' : '(?<regrowth> Regrowth)?';
+        const fortified = this.fortified ? 'Fortified ' : '(?<fortified>Fortified )?';
+        const name = this.formatName(this.isMOAB());
+        return new RegExp(`(?<number>\\d+) ${fortified}${name}${camo}${regrow}(?:,|$)`, 'g');
     }
 
     isFreeplay() {
@@ -172,17 +161,27 @@ class Enemy {
         }
 
         const roundAppearances = {};
-        // It's looking for a number followed by the bloon descriptor followed by either a comma or end of string
-        // The match call below captures the number and is returned in the [1] slot in the array
-        const pattern = new RegExp(`(\\d+) ${this.roundAppearanceDescription()}(?:,|$)`);
+
+        const pattern = this.roundAppearanceDescriptionPattern();
 
         for (const r in roundContents) {
             if (!r.startsWith(mode)) continue;
 
-            const numAppearances = parseInt(roundContents[r].match(pattern)?.[1] || '0');
+            const appearances = roundContents[r].matchAll(pattern);
 
-            if (numAppearances > 0) {
-                roundAppearances[r.replace(mode, 'r')] = parseInt(numAppearances);
+            let appearancesStrs = [];
+            for (const appearance of appearances) {
+                let number = appearance.groups.number
+                let fortified = appearance.groups.fortified ? 'f' : ''
+                let camo = appearance.groups.camo ? 'c' : ''
+                let regrowth = appearance.groups.regrowth ? 'r' : ''
+                appearancesStrs.push(
+                    `${number}${fortified}${camo}${regrowth}`
+                )
+            }
+
+            if (appearancesStrs.length > 0) {
+                roundAppearances[r.replace(mode, 'r')] = appearancesStrs.join('+');
             }
         }
 
@@ -371,16 +370,6 @@ class Enemy {
 
         if (this.name == DDT) {
             notes.push('DDTs have the camgrow property by default (meaning they release camgrow ceramics)');
-        }
-
-        const buggedLayers = ROUNDING_ERRORS[this.round];
-        if (buggedLayers) {
-            notes.push(
-                `On r${this.round}, the following blimp layers are bugged to have 1 less hp than they should: {${buggedLayers
-                    .map((l) => formatName(l, true))
-                    .join(', ')}} ` +
-                    "The above health calculations don't take this bug into account so you'll have to do the subtraction yourself."
-            );
         }
 
         if (this.name == BAD && this.round < 100) {

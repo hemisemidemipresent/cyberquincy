@@ -52,51 +52,54 @@ function validateInput(interaction) {
     return null;
 }
 
-function incomeEmbed(mode, startround, endround) {
+function incomeEmbed(mode, start, end) {
+    let roundset = r;
+    let multiplier = 1;
+    let modeName = 'CHIMPS';
     switch (mode) {
         case 'halfcash':
-            return halfIncome(startround, endround);
-        case 'chimps':
-            return normalIncome(startround, endround);
+            multiplier = 0.5;
+            modeName = 'Half Cash CHIMPS';
+            break;
         case 'abr':
-            return abrIncome(startround, endround);
+            roundset = abr;
+            modeName = 'ABR CHIMPS';
+            break;
+        case 'chimps':
+            break;
     }
-}
 
-function normalIncome(startround, endround) {
-    let startroundObject = r[startround - 1]; // thats just how it works
-    let endroundObject = r[endround];
-    let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
-    return new Discord.EmbedBuilder()
-        .setTitle(`$${Math.trunc(income * 100) / 100} earned in CHIMPS from rounds ${startround} to ${endround} inclusive`)
-        .setColor(magenta)
-        .setFooter({ text: 'not including starting cash' });
-}
+    // single-round data
+    if (start === end) {
+        let cashThisRound = roundset[start].cashThisRound * multiplier;
+        return new Discord.EmbedBuilder()
+            .setTitle(`You earn $${gHelper.round(cashThisRound)} in ${modeName} on round ${start}`)
+            .setColor(magenta);
+    }
+    // multiple-round data
 
-function halfIncome(startround, endround) {
-    let startroundObject = r[startround - 1]; // thats just how it works
-    let endroundObject = r[endround];
-    let income = (endroundObject.cumulativeCash - startroundObject.cumulativeCash) / 2;
-    return new Discord.EmbedBuilder()
-        .setTitle(
-            `$${
-                Math.trunc(income * 100) / 100
-            } earned in Half Cash CHIMPS from rounds ${startround} to ${endround} inclusive`
-        )
-        .setColor(red)
-        .setFooter({ text: 'not including starting cash' });
-}
+    // list them all out in a table
+    let table = '```\nstart | $0\n';
+    let ellipsisUsed = false;
+    for (let i = start; i <= end; i++) {
+        if (i - start > 2 && end - i > 2) {
+            if (!ellipsisUsed) table += '⋮\n';
+            ellipsisUsed = true;
+            continue;
+        }
+        let cumCash = roundset[i].cumulativeCash - roundset[start - 1].cumulativeCash;
+        cumCash *= multiplier;
+        table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}\n`;
+    }
+    table += '```';
 
-function abrIncome(startround, endround) {
-    let startroundObject = abr[startround - 1];
-    let endroundObject = abr[endround];
-    let income = endroundObject.cumulativeCash - startroundObject.cumulativeCash;
+    // form embed
+    let income = roundset[end].cumulativeCash - roundset[start - 1].cumulativeCash;
+    income *= multiplier;
     return new Discord.EmbedBuilder()
-        .setTitle(
-            `$${Math.trunc(income * 100) / 100} earned in ABR CHIMPS from rounds ${startround} to ${endround} inclusive`
-        )
-        .setColor(yellow)
-        .setFooter({ text: 'not including starting cash' });
+        .setTitle(`You will earn $${gHelper.round(income)} in ${modeName} from r${start}-r${end}`)
+        .setDescription(table)
+        .setColor(magenta);
 }
 
 function chincomeEmbed(mode, round) {

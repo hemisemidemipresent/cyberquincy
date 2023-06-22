@@ -17,8 +17,6 @@ const VersionParser = require('../parser/version-parser');
 
 const Parsed = require('../parser/parsed');
 
-const Towers = require('../helpers/towers');
-
 const entityOption = new SlashCommandStringOption()
     .setName('entity')
     .setDescription('Tower/Path/Upgrade/Hero')
@@ -197,7 +195,7 @@ async function execute(interaction) {
         addedVersion = balances[soleEntity]?.versionAdded;
     }
 
-    displayPages(interaction, pages, addedVersion, parsed);
+    await displayPages(interaction, pages, addedVersion, parsed);
 }
 
 function paginateBalances(balances, parsed) {
@@ -274,7 +272,7 @@ const multipageButtons = [
     new ButtonBuilder().setCustomId('last').setLabel('⏩').setStyle(ButtonStyle.Primary)
 ];
 
-function displayPages(interaction, pages, versionAdded, parsed) {
+async function displayPages(interaction, pages, versionAdded, parsed) {
     pageIdx = 0;
     let embed;
 
@@ -366,7 +364,7 @@ function displayPages(interaction, pages, versionAdded, parsed) {
         });
     }
 
-    embedPage();
+    await embedPage();
 }
 
 function title(parsed, hasResults = true) {

@@ -1,5 +1,5 @@
 const GoogleSheetsHelper = require('../../helpers/google-sheets.js');
-const gHelper = require('../../helpers/general.js');
+const Maps = require('../../helpers/maps')
 
 const COLS = {
     NUMBER: 'B',
@@ -11,7 +11,6 @@ const COLS = {
     DATE: 'L',
     PERSON: 'M',
     LINK: 'O',
-    CURRENT: 'P',
 };
 
 function sheet2TC() {
@@ -24,7 +23,7 @@ async function scrapeAll2TCCombos() {
     const nCombos = await numCombos();
     const rOffset = await findOGRowOffset();
     await sheet.loadCells(
-        `${COLS.NUMBER}${rOffset + 1}:${COLS.CURRENT}${rOffset + nCombos}`
+        `${COLS.NUMBER}${rOffset + 1}:${COLS.LINK}${rOffset + nCombos}`
     );
 
     let combos = [];
@@ -67,11 +66,6 @@ function parsePreloadedRow(row) {
 
     // Recapture date to format properly
     values.DATE = sheet.getCellByA1(`${COLS.DATE}${row}`).formattedValue;
-
-    // Replace checkmark that doesn't display in embedded with one that does
-    if (values.CURRENT === gHelper.HEAVY_CHECK_MARK) {
-        values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
-    }
 
     values.VERSION = values.VERSION.toString();
 
@@ -117,9 +111,7 @@ function parseMapCompletions(row) {
         OG: true,
     }
 
-    const ogMapAbbr = Aliases.mapToIndexAbbreviation(
-        Aliases.toAliasNormalForm(ogCells.MAP.value)
-    );
+    const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogCells.MAP.value)
  
     // Circular Dependency
     const { parseMapNotes } = require('../../helpers/index')

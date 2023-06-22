@@ -8,18 +8,6 @@
     "user": [
         "u"
     ],
-    "discord": "https://discord.gg/AtCA2ZMNng",
-    "footer": "d:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • s:time btw attacks • data is from extreme bloonology, by The Line, Nitjus, Char, JazzyJonah and TheKNEE",
-    "bottom-path": [
-        "bottom",
-        "bot"
-    ],
-    "middle-path": [
-        "middle",
-        "mid",
-        "mid_path"
-    ],
-    "top-path": [
-        "top"
-    ]
+    "discord": "https://discord.gg/K5AaDZcdZC",
+    "footer": "d:dmg • md:moab dmg • cd:ceram dmg • p:pierce • r:range • j: no. of projectiles • s:time between attacks • data is from extreme bloonology, by MawTheVoid, Nitjus, JazzyJonah, Klej, TheOneAndOnlyGhast, and Pancakes"
 }

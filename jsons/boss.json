@@ -58,13 +58,13 @@
                 "tier": 4,
                 "hp": 8000000,
                 "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **25 camo regrow fortified ceramics**\nfor every 12.5% of HP lost spawns **2 fortified BADs and 20 fortified DDTs**"
+                "desc": "for every 1% of HP lost spawns **12 MOABs**\nfor every 12.5% of HP lost spawns **2 fortified BADs and 20 fortified DDTs**"
             },
             {
                 "tier": 5,
                 "hp": 40000000,
                 "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **8 MOABs**\nfor every 25% of HP lost spawns **4 fortified BAD**"
+                "desc": "for every 1% of HP lost spawns **8 DDTs**\nfor every 25% of HP lost spawns **4 fortified BAD**"
             }
         ],
         "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs\nR120|+8 fMOABs, +4 BFBs, +4 ZOMGs"
@@ -88,9 +88,9 @@
             },
             {
                 "tier": 3,
-                "hp": 245000,
+                "hp": 220000,
                 "speed": 0.10,
-                "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 7900\nLych-Soul Life Steal (per 4 seconds): 5"
+                "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 7000\nLych-Soul Life Steal (per 4 seconds): 5"
             },
             {
                 "tier": 4,
@@ -108,71 +108,71 @@
         "elite": [
             {
                 "tier": 1,
-                "hp": 14000,
+                "hp": 30000,
                 "speed": 0.1,
-                "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 1600\nLych-Soul Life Steal (per 4 seconds): 11"
+                "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 1,600\nLych-Soul Life Steal (per 4 seconds): 11"
             },
             {
                 "tier": 2,
-                "hp": 52500,
+                "hp": 180000,
                 "speed": 0.108,
-                "desc": "Reanimated Blimp Stats: **1.9x** speed and **8x** health\nLych-Soul Health: 5600\nLych-Soul Life Steal (per 4 seconds): 12"
+                "desc": "Reanimated Blimp Stats: **1.9x** speed and **8x** health\nLych-Soul Health: 5,600\nLych-Soul Life Steal (per 4 seconds): 12"
             },
             {
                 "tier": 3,
-                "hp": 245000,
+                "hp": 1100000,
                 "speed": 0.116,
-                "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 27000\nLych-Soul Life Steal (per 4 seconds): 15"
+                "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 25,000\nLych-Soul Life Steal (per 4 seconds): 15"
             },
             {
                 "tier": 4,
-                "hp": 525000,
+                "hp": 4800000,
                 "speed": 0.12,
-                "desc": "Reanimated Blimp Stats: **2.1x** speed and **10x** health\nLych-Soul Health: 100000\nLych-Soul Life Steal (per 4 seconds): 20"
+                "desc": "Reanimated Blimp Stats: **2.1x** speed and **10x** health\nLych-Soul Health: 100,000\nLych-Soul Life Steal (per 4 seconds): 20"
             },
             {
                 "tier": 5,
-                "hp": 2100000,
+                "hp": 24000000,
                 "speed": 0.124,
-                "desc": "Reanimated Blimp Stats: **2.2x** speed and **12x** health\nLych-Soul Health: 485000\nLych-Soul Life Steal (per 4 seconds): 27"
+                "desc": "Reanimated Blimp Stats: **2.2x** speed and **12x** health\nLych-Soul Health: 485,000\nLych-Soul Life Steal (per 4 seconds): 27"
             }
         ],
         "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 41|+1 MOAB\nR 42|+1 MOAB\nR 43|+1 fMOAB\nR 44|+2 spaced MOABs\nR 45|+1 fMOAB, +1 MOAB\nR 46|+1 MOAB, +1 fMOAB\nR 47|+2 spaced fMOABs\nR 48|+2 very spaced fMOABs\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 10 ZOMGs, 15 DDTs"
     },
     "Vortex": {
         "desc": "Vortex is the fastest Boss in the game so far, but that's not all it has up its sleeve. It has lots of abilities on its damage phases, detailed below.",
-        "normalDesc": "**Projectile Destruction**: Destruction occurs within **60r** at all tiers and happens immediately once Vortex reaches a damage phase AND every **5 seconds**\n\n**Projectile Reflection**: The reflection occurs within **80r** and lasts for **6 seconds** after each damage phase and on spawn. This reflects **every** projectile except for instant-hitters (i.e. Sniper, First Strike ability, etc)..\n\n**Tower Stun**: Affects towers within **60r** once a damage phase is reached at all tiers. Paragons are stunned for **half** as long. During the stun, all towers affected cannot be sold.\n\n**Knockback**: On each damage phase, Vortex is knocked back by **100 units** for all tiers.\n\n**Slipstream**: Affects all Bloons behind Vortex, causing them to move at **2.5x** speed at all tiers.",
-        "eliteDesc": "**Projectile Destruction**: Destruction occurs within **60r** at all tiers and happens immediately once Vortex reaches a damage phase AND every **5 seconds**\n\n**Projectile Reflection**: The reflection occurs within **80r** and lasts for **6 seconds** after each damage phase and on spawn. This reflects **every** projectile except for instant-hitters (i.e. Sniper, First Strike ability, etc)..\n\n**Tower Stun**: Affects towers within **60r** once a damage phase is reached at all tiers. Paragons are stunned for **half** as long. During the stun, all towers affected cannot be sold.\n\n**Knockback**: On each damage phase, Vortex is knocked back by **100 units** for all tiers.\n\n**Slipstream**: Affects all Bloons behind Vortex, causing them to move at **2.5x** speed at all tiers.",
+        "normalDesc": "**Projectile Destruction**: happens immediately once Vortex reaches a damage phase AND every **5 seconds**\n\n**Projectile Reflection**: The reflection occurs within **80r** and lasts for **6 seconds** after each damage phase and on spawn. This reflects **every** projectile except for instant-hitters (i.e. Sniper, First Strike ability, etc)..\n\n**Tower Stun**: Affects towers within **60r** once a damage phase is reached at all tiers. Paragons are stunned for **half** as long. During the stun, all towers affected cannot be sold.\n\n**Knockback**: On each damage phase, Vortex is knocked back by **100 units** for all tiers.\n\n**Slipstream**: Affects all Bloons behind Vortex, causing them to move at **2.5x** speed at all tiers.",
+        "eliteDesc": "**Projectile Destruction**: happens immediately once Vortex reaches a damage phase AND every **5 seconds**\n\n**Projectile Reflection**: The reflection occurs within **80r** and lasts for **6 seconds** after each damage phase and on spawn. This reflects **every** projectile except for instant-hitters (i.e. Sniper, First Strike ability, etc)..\n\n**Tower Stun**: Affects towers within **60r** once a damage phase is reached at all tiers. Paragons are stunned for **half** as long. During the stun, all towers affected cannot be sold.\n\n**Knockback**: On each damage phase, Vortex is knocked back by **100 units** for all tiers.\n\n**Slipstream**: Affects all Bloons behind Vortex, causing them to move at **2.5x** speed at all tiers.",
         "normal": [
             {
                 "tier": 1,
                 "hp": 20000,
                 "speed": 0.144,
-                "desc": "Stun duration: 16s (for paragons: 8s)"
+                "desc": "Stun duration: 16s (for paragons: 8s)\nStun radius: 60r"
             },
             {
                 "tier": 2,
                 "hp": 62800,
                 "speed": 0.144,
-                "desc": "Stun duration: 16s (for paragons: 8s)"
+                "desc": "Stun duration: 16s (for paragons: 8s)\nStun radius: 65r"
             },
             {
                 "tier": 3,
                 "hp": 294000,
                 "speed": 0.156,
-                "desc": "Stun duration: 20s (for paragons: 10s)"
+                "desc": "Stun duration: 20s (for paragons: 10s)\nStun radius: 70r"
             },
             {
                 "tier": 4,
                 "hp": 628000,
                 "speed": 0.162,
-                "desc": "Stun duration: 25s (for paragons: 12.5s)"
+                "desc": "Stun duration: 25s (for paragons: 12.5s)\nStun radius: 75r"
             },
             {
                 "tier": 5,
                 "hp": 2512000,
                 "speed": 0.168,
-                "desc": "Stun duration: 30s (for paragons: 15s)"
+                "desc": "Stun duration: 30s (for paragons: 15s)\nProjectile Destruction Stun radius: 80r"
             }
         ],
         "elite": [
@@ -180,31 +180,31 @@
                 "tier": 1,
                 "hp": 41800,
                 "speed": 0.15,
-                "desc": "Stun duration: 20s (for paragons: 10s)"
+                "desc": "Stun duration: 20s (for paragons: 10s)\nProjectile Destruction Stun radius: 60r"
             },
             {
                 "tier": 2,
                 "hp": 251000,
                 "speed": 0.162,
-                "desc": "Stun duration: 25s (for paragons: 12.5s)"
+                "desc": "Stun duration: 25s (for paragons: 12.5s)\nProjectile Destruction Stun radius: 65r"
             },
             {
                 "tier": 3,
                 "hp": 1675000,
                 "speed": 0.18,
-                "desc": "Stun duration: 30s (for paragons: 15s)"
+                "desc": "Stun duration: 30s (for paragons: 15s)\nProjectile Destruction Stun radius: 70r"
             },
             {
                 "tier": 4,
                 "hp": 6700000,
                 "speed": 0.186,
-                "desc": "Stun duration: 36s (for paragons: 18s)"
+                "desc": "Stun duration: 36s (for paragons: 18s)\nProjectile Destruction Stun radius: 75r"
             },
             {
                 "tier": 5,
                 "hp": 33500000,
                 "speed": 0.192,
-                "desc": "Stun duration: 40s (for paragons: 20s)"
+                "desc": "Stun duration: 40s (for paragons: 20s)\nProjectile Destruction Stun radius: 80r"
             }
         ],
         "customRounds": "R  5|+6 spaced yellows\nR 12|+1 layer to all Bloons\nR 24|Camo Green replaced by Camo Yellow, Blues replaced by Pinks\nR 30|+4 spaced yellows, +5 spaced pinks\nR 40|MOAB replaced by 6 ceramics\nR 41|+60 clumped pinks\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs"

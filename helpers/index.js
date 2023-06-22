@@ -7,7 +7,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require(
 const fs = require('fs');
 const resolve = require('path').resolve;
 const gHelper = require('../helpers/general');
-const discordHelper = require('../helpers/discord.js');
+const Maps = require('../helpers/maps')
 
 DIR1 = 'cache';
 DIR2 = 'index';
@@ -87,14 +87,20 @@ function parseMapNotes(notes) {
             .trim()
             .split('\n')
             .map((n) => {
-                let altmap, altperson, altbitly;
-                [altmap, altperson, altbitly] = n.split(/[,:]/).map((t) => t.replace(/ /g, ''));
+                let altmap, altperson, link;
+                [altmap, altperson, link] = n.split(/,|(?::(?!\/))/).map((t) => t.replace(/ /g, ''));
+
+                if (link.includes('bit.ly')) {
+                    link = `[${link}](http://${link})`
+                } else if (link.includes('drive.google.com')) {
+                    link = `[Drive Image](${link})`
+                } // Otherwise keep the link the same
 
                 return [
                     altmap,
                     {
                         PERSON: altperson,
-                        LINK: `[${altbitly}](http://${altbitly})`
+                        LINK: link,
                     }
                 ];
             })
@@ -105,26 +111,24 @@ function parseMapNotes(notes) {
 // Formatting
 //////////////////////////////////////////////////////
 
-function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
+function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, impossibleMaps) {
     const completedAltMaps = allCompletedMapAbbrs.filter((m) => m != ogMapAbbr);
 
     let mapDifficultyGroups = [
-        Aliases.beginnerMaps(),
-        Aliases.intermediateMaps(),
-        Aliases.advancedMaps(),
-        Aliases.expertMaps()
+        Maps.beginnerMaps(),
+        Maps.intermediateMaps(),
+        Maps.advancedMaps(),
+        Maps.expertMaps()
     ];
-    if (isWaterEntity) {
-        mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-            aliases.filter((map) => Aliases.allWaterMaps().includes(map))
-        );
-    }
     mapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
-        aliases.map((alias) => Aliases.mapToIndexAbbreviation(alias))
+        aliases.map((alias) => Maps.mapToIndexAbbreviation(alias))
+    );
+    const possibleMapDifficultyGroups = mapDifficultyGroups.map((aliases) =>
+        aliases.filter((map) => !impossibleMaps.includes(map))
     );
 
-    const altMapGroups = mapDifficultyGroups.map((mapGroup) => mapGroup.filter((map) => completedAltMaps.includes(map)));
-    const unCompletedAltMapGroups = mapDifficultyGroups.map((mapGroup) =>
+    const altMapGroups = possibleMapDifficultyGroups.map((mapGroup) => mapGroup.filter((map) => completedAltMaps.includes(map)));
+    const unCompletedAltMapGroups = possibleMapDifficultyGroups.map((mapGroup) =>
         mapGroup.filter((map) => !completedAltMaps.concat(ogMapAbbr).includes(map))
     );
 
@@ -132,13 +136,14 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
 
     const displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
         mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
-        waterTowerAsterisk = isWaterEntity ? '*' : '';
+        existsImpossibleMapInGroup = mapDifficultyGroups[i].some(m => impossibleMaps.includes(m))
+        possibleAsterisk = impossibleMaps.length > 0 && existsImpossibleMapInGroup ? '*' : '';
         if (unCompletedAltMapGroups[i] == 0) {
             wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk}`;
+            return `All ${mapDifficulty}${possibleAsterisk}`;
         } else if (unCompletedAltMapGroups[i].length < 5) {
             wordAllIncluded = true;
-            return `All ${mapDifficulty}${waterTowerAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
+            return `All ${mapDifficulty}${possibleAsterisk} - {${unCompletedAltMapGroups[i].join(', ')}}`;
         } else if (altMapGroups[i].length == 0) {
             return '';
         } else {
@@ -157,7 +162,7 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, isWaterEntity) {
         completedAltMapsString = 'None';
     }
 
-    completedAltMapsFooter = isWaterEntity && wordAllIncluded ? '*with water' : null;
+    completedAltMapsFooter = impossibleMaps.length > 0 && wordAllIncluded ? '*where placement is possible' : null;
 
     return {
         field: completedAltMapsString,
@@ -194,7 +199,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
             let challengeEmbed = new Discord.EmbedBuilder();
 
             challengeEmbed.addFields([
-                { name: '# Combos', value: `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}` }
+                { name: '# Results', value: `**${leftIndex + 1}**-**${rightIndex + 1}** of ${numRows}` }
             ]);
 
             let fields = [];
@@ -204,7 +209,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                 for (header in colData) {
                     const data = colData[header].slice(leftIndex, rightIndex + 1);
 
-                    colWidths.push(Math.max(...data.concat(header).map((row) => row.length)));
+                    colWidths.push(Math.max(...data.concat(header).map((row) => `${row}`.length)));
                 }
 
                 // HEADER
@@ -213,9 +218,12 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                     throw 'LINK column cannot appear anywhere but the last column for mobile formatting purposes';
                 }
                 let headerField = headers
-                    .map((header, colIndex) =>
-                        header == 'LINK' ? header.padEnd(15, ' ') : header.padEnd(colWidths[colIndex], ' ')
-                    )
+                    .map((header, colIndex) => {
+                        formattedHeader = gHelper.toTitleCase(header.split('_').join(' '))
+                        return formattedHeader == 'Link' ?
+                            formattedHeader.padEnd(15, ' ') :
+                            formattedHeader.padEnd(colWidths[colIndex], ' ')
+                    })
                     .join(' | ');
                 headerField = `\`${headerField}\``;
 
@@ -232,7 +240,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                             if (headers[colIndex] == 'LINK') {
                                 return `\`${cellData}`;
                             } else {
-                                text = cellData.padEnd(colWidths[colIndex], ' ');
+                                text = `${cellData}`.padEnd(colWidths[colIndex], ' ');
                                 if (colIndex == rowData.length - 1) text += '`';
                                 return text;
                             }
@@ -289,7 +297,7 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
         const collector = interaction.channel.createMessageComponentCollector({
             filter,
             componentType: ComponentType.Button,
-            time: 20000
+            time: 60000
         });
 
         collector.on('collect', async (buttonInteraction) => {

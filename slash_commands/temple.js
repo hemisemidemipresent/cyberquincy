@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { isValidTempleSet } = require('../helpers/towers');
 
 const t = require('../jsons/temple.json');
+const t2 = require('../jsons/temple2.json');
 const { yellow } = require('../jsons/colors.json');
 
 builder = new SlashCommandBuilder()

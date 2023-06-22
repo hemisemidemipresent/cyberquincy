@@ -4,7 +4,7 @@
         "damage": 20,
         "cd": 30,
         "bd": 80,
-        "rate": 0.3
+        "rate": 0.35
     },
     "boomerang_monkey": {
         "main": {
@@ -73,6 +73,9 @@
         }
     },
     "monkey_buccaneer": {
+        "ability": {
+            "cooldown": 30
+        },
         "plasmaDarts": {
             "damage": 25,
             "md": 30,
@@ -150,6 +153,38 @@
         "mod_sell": {
             "damage": 30000,
             "pierce": 50
+        }
+    },
+    "monkey_ace": {
+        "radial": {
+            "damage": 200,
+            "bd": 200,
+            "pierce": 50,
+            "rate": 0.66
+        },
+        "seeking": {
+            "damage": 200,
+            "bd": 200,
+            "pierce": 1,
+            "rate": 0.66
+        },
+        "explosion": {
+            "damage": 200,
+            "bd": 200,
+            "pierce": 50,
+            "rate": 0.66
+        },
+        "forward": {
+            "damage": 300,
+            "bd": 300,
+            "pierce": 50,
+            "rate": 0.11
+        },
+        "carpet": {
+            "cooldown": 40,
+            "damage": 20000,
+            "bd": 20000,
+            "pierce": 150
         }
     }
 }

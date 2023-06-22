@@ -20,10 +20,13 @@ const clonedeep = require('lodash.clonedeep');
 
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
+const Maps = require('../helpers/maps')
 
 const { orange, palered } = require('../jsons/colors.json');
 
 const { COLS } = require('../services/index/2tc_scraper');
+
+BANNED_HEROES = ['sauda', 'geraldo']
 
 const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
@@ -205,12 +208,13 @@ async function execute(interaction) {
     }
 }
 
-function isWaterEntityCombo(combo) {
-    return [1, 2].some((entityNum) => {
-        const indexEntity = combo[`TOWER_${entityNum}`].NAME;
-        const entity = Aliases.getCanonicalForm(Aliases.toAliasNormalForm(indexEntity));
-        return Towers.isWaterEntity(entity);
-    });
+function mapsNotPossible(combo) {
+    const impossibleMapsPerTower = [1, 2].map((entityNum) => {
+        const entity = combo[`TOWER_${entityNum}`].NAME;
+        return Maps.mapsNotPossible(entity)
+    })
+
+    return [...new Set(impossibleMapsPerTower.flat())]
 }
 
 async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
@@ -243,9 +247,10 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
 
         if (flatCombo.OG && !(parsed.map || parsed.version || parsed.person)) {
             const allCompletedMaps = Object.keys(allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS);
-            const ogMapAbbr = Aliases.mapToIndexAbbreviation(Aliases.toAliasNormalForm(combo.MAP));
+            const ogMapAbbr = Maps.mapToIndexAbbreviation(Aliases.toAliasNormalForm(combo.MAP));
 
-            let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, allCompletedMaps, isWaterEntityCombo(combos[0]));
+            // TODO: Midnight Mansion no heli in 2tc? Probably will never happen though
+            let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, allCompletedMaps, mapsNotPossible(combos[0]));
 
             challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
@@ -364,7 +369,6 @@ function stripCombo(combo, parsed) {
     if (parsed.map) delete combo.MAP;
     if (parsed.person) delete combo.PERSON;
 
-    if (!combo.OG) delete combo.CURRENT;
     if (!combo.OG) delete combo.DATE;
 
     delete combo.OG;
@@ -387,14 +391,18 @@ function flattenCombo(combo, map) {
 
     let flattenedCombo = combo;
 
-    flattenedCombo.MAP = Aliases.indexMapAbbreviationToNormalForm(map);
+    flattenedCombo.MAP = Maps.indexMapAbbreviationToNormalForm(map);
     flattenedCombo.PERSON = subcombo.PERSON;
     flattenedCombo.LINK = subcombo.LINK;
     flattenedCombo.OG = subcombo.OG;
     delete flattenedCombo.MAPS;
 
     for (var tn = 1; tn <= 2; tn++) {
-        flattenedCombo[`TOWER_${tn}`] = `${flattenedCombo[`TOWER_${tn}`].NAME} (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`;
+        if (combo.OG) {
+            flattenedCombo[`TOWER_${tn}`] = `${flattenedCombo[`TOWER_${tn}`].NAME} (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`;
+        } else {
+            flattenedCombo[`TOWER_${tn}`] = flattenedCombo[`TOWER_${tn}`].NAME
+        }
     }
 
     return flattenedCombo;
@@ -412,7 +420,7 @@ function embedTitle(parsed, combos) {
     if (parsed.natural_number) title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
     else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
     if (parsed.person) title += `by ${sampleCombo.MAPS[sampleMap].PERSON} `;
-    if (parsed.map) title += `on ${Aliases.indexMapAbbreviationToNormalForm(parsed.map)} `;
+    if (parsed.map) title += `on ${Maps.indexMapAbbreviationToNormalForm(parsed.map)} `;
     if (parsed.map_difficulty) title += `on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} Maps `;
     for (var i = 0; i < towers.length; i++) {
         const tower = towers[i];
@@ -452,6 +460,10 @@ function filterCombos(filteredCombos, parsed) {
             throw new UserCommandError(
                 `Combo cannot have more than 1 hero (${gHelper.toTitleCase(parsed.heroes.join(' + '))})`
             );
+        }
+
+        if (BANNED_HEROES.includes(parsed.hero)) {
+            throw new UserCommandError(`${gHelper.toTitleCase(parsed.hero)} is banned from 2TC`)
         }
 
         const providedEntities = parsedProvidedEntities(parsed);
@@ -496,7 +508,7 @@ function filterCombos(filteredCombos, parsed) {
     }
 
     if (parsed.map) {
-        const mapAbbr = Aliases.mapToIndexAbbreviation(parsed.map);
+        const mapAbbr = Maps.mapToIndexAbbreviation(parsed.map);
         function mapFilter(map, _) {
             return map == mapAbbr;
         }
@@ -505,8 +517,8 @@ function filterCombos(filteredCombos, parsed) {
 
     if (parsed.map_difficulty) {
         function mapDifficultyFilter(map, _) {
-            const mapCanonical = Aliases.toAliasNormalForm(Aliases.getCanonicalForm(map));
-            return Aliases.allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical);
+            const mapCanonical = Aliases.toAliasCanonical(map);
+            return Maps.allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical);
         }
         filteredCombos = filterByCompletion(mapDifficultyFilter, filteredCombos);
     }
@@ -598,11 +610,10 @@ function entityMatch(combo, entity, excludeMatch) {
                     if (!t) return null;
                     upgradeArray = t.UPGRADE.split('-').map((u) => parseInt(u));
                     pathIndex = upgradeArray.indexOf(Math.max(...upgradeArray));
-                    path = pathIndex == 0 ? 'top' : pathIndex == 1 ? 'middle' : 'bottom';
 
                     towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
                     towerBase = Towers.towerUpgradeToTower(towerUpgrade);
-                    return `${towerBase}#${path}-path`;
+                    return `${towerBase}#${Towers.allPaths()[pathIndex]}`;
                 })
                 .indexOf(entity.NAME) + 1
         );

@@ -72,5 +72,14 @@
         "sunk",
         "sunken",
         "scull"
+    ],
+    "midnight_mansion": [
+        "mn",
+        "midnight",
+        "mansion"
+    ],
+    "erosion": [
+        "e",
+        "erode"
     ]
 }

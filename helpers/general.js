@@ -7,9 +7,9 @@ function is_fn(f) {
 }
 
 function numberWithCommas(x) {
-    let [ones, decimals] = x.toString().split('.')
-    ones = ones.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-    return decimals ? `${ones}.${decimals}` : ones
+    let [ones, decimals] = x.toString().split('.');
+    ones = ones.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    return decimals ? `${ones}.${decimals}` : ones;
 }
 
 function numberAsCost(x) {
@@ -55,14 +55,9 @@ function permutatePaddings(arr, newLength) {
 
     for (var i = 0; i < arr.length + 1; i++) {
         endArr = arr.slice(i);
-        const recursiveResults = permutatePaddings(
-            endArr,
-            endArr.length + numPads - 1
-        );
+        const recursiveResults = permutatePaddings(endArr, endArr.length + numPads - 1);
         for (var j = 0; j < recursiveResults.length; j++) {
-            results.push(
-                arr.slice(0, i).concat(null).concat(recursiveResults[j])
-            );
+            results.push(arr.slice(0, i).concat(null).concat(recursiveResults[j]));
         }
     }
 
@@ -92,9 +87,7 @@ function toOrdinalSuffix(num) {
         ordinals = ['st', 'nd', 'rd', 'th'],
         oPattern = [1, 2, 3, 4],
         tPattern = [11, 12, 13, 14, 15, 16, 17, 18, 19];
-    return oPattern.includes(digits[0]) && !tPattern.includes(digits[1])
-        ? int + ordinals[digits[0] - 1]
-        : int + ordinals[3];
+    return oPattern.includes(digits[0]) && !tPattern.includes(digits[1]) ? int + ordinals[digits[0] - 1] : int + ordinals[3];
 }
 
 function fromOrdinalSuffix(ordinal) {
@@ -131,12 +124,7 @@ function chunk(array, size) {
 }
 
 function arraysEqual(_arr1, _arr2) {
-    if (
-        !Array.isArray(_arr1) ||
-        !Array.isArray(_arr2) ||
-        _arr1.length !== _arr2.length
-    )
-        return false;
+    if (!Array.isArray(_arr1) || !Array.isArray(_arr2) || _arr1.length !== _arr2.length) return false;
 
     var arr1 = _arr1.concat().sort();
     var arr2 = _arr2.concat().sort();
@@ -169,13 +157,8 @@ function addSpaces(str, max) {
         str = ' '.repeat(max);
         return str;
     }
-    let diff = max - str.toString().length;
 
-    try {
-        str += ' '.repeat(diff);
-    } catch {}
-
-    return str;
+    return str.padEnd(max);
 }
 
 function timeSince(date) {
@@ -183,21 +166,38 @@ function timeSince(date) {
 
     let interval = seconds / 86400;
     if (interval > 1) {
-      return Math.floor(interval) + " days";
+        return Math.floor(interval) + ' days';
     }
     interval = seconds / 3600;
     if (interval > 1) {
-      return Math.floor(interval) + " hours";
+        return Math.floor(interval) + ' hours';
     }
     interval = seconds / 60;
     if (interval > 1) {
-      return Math.floor(interval) + " minutes";
+        return Math.floor(interval) + ' minutes';
     }
-    return Math.floor(seconds) + " seconds";
+    return Math.floor(seconds) + ' seconds';
 }
 
-function round(num, numDigitsAfterDecimal=0) {
-    return Math.round(num * 10**numDigitsAfterDecimal) / 10**numDigitsAfterDecimal
+function round(num, numDigitsAfterDecimal = 0) {
+    return Math.round(num * 10 ** numDigitsAfterDecimal) / 10 ** numDigitsAfterDecimal;
+}
+
+function mostCommonElement(arr) {
+    if (arr.length == 0) return null;
+    var modeMap = {};
+    var maxEl = arr[0],
+        maxCount = 1;
+    for (var i = 0; i < arr.length; i++) {
+        var el = arr[i];
+        if (modeMap[el] == null) modeMap[el] = 1;
+        else modeMap[el]++;
+        if (modeMap[el] > maxCount) {
+            maxEl = el;
+            maxCount = modeMap[el];
+        }
+    }
+    return maxEl;
 }
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
@@ -224,7 +224,8 @@ module.exports = {
     addSpaces,
     timeSince,
     round,
+    mostCommonElement,
     HEAVY_CHECK_MARK,
     WHITE_HEAVY_CHECK_MARK,
-    RED_X,
+    RED_X
 };

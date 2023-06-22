@@ -116,5 +116,15 @@
         "yard",
         "syard",
         "scyard"
+    ],
+    "one_two_tree": [
+        "ott",
+        "ot"
+    ],
+    "middle_of_the_road": [
+        "mr",
+	"motr",
+	"middle_road",
+	"middleroad"
     ]
 }

@@ -93,6 +93,8 @@ async function execute(interaction) {
 
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 
+    await interaction.deferReply();
+
     if (parsed.hasErrors()) {
         return await interaction.reply('Map provided not valid');
     } else {

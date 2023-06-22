@@ -1,4 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
+const gHelper = require('../helpers/general.js');
+
 const { Bloonarius } = require('../jsons/boss.json');
 const { Lych } = require('../jsons/boss.json');
 const { Vortex } = require('../jsons/boss.json');
@@ -58,10 +60,10 @@ function process(data, name, tier, isElite) {
     let desc = data.desc + '\n' + isElite ? data.eliteDesc : normalDesc;
     let obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
     desc += `\n\n**Stats**:
-    Health: ${obj.hp}
-    Speed: ${obj.speed} rbs/s
-    ${obj.desc}
-    \`\`\`${data.customRounds}\`\`\``;
+Health: ${gHelper.numberWithCommas(obj.hp)}
+Speed: ${obj.speed} rbs/s
+${obj.desc}
+\`\`\`${data.customRounds}\`\`\``;
     embed.setDescription(desc);
     return embed;
 }

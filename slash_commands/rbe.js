@@ -66,7 +66,7 @@ async function execute(interaction) {
 
     let totalpopcount = data[endround].cumulativeRBE - data[startround - 1].cumulativeRBE;
     const dataEmbed = new Discord.EmbedBuilder()
-        .setTitle(`<:PopIcon:755016023333404743>${totalpopcount}`)
+        .setTitle(`<:PopIcon:1113113267192201419>${totalpopcount}`)
         .setDescription(`from round ${startround} to ${endround}`)
         .setFooter({ text: 'note: towers may count pops differently due to bugs' })
         .setColor(magenta);

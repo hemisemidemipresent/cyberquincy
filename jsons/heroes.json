@@ -8,7 +8,7 @@
 		"levelModifier": 1.5
 	},
 	"brickell": {
-		"cost": 750,
+		"cost": 900,
 		"levelModifier": 1.425
 	},
 	"churchill": {
@@ -23,12 +23,12 @@
 		"cost": 600,
 		"levelModifier": 1.425
 	},
-    "geraldo": {
-        "cost": 600,
-        "levelModifier": 1
-    },
+	"geraldo": {
+		"cost": 700,
+		"levelModifier": 1
+	},
 	"gwen": {
-		"cost": 900,
+		"cost": 725,
 		"levelModifier": 1
 	},
 	"jones": {
@@ -44,7 +44,7 @@
 		"levelModifier": 1.425
 	},
 	"psi": {
-		"cost": 800,
+		"cost": 1000,
 		"levelModifier": 1.5
 	},
 	"quincy": {

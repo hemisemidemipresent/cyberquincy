@@ -20,7 +20,7 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 
 # Basic local test guide
 
-> note: all credentials will be in `./1/config.json`, fill in the json accordingly.
+> note: all credentials will be in `./1/config.json` (you probably need to create this file), fill in the json accordingly (as per `./1/template.json`).
 
 1. make a new discord bot in [discord dev page](https://discord.com/developers/applications), and copy the token into `./1/config.json` as `token`.
 

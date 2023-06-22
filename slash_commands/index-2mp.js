@@ -2,7 +2,7 @@ const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
-const Towers = require('../helpers/towers');
+const Maps = require('../helpers/maps')
 
 const { paleblue } = require('../jsons/colors.json');
 
@@ -51,14 +51,6 @@ async function execute(interaction) {
         new Parsed()
     );
 
-    // Not cached
-    if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
-        const challengeEmbed = await display2MPTowerStatistics(parsed.tower);
-        return await interaction.reply({
-            embeds: [challengeEmbed]
-        });
-    }
-
     await interaction.deferReply();
 
     const forceReload = interaction.options.getString('reload') ? true : false;
@@ -67,7 +59,12 @@ async function execute(interaction) {
 
     const mtime = Index.getLastCacheModified('2mp');
 
-    if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
+    if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
+        const challengeEmbed = embed2MPTowerStatistics(allCombos, parsed.tower);
+        return await interaction.reply({
+            embeds: [challengeEmbed]
+        });
+    } else if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
         const entity = parsed.hero || Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade);
         const entityFormatted = Aliases.toIndexNormalForm(entity);
         const combo = allCombos.find((c) => c.ENTITY.toLowerCase() == entityFormatted.toLowerCase());
@@ -205,7 +202,7 @@ function embed2MPOG(combo) {
     challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
     const ogMapAbbr = ogCombo(combo)[0];
-    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), isWaterEntityCombo(combo));
+    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), Maps.mapsNotPossible(combo.ENTITY));
 
     challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
@@ -220,7 +217,7 @@ function orderAndFlatten2MPOGCompletion(combo) {
     let [ogMap, ogCompletion] = ogCombo(combo);
     combo = {
         ...combo,
-        OG_MAP: Aliases.indexMapAbbreviationToNormalForm(ogMap),
+        OG_MAP: Maps.indexMapAbbreviationToNormalForm(ogMap),
         PERSON: ogCompletion.PERSON,
         LINK: ogCompletion.LINK
     };
@@ -243,7 +240,7 @@ function ogCombo(combo) {
 
 function embed2MPAlt(combo, map) {
     const mapFormatted = Aliases.toIndexNormalForm(map);
-    const mapAbbr = Aliases.mapToIndexAbbreviation(map);
+    const mapAbbr = Maps.mapToIndexAbbreviation(map);
 
     const altCombo = combo.MAPS[mapAbbr];
 
@@ -277,7 +274,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
 
     // Get all map abbreviations for the specified map difficulty
-    const permittedMapAbbrs = Aliases[`${mapDifficulty}Maps`]().map((map) => Aliases.mapToIndexAbbreviation(map));
+    const permittedMapAbbrs = Maps.allMapsFromMapDifficulty(mapDifficulty).map((map) => Maps.mapToIndexAbbreviation(map));
 
     const relevantMaps = Object.keys(combo.MAPS).filter((m) => permittedMapAbbrs.includes(m));
 
@@ -294,7 +291,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     for (const mapAbbr of relevantMaps) {
         const bold = combo.MAPS[mapAbbr].OG ? '**' : '';
 
-        mapColumn.push(`${bold}${Aliases.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`);
+        mapColumn.push(`${bold}${Maps.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`);
         personColumn.push(`${bold}${combo.MAPS[mapAbbr].PERSON}${bold}`);
         linkColumn.push(`${bold}${combo.MAPS[mapAbbr].LINK}${bold}`);
     }
@@ -305,14 +302,8 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     let mapsLeft = permittedMapAbbrs.filter((m) => !Object.keys(combo.MAPS).includes(m));
 
     // Check if tower is water tower
-    let impossibleMaps = [];
-    if (isWaterEntityCombo(combo)) {
-        // Calculate impossible maps (those that do not contain any water)
-        nonWaterMaps = Aliases.allNonWaterMaps().map((m) => Aliases.mapToIndexAbbreviation(m));
-        impossibleMaps = mapsLeft.filter((m) => nonWaterMaps.includes(m));
-
-        mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
-    }
+    const impossibleMaps = Maps.mapsNotPossible(combo.ENTITY).filter(m => permittedMapAbbrs.includes(m))
+    mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
 
     // Embed and send the message
     let challengeEmbed = new Discord.EmbedBuilder()
@@ -322,7 +313,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     const numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
     let possiblePhrasing;
     if (mapsLeft.length > 0) {
-        possiblePhrasing = impossibleMaps.length > 0 ? ' (that are possible)' : '';
+        possiblePhrasing = impossibleMaps.length > 0 ? ' (where placement is possible)' : '';
         challengeEmbed.addFields([
             { name: `Combos${possiblePhrasing}`, value: `**${numCombosCompleted}**/${numCombosPossible}` }
         ]);
@@ -365,6 +356,7 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
     let mapColumn = [];
 
     let numOGCompletions = 0;
+    let erroredYet = false
 
     // Retrieve og- and alt-map notes from each tower row
     for (const combo of combos) {
@@ -373,16 +365,16 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
 
             const canonicalCompletion = {
                 ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
-                MAP: Aliases.indexMapAbbreviationToMap(map),
+                MAP: Maps.indexMapAbbreviationToMap(map),
                 PERSON: mapCompletion.PERSON,
                 LINK: mapCompletion.LINK,
                 OG: mapCompletion.OG || false
             };
 
-            if (!canonicalCompletion.MAP) {
-                throw new DeveloperCommandError(
-                    `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`
-                );
+            if (!canonicalCompletion.MAP && !erroredYet) {
+                interaction.reply({content: `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`})
+                erroredYet = true
+                continue
             }
 
             if (!filterCombo(canonicalCompletion, parsed)) {
@@ -439,7 +431,7 @@ function filterCombo(c, parsed) {
 
     let matchesEntity = true;
     if (parsed.tower) {
-        if (Aliases.isHero(c.ENTITY)) {
+        if (Heroes.isHero(c.ENTITY)) {
             matchesEntity = false;
         } else {
             matchesEntity = Towers.towerUpgradeToTower(c.ENTITY) == parsed.tower;
@@ -451,7 +443,7 @@ function filterCombo(c, parsed) {
 
     let matchesMap = true;
     if (parsed.map_difficulty) {
-        matchesMap = Aliases.allMapsFromMapDifficulty(parsed.map_difficulty).includes(c.MAP);
+        matchesMap = Maps.allMapsFromMapDifficulty(parsed.map_difficulty).includes(c.MAP);
     } else if (parsed.map) {
         // Map
         matchesMap = parsed.map == c.MAP;
@@ -517,102 +509,40 @@ function determineExcludedColumns(parsed) {
 // Tower Statistics
 ////////////////////////////////////////////////////////////
 
-// TODO: Extract parsing to 2mp_scraper
-
 // Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier
 // Displays base centered above grid
-async function display2MPTowerStatistics(tower) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    entryRow = await findTowerRow(tower);
-
-    // Load the row where the map was found
-    await sheet.loadCells(`${TOWER_COLS.TOWER}${entryRow}:${TOWER_COLS.LAST}${entryRow}`);
-
-    // Check or X
-    baseTowerCompletionMarking = await getCompletionMarking(entryRow, null, 2);
-
+function embed2MPTowerStatistics(combos, tower) {
     const towerFormatted = Aliases.toIndexNormalForm(tower);
+
+    const completedComboEntities = combos.map(c => c.ENTITY.toLowerCase())
+
+    const baseTowerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower)
+    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName.toLowerCase()) ? gHelper.WHITE_HEAVY_CHECK_MARK : gHelper.RED_X
 
     let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
         .setColor(paleblue)
         .addFields([
-            { name: '\u200b', value: '\u200b', inline: true },
-            { name: 'Base Tower', value: baseTowerCompletionMarking, inline: true },
-            { name: '\u200b', value: '\u200b', inline: true }
-        ]); // Left column placeholder
-    // Base tower
-    // Right column placeholder
+            { name: '\u200b', value: '\u200b', inline: true }, // Left column placeholder
+            { name: 'Base Tower', value: baseTowerCompletionMarking, inline: true }, // Tower
+            { name: '\u200b', value: '\u200b', inline: true } // Right column placeholder
+        ]);
 
-    for (var tier = 3; tier <= 5; tier++) {
-        for (var path = 1; path <= 3; path++) {
-            towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
-            upgradeCompletionMarking = await getCompletionMarking(entryRow, path, tier);
+    let tier;
+    for (tier = 3; tier <= 5; tier++) {
+        Towers.allPaths().forEach(path => {
+            let towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
+            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName.toLowerCase()) ? gHelper.WHITE_HEAVY_CHECK_MARK : gHelper.RED_X
             challengeEmbed.addFields([{ name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }]);
-        }
+        })
     }
 
     return challengeEmbed;
 }
 
-async function findTowerRow(tower) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    // Load the column containing the different towers
-    await sheet.loadCells(`${TOWER_COLS.TOWER}1:${TOWER_COLS.TOWER}${sheet.rowCount}`);
-
-    entryRow = null;
-
-    // Search for the row in all "possible" rows
-    for (let row = 1; row <= sheet.rowCount; row++) {
-        let towerCandidate = sheet.getCellByA1(`${TOWER_COLS.TOWER}${row}`).value;
-
-        if (!towerCandidate) continue;
-
-        if (Towers.towerUpgradeToIndexNormalForm(tower) == towerCandidate) {
-            entryRow = row;
-            break;
-        }
-    }
-
-    if (!entryRow) {
-        throw new UserCommandError(`Tower \`${Aliases.toIndexNormalForm(tower)}\` doesn't yet have a 2MP completion`);
-    }
-
-    return entryRow;
-}
-
-// Converts the Index's marking of whether a tower's path/tier has been completed
-// to symbols that are recognizable on the discord embed level
-async function getCompletionMarking(entryRow, path, tier) {
-    const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, '2mpc');
-
-    upgradeCol = null;
-
-    if (tier == 2) {
-        upgradeCol = TOWER_COLS.BASE;
-    } else {
-        upgradeCol = String.fromCharCode(TOWER_COLS.BASE.charCodeAt(0) + (path - 1) * 3 + tier - 2);
-    }
-
-    completion = sheet.getCellByA1(`${upgradeCol}${entryRow}`).value.trim();
-
-    if (completion == gHelper.HEAVY_CHECK_MARK) {
-        return gHelper.WHITE_HEAVY_CHECK_MARK;
-    } else {
-        return gHelper.RED_X;
-    }
-}
-
 ////////////////////////////////////////////////////////////
 // General Helpers
 ////////////////////////////////////////////////////////////
-
-function isWaterEntityCombo(combo) {
-    const canonicalEntity = Aliases.toAliasCanonical(combo.ENTITY);
-    return Towers.isWaterEntity(canonicalEntity);
-}
 
 function err(e) {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors

@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { cyber } = require('../jsons/colors.json');
 const map = require('../jsons/map.json');
 const { discord } = require('../aliases/misc.json');
+const Maps = require('../helpers/maps');
 
 const FuzzySet = require('fuzzyset.js');
 
@@ -18,16 +19,12 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     let name = interaction.options.getString('map_name');
-    let m = map[name];
-    let thum = m.thu;
-    if (!thum)
-        thum =
-            'https://vignette.wikia.nocookie.net/b__/images/0/0c/QuincyCyberPortraitLvl20.png/revision/latest/scale-to-width-down/179?cb=20190612022025&path-prefix=bloons';
+    let m = map[name]; // map object
 
-    const mapEmbed = new Discord.EmbedBuilder()
+    let mapEmbed = new Discord.EmbedBuilder()
         .setTitle('Map info')
         .setDescription(`Here is your info for ${name}`)
-        .setThumbnail(`${thum}`)
+        .setColor(cyber)
         .addFields([
             { name: 'Map length(RBS)', value: `${m.lenStr}`, inline: true },
             { name: 'Object count:', value: `${m.obj}`, inline: true },
@@ -37,9 +34,9 @@ async function execute(interaction) {
             { name: 'Entrances/Exits', value: `${m.e}`, inline: true },
             { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
             //'Line of sight obstructions', `${m.los}`, true)
-        ])
+        ]);
+    if (m.thu) mapEmbed.setThumbnail(m.thu);
 
-        .setColor(cyber);
     return await interaction.reply({ embeds: [mapEmbed] });
 }
 
@@ -48,12 +45,19 @@ async function onAutocomplete(interaction) {
     const map_name_partial = hoistedOptions.find((option) => option.name == 'map_name'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = map_name_partial.value;
 
-    let fs = FuzzySet(Aliases.allMaps());
-    const values = fs.get(value, null, 0.2);
+    let fs = FuzzySet(Maps.allMaps());
+    let values = fs.get(value, null, 0.2);
     responseArr = [];
-    values.forEach((value, index) => {
-        if (index < 25) responseArr.push({ name: value[1], value: value[1] });
-    });
+    if (!values)
+        responseArr = Maps.allMaps()
+            .slice(0, 25) // discord only allows 25 options at a time
+            .map((map) => {
+                return { name: map, value: map }; // cant inline because we are returning an object :(
+            });
+    else
+        values.forEach((value, index) => {
+            if (index < 25) responseArr.push({ name: value[1], value: value[1] });
+        });
     await interaction.respond(responseArr);
 }
 

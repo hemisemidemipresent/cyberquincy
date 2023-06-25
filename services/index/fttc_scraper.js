@@ -170,7 +170,8 @@ async function getRowAltData(entryRow, colset) {
         .map((entry) => {
             let towers, person, link;
             [towers, person, link] = entry.split('|').map((t) => t.replace(/ /g, ''));
-            if (link.includes('bit.ly')) {
+            
+            if (link.includes('bit.ly') || link.includes('tinyurl.com')) {
                 link = `[${link}](http://${link})`
             } else if (link.includes('drive.google.com')) {
                 link = `[Drive Image](${link})`

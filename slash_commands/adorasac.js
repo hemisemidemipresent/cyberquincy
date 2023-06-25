@@ -3,6 +3,7 @@ const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgradeSet } = r
 
 const INF_BAG_SZ = 1000000;
 const XP_CAP = 400000;
+const XP_CAP_ADJUSTED = Math.ceil(XP_CAP / (4*5));
 
 builder = new SlashCommandBuilder()
     .setName('adorasac')
@@ -33,10 +34,10 @@ async function execute(interaction) {
         let moneyToSpendDiv5 = Math.ceil(interaction.options.getInteger('xp') / (4 * 5));
 
         // set up DP arrays
-        let bagSize = new Array(Math.ceil(XP_CAP / (4*5))+1);
+        let bagSize = new Array(XP_CAP_ADJUSTED+1);
         bagSize.fill(INF_BAG_SZ);
         bagSize[0] = 0
-        let lastItem = new Array(Math.ceil(XP_CAP / (4*5))+1);
+        let lastItem = new Array(XP_CAP_ADJUSTED+1);
         lastItem.fill(0);
 
         const costsDiv5ToUpgrade = new Map();
@@ -50,7 +51,7 @@ async function execute(interaction) {
             }
         }
 
-        for (let i = 1; i <= XP_CAP; ++i) {
+        for (let i = 1; i <= XP_CAP_ADJUSTED; ++i) {
             for (let cost of costsDiv5ToUpgrade.keys()) {
                 if (i - cost >= 0 && bagSize[i] > bagSize[i - cost] + 1) {
                     bagSize[i] = bagSize[i - cost] + 1;
@@ -60,7 +61,7 @@ async function execute(interaction) {
         }
 
         let result = [];
-        for (let i = moneyToSpendDiv5; i <= XP_CAP; ++i) {
+        for (let i = moneyToSpendDiv5; i <= XP_CAP_ADJUSTED; ++i) {
             if (bagSize[i] !== INF_BAG_SZ) {
                 while (i > 0) {
                     result.push(costsDiv5ToUpgrade.get(lastItem[i]));

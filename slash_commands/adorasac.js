@@ -36,7 +36,7 @@ async function execute(interaction) {
         let bagSize = new Array(Math.ceil(XP_CAP / (4*5))+1);
         bagSize.fill(INF_BAG_SZ);
         bagSize[0] = 0
-        let lastItem = new Array(XP_CAP+1);
+        let lastItem = new Array(Math.ceil(XP_CAP / (4*5))+1);
         lastItem.fill(0);
 
         const costsDiv5ToUpgrade = new Map();

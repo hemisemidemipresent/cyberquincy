@@ -6,6 +6,17 @@ const INF_BAG_SZ = 1000000;
 const XP_CAP = 400000;
 const XP_CAP_ADJUSTED = Math.ceil(XP_CAP / (4*5));
 
+// deprioritize water towers, illegal towers in CHIMPS, towers that are weird to sac in 2mpc, etc.
+const TOWER_PRIORITIES = new Map();
+TOWER_PRIORITIES.set('banana_farm', -1000); // illegal in chimps
+TOWER_PRIORITIES.set('monkey_sub', -700); // water tower
+TOWER_PRIORITIES.set('monkey_buccaneer', -850); // water tower
+TOWER_PRIORITIES.set('beast_handler', -620); // water tower in some paths
+TOWER_PRIORITIES.set('heli_pilot', -500); // can't be placed on midnight mansion
+TOWER_PRIORITIES.set('monkey_ace', -380); // weird in 2mp
+TOWER_PRIORITIES.set('sniper_monkey', -250); // weird in 2mp
+TOWER_PRIORITIES.set('druid_monkey', -120); // jungle druid is weird in 2mp
+
 builder = new SlashCommandBuilder()
     .setName('adorasac')
     .setDescription('Calculate the optimal ewwww adora sacrifice to advance a certain amount of XP.')
@@ -49,13 +60,23 @@ async function execute(interaction) {
 
         const costsDiv5ToUpgrade = new Map();
 
-        for (let tower of allTowers()) {
+        let towers = allTowers()
+        // sort towers in descending priority order, high priority should be looked at first
+        towers.sort((a, b) => (TOWER_PRIORITIES.get(b) || 0) - (TOWER_PRIORITIES.get(a) || 0));
+        for (let tower of towers) {
             if (excludedTowers.indexOf(tower) < 0) {
                 for (let xpathSet of allUpgradeCrosspathSets()) {
                     // exclude t5 beast handlers due to merge requirements
-                    if (tower !== 'beast_handler' || xpathSet.indexOf('5') < 0) {
+                    // exclude monkeyopolis
+                    if (
+                        (tower !== 'beast_handler' || xpathSet.indexOf('5') < 0)
+                        && (tower !== 'monkey_village' || xpathSet[2] !== '5')
+                    ) {
                         let processedCost = Math.ceil(costOfTowerUpgradeSet(tower, xpathSet, 'hard') / 5);
-                        costsDiv5ToUpgrade.set(processedCost, `${tower}#${xpathSet}`);
+                        // don't overwrite if higher priority present
+                        if (!costsDiv5ToUpgrade.has(processedCost)) {
+                            costsDiv5ToUpgrade.set(processedCost, `${tower}#${xpathSet}`);
+                        }
                     }
                 }
             }

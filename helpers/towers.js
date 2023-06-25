@@ -294,6 +294,21 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
     return [crossPath, crossTier];
 }
 
+function allUpgradeCrosspathSets() {
+    let result = new Set()
+    for (let mainPath=0; mainPath<=5; ++mainPath) {
+        for (let crossPath=0; crossPath<=2; ++crossPath) {
+            result.add(`${mainPath}${crossPath}0`);
+            result.add(`${mainPath}0${crossPath}`);
+            result.add(`0${mainPath}${crossPath}`);
+            result.add(`${crossPath}${mainPath}0`);
+            result.add(`${crossPath}0${mainPath}`);
+            result.add(`0${crossPath}${mainPath}`);
+        }
+    }
+    return result
+}
+
 /**
  * upgrade set is the "300" in "300 supermonkey"
  *
@@ -450,6 +465,7 @@ module.exports = {
     pathTierFromUpgradeSet,
     upgradesFromPath,
     crossPathTierFromUpgradeSet,
+    allUpgradeCrosspathSets,
     isValidUpgradeSet,
     isValidTempleSet,
     formatEntity,

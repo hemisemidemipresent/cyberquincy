@@ -72,7 +72,7 @@ async function execute(interaction) {
                         && (tower !== 'monkey_village' || xpathSet[2] !== '5')
                     ) {
                         let processedCost = Math.ceil(costOfTowerUpgradeSet(tower, xpathSet, 'hard') / 5);
-                        // don't overwrite if higher priority present
+                        // don't overwrite if higher priority present (deprioritize lower priority towers in case of tie)
                         if (!costsDiv5ToUpgrade.has(processedCost)) {
                             costsDiv5ToUpgrade.set(processedCost, `${tower}#${xpathSet}`);
                         }

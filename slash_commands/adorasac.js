@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require('discord.js');
 const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgradeSet } = require('../helpers/towers.js');
 const { red, cyber } = require('../jsons/colors.json');
 
-const INF_BAG_SZ = 1000000;
 const XP_CAP = 400000;
 const XP_CAP_ADJUSTED = Math.ceil(XP_CAP / (4*5));
 
@@ -53,7 +52,7 @@ async function execute(interaction) {
 
         // set up DP arrays
         let bagSize = new Array(XP_CAP_ADJUSTED+1);
-        bagSize.fill(INF_BAG_SZ);
+        bagSize.fill(Infinity);
         bagSize[0] = 0
         let lastItem = new Array(XP_CAP_ADJUSTED+1);
         lastItem.fill(0);
@@ -94,7 +93,7 @@ async function execute(interaction) {
         let resultCost = 0;
         let result = [];
         for (let i = moneyToSpendDiv5; i <= XP_CAP_ADJUSTED; ++i) {
-            if (bagSize[i] !== INF_BAG_SZ) {
+            if (bagSize[i] !== Infinity) {
                 resultCost = i * 5;
                 while (i > 0) {
                     result.push(costsDiv5ToUpgrade.get(lastItem[i]));

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgradeSet } = require('../helpers/towers.js');
+const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgradeSet, isTowerUpgrade } = require('../helpers/towers.js');
 const { red, cyber } = require('../jsons/colors.json');
 
 const XP_CAP = 400000;
@@ -22,19 +22,32 @@ builder = new SlashCommandBuilder()
     .addIntegerOption((option) => option.setName('xp').setDescription('target XP to gain').setRequired(true).setMinValue(0).setMaxValue(XP_CAP))
     .addStringOption((option) => option.setName('excluded_towers').setDescription('Comma-separated list of towers to exclude'));
 
+/**
+ * @param {string} excludedTowers raw excluded towers argument from command
+ * @returns {Set<string>} excluded tower upgrade ssets
+ */
 function parseExcludedTowers(excludedTowers) {
     if (!excludedTowers) {
-        return []
+        return new Set();
     }
-    let result = []
+
+    let result = new Set();
     let excludedTowersList = excludedTowers.split(/\s*,\s*/);
+    const allUpgradeSets = allUpgradeCrosspathSets();
+
     for (let excludedTower of excludedTowersList) {
-        if (isTower(excludedTower)) {
-            throw new RangeError(`${excludedTower} is an invalid tower`);
+        let canonicalForm = Aliases.canonicizeArg(excludedTower);
+        if (isTower(canonicalForm)) {
+            for (let upgradeSet of allUpgradeSets) {
+                result.add(`${canonicalForm}#${upgradeSet}`);
+            }
+        } else if (isTowerUpgrade(canonicalForm, true)) {
+            result.add(canonicalForm);
+        } else {
+            throw new RangeError(`${excludedTower} is neither a valid tower nor a valid tower upgrade`);
         }
-        result.push(Aliases.getCanonicalForm(excludedTower))
     }
-    return result
+    return result;
 }
 
 async function execute(interaction) {
@@ -62,20 +75,24 @@ async function execute(interaction) {
         let towers = allTowers()
         // sort towers in descending priority order, high priority should be looked at first
         towers.sort((a, b) => (TOWER_PRIORITIES.get(b) || 0) - (TOWER_PRIORITIES.get(a) || 0));
+
+        const allUpgradeSets = allUpgradeCrosspathSets();
+
         for (let tower of towers) {
-            if (!excludedTowers.includes(tower)) {
-                for (let xpathSet of allUpgradeCrosspathSets()) {
-                    // exclude t5 beast handlers due to merge requirements
-                    // exclude monkeyopolis
-                    if (
-                        (tower !== 'beast_handler' || !xpathSet.includes('5'))
-                        && (tower !== 'monkey_village' || xpathSet[2] !== '5')
-                    ) {
-                        let processedCost = Math.ceil(costOfTowerUpgradeSet(tower, xpathSet, 'hard') / 5);
-                        // don't overwrite if higher priority present (deprioritize lower priority towers in case of tie)
-                        if (!costsDiv5ToUpgrade.has(processedCost)) {
-                            costsDiv5ToUpgrade.set(processedCost, `${tower}#${xpathSet}`);
-                        }
+            for (let xpathSet of allUpgradeSets) {
+                const upgradeSetStr = `${tower}#${xpathSet}`;
+
+                // exclude t5 beast handlers due to merge requirements
+                // exclude monkeyopolis
+                if (
+                    !excludedTowers.has(upgradeSetStr)
+                    && (tower !== 'beast_handler' || !xpathSet.includes('5'))
+                    && (tower !== 'monkey_village' || xpathSet[2] !== '5')
+                ) {
+                    let processedCost = Math.ceil(costOfTowerUpgradeSet(tower, xpathSet, 'hard') / 5);
+                    // don't overwrite if higher priority present (deprioritize lower priority towers in case of cost tie)
+                    if (!costsDiv5ToUpgrade.has(processedCost)) {
+                        costsDiv5ToUpgrade.set(processedCost, upgradeSetStr);
                     }
                 }
             }

@@ -64,12 +64,12 @@ async function execute(interaction) {
         // sort towers in descending priority order, high priority should be looked at first
         towers.sort((a, b) => (TOWER_PRIORITIES.get(b) || 0) - (TOWER_PRIORITIES.get(a) || 0));
         for (let tower of towers) {
-            if (excludedTowers.indexOf(tower) < 0) {
+            if (!excludedTowers.includes(tower)) {
                 for (let xpathSet of allUpgradeCrosspathSets()) {
                     // exclude t5 beast handlers due to merge requirements
                     // exclude monkeyopolis
                     if (
-                        (tower !== 'beast_handler' || xpathSet.indexOf('5') < 0)
+                        (tower !== 'beast_handler' || !xpathSet.includes('5'))
                         && (tower !== 'monkey_village' || xpathSet[2] !== '5')
                     ) {
                         let processedCost = Math.ceil(costOfTowerUpgradeSet(tower, xpathSet, 'hard') / 5);

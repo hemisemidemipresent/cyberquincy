@@ -18,7 +18,7 @@ TOWER_PRIORITIES.set('sniper_monkey', -250); // weird in 2mp
 TOWER_PRIORITIES.set('druid_monkey', -120); // jungle druid is weird in 2mp
 
 builder = new SlashCommandBuilder()
-    .setName('adorasac')
+    .setName('adora-sac')
     .setDescription('Calculate the optimal ewwww adora sacrifice to advance a certain amount of XP.')
     .addIntegerOption((option) => option.setName('xp').setDescription('target XP to gain').setRequired(true).setMinValue(0).setMaxValue(XP_CAP))
     .addStringOption((option) => option.setName('excluded_towers').setDescription('Comma-separated list of towers to exclude'));

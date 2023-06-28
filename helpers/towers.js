@@ -445,9 +445,9 @@ function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscoun
     const costData = battles2 ? costs_b2 : costs;
     const tower = costData[towerName];
     let result = [0, 0, 0, 0, 0, 0];
-    for (let i = 1; i <= 5; ++i) {
-        const baseCost = tower.upgrades[path][`${i}`];
-        result[i] += result[i-1] + bHelper.difficultyDiscountPriceMult(baseCost, difficulty, i <= 3 ? numDiscounts : 0, false);
+    for (let tier = 1; tier <= 5; ++tier) {
+        const baseCost = tower.upgrades[path][`${tier}`];
+        result[tier] += result[tier-1] + bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, false);
     }
     return result;
 }

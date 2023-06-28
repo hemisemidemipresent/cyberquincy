@@ -66,10 +66,6 @@ async function execute(interaction) {
 
         let xp = interaction.options.getInteger('xp');
 
-        if (xp < 0 || xp > XP_CAP) {
-            throw new RangeError(`Provided XP value ${xp} should be between 0 and ${XP_CAP} inclusive`);
-        }
-
         // optimization: use money divided by 5 to shrink DP space as all tower/upgrade costs are divisble by 5
         let moneyToSpendDiv5 = Math.ceil(xp / (4 * 5));
 

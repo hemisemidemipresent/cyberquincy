@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgradeSet, isTowerUpgrade } = require('../helpers/towers.js');
+const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgrade, isTowerUpgrade, cumulativeTowerUpgradePathCosts } = require('../helpers/towers.js');
 const { red, cyber } = require('../jsons/colors.json');
 
 const XP_CAP = 400000;
@@ -63,13 +63,6 @@ async function execute(interaction) {
         // optimization: use money divided by 5 to shrink DP space as all tower/upgrade costs are divisble by 5
         let moneyToSpendDiv5 = Math.ceil(xp / (4 * 5));
 
-        // set up DP arrays
-        let bagSize = new Array(XP_CAP_ADJUSTED+1);
-        bagSize.fill(Infinity);
-        bagSize[0] = 0
-        let lastItem = new Array(XP_CAP_ADJUSTED+1);
-        lastItem.fill(0);
-
         const costsDiv5ToUpgrade = new Map();
 
         let towers = allTowers()
@@ -79,6 +72,10 @@ async function execute(interaction) {
         const allUpgradeSets = allUpgradeCrosspathSets();
 
         for (let tower of towers) {
+            let baseCost = costOfTowerUpgrade(tower, '000', 'hard');
+            let topPathCosts = cumulativeTowerUpgradePathCosts(tower, 'top_path', 'hard');
+            let midPathCosts = cumulativeTowerUpgradePathCosts(tower, 'middle_path', 'hard');
+            let bottomPathCosts = cumulativeTowerUpgradePathCosts(tower, 'bottom_path', 'hard');
             for (let xpathSet of allUpgradeSets) {
                 const upgradeSetStr = `${tower}#${xpathSet}`;
 
@@ -89,7 +86,8 @@ async function execute(interaction) {
                     && (tower !== 'beast_handler' || !xpathSet.includes('5'))
                     && (tower !== 'monkey_village' || xpathSet[2] !== '5')
                 ) {
-                    let processedCost = Math.ceil(costOfTowerUpgradeSet(tower, xpathSet, 'hard') / 5);
+                    let rawCost = baseCost + topPathCosts[parseInt(xpathSet[0])] + midPathCosts[parseInt(xpathSet[1])] + bottomPathCosts[parseInt(xpathSet[2])];
+                    let processedCost = Math.ceil(rawCost / 5);
                     // don't overwrite if higher priority present (deprioritize lower priority towers in case of cost tie)
                     if (!costsDiv5ToUpgrade.has(processedCost)) {
                         costsDiv5ToUpgrade.set(processedCost, upgradeSetStr);
@@ -98,9 +96,23 @@ async function execute(interaction) {
             }
         }
 
-        for (let i = 1; i <= XP_CAP_ADJUSTED; ++i) {
-            for (let cost of costsDiv5ToUpgrade.keys()) {
-                if (i - cost >= 0 && bagSize[i] > bagSize[i - cost] + 1) {
+        let upgradeCostKeys = [...costsDiv5ToUpgrade.keys()];
+        upgradeCostKeys.sort((a, b) => a - b);
+        
+        // cost of best sacrifice set is at most the cost of the smallest single upgrade set larger than target
+        let dpSize = Math.min(upgradeCostKeys.find((val) => val >= moneyToSpendDiv5) || XP_CAP_ADJUSTED, XP_CAP_ADJUSTED);
+
+        // set up DP arrays
+        let bagSize = new Array(dpSize+1);
+        bagSize.fill(Infinity);
+        bagSize[0] = 0
+        let lastItem = new Array(dpSize+1);
+        lastItem.fill(0);
+
+        for (let i = 1; i <= dpSize; ++i) {
+            for (let cost of upgradeCostKeys) {
+                if (i - cost < 0) break;
+                if (bagSize[i] > bagSize[i - cost] + 1) {
                     bagSize[i] = bagSize[i - cost] + 1;
                     lastItem[i] = cost;
                 }
@@ -109,7 +121,7 @@ async function execute(interaction) {
 
         let resultCost = 0;
         let result = [];
-        for (let i = moneyToSpendDiv5; i <= XP_CAP_ADJUSTED; ++i) {
+        for (let i = moneyToSpendDiv5; i <= dpSize; ++i) {
             if (bagSize[i] !== Infinity) {
                 resultCost = i * 5;
                 while (i > 0) {

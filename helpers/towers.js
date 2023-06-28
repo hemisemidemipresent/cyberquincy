@@ -441,6 +441,17 @@ function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, ba
     return bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, isBaseTower);
 }
 
+function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscounts = 0, battles2 = false) {
+    const costData = battles2 ? costs_b2 : costs;
+    const tower = costData[towerName];
+    let result = [0, 0, 0, 0, 0, 0];
+    for (let i = 1; i <= 5; ++i) {
+        const baseCost = tower.upgrades[path][`${i}`];
+        result[i] += result[i-1] + bHelper.difficultyDiscountPriceMult(baseCost, difficulty, i <= 3 ? numDiscounts : 0, false);
+    }
+    return result;
+}
+
 module.exports = {
     TOWER_NAME_TO_BLOONOLOGY_LINK,
     towerNameToBloonologyLink,
@@ -471,5 +482,6 @@ module.exports = {
     formatEntity,
     getEntityType,
     costOfTowerUpgrade,
-    costOfTowerUpgradeSet
+    costOfTowerUpgradeSet,
+    cumulativeTowerUpgradePathCosts
 };

@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgrade, isTowerUpgrade, cumulativeTowerUpgradePathCosts } = require('../helpers/towers.js');
 const { red, cyber } = require('../jsons/colors.json');
 
-const XP_CAP = 400000;
+const XP_CAP = 344740;
 const XP_CAP_ADJUSTED = Math.ceil(XP_CAP / (4*5));
 
 // deprioritize water towers, illegal towers in CHIMPS, towers that are weird to sac in 2mpc, etc.

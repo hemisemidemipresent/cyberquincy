@@ -50,6 +50,8 @@ function parseExcludedTowers(excludedTowers) {
     return result;
 }
 
+// algorithm finds fewest # of towers to sac to reach exact cash needed to gain XP rounded up to nearest 20
+// (divide XP by 4 to get cash; cash must be divisible by 5)
 async function execute(interaction) {
     try {
         let excludedTowers = parseExcludedTowers(interaction.options.getString('excluded_towers'));

@@ -18,7 +18,7 @@ TOWER_PRIORITIES.set('druid_monkey', -120); // jungle druid is weird in 2mp
 
 builder = new SlashCommandBuilder()
     .setName('adora-sac')
-    .setDescription('Calculate the optimal ewwww adora sacrifice to advance a certain amount of XP with hard/CHIMPS prices.')
+    .setDescription('Calculate optimal ewwww adora sacrifice to advance a certain amount of XP with hard/CHIMPS prices')
     .addIntegerOption((option) => option.setName('xp').setDescription('target XP to gain').setRequired(true).setMinValue(0).setMaxValue(XP_CAP))
     .addStringOption((option) => option.setName('excluded_towers').setDescription('Comma-separated list of towers to exclude'));
 
@@ -42,7 +42,15 @@ function parseExcludedTowers(excludedTowers) {
                 result.add(`${canonicalForm}#${upgradeSet}`);
             }
         } else if (isTowerUpgrade(canonicalForm, true)) {
-            result.add(canonicalForm);
+            const [specifiedTower, specifiedUpgradeSet] = canonicalForm.split('#');
+            for (let upgradeSet of allUpgradeSets) {
+                if (parseInt(specifiedUpgradeSet[0]) <= parseInt(upgradeSet[0])
+                    && parseInt(specifiedUpgradeSet[1]) <= parseInt(upgradeSet[1])
+                    && parseInt(specifiedUpgradeSet[2]) <= parseInt(upgradeSet[2])) {
+                    
+                    result.add(`${specifiedTower}#${upgradeSet}`);
+                }
+            }
         } else {
             throw new RangeError(`${excludedTower} is neither a valid tower nor a valid tower upgrade`);
         }

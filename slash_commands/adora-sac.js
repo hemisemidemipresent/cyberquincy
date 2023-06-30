@@ -70,6 +70,7 @@ async function execute(interaction) {
         let moneyToSpendDiv5 = Math.ceil(xp / (4 * 5));
 
         const costsDiv5ToUpgrade = new Map();
+        const costsDiv5ToPriority = new Map();
 
         let towers = allTowers()
         // sort towers in descending priority order, high priority should be looked at first
@@ -97,6 +98,7 @@ async function execute(interaction) {
                     // don't overwrite if higher priority present (deprioritize lower priority towers in case of cost tie)
                     if (!costsDiv5ToUpgrade.has(processedCost)) {
                         costsDiv5ToUpgrade.set(processedCost, upgradeSetStr);
+                        costsDiv5ToPriority.set(processedCost, TOWER_PRIORITIES.get(tower) || 0);
                     }
                 }
             }
@@ -114,13 +116,18 @@ async function execute(interaction) {
         bagSize[0] = 0
         let lastItem = new Array(dpSize+1);
         lastItem.fill(0);
+        let highestLowPriority = new Array(dpSize+1);
+        highestLowPriority.fill(Infinity);
 
         for (let i = 1; i <= dpSize; ++i) {
             for (let cost of upgradeCostKeys) {
                 if (i - cost < 0) break;
-                if (bagSize[i] > bagSize[i - cost] + 1) {
-                    bagSize[i] = bagSize[i - cost] + 1;
+                const candidate = bagSize[i - cost] + 1;
+                const candidatePriority = Math.min(highestLowPriority[i - cost], costsDiv5ToPriority.get(cost));
+                if (bagSize[i] > candidate || (bagSize[i] == candidate && highestLowPriority[i] <= candidatePriority)) {
+                    bagSize[i] = candidate;
                     lastItem[i] = cost;
+                    highestLowPriority[i] = candidatePriority;
                 }
             }
         }

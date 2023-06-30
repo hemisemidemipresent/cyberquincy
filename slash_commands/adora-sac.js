@@ -18,7 +18,7 @@ TOWER_PRIORITIES.set('druid_monkey', -120); // jungle druid is weird in 2mp
 
 builder = new SlashCommandBuilder()
     .setName('adora-sac')
-    .setDescription('Calculate optimal ewwww adora sacrifice to advance a certain amount of XP with hard/CHIMPS prices')
+    .setDescription('Calc optimal ew adora sac for specified XP amount with hard/CHIMPS prices (no MK/discounts/etc.)')
     .addIntegerOption((option) => option.setName('xp').setDescription('target XP to gain').setRequired(true).setMinValue(0).setMaxValue(XP_CAP))
     .addStringOption((option) => option.setName('excluded_towers').setDescription('Comma-separated list of towers to exclude'));
 
@@ -148,9 +148,9 @@ async function execute(interaction) {
         return await interaction.reply({
             embeds: [
                 new Discord.EmbedBuilder()
-                .setColor(cyber)
-                .setTitle(`${result.length} tower(s) with cost $${resultCost}`)
-                .setDescription(result.join('\n'))
+                    .setColor(cyber)
+                    .setTitle(`${result.length} tower(s) with cost $${resultCost}`)
+                    .setDescription(result.join('\n'))
             ]
         });
     } catch (error) {
@@ -158,8 +158,8 @@ async function execute(interaction) {
             return await interaction.reply({
                 embeds: [
                     new Discord.EmbedBuilder()
-                    .setColor(red)
-                    .setTitle(error.message)
+                        .setColor(red)
+                        .setTitle(error.message)
                 ]
             });
         } else {

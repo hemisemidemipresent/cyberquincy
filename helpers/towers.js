@@ -294,6 +294,21 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
     return [crossPath, crossTier];
 }
 
+function allUpgradeCrosspathSets() {
+    let result = new Set()
+    for (let mainPath=0; mainPath<=5; ++mainPath) {
+        for (let crossPath=0; crossPath<=2; ++crossPath) {
+            result.add(`${mainPath}${crossPath}0`);
+            result.add(`${mainPath}0${crossPath}`);
+            result.add(`0${mainPath}${crossPath}`);
+            result.add(`${crossPath}${mainPath}0`);
+            result.add(`${crossPath}0${mainPath}`);
+            result.add(`0${crossPath}${mainPath}`);
+        }
+    }
+    return result
+}
+
 /**
  * upgrade set is the "300" in "300 supermonkey"
  *
@@ -426,6 +441,17 @@ function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, ba
     return bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, isBaseTower);
 }
 
+function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscounts = 0, battles2 = false) {
+    const costData = battles2 ? costs_b2 : costs;
+    const tower = costData[towerName];
+    let result = [0, 0, 0, 0, 0, 0];
+    for (let tier = 1; tier <= 5; ++tier) {
+        const baseCost = tower.upgrades[path][`${tier}`];
+        result[tier] += result[tier-1] + bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, false);
+    }
+    return result;
+}
+
 module.exports = {
     TOWER_NAME_TO_BLOONOLOGY_LINK,
     towerNameToBloonologyLink,
@@ -450,10 +476,12 @@ module.exports = {
     pathTierFromUpgradeSet,
     upgradesFromPath,
     crossPathTierFromUpgradeSet,
+    allUpgradeCrosspathSets,
     isValidUpgradeSet,
     isValidTempleSet,
     formatEntity,
     getEntityType,
     costOfTowerUpgrade,
-    costOfTowerUpgradeSet
+    costOfTowerUpgradeSet,
+    cumulativeTowerUpgradePathCosts
 };

@@ -43,7 +43,7 @@ async function calc(interaction) {
         // skip whitespace
     });
 
-    lexer.addRule(/[a-zA-Z#!0-9\.]+/, function (lexeme) {
+    lexer.addRule(/[a-zA-Z#!0-9\._]+/, function (lexeme) {
         return lexeme; // symbols
     });
 

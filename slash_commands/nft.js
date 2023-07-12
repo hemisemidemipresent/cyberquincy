@@ -4,7 +4,7 @@ const bHelper = require("../helpers/bloons-general.js");
 
 const builder = new SlashCommandBuilder()
 .setName('nft')
-.setDescription('Calculate Quincy Action Figure buy/sell price in Shol Geraldo\'s shop')
+.setDescription('Calculate Quincy Action Figure buy/sell price in Shol Geraldo\'s shop (no MK by default)')
 .addIntegerOption(option => option.setName('unlock_round').setDescription("Start of round when the action figure is unlocked").setRequired(true).setMinValue(1))
 .addIntegerOption(option => option.setName('start_round').setDescription("Round when the action figure is bought").setRequired(true).setMinValue(1))
 .addIntegerOption(option => option.setName('end_round').setDescription("Round when the action figure is sold").setRequired(true).setMinValue(1))

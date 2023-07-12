@@ -15,7 +15,7 @@ const builder = new SlashCommandBuilder()
     .addChoices(
         { name: 'Easy (Primary only, Deflation)', value: 'easy' },
         { name: 'Medium (Military only, Reverse, Apopalypse)', value: 'medium' },
-        { name: 'Hard (Magic only, Double HP)', value: 'hard' },
+        { name: 'Hard (Magic only, Double HP, ABR)', value: 'hard' },
         { name: 'Impoppable', value: 'impoppable' }
     )
 )
@@ -57,7 +57,9 @@ async function execute(interaction) {
     let start_price = bHelper.difficultyDiscountPriceMult(
         raw_nft_value(unlock_round, start_round), difficulty, 0, false
     );
-    let end_price = Math.round(raw_nft_value(unlock_round, end_round) * (better_sell_deals ? 1 : 0.95));
+    let end_price = Math.ceil(
+        bHelper.rawDifficultyMult(raw_nft_value(unlock_round, end_round) * 0.95 + 750 * (better_sell_deals ? 0.05 : 0), difficulty)
+    );
 
     return await interaction.reply({
         embeds: [

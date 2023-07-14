@@ -51,6 +51,15 @@ async function execute(interaction) {
     let difficulty = interaction.options.getString("difficulty");
     let better_sell_deals = interaction.options.getBoolean("better_sell_deals") ?? false;
 
+    if (start_round < unlock_round) {
+        return await interaction.reply({
+            embeds: [
+                new Discord.EmbedBuilder()
+                    .setTitle(`Start round ${start_round} must be greater than or equal to the unlock round ${unlock_round}`)
+                    .setColor(red)
+            ]
+        });
+    }
     if (end_round < start_round) {
         return await interaction.reply({
             embeds: [

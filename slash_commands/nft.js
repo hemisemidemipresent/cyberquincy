@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { red, cyber } = require('../jsons/colors.json');
-const bHelper = require("../helpers/bloons-general.js");
 
 const builder = new SlashCommandBuilder()
 .setName('nft')
@@ -25,12 +24,20 @@ const builder = new SlashCommandBuilder()
     .setRequired(false)
 );
 
+const DIFFICULTY_TO_BASE_VALUE = {
+    easy: 635,
+    medium: 750,
+    hard: 810,
+    impoppable: 900
+}
+
 /**
  * @param {number} unlock_round
  * @param {number} round
+ * @param {string} difficulty
  */
-function raw_nft_value(unlock_round, round) {
-    let raw_result = 750
+function raw_nft_value(unlock_round, round, difficulty) {
+    let raw_result = DIFFICULTY_TO_BASE_VALUE[difficulty]
     * Math.pow(1.1, Math.min(round - unlock_round, 31 - unlock_round))
     * Math.pow(1.05, Math.max(Math.min(round - 31, 80 - 31), 0))
     * Math.pow(1.02, Math.max(round - 81, 0));
@@ -38,7 +45,7 @@ function raw_nft_value(unlock_round, round) {
 }
 
 async function execute(interaction) {
-    let unlock_round = interaction.options.getInteger("start_round");
+    let unlock_round = interaction.options.getInteger("unlock_round");
     let start_round = interaction.options.getInteger("start_round");
     let end_round = interaction.options.getInteger("end_round");
     let difficulty = interaction.options.getString("difficulty");
@@ -54,11 +61,9 @@ async function execute(interaction) {
         });
     }
 
-    let start_price = bHelper.difficultyDiscountPriceMult(
-        raw_nft_value(unlock_round, start_round), difficulty, 0, false
-    );
+    let start_price = Math.round(raw_nft_value(unlock_round, start_round, difficulty) / 5) * 5;
     let end_price = Math.ceil(
-        bHelper.rawDifficultyMult(raw_nft_value(unlock_round, end_round) * 0.95 + 750 * (better_sell_deals ? 0.05 : 0), difficulty)
+        raw_nft_value(unlock_round, end_round, difficulty) * 0.95 + DIFFICULTY_TO_BASE_VALUE[difficulty] * (better_sell_deals ? 0.05 : 0)
     );
 
     return await interaction.reply({

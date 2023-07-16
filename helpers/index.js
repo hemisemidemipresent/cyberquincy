@@ -90,7 +90,7 @@ function parseMapNotes(notes) {
                 let altmap, altperson, link;
                 [altmap, altperson, link] = n.split(/,|(?::(?!\/))/).map((t) => t.replace(/ /g, ''));
 
-                if (link.includes('bit.ly')) {
+                if (link.includes('bit.ly') || link.includes('tinyurl.com')) {
                     link = `[${link}](http://${link})`
                 } else if (link.includes('drive.google.com')) {
                     link = `[Drive Image](${link})`

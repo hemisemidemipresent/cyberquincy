@@ -72,6 +72,6 @@ async function execute(interaction) {
 }
 
 module.exports = {
-	data: builder,
-	execute
+    data: builder,
+    execute
 };

@@ -14,17 +14,20 @@ NUM_DISCOUNTS_TO_FACTOR = {
 
 class DiscountError extends Error {}
 
-function difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts, baseTower = false) {
+function rawDifficultyMult(mediumCost, difficulty) {
     const difficultyMultiplier = PRICE_MULTS[difficulty];
     if (!difficultyMultiplier) {
         throw `${difficulty} not a valid difficulty`;
     }
+    return mediumCost * difficultyMultiplier;
+}
 
+function difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts, baseTower = false) {
     const discountFactor = NUM_DISCOUNTS_TO_FACTOR[numDiscounts];
     if (!discountFactor) {
         throw new DiscountError(`Cannot apply ${numDiscounts} discounts (must be between 0 and 3)`);
     }
-    const unroundedCost = mediumCost * difficultyMultiplier * discountFactor;
+    const unroundedCost = rawDifficultyMult(mediumCost, difficulty) * discountFactor;
     if (baseTower) return specialRound(unroundedCost);
     return Math.round(unroundedCost / 5) * 5;
 }
@@ -38,6 +41,7 @@ function specialRound(c) {
     return quotient + rounded;
 }
 module.exports = {
+    rawDifficultyMult,
     difficultyDiscountPriceMult,
     DiscountError
 };

@@ -156,6 +156,17 @@ async function execute(interaction) {
             }
         }
 
+        if (result.length == 0) {
+            return await interaction.reply({
+                embeds: [
+                    new Discord.EmbedBuilder()
+                        .setColor(red)
+                        .setTitle(`No possibilities found`)
+                        .setDescription("Loosen your restrictions to get a valid solution")
+                ]
+            });
+        }
+
         return await interaction.reply({
             embeds: [
                 new Discord.EmbedBuilder()

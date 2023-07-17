@@ -77,7 +77,7 @@ async function execute(interaction) {
 
         let towers = allTowers()
         // sort towers in descending priority order, high priority should be looked at first
-        towers.sort((a, b) => (TOWER_PRIORITIES.get(b) || 0) - (TOWER_PRIORITIES.get(a) || 0));
+        towers.sort((a, b) => (TOWER_PRIORITIES.get(b) ?? 0) - (TOWER_PRIORITIES.get(a) ?? 0));
 
         const allUpgradeSets = allUpgradeCrosspathSets();
 
@@ -101,7 +101,7 @@ async function execute(interaction) {
                     // don't overwrite if higher priority present (deprioritize lower priority towers in case of cost tie)
                     if (!costsDiv5ToUpgrade.has(processedCost)) {
                         costsDiv5ToUpgrade.set(processedCost, upgradeSetStr);
-                        costsDiv5ToPriority.set(processedCost, TOWER_PRIORITIES.get(tower) || 0);
+                        costsDiv5ToPriority.set(processedCost, TOWER_PRIORITIES.get(tower) ?? 0);
                     }
                 }
             }
@@ -111,7 +111,7 @@ async function execute(interaction) {
         upgradeCostKeys.sort((a, b) => a - b);
         
         // cost of best sacrifice set is at most the cost of the smallest single upgrade set larger than target
-        let dpSize = Math.min(upgradeCostKeys.find((val) => val >= moneyToSpendDiv5) || XP_CAP_ADJUSTED, XP_CAP_ADJUSTED);
+        let dpSize = upgradeCostKeys.find((val) => val >= moneyToSpendDiv5) ?? XP_CAP_ADJUSTED;
 
         // set up DP arrays
         let bagSize = new Array(dpSize+1);

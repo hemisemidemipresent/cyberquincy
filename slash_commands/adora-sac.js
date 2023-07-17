@@ -20,7 +20,8 @@ builder = new SlashCommandBuilder()
     .setName('adora-sac')
     .setDescription('Calc optimal ew adora sac for specified XP amount with hard/CHIMPS prices (no MK/discounts/etc.)')
     .addIntegerOption((option) => option.setName('xp').setDescription('target XP to gain').setRequired(true).setMinValue(0).setMaxValue(XP_CAP))
-    .addStringOption((option) => option.setName('excluded_towers').setDescription('Comma-separated list of towers to exclude'));
+    .addStringOption((option) => option.setName('excluded_towers').setDescription('Comma-separated list of towers to exclude'))
+    .addIntegerOption((option) => option.setName('max_towers').setDescription('Max number of towers you are willing to sacrifice').setMinValue(1));
 
 /**
  * @param {string} excludedTowers raw excluded towers argument from command
@@ -65,6 +66,8 @@ async function execute(interaction) {
         let excludedTowers = parseExcludedTowers(interaction.options.getString('excluded_towers'));
 
         let xp = interaction.options.getInteger('xp');
+
+        let maxTowers = interaction.options.getInteger('max_towers') ?? Infinity;
 
         // optimization: use money divided by 5 to shrink DP space as all tower/upgrade costs are divisble by 5
         let moneyToSpendDiv5 = Math.ceil(xp / (4 * 5));
@@ -134,14 +137,22 @@ async function execute(interaction) {
 
         let resultCost = 0;
         let result = [];
-        for (let i = moneyToSpendDiv5; i <= dpSize; ++i) {
-            if (bagSize[i] !== Infinity) {
-                resultCost = i * 5;
-                while (i > 0) {
-                    result.push(costsDiv5ToUpgrade.get(lastItem[i]));
-                    i -= lastItem[i];
+
+        for (let startingMoneyDiv5 = moneyToSpendDiv5; startingMoneyDiv5 <= dpSize; ++startingMoneyDiv5) {
+            let moneyDiv5 = startingMoneyDiv5;
+            if (bagSize[moneyDiv5] !== Infinity) {
+                resultCost = moneyDiv5 * 5;
+                while (moneyDiv5 > 0) {
+                    result.push(costsDiv5ToUpgrade.get(lastItem[moneyDiv5]));
+                    moneyDiv5 -= lastItem[moneyDiv5];
                 }
-                break;
+
+                if (result.length > maxTowers) {
+                    result = [];
+                    resultCost = 0;
+                } else {
+                    break;
+                }
             }
         }
 

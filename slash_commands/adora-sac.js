@@ -204,12 +204,13 @@ async function execute(interaction) {
                 .setDescription(overshotResult.join('\n'))
         } else {
             const s = undershotResult.length == 1 ? '' : 's'
-            const rawLevelingInstruction = `Then spend ${numberAsCost(rawLevelingCost)} to reach target`
+            const then = undershotResult.length > 0 ? 'then ' : ''
+            const rawLevelingInstruction = `${then}spend ${numberAsCost(rawLevelingCost)} to reach target`
 
             embed = new Discord.EmbedBuilder()
                 .setColor(cyber)
                 .setTitle(`${undershotResult.length} tower${s} + raw leveling with total cost ${numberAsCost(undershotResultCost)}`)
-                .setDescription(undershotResult.concat(rawLevelingInstruction).join('\n'))
+                .setDescription(undershotResult.concat('', rawLevelingInstruction).join('\n'))
         }
 
         if (xp === XP_CAP) {

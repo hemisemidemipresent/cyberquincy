@@ -175,7 +175,7 @@ async function execute(interaction) {
             if (bagSize[moneyDiv5] !== Infinity) {
                 undershotResultCost = moneyDiv5 * 5;
 
-                // Direct Adora leveling since sacrifices here will bring the xp just short
+                // Direct Adora leveling since sacrifices here will bring the xp short by some amount
                 rawLevelingCost = xp - (startingMoneyDiv5 * 4 * 5)
                 undershotResultCost += rawLevelingCost
 

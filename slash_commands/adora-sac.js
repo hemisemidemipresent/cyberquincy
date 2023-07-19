@@ -139,10 +139,10 @@ async function execute(interaction) {
         /**
          * Overshoot vs Undershoot:
          *
-         * You can either undershoot by sacrificing to adora while leaving xp leftover (which you buy directly)
+         * You can either undershoot by sacrificing to adora while leaving xp leftover (which you then buy directly)
          * or overshoot by sacrificing to adora to reach the XP needed and then some
          *
-         * The below loops finds the cheapest of each kind and further down the costs are compared to find the cheaper.
+         * The below loop finds the cheapest of each kind and further down the costs are compared to find the cheaper.
          */
 
         let overshotResultCost = Infinity;

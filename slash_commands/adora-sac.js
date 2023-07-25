@@ -1,8 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgrade, isTowerUpgrade, cumulativeTowerUpgradePathCosts } = require('../helpers/towers.js');
 const { red, cyber } = require('../jsons/colors.json');
+const { numberAsCost } = require('../helpers/general.js')
 
-const XP_CAP = 344740;
+const XP_CAP = 344737;
 const XP_CAP_ADJUSTED = Math.ceil(XP_CAP / (4*5));
 
 // deprioritize water towers, illegal towers in CHIMPS, towers that are weird to sac in 2mpc, etc.
@@ -19,8 +20,9 @@ TOWER_PRIORITIES.set('druid_monkey', -120); // jungle druid is weird in 2mp
 builder = new SlashCommandBuilder()
     .setName('adora-sac')
     .setDescription('Calc optimal ew adora sac for specified XP amount with hard/CHIMPS prices (no MK/discounts/etc.)')
-    .addIntegerOption((option) => option.setName('xp').setDescription('target XP to gain').setRequired(true).setMinValue(0).setMaxValue(XP_CAP))
-    .addStringOption((option) => option.setName('excluded_towers').setDescription('Comma-separated list of towers to exclude'));
+    .addIntegerOption((option) => option.setName('xp').setDescription('target XP to gain').setRequired(true).setMinValue(1).setMaxValue(XP_CAP))
+    .addStringOption((option) => option.setName('excluded_towers').setDescription('Comma-separated list of towers to exclude'))
+    .addIntegerOption((option) => option.setName('max_towers').setDescription('Max number of towers you are willing to sacrifice').setMinValue(1));
 
 /**
  * @param {string} excludedTowers raw excluded towers argument from command
@@ -66,6 +68,8 @@ async function execute(interaction) {
 
         let xp = interaction.options.getInteger('xp');
 
+        let maxTowers = interaction.options.getInteger('max_towers') ?? Infinity;
+
         // optimization: use money divided by 5 to shrink DP space as all tower/upgrade costs are divisble by 5
         let moneyToSpendDiv5 = Math.ceil(xp / (4 * 5));
 
@@ -74,7 +78,7 @@ async function execute(interaction) {
 
         let towers = allTowers()
         // sort towers in descending priority order, high priority should be looked at first
-        towers.sort((a, b) => (TOWER_PRIORITIES.get(b) || 0) - (TOWER_PRIORITIES.get(a) || 0));
+        towers.sort((a, b) => (TOWER_PRIORITIES.get(b) ?? 0) - (TOWER_PRIORITIES.get(a) ?? 0));
 
         const allUpgradeSets = allUpgradeCrosspathSets();
 
@@ -98,7 +102,7 @@ async function execute(interaction) {
                     // don't overwrite if higher priority present (deprioritize lower priority towers in case of cost tie)
                     if (!costsDiv5ToUpgrade.has(processedCost)) {
                         costsDiv5ToUpgrade.set(processedCost, upgradeSetStr);
-                        costsDiv5ToPriority.set(processedCost, TOWER_PRIORITIES.get(tower) || 0);
+                        costsDiv5ToPriority.set(processedCost, TOWER_PRIORITIES.get(tower) ?? 0);
                     }
                 }
             }
@@ -108,7 +112,7 @@ async function execute(interaction) {
         upgradeCostKeys.sort((a, b) => a - b);
         
         // cost of best sacrifice set is at most the cost of the smallest single upgrade set larger than target
-        let dpSize = Math.min(upgradeCostKeys.find((val) => val >= moneyToSpendDiv5) || XP_CAP_ADJUSTED, XP_CAP_ADJUSTED);
+        let dpSize = upgradeCostKeys.find((val) => val >= moneyToSpendDiv5) ?? XP_CAP_ADJUSTED;
 
         // set up DP arrays
         let bagSize = new Array(dpSize+1);
@@ -132,27 +136,88 @@ async function execute(interaction) {
             }
         }
 
-        let resultCost = 0;
-        let result = [];
-        for (let i = moneyToSpendDiv5; i <= dpSize; ++i) {
-            if (bagSize[i] !== Infinity) {
-                resultCost = i * 5;
-                while (i > 0) {
-                    result.push(costsDiv5ToUpgrade.get(lastItem[i]));
-                    i -= lastItem[i];
+        /**
+         * Overshoot vs Undershoot:
+         *
+         * You can either undershoot by sacrificing to adora while leaving xp leftover (which you then buy directly)
+         * or overshoot by sacrificing to adora to reach the XP needed and then some
+         *
+         * The below loop finds the cheapest of each kind and further down the costs are compared to find the cheaper.
+         */
+
+        let overshotResultCost = Infinity;
+        let overshotResult = [];
+
+        for (let startingMoneyDiv5 = moneyToSpendDiv5; startingMoneyDiv5 <= dpSize; ++startingMoneyDiv5) {
+            let moneyDiv5 = startingMoneyDiv5;
+            if (bagSize[moneyDiv5] !== Infinity) {
+                overshotResultCost = moneyDiv5 * 5;
+                while (moneyDiv5 > 0) {
+                    overshotResult.push(costsDiv5ToUpgrade.get(lastItem[moneyDiv5]));
+                    moneyDiv5 -= lastItem[moneyDiv5];
                 }
-                break;
+
+                if (overshotResult.length > maxTowers) {
+                    overshotResult = [];
+                    overshotResultCost = Infinity;
+                } else {
+                    break;
+                }
             }
         }
 
-        return await interaction.reply({
-            embeds: [
-                new Discord.EmbedBuilder()
-                    .setColor(cyber)
-                    .setTitle(`${result.length} tower(s) with cost $${resultCost}`)
-                    .setDescription(result.join('\n'))
-            ]
-        });
+        let undershotResultCost = Infinity;
+        let undershotResult = [];
+        let rawLevelingCost = 0;
+
+        for (let startingMoneyDiv5 = moneyToSpendDiv5 - 1; startingMoneyDiv5 >= 0; --startingMoneyDiv5) {
+            let moneyDiv5 = startingMoneyDiv5;
+            if (bagSize[moneyDiv5] !== Infinity) {
+                undershotResultCost = moneyDiv5 * 5;
+
+                // Direct Adora leveling since sacrifices here will bring the xp short by some amount
+                rawLevelingCost = xp - (startingMoneyDiv5 * 4 * 5)
+                undershotResultCost += rawLevelingCost
+
+                while (moneyDiv5 > 0) {
+                    undershotResult.push(costsDiv5ToUpgrade.get(lastItem[moneyDiv5]));
+                    moneyDiv5 -= lastItem[moneyDiv5];
+                }
+
+                if (undershotResult.length > maxTowers) {
+                    undershotResult = [];
+                    undershotResultCost = Infinity;
+                } else {
+                    break;
+                }
+            }
+        }
+
+
+        let embed;
+        if (overshotResultCost <= undershotResultCost) {
+            const s = overshotResult.length == 1 ? '' : 's'
+            const total = overshotResult.length > 1 ? ' total' : ''
+            embed = new Discord.EmbedBuilder()
+                .setColor(cyber)
+                .setTitle(`${overshotResult.length} tower${s} with${total} cost ${numberAsCost(overshotResultCost)}`)
+                .setDescription(overshotResult.join('\n'))
+        } else {
+            const s = undershotResult.length == 1 ? '' : 's'
+            const then = undershotResult.length > 0 ? 'then ' : ''
+            const rawLevelingInstruction = `${then}spend ${numberAsCost(rawLevelingCost)} to reach target`
+
+            embed = new Discord.EmbedBuilder()
+                .setColor(cyber)
+                .setTitle(`${undershotResult.length} tower${s} + raw leveling with total cost ${numberAsCost(undershotResultCost)}`)
+                .setDescription(undershotResult.concat('', rawLevelingInstruction).join('\n'))
+        }
+
+        if (xp === XP_CAP) {
+            embed.setFooter({ text: `${xp} is the total XP between Adora lvl-7 (when blood sacrifice is unlocked) and lvl-20 (max)` })
+        }
+
+        return await interaction.reply({ embeds: [embed] });
     } catch (error) {
         if (error instanceof RangeError) {
             return await interaction.reply({

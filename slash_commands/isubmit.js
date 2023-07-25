@@ -36,7 +36,7 @@ async function execute(interaction) {
 
 	if (currentGuild != SUBMISSIONS_GUILD){
 		await interaction.reply({ content: 'You may only submit from within the BTD6 Index Discord Server', ephemeral: true });
-	} else if (currentGuild == SUBMISSIONS_GUILD){
+	} else {
 		if (!messageAttachment && !text) {
 			return await interaction.reply({ content: 'No content submitted.', ephemeral: true });
 		} else if (!messageAttachment && text) {
@@ -55,9 +55,9 @@ async function execute(interaction) {
 						.setColor(cyber)
 						.setImage(`${json.link}`)
 						.setFooter({ text: `sent by ${interaction.user.tag}` });
-					const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send({ embeds: [embed] });
+					await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send({ embeds: [embed] });
+					const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send({ embeds: [embed] });
 					await interaction.reply({ content: 'Submitted: ' + url });
-					await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send({ embeds: [embed] });
 				})
 				.catch(async (e) => {
 					console.log(e);

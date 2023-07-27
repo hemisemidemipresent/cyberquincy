@@ -205,7 +205,9 @@ async function calc(interaction) {
             return await interaction.reply({
                 embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red)]
             });
-        } else console.log(e);
+        } else {
+            throw e
+        };
     }
 
     // The single item left in the stack is the evaluated result
@@ -277,7 +279,7 @@ function parseAndValueToken(t, i, difficulty) {
     } else if (Heroes.isHero(tokenCanonical)) {
         return costOfHero(tokenCanonical, difficulty, numDiscounts);
     } else {
-        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${s}"`);
+        throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }
 }
 

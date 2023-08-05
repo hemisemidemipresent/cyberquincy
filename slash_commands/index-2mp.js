@@ -336,10 +336,15 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
         { name: 'Map', value: mapColumn1, inline: true },
         { name: 'Person', value: personColumn1, inline: true },
         { name: 'Link', value: linkColumn1, inline: true },
-        { name: 'Map', value: mapColumn2, inline: true },
-        { name: 'Person', value: personColumn2, inline: true },
-        { name: 'Link', value: linkColumn2, inline: true },
     ]);
+
+    if (mapColumn2) {
+        challengeEmbed.addFields([
+            { name: 'Map', value: mapColumn2, inline: true },
+            { name: 'Person', value: personColumn2, inline: true },
+            { name: 'Link', value: linkColumn2, inline: true },
+        ])
+    }
 
     if (impossibleMaps.length > 0) {
         challengeEmbed.addFields([{ name: 'Impossible maps', value: impossibleMaps.join(', ') }]);

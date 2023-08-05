@@ -200,6 +200,17 @@ function mostCommonElement(arr) {
     return maxEl;
 }
 
+function partition(arr, num) {
+    const partitions = []
+    for (let p = 0; p < num; p++) {
+        const lowerLimit = Math.ceil(arr.length / num * p)
+        const upperLimit = Math.ceil(arr.length / num * (p + 1))
+        const part = arr.slice(lowerLimit, upperLimit)
+        partitions.push(part)
+    }
+    return partitions
+}
+
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);
 WHITE_HEAVY_CHECK_MARK = String.fromCharCode(9989);
 RED_X = String.fromCharCode(10060);
@@ -225,6 +236,7 @@ module.exports = {
     timeSince,
     round,
     mostCommonElement,
+    partition,
     HEAVY_CHECK_MARK,
     WHITE_HEAVY_CHECK_MARK,
     RED_X

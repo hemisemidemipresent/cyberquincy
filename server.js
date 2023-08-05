@@ -62,6 +62,7 @@ function consoleBootup() {
             status: 'online'
         });
         console.log('<Program Directive> Discord Bot Client is ready');
+        console.log(new Date());
         const botposting = require('./1/config.json')['botposting'];
         if (!botposting) {
             global.statcord = undefined;

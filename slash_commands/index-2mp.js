@@ -1,5 +1,3 @@
-const GoogleSheetsHelper = require('../helpers/google-sheets.js');
-
 const { timeSince, toTitleCase, WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps')
@@ -9,12 +7,6 @@ const { paleblue } = require('../jsons/colors.json');
 const Parsed = require('../parser/parsed.js');
 
 const { COLS } = require('../services/index/2mp_scraper');
-
-const TOWER_COLS = {
-    TOWER: 'O',
-    BASE: 'P',
-    LAST: 'Y'
-};
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
@@ -296,16 +288,18 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
         linkColumn.push(`${bold}${combo.MAPS[mapAbbr].LINK}${bold}`);
     }
 
-    let [mapColumn1, mapColumn2] = partition(mapColumn, 2)
-    let [personColumn1, personColumn2] = partition(personColumn, 2)
-    let [linkColumn1, linkColumn2] = partition(linkColumn, 2)
+    const numPartitions = mapColumn.length > 10 ? 2 : 1
+    let [mapColumn1, mapColumn2] = partition(mapColumn, numPartitions)
+    let [personColumn1, personColumn2] = partition(personColumn, numPartitions)
+    let [linkColumn1, linkColumn2] = partition(linkColumn, numPartitions)
 
     mapColumn1 = mapColumn1.join('\n');
-    mapColumn2 = mapColumn2.join('\n');
     personColumn1 = personColumn1.join('\n');
-    personColumn2 = personColumn2.join('\n');
     linkColumn1 = linkColumn1.join('\n');
-    linkColumn2 = linkColumn2.join('\n');
+
+    mapColumn2 = mapColumn2?.join('\n');
+    personColumn2 = personColumn2?.join('\n');
+    linkColumn2 = linkColumn2?.join('\n');
 
     let mapsLeft = permittedMapAbbrs.filter((m) => !Object.keys(combo.MAPS).includes(m));
 

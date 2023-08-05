@@ -385,6 +385,17 @@
         "thu": "https://media.discordapp.net/attachments/770247322633633792/1091540862057594931/springspring.png",
         "e": "1/1"
     },
+    "water_park": {
+        "ver": 38,
+        "len": [999, 999],
+        "lenStr": "999 Top\n999 Bottom",
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "Yes",
+        "los": "No",
+        "thu": "",
+        "e": "2/2"
+    },
     "bloonarius_prime": {
         "ver": 27,
         "len": [

@@ -1,6 +1,4 @@
-const GoogleSheetsHelper = require('../helpers/google-sheets.js');
-
-const gHelper = require('../helpers/general.js');
+const { timeSince, toTitleCase, WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps')
 
@@ -9,12 +7,6 @@ const { paleblue } = require('../jsons/colors.json');
 const Parsed = require('../parser/parsed.js');
 
 const { COLS } = require('../services/index/2mp_scraper');
-
-const TOWER_COLS = {
-    TOWER: 'O',
-    BASE: 'P',
-    LAST: 'Y'
-};
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
@@ -83,7 +75,7 @@ async function execute(interaction) {
             } else {
                 challengeEmbed = embed2MPOG(combo);
             }
-            challengeEmbed.setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
+            challengeEmbed.setDescription(`Index last reloaded ${timeSince(mtime)} ago`);
         } catch (e) {
             challengeEmbed = err(e);
         }
@@ -195,7 +187,7 @@ function embed2MPOG(combo) {
 
     for (const field in comboToEmbed) {
         challengeEmbed.addFields([
-            { name: gHelper.toTitleCase(field.replace('_', ' ')), value: comboToEmbed[field], inline: true }
+            { name: toTitleCase(field.replace('_', ' ')), value: comboToEmbed[field], inline: true }
         ]);
     }
 
@@ -295,9 +287,19 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
         personColumn.push(`${bold}${combo.MAPS[mapAbbr].PERSON}${bold}`);
         linkColumn.push(`${bold}${combo.MAPS[mapAbbr].LINK}${bold}`);
     }
-    mapColumn = mapColumn.join('\n');
-    personColumn = personColumn.join('\n');
-    linkColumn = linkColumn.join('\n');
+
+    const numPartitions = mapColumn.length > 10 ? 2 : 1
+    let [mapColumn1, mapColumn2] = partition(mapColumn, numPartitions)
+    let [personColumn1, personColumn2] = partition(personColumn, numPartitions)
+    let [linkColumn1, linkColumn2] = partition(linkColumn, numPartitions)
+
+    mapColumn1 = mapColumn1.join('\n');
+    personColumn1 = personColumn1.join('\n');
+    linkColumn1 = linkColumn1.join('\n');
+
+    mapColumn2 = mapColumn2?.join('\n');
+    personColumn2 = personColumn2?.join('\n');
+    linkColumn2 = linkColumn2?.join('\n');
 
     let mapsLeft = permittedMapAbbrs.filter((m) => !Object.keys(combo.MAPS).includes(m));
 
@@ -325,10 +327,18 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     }
 
     challengeEmbed.addFields([
-        { name: 'Map', value: mapColumn, inline: true },
-        { name: 'Person', value: personColumn, inline: true },
-        { name: 'Link', value: linkColumn, inline: true }
+        { name: 'Map', value: mapColumn1, inline: true },
+        { name: 'Person', value: personColumn1, inline: true },
+        { name: 'Link', value: linkColumn1, inline: true },
     ]);
+
+    if (mapColumn2) {
+        challengeEmbed.addFields([
+            { name: 'Map', value: mapColumn2, inline: true },
+            { name: 'Person', value: personColumn2, inline: true },
+            { name: 'Link', value: linkColumn2, inline: true },
+        ])
+    }
 
     if (impossibleMaps.length > 0) {
         challengeEmbed.addFields([{ name: 'Impossible maps', value: impossibleMaps.join(', ') }]);
@@ -411,7 +421,7 @@ async function display2MPFilterAll(interaction, combos, parsed, mtime) {
         challengeEmbed
             .setTitle(title)
             .setColor(paleblue)
-            .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
+            .setDescription(`Index last reloaded ${timeSince(mtime)} ago`);
 
         if (numOGCompletions == 1) {
             challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
@@ -517,7 +527,7 @@ function embed2MPTowerStatistics(combos, tower) {
     const completedComboEntities = combos.map(c => c.ENTITY.toLowerCase())
 
     const baseTowerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower)
-    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName.toLowerCase()) ? gHelper.WHITE_HEAVY_CHECK_MARK : gHelper.RED_X
+    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName.toLowerCase()) ? WHITE_HEAVY_CHECK_MARK : RED_X
 
     let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
@@ -532,7 +542,7 @@ function embed2MPTowerStatistics(combos, tower) {
     for (tier = 3; tier <= 5; tier++) {
         Towers.allPaths().forEach(path => {
             let towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
-            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName.toLowerCase()) ? gHelper.WHITE_HEAVY_CHECK_MARK : gHelper.RED_X
+            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName.toLowerCase()) ? WHITE_HEAVY_CHECK_MARK : RED_X
             challengeEmbed.addFields([{ name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }]);
         })
     }

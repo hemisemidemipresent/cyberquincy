@@ -1,9 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const gHelper = require('../helpers/general.js');
 
-const { Bloonarius } = require('../jsons/boss.json');
-const { Lych } = require('../jsons/boss.json');
-const { Vortex } = require('../jsons/boss.json');
+const Bosses = require('../jsons/boss.json');
 
 const builder = new SlashCommandBuilder()
     .setName('boss')
@@ -13,9 +11,11 @@ const builder = new SlashCommandBuilder()
             .setName('name')
             .setDescription('Which boss it is')
             .addChoices(
-                { name: 'Bloonarius', value: 'bloonarius' },
-                { name: 'Gravelord Lych', value: 'lych' },
-                { name: 'Vortex: Deadly Master of Air', value: 'vortex' }
+                { name: 'Bloonarius', value: 'Bloonarius' },
+                { name: 'Gravelord Lych', value: 'Lych' },
+                { name: 'Vortex: Deadly Master of Air', value: 'Vortex' },
+                { name: 'Dreadbloon: Armored Behemoth', value: 'Dreadbloon' },
+                { name: 'Reality Warper Phayze', value: 'Phayze' }
             )
             .setRequired(true)
     )
@@ -40,28 +40,19 @@ async function execute(interaction) {
     const boss = interaction.options.getString('name');
     const isElite = interaction.options.getBoolean('elite');
 
-    let embed;
-    switch (boss) {
-        case 'bloonarius':
-            embed = process(Bloonarius, 'Bloonarius', tier, isElite);
-            break;
-        case 'lych':
-            embed = process(Lych, 'Lych', tier, isElite);
-            break;
-        case 'vortex':
-            embed = process(Vortex, 'Vortex', tier, isElite);
-            break;
-    }
+    let data = Bosses[boss];
+    let embed = process(data, boss, tier, isElite);
+
     return await interaction.reply({ embeds: [embed] });
 }
 
 function process(data, name, tier, isElite) {
     let embed = new Discord.EmbedBuilder().setTitle(`${isElite ? 'Elite' : ''} ${name} Tier ${tier}`);
-    let desc = data.desc + '\n' + isElite ? data.eliteDesc : normalDesc;
+    let desc = data.desc + '\n\n' + (isElite ? data.eliteDesc : normalDesc);
     let obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
     desc += `\n\n**Stats**:
 Health: ${gHelper.numberWithCommas(obj.hp)}
-Speed: ${obj.speed} rbs/s
+Speed: ${obj.speed}x red bloon speed
 ${obj.desc}
 \`\`\`${data.customRounds}\`\`\``;
     embed.setDescription(desc);

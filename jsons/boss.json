@@ -70,7 +70,7 @@
         "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs\nR120|+8 fMOABs, +4 BFBs, +4 ZOMGs"
     },
     "Lych": {
-        "desc": "The Lych is more complicated; itcan gain health from towers sold while it's on screen and also heals from buffs along with removing them and stunning affected towers. Lych cannot heal above its starting health.",
+        "desc": "The Lych is complicated; it can gain health from towers sold while it's on screen and also heals from buffs along with removing them and stunning affected towers. Lych cannot heal above its starting health.",
         "normalDesc": "**Sell Life Steal**: Heals **1%** HP per highest tier of the tower sacrificed (example: a tier 5 tower would heal 5% of lych's max HP, crosspathing doesn't matter).\n\n**Buff Life Steal**: Heals **2%** HP for each buff stolen and stuns affected towers for **5 seconds**. The buff steal has **100 range** at tiers 1-4 and **infinite range** at tier 5. Can only steal buffs once per 12 seconds.\n\n**Reanimated Blimps**: Reanimated blimps at each skull phase spawn based off of popped blimps from the **past 20 seconds** at all tiers. Reanimated blimps have the same properties as their normal counterparts (i.e. can be stunned, insta-killed, etc)\n\n**Lych-Soul**: The Lych-Soul's speed is always **100%** of a Red Bloon. The Lych-Soul has the same properties as the main boss.",
         "eliteDesc": "**Sell Life Steal**: Heals **1%** HP per highest tier of the tower sacrificed (example: a tier 5 tower would heal 5% of lych's max HP, crosspathing doesn't matter).\n\n**Buff Life Steal**: Heals **4%** HP for each buff stolen and stuns affected towers for **5 seconds**. The buff steal has **100 range** at tiers 1-4 and **infinite range** at tier 5. Can only steal buffs once per 12 seconds.\n\n**Reanimated Blimps**: Reanimated blimps at each skull phase spawn based off of popped blimps from the **past 20 seconds** at all tiers. Reanimated blimps have the same properties as their normal counterparts (i.e. can be stunned, insta-killed, etc)\n\n**Lych-Soul**: The Lych-Soul's speed is always **100%** of a Red Bloon. The Lych-Soul has the same properties as the main boss.",
         "normal": [
@@ -208,5 +208,145 @@
             }
         ],
         "customRounds": "R  5|+6 spaced yellows\nR 12|+1 layer to all Bloons\nR 24|Camo Green replaced by Camo Yellow, Blues replaced by Pinks\nR 30|+4 spaced yellows, +5 spaced pinks\nR 40|MOAB replaced by 6 ceramics\nR 41|+60 clumped pinks\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs"
+    },
+    "Dreadbloon": {
+        "desc": "Dreadbloon has several special immunities to entire tower categories that cycle at each damage phase, while also passively spawning beefy Dreadrock Bloons, detailed below.",
+        "normalDesc": "**Immunities**: Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.\n\n**Ceramic Armor Shell**: Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 3,750 HP). Dreadbloon moves at **0.3x speed** while its Shell is active.\n\n**Dreadrock Bloons**: **Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull (exact amount unknown). Each Dreadrock Bloon has **both Ceramic and MOAB properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. They always move slightly slower than a Red Bloon.",
+        "eliteDesc": "**Immunities**: Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.\n\n**Ceramic Armor Shell**: Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 7,500 HP). Dreadbloon moves at **0.35x speed** while its Shell is active.\n\n**Dreadrock Bloons**: **Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull (exact amount unknown). Each Dreadrock Bloon has **both Ceramic and MOAB properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. They always move slightly slower than a Red Bloon.",
+        "normal": [
+            {
+                "tier": 1,
+                "hp": 7500,
+                "speed": 0.05,
+                "desc": "Dreadrock HP: 300\nLives lost per leaked Dreadrock: 5"
+            },
+            {
+                "tier": 2,
+                "hp": 25000,
+                "speed": 0.05,
+                "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 10"
+            },
+            {
+                "tier": 3,
+                "hp": 120000,
+                "speed": 0.05,
+                "desc": "Dreadrock HP: 900\nLives lost per leaked Dreadrock: 15"
+            },
+            {
+                "tier": 4,
+                "hp": 280000,
+                "speed": 0.06,
+                "desc": "Dreadrock HP: 5000\nLives lost per leaked Dreadrock: 20"
+            },
+            {
+                "tier": 5,
+                "hp": 1000000,
+                "speed": 0.06,
+                "desc": "Dreadrock HP: 12000\nLives lost per leaked Dreadrock: 25"
+            }
+        ],
+        "elite": [
+            {
+                "tier": 1,
+                "hp": 15000,
+                "speed": 0.05,
+                "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 20"
+            },
+            {
+                "tier": 2,
+                "hp": 90000,
+                "speed": 0.05,
+                "desc": "Dreadrock HP: 2500\nLives lost per leaked Dreadrock: 30"
+            },
+            {
+                "tier": 3,
+                "hp": 650000,
+                "speed": 0.05,
+                "desc": "Dreadrock HP: 10000\nLives lost per leaked Dreadrock: 50"
+            },
+            {
+                "tier": 4,
+                "hp": 2625000,
+                "speed": 0.06,
+                "desc": "Dreadrock HP: 22000\nLives lost per leaked Dreadrock: 75"
+            },
+            {
+                "tier": 5,
+                "hp": 12500000,
+                "speed": 0.06,
+                "desc": "Dreadrock HP: 45000\nLives lost per leaked Dreadrock: 100"
+            }
+        ],
+        "customRounds": "\nLeads & Ceramics become Fortified\nZebras -> Leads\nRainbows -> Ceramics\nFor rounds 40-69, every other regular MOAB is fortified (BFBs+ unaffected)\nFor rounds 70+, every MOAB is fortified (BFBs+ unaffected)\nThere are some exceptions:\nR 39|18 Rainbows -> 12 fLeads, 6 Ceramics\nR 40|MOAB -> 10 fLeads, 8 fCeramics\nR 43|10 Rainbows -> 10 fLeads\nR 46|replaced by 1 fMOAB\nR 60|replaced by 3 fMOABs, 40 fLeads\nR 80|replaced by a copy of R75\n"
+    },
+    "Phayze": {
+        "desc": "Phayze is a camo boss bloon that has a variety of \"reality-warping\" gimmicks, and resistance to camo removal.",
+        "normalDesc": "Spawns with **Camo**, and has 3 skulls.\n\n**Dash**: on every skull, it skips forward 8% of the total track length.\n\n**Reality Shield**: On spawn and every time a skull is reached, Phayze has a Reality Shield, of which it's HP of **1/4 of the total health of the raw blimp**. This means the **effective health** of the blimp when including the shield is **2x** the base health\nThe Reality Shield also increases its **movement speed** when it is active, which depends on the tier of the boss.\n\n**Radar Jam**: disables all non-innate camo-seeing buffs as well as restoring its camo property if it has been stripped every **24s**.\n\n**Global Attack Cooldown Multiplier**:\n- skull 1: **1.1x**\n- skull 2: **1.15x**\n- skull 3: **1.2x**\n(a multiplier of 1.1x means your towers will take 1.1x longer in between attacks)\n\n\"Opening a tear in the fabric of reality\": When each skull is reached, Phayze opens a tear in the fabric reality where it was, which allows bloons to spawn further along the track. (This disappears once Phayze is killed)",
+        "eliteDesc": "Spawns with **Camo**, and has 5 skulls.\n\n**Dash**: on every skull, it skips forward 8% of the total track length.\n\n**Reality Shield**: On spawn and every time a skull is reached, Phayze has a Reality Shield, of which it's HP of **1/4 of the total health of the raw blimp**. This means the **effective health** of the blimp when including the shield is **2.5x** the base health.\nThe Reality Shield also increases its **movement speed** when it is active, which depends on the tier of the boss.\n\n**Radar Jam**: disables all non-innate camo-seeing buffs as well as restoring its camo property if it has been stripped every **24s**.\n\n**Global Attack Cooldown Multiplier**: also changes based on the tier of the boss.\n\n\"Opening a tear in the fabric of reality\": When each skull is reached, Phayze opens a tear in the fabric reality where it was, which allows bloons to spawn further along the track. (this disappears once Phayze is killed)",
+        "normal": [
+            {
+                "tier": 1,
+                "hp": 10000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 20,000\nReality Shield bonus: **+30%** speed"
+            },
+            {
+                "tier": 2,
+                "hp": 37500,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 75,000\nReality Shield bonus: **+35%** speed"
+            },
+            {
+                "tier": 3,
+                "hp": 175000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 350,000\nReality Shield bonus: **+40%** speed"
+            },
+            {
+                "tier": 4,
+                "hp": 375000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 750,000\nReality Shield bonus: **+45%** speed"
+            },
+            {
+                "tier": 5,
+                "hp": 1500000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 3,000,000\nReality Shield bonus: **+50%** speed"
+            }
+        ],
+        "elite": [
+            {
+                "tier": 1,
+                "hp": 20000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 50,000\nReality Shield bonus: **+50%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.1x\n- skull 2 - 1.15x\n- skull 3 - 1.2x\n- skull 4 - 1.25x\n- skull 5 - 1.3x"
+            },
+            {
+                "tier": 2,
+                "hp": 120000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 300,000\nReality Shield bonus: **+55%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.1x\n- skull 2 - 1.15x\n- skull 3 - 1.2x\n- skull 4 - 1.25x\n- skull 5 - 1.3x"
+            },
+            {
+                "tier": 3,
+                "hp": 800000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 2,000,000\nReality Shield bonus: **+60%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.2x\n- skull 2 - 1.3x\n- skull 3 - 1.4x\n- skull 4 - 1.5x\n- skull 5 - 1.6x"
+            },
+            {
+                "tier": 4,
+                "hp": 3200000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 2,000,000\nReality Shield bonus: **+65%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.3x\n- skull 2 - 1.45x\n- skull 3 - 1.6x\n- skull 4 - 1.75x\n- skull 5 - 1.9x"
+            },
+            {
+                "tier": 5,
+                "hp": 16000000,
+                "speed": 0.36,
+                "desc": "Effective Health with Reality Shield: 40,000,000\nReality Shield bonus: **+70%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.4x\n- skull 2 - 1.6x\n- skull 3 - 1.8x\n- skull 4 - 2.0x\n- skull 5 - 2.2x"
+            }
+        ],
+        "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs\nR120|replaced by 12 ZOMGs, 12 BFBs and 24 fortified MOABs"
     }
 }

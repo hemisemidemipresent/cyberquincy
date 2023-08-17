@@ -12,7 +12,7 @@ const builder = new SlashCommandBuilder()
     .setDescription("Gamemode difficulty")
     .setRequired(true)
     .addChoices(
-        { name: 'Easy (Primary only, Deflation)', value: 'easy' },
+        { name: 'Easy (Primary only)', value: 'easy' },
         { name: 'Medium (Military only, Reverse, Apopalypse)', value: 'medium' },
         { name: 'Hard (Magic only, Double HP, ABR)', value: 'hard' },
         { name: 'Impoppable', value: 'impoppable' }

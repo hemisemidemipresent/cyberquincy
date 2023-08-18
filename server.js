@@ -1,7 +1,6 @@
 const { Client, GatewayIntentBits, InteractionType, ChatInputCommandInteraction } = require('discord.js');
 
 function main() {
-    pingHeroku();
     globalRequirements();
     consoleBootup();
     googleSheetsInitialization();
@@ -12,24 +11,7 @@ function main() {
     login();
 }
 
-function pingHeroku() {
-    let isTesting = require('./1/config.json')['testing'];
-    if (isTesting) return;
-
-    const express = require('express');
-
-    // this part is to keep the project going
-    const app = express();
-    //    app.use(express.static('public'));
-    app.get('/', (request, response) => {
-        let d = new Date(Date.now());
-        d.toString();
-        response.sendStatus(200);
-    });
-    app.listen(process.env.PORT || 3000);
-}
 function globalRequirements() {
-    global.colours = require('./jsons/colors.json');
     global.Towers = require('./helpers/towers.js');
     global.Heroes = require('./helpers/heroes.js');
     global.AliasRepository = require('./alias-repository.js');

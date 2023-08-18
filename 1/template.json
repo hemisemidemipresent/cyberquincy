@@ -1,5 +1,4 @@
 {
-    "prefix": "q!",
     "testToken": "put testing token here",
     "token": "production token",
     "testClient": "testing bot client ID",
@@ -19,6 +18,5 @@
     "btd6index": true,
     "botposting": false,
     "testing": true,
-    "btd6Version": 30,
-    "UserAgent": "btd6-windowsplayer-30.1"
+    "btd6Version": 30
 }

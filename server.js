@@ -21,25 +21,17 @@ function globalRequirements() {
         intents: [GatewayIntentBits.Guilds]
     });
 
-    global.prefix = require('./1/config.json')['prefix'];
-
-    global.Cooldowns = require('./helpers/cooldowns.js');
     global.CommandParser = require('./parser/command-parser.js');
 
     global.UserCommandError = require('./exceptions/user-command-error.js');
     global.DeveloperCommandError = require('./exceptions/developer-command-error.js');
-
-    //global.Xp = require('./helpers/xp.js');
-    //global.DiscordUsers = require('./helpers/discord-users.js');
-
-    //global.xpEnabled = true;
 }
 
 function consoleBootup() {
     client.once('ready', () => {
         client.user.setPresence({
             activity: {
-                name: `${prefix}help`
+                name: `/help`
             },
             status: 'online'
         });

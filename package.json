@@ -26,7 +26,7 @@
         "url": "https://github.com/hemisemidemipresent/cyberquincy/issues"
     },
     "engines": {
-        "node": "16.x"
+        "node": "18.x"
     },
     "homepage": "https://github.com/hemisemidemipresent/cyberquincy#readme",
     "dependencies": {

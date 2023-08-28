@@ -1,12 +1,9 @@
 const { timeSince, toTitleCase, WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
-const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps')
 
 const { paleblue } = require('../jsons/colors.json');
 
 const Parsed = require('../parser/parsed.js');
-
-const { COLS } = require('../services/index/2mp_scraper');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
@@ -44,12 +41,33 @@ async function execute(interaction) {
     );
 
     await interaction.deferReply();
+    
+    const entityType = parsed.tower ? Aliases.toIndexNormalForm(parsed.tower) : null;
+    const entity = parsed.tower_upgrade ? Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade) : null;
+    const map = parsed.map ? Aliases.toIndexNormalForm(parsed.map) : null;
 
-    const forceReload = interaction.options.getString('reload') ? true : false;
-
-    const allCombos = await Index.fetchInfo('2mp', forceReload);
-
-    const mtime = Index.getLastCacheModified('2mp');
+    const fetchParams = new URLSearchParams(
+        Object.entries({
+            towerquery: JSON.stringify([entityType ?? entity].filter(val => val)),
+            map,
+            person: parsed.person,
+            difficulty: parsed.map_difficulty,
+            pending: '0',
+            count: '10'
+        }).filter(([,value]) => value !== null && value !== undefined)
+    );
+    
+    if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
+        fetchParams.set('og', '1');
+        const res = await fetch('https://btd6index.win/fetch-2mp?' + fetchParams);
+        const resJson = await res.json();
+        return await interaction.editReply({
+            embeds: [embed2MPTowerStatistics(resJson, parsed.tower)]
+        });
+    } else {
+        // TODO add shit
+    }
+    return await interaction.editReply({content: JSON.stringify(resJson, null, 2)});
 
     if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
         const challengeEmbed = embed2MPTowerStatistics(allCombos, parsed.tower);
@@ -521,13 +539,13 @@ function determineExcludedColumns(parsed) {
 
 // Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier
 // Displays base centered above grid
-function embed2MPTowerStatistics(combos, tower) {
+function embed2MPTowerStatistics(resJson, tower) {
     const towerFormatted = Aliases.toIndexNormalForm(tower);
 
-    const completedComboEntities = combos.map(c => c.ENTITY.toLowerCase())
+    const completedComboEntities = resJson.results.map(res => res.entity);
 
     const baseTowerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower)
-    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName.toLowerCase()) ? WHITE_HEAVY_CHECK_MARK : RED_X
+    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X
 
     let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
@@ -542,7 +560,7 @@ function embed2MPTowerStatistics(combos, tower) {
     for (tier = 3; tier <= 5; tier++) {
         Towers.allPaths().forEach(path => {
             let towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
-            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName.toLowerCase()) ? WHITE_HEAVY_CHECK_MARK : RED_X
+            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X
             challengeEmbed.addFields([{ name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }]);
         })
     }

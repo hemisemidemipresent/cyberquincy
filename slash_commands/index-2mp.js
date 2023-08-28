@@ -27,6 +27,15 @@ builder = new SlashCommandBuilder()
     .addStringOption(userOption)
     .addStringOption(reloadOption);
 
+async function fetch2mp(searchParams) {
+    let res = await fetch('https://btd6index.win/fetch-2mp?' + searchParams);
+    let resJson = await res.json();
+    if ('error' in resJson) {
+        throw new Error(resJson.error);
+    }
+    return resJson;
+}
+
 async function execute(interaction) {
     validationFailure = validateInput(interaction);
     if (validationFailure)
@@ -44,28 +53,41 @@ async function execute(interaction) {
     
     const entityType = parsed.tower ? Aliases.toIndexNormalForm(parsed.tower) : null;
     const entity = parsed.tower_upgrade ? Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade) : null;
+    const hero = parsed.hero ? Aliases.toIndexNormalForm(parsed.hero) : null;
     const map = parsed.map ? Aliases.toIndexNormalForm(parsed.map) : null;
 
     const fetchParams = new URLSearchParams(
         Object.entries({
-            towerquery: JSON.stringify([entityType ?? entity].filter(val => val)),
+            towerquery: JSON.stringify([entityType ?? entity ?? hero].filter(val => val)),
             map,
             person: parsed.person,
             difficulty: parsed.map_difficulty,
             pending: '0',
-            count: '10'
+            count: '100'
         }).filter(([,value]) => value !== null && value !== undefined)
     );
     
     if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
         fetchParams.set('og', '1');
-        const res = await fetch('https://btd6index.win/fetch-2mp?' + fetchParams);
-        const resJson = await res.json();
+        const resJson = await fetch2mp(fetchParams);
         return await interaction.editReply({
             embeds: [embed2MPTowerStatistics(resJson, parsed.tower)]
         });
-    } else {
-        // TODO add shit
+    } else if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
+        const resJson = await fetch2mp(fetchParams);
+        let challengeEmbed;
+
+        try {
+            if (parsed.map_difficulty) {
+                challengeEmbed = embed2MPMapDifficulty(resJson, entity ?? hero, parsed.map_difficulty);
+            }
+
+            return await interaction.editReply({
+                embeds: [challengeEmbed]
+            });
+        } catch (e) {
+            challengeEmbed = err(e);
+        }
     }
     return await interaction.editReply({content: JSON.stringify(resJson, null, 2)});
 
@@ -280,30 +302,27 @@ function embed2MPAlt(combo, map) {
 ////////////////////////////////////////////////////////////
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
-function embed2MPMapDifficulty(combo, mapDifficulty) {
+function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
     const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
+
+    if (resJson.results.length === 0) {
+        throw new UserCommandError(`\`${entity}\` hasn't been completed yet on any \`${mapDifficulty}\` maps`);
+    }
 
     // Get all map abbreviations for the specified map difficulty
     const permittedMapAbbrs = Maps.allMapsFromMapDifficulty(mapDifficulty).map((map) => Maps.mapToIndexAbbreviation(map));
-
-    const relevantMaps = Object.keys(combo.MAPS).filter((m) => permittedMapAbbrs.includes(m));
-
-    const numCombosCompleted = relevantMaps.length;
-
-    if (numCombosCompleted == 0) {
-        throw new UserCommandError(`\`${combo.ENTITY}\` has not yet been completed on any \`${mapDifficulty}\` maps`);
-    }
+    const completedMaps = resJson.results.map(completion => Maps.mapToIndexAbbreviation(Aliases.getCanonicalForm(completion.map)));
 
     // Format 3 columns: map, person, link
     let mapColumn = [];
     let personColumn = [];
     let linkColumn = [];
-    for (const mapAbbr of relevantMaps) {
-        const bold = combo.MAPS[mapAbbr].OG ? '**' : '';
+    for (const completion of resJson.results) {
+        const bold = completion.og ? '**' : '';
 
-        mapColumn.push(`${bold}${Maps.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`);
-        personColumn.push(`${bold}${combo.MAPS[mapAbbr].PERSON}${bold}`);
-        linkColumn.push(`${bold}${combo.MAPS[mapAbbr].LINK}${bold}`);
+        mapColumn.push(`${bold}${completion.map}${bold}`);
+        personColumn.push(`${bold}${completion.person}${bold}`);
+        linkColumn.push(`${bold}[Link](${completion.link})${bold}`);
     }
 
     const numPartitions = mapColumn.length > 10 ? 2 : 1
@@ -319,15 +338,15 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     personColumn2 = personColumn2?.join('\n');
     linkColumn2 = linkColumn2?.join('\n');
 
-    let mapsLeft = permittedMapAbbrs.filter((m) => !Object.keys(combo.MAPS).includes(m));
+    let mapsLeft = permittedMapAbbrs.filter((m) => !completedMaps.includes(m));
 
     // Check if tower is water tower
-    const impossibleMaps = Maps.mapsNotPossible(combo.ENTITY).filter(m => permittedMapAbbrs.includes(m))
+    const impossibleMaps = Maps.mapsNotPossible(entity).filter(m => permittedMapAbbrs.includes(m))
     mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
 
     // Embed and send the message
     let challengeEmbed = new Discord.EmbedBuilder()
-        .setTitle(`${combo.ENTITY} 2MPCs on ${mapDifficultyFormatted} Maps`)
+        .setTitle(`${entity} 2MPCs on ${mapDifficultyFormatted} Maps`)
         .setColor(paleblue);
 
     const numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
@@ -335,7 +354,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     if (mapsLeft.length > 0) {
         possiblePhrasing = impossibleMaps.length > 0 ? ' (where placement is possible)' : '';
         challengeEmbed.addFields([
-            { name: `Combos${possiblePhrasing}`, value: `**${numCombosCompleted}**/${numCombosPossible}` }
+            { name: `Combos${possiblePhrasing}`, value: `**${completedMaps.length}**/${numCombosPossible}` }
         ]);
     } else {
         possiblePhrasing = impossibleMaps.length > 0 ? ' possible' : '';

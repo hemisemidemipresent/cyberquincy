@@ -1,5 +1,6 @@
 const { timeSince, toTitleCase, WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
-const Maps = require('../helpers/maps')
+const Index = require('../helpers/index.js');
+const Maps = require('../helpers/maps');
 
 const { paleblue } = require('../jsons/colors.json');
 
@@ -34,6 +35,10 @@ async function fetch2mp(searchParams) {
         throw new Error(resJson.error);
     }
     return resJson;
+}
+
+function genCompletionLink(completion) {
+    return `[Link](${completion.link ?? `https://media.btd6index.win/${completion.filekey}`})`;
 }
 
 async function execute(interaction) {
@@ -80,6 +85,10 @@ async function execute(interaction) {
         try {
             if (parsed.map_difficulty) {
                 challengeEmbed = embed2MPMapDifficulty(resJson, entity ?? hero, parsed.map_difficulty);
+            } else if (parsed.map) {
+                challengeEmbed = await embed2MPAlt(resJson, entity ?? hero, parsed.map);
+            } else {
+                challengeEmbed = await embed2MPOG(entity ?? hero);
             }
 
             return await interaction.editReply({
@@ -219,22 +228,35 @@ function parsePerson(interaction) {
 // 2MP OG
 ////////////////////////////////////////////////////////////
 
-function embed2MPOG(combo) {
-    const comboToEmbed = orderAndFlatten2MPOGCompletion(combo);
+async function embed2MPOG(entity) {
+    let resJson = await fetch2mp(new URLSearchParams({
+        towerquery: JSON.stringify([entity]),
+        pending: '0',
+        count: '100'
+    }));
 
-    // Embed and send the message
-    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${comboToEmbed.ENTITY} 2MPC Combo`).setColor(paleblue);
-
-    for (const field in comboToEmbed) {
-        challengeEmbed.addFields([
-            { name: toTitleCase(field.replace('_', ' ')), value: comboToEmbed[field], inline: true }
-        ]);
+    if (resJson.results.length === 0) {
+        throw new UserCommandError(`Entity \`${entity}\` does not yet have a 2MP`);
     }
 
+    let ogCompletion = resJson.results.find(completion => completion.og);
+
+    const comboToEmbed = await orderAndFlatten2MPOGCompletion(ogCompletion);
+
+    // Embed and send the message
+    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${entity} 2MPC Combo`).setColor(paleblue);
+
+    challengeEmbed.addFields(
+        Object.entries(comboToEmbed).map(([field, value]) => ({name: field, value, inline: true}))
+    );
     challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
-    const ogMapAbbr = ogCombo(combo)[0];
-    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), Maps.mapsNotPossible(combo.ENTITY));
+    const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogCompletion.map);
+    let completedAltMapsFields = Index.altMapsFields(
+        ogMapAbbr,
+        resJson.results.map(completion => Maps.indexNormalFormToMapAbbreviation(completion.map)),
+        Maps.mapsNotPossible(entity)
+    );
 
     challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
@@ -245,53 +267,50 @@ function embed2MPOG(combo) {
     return challengeEmbed;
 }
 
-function orderAndFlatten2MPOGCompletion(combo) {
-    let [ogMap, ogCompletion] = ogCombo(combo);
-    combo = {
-        ...combo,
-        OG_MAP: Maps.indexMapAbbreviationToNormalForm(ogMap),
-        PERSON: ogCompletion.PERSON,
-        LINK: ogCompletion.LINK
+async function orderAndFlatten2MPOGCompletion(ogCompletion) {
+    let ogInfo = await fetch('https://btd6index.win/fetch-2mp-og-info?' + new URLSearchParams({entity: ogCompletion.entity}));
+    ogInfo = await ogInfo.json();
+
+    if ('error' in ogInfo) {
+        throw new Error(ogInfo.error);
+    }
+
+    return {
+        Entity: ogCompletion.entity,
+        Upgrade: ogInfo.result.upgrade,
+        'OG Map': ogCompletion.map,
+        Version: ogInfo.result.version,
+        Date: ogInfo.result.date,
+        Person: ogCompletion.person,
+        Link: genCompletionLink(ogCompletion)
     };
-
-    const ordering = Object.keys(COLS);
-    let orderedFields = {};
-    ordering.forEach((col) => (orderedFields[col] = combo[col]));
-    return orderedFields;
-}
-
-function ogCombo(combo) {
-    return Object.entries(combo.MAPS).find(([_, altCombo]) => {
-        return altCombo.OG;
-    });
 }
 
 ////////////////////////////////////////////////////////////
 // 2MP Alt Map
 ////////////////////////////////////////////////////////////
 
-function embed2MPAlt(combo, map) {
+async function embed2MPAlt(resJson, entity, map) {
     const mapFormatted = Aliases.toIndexNormalForm(map);
-    const mapAbbr = Maps.mapToIndexAbbreviation(map);
 
-    const altCombo = combo.MAPS[mapAbbr];
+    const altCombo = resJson.results[0];
 
     if (!altCombo) {
-        throw new UserCommandError(`\`${combo.ENTITY}\` hasn't been completed yet on \`${mapFormatted}\``);
+        throw new UserCommandError(`\`${entity}\` hasn't been completed yet on \`${mapFormatted}\``);
     }
 
     // Display OG map as if map weren't in the query
-    if (altCombo.OG) {
-        return embed2MPOG(combo);
+    if (altCombo.og) {
+        return embed2MPOG(entity);
     }
 
     // Embed and send the message
     let challengeEmbed = new Discord.EmbedBuilder()
-        .setTitle(`${combo.ENTITY} 2MPC Combo on ${mapFormatted}`)
+        .setTitle(`${entity} 2MPC Combo on ${mapFormatted}`)
         .setColor(paleblue)
         .addFields([
-            { name: 'Person', value: altCombo.PERSON, inline: true },
-            { name: 'Link', value: altCombo.LINK, inline: true }
+            { name: 'Person', value: altCombo.person, inline: true },
+            { name: 'Link', value: genCompletionLink(altCombo), inline: true }
         ]);
 
     return challengeEmbed;
@@ -322,7 +341,7 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
 
         mapColumn.push(`${bold}${completion.map}${bold}`);
         personColumn.push(`${bold}${completion.person}${bold}`);
-        linkColumn.push(`${bold}[Link](${completion.link})${bold}`);
+        linkColumn.push(`${bold}${genCompletionLink(completion.link)}${bold}`);
     }
 
     const numPartitions = mapColumn.length > 10 ? 2 : 1

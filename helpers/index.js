@@ -63,6 +63,7 @@ const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js');
 const { scrapeAll2MPCompletions } = require('../services/index/2mp_scraper.js');
 const { scrapeAllFTTCCombos } = require('../services/index/fttc_scraper');
 const { scrapeAllBalanceChanges } = require('../services/index/balances_scraper');
+const { URLSearchParams } = require('url');
 
 async function scrapeInfo(info) {
     switch (info) {
@@ -340,6 +341,129 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
     await displayPages(1);
 }
 
+/**
+ * @async
+ * @callback fetchFn
+ * @param {URLSearchParams} searchParams
+ * @returns {*}
+ */
+
+/**
+ * @callback completionToFields
+ * @param {*} completion
+ * @returns {*}
+ */
+
+/**
+ * 
+ * @param {import('discord.js').Interaction} interaction 
+ * @param {fetchFn} fetchFn 
+ * @param {URLSearchParams} searchParams 
+ * @param {string[]} displayFields
+ * @param {completionToFields} completionToFields
+ */
+async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, displayFields, completionToFields) {
+    const NUM_ROWS = 10;
+    let mobile = false;
+
+    const createPage = async () => {
+        let resJson = await fetchFn(searchParams);
+        let offset = parseInt(searchParams.get('offset') ?? '0');
+        const challengeEmbed = new Discord.EmbedBuilder();
+        let content = `**Results ${offset+1}-${offset+resJson.results.length} of ${resJson.count}**`;
+        const completionsFields = resJson.results.map(completionToFields);
+        const fieldWidths = displayFields.map(field => Math.max(
+            ...completionsFields.map(completionFields => {
+                return field === 'Link' ? 4 : completionFields[field].length;
+            }),
+            field.length
+        ));
+        if (mobile) {
+            content += '\n`';
+            content += displayFields.map((field, idx) => field.padEnd(fieldWidths[idx])).join(' ');
+            content += ' `\n';
+            content += completionsFields.map(completionFields => {
+                return '`' + displayFields.map((field, idx) => {
+                    let val = completionFields[field];
+                    let res = val.padEnd(fieldWidths[idx] + val.length - (field === 'Link' ? 4 : val.length));
+                    return field === 'Link' ? '`' + res + '`' : res;
+                }).join(' ') + ' `';
+            }).join('\n');
+        } else {
+            challengeEmbed.addFields(displayFields.map(field => {
+                return {
+                    name: field,
+                    value: completionsFields.map(completionFields => completionFields[field]).join('\n'),
+                    inline: true
+                };
+            }));
+        }
+
+        challengeEmbed.setDescription(content);
+        return [challengeEmbed, resJson.more];
+    };
+
+    const displayPages = async (initial) => {
+        let [embed, more] = await createPage();
+
+        await interaction.editReply({embeds: [embed], components: !initial || more ? [multipageButtons] : [singlepageButtons]});
+
+        const filter = (selection) => {
+            // Ensure user clicking button is same as the user that started the interaction
+            if (selection.user.id !== interaction.user.id) {
+                return false;
+            }
+            // Ensure that the button press corresponds with this interaction and wasn't
+            // a button press on the previous interaction
+            if (selection.message.interaction.id !== interaction.id) {
+                return false;
+            }
+            return true;
+        };
+
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            componentType: ComponentType.Button,
+            time: 60000
+        });
+
+        collector.on('collect', async (buttonInteraction) => {
+            collector.stop();
+            buttonInteraction.deferUpdate();
+
+            let offset = parseInt(searchParams.get('offset') ?? '0');
+
+            switch (buttonInteraction.customId) {
+                case 'mobile':
+                    mobile = !mobile;
+                    await displayPages(initial);
+                    break;
+                case '-1':
+                    searchParams.set('offset', Math.max(offset - NUM_ROWS, 0));
+                    await displayPages(false);
+                    break;
+                case '1':
+                    if (more) {
+                        searchParams.set('offset', offset + NUM_ROWS);
+                    }
+                    await displayPages(false);
+                    break;
+            }
+        });
+
+        collector.on('end', async (collected) => {
+            if (collected.size == 0) {
+                await interaction.editReply({
+                    embeds: [embed],
+                    components: []
+                });
+            }
+        });
+    };
+
+    await displayPages(true);
+}
+
 module.exports = {
     getLastCacheModified,
     fetchInfo,
@@ -347,5 +471,6 @@ module.exports = {
     parseMapNotes,
     altMapsFields,
 
-    displayOneOrMultiplePages
+    displayOneOrMultiplePages,
+    displayOneOrMultiplePagesNew
 };

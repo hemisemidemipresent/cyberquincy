@@ -90,41 +90,6 @@ async function execute(interaction) {
             } else {
                 challengeEmbed = await embed2MPOG(entity ?? hero);
             }
-
-            return await interaction.editReply({
-                embeds: [challengeEmbed]
-            });
-        } catch (e) {
-            challengeEmbed = err(e);
-        }
-    }
-    return await interaction.editReply({content: JSON.stringify(resJson, null, 2)});
-
-    if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
-        const challengeEmbed = embed2MPTowerStatistics(allCombos, parsed.tower);
-        return await interaction.reply({
-            embeds: [challengeEmbed]
-        });
-    } else if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
-        const entity = parsed.hero || Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade);
-        const entityFormatted = Aliases.toIndexNormalForm(entity);
-        const combo = allCombos.find((c) => c.ENTITY.toLowerCase() == entityFormatted.toLowerCase());
-
-        let challengeEmbed;
-
-        try {
-            if (!combo) {
-                throw new UserCommandError(`Entity \`${entityFormatted}\` does not yet have a 2MP`);
-            }
-
-            if (parsed.map_difficulty) {
-                challengeEmbed = embed2MPMapDifficulty(combo, parsed.map_difficulty);
-            } else if (parsed.map) {
-                challengeEmbed = embed2MPAlt(combo, parsed.map);
-            } else {
-                challengeEmbed = embed2MPOG(combo);
-            }
-            challengeEmbed.setDescription(`Index last reloaded ${timeSince(mtime)} ago`);
         } catch (e) {
             challengeEmbed = err(e);
         }
@@ -133,9 +98,8 @@ async function execute(interaction) {
             embeds: [challengeEmbed]
         });
     }
-
     try {
-        return await display2MPFilterAll(interaction, allCombos, parsed, mtime);
+        return await display2MPFilterAll(interaction, fetchParams, parsed);
     } catch (e) {
         return await interaction.editReply({ embeds: [err(e)] });
     }
@@ -413,83 +377,98 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
 // Custom Multipage Queries
 ////////////////////////////////////////////////////////////
 
-async function display2MPFilterAll(interaction, combos, parsed, mtime) {
-    // Collect data from 4 columns: tower, map, person, link
-    // Only 3 can be used maximum to format a discord embed
-    let towerColumn = [];
-    let personColumn = [];
-    let linkColumn = [];
-    let mapColumn = [];
-
-    let numOGCompletions = 0;
-    let erroredYet = false
-
-    // Retrieve og- and alt-map notes from each tower row
-    for (const combo of combos) {
-        for (const map in combo.MAPS) {
-            const mapCompletion = combo.MAPS[map];
-
-            const canonicalCompletion = {
-                ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
-                MAP: Maps.indexMapAbbreviationToMap(map),
-                PERSON: mapCompletion.PERSON,
-                LINK: mapCompletion.LINK,
-                OG: mapCompletion.OG || false
-            };
-
-            if (!canonicalCompletion.MAP && !erroredYet) {
-                interaction.reply({content: `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`})
-                erroredYet = true
-                continue
-            }
-
-            if (!filterCombo(canonicalCompletion, parsed)) {
-                continue;
-            }
-
-            const bold = mapCompletion.OG ? '**' : '';
-            if (mapCompletion.OG) numOGCompletions += 1;
-
-            towerColumn.push(`${bold}${combo.ENTITY}${bold}`);
-            mapColumn.push(`${bold}${map}${bold}`);
-            linkColumn.push(`${bold}${mapCompletion.LINK}${bold}`);
-            personColumn.push(`${bold}${mapCompletion.PERSON}${bold}`);
-        }
-    }
-
-    // If no combos were found after filtering
-    if (towerColumn.length == 0) {
-        throw new UserCommandError(titleFunction(parsed, true));
-    }
-
-    const title = titleFunction(parsed);
-
+async function display2MPFilterAll(interaction, fetchParams, parsed) {
     const excludedColumns = determineExcludedColumns(parsed);
-
-    // Exclude columns from data output based on function input
-    let columns = {};
-    if (!excludedColumns.includes('entity')) columns.ENTITY = towerColumn;
-    if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
-    if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
-    columns.LINK = linkColumn;
-
-    function setOtherDisplayFields(challengeEmbed) {
-        challengeEmbed
-            .setTitle(title)
-            .setColor(paleblue)
-            .setDescription(`Index last reloaded ${timeSince(mtime)} ago`);
-
-        if (numOGCompletions == 1) {
-            challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
+    fetchParams.set('count', '10');
+    return await Index.displayOneOrMultiplePagesNew(
+        interaction, fetch2mp, fetchParams,
+        ['Tower', 'Map', 'Person', 'Link'].filter(col => !excludedColumns.includes(col)),
+        completion => {
+            return {
+                'Tower': completion.entity,
+                'Map': completion.map,
+                'Person': completion.person,
+                'Link': genCompletionLink(completion)
+            };
         }
-        if (numOGCompletions > 1) {
-            challengeEmbed.setFooter({
-                text: `---\n${numOGCompletions} total OG completions bolded`
-            });
-        }
-    }
+    );
 
-    return await Index.displayOneOrMultiplePages(interaction, columns, setOtherDisplayFields);
+    // // Collect data from 4 columns: tower, map, person, link
+    // // Only 3 can be used maximum to format a discord embed
+    // let towerColumn = [];
+    // let personColumn = [];
+    // let linkColumn = [];
+    // let mapColumn = [];
+
+    // let numOGCompletions = 0;
+    // let erroredYet = false;
+
+    // // Retrieve og- and alt-map notes from each tower row
+    // for (const combo of combos) {
+    //     for (const map in combo.MAPS) {
+    //         const mapCompletion = combo.MAPS[map];
+
+    //         const canonicalCompletion = {
+    //             ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
+    //             MAP: Maps.indexMapAbbreviationToMap(map),
+    //             PERSON: mapCompletion.PERSON,
+    //             LINK: mapCompletion.LINK,
+    //             OG: mapCompletion.OG || false
+    //         };
+
+    //         if (!canonicalCompletion.MAP && !erroredYet) {
+    //             interaction.reply({content: `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`})
+    //             erroredYet = true
+    //             continue
+    //         }
+
+    //         if (!filterCombo(canonicalCompletion, parsed)) {
+    //             continue;
+    //         }
+
+    //         const bold = mapCompletion.OG ? '**' : '';
+    //         if (mapCompletion.OG) numOGCompletions += 1;
+
+    //         towerColumn.push(`${bold}${combo.ENTITY}${bold}`);
+    //         mapColumn.push(`${bold}${map}${bold}`);
+    //         linkColumn.push(`${bold}${mapCompletion.LINK}${bold}`);
+    //         personColumn.push(`${bold}${mapCompletion.PERSON}${bold}`);
+    //     }
+    // }
+
+    // // If no combos were found after filtering
+    // if (towerColumn.length == 0) {
+    //     throw new UserCommandError(titleFunction(parsed, true));
+    // }
+
+    // const title = titleFunction(parsed);
+
+    // const excludedColumns = determineExcludedColumns(parsed);
+
+    // // Exclude columns from data output based on function input
+    // let columns = {};
+    // if (!excludedColumns.includes('entity')) columns.ENTITY = towerColumn;
+    // if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
+    // if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
+    // columns.LINK = linkColumn;
+
+    // function setOtherDisplayFields(challengeEmbed) {
+    //     challengeEmbed
+    //         .setTitle(title)
+    //         .setColor(paleblue)
+    //         .setDescription(`Index last reloaded ${timeSince(mtime)} ago`);
+
+    //     if (numOGCompletions == 1) {
+    //         challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
+    //     }
+    //     if (numOGCompletions > 1) {
+    //         challengeEmbed.setFooter({
+    //             text: `---\n${numOGCompletions} total OG completions bolded`
+    //         });
+    //     }
+    // }
+
+    // return await Index.displayOneOrMultiplePages(interaction, columns, setOtherDisplayFields);
 }
 
 function filterCombo(c, parsed) {
@@ -553,19 +532,19 @@ function determineExcludedColumns(parsed) {
     let excludedColumns = [];
 
     if (parsed.tower_upgrade || parsed.hero) {
-        excludedColumns.push('entity');
+        excludedColumns.push('Tower');
     }
 
     if (parsed.map) {
-        excludedColumns.push('map');
+        excludedColumns.push('Map');
     }
 
     if (parsed.person || !parsed.hasAny()) {
-        excludedColumns.push('person');
+        excludedColumns.push('Person');
     }
 
     if (!parsed.tower_upgrade && !parsed.hero && !parsed.map && !parsed.person) {
-        excludedColumns.push('person');
+        excludedColumns.push('Person');
     }
 
     return excludedColumns;

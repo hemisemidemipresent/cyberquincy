@@ -379,124 +379,31 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
 
 async function display2MPFilterAll(interaction, fetchParams, parsed) {
     const excludedColumns = determineExcludedColumns(parsed);
+    fetchParams.set('count', '0');
+    if ((await fetch2mp(fetchParams)).count <= 0) {
+        throw new UserCommandError(titleFunction(parsed, true));
+    }
     fetchParams.set('count', '10');
     return await Index.displayOneOrMultiplePagesNew(
         interaction, fetch2mp, fetchParams,
         ['Tower', 'Map', 'Person', 'Link'].filter(col => !excludedColumns.includes(col)),
         completion => {
+            const boldOg = (str) => completion.og ? `**${str}**` : str;
+
             return {
-                'Tower': completion.entity,
-                'Map': completion.map,
-                'Person': completion.person,
-                'Link': genCompletionLink(completion)
+                'Tower': boldOg(completion.entity),
+                'Map': boldOg(completion.map),
+                'Person': boldOg(completion.person),
+                'Link': boldOg(genCompletionLink(completion))
             };
+        },
+        embed => {
+            embed
+            .setTitle(titleFunction(parsed))
+            .setColor(paleblue)
+            .setFooter({ text: `---\nAny OG completion(s) bolded` });
         }
     );
-
-    // // Collect data from 4 columns: tower, map, person, link
-    // // Only 3 can be used maximum to format a discord embed
-    // let towerColumn = [];
-    // let personColumn = [];
-    // let linkColumn = [];
-    // let mapColumn = [];
-
-    // let numOGCompletions = 0;
-    // let erroredYet = false;
-
-    // // Retrieve og- and alt-map notes from each tower row
-    // for (const combo of combos) {
-    //     for (const map in combo.MAPS) {
-    //         const mapCompletion = combo.MAPS[map];
-
-    //         const canonicalCompletion = {
-    //             ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
-    //             MAP: Maps.indexMapAbbreviationToMap(map),
-    //             PERSON: mapCompletion.PERSON,
-    //             LINK: mapCompletion.LINK,
-    //             OG: mapCompletion.OG || false
-    //         };
-
-    //         if (!canonicalCompletion.MAP && !erroredYet) {
-    //             interaction.reply({content: `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`})
-    //             erroredYet = true
-    //             continue
-    //         }
-
-    //         if (!filterCombo(canonicalCompletion, parsed)) {
-    //             continue;
-    //         }
-
-    //         const bold = mapCompletion.OG ? '**' : '';
-    //         if (mapCompletion.OG) numOGCompletions += 1;
-
-    //         towerColumn.push(`${bold}${combo.ENTITY}${bold}`);
-    //         mapColumn.push(`${bold}${map}${bold}`);
-    //         linkColumn.push(`${bold}${mapCompletion.LINK}${bold}`);
-    //         personColumn.push(`${bold}${mapCompletion.PERSON}${bold}`);
-    //     }
-    // }
-
-    // // If no combos were found after filtering
-    // if (towerColumn.length == 0) {
-    //     throw new UserCommandError(titleFunction(parsed, true));
-    // }
-
-    // const title = titleFunction(parsed);
-
-    // const excludedColumns = determineExcludedColumns(parsed);
-
-    // // Exclude columns from data output based on function input
-    // let columns = {};
-    // if (!excludedColumns.includes('entity')) columns.ENTITY = towerColumn;
-    // if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
-    // if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
-    // columns.LINK = linkColumn;
-
-    // function setOtherDisplayFields(challengeEmbed) {
-    //     challengeEmbed
-    //         .setTitle(title)
-    //         .setColor(paleblue)
-    //         .setDescription(`Index last reloaded ${timeSince(mtime)} ago`);
-
-    //     if (numOGCompletions == 1) {
-    //         challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
-    //     }
-    //     if (numOGCompletions > 1) {
-    //         challengeEmbed.setFooter({
-    //             text: `---\n${numOGCompletions} total OG completions bolded`
-    //         });
-    //     }
-    // }
-
-    // return await Index.displayOneOrMultiplePages(interaction, columns, setOtherDisplayFields);
-}
-
-function filterCombo(c, parsed) {
-    const matchesPerson = parsed.person ? parsed.person === c.PERSON.toLowerCase() : true;
-
-    let matchesEntity = true;
-    if (parsed.tower) {
-        if (Heroes.isHero(c.ENTITY)) {
-            matchesEntity = false;
-        } else {
-            matchesEntity = Towers.towerUpgradeToTower(c.ENTITY) == parsed.tower;
-        }
-    } else if (parsed.tower_upgrade || parsed.hero) {
-        // Tower upgrade or hero
-        matchesEntity = c.ENTITY == (parsed.tower_upgrade || parsed.hero);
-    }
-
-    let matchesMap = true;
-    if (parsed.map_difficulty) {
-        matchesMap = Maps.allMapsFromMapDifficulty(parsed.map_difficulty).includes(c.MAP);
-    } else if (parsed.map) {
-        // Map
-        matchesMap = parsed.map == c.MAP;
-    }
-
-    const matchesOg = parsed.hasAny() ? true : c.OG;
-
-    return matchesPerson && matchesEntity && matchesMap && matchesOg;
 }
 
 function titleFunction(parsed, noCombos = false) {

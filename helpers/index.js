@@ -355,14 +355,20 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
  */
 
 /**
+ * @callback setOtherDisplayFields
+ * @param {import('discord.js').Embed} embed 
+ */
+
+/**
  * 
  * @param {import('discord.js').Interaction} interaction 
  * @param {fetchFn} fetchFn 
  * @param {URLSearchParams} searchParams 
  * @param {string[]} displayFields
  * @param {completionToFields} completionToFields
+ * @param {setOtherDisplayFields} setOtherDisplayFields
  */
-async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, displayFields, completionToFields) {
+async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, displayFields, completionToFields, setOtherDisplayFields) {
     const NUM_ROWS = 10;
     let mobile = false;
 
@@ -400,6 +406,7 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
         }
 
         challengeEmbed.setDescription(content);
+        setOtherDisplayFields(challengeEmbed);
         return [challengeEmbed, resJson.more];
     };
 

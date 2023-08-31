@@ -380,7 +380,7 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
 async function display2MPFilterAll(interaction, fetchParams, parsed) {
     const excludedColumns = determineExcludedColumns(parsed);
     fetchParams.set('count', '0');
-    if ((await fetch2mp(fetchParams)).count ?? 0 <= 0) {
+    if ((await fetch2mp(fetchParams)).count <= 0) {
         throw new UserCommandError(titleFunction(parsed, true));
     }
     fetchParams.set('count', '10');

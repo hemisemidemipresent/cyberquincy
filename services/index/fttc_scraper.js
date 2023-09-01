@@ -74,7 +74,9 @@ async function scrapeAllFTTCCombos() {
     // Search for the row in all "possible" rows
     for (let row = 1; row <= sheet.rowCount; row++) {
         parsedHeader = sectionHeader(row, sheet);
-        if (parsedHeader) {
+        if (parsedHeader == -1) {
+            return combos
+        } else if (parsedHeader) {
             colset = COLS[parsedHeader];
             row += 2;
             continue;
@@ -99,6 +101,10 @@ function sectionHeader(mapRow, sheet) {
 
     // Header rows take up 2 rows. If you check the bottom row, the data value is null.
     if (candidateHeaderCell.value) {
+        if (candidateHeaderCell.value.match(/All Time Lowest/)) {
+            return -1
+        }
+
         const match = candidateHeaderCell.value.match(headerRegex);
 
         // Get the column set from the number of towers string in the header cell

@@ -305,7 +305,7 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
 
         mapColumn.push(`${bold}${completion.map}${bold}`);
         personColumn.push(`${bold}${completion.person}${bold}`);
-        linkColumn.push(`${bold}${genCompletionLink(completion.link)}${bold}`);
+        linkColumn.push(`${bold}${genCompletionLink(completion)}${bold}`);
     }
 
     const numPartitions = mapColumn.length > 10 ? 2 : 1

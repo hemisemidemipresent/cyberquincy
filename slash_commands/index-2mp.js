@@ -1,4 +1,4 @@
-const { timeSince, toTitleCase, WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
+const { WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps');
 

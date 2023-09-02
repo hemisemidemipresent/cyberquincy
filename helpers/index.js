@@ -391,7 +391,7 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
             content += completionsFields.map(completionFields => {
                 return '`' + displayFields.map((field, idx) => {
                     let val = completionFields[field];
-                    let res = val.padEnd(fieldWidths[idx] + val.length - (field === 'Link' ? 4 : val.length));
+                    let res = field === 'Link' ? val : val.padEnd(fieldWidths[idx]);
                     return field === 'Link' ? '`' + res + '`' : res;
                 }).join(' ') + ' `';
             }).join('\n');

@@ -14,19 +14,12 @@ let mapOption = new SlashCommandStringOption().setName('map').setDescription('Ma
 
 let userOption = new SlashCommandStringOption().setName('person').setDescription('Person').setRequired(false);
 
-const reloadOption = new SlashCommandStringOption()
-    .setName('reload')
-    .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
-    .setRequired(false)
-    .addChoices({ name: 'Yes', value: 'yes' });
-
 builder = new SlashCommandBuilder()
     .setName('2mp')
     .setDescription('Search and Browse Completed 2MP Index Combos')
     .addStringOption(entityOption)
     .addStringOption(mapOption)
-    .addStringOption(userOption)
-    .addStringOption(reloadOption);
+    .addStringOption(userOption);
 
 async function fetch2mp(searchParams) {
     let res = await fetch('https://btd6index.win/fetch-2mp?' + searchParams);

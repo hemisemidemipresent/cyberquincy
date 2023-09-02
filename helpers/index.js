@@ -369,14 +369,16 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
  * @param {setOtherDisplayFields} setOtherDisplayFields
  */
 async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, displayFields, completionToFields, setOtherDisplayFields) {
-    const NUM_ROWS = 10;
+    const NUM_ROWS = parseInt(searchParams.get('count'));
     let mobile = false;
+    let count = 0;
 
     const createPage = async () => {
         let resJson = await fetchFn(searchParams);
         let offset = parseInt(searchParams.get('offset') ?? '0');
+        count = resJson.count;
         const challengeEmbed = new Discord.EmbedBuilder();
-        let content = `**Results ${offset+1}-${offset+resJson.results.length} of ${resJson.count}**`;
+        let content = `**Results ${offset+1}-${offset+resJson.results.length} of ${count}**`;
         const completionsFields = resJson.results.map(completionToFields);
         const fieldWidths = displayFields.map(field => Math.max(
             ...completionsFields.map(completionFields => {
@@ -446,12 +448,18 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
                     await displayPages(initial);
                     break;
                 case '-1':
-                    searchParams.set('offset', Math.max(offset - NUM_ROWS, 0));
+                    if (offset > 0) {
+                        searchParams.set('offset', Math.max(offset - NUM_ROWS, 0));
+                    } else {
+                        searchParams.set('offset', Math.floor(count / NUM_ROWS) * NUM_ROWS);
+                    }
                     await displayPages(false);
                     break;
                 case '1':
                     if (more) {
                         searchParams.set('offset', offset + NUM_ROWS);
+                    } else {
+                        searchParams.set('offset', 0);
                     }
                     await displayPages(false);
                     break;

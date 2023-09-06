@@ -4,7 +4,7 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 const Lexer = require('lex');
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 
-const { footer } = require('../aliases/misc.json');
+const { justStatsFooter } = require('../aliases/misc.json');
 const { red, paragon } = require('../jsons/colors.json');
 
 const reqs = require('../jsons/power_degree_req.json');
@@ -237,7 +237,7 @@ async function paragon_stats(interaction) {
     let messageEmbed = new Discord.EmbedBuilder()
         .setTitle(`\`${tower}\` paragon - level ${level}`)
         .setDescription(desc.replace(/    /g, ''))
-        .setFooter({ text: footer })
+        .setFooter({ text: justStatsFooter })
         .setColor(paragon);
     return await interaction.reply({ embeds: [messageEmbed] });
 }

@@ -10,7 +10,8 @@
         "round": 1
     },
     {
-        "round": 2
+        "round": 2,
+        "cumulativeRBE": 0
     },
     {
         "round": 3,

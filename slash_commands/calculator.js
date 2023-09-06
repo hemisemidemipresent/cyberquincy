@@ -9,7 +9,7 @@ const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexi
 const chimps = require('../jsons/round2.json');
 const RoundParser = require('../parser/round-parser');
 
-const { red } = require('../jsons/colors.json');
+const { red, cyber, black } = require('../jsons/colors.json');
 
 const heroes = require('../jsons/heroes.json');
 const gerrysShop = require('../jsons/geraldos_shop.json');
@@ -115,7 +115,7 @@ async function calc(interaction) {
                              • You can use this calculator for non-cash-related calculations as well. Just ignore the dollar sign in the result.`
                 }
             ])
-            .setColor(colors['black']);
+            .setColor(black);
         return await interaction.reply({ embeds: [helpEmbed] });
     }
 
@@ -238,7 +238,7 @@ async function calc(interaction) {
                 new Discord.EmbedBuilder()
                     .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
                     .setDescription(`\`${expression}\``)
-                    .setColor(colors['cyber'])
+                    .setColor(cyber)
             ]
         });
     }

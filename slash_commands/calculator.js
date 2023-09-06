@@ -115,7 +115,7 @@ async function calc(interaction) {
                              • You can use this calculator for non-cash-related calculations as well. Just ignore the dollar sign in the result.`
                 }
             ])
-            .setColor(colours['black']);
+            .setColor(colors['black']);
         return await interaction.reply({ embeds: [helpEmbed] });
     }
 
@@ -206,8 +206,8 @@ async function calc(interaction) {
                 embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red)]
             });
         } else {
-            throw e
-        };
+            throw e;
+        }
     }
 
     // The single item left in the stack is the evaluated result
@@ -238,7 +238,7 @@ async function calc(interaction) {
                 new Discord.EmbedBuilder()
                     .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
                     .setDescription(`\`${expression}\``)
-                    .setColor(colours['cyber'])
+                    .setColor(colors['cyber'])
             ]
         });
     }

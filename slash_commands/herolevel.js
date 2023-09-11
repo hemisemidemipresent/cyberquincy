@@ -8,6 +8,7 @@ const {
 const gHelper = require('../helpers/general.js');
 const Maps = require('../helpers/maps')
 const Heroes = require('../helpers/heroes')
+const { cyber } = require('../jsons/colors.json')
 
 const heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Heroes.allHeroes().forEach((hero) => {
@@ -52,7 +53,7 @@ function generateHeroLevels(interaction) {
         .setTitle(`${gHelper.toTitleCase(hero)} Leveling Chart`)
         .setDescription(description(placementRound, mapDifficulty, energizerRound))
         .addFields([{ name: '\u200b', value: `${res}` }])
-        .setColor(colours['cyber']);
+        .setColor(cyber);
     return embed;
 }
 

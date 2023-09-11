@@ -9,7 +9,6 @@ const cashAbr = require('../jsons/income-abr.json');
 const roundHelper = require('../helpers/rounds');
 const enemyHelper = require('../helpers/enemies');
 const gHelper = require('../helpers/general');
-
 const { cyber } = require('../jsons/colors.json');
 
 builder = new SlashCommandBuilder()
@@ -159,7 +158,7 @@ async function execute(interaction) {
             }
         ])
         .setFooter({ text: `For more data on round incomes use \`/income${isAbr ? ' abr' : ''} <round>\`` })
-        .setColor(colours['cyber']);
+        .setColor(cyber);
     if (round > 80) {
         let hRamping = enemyHelper.getHealthRamping(round);
         let sRamping = enemyHelper.getSpeedRamping(round);

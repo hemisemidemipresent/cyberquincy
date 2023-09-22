@@ -1,5 +1,6 @@
 const WHEEL_SIZE = 50;
 const { discord } = require('../aliases/misc.json');
+const { blurple, turq } = require('../jsons/colors.json')
 
 async function spin(message) {
     user = message.author;
@@ -26,7 +27,7 @@ function botOffline(message) {
         .addFields([
             { name: 'Join the discord server!', value: `Get notifications for new updates and bot status at ${discord}` }
         ])
-        .setColor(colours['blurple'])
+        .setColor(blurple)
         .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
 
     message.channel.send({ embeds: [serverEmbed] });
@@ -41,7 +42,7 @@ function ownServer(message) {
                 value: 'Click [here](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617) or use the link https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617'
             }
         ])
-        .setColor(colours['turq'])
+        .setColor(turq)
         .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
 
     message.channel.send(inviteEmbed);
@@ -51,7 +52,7 @@ function bugReport(message) {
     const bugEmbed = new Discord.EmbedBuilder()
         .setTitle('Want to suggest a new feature? Fix a typo? Report a bug?')
         .addFields([{ name: 'join the discord server!', value: `suggest a new feature and report a bug at ${discord}` }])
-        .setColor(colours['turq'])
+        .setColor(turq)
         .setFooter({ text: 'use q!toggle ad to turn this off | Leaving this on is the least you can do to help' });
 
     message.channel.send(bugEmbed);

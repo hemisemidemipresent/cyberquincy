@@ -9,6 +9,7 @@ const {
 const gHelper = require('../helpers/general.js');
 const Maps = require('../helpers/maps')
 const Heroes = require('../helpers/heroes')
+const { cyber } = require('../jsons/colors.json')
 
 let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Heroes.allHeroes().forEach((hero) => {
@@ -87,7 +88,7 @@ async function displayHeroPlacementRounds(interaction) {
                 { name: `Pay on r${goalRound}`, value: costs.join('\n'), inline: true }
             ])
             .setFooter({ text: `Click a button below to see more starting rounds` })
-            .setColor(colours['cyber']);
+            .setColor(cyber);
 
         if (heroPlacementRound == -Infinity) {
             embed.setTitle(`Can't place ${gHelper.toTitleCase(hero)} early enough`);

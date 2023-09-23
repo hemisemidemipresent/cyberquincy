@@ -1,5 +1,5 @@
 const { WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
-const Index = require('../helpers/index.js');
+const { displayOneOrMultiplePagesNew, altMapsFields, genCompletionLink } = require('../helpers/index.js');
 const Maps = require('../helpers/maps');
 
 const { paleblue } = require('../jsons/colors.json');
@@ -28,19 +28,6 @@ async function fetch2mp(searchParams) {
         throw new Error(resJson.error);
     }
     return resJson;
-}
-
-function genCompletionLink(completion) {
-    let actualLink = completion.link ?? `https://media.btd6index.win/${completion.filekey}`;
-    let linkText = 'Link';
-    if (actualLink.includes('reddit.com')) {
-        linkText = 'Reddit';
-    } else if (actualLink.includes('media.btd6index.win')) {
-        linkText = 'Image/Video';
-    } else if (actualLink.includes('youtube.com')) {
-        linkText = 'YouTube';
-    }
-    return `[${linkText}](${actualLink})`;
 }
 
 async function execute(interaction) {
@@ -218,7 +205,7 @@ async function embed2MPOG(entity) {
     challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
     const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogCompletion.map);
-    let completedAltMapsFields = Index.altMapsFields(
+    let completedAltMapsFields = altMapsFields(
         ogMapAbbr,
         resJson.results.map(completion => Maps.indexNormalFormToMapAbbreviation(completion.map)),
         Maps.mapsNotPossible(entity)
@@ -386,7 +373,7 @@ async function display2MPFilterAll(interaction, fetchParams, parsed) {
         throw new UserCommandError(titleFunction(parsed, true));
     }
     fetchParams.set('count', '10');
-    return await Index.displayOneOrMultiplePagesNew(
+    return await displayOneOrMultiplePagesNew(
         interaction, fetch2mp, fetchParams,
         ['Tower', 'Map', 'Person', 'Link'].filter(col => !excludedColumns.includes(col)),
         completion => {

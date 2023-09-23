@@ -479,6 +479,21 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
     await displayPages(true);
 }
 
+function genCompletionLink(completion) {
+    let actualLink = completion.link ?? `https://media.btd6index.win/${completion.filekey}`;
+    let linkText = 'Link';
+    if (actualLink.includes('reddit.com')) {
+        linkText = 'Reddit';
+    } else if (actualLink.includes('media.btd6index.win')) {
+        linkText = 'Image/Video';
+    } else if (actualLink.includes('imgur.com')) {
+        linkText = 'Imgur';
+    } else if (actualLink.includes('youtube.com')) {
+        linkText = 'YouTube';
+    }
+    return `[${linkText}](${actualLink})`;
+}
+
 module.exports = {
     getLastCacheModified,
     fetchInfo,
@@ -487,5 +502,6 @@ module.exports = {
     altMapsFields,
 
     displayOneOrMultiplePages,
-    displayOneOrMultiplePagesNew
+    displayOneOrMultiplePagesNew,
+    genCompletionLink,
 };

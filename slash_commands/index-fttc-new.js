@@ -5,8 +5,7 @@ const TowerParser = require('../parser/tower-parser');
 
 const Parsed = require('../parser/parsed');
 
-const gHelper = require('../helpers/general.js');
-const Index = require('../helpers/index.js');
+const { displayOneOrMultiplePagesNew, genCompletionLink } = require('../helpers/index.js');
 
 const { paleorange } = require('../jsons/colors.json');
 
@@ -60,17 +59,29 @@ async function execute(interaction) {
 async function displayFttcFilterAll(interaction, parsed) {
     const fetchParams = getUrlParams(parsed)
     if ((await fetchFttc(fetchParams)).count <= 0) {
-        throw new UserCommandError(titleFunction(parsed, true));
+        return interaction.reply({
+            embeds: [
+                new Discord.EmbedBuilder().setTitle(titleNoCombos(parsed))
+            ]
+        })
     }
     fetchParams.set('count', '10');
-    return await Index.displayOneOrMultiplePagesNew(
+    return await displayOneOrMultiplePagesNew(
         interaction, fetchFttc, fetchParams,
-        ['Tower', 'Map', 'Person', 'Link'].filter(col => !excludedColumns.includes(col)),
+        includedColumns(parsed),
         completion => {
             const boldOg = (str) => completion.og ? `**${str}**` : str;
 
+            const towers = JSON.parse(completion.towerset).map(tower => {
+                const towerCanonical = Aliases.getCanonicalForm(tower);
+                const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
+                return parsed.towers && parsed.towers.includes(towerCanonical)
+                    ? `**${towerAbbreviation}**`
+                    : towerAbbreviation;
+            }).join(' | ')
+
             return {
-                'Tower': boldOg(completion.entity),
+                'Towers': boldOg(towers),
                 'Map': boldOg(completion.map),
                 'Person': boldOg(completion.person),
                 'Link': boldOg(genCompletionLink(completion))
@@ -78,11 +89,30 @@ async function displayFttcFilterAll(interaction, parsed) {
         },
         embed => {
             embed
-            .setTitle(titleFunction(parsed))
-            .setColor(paleblue)
+            .setTitle(title(parsed))
+            .setColor(paleorange)
             .setFooter({ text: `---\nAny OG completion(s) bolded` });
         }
     );
+}
+
+function includedColumns(parsed) {
+    // Setup / Data consolidation
+    let displayCols = ['Towers', 'Map', 'Person', 'Link'];
+
+    if (parsed.person) {
+        displayCols = displayCols.filter((col) => col != 'Person');
+    }
+
+    if (parsed.map) {
+        displayCols = displayCols.filter((col) => col != 'Map');
+    }
+
+    if (displayCols.length === 4) {
+        displayCols = displayCols.filter((col) => col != 'Person');
+    }
+
+    return displayCols;
 }
 
 async function fetchFttc(searchParams) {
@@ -94,7 +124,7 @@ async function fetchFttc(searchParams) {
     return resJson;
 }
 
-async function getUrlParams(parsed) {
+function getUrlParams(parsed) {
     params = new URLSearchParams()
 
     if (parsed.map) {
@@ -106,7 +136,7 @@ async function getUrlParams(parsed) {
     }
 
     if (parsed.towers) {
-        params.set('towerincludes', parsed.towers)
+        params.set('towerincludes', parsed.towers.map(t => `"${t}"`))
     }
 
     if (parsed.person) {
@@ -239,105 +269,19 @@ const FTTC_TOWER_ABBREVIATIONS = {
     beast_handler: 'bst'
 };
 
-async function embedOneOrMultiplePages(interaction, parsed, combos) {
-    // Setup / Data consolidation
-    let displayCols = ['towers', 'map', 'person', 'link'];
-
-    if (parsed.person) {
-        displayCols = displayCols.filter((col) => col != 'person');
-    }
-
-    if (parsed.map) {
-        displayCols = displayCols.filter((col) => col != 'map');
-    }
-
-    if (displayCols.length === 4) {
-        displayCols = displayCols.filter((col) => col != 'person');
-    }
-    const colData = Object.fromEntries(
-        displayCols.map((col) => {
-            if (col == 'towers') {
-                const boldedAbbreviatedTowers = combos.map((combo) =>
-                    JSON.parse(combo['towerset']).map((tower) => {
-                        const towerCanonical = Aliases.getCanonicalForm(tower);
-                        const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
-                        return parsed.towers && parsed.towers.includes(towerCanonical)
-                            ? `**${towerAbbreviation}**`
-                            : towerAbbreviation;
-                    })
-                );
-                const colValues = boldedAbbreviatedTowers.map((comboTowers, i) => {
-                    let value = comboTowers.join(' | ');
-                    if (combos[i].OG && !parsed.towers) {
-                        value = `**${value}**`;
-                    }
-                    return value;
-                });
-                return [col, colValues];
-            } else if (col == 'link') {
-                const colValues = combos.map((combo) => {
-                    value = combo.link;
-                    if (!value) {
-                        value = '----------'
-                    } else if (value.includes('drive.google.com')) {
-                        value = `[Drive Image](${value})`
-                    } else if (value.includes('reddit.com')) {
-                        value = `[Reddit](${value})`
-                    } else if (value.includes('youtube.com')) {
-                        value = `[Youtube](${value})`
-                    } // Otherwise keep the link the same
-
-                    if (combo.OG) {
-                        value = `**${value}**`;
-                    }
-                    return value;
-                });
-                return [col, colValues];
-            } else { // person / map
-                const colValues = combos.map((combo) => {
-                    value = combo[col];
-                    if (combo.OG) {
-                        value = `**${value}**`;
-                    }
-                    return value;
-                });
-                return [col, colValues];
-            }
-        })
-    );
-
-    const numOGCompletions = combos.filter((combo) => combo.OG == 1).length;
-
-    function setOtherDisplayFields(challengeEmbed) {
-        challengeEmbed
-            .setTitle(embedTitle(parsed, combos))
-            .setColor(paleorange)
-
-        if (numOGCompletions == 1) {
-            challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
-        }
-        if (numOGCompletions > 1) {
-            challengeEmbed.setFooter({
-                text: `---\n${numOGCompletions} OG completions bolded`
-            });
-        }
-    }
-
-    return await Index.displayOneOrMultiplePages(interaction, colData, setOtherDisplayFields);
-}
-
-function embedTitle(parsed, combos) {
-    t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';
-    if (parsed.person) t += `by ${combos[0].person} `;
+function title(parsed) {
+    // t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';
+    let t = 'All FTTC Combos '
+    if (parsed.person) t += `by ${parsed.person} `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
-    if (parsed.map) t += `on ${combos[0].map} `;
+    if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
     if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
     if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 
 function titleNoCombos(parsed) {
-    t = 'No FTTC Combos Found ';
+    let t = 'No FTTC Combos Found ';
     if (parsed.person) t += `by "${parsed.person}" `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;

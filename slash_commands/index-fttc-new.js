@@ -54,50 +54,72 @@ async function execute(interaction) {
         new Parsed()
     );
 
-    data = await getFTTCData(parsed)
-
-    if (data.length == 0) {
-        const noCombosEmbed = new Discord.EmbedBuilder().setTitle(titleNoCombos(parsed)).setColor(paleorange);
-
-        return interaction.reply({ embeds: [noCombosEmbed] });
-    } else {
-        return await embedOneOrMultiplePages(interaction, parsed, data);
-    }
+    return await displayFttcFilterAll(interaction, parsed)
 }
 
-async function getFTTCData(parsed) {
-    url = `${BASE_URL}?`
+async function displayFttcFilterAll(interaction, parsed) {
+    const fetchParams = getUrlParams(parsed)
+    if ((await fetchFttc(fetchParams)).count <= 0) {
+        throw new UserCommandError(titleFunction(parsed, true));
+    }
+    fetchParams.set('count', '10');
+    return await Index.displayOneOrMultiplePagesNew(
+        interaction, fetchFttc, fetchParams,
+        ['Tower', 'Map', 'Person', 'Link'].filter(col => !excludedColumns.includes(col)),
+        completion => {
+            const boldOg = (str) => completion.og ? `**${str}**` : str;
+
+            return {
+                'Tower': boldOg(completion.entity),
+                'Map': boldOg(completion.map),
+                'Person': boldOg(completion.person),
+                'Link': boldOg(genCompletionLink(completion))
+            };
+        },
+        embed => {
+            embed
+            .setTitle(titleFunction(parsed))
+            .setColor(paleblue)
+            .setFooter({ text: `---\nAny OG completion(s) bolded` });
+        }
+    );
+}
+
+async function fetchFttc(searchParams) {
+    let res = await fetch('https://btd6index.win/fetch-fttc?' + searchParams);
+    let resJson = await res.json();
+    if ('error' in resJson) {
+        throw new Error(resJson.error);
+    }
+    return resJson;
+}
+
+async function getUrlParams(parsed) {
+    params = new URLSearchParams()
 
     if (parsed.map) {
-        url += `map=${Aliases.toIndexNormalForm(parsed.map)}&`
+        params.set('map', Aliases.toIndexNormalForm(parsed.map))
     }
 
     if (parsed.natural_number) {
-        url += `towercount=${parsed.natural_number}&`
+        params.set('towercount', parsed.natural_number)
     }
 
     if (parsed.towers) {
-        url += `towerincludes=[${parsed.towers.map(t => `"${t}"`)}]&`
+        params.set('towerincludes', parsed.towers)
     }
 
     if (parsed.person) {
-        url += `person=${parsed.person}&`
+        params.set('person', parsed.person)
     }
 
     if(keepOnlyOG(parsed)) {
-        url += `og=1&`
+        params.set('og', 1)
     }
 
+    params.set('count', 0)
 
-    try {
-        res = await axios.get(url);
-    } catch {
-        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
-    }
-
-    console.log(res)
-
-    return res.data.results
+    return params
 }
 
 ////////////////////////////////////////////////////////////

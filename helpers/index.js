@@ -60,8 +60,6 @@ async function fetchInfo(info, reload = false) {
 }
 
 const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js');
-const { scrapeAll2MPCompletions } = require('../services/index/2mp_scraper.js');
-const { scrapeAllFTTCCombos } = require('../services/index/fttc_scraper');
 const { scrapeAllBalanceChanges } = require('../services/index/balances_scraper');
 const { URLSearchParams } = require('url');
 
@@ -69,10 +67,6 @@ async function scrapeInfo(info) {
     switch (info) {
         case '2tc':
             return await scrapeAll2TCCombos();
-        case '2mp':
-            return await scrapeAll2MPCompletions();
-        case 'fttc':
-            return await scrapeAllFTTCCombos();
         case 'balances':
             return await scrapeAllBalanceChanges();
         default:

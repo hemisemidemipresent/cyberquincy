@@ -5,7 +5,6 @@ function main() {
     consoleBootup();
     googleSheetsInitialization();
     configureAliases();
-    // commandCenter = configureCommands();
     slashCommandCenter = setupSlashCommandCenter();
     generateCommandListeners(slashCommandCenter);
     login();
@@ -36,7 +35,7 @@ function consoleBootup() {
             status: 'online'
         });
         console.log('<Program Directive> Discord Bot Client is ready');
-        console.log(new Date());
+        // console.log(new Date());
         const botposting = require('./1/config.json')['botposting'];
         if (!botposting) {
             global.statcord = undefined;
@@ -82,7 +81,7 @@ async function googleSheetsInitialization() {
     const GoogleSheetsHelper = require('./helpers/google-sheets.js');
     // Load the BTD6 Index
     global.Btd6Index = await GoogleSheetsHelper.load(GoogleSheetsHelper.BTD6_INDEX_KEY);
-    console.log('<INITIATE> Btd6 Index has been loaded');
+    // console.log('<INITIATE> Btd6 Index has been loaded');
 }
 
 function configureAliases() {
@@ -134,7 +133,7 @@ function generateCommandListeners(slashCommandCenter) {
 
 function login() {
     const { ActivityType } = require('discord.js');
-    configHelper = require('./helpers/config');
+    const configHelper = require('./helpers/config');
     const activeToken = configHelper.activeToken();
     client.login(activeToken).then(() => {
         client.user?.setActivity('/help', { type: ActivityType.Listening });

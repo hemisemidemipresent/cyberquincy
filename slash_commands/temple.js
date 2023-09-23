@@ -1,8 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { isValidTempleSet } = require('../helpers/towers');
 
+const { footer } = require('../aliases/misc.json');
+
 const t = require('../jsons/temple.json');
 const t2 = require('../jsons/temple2.json');
+
 const { yellow } = require('../jsons/colors.json');
 
 builder = new SlashCommandBuilder()
@@ -53,13 +56,25 @@ async function by_category(interaction) {
     let embed = new Discord.EmbedBuilder();
     embed.setTitle('Temple stats');
     embed.setColor(yellow);
-    // there is probably a better way
-    embed.addFields([
-        { name: `Primary sacrifice ($${primary})`, value: t[0][0] + '\n' + levelToString(cashToLevel(primary), 0) },
-        { name: `Military sacrifice ($${military})`, value: t[1][0] + '\n' + levelToString(cashToLevel(military), 1) },
-        { name: `Magic sacrifice ($${magic})`, value: t[2][0] + '\n' + levelToString(cashToLevel(magic), 2) },
-        { name: `Support sacrifice ($${support})`, value: t[3][0] + '\n' + levelToString(cashToLevel(support), 3) }
-    ]);
+
+    let fields = [];
+    let inputs = [primary, military, magic, support];
+    let names = ['Primary', 'Military', 'Magic', 'Support'];
+    for (let i = 0; i < 4; i++) {
+        let level = cashToLevel(inputs[i]);
+        if (level == 0) continue;
+        fields.push({ name: `${names[i]} sacrifice ($${inputs[i]} - level ${level}/9)`, value: t[i][level - 1] });
+    }
+    if (fields.length > 0) {
+        embed.setDescription(
+            'This command only tells you the **changes** from the temple due to sacrifices. For the base temple with no sacrifices, please use `/tower` with the temple crosspath of choice'
+        );
+        embed.addFields(fields);
+    } else
+        embed.setDescription(
+            'no changes from due to sacrifices; not enough sacrificed\nFind the base temple stats with `/tower` with the temple crosspath of choice'
+        );
+    embed.setFooter({ text: 'Cash thresholds for levels are: 300, 1000, 2000, 4000, 7500, 10000, 15000, 25000, 50000' });
     return await interaction.reply({ embeds: [embed] });
 }
 
@@ -102,10 +117,10 @@ function addSacrificeStats(embed, num, i) {
 
     if (num == 0) return;
     if (num == 1) {
-        return embed.addFields([{ name: titles[i], value: `${t[i][0]}\n${t[i][9]}` }]);
+        return embed.addFields([{ name: titles[i], value: `${t[i][8]}` }]);
     }
     if (num == 2) {
-        return embed.addFields([{ name: titles[i], value: `${t[i][0]}\n${t[i][9]}\n**TSG**:\n${t2[i]}` }]);
+        return embed.addFields([{ name: titles[i], value: `${t[i][8]}\n\n-----True Sun God-----\n${t2[i]}` }]);
     }
 }
 
@@ -120,14 +135,4 @@ function cashToLevel(cash) {
         if (cash < sacrifice_levels[i]) return i;
     }
     return 9;
-}
-/**
- * given level and tower type, return the string
- * @param {int} level
- * @param {int} towerType
- * @returns
- */
-function levelToString(level, towerType) {
-    if (level == 0) return '\u200b';
-    return t[towerType][level];
 }

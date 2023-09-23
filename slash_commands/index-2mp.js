@@ -1,12 +1,10 @@
-const { timeSince, toTitleCase, WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
+const { WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
-const Maps = require('../helpers/maps')
+const Maps = require('../helpers/maps');
 
 const { paleblue } = require('../jsons/colors.json');
 
 const Parsed = require('../parser/parsed.js');
-
-const { COLS } = require('../services/index/2mp_scraper');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
@@ -16,19 +14,34 @@ let mapOption = new SlashCommandStringOption().setName('map').setDescription('Ma
 
 let userOption = new SlashCommandStringOption().setName('person').setDescription('Person').setRequired(false);
 
-const reloadOption = new SlashCommandStringOption()
-    .setName('reload')
-    .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
-    .setRequired(false)
-    .addChoices({ name: 'Yes', value: 'yes' });
-
 builder = new SlashCommandBuilder()
     .setName('2mp')
     .setDescription('Search and Browse Completed 2MP Index Combos')
     .addStringOption(entityOption)
     .addStringOption(mapOption)
-    .addStringOption(userOption)
-    .addStringOption(reloadOption);
+    .addStringOption(userOption);
+
+async function fetch2mp(searchParams) {
+    let res = await fetch('https://btd6index.win/fetch-2mp?' + searchParams);
+    let resJson = await res.json();
+    if ('error' in resJson) {
+        throw new Error(resJson.error);
+    }
+    return resJson;
+}
+
+function genCompletionLink(completion) {
+    let actualLink = completion.link ?? `https://media.btd6index.win/${completion.filekey}`;
+    let linkText = 'Link';
+    if (actualLink.includes('reddit.com')) {
+        linkText = 'Reddit';
+    } else if (actualLink.includes('media.btd6index.win')) {
+        linkText = 'Image/Video';
+    } else if (actualLink.includes('youtube.com')) {
+        linkText = 'YouTube';
+    }
+    return `[${linkText}](${actualLink})`;
+}
 
 async function execute(interaction) {
     validationFailure = validateInput(interaction);
@@ -44,38 +57,41 @@ async function execute(interaction) {
     );
 
     await interaction.deferReply();
+    
+    const entityType = parsed.tower ? Aliases.toIndexNormalForm(parsed.tower) : null;
+    const entity = parsed.tower_upgrade ? Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade) : null;
+    const hero = parsed.hero ? Aliases.toIndexNormalForm(parsed.hero) : null;
+    const map = parsed.map ? Aliases.toIndexNormalForm(parsed.map) : null;
 
-    const forceReload = interaction.options.getString('reload') ? true : false;
-
-    const allCombos = await Index.fetchInfo('2mp', forceReload);
-
-    const mtime = Index.getLastCacheModified('2mp');
-
+    const fetchParams = new URLSearchParams(
+        Object.entries({
+            towerquery: JSON.stringify([entityType ?? entity ?? hero].filter(val => val)),
+            map,
+            person: parsed.person,
+            difficulty: parsed.map_difficulty,
+            pending: '0',
+            count: '100'
+        }).filter(([,value]) => value !== null && value !== undefined)
+    );
+    
     if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
-        const challengeEmbed = embed2MPTowerStatistics(allCombos, parsed.tower);
-        return await interaction.reply({
-            embeds: [challengeEmbed]
+        fetchParams.set('og', '1');
+        const resJson = await fetch2mp(fetchParams);
+        return await interaction.editReply({
+            embeds: [embed2MPTowerStatistics(resJson, parsed.tower)]
         });
     } else if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
-        const entity = parsed.hero || Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade);
-        const entityFormatted = Aliases.toIndexNormalForm(entity);
-        const combo = allCombos.find((c) => c.ENTITY.toLowerCase() == entityFormatted.toLowerCase());
-
+        const resJson = await fetch2mp(fetchParams);
         let challengeEmbed;
 
         try {
-            if (!combo) {
-                throw new UserCommandError(`Entity \`${entityFormatted}\` does not yet have a 2MP`);
-            }
-
             if (parsed.map_difficulty) {
-                challengeEmbed = embed2MPMapDifficulty(combo, parsed.map_difficulty);
+                challengeEmbed = embed2MPMapDifficulty(resJson, entity ?? hero, parsed.map_difficulty);
             } else if (parsed.map) {
-                challengeEmbed = embed2MPAlt(combo, parsed.map);
+                challengeEmbed = await embed2MPAlt(resJson, entity ?? hero, parsed.map);
             } else {
-                challengeEmbed = embed2MPOG(combo);
+                challengeEmbed = await embed2MPOG(entity ?? hero);
             }
-            challengeEmbed.setDescription(`Index last reloaded ${timeSince(mtime)} ago`);
         } catch (e) {
             challengeEmbed = err(e);
         }
@@ -84,9 +100,8 @@ async function execute(interaction) {
             embeds: [challengeEmbed]
         });
     }
-
     try {
-        return await display2MPFilterAll(interaction, allCombos, parsed, mtime);
+        return await display2MPFilterAll(interaction, fetchParams, parsed);
     } catch (e) {
         return await interaction.editReply({ embeds: [err(e)] });
     }
@@ -179,22 +194,35 @@ function parsePerson(interaction) {
 // 2MP OG
 ////////////////////////////////////////////////////////////
 
-function embed2MPOG(combo) {
-    const comboToEmbed = orderAndFlatten2MPOGCompletion(combo);
+async function embed2MPOG(entity) {
+    let resJson = await fetch2mp(new URLSearchParams({
+        towerquery: JSON.stringify([entity]),
+        pending: '0',
+        count: '100'
+    }));
 
-    // Embed and send the message
-    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${comboToEmbed.ENTITY} 2MPC Combo`).setColor(paleblue);
-
-    for (const field in comboToEmbed) {
-        challengeEmbed.addFields([
-            { name: toTitleCase(field.replace('_', ' ')), value: comboToEmbed[field], inline: true }
-        ]);
+    if (resJson.results.length === 0) {
+        throw new UserCommandError(`Entity \`${entity}\` does not yet have a 2MP`);
     }
 
+    let ogCompletion = resJson.results.find(completion => completion.og);
+
+    const comboToEmbed = await orderAndFlatten2MPOGCompletion(ogCompletion);
+
+    // Embed and send the message
+    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${entity} 2MPC Combo`).setColor(paleblue);
+
+    challengeEmbed.addFields(
+        Object.entries(comboToEmbed).map(([field, value]) => ({name: field, value, inline: true}))
+    );
     challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
-    const ogMapAbbr = ogCombo(combo)[0];
-    let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, Object.keys(combo.MAPS), Maps.mapsNotPossible(combo.ENTITY));
+    const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogCompletion.map);
+    let completedAltMapsFields = Index.altMapsFields(
+        ogMapAbbr,
+        resJson.results.map(completion => Maps.indexNormalFormToMapAbbreviation(completion.map)),
+        Maps.mapsNotPossible(entity)
+    );
 
     challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
 
@@ -205,53 +233,50 @@ function embed2MPOG(combo) {
     return challengeEmbed;
 }
 
-function orderAndFlatten2MPOGCompletion(combo) {
-    let [ogMap, ogCompletion] = ogCombo(combo);
-    combo = {
-        ...combo,
-        OG_MAP: Maps.indexMapAbbreviationToNormalForm(ogMap),
-        PERSON: ogCompletion.PERSON,
-        LINK: ogCompletion.LINK
+async function orderAndFlatten2MPOGCompletion(ogCompletion) {
+    let ogInfo = await fetch('https://btd6index.win/fetch-2mp-og-info?' + new URLSearchParams({entity: ogCompletion.entity}));
+    ogInfo = await ogInfo.json();
+
+    if ('error' in ogInfo) {
+        throw new Error(ogInfo.error);
+    }
+
+    return {
+        Entity: ogCompletion.entity,
+        Upgrade: ogInfo.result.upgrade,
+        'OG Map': ogCompletion.map,
+        Version: ogInfo.result.version,
+        Date: ogInfo.result.date,
+        Person: ogCompletion.person,
+        Link: genCompletionLink(ogCompletion)
     };
-
-    const ordering = Object.keys(COLS);
-    let orderedFields = {};
-    ordering.forEach((col) => (orderedFields[col] = combo[col]));
-    return orderedFields;
-}
-
-function ogCombo(combo) {
-    return Object.entries(combo.MAPS).find(([_, altCombo]) => {
-        return altCombo.OG;
-    });
 }
 
 ////////////////////////////////////////////////////////////
 // 2MP Alt Map
 ////////////////////////////////////////////////////////////
 
-function embed2MPAlt(combo, map) {
+async function embed2MPAlt(resJson, entity, map) {
     const mapFormatted = Aliases.toIndexNormalForm(map);
-    const mapAbbr = Maps.mapToIndexAbbreviation(map);
 
-    const altCombo = combo.MAPS[mapAbbr];
+    const altCombo = resJson.results[0];
 
     if (!altCombo) {
-        throw new UserCommandError(`\`${combo.ENTITY}\` hasn't been completed yet on \`${mapFormatted}\``);
+        throw new UserCommandError(`\`${entity}\` hasn't been completed yet on \`${mapFormatted}\``);
     }
 
     // Display OG map as if map weren't in the query
-    if (altCombo.OG) {
-        return embed2MPOG(combo);
+    if (altCombo.og) {
+        return embed2MPOG(entity);
     }
 
     // Embed and send the message
     let challengeEmbed = new Discord.EmbedBuilder()
-        .setTitle(`${combo.ENTITY} 2MPC Combo on ${mapFormatted}`)
+        .setTitle(`${entity} 2MPC Combo on ${mapFormatted}`)
         .setColor(paleblue)
         .addFields([
-            { name: 'Person', value: altCombo.PERSON, inline: true },
-            { name: 'Link', value: altCombo.LINK, inline: true }
+            { name: 'Person', value: altCombo.person, inline: true },
+            { name: 'Link', value: genCompletionLink(altCombo), inline: true }
         ]);
 
     return challengeEmbed;
@@ -262,30 +287,27 @@ function embed2MPAlt(combo, map) {
 ////////////////////////////////////////////////////////////
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
-function embed2MPMapDifficulty(combo, mapDifficulty) {
+function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
     const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
+
+    if (resJson.results.length === 0) {
+        throw new UserCommandError(`\`${entity}\` hasn't been completed yet on any \`${mapDifficulty}\` maps`);
+    }
 
     // Get all map abbreviations for the specified map difficulty
     const permittedMapAbbrs = Maps.allMapsFromMapDifficulty(mapDifficulty).map((map) => Maps.mapToIndexAbbreviation(map));
-
-    const relevantMaps = Object.keys(combo.MAPS).filter((m) => permittedMapAbbrs.includes(m));
-
-    const numCombosCompleted = relevantMaps.length;
-
-    if (numCombosCompleted == 0) {
-        throw new UserCommandError(`\`${combo.ENTITY}\` has not yet been completed on any \`${mapDifficulty}\` maps`);
-    }
+    const completedMaps = resJson.results.map(completion => Maps.mapToIndexAbbreviation(Aliases.getCanonicalForm(completion.map)));
 
     // Format 3 columns: map, person, link
     let mapColumn = [];
     let personColumn = [];
     let linkColumn = [];
-    for (const mapAbbr of relevantMaps) {
-        const bold = combo.MAPS[mapAbbr].OG ? '**' : '';
+    for (const completion of resJson.results) {
+        const bold = completion.og ? '**' : '';
 
-        mapColumn.push(`${bold}${Maps.indexMapAbbreviationToNormalForm(mapAbbr)}${bold}`);
-        personColumn.push(`${bold}${combo.MAPS[mapAbbr].PERSON}${bold}`);
-        linkColumn.push(`${bold}${combo.MAPS[mapAbbr].LINK}${bold}`);
+        mapColumn.push(`${bold}${completion.map}${bold}`);
+        personColumn.push(`${bold}${completion.person}${bold}`);
+        linkColumn.push(`${bold}${genCompletionLink(completion)}${bold}`);
     }
 
     const numPartitions = mapColumn.length > 10 ? 2 : 1
@@ -301,15 +323,15 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     personColumn2 = personColumn2?.join('\n');
     linkColumn2 = linkColumn2?.join('\n');
 
-    let mapsLeft = permittedMapAbbrs.filter((m) => !Object.keys(combo.MAPS).includes(m));
+    let mapsLeft = permittedMapAbbrs.filter((m) => !completedMaps.includes(m));
 
     // Check if tower is water tower
-    const impossibleMaps = Maps.mapsNotPossible(combo.ENTITY).filter(m => permittedMapAbbrs.includes(m))
+    const impossibleMaps = Maps.mapsNotPossible(entity).filter(m => permittedMapAbbrs.includes(m))
     mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
 
     // Embed and send the message
     let challengeEmbed = new Discord.EmbedBuilder()
-        .setTitle(`${combo.ENTITY} 2MPCs on ${mapDifficultyFormatted} Maps`)
+        .setTitle(`${entity} 2MPCs on ${mapDifficultyFormatted} Maps`)
         .setColor(paleblue);
 
     const numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
@@ -317,7 +339,7 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
     if (mapsLeft.length > 0) {
         possiblePhrasing = impossibleMaps.length > 0 ? ' (where placement is possible)' : '';
         challengeEmbed.addFields([
-            { name: `Combos${possiblePhrasing}`, value: `**${numCombosCompleted}**/${numCombosPossible}` }
+            { name: `Combos${possiblePhrasing}`, value: `**${completedMaps.length}**/${numCombosPossible}` }
         ]);
     } else {
         possiblePhrasing = impossibleMaps.length > 0 ? ' possible' : '';
@@ -357,111 +379,33 @@ function embed2MPMapDifficulty(combo, mapDifficulty) {
 // Custom Multipage Queries
 ////////////////////////////////////////////////////////////
 
-async function display2MPFilterAll(interaction, combos, parsed, mtime) {
-    // Collect data from 4 columns: tower, map, person, link
-    // Only 3 can be used maximum to format a discord embed
-    let towerColumn = [];
-    let personColumn = [];
-    let linkColumn = [];
-    let mapColumn = [];
-
-    let numOGCompletions = 0;
-    let erroredYet = false
-
-    // Retrieve og- and alt-map notes from each tower row
-    for (const combo of combos) {
-        for (const map in combo.MAPS) {
-            const mapCompletion = combo.MAPS[map];
-
-            const canonicalCompletion = {
-                ENTITY: Aliases.toAliasCanonical(combo.ENTITY),
-                MAP: Maps.indexMapAbbreviationToMap(map),
-                PERSON: mapCompletion.PERSON,
-                LINK: mapCompletion.LINK,
-                OG: mapCompletion.OG || false
-            };
-
-            if (!canonicalCompletion.MAP && !erroredYet) {
-                interaction.reply({content: `Index Entry Error: ${map} is not a valid quincybot map abbreviation (check ${combo.ENTITY})`})
-                erroredYet = true
-                continue
-            }
-
-            if (!filterCombo(canonicalCompletion, parsed)) {
-                continue;
-            }
-
-            const bold = mapCompletion.OG ? '**' : '';
-            if (mapCompletion.OG) numOGCompletions += 1;
-
-            towerColumn.push(`${bold}${combo.ENTITY}${bold}`);
-            mapColumn.push(`${bold}${map}${bold}`);
-            linkColumn.push(`${bold}${mapCompletion.LINK}${bold}`);
-            personColumn.push(`${bold}${mapCompletion.PERSON}${bold}`);
-        }
-    }
-
-    // If no combos were found after filtering
-    if (towerColumn.length == 0) {
+async function display2MPFilterAll(interaction, fetchParams, parsed) {
+    const excludedColumns = determineExcludedColumns(parsed);
+    fetchParams.set('count', '0');
+    if ((await fetch2mp(fetchParams)).count <= 0) {
         throw new UserCommandError(titleFunction(parsed, true));
     }
+    fetchParams.set('count', '10');
+    return await Index.displayOneOrMultiplePagesNew(
+        interaction, fetch2mp, fetchParams,
+        ['Tower', 'Map', 'Person', 'Link'].filter(col => !excludedColumns.includes(col)),
+        completion => {
+            const boldOg = (str) => completion.og ? `**${str}**` : str;
 
-    const title = titleFunction(parsed);
-
-    const excludedColumns = determineExcludedColumns(parsed);
-
-    // Exclude columns from data output based on function input
-    let columns = {};
-    if (!excludedColumns.includes('entity')) columns.ENTITY = towerColumn;
-    if (!excludedColumns.includes('map')) columns.MAP = mapColumn;
-    if (!excludedColumns.includes('person')) columns.PERSON = personColumn;
-    columns.LINK = linkColumn;
-
-    function setOtherDisplayFields(challengeEmbed) {
-        challengeEmbed
-            .setTitle(title)
+            return {
+                'Tower': boldOg(completion.entity),
+                'Map': boldOg(completion.map),
+                'Person': boldOg(completion.person),
+                'Link': boldOg(genCompletionLink(completion))
+            };
+        },
+        embed => {
+            embed
+            .setTitle(titleFunction(parsed))
             .setColor(paleblue)
-            .setDescription(`Index last reloaded ${timeSince(mtime)} ago`);
-
-        if (numOGCompletions == 1) {
-            challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
+            .setFooter({ text: `---\nAny OG completion(s) bolded` });
         }
-        if (numOGCompletions > 1) {
-            challengeEmbed.setFooter({
-                text: `---\n${numOGCompletions} total OG completions bolded`
-            });
-        }
-    }
-
-    return await Index.displayOneOrMultiplePages(interaction, columns, setOtherDisplayFields);
-}
-
-function filterCombo(c, parsed) {
-    const matchesPerson = parsed.person ? parsed.person === c.PERSON.toLowerCase() : true;
-
-    let matchesEntity = true;
-    if (parsed.tower) {
-        if (Heroes.isHero(c.ENTITY)) {
-            matchesEntity = false;
-        } else {
-            matchesEntity = Towers.towerUpgradeToTower(c.ENTITY) == parsed.tower;
-        }
-    } else if (parsed.tower_upgrade || parsed.hero) {
-        // Tower upgrade or hero
-        matchesEntity = c.ENTITY == (parsed.tower_upgrade || parsed.hero);
-    }
-
-    let matchesMap = true;
-    if (parsed.map_difficulty) {
-        matchesMap = Maps.allMapsFromMapDifficulty(parsed.map_difficulty).includes(c.MAP);
-    } else if (parsed.map) {
-        // Map
-        matchesMap = parsed.map == c.MAP;
-    }
-
-    const matchesOg = parsed.hasAny() ? true : c.OG;
-
-    return matchesPerson && matchesEntity && matchesMap && matchesOg;
+    );
 }
 
 function titleFunction(parsed, noCombos = false) {
@@ -497,19 +441,19 @@ function determineExcludedColumns(parsed) {
     let excludedColumns = [];
 
     if (parsed.tower_upgrade || parsed.hero) {
-        excludedColumns.push('entity');
+        excludedColumns.push('Tower');
     }
 
     if (parsed.map) {
-        excludedColumns.push('map');
+        excludedColumns.push('Map');
     }
 
     if (parsed.person || !parsed.hasAny()) {
-        excludedColumns.push('person');
+        excludedColumns.push('Person');
     }
 
     if (!parsed.tower_upgrade && !parsed.hero && !parsed.map && !parsed.person) {
-        excludedColumns.push('person');
+        excludedColumns.push('Person');
     }
 
     return excludedColumns;
@@ -521,13 +465,13 @@ function determineExcludedColumns(parsed) {
 
 // Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier
 // Displays base centered above grid
-function embed2MPTowerStatistics(combos, tower) {
+function embed2MPTowerStatistics(resJson, tower) {
     const towerFormatted = Aliases.toIndexNormalForm(tower);
 
-    const completedComboEntities = combos.map(c => c.ENTITY.toLowerCase())
+    const completedComboEntities = resJson.results.map(res => res.entity);
 
     const baseTowerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower)
-    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName.toLowerCase()) ? WHITE_HEAVY_CHECK_MARK : RED_X
+    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X
 
     let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
@@ -542,7 +486,7 @@ function embed2MPTowerStatistics(combos, tower) {
     for (tier = 3; tier <= 5; tier++) {
         Towers.allPaths().forEach(path => {
             let towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
-            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName.toLowerCase()) ? WHITE_HEAVY_CHECK_MARK : RED_X
+            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X
             challengeEmbed.addFields([{ name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }]);
         })
     }

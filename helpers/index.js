@@ -445,7 +445,7 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
                     if (offset > 0) {
                         searchParams.set('offset', Math.max(offset - NUM_ROWS, 0));
                     } else {
-                        searchParams.set('offset', count - NUM_ROWS);
+                        searchParams.set('offset', Math.floor((count - 1) / NUM_ROWS) * NUM_ROWS);
                     }
                     await displayPages(false);
                     break;

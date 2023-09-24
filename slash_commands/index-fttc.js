@@ -53,102 +53,6 @@ async function execute(interaction) {
     return await displayFttcFilterAll(interaction, parsed)
 }
 
-async function displayFttcFilterAll(interaction, parsed) {
-    const fetchParams = getUrlParams(parsed)
-    if ((await fetchFttc(fetchParams)).count <= 0) {
-        return interaction.reply({
-            embeds: [
-                new Discord.EmbedBuilder().setTitle(titleNoCombos(parsed))
-            ]
-        })
-    }
-    fetchParams.set('count', '10');
-    return await displayOneOrMultiplePagesNew(
-        interaction, fetchFttc, fetchParams,
-        includedColumns(parsed),
-        completion => {
-            const boldOg = (str) => completion.og ? `**${str}**` : str;
-
-            const towers = JSON.parse(completion.towerset).map(tower => {
-                const towerCanonical = Aliases.getCanonicalForm(tower);
-                const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
-                return parsed.towers && parsed.towers.includes(towerCanonical)
-                    ? `**${towerAbbreviation}**`
-                    : towerAbbreviation;
-            }).join(' | ')
-
-            return {
-                'Towers': boldOg(towers),
-                'Map': boldOg(completion.map),
-                'Person': boldOg(completion.person),
-                'Link': boldOg(genCompletionLink(completion))
-            };
-        },
-        embed => {
-            embed
-            .setTitle(title(parsed))
-            .setColor(paleorange)
-            .setFooter({ text: `---\nAny OG completion(s) bolded` });
-        }
-    );
-}
-
-function includedColumns(parsed) {
-    // Setup / Data consolidation
-    let displayCols = ['Towers', 'Map', 'Person', 'Link'];
-
-    if (parsed.person) {
-        displayCols = displayCols.filter((col) => col != 'Person');
-    }
-
-    if (parsed.map) {
-        displayCols = displayCols.filter((col) => col != 'Map');
-    }
-
-    if (displayCols.length === 4) {
-        displayCols = displayCols.filter((col) => col != 'Person');
-    }
-
-    return displayCols;
-}
-
-async function fetchFttc(searchParams) {
-    let res = await fetch('https://btd6index.win/fetch-fttc?' + searchParams);
-    let resJson = await res.json();
-    if ('error' in resJson) {
-        throw new Error(resJson.error);
-    }
-    return resJson;
-}
-
-function getUrlParams(parsed) {
-    params = new URLSearchParams()
-
-    if (parsed.map) {
-        params.set('map', Aliases.toIndexNormalForm(parsed.map))
-    }
-
-    if (parsed.natural_number) {
-        params.set('towercount', parsed.natural_number)
-    }
-
-    if (parsed.towers) {
-        params.set('towerincludes', parsed.towers.map(t => `"${t}"`))
-    }
-
-    if (parsed.person) {
-        params.set('person', parsed.person)
-    }
-
-    if(keepOnlyOG(parsed)) {
-        params.set('og', 1)
-    }
-
-    params.set('count', 0)
-
-    return params
-}
-
 ////////////////////////////////////////////////////////////
 // Parsing SlashCommand Input
 ////////////////////////////////////////////////////////////
@@ -238,6 +142,47 @@ function keepOnlyOG(parsed) {
 }
 
 ////////////////////////////////////////////////////////////
+// Fetch Combos
+////////////////////////////////////////////////////////////
+
+async function fetchFttc(searchParams) {
+    let res = await fetch('https://btd6index.win/fetch-fttc?' + searchParams);
+    let resJson = await res.json();
+    if ('error' in resJson) {
+        throw new Error(resJson.error);
+    }
+    return resJson;
+}
+
+function getUrlParams(parsed) {
+    params = new URLSearchParams()
+
+    if (parsed.map) {
+        params.set('map', Aliases.toIndexNormalForm(parsed.map))
+    }
+
+    if (parsed.natural_number) {
+        params.set('towercount', parsed.natural_number)
+    }
+
+    if (parsed.towers) {
+        params.set('towerincludes', parsed.towers.map(t => `"${t}"`))
+    }
+
+    if (parsed.person) {
+        params.set('person', parsed.person)
+    }
+
+    if(keepOnlyOG(parsed)) {
+        params.set('og', 1)
+    }
+
+    params.set('count', 0)
+
+    return params
+}
+
+////////////////////////////////////////////////////////////
 // Display Combos
 ////////////////////////////////////////////////////////////
 
@@ -265,6 +210,65 @@ const FTTC_TOWER_ABBREVIATIONS = {
     engineer: 'eng',
     beast_handler: 'bst'
 };
+
+async function displayFttcFilterAll(interaction, parsed) {
+    const fetchParams = getUrlParams(parsed)
+    if ((await fetchFttc(fetchParams)).count <= 0) {
+        return interaction.reply({
+            embeds: [
+                new Discord.EmbedBuilder().setTitle(titleNoCombos(parsed))
+            ]
+        })
+    }
+    fetchParams.set('count', '10');
+    return await displayOneOrMultiplePagesNew(
+        interaction, fetchFttc, fetchParams,
+        includedColumns(parsed),
+        completion => {
+            const boldOg = (str) => completion.og ? `**${str}**` : str;
+
+            const towers = JSON.parse(completion.towerset).map(tower => {
+                const towerCanonical = Aliases.getCanonicalForm(tower);
+                const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
+                return parsed.towers && parsed.towers.includes(towerCanonical)
+                    ? `**${towerAbbreviation}**`
+                    : towerAbbreviation;
+            }).join(' | ')
+
+            return {
+                'Towers': boldOg(towers),
+                'Map': boldOg(completion.map),
+                'Person': boldOg(completion.person),
+                'Link': boldOg(genCompletionLink(completion))
+            };
+        },
+        embed => {
+            embed
+            .setTitle(title(parsed))
+            .setColor(paleorange)
+            .setFooter({ text: `---\nAny OG completion(s) bolded` });
+        }
+    );
+}
+
+function includedColumns(parsed) {
+    // Setup / Data consolidation
+    let displayCols = ['Towers', 'Map', 'Person', 'Link'];
+
+    if (parsed.person) {
+        displayCols = displayCols.filter((col) => col != 'Person');
+    }
+
+    if (parsed.map) {
+        displayCols = displayCols.filter((col) => col != 'Map');
+    }
+
+    if (displayCols.length === 4) {
+        displayCols = displayCols.filter((col) => col != 'Person');
+    }
+
+    return displayCols;
+}
 
 function title(parsed) {
     // t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';

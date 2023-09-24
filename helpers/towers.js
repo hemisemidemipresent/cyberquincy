@@ -192,9 +192,20 @@ function allWaterTowers() {
 function isWaterEntity(entity) {
     let entityToCompare;
     if (isTowerPath(entity)) {
-        entityToCompare = entity.split('#')[0];
+        const [tower, path] = entity.split('#')
+        if (tower == 'beast_handler' && path == 'top_path') {
+            return true
+        } else {
+            entityToCompare = tower;
+        }
     } else if (isTowerUpgrade(entity)) {
-        entityToCompare = towerUpgradeToTower(entity);
+        const [tower, upgrade] = entity.split('#')
+        const [path] = pathTierFromUpgradeSet(upgrade)
+        if (tower == 'beast_handler' && path == 'top_path') {
+            return true
+        } else {
+            entityToCompare = towerUpgradeToTower(entity);
+        }
     } else if (Heroes.isHero(entity)) {
         entityToCompare = entity;
     } else if (isTower(entity)) {

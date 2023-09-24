@@ -38,8 +38,8 @@ async function scrapeAll2TCCombos() {
 
 async function numCombos() {
     const sheet = sheet2TC();
-    await sheet.loadCells(`J6`);
-    return sheet.getCellByA1('J6').value;
+    await sheet.loadCells(`J10`);
+    return sheet.getCellByA1('J10').value;
 }
 
 function parsePreloadedRow(row) {

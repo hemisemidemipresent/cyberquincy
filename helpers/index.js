@@ -60,8 +60,6 @@ async function fetchInfo(info, reload = false) {
 }
 
 const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js');
-const { scrapeAll2MPCompletions } = require('../services/index/2mp_scraper.js');
-const { scrapeAllFTTCCombos } = require('../services/index/fttc_scraper');
 const { scrapeAllBalanceChanges } = require('../services/index/balances_scraper');
 const { URLSearchParams } = require('url');
 
@@ -69,10 +67,6 @@ async function scrapeInfo(info) {
     switch (info) {
         case '2tc':
             return await scrapeAll2TCCombos();
-        case '2mp':
-            return await scrapeAll2MPCompletions();
-        case 'fttc':
-            return await scrapeAllFTTCCombos();
         case 'balances':
             return await scrapeAllBalanceChanges();
         default:
@@ -451,7 +445,7 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
                     if (offset > 0) {
                         searchParams.set('offset', Math.max(offset - NUM_ROWS, 0));
                     } else {
-                        searchParams.set('offset', Math.floor(count / NUM_ROWS) * NUM_ROWS);
+                        searchParams.set('offset', Math.floor((count - 1) / NUM_ROWS) * NUM_ROWS);
                     }
                     await displayPages(false);
                     break;
@@ -479,6 +473,21 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
     await displayPages(true);
 }
 
+function genCompletionLink(completion) {
+    let actualLink = completion.link ?? `https://media.btd6index.win/${completion.filekey}`;
+    let linkText = 'Link';
+    if (actualLink.includes('reddit.com')) {
+        linkText = 'Reddit';
+    } else if (actualLink.includes('media.btd6index.win')) {
+        linkText = 'Image/Video';
+    } else if (actualLink.includes('imgur.com')) {
+        linkText = 'Imgur';
+    } else if (actualLink.includes('youtube.com')) {
+        linkText = 'YouTube';
+    }
+    return `[${linkText}](${actualLink})`;
+}
+
 module.exports = {
     getLastCacheModified,
     fetchInfo,
@@ -487,5 +496,6 @@ module.exports = {
     altMapsFields,
 
     displayOneOrMultiplePages,
-    displayOneOrMultiplePagesNew
+    displayOneOrMultiplePagesNew,
+    genCompletionLink,
 };

@@ -48,7 +48,7 @@ async function execute(interaction) {
 
 function process(data, name, tier, isElite) {
     let embed = new Discord.EmbedBuilder().setTitle(`${isElite ? 'Elite' : ''} ${name} Tier ${tier}`);
-    let desc = data.desc + '\n\n' + (isElite ? data.eliteDesc : normalDesc);
+    let desc = data.desc + '\n\n' + (isElite ? data.eliteDesc : data.normalDesc);
     let obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
     desc += `\n\n**Stats**:
 Health: ${gHelper.numberWithCommas(obj.hp)}

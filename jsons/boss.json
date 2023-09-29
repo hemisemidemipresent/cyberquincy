@@ -67,7 +67,7 @@
                 "desc": "for every 1% of HP lost spawns **8 DDTs**\nfor every 25% of HP lost spawns **30 MOABs and 4 fortified BAD**"
             }
         ],
-        "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs\nR120|+8 fMOABs, +4 BFBs, +4 ZOMGs"
+        "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs"
     },
     "Lych": {
         "desc": "The Lych is complicated; it can gain health from towers sold while it's on screen and also heals from buffs along with removing them and stunning affected towers. Lych cannot heal above its starting health.",

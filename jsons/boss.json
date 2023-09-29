@@ -8,31 +8,31 @@
                 "tier": 1,
                 "hp": 20000,
                 "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **8 greens**\nfor every 25% of HP lost spawns **30 ceramics**"
+                "desc": "for every 1% of HP lost spawns **8 greens**\nfor every 25% of HP lost spawns **30 greens and 30 ceramics**"
             },
             {
                 "tier": 2,
                 "hp": 75000,
                 "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **15 yellows**\nfor every 25% of HP lost spawns **60 ceramics**"
+                "desc": "for every 1% of HP lost spawns **15 yellows**\nfor every 25% of HP lost spawns **60 yellows and 60 ceramics**"
             },
             {
                 "tier": 3,
                 "hp": 350000,
                 "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **25 pinks**\nfor every 25% of HP lost spawns **6 MOABs**"
+                "desc": "for every 1% of HP lost spawns **25 pinks**\nfor every 25% of HP lost spawns **100 pinks and 6 MOABs**"
             },
             {
                 "tier": 4,
                 "hp": 750000,
                 "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **15 zebras**\nfor every 25% of HP lost spawns **10 ZOMGs**"
+                "desc": "for every 1% of HP lost spawns **15 zebras**\nfor every 25% of HP lost spawns **60 zebras and 10 ZOMGs**"
             },
             {
                 "tier": 5,
                 "hp": 3000000,
                 "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **25 rainbows**\nfor every 25% of HP lost spawns **1 BAD**"
+                "desc": "for every 1% of HP lost spawns **25 rainbows**\nfor every 25% of HP lost spawns **100 rainbows and 1 BAD**"
             }
         ],
         "elite": [
@@ -40,31 +40,31 @@
                 "tier": 1,
                 "hp": 50000,
                 "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **10 pinks**\nfor every 12.5% of HP lost spawns **70 ceramics**"
+                "desc": "for every 1% of HP lost spawns **10 pinks**\nfor every 12.5% of HP lost spawns **40 pinks and 70 ceramics**"
             },
             {
                 "tier": 2,
                 "hp": 300000,
                 "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **10 rainbows**\nfor every 12.5% of HP lost spawns **16 BFBs**"
+                "desc": "for every 1% of HP lost spawns **10 rainbows**\nfor every 12.5% of HP lost spawns **40 rainbows and 16 BFBs**"
             },
             {
                 "tier": 3,
                 "hp": 2000000,
                 "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **13 ceramics**\nfor every 12.5% of HP lost spawns **1 BAD and 9 DDTs**"
+                "desc": "for every 1% of HP lost spawns **13 ceramics**\nfor every 12.5% of HP lost spawns **50 ceramics, 1 BAD and 9 DDTs**"
             },
             {
                 "tier": 4,
                 "hp": 8000000,
                 "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **12 MOABs**\nfor every 12.5% of HP lost spawns **2 fortified BADs and 20 fortified DDTs**"
+                "desc": "for every 1% of HP lost spawns **12 MOABs**\nfor every 12.5% of HP lost spawns **100 regrow fortified ceramics, 2 fortified BADs and 20 fortified DDTs**"
             },
             {
                 "tier": 5,
                 "hp": 40000000,
                 "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **8 DDTs**\nfor every 25% of HP lost spawns **4 fortified BAD**"
+                "desc": "for every 1% of HP lost spawns **8 DDTs**\nfor every 25% of HP lost spawns **30 MOABs and 4 fortified BAD**"
             }
         ],
         "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs\nR120|+8 fMOABs, +4 BFBs, +4 ZOMGs"

@@ -116,13 +116,11 @@ async function paragon_stats(interaction) {
         let attacks = Object.keys(pa);
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x))); // apply levelling to all stats
 
-        desc = `**glaive(main)** - 75r, ${pa.main.d}d, ${pa.main.bd}bd, ${pa.main.ed}ed,  ${pa.main.p}p, ${pa.main.s}s, normal, camo
+        desc = `**glaive(main)** - 60r, ${pa.main.d}d, ${pa.main.bd}bd, ${pa.main.ed}ed,  ${pa.main.p}p, ${pa.main.s}s, normal, camo
                 • can jump to a nearby target after hitting
                 • first hit applies **shred** effect- (${pa.mainDot.d}d, ${pa.mainDot.bd}bd, ${pa.mainDot.ed}ed)/s, 15s duration
-                **orbitalglaive** - 40r, ${pa.orbit.d}d, ${pa.orbit.cd}cd, ${pa.orbit.md}md, +${pa.orbit.fd}fd, ${pa.orbit.bd}bd, ${pa.orbit.ed}ed, ${pa.orbit.p}p, ${pa.orbit.s}s, normal, camo
-                • zone, 40r
-                **heavykylie** - ${pa.press.d}d, ${pa.press.md}md, ${pa.press.bd}bd, ${pa.press.ed}ed, ${pa.press.p}p, ${pa.press.s}s, normal, camo
-                • 100r
+                **orbitalglaive** - 50r, zone, ${pa.orbit.d}d, ${pa.orbit.cd}cd, ${pa.orbit.md}md, +${pa.orbit.fd}fd, ${pa.orbit.bd}bd, ${pa.orbit.ed}ed, ${pa.orbit.p}p, ${pa.orbit.s}s, normal, camo
+                **heavykylie** - 100r, ${pa.press.d}d, ${pa.press.md}md, ${pa.press.bd}bd, ${pa.press.ed}ed, ${pa.press.p}p, ${pa.press.s}s, normal, camo
                 • only targets blimps
                 • creates **explosion** instead of returning
                 **explosion** -  ${pa.explosion.d}d, ${pa.explosion.bd}bd, ${pa.explosion.ed}ed, ${pa.explosion.p}p, normal, camo

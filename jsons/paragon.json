@@ -9,7 +9,7 @@
     "boomerang_monkey": {
         "main": {
             "damage": 20,
-            "bd": 60,
+            "bd": 50,
             "rate": 0.04,
             "pierce": 100
         },
@@ -22,19 +22,19 @@
             "cd": 20,
             "md": 20,
             "fd": 2,
-            "bd": 160,
+            "bd": 150,
             "rate": 0.1,
             "pierce": 1000
         },
         "press": {
             "damage": 1,
             "md": 19,
-            "rate": 2.5,
+            "rate": 3,
             "pierce": 300
         },
         "explosion": {
             "damage": 2500,
-            "bd": 5000,
+            "bd": 4000,
             "pierce": 20
         },
         "burn": {

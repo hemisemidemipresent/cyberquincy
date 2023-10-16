@@ -35,7 +35,7 @@ async function execute(interaction) {
     if (parsed.hasErrors()) {
         return await interaction.reply('Map provided not valid');
     } else {
-        await interaction.deferReply()
+        await interaction.deferReply();
         let challengeEmbed = await lcd(parsed.map);
         return await interaction.editReply({ embeds: [challengeEmbed] });
     }

@@ -9,7 +9,7 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-        "indent": ["warn", 4, {"SwitchCase":1}],
+        "indent": ["warn", 4, {"SwitchCase": 1}],
         "no-case-declarations": "off",
         "no-inner-declarations": "off",
         "no-undef": "off",

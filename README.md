@@ -16,11 +16,11 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 -   [invite link](https://discordapp.com/oauth2/authorize?client_id=591922988832653313&scope=bot%20applications.commands&permissions=2147863617)
 -   [website](https://cq.netlify.com)
 
-**For help, simply use `q!help`**
+**For help, simply use `/help`**
 
 # Basic local test guide
 
-> note: all credentials will be in `./1/config.json` (you probably need to create this file), fill in the json accordingly (as per `./1/template.json`).
+> note: all credentials will be in `./1/config.json` (you need to create this file yourself), fill in the json accordingly (as per `./1/template.json`).
 
 1. make a new discord bot in [discord dev page](https://discord.com/developers/applications), and copy the token into `./1/config.json` as `token`.
 
@@ -28,12 +28,19 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 
 3. to register slash commands type `node register`
 
-4. to run type `node server`, to run with sharding run `node index`
+4. to run type `node server`, or to run with sharding run `node index`
 
 # Project Info
 
--   this project uses CommonJS modules
+-   this project uses CommonJS modules (no `import` or `export`, just `require` and `module.exports`)
 -   there is now ESLint for this project - there is an `.eslintrc.json` linter file now which should hopefully enforce a somewhat consistent code standard
+-   to use eslint to check for errors run `npx eslint <file or directory>`. Many text editors also have integration with eslint as well.
+
+## Project Information (Where do the numbers and stats come from)
+
+-   Much of the data the bot uses is within the `./jsons` folder
+-   Tower Information are from Extreme Bloonology and their pastebins ([Heroes](./helpers/heroes.js) and [Towers](./helpers/towers.js))
+-   This bot also uses the [Official Ninja Kiwi API](https://data.ninjakiwi.com)
 
 # Contributing Guidelines
 

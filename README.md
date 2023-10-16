@@ -38,7 +38,7 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 # Project Info
 
 -   this project uses CommonJS modules
--   there is now a `.eslintrc.json` linter file which should hopefully
+-   there is now ESLint for this project - there is an `.eslintrc.json` linter file now which should hopefully enforce a somewhat consistent code standard
 
 # Contributing Guidelines
 

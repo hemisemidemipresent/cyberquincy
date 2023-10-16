@@ -49,11 +49,11 @@ async function lcc(btd6_map) {
     await sheet.loadCells(`${COLS.MAP}${MIN_ROW}:${COLS.MAP}${MAX_ROW}`); // loads all possible cells with map
 
     // The row where the queried map is found
-    var entryRow = null;
+    let entryRow = null;
 
     // Search for the row in all "possible" rows
     for (let row = 1; row <= MAX_ROW; row++) {
-        var mapCandidate = sheet.getCellByA1(`${COLS.MAP}${row}`).value;
+        let mapCandidate = sheet.getCellByA1(`${COLS.MAP}${row}`).value;
         // input is "in_the_loop" but needs to be compared to "In The Loop"
         if (mapCandidate && mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map) {
             entryRow = row;
@@ -92,7 +92,7 @@ async function lcc(btd6_map) {
     }
 
     // Embed and send the message
-    var challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LCC Combo`).setColor(paleyellow);
+    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LCC Combo`).setColor(paleyellow);
 
     for (field in values) {
         if (values[field])

@@ -1,10 +1,10 @@
 {
     "dart_monkey": {
         "pierce": 200,
-        "damage": 20,
-        "cd": 30,
+        "damage": 15,
+        "cd": 75,
         "bd": 80,
-        "rate": 0.35
+        "rate": 0.4
     },
     "boomerang_monkey": {
         "main": {

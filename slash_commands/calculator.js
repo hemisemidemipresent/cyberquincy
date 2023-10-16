@@ -37,7 +37,7 @@ builder = new SlashCommandBuilder()
 
 async function calc(interaction) {
     // Use a "lexer" to parse the operator/operand tokens
-    var lexer = new Lexer();
+    let lexer = new Lexer();
 
     lexer.addRule(/\s+/, function () {
         // skip whitespace
@@ -52,19 +52,19 @@ async function calc(interaction) {
     });
 
     // Set up operators and operator precedence to interpret the parsed tree
-    var power = {
+    let power = {
         precedence: 3
     };
 
-    var factor = {
+    let factor = {
         precedence: 2
     };
 
-    var term = {
+    let term = {
         precedence: 1
     };
 
-    var parser = new LexicalParser({
+    let parser = new LexicalParser({
         '+': term,
         '-': term,
         '*': factor,
@@ -76,7 +76,7 @@ async function calc(interaction) {
     // Execute the interpretation of the parsed lexical stack
     function parse(input) {
         lexer.setInput(input);
-        var tokens = [],
+        let tokens = [],
             token;
         while ((token = lexer.lex())) tokens.push(token);
         return parser.parse(tokens);
@@ -151,10 +151,10 @@ async function calc(interaction) {
         } else throw e;
     }
 
-    var stack = [];
+    let stack = [];
 
     // Evaluate the interpreted expression
-    var operator = {
+    let operator = {
         '+': function (a, b) {
             return a + b;
         },
@@ -186,8 +186,8 @@ async function calc(interaction) {
                 case '/':
                 case '%':
                 case '^':
-                    var b = +stack.pop();
-                    var a = +stack.pop();
+                    let b = +stack.pop();
+                    let a = +stack.pop();
                     stack.push(operator[c](a, b));
                     break;
                 default:
@@ -211,7 +211,7 @@ async function calc(interaction) {
     }
 
     // The single item left in the stack is the evaluated result
-    var output = stack.pop();
+    let output = stack.pop();
 
     if (isNaN(output)) {
         return await interaction.reply({

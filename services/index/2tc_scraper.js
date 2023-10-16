@@ -55,7 +55,7 @@ function parsePreloadedRow(row) {
     const upgrades = values.UPGRADES.split('|').map((u) =>
         u.replace(/^\s+|\s+$/g, '')
     );
-    for (var i = 0; i < upgrades.length; i++) {
+    for (let i = 0; i < upgrades.length; i++) {
         // Display upgrade next to tower
         values[`TOWER_${i + 1}`] = {
             NAME: values[`TOWER_${i + 1}`],
@@ -84,7 +84,7 @@ async function findOGRowOffset() {
         `${COLS.NUMBER}${MIN_OFFSET}:${COLS.NUMBER}${MAX_OFFSET}`
     );
 
-    for (var row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
+    for (let row = MIN_OFFSET; row <= MAX_OFFSET; row++) {
         const cellValue = sheet.getCellByA1(`B${row}`).value;
         if (cellValue) {
             if (cellValue.toLowerCase().includes('number')) {

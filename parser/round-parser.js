@@ -13,8 +13,8 @@ class RoundParser {
 
     constructor(difficulty) {
         // Defaults to any possible valid BTD6 round (1-->who knows) if difficulty isn't provided
-        var startRound = 1;
-        var endRound = Infinity;
+        let startRound = 1;
+        let endRound = Infinity;
         if (difficulty) {
             if (!['ALL', 'PREDET', 'PREDET_CHIMPS'].includes(difficulty)) {
                 // "ALL" represents "ALL_ROUNDS"
@@ -53,7 +53,7 @@ class RoundParser {
     // Parses all ways the command user could enter a round
     transformArgument(arg) {
         if (isNaN(arg)) {
-            var result = arg.match(/^(?:round|r)(\d+)$/);
+            let result = arg.match(/^(?:round|r)(\d+)$/);
             if (result) return result[1];
             else throw new UserCommandError(`Round must be of form \`15\`, \`R15\` or \`round15\` (Got \`${arg}\` instead)`);
         } else {

@@ -27,7 +27,7 @@ class VersionParser {
 
     // Parses all ways the command user could enter a round
     transformArgument(arg) {
-        var result = null;
+        let result = null;
         if (this.allowSubVersion) {
             result = arg.match(/^v(\d\d?\.?\d?)$/i);
             if (result) return result[1];

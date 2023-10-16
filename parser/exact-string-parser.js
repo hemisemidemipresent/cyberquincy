@@ -19,7 +19,7 @@ class ExactStringParser {
             );
         }
 
-        var regex = new RegExp(`^${this.str}$`, 'i');
+        let regex = new RegExp(`^${this.str}$`, 'i');
         this.delegateParser = new RegexParser(regex);
     }
 

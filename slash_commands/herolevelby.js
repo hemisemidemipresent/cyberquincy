@@ -191,7 +191,7 @@ function calculateHeroPlacementRound(hero, goalRound, desiredHeroLevel, mapDiffi
 
 function calculateLaterPlacementRounds(hero, startingRounds, goalRound, desiredHeroLevel, mapDifficulty) {
     placementRounds = {};
-    for (var i = 0; i < startingRounds.length; i++) {
+    for (let i = 0; i < startingRounds.length; i++) {
         placementRounds[startingRounds[i]] = costToUpgrade(
             hero,
             startingRounds[i],

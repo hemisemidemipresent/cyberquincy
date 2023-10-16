@@ -111,11 +111,11 @@ async function ltc(btd6_map, modifier) {
     await sheet.loadCells(`${COLS['TWO'].MAP}${MIN_ROW}:${COLS['TWO'].MAP}${MAX_ROW}`); // loads all possible cells with map
 
     // The row where the queried map is found
-    var entryRow = null;
+    let entryRow = null;
 
     // Search for the row in all "possible" rows
     for (let row = 1; row <= MAX_ROW; row++) {
-        var mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`).value;
+        let mapCandidate = sheet.getCellByA1(`${COLS['TWO'].MAP}${row}`).value;
         // input is "in_the_loop" but needs to be compared to "In The Loop"
         if (mapCandidate && mapCandidate.toLowerCase().replace(/ /g, '_') === btd6_map) {
             entryRow = row;
@@ -152,7 +152,7 @@ async function getRowStandardData(entryRow, colset) {
             .value.split('|')
             .map((u) => u.replace(/^\s+|\s+$/g, ''));
 
-        for (var i = 0; i < colset['TOWERS'].length; i++) {
+        for (let i = 0; i < colset['TOWERS'].length; i++) {
             values[`Tower ${i + 1}`] =
                 sheet.getCellByA1(`**${colset['TOWERS'][i]}${entryRow}**`).value + ' (' + upgrades[i] + ')';
         }
@@ -178,7 +178,7 @@ async function getRowStandardData(entryRow, colset) {
         values.CURRENT = gHelper.WHITE_HEAVY_CHECK_MARK;
     }
 
-    var challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LTC Combo`).setColor(palegreen);
+    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${values.MAP} LTC Combo`).setColor(palegreen);
 
     for (field in values) {
         challengeEmbed = challengeEmbed.addFields([
@@ -199,7 +199,7 @@ async function getRowAltData(entryRow, qualifier, colset) {
         return await getRowStandardData(entryRow, colset);
     }
 
-    var challengeEmbed = new Discord.EmbedBuilder()
+    let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`${gHelper.toTitleCase(qualifier)} ${mapCell.value} LTC Combo`)
         .setColor(palegreen)
         .addFields([

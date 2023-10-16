@@ -271,7 +271,7 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
 
         let numOGCompletions = 0;
 
-        for (var i = 0; i < combos.length; i++) {
+        for (let i = 0; i < combos.length; i++) {
             for (map in combos[i].MAPS) {
                 const combo = flattenCombo(clonedeep(combos[i]), map);
 
@@ -397,7 +397,7 @@ function flattenCombo(combo, map) {
     flattenedCombo.OG = subcombo.OG;
     delete flattenedCombo.MAPS;
 
-    for (var tn = 1; tn <= 2; tn++) {
+    for (let tn = 1; tn <= 2; tn++) {
         if (combo.OG) {
             flattenedCombo[`TOWER_${tn}`] = `${flattenedCombo[`TOWER_${tn}`].NAME} (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`;
         } else {
@@ -422,7 +422,7 @@ function embedTitle(parsed, combos) {
     if (parsed.person) title += `by ${sampleCombo.MAPS[sampleMap].PERSON} `;
     if (parsed.map) title += `on ${Maps.indexMapAbbreviationToNormalForm(parsed.map)} `;
     if (parsed.map_difficulty) title += `on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} Maps `;
-    for (var i = 0; i < towers.length; i++) {
+    for (let i = 0; i < towers.length; i++) {
         const tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';
@@ -439,7 +439,7 @@ function embedTitleNoCombos(parsed) {
     if (parsed.person) title += `by "${parsed.person}" `;
     if (parsed.map) title += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
     if (parsed.map_difficulty) title += `on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} Maps `;
-    for (var i = 0; i < towers.length; i++) {
+    for (let i = 0; i < towers.length; i++) {
         tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';

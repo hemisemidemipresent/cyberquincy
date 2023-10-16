@@ -22,7 +22,7 @@ class SecondsParser {
     // Parses all ways the command user could enter a round
     transformArgument(arg) {
         if (isNaN(arg)) {
-            var result = arg.match(/[+-]?([0-9]*[.])?[0-9]+(?=sec|s)/);
+            let result = arg.match(/[+-]?([0-9]*[.])?[0-9]+(?=sec|s)/);
             // see: https://stackoverflow.com/questions/12643009/regular-expression-for-floating-point-numbers/42629198#42629198
 
             if (result) return result[0];

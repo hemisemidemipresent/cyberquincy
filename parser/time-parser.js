@@ -21,7 +21,7 @@ class TimeParser {
     // Parses all ways the command user could enter a round
     transformArgument(arg) {
         if (!isNaN(arg)) return parseFloat(arg);
-        var a = arg.split(':'); // split it at the colons
+        let a = arg.split(':'); // split it at the colons
         let h = 0;
         let m = 0;
         let s = 0;
@@ -34,7 +34,7 @@ class TimeParser {
             s = a[2];
         }
         // minutes are worth 60 seconds. Hours are worth 60 minutes, or 3600 seconds.
-        var seconds = h * 3600 + m * 60 + parseFloat(s) * 1;
+        let seconds = h * 3600 + m * 60 + parseFloat(s) * 1;
         if (isNaN(seconds))
             throw new UserCommandError(
                 `Time must be of form \`mm:ss\`, \`hh:mm:ss\`, \`mm:ss.xxx\`, \`hh:mm:ss.xxx\` (Got \`${arg}\` instead)`

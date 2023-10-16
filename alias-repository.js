@@ -155,10 +155,10 @@ class AliasRepository extends Array {
         const tokens = al.split(new RegExp(SEPARATOR_TOKENS.join('|')));
         let aliases = [tokens[0]];
         if (tokens.length < 8) {
-            for (var i = 1; i < tokens.length; i++) {
+            for (let i = 1; i < tokens.length; i++) {
                 let new_aliases = [];
-                for (var j = 0; j < aliases.length; j++) {
-                    for (var k = 0; k < JOIN_TOKENS.length; k++) {
+                for (let j = 0; j < aliases.length; j++) {
+                    for (let k = 0; k < JOIN_TOKENS.length; k++) {
                         new_aliases.push(
                             aliases[j] + JOIN_TOKENS[k] + tokens[i]
                         );

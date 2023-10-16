@@ -53,10 +53,10 @@ function permutatePaddings(arr, newLength) {
 
     let results = [];
 
-    for (var i = 0; i < arr.length + 1; i++) {
+    for (let i = 0; i < arr.length + 1; i++) {
         endArr = arr.slice(i);
         const recursiveResults = permutatePaddings(endArr, endArr.length + numPads - 1);
-        for (var j = 0; j < recursiveResults.length; j++) {
+        for (let j = 0; j < recursiveResults.length; j++) {
             results.push(arr.slice(0, i).concat(null).concat(recursiveResults[j]));
         }
     }
@@ -126,10 +126,10 @@ function chunk(array, size) {
 function arraysEqual(_arr1, _arr2) {
     if (!Array.isArray(_arr1) || !Array.isArray(_arr2) || _arr1.length !== _arr2.length) return false;
 
-    var arr1 = _arr1.concat().sort();
-    var arr2 = _arr2.concat().sort();
+    let arr1 = _arr1.concat().sort();
+    let arr2 = _arr2.concat().sort();
 
-    for (var i = 0; i < arr1.length; i++) {
+    for (let i = 0; i < arr1.length; i++) {
         if (arr1[i] !== arr2[i]) return false;
     }
 
@@ -185,11 +185,11 @@ function round(num, numDigitsAfterDecimal = 0) {
 
 function mostCommonElement(arr) {
     if (arr.length == 0) return null;
-    var modeMap = {};
-    var maxEl = arr[0],
+    let modeMap = {};
+    let maxEl = arr[0],
         maxCount = 1;
-    for (var i = 0; i < arr.length; i++) {
-        var el = arr[i];
+    for (let i = 0; i < arr.length; i++) {
+        let el = arr[i];
         if (modeMap[el] == null) modeMap[el] = 1;
         else modeMap[el]++;
         if (modeMap[el] > maxCount) {

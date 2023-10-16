@@ -53,7 +53,7 @@ concretizeAndParse = function (args, parsers, abstractParserIndex) {
 
     // Loop through the results and recurse, then taking the most successful result
     // i.e. either the successful parsing attempt or the attempt with the fewest errors
-    for (var i = 0; i < moreConcreteParsingAttempts.length; i++) {
+    for (let i = 0; i < moreConcreteParsingAttempts.length; i++) {
         // Unpack results
         const moreConcreteParsers = moreConcreteParsingAttempts[i].parsers;
         const alreadyParsed = moreConcreteParsingAttempts[i].parsed;
@@ -127,7 +127,7 @@ expandOrParser = function (parsers) {
     orParser = parsers[orParserIndex];
 
     // Create a new list for every parserList provided in the command's OrParser constructor
-    for (var i = 0; i < orParser.parserLists.length; i++) {
+    for (let i = 0; i < orParser.parserLists.length; i++) {
         parserLists.push(
             parsers
                 .slice(0, orParserIndex)
@@ -176,7 +176,7 @@ permutateParsers = function (parsers) {
     parserPermutations = gHelper.allLengthNPermutations(subParsers);
 
     parserLists = [];
-    for (var i = 0; i < parserPermutations.length; i++) {
+    for (let i = 0; i < parserPermutations.length; i++) {
         parserLists.push(
             parsers
                 .slice(0, anyOrderParserIndex)

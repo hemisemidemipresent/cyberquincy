@@ -1,2 +1,0 @@
-GET https://fast-static-api.nkstatic.com/storage/static/11/5c6ecbba02beb5d715b80539/public-stats
-User-Agent: 'btd6-windowsplayer-27.3'

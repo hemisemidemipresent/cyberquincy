@@ -81,14 +81,14 @@
             "md": 30,
             "bd": 30,
             "pierce": 10,
-            "rate": 0.5
+            "rate": 0.25
         },
         "cannonball": {
             "damage": 60,
             "md": 60,
             "bd": 60,
             "pierce": 28,
-            "rate": 0.5
+            "rate": 0.25
         },
         "darts": {
             "damage": 44,

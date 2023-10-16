@@ -8,11 +8,11 @@ class OptionalParser {
         // then defaultValue must be a valid difficulty
         try {
             if (defaultValue)
-                this.parser.parse(defaultValue)
+                this.parser.parse(defaultValue);
         } catch(e) {
             throw new DeveloperCommandError(`Default value "${defaultValue}" for OptionalParser<${this.parser.constructor.name}> is invalid`);
         }
-        this.defaultValue = defaultValue
+        this.defaultValue = defaultValue;
     }
 
     // The optional parser type is the type of the concrete parser wrapped in parentheses
@@ -21,8 +21,8 @@ class OptionalParser {
         return 'optional';
     }
 
-    parse(arg) {
-        throw `Must not parse directly from the Optional Parser. Try parsing using the nested parser \`${this.parser.constructor.name}\` instead`
+    parse() {
+        throw `Must not parse directly from the Optional Parser. Try parsing using the nested parser \`${this.parser.constructor.name}\` instead`;
     }
 }
 

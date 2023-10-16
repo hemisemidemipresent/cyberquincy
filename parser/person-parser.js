@@ -7,11 +7,11 @@ class PersonParser {
     }
 
     parse(arg) {
-        const result = arg.match(/user#(.*)/)
+        const result = arg.match(/user#(.*)/);
         if (result) {
             return result[1];
         } else {
-            throw new UserCommandError(`Username must start with \`user#\` or \`u#\` but got ${arg} instead`)
+            throw new UserCommandError(`Username must start with \`user#\` or \`u#\` but got ${arg} instead`);
         }
     }
 }

@@ -6,12 +6,12 @@ TOWER_HEADER_ROW = 23;
 HERO_HEADER_ROW = 18;
 
 async function scrapeAllBalanceChanges() {
-    const towerBalances = await scrapeAllTowers()
-    const heroBalances = await scrapeAllHeroes()
+    const towerBalances = await scrapeAllTowers();
+    const heroBalances = await scrapeAllHeroes();
     return {
         ...towerBalances,
         ...heroBalances,
-    }
+    };
 }
 
 ///////////////////////////////////////////////
@@ -22,9 +22,9 @@ async function scrapeAllTowers() {
     const towersSheet = getTowersSheet();
     const currentVersion = await parseCurrentVersion(towersSheet);
     await loadBuffNerfCells(towersSheet, TOWER_HEADER_ROW, currentVersion);
-    await loadTowerChangesCells(towersSheet, currentVersion)
+    await loadTowerChangesCells(towersSheet, currentVersion);
 
-    const towerBalances = {}
+    const towerBalances = {};
     let colIndex;
     for (
         colIndex =
@@ -34,17 +34,17 @@ async function scrapeAllTowers() {
     ) {
         const towerHeader = towersSheet.getCell(TOWER_HEADER_ROW - 1, colIndex).value;
 
-        if (!towerHeader) return towerBalances
+        if (!towerHeader) return towerBalances;
 
         const tower = Aliases.getCanonicalForm(towerHeader);
 
-        const versionAdded = await parseVersionAdded(towersSheet, TOWER_HEADER_ROW, colIndex, currentVersion)
-        const balances = await parseTowerBalances(towersSheet, currentVersion, colIndex)
+        const versionAdded = await parseVersionAdded(towersSheet, TOWER_HEADER_ROW, colIndex, currentVersion);
+        const balances = await parseTowerBalances(towersSheet, currentVersion, colIndex);
 
         towerBalances[tower] = {
             versionAdded: versionAdded,
             balances: balances,
-        }
+        };
     }
     return towerBalances;
 }
@@ -54,16 +54,16 @@ function getTowersSheet() {
 }
 
 async function loadTowerChangesCells(towersSheet, currentVersion) {
-    const changesTopLeft = `${VERSION_COLUMN}${getTowerChangesRowEquivalent(currentVersion, TOWER_HEADER_ROW)}`
+    const changesTopLeft = `${VERSION_COLUMN}${getTowerChangesRowEquivalent(currentVersion, TOWER_HEADER_ROW)}`;
     const changesBottomRight = GoogleSheetsHelper.rowColToA1(
         getTowerChangesRowEquivalent(currentVersion, TOWER_HEADER_ROW) + currentVersion - 1,
         towersSheet.columnCount
-    )
-    await towersSheet.loadCells(`${changesTopLeft}:${changesBottomRight}`)
+    );
+    await towersSheet.loadCells(`${changesTopLeft}:${changesBottomRight}`);
 }
 
 async function parseTowerBalances(towersSheet, currentVersion, colIndex) {
-    const balances = {}
+    const balances = {};
 
     let rowIndex, changesRowIndex;
     // row index starts at the first row after the tower header row (row index vs row discrepancy)
@@ -73,7 +73,7 @@ async function parseTowerBalances(towersSheet, currentVersion, colIndex) {
             GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN)
         ).formattedValue;
 
-        changesRowIndex = getTowerChangesRowEquivalent(currentVersion, rowIndex)
+        changesRowIndex = getTowerChangesRowEquivalent(currentVersion, rowIndex);
 
         const buffs = towersSheet.getCell(rowIndex, colIndex).note?.replace(/✔️/g, '✅')?.split('\n\n') || [];
         const nerfs = towersSheet.getCell(rowIndex, colIndex + 1).note?.split('\n\n') || [];
@@ -85,13 +85,13 @@ async function parseTowerBalances(towersSheet, currentVersion, colIndex) {
             nerfs: nerfs,
             fixes: fixes,
             changes: changes,
-        }
+        };
     }
-    return balances
+    return balances;
 }
 
 function getTowerChangesRowEquivalent(currentVersion, from) {
-    return from + currentVersion + 2
+    return from + currentVersion + 2;
 }
 
 ///////////////////////////////////////////////
@@ -102,7 +102,7 @@ async function scrapeAllHeroes() {
     const heroesSheet = getHeroesSheet();
     const currentVersion = await parseCurrentVersion(heroesSheet);
     await loadBuffNerfCells(heroesSheet, HERO_HEADER_ROW, currentVersion);
-    const heroBalances = {}
+    const heroBalances = {};
     let colIndex;
     for (
         colIndex = GoogleSheetsHelper.getColumnIndexFromLetter(VERSION_COLUMN) + 1;
@@ -111,17 +111,17 @@ async function scrapeAllHeroes() {
     ) {
         const heroHeader = heroesSheet.getCell(HERO_HEADER_ROW - 1, colIndex).value;
 
-        if (!heroHeader) return heroBalances
+        if (!heroHeader) return heroBalances;
 
         const hero = Aliases.getCanonicalForm(heroHeader);
 
-        const versionAdded = await parseVersionAdded(heroesSheet, HERO_HEADER_ROW, colIndex, currentVersion)
-        const balances = await parseHeroBalances(heroesSheet, currentVersion, colIndex)
+        const versionAdded = await parseVersionAdded(heroesSheet, HERO_HEADER_ROW, colIndex, currentVersion);
+        const balances = await parseHeroBalances(heroesSheet, currentVersion, colIndex);
 
         heroBalances[hero] = {
             versionAdded: versionAdded,
             balances: balances,
-        }
+        };
     }
     return heroBalances;
 }
@@ -131,7 +131,7 @@ function getHeroesSheet() {
 }
 
 async function parseHeroBalances(heroesSheet, currentVersion, colIndex) {
-    const balances = {}
+    const balances = {};
 
     let rowIndex;
     // row index starts at the first row after the tower header row (row index vs row discrepancy)
@@ -143,21 +143,21 @@ async function parseHeroBalances(heroesSheet, currentVersion, colIndex) {
 
         const buffLikes = heroesSheet.getCell(rowIndex, colIndex).note?.replace(/✔️/g, '✅')?.split('\n\n') || [];
         const nerfLikes = heroesSheet.getCell(rowIndex, colIndex + 1).note?.split('\n\n') || [];
-        const combined = buffLikes.concat(nerfLikes).map(n => n.replace(/🟡/g, '⚠️').replace(/🟦/g, "↔"))
+        const combined = buffLikes.concat(nerfLikes).map(n => n.replace(/🟡/g, '⚠️').replace(/🟦/g, "↔"));
 
-        const buffs = buffLikes.filter(n => n.trim().startsWith('✅'))
-        const nerfs = nerfLikes.filter(n => n.trim().startsWith('❌'))
-        const fixes = combined.filter(n => n.trim().startsWith('⚠️'))
-        const changes = combined.filter(n => n.trim().startsWith('↔️'))
+        const buffs = buffLikes.filter(n => n.trim().startsWith('✅'));
+        const nerfs = nerfLikes.filter(n => n.trim().startsWith('❌'));
+        const fixes = combined.filter(n => n.trim().startsWith('⚠️'));
+        const changes = combined.filter(n => n.trim().startsWith('↔️'));
 
         balances[parseInt(version)] = {
             buffs: buffs,
             nerfs: nerfs,
             fixes: fixes,
             changes: changes,
-        }
+        };
     }
-    return balances
+    return balances;
 }
 
 ///////////////////////////////////////////////
@@ -186,7 +186,7 @@ async function loadBuffNerfCells(sheet, headerRow, currentVersion) {
 async function parseVersionAdded(sheet, headerRow, colIndex, currentVersion) {
     let rowIndex, cellFormatting;
     for (rowIndex = headerRow; rowIndex < headerRow + currentVersion - 1; rowIndex++) {
-        cellFormatting = sheet.getCell(rowIndex, colIndex).effectiveFormat
+        cellFormatting = sheet.getCell(rowIndex, colIndex).effectiveFormat;
         // The version added is the first non-greyed out row for the column
         if (cellFormatting && !isEqual(cellFormatting.backgroundColor, { red: 0.6, green: 0.6, blue: 0.6 })) {
             const version = sheet.getCell(
@@ -201,4 +201,4 @@ async function parseVersionAdded(sheet, headerRow, colIndex, currentVersion) {
 
 module.exports = { 
     scrapeAllBalanceChanges,
-}
+};

@@ -43,11 +43,11 @@ async function calc(interaction) {
         // skip whitespace
     });
 
-    lexer.addRule(/[a-zA-Z#!0-9\._]+/, function (lexeme) {
+    lexer.addRule(/[a-zA-Z#!0-9._]+/, function (lexeme) {
         return lexeme; // symbols
     });
 
-    lexer.addRule(/[\(\+\-\*\/%\^\)'"]/, function (lexeme) {
+    lexer.addRule(/[(+\-*/%^)'"]/, function (lexeme) {
         return lexeme; // punctuation and operators
     });
 

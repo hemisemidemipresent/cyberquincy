@@ -32,7 +32,7 @@ builder = new SlashCommandBuilder()
     .addStringOption(tower1Option)
     .addStringOption(tower2Option)
     .addIntegerOption(numTowerTypesOption)
-    .addStringOption(personOption)
+    .addStringOption(personOption);
 
 async function execute(interaction) {
     await interaction.deferReply();
@@ -50,7 +50,7 @@ async function execute(interaction) {
         new Parsed()
     );
 
-    return await displayFttcFilterAll(interaction, parsed)
+    return await displayFttcFilterAll(interaction, parsed);
 }
 
 ////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ function parseAll(interaction) {
 }
 
 function validateInput(interaction) {
-    let [parsedMap, parsedTower1, parsedTower2, parsedNumTowerTypes, _] = parseAll(interaction);
+    let [parsedMap, parsedTower1, parsedTower2, parsedNumTowerTypes, ] = parseAll(interaction);
 
     if (parsedMap.hasErrors()) {
         return `Map not valid`;
@@ -155,31 +155,31 @@ async function fetchFttc(searchParams) {
 }
 
 function getUrlParams(parsed) {
-    params = new URLSearchParams()
+    params = new URLSearchParams();
 
     if (parsed.map) {
-        params.set('map', Aliases.toIndexNormalForm(parsed.map))
+        params.set('map', Aliases.toIndexNormalForm(parsed.map));
     }
 
     if (parsed.natural_number) {
-        params.set('towercount', parsed.natural_number)
+        params.set('towercount', parsed.natural_number);
     }
 
     if (parsed.towers) {
-        params.set('towerincludes', parsed.towers.map(t => `"${t}"`))
+        params.set('towerincludes', parsed.towers.map(t => `"${t}"`));
     }
 
     if (parsed.person) {
-        params.set('person', parsed.person)
+        params.set('person', parsed.person);
     }
 
     if(keepOnlyOG(parsed)) {
-        params.set('og', 1)
+        params.set('og', 1);
     }
 
-    params.set('count', 0)
+    params.set('count', 0);
 
-    return params
+    return params;
 }
 
 ////////////////////////////////////////////////////////////
@@ -212,13 +212,13 @@ const FTTC_TOWER_ABBREVIATIONS = {
 };
 
 async function displayFttcFilterAll(interaction, parsed) {
-    const fetchParams = getUrlParams(parsed)
+    const fetchParams = getUrlParams(parsed);
     if ((await fetchFttc(fetchParams)).count <= 0) {
         return interaction.reply({
             embeds: [
                 new Discord.EmbedBuilder().setTitle(titleNoCombos(parsed))
             ]
-        })
+        });
     }
     fetchParams.set('count', '10');
     return await displayOneOrMultiplePagesNew(
@@ -233,7 +233,7 @@ async function displayFttcFilterAll(interaction, parsed) {
                 return parsed.towers && parsed.towers.includes(towerCanonical)
                     ? `**${towerAbbreviation}**`
                     : towerAbbreviation;
-            }).join(' | ')
+            }).join(' | ');
 
             return {
                 'Towers': boldOg(towers),
@@ -244,9 +244,9 @@ async function displayFttcFilterAll(interaction, parsed) {
         },
         embed => {
             embed
-            .setTitle(title(parsed))
-            .setColor(paleorange)
-            .setFooter({ text: `---\nAny OG completion(s) bolded` });
+                .setTitle(title(parsed))
+                .setColor(paleorange)
+                .setFooter({ text: `---\nAny OG completion(s) bolded` });
         }
     );
 }
@@ -272,7 +272,7 @@ function includedColumns(parsed) {
 
 function title(parsed) {
     // t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';
-    let t = 'All FTTC Combos '
+    let t = 'All FTTC Combos ';
     if (parsed.person) t += `by ${parsed.person} `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;

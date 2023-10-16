@@ -222,7 +222,7 @@ parseConcrete = function (args, parsers) {
         // but not just at the end of the array..in every possible permutable way within the array
         // giving error-handling the best chance at finding the closest match
         argPaddingPermutations = gHelper.permutatePaddings(args, parsers.length);
-        for (var i = 0; i < argPaddingPermutations.length; i++) {
+        for (let i = 0; i < argPaddingPermutations.length; i++) {
             results.push(parseConcreteArgsParsersAligned(argPaddingPermutations[i], parsers));
         }
     } else if (args.length > parsers.length) {
@@ -230,7 +230,7 @@ parseConcrete = function (args, parsers) {
         // but not just at the end of the array..in every possible permutable way within the array
         // giving error-handling the best chance at finding the closest match
         parserPaddingPermutations = gHelper.permutatePaddings(parsers, args.length);
-        for (var i = 0; i < parserPaddingPermutations.length; i++) {
+        for (let i = 0; i < parserPaddingPermutations.length; i++) {
             results.push(parseConcreteArgsParsersAligned(args, parserPaddingPermutations[i]));
         }
     } else {

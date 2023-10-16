@@ -1,8 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { isValidTempleSet } = require('../helpers/towers');
 
-const { footer } = require('../aliases/misc.json');
-
 const t = require('../jsons/temple.json');
 const t2 = require('../jsons/temple2.json');
 

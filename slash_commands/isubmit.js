@@ -20,55 +20,55 @@ const SUBMISSIONS_CHANNEL_2 = IS_TESTING ? TEST_SUBMISSIONS_CHANNEL_2 : BTD6_IND
 const SUBMISSIONS_GUILD = IS_TESTING ? TEST_GUILD : BTD6_INDEX_SERVER_ID;
 
 builder = new SlashCommandBuilder()
-	.setName('isubmit')
-	.setDescription('Submit an image to the BTD6 Index')
-	.addAttachmentOption((option) =>
-		option.setName('img').setDescription('the image that you want to upload').setRequired(false)
-	)
-	.addStringOption((option) =>
-		option.setName('text').setDescription('text to add to the submission').setRequired(false)
-	);
+    .setName('isubmit')
+    .setDescription('Submit an image to the BTD6 Index')
+    .addAttachmentOption((option) =>
+        option.setName('img').setDescription('the image that you want to upload').setRequired(false)
+    )
+    .addStringOption((option) =>
+        option.setName('text').setDescription('text to add to the submission').setRequired(false)
+    );
 
 async function execute(interaction) {
-	let messageAttachment = interaction.options.getAttachment('img');
-	let text = interaction.options.getString('text');
-	let currentGuild = interaction.guild.id;
+    let messageAttachment = interaction.options.getAttachment('img');
+    let text = interaction.options.getString('text');
+    let currentGuild = interaction.guild.id;
 
-	if (currentGuild != SUBMISSIONS_GUILD){
-		await interaction.reply({ content: 'You may only submit from within the BTD6 Index Discord Server', ephemeral: true });
-	} else {
-		if (!messageAttachment && !text) {
-			return await interaction.reply({ content: 'No content submitted.', ephemeral: true });
-		} else if (!messageAttachment && text) {
-			let temp = `${text}\n——————————————————————\nSent by ${interaction.user.tag}`;
-			await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send(temp);
-			const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send(temp);
-			await interaction.reply({ content: 'Submitted: ' + url });
-		} else if (messageAttachment) {
-			if (!text) text = '';
-			let image = messageAttachment.url;
-			imgur
-				.uploadUrl(image)
-				.then(async (json) => {
-					const embed = new Discord.EmbedBuilder()
-						.setDescription(`${json.link}\n${text}`)
-						.setColor(cyber)
-						.setImage(`${json.link}`)
-						.setFooter({ text: `sent by ${interaction.user.tag}` });
-					await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send({ embeds: [embed] });
-					const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send({ embeds: [embed] });
-					await interaction.reply({ content: 'Submitted: ' + url });
-				})
-				.catch(async (e) => {
-					console.log(e);
-					let errMsg = e.message.message.replace(
-						'File type invalid (1)',
-						`Imgur failed to identify file type as :ok_hand: ${image}`
-					);
-					return await interaction.reply({ content: errMsg, ephemeral: false });
-				});
-		}
-	}
+    if (currentGuild != SUBMISSIONS_GUILD){
+        await interaction.reply({ content: 'You may only submit from within the BTD6 Index Discord Server', ephemeral: true });
+    } else {
+        if (!messageAttachment && !text) {
+            return await interaction.reply({ content: 'No content submitted.', ephemeral: true });
+        } else if (!messageAttachment && text) {
+            let temp = `${text}\n——————————————————————\nSent by ${interaction.user.tag}`;
+            await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send(temp);
+            const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send(temp);
+            await interaction.reply({ content: 'Submitted: ' + url });
+        } else if (messageAttachment) {
+            if (!text) text = '';
+            let image = messageAttachment.url;
+            imgur
+                .uploadUrl(image)
+                .then(async (json) => {
+                    const embed = new Discord.EmbedBuilder()
+                        .setDescription(`${json.link}\n${text}`)
+                        .setColor(cyber)
+                        .setImage(`${json.link}`)
+                        .setFooter({ text: `sent by ${interaction.user.tag}` });
+                    await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL).send({ embeds: [embed] });
+                    const { url } = await interaction.guild.channels.resolve(SUBMISSIONS_CHANNEL_2).send({ embeds: [embed] });
+                    await interaction.reply({ content: 'Submitted: ' + url });
+                })
+                .catch(async (e) => {
+                    console.log(e);
+                    let errMsg = e.message.message.replace(
+                        'File type invalid (1)',
+                        `Imgur failed to identify file type as :ok_hand: ${image}`
+                    );
+                    return await interaction.reply({ content: errMsg, ephemeral: false });
+                });
+        }
+    }
 }
 
 module.exports = {

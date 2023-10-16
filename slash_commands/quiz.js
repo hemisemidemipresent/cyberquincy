@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const quiz = require('../jsons/quiz.json');
-const { cyber, orange, turq, magenta } = require('../jsons/colors.json');
+const { cyber, orange, turq } = require('../jsons/colors.json');
 const { shuffle } = require('../helpers/general');
 const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { discord } = require('../aliases/misc.json');
@@ -9,12 +9,8 @@ let numbers = [0, 1, 2, 3];
 const emojis = [':regional_indicator_a:', ':regional_indicator_b:', ':regional_indicator_c:', ':regional_indicator_d:'];
 
 builder = new SlashCommandBuilder().setName('quiz').setDescription('test your knowledge in all things bloons-related');
-const time = 10000;
 
 async function execute(interaction) {
-    let botMessage = undefined;
-    //const filter = (i) => i.user.id == interaction.author.id;
-
     await loadQuestion(interaction);
 }
 

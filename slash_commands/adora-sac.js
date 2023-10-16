@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgrade, isTowerUpgrade, cumulativeTowerUpgradePathCosts } = require('../helpers/towers.js');
 const { red, cyber } = require('../jsons/colors.json');
-const { numberAsCost } = require('../helpers/general.js')
+const { numberAsCost } = require('../helpers/general.js');
 
 const XP_CAP = 344737;
 const XP_CAP_ADJUSTED = Math.ceil(XP_CAP / (4*5));
@@ -76,7 +76,7 @@ async function execute(interaction) {
         const costsDiv5ToUpgrade = new Map();
         const costsDiv5ToPriority = new Map();
 
-        let towers = allTowers()
+        let towers = allTowers();
         // sort towers in descending priority order, high priority should be looked at first
         towers.sort((a, b) => (TOWER_PRIORITIES.get(b) ?? 0) - (TOWER_PRIORITIES.get(a) ?? 0));
 
@@ -117,7 +117,7 @@ async function execute(interaction) {
         // set up DP arrays
         let bagSize = new Array(dpSize+1);
         bagSize.fill(Infinity);
-        bagSize[0] = 0
+        bagSize[0] = 0;
         let lastItem = new Array(dpSize+1);
         lastItem.fill(0);
         let highestLowPriority = new Array(dpSize+1);
@@ -176,8 +176,8 @@ async function execute(interaction) {
                 undershotResultCost = moneyDiv5 * 5;
 
                 // Direct Adora leveling since sacrifices here will bring the xp short by some amount
-                rawLevelingCost = xp - (startingMoneyDiv5 * 4 * 5)
-                undershotResultCost += rawLevelingCost
+                rawLevelingCost = xp - (startingMoneyDiv5 * 4 * 5);
+                undershotResultCost += rawLevelingCost;
 
                 while (moneyDiv5 > 0) {
                     undershotResult.push(costsDiv5ToUpgrade.get(lastItem[moneyDiv5]));
@@ -196,25 +196,25 @@ async function execute(interaction) {
 
         let embed;
         if (overshotResultCost <= undershotResultCost) {
-            const s = overshotResult.length == 1 ? '' : 's'
-            const total = overshotResult.length > 1 ? ' total' : ''
+            const s = overshotResult.length == 1 ? '' : 's';
+            const total = overshotResult.length > 1 ? ' total' : '';
             embed = new Discord.EmbedBuilder()
                 .setColor(cyber)
                 .setTitle(`${overshotResult.length} tower${s} with${total} cost ${numberAsCost(overshotResultCost)}`)
-                .setDescription(overshotResult.join('\n'))
+                .setDescription(overshotResult.join('\n'));
         } else {
-            const s = undershotResult.length == 1 ? '' : 's'
-            const then = undershotResult.length > 0 ? 'then ' : ''
-            const rawLevelingInstruction = `${then}spend ${numberAsCost(rawLevelingCost)} to reach target`
+            const s = undershotResult.length == 1 ? '' : 's';
+            const then = undershotResult.length > 0 ? 'then ' : '';
+            const rawLevelingInstruction = `${then}spend ${numberAsCost(rawLevelingCost)} to reach target`;
 
             embed = new Discord.EmbedBuilder()
                 .setColor(cyber)
                 .setTitle(`${undershotResult.length} tower${s} + raw leveling with total cost ${numberAsCost(undershotResultCost)}`)
-                .setDescription(undershotResult.concat('', rawLevelingInstruction).join('\n'))
+                .setDescription(undershotResult.concat('', rawLevelingInstruction).join('\n'));
         }
 
         if (xp === XP_CAP) {
-            embed.setFooter({ text: `${xp} is the total XP between Adora lvl-7 (when blood sacrifice is unlocked) and lvl-20 (max)` })
+            embed.setFooter({ text: `${xp} is the total XP between Adora lvl-7 (when blood sacrifice is unlocked) and lvl-20 (max)` });
         }
 
         return await interaction.reply({ embeds: [embed] });

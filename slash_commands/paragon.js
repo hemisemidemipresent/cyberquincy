@@ -234,7 +234,7 @@ async function paragon_stats(interaction) {
     }
     let messageEmbed = new Discord.EmbedBuilder()
         .setTitle(`\`${tower}\` paragon - level ${level}`)
-        .setDescription(desc.replace(/    /g, ''))
+        .setDescription(desc.replace(/ {4}/g, ''))
         .setFooter({ text: justStatsFooter })
         .setColor(paragon);
     return await interaction.reply({ embeds: [messageEmbed] });
@@ -357,10 +357,10 @@ async function paragon_degree(interaction) {
         .setDescription(
             `Input: \`expr: ${expression}\tpops: ${pops}\`
                 ${
-                    totalT5 === 3 || totalT5 === 4
-                        ? "Did you include the three original T5s to be sacrificed? You aren't supposed to do that!"
-                        : ''
-                }
+    totalT5 === 3 || totalT5 === 4
+        ? "Did you include the three original T5s to be sacrificed? You aren't supposed to do that!"
+        : ''
+}
             `
         )
         .addFields([
@@ -407,9 +407,9 @@ function lex(input, operator, value, difficulty) {
     lexer.addRule(/\s+/, () => {});
 
     // symbols
-    lexer.addRule(/[a-zA-Z#0-9\.]+/, (lexme) => lexme);
+    lexer.addRule(/[a-zA-Z#0-9.]+/, (lexme) => lexme);
     // punctuation and operators
-    lexer.addRule(/[\(\+\*\)]/, (lexme) => lexme);
+    lexer.addRule(/[(+*)]/, (lexme) => lexme);
 
     // Set up operators and operator precedence to interpret the parsed tree
     const factor = {

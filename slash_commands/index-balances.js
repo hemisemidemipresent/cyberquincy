@@ -104,7 +104,7 @@ function parseAll(interaction) {
 function validateInput(interaction) {
     entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
 
-    let [parsedEntity, parsedVersion1, parsedVersion2, parsedFilter] = parseAll(interaction);
+    let [parsedEntity, parsedVersion1, parsedVersion2, /*parsedFilter*/] = parseAll(interaction);
 
     if (parsedEntity.hasErrors()) {
         return 'Entity did not match a tower/upgrade/path/hero';
@@ -284,7 +284,7 @@ async function displayPages(interaction, pages, versionAdded, parsed) {
             return b.data.custom_id.endsWith('!') || b.data.style == ButtonStyle.Secondary;
         });
     } else {
-        includedButtons = multipageButtons.filter((b) => true);
+        includedButtons = multipageButtons;
     }
 
     let displayedButtons;

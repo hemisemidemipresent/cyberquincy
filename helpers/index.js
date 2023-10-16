@@ -7,7 +7,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require(
 const fs = require('fs');
 const resolve = require('path').resolve;
 const gHelper = require('../helpers/general');
-const Maps = require('../helpers/maps')
+const Maps = require('../helpers/maps');
 
 DIR1 = 'cache';
 DIR2 = 'index';
@@ -86,9 +86,9 @@ function parseMapNotes(notes) {
                 [altmap, altperson, link] = n.split(/,|(?::(?!\/))/).map((t) => t.replace(/ /g, ''));
 
                 if (link.includes('bit.ly') || link.includes('tinyurl.com')) {
-                    link = `[${link}](http://${link})`
+                    link = `[${link}](http://${link})`;
                 } else if (link.includes('drive.google.com')) {
-                    link = `[Drive Image](${link})`
+                    link = `[Drive Image](${link})`;
                 } // Otherwise keep the link the same
 
                 return [
@@ -131,7 +131,7 @@ function altMapsFields(ogMapAbbr, allCompletedMapAbbrs, impossibleMaps) {
 
     const displayedMapGroups = gHelper.range(0, altMapGroups.length - 1).map((i) => {
         mapDifficulty = ['BEG', 'INT', 'ADV', 'EXP'][i];
-        existsImpossibleMapInGroup = mapDifficultyGroups[i].some(m => impossibleMaps.includes(m))
+        existsImpossibleMapInGroup = mapDifficultyGroups[i].some(m => impossibleMaps.includes(m));
         possibleAsterisk = impossibleMaps.length > 0 && existsImpossibleMapInGroup ? '*' : '';
         if (unCompletedAltMapGroups[i] == 0) {
             wordAllIncluded = true;
@@ -214,10 +214,10 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
                 }
                 let headerField = headers
                     .map((header, colIndex) => {
-                        formattedHeader = gHelper.toTitleCase(header.split('_').join(' '))
+                        formattedHeader = gHelper.toTitleCase(header.split('_').join(' '));
                         return formattedHeader == 'Link' ?
                             formattedHeader.padEnd(15, ' ') :
-                            formattedHeader.padEnd(colWidths[colIndex], ' ')
+                            formattedHeader.padEnd(colWidths[colIndex], ' ');
                     })
                     .join(' | ');
                 headerField = `\`${headerField}\``;
@@ -409,7 +409,7 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
     const displayPages = async (initial) => {
         let [embed, more] = await createPage();
 
-        await interaction.editReply({embeds: [embed], components: !initial || more ? [multipageButtons] : [singlepageButtons]});
+        await interaction.editReply({ embeds: [embed], components: !initial || more ? [multipageButtons] : [singlepageButtons] });
 
         const filter = (selection) => {
             // Ensure user clicking button is same as the user that started the interaction

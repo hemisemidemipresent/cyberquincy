@@ -9,19 +9,19 @@ class HeroLevelParser {
 
     constructor(minLvl, maxLvl) {
         if (maxLvl > 20) {
-            throw new DeveloperCommandError(`Hero level doesn't go past 20`)
+            throw new DeveloperCommandError(`Hero level doesn't go past 20`);
         }
         
-        if (!minLvl) minLvl = 1
-        if (!maxLvl) maxLvl = 20
+        if (!minLvl) minLvl = 1;
+        if (!maxLvl) maxLvl = 20;
 
         // Ultimately at play is just a natural number parser with bounds
         this.delegateParser = new NaturalNumberParser(minLvl, maxLvl);
     }
 
     parse(arg) {
-        arg = this.transformArgument(arg)
-        return this.delegateParser.parse(arg)
+        arg = this.transformArgument(arg);
+        return this.delegateParser.parse(arg);
     }
 
     // Parses all ways the command user could enter a hero level

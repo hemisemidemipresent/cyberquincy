@@ -20,13 +20,13 @@ const clonedeep = require('lodash.clonedeep');
 
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
-const Maps = require('../helpers/maps')
+const Maps = require('../helpers/maps');
 
 const { orange, palered } = require('../jsons/colors.json');
 
 const { COLS } = require('../services/index/2tc_scraper');
 
-BANNED_HEROES = ['sauda', 'geraldo']
+BANNED_HEROES = ['sauda', 'geraldo'];
 
 const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
@@ -140,7 +140,7 @@ function parseAll(interaction) {
 }
 
 function validateInput(interaction) {
-    let [parsedEntity1, parsedEntity2, parsedMap, parsedPerson, parsedVersion, parsedNumber] = parseAll(interaction);
+    let [parsedEntity1, parsedEntity2, parsedMap, /*parsedPerson*/, parsedVersion, parsedNumber] = parseAll(interaction);
 
     if (parsedEntity1.hasErrors()) {
         return 'Entity1 did not match a tower/upgrade/path/hero';
@@ -211,10 +211,10 @@ async function execute(interaction) {
 function mapsNotPossible(combo) {
     const impossibleMapsPerTower = [1, 2].map((entityNum) => {
         const entity = combo[`TOWER_${entityNum}`].NAME;
-        return Maps.mapsNotPossible(entity)
-    })
+        return Maps.mapsNotPossible(entity);
+    });
 
-    return [...new Set(impossibleMapsPerTower.flat())]
+    return [...new Set(impossibleMapsPerTower.flat())];
 }
 
 async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
@@ -401,7 +401,7 @@ function flattenCombo(combo, map) {
         if (combo.OG) {
             flattenedCombo[`TOWER_${tn}`] = `${flattenedCombo[`TOWER_${tn}`].NAME} (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`;
         } else {
-            flattenedCombo[`TOWER_${tn}`] = flattenedCombo[`TOWER_${tn}`].NAME
+            flattenedCombo[`TOWER_${tn}`] = flattenedCombo[`TOWER_${tn}`].NAME;
         }
     }
 
@@ -463,7 +463,7 @@ function filterCombos(filteredCombos, parsed) {
         }
 
         if (BANNED_HEROES.includes(parsed.hero)) {
-            throw new UserCommandError(`${gHelper.toTitleCase(parsed.hero)} is banned from 2TC`)
+            throw new UserCommandError(`${gHelper.toTitleCase(parsed.hero)} is banned from 2TC`);
         }
 
         const providedEntities = parsedProvidedEntities(parsed);
@@ -475,9 +475,9 @@ function filterCombos(filteredCombos, parsed) {
 
         const entity2 = providedEntities[1]
             ? {
-                  NAME: providedEntities[1],
-                  TYPE: Towers.getEntityType(providedEntities[1])
-              }
+                NAME: providedEntities[1],
+                TYPE: Towers.getEntityType(providedEntities[1])
+            }
             : null;
 
         filteredCombos = filteredCombos.filter((combo) => {
@@ -509,14 +509,14 @@ function filterCombos(filteredCombos, parsed) {
 
     if (parsed.map) {
         const mapAbbr = Maps.mapToIndexAbbreviation(parsed.map);
-        function mapFilter(map, _) {
+        function mapFilter(map) {
             return map == mapAbbr;
         }
         filteredCombos = filterByCompletion(mapFilter, filteredCombos);
     }
 
     if (parsed.map_difficulty) {
-        function mapDifficultyFilter(map, _) {
+        function mapDifficultyFilter(map) {
             const mapCanonical = Aliases.toAliasCanonical(map);
             return Maps.allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical);
         }

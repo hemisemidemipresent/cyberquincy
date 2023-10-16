@@ -1,5 +1,5 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
-const Maps = require('../helpers/maps')
+const Maps = require('../helpers/maps');
 
 class MapParser {
     type() {

@@ -1,6 +1,6 @@
 class LexicalParser {
     constructor(table) {
-        this.table = table
+        this.table = table;
     }
     
     parse(input) {
@@ -34,23 +34,23 @@ class LexicalParser {
                 // I figured empirically/logically that the start is reached when the # of
                 // operands reaches 1 + the # of operators when counting backwards
                 for (idx = output.length - 1; idx >= 0; idx--) {
-                    let outputToken = output[idx]
-                    if (this.table.hasOwnProperty(outputToken)) {
-                        numOperators += 1
+                    let outputToken = output[idx];
+                    if (Object.prototype.hasOwnProperty.call(this.table, outputToken)) {
+                        numOperators += 1;
                     } else {
-                        numOperands += 1
-                        output[idx] = outputToken + "'"
-                        if (numOperands > numOperators) break
+                        numOperands += 1;
+                        output[idx] = outputToken + "'";
+                        if (numOperands > numOperators) break;
                     }
                 }
             } else {
-                if (this.table.hasOwnProperty(token)) { // is an operator
+                if (Object.prototype.hasOwnProperty.call(this.table, outputToken)) { // is an operator
                     while (stack.length) {
                         let punctuator = stack[0];
 
                         if (punctuator === "(") break;
 
-                        let precedence = this.table[token].precedence
+                        let precedence = this.table[token].precedence;
                         let antecedence = this.table[punctuator].precedence;
 
                         if (precedence > antecedence) break;
@@ -77,4 +77,4 @@ class LexicalParseError extends Error {}
 module.exports = {
     LexicalParser,
     LexicalParseError,
-}
+};

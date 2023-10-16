@@ -10,13 +10,15 @@
     },
     "rules": {
         "indent": [
-            "error",
-            4
+            "warn",
+            4,
+            {"SwitchCase":1}
         ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "no-case-declaration": "off"
+        "no-case-declarations": "off",
+        "no-inner-declarations": "off",
+        "no-undef": "off",
+        "object-curly-spacing": ["warn", "always"],
+        "semi": ["warn", "always"],
+        "space-in-parens":["warn", "never"]
     }
 }

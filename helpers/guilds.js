@@ -1,6 +1,6 @@
 const CYBER_SUPPORT = '598768024761139240';
 const BTD6_INDEX = '661812833771847700';
-const { cyber } = require('../jsons/colors.json')
+const { cyber } = require('../jsons/colors.json');
 
 const { discord } = require('../aliases/misc.json');
 async function enterGuild(guild) {

@@ -171,13 +171,13 @@ class Enemy {
 
             let appearancesStrs = [];
             for (const appearance of appearances) {
-                let number = appearance.groups.number
-                let fortified = appearance.groups.fortified ? 'f' : ''
-                let camo = appearance.groups.camo ? 'c' : ''
-                let regrowth = appearance.groups.regrowth ? 'r' : ''
+                let number = appearance.groups.number;
+                let fortified = appearance.groups.fortified ? 'f' : '';
+                let camo = appearance.groups.camo ? 'c' : '';
+                let regrowth = appearance.groups.regrowth ? 'r' : '';
                 appearancesStrs.push(
                     `${number}${fortified}${camo}${regrowth}`
-                )
+                );
             }
 
             if (appearancesStrs.length > 0) {

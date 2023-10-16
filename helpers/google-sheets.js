@@ -43,12 +43,10 @@ function getA1ColumnName(col) {
 }
 
 function getColumnIndexFromLetter(letter) {
-    var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        i,
-        j,
-        result = 0;
+    let base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = 0;
 
-    for (i = 0, j = letter.length - 1; i < letter.length; i += 1, j -= 1) {
+    for (let i = 0, j = letter.length - 1; i < letter.length; i += 1, j -= 1) {
         result += Math.pow(base.length, j) * (base.indexOf(letter[i]) + 1);
     }
 

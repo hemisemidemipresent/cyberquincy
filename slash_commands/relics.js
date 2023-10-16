@@ -85,11 +85,11 @@ module.exports = {
     onAutocomplete
 };
 // background info: there are 2 newlines present in the string: \n and \r. \n is preferred
-function cleanDescription(desc) {
-    return desc
-        .toString()
-        .replace(/\n/g, '') // removes all newlines \n
-        .replace(/\r \t/g, '\n') // removes all \r + tab
-        .replace(/ \t-/g, '-    ') // removes remaining tabs
-        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
-}
+// function cleanDescription(desc) {
+//     return desc
+//         .toString()
+//         .replace(/\n/g, '') // removes all newlines \n
+//         .replace(/\r \t/g, '\n') // removes all \r + tab
+//         .replace(/ \t-/g, '-    ') // removes remaining tabs
+//         .replace(/\r/g, '\n'); // switches back all remaining \r with \n
+// }

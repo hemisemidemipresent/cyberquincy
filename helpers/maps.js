@@ -47,17 +47,17 @@ function allMapsFromMapDifficulty(mapDifficulty) {
 }
 
 function mapToMapDifficulty(m) {
-    const formattedMap = Aliases.toAliasCanonical(m)
+    const formattedMap = Aliases.toAliasCanonical(m);
     if (beginnerMaps().includes(formattedMap)) {
-        return 'beginner'
+        return 'beginner';
     } else if (intermediateMaps().includes(formattedMap)) {
-        return 'intermediate'
+        return 'intermediate';
     } else if (advancedMaps().includes(formattedMap)) {
-        return 'advanced'
+        return 'advanced';
     } else if (expertMaps().includes(formattedMap)) {
-        return 'expert'
+        return 'expert';
     } else {
-        throw 'not a map'
+        throw 'not a map';
     }
 }
 
@@ -122,13 +122,13 @@ function indexNormalFormToMapAbbreviation(map) {
 function mapsNotPossible(entity) {
     const canonicalEntity = Aliases.toAliasCanonical(entity);
 
-    let impossibleMaps = []
+    let impossibleMaps = [];
     if (Towers.isWaterEntity(canonicalEntity)) {
         impossibleMaps = impossibleMaps.concat(
             allNonWaterMaps().map((m) => mapToIndexAbbreviation(m))
         );
     } else if (Towers.isOfTower(canonicalEntity, 'heli_pilot')) {
-        impossibleMaps.push('MN')
+        impossibleMaps.push('MN');
     }
 
     return impossibleMaps;
@@ -150,4 +150,4 @@ module.exports = {
     indexMapAbbreviationToMap,
     indexMapAbbreviationToNormalForm,
     indexNormalFormToMapAbbreviation,
-}
+};

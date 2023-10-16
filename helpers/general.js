@@ -201,14 +201,14 @@ function mostCommonElement(arr) {
 }
 
 function partition(arr, num) {
-    const partitions = []
+    const partitions = [];
     for (let p = 0; p < num; p++) {
-        const lowerLimit = Math.ceil(arr.length / num * p)
-        const upperLimit = Math.ceil(arr.length / num * (p + 1))
-        const part = arr.slice(lowerLimit, upperLimit)
-        partitions.push(part)
+        const lowerLimit = Math.ceil(arr.length / num * p);
+        const upperLimit = Math.ceil(arr.length / num * (p + 1));
+        const part = arr.slice(lowerLimit, upperLimit);
+        partitions.push(part);
     }
-    return partitions
+    return partitions;
 }
 
 HEAVY_CHECK_MARK = String.fromCharCode(10004) + String.fromCharCode(65039);

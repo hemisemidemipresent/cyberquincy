@@ -192,17 +192,17 @@ function allWaterTowers() {
 function isWaterEntity(entity) {
     let entityToCompare;
     if (isTowerPath(entity)) {
-        const [tower, path] = entity.split('#')
+        const [tower, path] = entity.split('#');
         if (tower == 'beast_handler' && path == 'top_path') {
-            return true
+            return true;
         } else {
             entityToCompare = tower;
         }
     } else if (isTowerUpgrade(entity)) {
-        const [tower, upgrade] = entity.split('#')
-        const [path] = pathTierFromUpgradeSet(upgrade)
+        const [tower, upgrade] = entity.split('#');
+        const [path] = pathTierFromUpgradeSet(upgrade);
         if (tower == 'beast_handler' && path == 'top_path') {
-            return true
+            return true;
         } else {
             entityToCompare = towerUpgradeToTower(entity);
         }
@@ -306,7 +306,7 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
 }
 
 function allUpgradeCrosspathSets() {
-    let result = new Set()
+    let result = new Set();
     for (let mainPath=0; mainPath<=5; ++mainPath) {
         for (let crossPath=0; crossPath<=2; ++crossPath) {
             result.add(`${mainPath}${crossPath}0`);
@@ -317,7 +317,7 @@ function allUpgradeCrosspathSets() {
             result.add(`0${crossPath}${mainPath}`);
         }
     }
-    return result
+    return result;
 }
 
 /**

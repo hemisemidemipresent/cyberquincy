@@ -2,8 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const r = require('../jsons/round2.json');
 const abr = require('../jsons/round2-abr.json');
 
-const gHelper = require('../helpers/general.js');
-const { red, magenta, yellow } = require('../jsons/colors.json');
+const { magenta } = require('../jsons/colors.json');
 
 builder = new SlashCommandBuilder()
     .setName('rbe')

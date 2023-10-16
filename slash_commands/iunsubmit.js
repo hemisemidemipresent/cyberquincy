@@ -20,21 +20,21 @@ const HELPER_ROLE_ID = '923076988607037470';
 const DISCORD_LINK_REGEX = /https:\/\/discord.com\/channels\/(\d+)\/(\d+)\/(\d+)/i;
 
 builder = new SlashCommandBuilder()
-	.setName('iunsubmit')
-	.setDescription('Remove one of your submissions from #submissions')
-	.addStringOption((option) =>
-		option.setName('url').setDescription('Link to the submissions message').setRequired(true)
-	);
+    .setName('iunsubmit')
+    .setDescription('Remove one of your submissions from #submissions')
+    .addStringOption((option) =>
+        option.setName('url').setDescription('Link to the submissions message').setRequired(true)
+    );
 
 
 async function execute(interaction) {
     const LIVEMODE = interaction.guild.id == SUBMISSIONS_GUILD;
     let currentGuild = interaction.guild.id;
     let url = interaction.options.getString('url');
-    let [, server_id, channel_id, message_id] = url.match(DISCORD_LINK_REGEX);
+    let [, , channel_id, message_id] = url.match(DISCORD_LINK_REGEX);
 
     if (!LIVEMODE){
-        return await interaction.reply({content: `Must be in the BTD6 Index Server to run this command`});
+        return await interaction.reply({ content: `Must be in the BTD6 Index Server to run this command` });
     }
 
     if(!IS_TESTING && currentGuild != SUBMISSIONS_GUILD){
@@ -46,9 +46,9 @@ async function execute(interaction) {
     }
 
     const SUBMISSIONS_CHANNEL_OBJ = interaction.guild.channels.cache.get(SUBMISSIONS_CHANNEL);
-    messages = await SUBMISSIONS_CHANNEL_OBJ.messages.fetch({limit: 100});
-
-    if (submission = messages.get(message_id)){
+    messages = await SUBMISSIONS_CHANNEL_OBJ.messages.fetch({ limit: 100 });
+    let submission = messages.get(message_id);
+    if (submission){
         if(submission.author.id != CYBER_QUINCY_USER_ID){
             return await interaction.reply({ content: `This isn't a /isub submission. ${submission.author.username} wrote that`, ephemeral: true });
         }
@@ -61,19 +61,19 @@ async function execute(interaction) {
         if (submitterTag == interaction.user.tag || interaction.member.roles.cache.has(HELPER_ROLE_ID)){
             try {
                 submission.delete();
-                return await interaction.reply({content: `The submission was successfully removed`})
+                return await interaction.reply({ content: `The submission was successfully removed` });
             } catch {
-                return await interaction.reply({content: `Failed to removes submission`})
+                return await interaction.reply({ content: `Failed to removes submission` });
             }
         } else {
-            return await interaction.reply({content: `You ${interaction.user.tag}, didn't submit this. ${submitterTag} did. You must be the submitter to delete.`});
+            return await interaction.reply({ content: `You ${interaction.user.tag}, didn't submit this. ${submitterTag} did. You must be the submitter to delete.` });
         }
     } else {
-        return await interaction.reply({content: `Message was already deleted`});
+        return await interaction.reply({ content: `Message was already deleted` });
     }
 }
 
 module.exports = {
-	data: builder,
-	execute
+    data: builder,
+    execute
 };

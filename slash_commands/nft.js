@@ -2,34 +2,34 @@ const { SlashCommandBuilder } = require('discord.js');
 const { red, cyber } = require('../jsons/colors.json');
 
 const builder = new SlashCommandBuilder()
-.setName('nft')
-.setDescription('Calculate Quincy Action Figure buy/sell price in Shol Geraldo\'s shop (no MK by default)')
-.addIntegerOption(option => option.setName('unlock_round').setDescription("Start of round when the action figure is unlocked").setRequired(true).setMinValue(1))
-.addIntegerOption(option => option.setName('start_round').setDescription("Round when the action figure is bought").setRequired(true).setMinValue(1))
-.addIntegerOption(option => option.setName('end_round').setDescription("Round when the action figure is sold").setRequired(true).setMinValue(1))
-.addStringOption(option => option
-    .setName('difficulty')
-    .setDescription("Gamemode difficulty")
-    .setRequired(true)
-    .addChoices(
-        { name: 'Easy (Primary only)', value: 'easy' },
-        { name: 'Medium (Military only, Reverse, Apopalypse)', value: 'medium' },
-        { name: 'Hard (Magic only, Double HP, ABR)', value: 'hard' },
-        { name: 'Impoppable', value: 'impoppable' }
+    .setName('nft')
+    .setDescription('Calculate Quincy Action Figure buy/sell price in Shol Geraldo\'s shop (no MK by default)')
+    .addIntegerOption(option => option.setName('unlock_round').setDescription("Start of round when the action figure is unlocked").setRequired(true).setMinValue(1))
+    .addIntegerOption(option => option.setName('start_round').setDescription("Round when the action figure is bought").setRequired(true).setMinValue(1))
+    .addIntegerOption(option => option.setName('end_round').setDescription("Round when the action figure is sold").setRequired(true).setMinValue(1))
+    .addStringOption(option => option
+        .setName('difficulty')
+        .setDescription("Gamemode difficulty")
+        .setRequired(true)
+        .addChoices(
+            { name: 'Easy (Primary only)', value: 'easy' },
+            { name: 'Medium (Military only, Reverse, Apopalypse)', value: 'medium' },
+            { name: 'Hard (Magic only, Double HP, ABR)', value: 'hard' },
+            { name: 'Impoppable', value: 'impoppable' }
+        )
     )
-)
-.addBooleanOption(option => option
-    .setName('better_sell_deals')
-    .setDescription("Whether the Better Sell Deals MK is enabled")
-    .setRequired(false)
-);
+    .addBooleanOption(option => option
+        .setName('better_sell_deals')
+        .setDescription("Whether the Better Sell Deals MK is enabled")
+        .setRequired(false)
+    );
 
 const DIFFICULTY_TO_BASE_VALUE = {
     easy: 635,
     medium: 750,
     hard: 810,
     impoppable: 900
-}
+};
 
 /**
  * @param {number} unlock_round
@@ -88,4 +88,4 @@ async function execute(interaction) {
 module.exports = {
     data: builder,
     execute
-}
+};

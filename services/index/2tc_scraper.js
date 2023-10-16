@@ -1,5 +1,5 @@
 const GoogleSheetsHelper = require('../../helpers/google-sheets.js');
-const Maps = require('../../helpers/maps')
+const Maps = require('../../helpers/maps');
 
 const COLS = {
     NUMBER: 'B',
@@ -30,7 +30,7 @@ async function scrapeAll2TCCombos() {
     for (let n = 1; n <= nCombos; n++) {
         combos.push(
             parsePreloadedRow(rOffset + n)
-        )
+        );
     }
 
     return combos;
@@ -47,7 +47,7 @@ function parsePreloadedRow(row) {
 
     // Assign each value to be discord-embedded in a simple default way
     let values = {};
-    const ogSpecificCols = Object.keys(COLS).filter(col => !['PERSON', 'MAP', 'LINK'].includes(col))
+    const ogSpecificCols = Object.keys(COLS).filter(col => !['PERSON', 'MAP', 'LINK'].includes(col));
     for (key of ogSpecificCols) {
         values[key] = sheet.getCellByA1(`${COLS[key]}${row}`).value;
     }
@@ -69,7 +69,7 @@ function parsePreloadedRow(row) {
 
     values.VERSION = values.VERSION.toString();
 
-    values.MAPS = parseMapCompletions(row)
+    values.MAPS = parseMapCompletions(row);
 
     return values;
 }
@@ -101,30 +101,30 @@ function parseMapCompletions(row) {
 
     const ogCells = Object.fromEntries(
         ['MAP', 'PERSON', 'LINK'].map(col => {
-            return [col, sheet.getCellByA1(`${COLS[col]}${row}`)]
+            return [col, sheet.getCellByA1(`${COLS[col]}${row}`)];
         }
-    ))
+        ));
 
     const ogMapCompletion = {
         PERSON: ogCells.PERSON.value,
         LINK: `[${ogCells.LINK.value}](${ogCells.LINK.hyperlink})`,
         OG: true,
-    }
+    };
 
-    const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogCells.MAP.value)
+    const ogMapAbbr = Maps.indexNormalFormToMapAbbreviation(ogCells.MAP.value);
  
     // Circular Dependency
-    const { parseMapNotes } = require('../../helpers/index')
+    const { parseMapNotes } = require('../../helpers/index');
 
     const maps = {
         [ogMapAbbr]: ogMapCompletion,
         ...parseMapNotes(ogCells.MAP.note),
-    }
+    };
 
-    return maps
+    return maps;
 }
 
 module.exports = { 
     scrapeAll2TCCombos,
     COLS,
-}
+};

@@ -200,7 +200,7 @@ async function embed2MPOG(entity) {
     let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${entity} 2MPC Combo`).setColor(paleblue);
 
     challengeEmbed.addFields(
-        Object.entries(comboToEmbed).map(([field, value]) => ({name: field, value, inline: true}))
+        Object.entries(comboToEmbed).map(([field, value]) => ({ name: field, value, inline: true }))
     );
     challengeEmbed.addFields([{ name: 'OG?', value: 'OG', inline: true }]);
 
@@ -221,7 +221,7 @@ async function embed2MPOG(entity) {
 }
 
 async function orderAndFlatten2MPOGCompletion(ogCompletion) {
-    let ogInfo = await fetch('https://btd6index.win/fetch-2mp-og-info?' + new URLSearchParams({entity: ogCompletion.entity}));
+    let ogInfo = await fetch('https://btd6index.win/fetch-2mp-og-info?' + new URLSearchParams({ entity: ogCompletion.entity }));
     ogInfo = await ogInfo.json();
 
     if ('error' in ogInfo) {
@@ -297,10 +297,10 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
         linkColumn.push(`${bold}${genCompletionLink(completion)}${bold}`);
     }
 
-    const numPartitions = mapColumn.length > 10 ? 2 : 1
-    let [mapColumn1, mapColumn2] = partition(mapColumn, numPartitions)
-    let [personColumn1, personColumn2] = partition(personColumn, numPartitions)
-    let [linkColumn1, linkColumn2] = partition(linkColumn, numPartitions)
+    const numPartitions = mapColumn.length > 10 ? 2 : 1;
+    let [mapColumn1, mapColumn2] = partition(mapColumn, numPartitions);
+    let [personColumn1, personColumn2] = partition(personColumn, numPartitions);
+    let [linkColumn1, linkColumn2] = partition(linkColumn, numPartitions);
 
     mapColumn1 = mapColumn1.join('\n');
     personColumn1 = personColumn1.join('\n');
@@ -313,7 +313,7 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
     let mapsLeft = permittedMapAbbrs.filter((m) => !completedMaps.includes(m));
 
     // Check if tower is water tower
-    const impossibleMaps = Maps.mapsNotPossible(entity).filter(m => permittedMapAbbrs.includes(m))
+    const impossibleMaps = Maps.mapsNotPossible(entity).filter(m => permittedMapAbbrs.includes(m));
     mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
 
     // Embed and send the message
@@ -346,7 +346,7 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
             { name: 'Map', value: mapColumn2, inline: true },
             { name: 'Person', value: personColumn2, inline: true },
             { name: 'Link', value: linkColumn2, inline: true },
-        ])
+        ]);
     }
 
     if (impossibleMaps.length > 0) {
@@ -388,9 +388,9 @@ async function display2MPFilterAll(interaction, fetchParams, parsed) {
         },
         embed => {
             embed
-            .setTitle(titleFunction(parsed))
-            .setColor(paleblue)
-            .setFooter({ text: `---\nAny OG completion(s) bolded` });
+                .setTitle(titleFunction(parsed))
+                .setColor(paleblue)
+                .setFooter({ text: `---\nAny OG completion(s) bolded` });
         }
     );
 }
@@ -457,8 +457,8 @@ function embed2MPTowerStatistics(resJson, tower) {
 
     const completedComboEntities = resJson.results.map(res => res.entity);
 
-    const baseTowerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower)
-    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X
+    const baseTowerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower);
+    const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X;
 
     let challengeEmbed = new Discord.EmbedBuilder()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
@@ -473,9 +473,9 @@ function embed2MPTowerStatistics(resJson, tower) {
     for (tier = 3; tier <= 5; tier++) {
         Towers.allPaths().forEach(path => {
             let towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
-            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X
+            let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X;
             challengeEmbed.addFields([{ name: towerUpgradeName, value: upgradeCompletionMarking, inline: true }]);
-        })
+        });
     }
 
     return challengeEmbed;

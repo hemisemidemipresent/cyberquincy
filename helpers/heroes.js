@@ -1,7 +1,7 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
 const gHelper = require('../helpers/general.js');
-const heroes = require('../jsons/heroes.json')
+const heroes = require('../jsons/heroes.json');
 
 BASE_XP_TO_GET_LEVEL = [
     null, // Slot for non-existent level-0
@@ -94,7 +94,7 @@ function accumulatedXpCurve(
 
 function heroLevelXpRequirements(hero) {
     heroSpecificLevelingMultiplier = heroes[hero]['levelModifier'];
-    if (!heroSpecificLevelingMultiplier) throw `${hero} does not have "levelModifier" entry in heroes.json`
+    if (!heroSpecificLevelingMultiplier) throw `${hero} does not have "levelModifier" entry in heroes.json`;
     acc = 0;
     return BASE_XP_TO_GET_LEVEL.map((bxp) => {
         return bxp == null

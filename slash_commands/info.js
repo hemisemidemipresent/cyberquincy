@@ -14,11 +14,14 @@ async function execute(interaction) {
     const minutes = Math.floor(totalSeconds / 60);
     const uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 
+    let guildCounts = await client.shard.fetchClientValues('guilds.cache.size');
+    let guildCount = guildCounts.reduce((acc, guildCount) => acc + guildCount, 0);
+
     const infoEmbed = new Discord.EmbedBuilder()
         .setColor(cyber)
         .setTitle('access help here')
         .setURL(`${discord}`)
-        .setDescription(`Cyber Quincy is battling ${client.guilds.cache.size} waves of bloons`)
+        .setDescription(`Cyber Quincy is battling ${guildCount} waves of bloons`)
         .addFields([
             { name: 'ping:', value: `Response time: ${responseTime}ms`, inline: true },
             { name: 'time since last restart:', value: `${uptime}`, inline: true },

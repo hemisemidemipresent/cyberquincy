@@ -55,5 +55,8 @@
         "statcord.js": "^3.2.0",
         "utf-8-validate": "^5.0.2",
         "zlib": "^1.0.5"
+    },
+    "devDependencies": {
+        "eslint": "^8.51.0"
     }
 }

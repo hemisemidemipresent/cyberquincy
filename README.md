@@ -35,10 +35,15 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 
 5. to run type `node server`
 
+# Project Info
+
+-   this project uses CommonJS modules
+-   there is now a `.eslintrc.json` linter file which should hopefully
+
 # Contributing Guidelines
 
 -   try to use `camelCase`
 -   don't use `var` to define variables. JS is weird enough
--   try not to do too much at once (for pull requests)
+-   try not to do too much at once (for pull requests, split it into multiple PRs)
 -   util functions/classes/modules _should_ go to `./helpers` (unless they are specific to only one command)
--   [how the bot generally works](./ARCHITECHTURE.md)
+-   new data should go into `./jsons` if to be stored locally. Small nuggets of information are usually displayed via the `/tag` command

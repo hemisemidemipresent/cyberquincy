@@ -25,11 +25,6 @@ async function execute(interaction) {
         .addFields([
             { name: 'ping:', value: `Response time: ${responseTime}ms`, inline: true },
             { name: 'time since last restart:', value: `${uptime}`, inline: true },
-            {
-                name: 'more data',
-                value: '[full bot statistics](https://statcord.com/bot/591922988832653313) - note users are inaccurate and servers might be inaccurate',
-                inline: true
-            },
             { name: 'discord server, join for updates (happens pretty often)', value: `${discord}`, inline: true }
         ])
         .setFooter({ text: 'thank you for using it! Please share!' });

@@ -35,42 +35,6 @@ function consoleBootup() {
             status: 'online'
         });
         console.log('<Program Directive> Discord Bot Client is ready');
-        // console.log(new Date());
-        const botposting = require('./1/config.json')['botposting'];
-        if (!botposting) {
-            global.statcord = undefined;
-            return;
-        }
-        const Statcord = require('statcord.js');
-        let statcordKey = require('./1/config.json')['statcord'];
-        if (!statcordKey || statcordKey === 'no') {
-            console.log('[INFO] statcord is not configured');
-            return;
-        }
-        const statcord = new Statcord.Client({
-            client,
-            key: statcordKey
-        });
-        statcord.autopost();
-        statcord.on('autopost-start', () => {
-            // Emitted when statcord autopost starts
-            console.log('[POST] started autopost');
-        });
-
-        statcord.on('post', (status) => {
-            // status = false if the post was successful
-            // status = "Error message" or status = Error if there was an error
-            if (!status) {
-                //console.log('[POST] successful Statcord post');
-            } else console.error(status);
-        });
-        statcord.autopost().catch((error) => {
-            console.log(error.name);
-            console.error('[ERROR] Something is wrong with statcord autopost');
-        });
-
-        // Make available globally
-        global.statcord = statcord;
     });
 }
 

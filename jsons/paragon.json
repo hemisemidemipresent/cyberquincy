@@ -81,26 +81,26 @@
             "md": 30,
             "bd": 30,
             "pierce": 10,
-            "rate": 0.429
+            "rate": 0.5
         },
         "cannonball": {
             "damage": 60,
             "md": 60,
             "bd": 60,
             "pierce": 28,
-            "rate": 0.429
+            "rate": 0.5
         },
         "darts": {
             "damage": 44,
             "bd": 44,
             "pierce": 14,
-            "rate": 0.15
+            "rate": 0.158
         },
         "antiMOAB": {
             "damage": 200,
             "bd": 200,
             "pierce": 10,
-            "rate": 1.5
+            "rate": 1.8
         }
     },
     "engineer_monkey": {

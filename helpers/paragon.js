@@ -37,7 +37,7 @@ module.exports = {
         const md_x = md ? this.getDmgMod(md, x) : 0;
         const bd_x = this.getDmgMod(bd, x);
 
-        const mult = 1 + Math.floor(x / 20) * 0.2;
+        const mult = 1 + Math.floor(x / 20) * 0.25;
 
         const cum_d = d_x + md_x + bd_x; // cumulative damage to boss bloons
         const cum_d2 = d_x + md_x + 2 * bd_x; // some elite / DoT dmg stats use this instead for some reason, then minusing the boss dmg

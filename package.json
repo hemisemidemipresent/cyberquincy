@@ -52,7 +52,6 @@
         "node-dgdata": "^1.0.2",
         "node-fetch": "^2.6.7",
         "pluralize": "^8.0.0",
-        "statcord.js": "^3.2.0",
         "utf-8-validate": "^5.0.2",
         "zlib": "^1.0.5"
     },

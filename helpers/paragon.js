@@ -74,8 +74,10 @@ module.exports = {
 
         // ceramic damage is total, while fortified damage is handled as an additive.
         // this is because fortified can stack with normal bloons (lead), ceramics, and moab-class bloons
+        // same applies to camo damage
         if (obj.cd) res.cd = round(this.getDmgMod(obj.cd, x) + res.d, 1);
-        if (obj.fd) res.fd = round(this.getDmgMod(obj.fd, x), 1);
+        if (obj.fd) res.fd = round(this.getDmgMod(obj.fd, x), 1); // (additional) fortified damage
+        if (obj.cad) res.cad = round(this.getDmgMod(obj.cad, x), 1); // (additional) camo damage
 
         if (obj.pierce) res.p = round(this.getPiece(obj.pierce, x), 1);
         if (obj.rate) res.s = round(this.getSpeed(obj.rate, x), 4); // secomds between attack needs more precision

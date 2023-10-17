@@ -47,29 +47,34 @@
             "rate": 0.217,
             "pierce": 4,
             "damage": 32,
-            "bd": 32
+            "bd": 32,
+            "cad": 6
         },
         "fbomb": {
             "rate": 1.5,
             "pierce": 50,
             "damage": 96,
-            "bd": 96
+            "bd": 96,
+            "cad": 20
         },
         "blues": {
             "pierce": 20,
             "damage": 80,
-            "bd": 80
+            "bd": 80,
+            "cad": 16
         },
         "sbomb": {
             "rate": 5.5,
             "pierce": 1,
             "damage": 16000,
-            "bd": 32000
+            "bd": 32000,
+            "cad": 3200
         },
         "sbombsplash": {
             "pierce": 10,
             "damage": 3500,
-            "bd": 1400
+            "bd": 1400,
+            "cad": 700
         }
     },
     "monkey_buccaneer": {

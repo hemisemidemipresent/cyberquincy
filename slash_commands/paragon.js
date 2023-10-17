@@ -135,17 +135,20 @@ async function paragon_stats(interaction) {
         let attacks = Object.keys(pa);
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
 
-        desc = `All Bloons on screen (excluding BADs and Bosses) are permanently slowed to 50%  speed.
-                **main shuriken** - ${pa.shuriken.d}d, ${pa.shuriken.bd}bd, ${pa.shuriken.ed}ed, ${pa.shuriken.p}p, 8j, ${pa.shuriken.s}s, 70r
-                • 15% chance to distract, decamos
+        desc = `All Bloons on screen (excluding BADs and Bosses) are permanently slowed to 50% speed.
+                All towers granted global camo detection
+                Deals 25% damage to all non-Boss MOABs that spawn (does not stack with x5x ninja)
 
-                **flash bomb** - ${pa.fbomb.d}d, ${pa.fbomb.bd}bd, ${pa.fbomb.ed}ed, ${pa.fbomb.p}p, 5j, ${pa.fbomb.s}s, 70r, emites **blue shurikens** on impact
-                **blue shurikens** - ${pa.blues.d}d, ${pa.blues.bd}bd, ${pa.blues.ed}ed, ${pa.blues.p}p, 3j
-                • 15% chance to distract, decamos
+                **main shuriken** - ${pa.shuriken.d}d, ${pa.shuriken.bd}bd, ${pa.shuriken.ed}ed, +${pa.shuriken.cad} camo damage, ${pa.shuriken.p}p, 8j, ${pa.shuriken.s}s, 70r
+                • 15% chance to distract
+
+                **flash bomb** - ${pa.fbomb.d}d, ${pa.fbomb.bd}bd, ${pa.fbomb.ed}ed, +${pa.fbomb.cad} camo damage, ${pa.fbomb.p}p, 5j, ${pa.fbomb.s}s, 70r, emites **blue shurikens** on impact
+                **blue shurikens** - ${pa.blues.d}d, ${pa.blues.bd}bd, ${pa.blues.ed}ed, +${pa.blues.cad} camo damage, ${pa.blues.p}p, 3j
+                • 15% chance to distract
                 **sticky bomb** - 3?s to detonate, ∞r, ${pa.sbomb.s}s
                 • damage can soak through moab layers
-                • main target: ${pa.sbomb.d}d, ${pa.sbomb.bd}bd, ${pa.sbomb.ed}ed, ${pa.sbomb.p}p
-                • area of effect: ${pa.sbombsplash.d}d, ${pa.sbombsplash.bd}bd, ${pa.sbombsplash.ed}ed, ${pa.sbombsplash.p}p`;
+                • main target: ${pa.sbomb.d}d, ${pa.sbomb.bd}bd, ${pa.sbomb.ed}ed, +${pa.sbomb.cad} camo damage, ${pa.sbomb.p}p
+                • area of effect: ${pa.sbombsplash.d}d, ${pa.sbombsplash.bd}bd, ${pa.sbombsplash.ed}ed, +${pa.sbombsplash.cad} camo damage, ${pa.sbombsplash.p}p`;
     } else if (tower == 'monkey_buccaneer') {
         let pa = JSON.parse(JSON.stringify(paragonStats.monkey_buccaneer));
 

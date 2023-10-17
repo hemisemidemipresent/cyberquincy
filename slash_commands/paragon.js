@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
@@ -52,6 +52,12 @@ builder = new SlashCommandBuilder()
                 new SlashCommandStringOption()
                     .setName('pops')
                     .setDescription('Total pops from all towers; press TAB when done')
+                    .setRequired(true)
+            )
+            .addIntegerOption(
+                new SlashCommandIntegerOption()
+                    .setName("injected_cash")
+                    .setDescription("the amount of cash injected via the Paragon Cash Slider")
                     .setRequired(true)
             )
             .addStringOption(
@@ -314,6 +320,18 @@ async function paragon_degree(interaction) {
     let popCount = lex(pops, pop_operator, valueByPop, difficulty);
     if (isNaN(popCount)) return await interaction.reply({ embeds: [popCount], ephemeral: true });
 
+    let injectedCash = interaction.options.getInteger('injected_cash');
+    if (injectedCash < 0) return await interaction.reply({ embeds: [
+        new Discord.EmbedBuilder()
+            .setTitle(`Injected cash is negative`)
+            .setDescription(
+                `You can only input a nonegative number into \`injected_cash\`, when ${injectedCash} is a negative number. Use \`/paragon degree expr: help pops: 0 injected_cash: 0\` for help.`
+            )
+            .setColor(red)
+    ], ephemeral: true });
+
+    totalMoneySpent += Math.ceil(injectedCash / 1.05);
+
     let powerCost = totalMoneySpent / 25;
     let powerUpgrade = totalUpgradeCount * 100;
     let powerT5 = totalT5 * 10000;
@@ -358,7 +376,7 @@ async function paragon_degree(interaction) {
     const embed = new Discord.EmbedBuilder()
         .setTitle(`The paragon will be of degree **${x + 1}**`)
         .setDescription(
-            `Input: \`expr: ${expression}\tpops: ${pops}\`
+            `Input: \`expr: ${expression}\tpops: ${pops}\tinjected_cash: ${injectedCash}\`
                 ${
     totalT5 === 3 || totalT5 === 4
         ? "Did you include the three original T5s to be sacrificed? You aren't supposed to do that!"
@@ -430,6 +448,7 @@ function lex(input, operator, value, difficulty) {
         '*': factor
     });
 
+    let parsed;
     try {
         // Execute the interpretation of the parsed lexical stack
         lexer.setInput(input);
@@ -444,7 +463,7 @@ function lex(input, operator, value, difficulty) {
             let embed = new Discord.EmbedBuilder()
                 .setTitle(`Unexpected character "${c}"`)
                 .setDescription(
-                    `"${c}" is not a valid character in the expression. Use \`/paragon degree expr: help pops: 0\` for help.`
+                    `"${c}" is not a valid character in the expression. Use \`/paragon degree expr: help pops: 0 injected_cash: 0\` for help.`
                 )
                 .setColor(red);
             if (c === '<')
@@ -458,7 +477,7 @@ function lex(input, operator, value, difficulty) {
     let stack = [];
 
     try {
-        i = 0;
+        let i = 0;
         parsed.forEach((c) => {
             i++;
             switch (c) {
@@ -485,13 +504,13 @@ function lex(input, operator, value, difficulty) {
             .setTitle('Error processing expression. Did you add an extra operator?')
             .setDescription(`\`${input}\``)
             .setColor(red)
-            .setFooter({ text: 'Enter /paragon degree expr: help pops: 0 for help' });
+            .setFooter({ text: 'Enter /paragon degree expr: help pops: 0 injected_cash: 0 for help' });
     else if (stack.length > 0)
         return new Discord.EmbedBuilder()
             .setTitle('Error processing expression. Did you leave out an operator?')
             .setDescription(`\`${input}\``)
             .setColor(red)
-            .setFooter({ text: 'Enter /paragon degree expr: help pops: 0 for help' });
+            .setFooter({ text: 'Enter /paragon degree expr: help pops: 0 injected_cash: 0 for help' });
     return output;
 }
 

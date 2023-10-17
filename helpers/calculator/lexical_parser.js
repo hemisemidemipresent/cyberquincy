@@ -44,7 +44,7 @@ class LexicalParser {
                     }
                 }
             } else {
-                if (Object.prototype.hasOwnProperty.call(this.table, outputToken)) { // is an operator
+                if (Object.prototype.hasOwnProperty.call(this.table, token)) { // is an operator
                     while (stack.length) {
                         let punctuator = stack[0];
 

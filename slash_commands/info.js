@@ -7,10 +7,12 @@ builder = new SlashCommandBuilder().setName('info').setDescription('Information 
 
 async function execute(interaction) {
     const responseTime = Math.round(Date.now() - interaction.createdTimestamp);
-    let totalSeconds = client.uptime / 1000;
+    // let totalSeconds = client.uptime / 1000;
+    let totalSeconds = 604800;
     const days = Math.floor(totalSeconds / 86400);
+    totalSeconds -= days * 86400;
     const hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
+    totalSeconds -= hours * 3600;
     const minutes = Math.floor(totalSeconds / 60);
     const uptime = `${days} days, ${hours} hours, and ${minutes} minutes`;
 

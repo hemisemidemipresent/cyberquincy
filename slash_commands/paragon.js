@@ -9,7 +9,7 @@ const { red, paragon } = require('../jsons/colors.json');
 
 const reqs = require('../jsons/power_degree_req.json');
 const pHelp = require('../helpers/paragon');
-const paragonStats = require('../jsons/paragon.json');
+const paragonStats = require('../jsons/paragon_attacks.json');
 
 builder = new SlashCommandBuilder()
     .setName('paragon')
@@ -334,13 +334,13 @@ async function paragon_degree(interaction) {
 
     let powerCost = totalMoneySpent / 25;
     let powerUpgrade = totalUpgradeCount * 100;
-    let powerT5 = totalT5 * 10000;
+    let powerT5 = totalT5 * 6000;
     let powerTotem = totems * 2000;
     let powerPops = popCount / 180;
 
-    if (powerCost > 10000) powerCost = 10000;
+    if (powerCost > 60000) powerCost = 60000;
     if (powerUpgrade > 10000) powerUpgrade = 10000;
-    if (powerT5 > 90000) powerT5 = 90000;
+    if (powerT5 > 50000) powerT5 = 50000;
     if (powerPops > 90000) powerPops = 90000;
 
     let totalPower = powerCost + powerUpgrade + powerT5 + powerTotem + powerPops;
@@ -351,9 +351,9 @@ async function paragon_degree(interaction) {
     powerTotem = Number.isInteger(powerTotem) ? powerTotem : powerTotem.toFixed(1);
     powerPops = Number.isInteger(powerPops) ? powerPops : powerPops.toFixed(1);
 
-    if (powerCost === 10000) powerCost += ' [MAX]';
+    if (powerCost === 60000) powerCost += ' [MAX]';
     if (powerUpgrade === 10000) powerUpgrade += ' [MAX]';
-    if (powerT5 === 90000) powerT5 += ' [MAX]';
+    if (powerT5 === 50000) powerT5 += ' [MAX]';
     if (powerPops === 90000) powerPops += ' [MAX]';
 
     // get degree (crude binary search)

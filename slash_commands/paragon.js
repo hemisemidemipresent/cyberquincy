@@ -132,7 +132,8 @@ async function paragon_stats(interaction) {
                 • can rehit after 1st frame and every 0.1s after
                 • pierce is used on each rehit
                 • 0.25s stun after each rehit
-                • knocks back moabs 1 units, bfbs 0.5 units, ddts and zomgs 0.25 units`;
+                • knocks back moabs 1 units, bfbs 0.5 units, ddts and zomgs 0.25 units
+                **buff** - all primary towers get 90%s, including paragons`;
     } else if (tower === 'ninja_monkey') {
         let pa = JSON.parse(JSON.stringify(paragonStats.ninja_monkey));
 

@@ -111,10 +111,9 @@ async function paragon_stats(interaction) {
 
         desc = `85r
                 **juggernaut** - 3j, ${d}d, ${cd}cd, ${bd}bd, ${ed}ed, ${p}p, ${s}s, normal, camo
-                • splits into 6 mini juggernauts
                 • can rebound off walls and rehit bloons after rebound
-                • explodes into mini juggernauts when 50% or 100% pierce used
-                **mini juggernaut** - identical to **juggernaut**`;
+                • emits 6 mini-juggernauts when 50% or 100% pierce used
+                **mini-juggernaut** - identical to **juggernaut**`;
     } else if (tower === 'boomerang_monkey') {
         let pa = JSON.parse(JSON.stringify(paragonStats.boomerang_monkey));
 
@@ -133,7 +132,7 @@ async function paragon_stats(interaction) {
                 • can rehit after 1st frame and every 0.1s after
                 • pierce is used on each rehit
                 • 0.25s stun after each rehit
-                • knocks back moabs 3 units, bfbs 1.5 units, ddts and zomgs 0.75 units`;
+                • knocks back moabs 1 units, bfbs 0.5 units, ddts and zomgs 0.25 units`;
     } else if (tower === 'ninja_monkey') {
         let pa = JSON.parse(JSON.stringify(paragonStats.ninja_monkey));
 

@@ -682,6 +682,17 @@
         "thu": "https://media.discordapp.net/attachments/1120685628812693504/1164105900911505490/latest.png",
         "e": "6/6"
     },
+    "dark_path": {
+        "ver": 39,
+        "len": [],
+        "lenStr": "???",
+        "obj": 2,
+        "Cos": "5500",
+        "wa%": "No",
+        "los": "Yes",
+        "thu": "https://media.discordapp.net/attachments/1120685628812693504/1164110344344584322/latest.png",
+        "e": "1/1"
+    },
     "infernal": {
         "ver": 15,
         "len": [

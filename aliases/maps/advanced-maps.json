@@ -81,5 +81,8 @@
     "erosion": [
         "e",
         "erode"
+    ],
+    "dark_path": [
+        "dp"
     ]
 }

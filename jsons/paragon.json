@@ -21,7 +21,6 @@
             "damage": 42,
             "cd": 20,
             "md": 20,
-            "fd": 2,
             "bd": 150,
             "rate": 0.1,
             "pierce": 1000
@@ -186,7 +185,7 @@
             "rate": 0.11
         },
         "carpet": {
-            "cooldown": 40,
+            "cooldown": 45,
             "damage": 20000,
             "bd": 20000,
             "pierce": 150

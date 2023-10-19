@@ -9,7 +9,8 @@ const { red, paragon } = require('../jsons/colors.json');
 
 const reqs = require('../jsons/power_degree_req.json');
 const pHelp = require('../helpers/paragon');
-const paragonStats = require('../jsons/paragon_attacks.json');
+const paragonStats = require('../jsons/paragon.json');
+// const paragonCosts = require('../jsons/paragon_costs.json');
 
 builder = new SlashCommandBuilder()
     .setName('paragon')
@@ -31,7 +32,8 @@ builder = new SlashCommandBuilder()
                         { name: 'Ninja Monkey (Ascended Shadow)', value: 'ninja_monkey' },
                         { name: 'Monkey Buccaneer (Navarch of the Seas)', value: 'monkey_buccaneer' },
                         { name: 'Engineer Monkey (Master Builder)', value: 'engineer_monkey' },
-                        { name: 'Monkey Ace (Goliath Doomship)', value: 'monkey_ace' }
+                        { name: 'Monkey Ace (Goliath Doomship)', value: 'monkey_ace' },
+                        { name: 'Wizard Monkey (Magus Perfectus)', value: 'wizard_monkey' }
                     )
             )
             .addIntegerOption((option) =>
@@ -240,6 +242,59 @@ async function paragon_stats(interaction) {
         • ~3s after activation, 8 **carpet-bomb**s are deployed along the selected path
         • **carpet-bomb** - ${pa.carpet.d}d, ${pa.carpet.bd}bd, ${pa.carpet.ed}ed, ${pa.carpet.p}p, 50 blast radius each 
         • if the hit does not pop the bloon: stun for 8s`;
+    } else if (tower === 'wizard_monkey') {
+        let pa = JSON.parse(JSON.stringify(paragonStats.wizard_monkey));
+        let attacks = Object.keys(pa);
+        attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
+        desc = `**Mana Graveyard** [degree independent]
+        100000 capacity
+        If there's at least 50% mana left, all attacks' cooldown decreased by 50% (except for **Dark Phoenix**)
+
+        **Arcane Blast**
+        - ${pa.arcane.d}d, ${pa.arcane.md}md, ${pa.arcane.bd}bd, ${pa.arcane.ed}ed, ${pa.arcane.p}p, ${pa.arcane.s}s
+        - Drains 50 mana per shot
+        - Spawns **Zombie Bloon** when bloon is popped
+
+        **Zombie Bloon**
+        - ${pa.zombie.d}d, ${pa.zombie.bd}bd, ${pa.zombie.ed}ed, ${pa.zombie.p}p, ${pa.zombie.s}s
+        - 16s lifespan, travel range of 400, drains 250 mana per Zombie Bloon [degree independent]
+
+        **Draining ~~Spell~~ Beam**
+        - ${pa.drain.d}d, ${pa.drain.bd}bd, ${pa.drain.ed}ed, ${pa.drain.p}p, 0.05s [attack speed degree independent]
+        - regenerates 250 mana per hit [degree independent]
+           
+        **Dark Phoenix**
+        - **Dark Flame**
+         - ${pa.flame.d}d, ${pa.flame.bd}bd, ${pa.flame.ed}ed, ${pa.flame.p}p, ${pa.flame.s}s
+         - Drains 50 mana per attack [degree independent]
+        - **Dark Fireballs**
+         - ${pa.fireball.d}d, ${pa.fireball.bd}bd, ${pa.fireball.ed}ed, ${pa.fireball.p}p, ${pa.fireball.s}s, 8j
+         - does not consume mana
+        
+        Activated Ability - **Phoenix Explosion**
+        - ${pa.explosion.cooldown}s cooldown
+        - Consumes all mana instantaneously and disables Phoenix for 10s [degree independent]
+        - On Activation, applies **Burn** DoT (damage-over-time) effect to all bloons within 100r [degree independent] of the Phoenix
+         - **Burn** - ${pa.burn.d}d, ${pa.burn.bd}bd, ${pa.burn.ed}ed, 0.5s [degree independent], 30s duration [degree independent]
+        - Spawns 1 **Zombie ZOMG** per 9000 mana, max 10 **Zombie ZOMG**s
+        - **Zombie ZOMG** - ${pa.zomg.d}d, ${pa.zomg.bd}bd, ${pa.zomg.ed}ed, ${pa.zomg.p}p
+         - 10s lifespan [degree independent]
+         - spawns 4 **Zombie BFB**s upon expiration
+        - **Zombie BFB** - ${pa.bfb.d}d, ${pa.bfb.bd}bd, ${pa.bfb.ed}ed, ${pa.bfb.p}p
+         - 7s lifespan [degree independent]
+
+        Activated Ability - **Arcane Metamorphosis**
+        - ${pa.metamorphosis.cooldown}s cooldown
+        - drains 5,000 mana/s [degree independent], ends when fully drained
+        - disables Phoenix and changes main attack to **Flamethrower** for its duration
+        - **Flamethrower** - ${pa.bfb.d}d, ${pa.bfb.bd}bd, ${pa.bfb.ed}ed, ${pa.bfb.p}p, ${pa.bfb.s}s, 2j
+        - **Wall of Fire Placement** 
+         - ${pa.wof.rate}
+         - places up to 5 **Wall of Fire**s with a little delay along the straight line
+        - **Wall of Fire** 
+         - ${pa.bfb.d}d, ${pa.bfb.bd}bd, ${pa.bfb.ed}ed, ${pa.bfb.p}p
+         - 0.2s, 9s lifespan [both degree independent]
+        `;
     }
     let messageEmbed = new Discord.EmbedBuilder()
         .setTitle(`\`${tower}\` paragon - level ${level}`)

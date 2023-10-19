@@ -191,5 +191,62 @@
             "bd": 20000,
             "pierce": 150
         }
+    },
+    "wizard_monkey":{
+        "arcane": {
+            "damage": 50,
+            "md": 250,
+            "bd": 100,
+            "pierce": 25,
+            "rate": 0.275
+        },
+        "zombie": {
+            "damage": 150,
+            "bd": 150,
+            "pierce": 50
+        },
+        "drain": {
+            "damage": 200,
+            "bd": 0,
+            "pierce": 1
+        },
+        "flame": {
+            "damage": 200,
+            "bd": 50,
+            "pierce": 100,
+            "rate": 0.2
+        },
+        "fireball": {
+            "damage": 400,
+            "bd": 400,
+            "pierce": 100,
+            "rate": 2
+        },
+        "explosion": {
+            "cooldown": 40
+        },
+        "burn": {
+            "damage": 2500,
+            "bd": 0
+        },
+        "zomg": {
+            "damage": 4000,
+            "bd": 8000,
+            "pierce": 200
+        },
+        "bfb": {
+            "damage": 700,
+            "bd": 0,
+            "pierce": 50
+        },
+        "metamorphosis": {
+            "cooldown": 120
+        },
+        "wof": {
+            "rate": 6.5,
+            "damage": 25,
+            "bd": 0,
+            "pierce": 60
+        }
     }
 }

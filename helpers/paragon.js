@@ -30,9 +30,8 @@ module.exports = {
      * @param {int} md ADDITIONAL moab damage at degree 1
      * @param {int} bd ADDITIONAL boss damage at degree 1
      * @param {int} x degree
-     * @param {boolean} isDot whether attack does damage over time
      */
-    getDamages(d, md = 0, bd = 0, x, isDot = false) {
+    getDamages(d, md = 0, bd = 0, x) {
         const d_x = this.getDmg(d, x);
         const md_x = md ? this.getDmgMod(md, x) : 0;
         const bd_x = this.getDmgMod(bd, x);
@@ -40,10 +39,9 @@ module.exports = {
         const mult = 1 + Math.floor(x / 20) * 0.25;
 
         const cum_d = d_x + md_x + bd_x; // cumulative damage to boss bloons
-        const cum_d2 = d_x + md_x + 2 * bd_x; // some elite / DoT dmg stats use this instead for some reason, then minusing the boss dmg
 
-        const bd_tot = isDot ? cum_d * mult : cum_d2 * mult - bd_x;
-        const ed_tot = x < 20 || isDot ? 2 * cum_d : 2 * cum_d2 * mult - bd_x;
+        const bd_tot = cum_d * mult;
+        const ed_tot = 2 * cum_d;
 
         return {
             d: round(d_x, 1),
@@ -66,11 +64,10 @@ module.exports = {
      *
      * @param {Object} obj The original object for damages
      * @param {int} x degree
-     * @param {boolean} isDot whether attack does damage over time
      * @returns
      */
     getLevelledObj(obj, x) {
-        let res = this.getDamages(obj.damage, obj.md, obj.bd, x, obj.isDot);
+        let res = this.getDamages(obj.damage, obj.md, obj.bd, x);
 
         // ceramic damage is total, while fortified damage is handled as an additive.
         // this is because fortified can stack with normal bloons (lead), ceramics, and moab-class bloons

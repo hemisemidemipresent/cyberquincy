@@ -27,8 +27,10 @@ function difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts, baseT
     if (!discountFactor) {
         throw new DiscountError(`Cannot apply ${numDiscounts} discounts (must be between 0 and 3)`);
     }
-    const unroundedCost = rawDifficultyMult(mediumCost, difficulty) * discountFactor;
+    let unroundedCost = rawDifficultyMult(mediumCost, difficulty) * discountFactor;
     if (baseTower) return specialRound(unroundedCost);
+
+    unroundedCost = Math.floor(unroundedCost);
     return Math.round(unroundedCost / 5) * 5;
 }
 

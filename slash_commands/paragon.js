@@ -113,11 +113,9 @@ async function paragon_stats(interaction) {
 
         desc = `85r
                 **juggernaut** - 3j, ${d}d, ${cd}cd, ${bd}bd, ${ed}ed, ${p}p, ${s}s, normal, camo
-                • splits into 2 mini juggernauts
-                • The juggernaut projectiles bounce off objects
-                • explodes into mini juggernauts when it hits edge of screen
-                • projectiles can rehit target
-                **mini juggernaut** - identical to **juggernaut**`;
+                • can rebound off walls and rehit bloons after rebound
+                • emits 6 mini-juggernauts when 50% or 100% pierce used
+                **mini-juggernaut** - identical to **juggernaut**`;
     } else if (tower === 'boomerang_monkey') {
         let pa = JSON.parse(JSON.stringify(paragonStats.boomerang_monkey));
 
@@ -127,7 +125,7 @@ async function paragon_stats(interaction) {
         desc = `**glaive(main)** - 60r, ${pa.main.d}d, ${pa.main.bd}bd, ${pa.main.ed}ed,  ${pa.main.p}p, ${pa.main.s}s, normal, camo
                 • can jump to a nearby target after hitting
                 • first hit applies **shred** effect- (${pa.mainDot.d}d, ${pa.mainDot.bd}bd, ${pa.mainDot.ed}ed)/s, 15s duration
-                **orbitalglaive** - 50r, zone, ${pa.orbit.d}d, ${pa.orbit.cd}cd, ${pa.orbit.md}md, +${pa.orbit.fd}fd, ${pa.orbit.bd}bd, ${pa.orbit.ed}ed, ${pa.orbit.p}p, ${pa.orbit.s}s, normal, camo
+                **orbitalglaive** - 50r, zone, ${pa.orbit.d}d, ${pa.orbit.cd}cd, ${pa.orbit.md}md, ${pa.orbit.bd}bd, ${pa.orbit.ed}ed, ${pa.orbit.p}p, ${pa.orbit.s}s, normal, camo
                 **heavykylie** - 100r, ${pa.press.d}d, ${pa.press.md}md, ${pa.press.bd}bd, ${pa.press.ed}ed, ${pa.press.p}p, ${pa.press.s}s, normal, camo
                 • only targets blimps
                 • creates **explosion** instead of returning
@@ -136,7 +134,8 @@ async function paragon_stats(interaction) {
                 • can rehit after 1st frame and every 0.1s after
                 • pierce is used on each rehit
                 • 0.25s stun after each rehit
-                • knocks back moabs 3 units, bfbs 1.5 units, ddts and zomgs 0.75 units`;
+                • knocks back moabs 1 units, bfbs 0.5 units, ddts and zomgs 0.25 units
+                **buff** - all primary towers get 90%s, including paragons`;
     } else if (tower === 'ninja_monkey') {
         let pa = JSON.parse(JSON.stringify(paragonStats.ninja_monkey));
 

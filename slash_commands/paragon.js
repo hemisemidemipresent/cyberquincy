@@ -189,12 +189,12 @@ async function paragon_stats(interaction) {
         desc = `__**Main Guns**__
                 70r
                 **nail-guns** - ${pa.nailGuns.d}d, ${pa.nailGuns.bd}bd, ${pa.nailGuns.ed}ed, ${pa.nailGuns.p}p, ${pa.nailGuns.s}s, 3j (technically all 3 projectiles are separate attacks) 
-                • on hit, applies *pinned* status on up to ceramics: bloon can’t move for 0.95s 
-                • on hit, applies *stun* status on up to zomgs: bloon can’t move for 0.95s 
+                • on hit, applies *pinned* status on up to ceramics: bloon can’t move for 1s
+                • on hit, applies *stun* status on up to zomgs: bloon can’t move for 1s
                 • **nail-guns** attack gets +10% attack speed each round additively, maxes at 0.05s (6x faster) [max speed is degree independent] 
         
                 __**Activated Ability**__
-                • 20s cooldown, cycles between spawning Green, Red, and Blue Mega Sentries in that order. 
+                • ${pa.ability.cooldown}s cooldown, cycles between spawning Green, Red, and Blue Mega Sentries in that order. 
         
                 __**Green Mega Sentry**__
                 70r
@@ -208,17 +208,16 @@ async function paragon_stats(interaction) {
                 __**Blue Mega Sentry**__
                 70r
                 **missile** - ${pa.missile.d}d, ${pa.missile.md}md, ${pa.missile.bd}bd, ${pa.missile.ed}ed, ${pa.missile.p}p, each bloon uses 2p, ${pa.missile.s}s, creates **explosion** on each hit
-                • **explosion** - ${pa.explosion.d}d, ${pa.explosion.md}md, ${pa.explosion.bd}bd, ${pa.explosion.ed}ed, ${pa.explosion.p}p, 30r blast 
+                • **explosion** - ${pa.explosion.d}d, ${pa.explosion.bd}bd, ${pa.explosion.ed}ed, ${pa.explosion.p}p, 30r blast 
         
-                When all Mega Sentries are sold or replaced, they do ${pa.sell.d}d, ${pa.sell.bd}bd, ${pa.sell.ed}ed to ${pa.sell.p} bloons within 50r
+                When all Mega Sentries are sold or replaced, they do ${pa.sell.d}d, ${pa.sell.bd}bd, ${pa.sell.ed}ed to ${pa.sell.p} bloons within 40r
         
                 __**Modified Paragon Sentry**__ 
                 50r
-                **plasma** - ${pa.mod_plasma.d}d, ${pa.mod_plasma.bd}bd, ${pa.mod_plasma.ed}ed, ${pa.mod_plasma.p}p, ${pa.mod_plasma.s}s, plasma type, lasts for 19s 
+                **plasma** - ${pa.mod_plasma.d}d, ${pa.mod_plasma.md}md, ${pa.mod_plasma.bd}bd, ${pa.mod_plasma.ed}ed, ${pa.mod_plasma.p}p, ${pa.mod_plasma.s}s, plasma type, lasts for 19s 
                 • spawned every 6 seconds by each Mega Sentry
-                • ignores camo bloons (targets them but passes right through) 
         
-                When expired: ${pa.mod_sell.d}d, ${pa.mod_sell.p}p within a 50r blast 
+                When expired: ${pa.mod_sell.d}d, ${pa.mod_plasma.bd}bd, ${pa.mod_plasma.ed}ed, ${pa.mod_sell.p}p within a 50r blast 
                 `;
     } else if (tower === 'monkey_ace') {
         let pa = JSON.parse(JSON.stringify(paragonStats.monkey_ace));
@@ -228,7 +227,7 @@ async function paragon_stats(interaction) {
         • ${pa.radial.d}d, ${pa.radial.bd}bd, ${pa.radial.ed}ed, ${pa.radial.p}p, 16j, ${pa.radial.s}s
         
         **Seeking Missiles** (green trail)
-        • ${pa.seeking.d}d, ${pa.seeking.bd}bd, ${pa.seeking.ed}ed, ${pa.seeking.p}p, 4j, ${pa.seeking.s}s, on last hit: creates explosion
+        • ${pa.seeking.d}d, ${pa.seeking.bd}bd, ${pa.seeking.ed}ed, 4j, ${pa.seeking.s}s, on hit: creates explosion
            
         **explosion** - ${pa.explosion.d}d, ${pa.explosion.bd}bd, ${pa.explosion.ed}ed, ${pa.explosion.p}p
         
@@ -261,7 +260,7 @@ async function paragon_stats(interaction) {
         **Draining ~~Spell~~ Beam**
         - ${pa.drain.d}d, ${pa.drain.bd}bd, ${pa.drain.ed}ed, ${pa.drain.p}p, 0.05s [attack speed degree independent]
         - regenerates 250 mana per hit [degree independent]
-           
+
         **Dark Phoenix**
         - **Dark Flame**
          - ${pa.flame.d}d, ${pa.flame.bd}bd, ${pa.flame.ed}ed, ${pa.flame.p}p, ${pa.flame.s}s

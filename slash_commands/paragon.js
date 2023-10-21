@@ -217,7 +217,7 @@ async function paragon_stats(interaction) {
                 **plasma** - ${pa.mod_plasma.d}d, ${pa.mod_plasma.md}md, ${pa.mod_plasma.bd}bd, ${pa.mod_plasma.ed}ed, ${pa.mod_plasma.p}p, ${pa.mod_plasma.s}s, plasma type, lasts for 19s 
                 • spawned every 6 seconds by each Mega Sentry
         
-                When expired: ${pa.mod_sell.d}d, ${pa.mod_plasma.bd}bd, ${pa.mod_plasma.ed}ed, ${pa.mod_sell.p}p within a 50r blast 
+                When expired: ${pa.mod_sell.d}d, ${pa.mod_sell.bd}bd, ${pa.mod_sell.ed}ed, ${pa.mod_sell.p}p within a 50r blast 
                 `;
     } else if (tower === 'monkey_ace') {
         let pa = JSON.parse(JSON.stringify(paragonStats.monkey_ace));

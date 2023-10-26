@@ -98,7 +98,7 @@
             "damage": 44,
             "bd": 44,
             "pierce": 14,
-            "rate": 0.158
+            "rate": 0.18
         },
         "antiMOAB": {
             "damage": 200,
@@ -114,6 +114,9 @@
             "pierce": 15,
             "rate": 0.3
         },
+        "ability": {
+            "cooldown": 20
+        },
         "endpoint": {
             "damage": 100,
             "bd": 250,
@@ -128,19 +131,18 @@
         },
         "plasma": {
             "damage": 5,
-            "bd": 4,
+            "bd": 0,
             "pierce": 10,
             "rate": 0.05
         },
         "missile": {
-            "damage": 3,
-            "md": 747,
+            "damage": 0,
+            "md": 750,
             "pierce": 20,
             "rate": 0.5
         },
         "explosion": {
             "damage": 3,
-            "md": 2,
             "pierce": 20
         },
         "sell": {
@@ -150,12 +152,14 @@
         },
         "mod_plasma": {
             "damage": 4,
-            "bd": 2,
+            "md": 2,
+            "bd": 4,
             "pierce": 5,
             "rate": 0.06
         },
         "mod_sell": {
-            "damage": 30000,
+            "damage": 100,
+            "bd": 0,
             "pierce": 50
         }
     },
@@ -163,20 +167,18 @@
         "radial": {
             "damage": 200,
             "bd": 200,
-            "pierce": 50,
+            "pierce": 35,
             "rate": 0.66
         },
         "seeking": {
             "damage": 200,
             "bd": 200,
-            "pierce": 1,
             "rate": 0.66
         },
         "explosion": {
             "damage": 200,
             "bd": 200,
-            "pierce": 50,
-            "rate": 0.66
+            "pierce": 35
         },
         "forward": {
             "damage": 300,

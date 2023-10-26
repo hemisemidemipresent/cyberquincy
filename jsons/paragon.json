@@ -240,6 +240,12 @@
             "bd": 0,
             "pierce": 50
         },
+        "flamethrower": {
+            "damage": 500,
+            "bd": 1000,
+            "pierce": 100,
+            "rate": 0.1
+        },
         "metamorphosis": {
             "cooldown": 120
         },

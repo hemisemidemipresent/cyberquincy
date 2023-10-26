@@ -257,7 +257,7 @@ async function paragon_stats(interaction) {
         - ${pa.zombie.d}d, ${pa.zombie.bd}bd, ${pa.zombie.ed}ed, ${pa.zombie.p}p, ${pa.zombie.s}s
         - 16s lifespan, travel range of 400, drains 250 mana per Zombie Bloon [degree independent]
 
-        **Draining ~~Spell~~ Beam**
+        **Draining Spell/Beam**
         - ${pa.drain.d}d, ${pa.drain.bd}bd, ${pa.drain.ed}ed, ${pa.drain.p}p, 0.05s [attack speed degree independent]
         - regenerates 250 mana per hit [degree independent]
 
@@ -285,9 +285,9 @@ async function paragon_stats(interaction) {
         - ${pa.metamorphosis.cooldown}s cooldown
         - drains 5,000 mana/s [degree independent], ends when fully drained
         - disables Phoenix and changes main attack to **Flamethrower** for its duration
-        - **Flamethrower** - ${pa.bfb.d}d, ${pa.bfb.bd}bd, ${pa.bfb.ed}ed, ${pa.bfb.p}p, ${pa.bfb.s}s, 2j
+        - **Flamethrower** - ${pa.flamethrower.d}d, ${pa.flamethrower.bd}bd, ${pa.flamethrower.ed}ed, ${pa.flamethrower.p}p, ${pa.flamethrower.s}s, 2j
         - **Wall of Fire Placement** 
-         - ${pa.wof.rate}
+         - every ${pa.wof.s}s
          - places up to 5 **Wall of Fire**s with a little delay along the straight line
         - **Wall of Fire** 
          - ${pa.wof.d}d, ${pa.wof.bd}bd, ${pa.wof.ed}ed, ${pa.wof.p}p

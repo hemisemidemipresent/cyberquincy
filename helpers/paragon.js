@@ -41,7 +41,7 @@ module.exports = {
         const cum_d = d_x + md_x + bd_x; // cumulative damage to boss bloons
 
         const bd_tot = cum_d * mult;
-        const ed_tot = 2 * cum_d;
+        const ed_tot = 2 * bd_tot;
 
         return {
             d: round(d_x, 1),

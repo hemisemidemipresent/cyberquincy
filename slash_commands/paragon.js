@@ -290,7 +290,7 @@ async function paragon_stats(interaction) {
          - ${pa.wof.rate}
          - places up to 5 **Wall of Fire**s with a little delay along the straight line
         - **Wall of Fire** 
-         - ${pa.bfb.d}d, ${pa.bfb.bd}bd, ${pa.bfb.ed}ed, ${pa.bfb.p}p
+         - ${pa.wof.d}d, ${pa.wof.bd}bd, ${pa.wof.ed}ed, ${pa.wof.p}p
          - 0.2s, 9s lifespan [both degree independent]
         `;
     }

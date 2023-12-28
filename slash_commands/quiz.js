@@ -1,10 +1,13 @@
-const { SlashCommandBuilder } = require('discord.js');
-const quiz = require('../jsons/quiz.json');
-const { cyber, orange, turq } = require('../jsons/colors.json');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+
 const { shuffle } = require('../helpers/general');
-const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
-const { discord } = require('../aliases/misc.json');
+
+const quiz = require('../jsons/quiz.json');
 const Quiz = require('../helpers/quiz.js');
+
+const { cyber, orange, turq } = require('../jsons/colors.json');
+const { discord } = require('../aliases/misc.json');
+
 let numbers = [0, 1, 2, 3];
 const emojis = [':regional_indicator_a:', ':regional_indicator_b:', ':regional_indicator_c:', ':regional_indicator_d:'];
 
@@ -22,10 +25,10 @@ async function loadQuestion(interaction) {
     shuffle(numbers);
 
     const buttons = new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId(numbers[0].toString()).setLabel('A').setStyle('PRIMARY'),
-        new ButtonBuilder().setCustomId(numbers[1].toString()).setLabel('B').setStyle('PRIMARY'),
-        new ButtonBuilder().setCustomId(numbers[2].toString()).setLabel('C').setStyle('PRIMARY'),
-        new ButtonBuilder().setCustomId(numbers[3].toString()).setLabel('D').setStyle('PRIMARY')
+        new ButtonBuilder().setCustomId(numbers[0].toString()).setLabel('A').setStyle(ButtonStyle.Primary),
+        new ButtonBuilder().setCustomId(numbers[1].toString()).setLabel('B').setStyle(ButtonStyle.Primary),
+        new ButtonBuilder().setCustomId(numbers[2].toString()).setLabel('C').setStyle(ButtonStyle.Primary),
+        new ButtonBuilder().setCustomId(numbers[3].toString()).setLabel('D').setStyle(ButtonStyle.Primary)
     );
 
     let string = '';

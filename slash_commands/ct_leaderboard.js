@@ -9,23 +9,15 @@ const SCORES_PER_PAGE = 25;
 builder = new SlashCommandBuilder()
     .setName('ct_lb')
     .setDescription('Shows the CT Leaderboard!')
-    .addIntegerOption((option) => option.setName('ct_event').setDescription("Which event's leaderboard").setRequired(false))
     .addIntegerOption((option) => option.setName('page').setDescription('Which page of the leaderboard').setRequired(false));
 
 function getCurrentCT() {
-    const firstCT = new Date('Tue, 26 Jul 2022 22:00:00 GMT');
+    const thirtysixthCT = new Date(1703023200000);
     const twoWeeks = 1209600000;
-    return Math.floor((Date.now() - firstCT) / twoWeeks);
+    return Math.floor((Date.now() - thirtysixthCT) / twoWeeks) + 36;
 }
 
 function validateInput(interaction) {
-    const currentCT = getCurrentCT();
-    ct_event = interaction.options.getInteger('ct_event') || currentCT;
-    if (ct_event < 1) return `Please enter a positive integer`;
-    if (ct_event <= currentCT - 5)
-        return `older events like CT event ${ct_event} aren't available on the official Ninja Kiwi API`;
-    if (ct_event > currentCT) return `CT event ${ct_event} isn't available on the official Ninja Kiwi API`;
-
     page = interaction.options.getInteger('page') || 1;
     if (page < 1) return `${page} isn't a valid page number`;
 }
@@ -49,9 +41,17 @@ async function execute(interaction) {
         return true;
     };
 
-    const currentCT = getCurrentCT();
-    const eventNo = interaction.options.getInteger('ct_event') || currentCT;
-    const event = events[currentCT - eventNo];
+    const event = events.find((event) => {
+        const oneWeek = 604800000;
+        return Math.abs(event.end - Date.now()) < oneWeek;
+    });
+    if (!event) {
+        return await inter.editReply({
+            content: 'Current CT does not seem to be available in the Ninja Kiwi API',
+            embeds: [],
+            components: []
+        });
+    }
 
     let page = interaction.options.getInteger('page') || 1;
 
@@ -80,8 +80,10 @@ async function execute(interaction) {
 
             desc += `${placement} ${name.padEnd(25)}${obj.score.toString().padStart(6)}\n`;
         }
+
+        
         const embed = new Discord.EmbedBuilder()
-            .setTitle(`CT Event #${eventNo} Page ${page}`)
+            .setTitle(`CT Event #${getCurrentCT()} Page ${page}`)
             .setDescription('```\n' + desc + '```')
             .setColor(lightgreen)
             .setFooter({ text: `Total players: ${event.totalScores_player}, Total teams: ${event.totalScores_team}` });

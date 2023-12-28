@@ -109,7 +109,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
                 value: totalCost,
                 inline: true
             },
-            { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
+            { name: 'Incorrect/out of date information?', value: `please report them [here](${discord})\n\note: increasingly more and more people have been pointing out how these stats are several versions behind, if you would like to contribute to updating the stats please ask in the above discord server`, inline: true }
         ])
         .setFooter({ text: footer })
         .setColor(cyber);

@@ -80,7 +80,7 @@
         "ans": 0
     },
     {
-        "question": "Roses are red, Violets are blue. What colour is a Tack Shooter?",
+        "question": "Roses are red, Violets are blue. What color is a Tack Shooter?",
         "optns": [
             "Purple",
             "Green",
@@ -150,7 +150,7 @@
         "ans": 2
     },
     {
-        "question": "Bloons come in all colours of the rainbow. In the original Bloons Tower Defense, which colour of the rainbow is missing?",
+        "question": "Bloons come in all colors of the rainbow. In the original Bloons Tower Defense, which color of the rainbow is missing?",
         "optns": [
             "Green",
             "Orange",

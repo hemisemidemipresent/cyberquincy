@@ -25,6 +25,12 @@
         "brick",
         "bri"
     ],
+    "corvus":[
+        "corv",
+        "crv",
+        "crow",
+        "caw"
+    ],
     "churchill": [
         "captain-churchill",
         "captain_churchill",
@@ -87,6 +93,11 @@
         "fro",
         "snowman"
     ],
+    "psi": [
+        "psy",
+        "Ψ",
+        "sigh"
+    ],
     "quincy": [
         "q",
         "quin",
@@ -103,10 +114,5 @@
     "sauda": [
         "saud",
         "sau"
-    ],
-    "psi": [
-        "psy",
-        "Ψ",
-        "sigh"
     ]
 }

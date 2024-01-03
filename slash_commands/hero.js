@@ -51,9 +51,31 @@ async function embedBloonology(heroName, level) {
         ? `${Aliases.toIndexNormalForm(heroName)} (Level-${level})`
         : `${Aliases.toIndexNormalForm(heroName)} (All Levels)`;
 
+    // overflow
+    // TODO: Check for total chars > 6000
+    let fields = [];
+    let descForDescription = '';
+    if (descWithoutLevel.length > 4096) {
+        const descLines = descWithoutLevel.split('\n');
+        descLines.forEach((line) => {
+            // add to description until char limit is reached
+            if (descForDescription.length + line.length < 4096) 
+                return descForDescription += line + '\n';
+            
+            // (assuming fields array is not empty) add to value of latest field
+            if (fields[0] && fields[fields.length - 1].value.length + line.length < 1024)
+                return fields[fields.length - 1].value += line + '\n';
+
+            fields.push({ name: '\u200b', value: line + '\n' });
+        });
+    } else {
+        descForDescription = descWithoutLevel;
+    }
+
     const embed = new Discord.EmbedBuilder()
         .setTitle(title)
-        .setDescription(descWithoutLevel)
+        .setDescription(descForDescription)
+        .addFields(fields)
         .setColor(cyber)
         .setFooter({ text: footer });
     return embed;

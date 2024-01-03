@@ -1,8 +1,8 @@
 {
     "adora": [
         "ad",
-        "ador",
         "ado",
+        "ador",
         "dora",
         "priestess",
         "highpriestess",
@@ -33,13 +33,12 @@
     ],
     "churchill": [
         "captain-churchill",
-        "captain_churchill",
         "chirch",
         "church",
+        "hill",
         "captain",
         "tank",
         "winston",
-        "hill",
         "cap"
     ],
     "etienne": [
@@ -88,8 +87,7 @@
         "pat-fusty",
         "pf",
         "fu",
-        "patfu",
-        "pat_fu",
+        "fusty",
         "fro",
         "snowman"
     ],
@@ -105,11 +103,8 @@
         "quincey",
         "quinc",
         "quonc",
-        "quonce",
-        "quoncy",
         "cyber",
-        "cq",
-        "uincy"
+        "cq"
     ],
     "sauda": [
         "saud",

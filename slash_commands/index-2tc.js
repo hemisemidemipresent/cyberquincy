@@ -37,7 +37,7 @@ const mapOption = new SlashCommandStringOption().setName('map').setDescription('
 const personOption = new SlashCommandStringOption().setName('person').setDescription('Completer').setRequired(false);
 
 builder = new SlashCommandBuilder()
-    .setName('twoteecee')
+    .setName('2tc')
     .setDescription('Search and Browse Completed 2TC Index Combos')
     .addStringOption(entity1Option)
     .addStringOption(entity2Option)

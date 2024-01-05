@@ -1,3 +1,4 @@
+// btw rml I kinda updated it to use the website but it is quite scuffed so sorry if i bastardized your code
 const OrParser = require('../parser/or-parser.js');
 
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
@@ -9,26 +10,17 @@ const MapParser = require('../parser/map-parser.js');
 const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
 const PersonParser = require('../parser/person-parser');
 
-const NaturalNumberParser = require('../parser/natural-number-parser.js');
-const VersionParser = require('../parser/version-parser');
-
 const Parsed = require('../parser/parsed');
-
-const UserCommandError = require('../exceptions/user-command-error.js');
-
-const clonedeep = require('lodash.clonedeep');
 
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps');
 
-const { orange, palered } = require('../jsons/colors.json');
+const { palered } = require('../jsons/colors.json');
 
-const { COLS } = require('../services/index/2tc_scraper');
+BANNED_HEROES = ['sauda', 'geraldo', 'corvus'];
 
-BANNED_HEROES = ['sauda', 'geraldo'];
-
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 const entity1Option = new SlashCommandStringOption()
     .setName('entity1')
@@ -44,29 +36,13 @@ const mapOption = new SlashCommandStringOption().setName('map').setDescription('
 
 const personOption = new SlashCommandStringOption().setName('person').setDescription('Completer').setRequired(false);
 
-const versionOption = new SlashCommandStringOption()
-    .setName('version')
-    .setDescription('Version or Subversion')
-    .setRequired(false);
-
-const numberOption = new SlashCommandIntegerOption().setName('number').setDescription('Combo Number').setRequired(false);
-
-const reloadOption = new SlashCommandStringOption()
-    .setName('reload')
-    .setDescription('Do you need to reload completions from the index but for a much slower runtime?')
-    .setRequired(false)
-    .addChoices({ name: 'Yes', value: 'yes' });
-
 builder = new SlashCommandBuilder()
-    .setName('2tc')
+    .setName('twoteecee')
     .setDescription('Search and Browse Completed 2TC Index Combos')
     .addStringOption(entity1Option)
     .addStringOption(entity2Option)
     .addStringOption(mapOption)
-    .addStringOption(personOption)
-    .addStringOption(versionOption)
-    .addIntegerOption(numberOption)
-    .addStringOption(reloadOption);
+    .addStringOption(personOption);
 
 function parseEntity(interaction, num) {
     const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
@@ -107,24 +83,10 @@ function parseMap(interaction) {
     } else return new Parsed();
 }
 
-function parseVersion(interaction) {
-    const v = interaction.options.getString(`version`);
-    if (v) {
-        return CommandParser.parse([`v${v}`], new VersionParser());
-    } else return new Parsed();
-}
-
 function parsePerson(interaction) {
     const u = interaction.options.getString('person')?.toLowerCase();
     if (u) {
         return CommandParser.parse([`user#${u}`], new PersonParser());
-    } else return new Parsed();
-}
-
-function parseNumber(interaction) {
-    const n = interaction.options.getInteger('number');
-    if (n || n == 0) {
-        return CommandParser.parse([n], new NaturalNumberParser());
     } else return new Parsed();
 }
 
@@ -133,14 +95,12 @@ function parseAll(interaction) {
     const parsedEntity2 = parseEntity(interaction, 2);
     const parsedMap = parseMap(interaction);
     const parsedPerson = parsePerson(interaction);
-    const parsedVersion = parseVersion(interaction);
-    const parsedNumber = parseNumber(interaction);
 
-    return [parsedEntity1, parsedEntity2, parsedMap, parsedPerson, parsedVersion, parsedNumber];
+    return [parsedEntity1, parsedEntity2, parsedMap, parsedPerson];
 }
 
 function validateInput(interaction) {
-    let [parsedEntity1, parsedEntity2, parsedMap, /*parsedPerson*/, parsedVersion, parsedNumber] = parseAll(interaction);
+    let [parsedEntity1, parsedEntity2, parsedMap] = parseAll(interaction);
 
     if (parsedEntity1.hasErrors()) {
         return 'Entity1 did not match a tower/upgrade/path/hero';
@@ -153,22 +113,15 @@ function validateInput(interaction) {
     if (parsedMap.hasErrors()) {
         return `Map/Difficulty not valid`;
     }
+}
 
-    if (parsedVersion.hasErrors()) {
-        return `Parsed Version must be a number >= 1`;
+async function fetch2tc(searchParams) {
+    let res = await fetch('https://btd6index.win/fetch-2tc?' + searchParams);
+    let resJson = await res.json();
+    if ('error' in resJson) {
+        throw new Error(resJson.error);
     }
-
-    if (parsedNumber.hasErrors()) {
-        return `Combo Number must be >= 1`;
-    }
-
-    if ((parsedEntity1.hasAny() || parsedEntity2.hasAny()) && parsedNumber.hasAny()) {
-        return `Entity + Combo Number either conflict or are redundant; don't enter both`;
-    }
-
-    if (parsedMap.hasAny() && parsedVersion.hasAny()) {
-        return `Alt map completions don't have an associated version; don't search both map and version`;
-    }
+    return resJson;
 }
 
 async function execute(interaction) {
@@ -179,132 +132,85 @@ async function execute(interaction) {
             ephemeral: true
         });
     }
+    await interaction.deferReply();
+    
+    // I give up on anything remotely elegant to construct the request from the parsed output ~hemi
+    const parsed = parseAll(interaction);
 
-    const parsed = parseAll(interaction).reduce(
-        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
+    const e1 = parsed[0];
+    const e2 = parsed[1];
+
+    const entityType1 = e1.tower ? Aliases.toIndexNormalForm(e1.tower) : null;
+    const entity1 = e1.tower_upgrade ? Towers.towerUpgradeToIndexNormalForm(e1.tower_upgrade) : null;
+    const hero1 = e1.hero ? Aliases.toIndexNormalForm(e1.hero) : null;
+
+    const entityType2 = e2.tower ? Aliases.toIndexNormalForm(e2.tower) : null;
+    const entity2 = e2.tower_upgrade ? Towers.towerUpgradeToIndexNormalForm(e2.tower_upgrade) : null;
+    const hero2 = e2.hero ? Aliases.toIndexNormalForm(e2.hero) : null;
+
+    let newparsed = parsed.reduce(
+        (combinedParsed, nextParsed, i) => i > 1 ? combinedParsed.merge(nextParsed) : combinedParsed,
         new Parsed()
     );
+    newparsed.entity1 = entityType1 ?? entity1 ?? hero1;
+    newparsed.entity2 = entityType2 ?? entity2 ?? hero2;
 
-    await interaction.deferReply();
+    const map = newparsed.map ? Aliases.toIndexNormalForm(newparsed.map) : null;
 
-    try {
-        const forceReload = interaction.options.getString('reload') ? true : false;
+    const searchParams = new URLSearchParams(
+        Object.entries({
+            towerquery: JSON.stringify([newparsed.entity1, newparsed.entity2].filter(val => val)),
+            map,
+            person: newparsed.person,
+            difficulty: newparsed.map_difficulty,
+            pending: '0',
+            count: '100'
+        }).filter(([,value]) => value !== null && value !== undefined)
+    );
 
-        const allCombos = await Index.fetchInfo('2tc', forceReload);
-
-        const mtime = Index.getLastCacheModified('2tc');
-
-        const filteredCombos = filterCombos(clonedeep(allCombos), parsed);
-
-        await displayCombos(interaction, filteredCombos, parsed, allCombos, mtime);
-    } catch (e) {
-        if (e instanceof UserCommandError) {
-            await interaction.editReply({
-                embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(orange)]
-            });
-        } else {
-            throw e;
-        }
-    }
+    let resJson = await fetch2tc(searchParams);
+    
+    await displayCombos(interaction, resJson, newparsed, searchParams);
 }
 
-function mapsNotPossible(combo) {
-    const impossibleMapsPerTower = [1, 2].map((entityNum) => {
-        const entity = combo[`TOWER_${entityNum}`].NAME;
-        return Maps.mapsNotPossible(entity);
-    });
+async function displayCombos(interaction, resJson, parsed, searchParams) {
+    const combos = resJson.results;
 
-    return [...new Set(impossibleMapsPerTower.flat())];
-}
-
-async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
     if (combos.length == 0) {
         return await interaction.editReply({
             embeds: [
                 new Discord.EmbedBuilder()
                     .setTitle(embedTitleNoCombos(parsed))
-                    .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
                     .setColor(palered)
             ]
         });
     }
 
-    if (combos.length == 1 && Object.keys(combos[0].MAPS).length == 1) {
+    if (combos.length == 1) {
         let challengeEmbed = new Discord.EmbedBuilder()
             .setTitle(embedTitle(parsed, combos))
-            .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`)
             .setColor(palered);
 
-        const flatCombo = flattenCombo(clonedeep(combos[0]));
-        const strippedCombo = stripCombo(clonedeep(flatCombo), parsed);
-        const combo = orderCombo(clonedeep(strippedCombo));
+        const combo = combos[0];
+        // i give up I'm hardcoding the fields to use for displaying a single combo ~hemi
+        const fields = ['tower1', 'tower2', 'map', 'version', 'date', 'person'];
+        fields.forEach((field) => challengeEmbed.addFields([{ name: gHelper.toTitleCase(field), value: combo[field], inline: true }]));
 
-        for (field in combo) {
-            challengeEmbed.addFields([{ name: gHelper.toTitleCase(field), value: combo[field], inline: true }]);
-        }
-
-        challengeEmbed.addFields([{ name: 'OG?', value: flatCombo.OG ? 'OG' : 'ALT', inline: true }]);
-
-        if (flatCombo.OG && !(parsed.map || parsed.version || parsed.person)) {
-            const allCompletedMaps = Object.keys(allCombos.find((c) => c.NUMBER === flatCombo.NUMBER).MAPS);
-            const ogMapAbbr = Maps.mapToIndexAbbreviation(Aliases.toAliasNormalForm(combo.MAP));
-
-            // TODO: Midnight Mansion no heli in 2tc? Probably will never happen though
-            let completedAltMapsFields = Index.altMapsFields(ogMapAbbr, allCompletedMaps, mapsNotPossible(combos[0]));
-
-            challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
-
-            if (completedAltMapsFields.footer) {
-                challengeEmbed.setFooter({ text: completedAltMapsFields.footer });
-            }
-        }
+        challengeEmbed.addFields([{ name: 'Link', value: Index.genCompletionLink(combo), inline: true }]);
+        challengeEmbed.addFields([{ name: 'OG?', value: combo.og ? 'OG' : 'ALT', inline: true }]);
 
         return await interaction.editReply({ embeds: [challengeEmbed] });
     } else {
-        const fieldHeaders = getDisplayCols(parsed);
-
-        const colData = Object.fromEntries(
-            fieldHeaders.map((fieldHeader) => {
-                return [fieldHeader, []];
-            })
-        );
-
         let numOGCompletions = 0;
 
         for (let i = 0; i < combos.length; i++) {
-            for (map in combos[i].MAPS) {
-                const combo = flattenCombo(clonedeep(combos[i]), map);
-
-                for (let colIndex = 0; colIndex < fieldHeaders.length; colIndex++) {
-                    const fieldHeader = fieldHeaders[colIndex];
-
-                    let key = fieldHeader;
-
-                    if (fieldHeader === 'UNSPECIFIED_TOWER') {
-                        const providedEntity = parseProvidedDefinedEntities(parsed)[0];
-                        const entity = {
-                            NAME: providedEntity,
-                            TYPE: Towers.getEntityType(providedEntity)
-                        };
-                        const towerNum = entityMatch(combos[i], entity);
-                        const otherTowerNum = 3 - towerNum;
-                        key = `TOWER_${otherTowerNum}`;
-                    }
-
-                    const bold = combo.OG && !includeOnlyOG(parsed) ? '**' : '';
-
-                    colData[fieldHeader].push(`${bold}${combo[key]}${bold}`);
-                }
-
-                if (combo.OG) numOGCompletions += 1;
-            }
+            if (combos[i].og) numOGCompletions += 1;
         }
 
         function setOtherDisplayFields(challengeEmbed) {
             challengeEmbed
                 .setTitle(embedTitle(parsed, combos))
-                .setColor(palered)
-                .setDescription(`Index last reloaded ${gHelper.timeSince(mtime)} ago`);
+                .setColor(palered);
 
             if (!includeOnlyOG(parsed)) {
                 if (numOGCompletions == 1) {
@@ -318,115 +224,75 @@ async function displayCombos(interaction, combos, parsed, allCombos, mtime) {
             }
         }
 
-        return await Index.displayOneOrMultiplePages(interaction, colData, setOtherDisplayFields);
+        const displayFields = getDisplayCols(parsed);
+        searchParams.set('count', '10');
+        return await Index.displayOneOrMultiplePagesNew(interaction, fetch2tc, searchParams, displayFields, 
+            completion => {
+
+                const boldOg = (str) => completion.og ? `**${str}**` : str;
+                
+                let obj = {};
+
+                const specifiedTower = parsedProvidedEntities(parsed);
+                displayFields.forEach((field)=>{
+                    if (field == 'Link') obj.Link = boldOg(Index.genCompletionLink(completion));
+                    if (completion[field]) return obj[field] = boldOg(completion[field]);
+                    if (field == 'unspecified_tower') {
+                        if (completion.tower1 == specifiedTower) obj.unspecified_tower = boldOg(completion.tower2);
+                        else if (completion.tower2 == specifiedTower) obj.unspecified_tower = boldOg(completion.tower1);
+                    }
+                });
+                return obj;
+            }, setOtherDisplayFields);
     }
 }
 
 function getDisplayCols(parsed) {
-    definiteTowers = parseProvidedDefinedEntities(parsed);
+    definiteTowers = parsedProvidedEntities(parsed);
     if (parsed.person) {
         if (definiteTowers.length == 2) {
-            return ['NUMBER', 'MAP', 'LINK'];
+            return ['version', 'map', 'Link'];
         } else if (definiteTowers.length == 1) {
-            return ['UNSPECIFIED_TOWER', 'MAP', 'LINK'];
+            return ['unspecified_tower', 'map', 'Link'];
         } else if (parsed.map) {
-            return ['TOWER_1', 'TOWER_2', 'LINK'];
+            return ['tower1', 'tower2', 'Link'];
         } else {
-            return ['TOWER_1', 'TOWER_2', 'MAP'];
+            return ['tower1', 'tower2', 'map'];
         }
     } else if (parsed.map_difficulty) {
-        if (definiteTowers.length == 2 || parsed.natural_number) {
-            return ['PERSON', 'MAP', 'LINK'];
+        if (definiteTowers.length == 2) {
+            return ['person', 'map', 'Link'];
         }
         if (definiteTowers.length == 1) {
-            return ['UNSPECIFIED_TOWER', 'MAP', 'LINK'];
+            return ['unspecified_tower', 'map', 'Link'];
         } else {
-            return ['NUMBER', 'MAP', 'LINK'];
+            // return ['NUMBER', 'map', 'Link']; Since we cant search for number anymore no point including number
+            return ['tower1', 'tower2', 'map'];
         }
     } else if (definiteTowers.length == 2) {
-        return ['NUMBER', 'PERSON', 'LINK'];
-    } else if (parsed.tower_upgrade || parsed.hero) {
-        return ['UNSPECIFIED_TOWER', 'PERSON', 'LINK'];
-    } else if (parsed.version) {
-        return ['NUMBER', 'TOWER_1', 'TOWER_2'];
+        return ['map', 'person', 'Link'];
+    } else if (definiteTowers.length == 1) {
+        return ['unspecified_tower', 'person', 'Link'];
     } else {
-        return ['TOWER_1', 'TOWER_2', 'LINK'];
+        return ['tower1', 'tower2', 'Link'];
     }
-}
-
-function stripCombo(combo, parsed) {
-    const wellDefinedTowers = []
-        .concat(parsed.tower_upgrades)
-        .concat(parsed.heroes)
-        .filter((el) => el);
-
-    if (parsed.natural_number) delete combo.NUMBER;
-    if (wellDefinedTowers.length == 2) {
-        delete combo.TOWER_1;
-        delete combo.TOWER_2;
-    }
-    if (parsed.version || !combo.OG) delete combo.VERSION;
-    if (parsed.map) delete combo.MAP;
-    if (parsed.person) delete combo.PERSON;
-
-    if (!combo.OG) delete combo.DATE;
-
-    delete combo.OG;
-
-    return combo;
-}
-
-function orderCombo(combo) {
-    const ordering = Object.keys(COLS).filter((v) => v !== 'UPGRADES');
-    let newCombo = {};
-    ordering.forEach((key) => {
-        if (combo[key]) newCombo[key] = combo[key];
-    });
-    return newCombo;
-}
-
-function flattenCombo(combo, map) {
-    if (!map) map = Object.keys(combo.MAPS)[0];
-    const subcombo = combo.MAPS[map];
-
-    let flattenedCombo = combo;
-
-    flattenedCombo.MAP = Maps.indexMapAbbreviationToNormalForm(map);
-    flattenedCombo.PERSON = subcombo.PERSON;
-    flattenedCombo.LINK = subcombo.LINK;
-    flattenedCombo.OG = subcombo.OG;
-    delete flattenedCombo.MAPS;
-
-    for (let tn = 1; tn <= 2; tn++) {
-        if (combo.OG) {
-            flattenedCombo[`TOWER_${tn}`] = `${flattenedCombo[`TOWER_${tn}`].NAME} (${flattenedCombo[`TOWER_${tn}`].UPGRADE})`;
-        } else {
-            flattenedCombo[`TOWER_${tn}`] = flattenedCombo[`TOWER_${tn}`].NAME;
-        }
-    }
-
-    return flattenedCombo;
 }
 
 // include sampleCombo for the correct capitalization and punctuation
 function embedTitle(parsed, combos) {
-    const sampleCombo = combos[0];
-    const multipleCombos = combos.length > 1 || Object.keys(combos[0].MAPS).length > 1;
+    const multipleCombos = combos.length > 1;
 
     const towers = parsedProvidedEntities(parsed);
-    const sampleMap = Object.keys(sampleCombo.MAPS)[0];
 
-    let title = '';
-    if (parsed.natural_number) title += `${gHelper.toOrdinalSuffix(sampleCombo.NUMBER)} 2TC Combo `;
-    else title += multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
-    if (parsed.person) title += `by ${sampleCombo.MAPS[sampleMap].PERSON} `;
+    let title = multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
+    if (parsed.person) title += `by ${parsed.person} `;
     if (parsed.map) title += `on ${Maps.indexMapAbbreviationToNormalForm(parsed.map)} `;
     if (parsed.map_difficulty) title += `on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} Maps `;
     for (let i = 0; i < towers.length; i++) {
         const tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';
-        title += `${Towers.formatEntity(tower)} `;
+        title += `${tower} `;
     }
     if (parsed.version) title += `in v${parsed.version} `;
     return title.slice(0, title.length - 1);
@@ -443,183 +309,19 @@ function embedTitleNoCombos(parsed) {
         tower = towers[i];
         if (i == 0) title += 'with ';
         else title += 'and ';
-        title += `${Towers.formatEntity(tower)} `;
+        title += `${tower} `;
     }
     if (parsed.version) title += `in v${parsed.version} `;
     return title.slice(0, title.length - 1);
-}
-
-function filterCombos(filteredCombos, parsed) {
-    if (parsed.natural_number) {
-        const combo = filteredCombos[parsed.natural_number - 1];
-        // Filter by combo # provided
-        filteredCombos = combo ? [combo] : []; // Wrap single combo object in an array for consistency
-    } else if (parsed.hero || parsed.tower_upgrade || parsed.tower || parsed.tower_path) {
-        // Filter by towers/heroes provided
-        if (parsed.heroes && parsed.heroes.length > 1) {
-            throw new UserCommandError(
-                `Combo cannot have more than 1 hero (${gHelper.toTitleCase(parsed.heroes.join(' + '))})`
-            );
-        }
-
-        if (BANNED_HEROES.includes(parsed.hero)) {
-            throw new UserCommandError(`${gHelper.toTitleCase(parsed.hero)} is banned from 2TC`);
-        }
-
-        const providedEntities = parsedProvidedEntities(parsed);
-
-        const entity1 = {
-            NAME: providedEntities[0],
-            TYPE: Towers.getEntityType(providedEntities[0])
-        };
-
-        const entity2 = providedEntities[1]
-            ? {
-                NAME: providedEntities[1],
-                TYPE: Towers.getEntityType(providedEntities[1])
-            }
-            : null;
-
-        filteredCombos = filteredCombos.filter((combo) => {
-            towerNum = entityMatch(combo, entity1);
-            if (!entity2) return towerNum != 0; // If only 1 tower-query, return true for the combo if there was a tower match
-
-            otherTowerNum = entityMatch(combo, entity2, towerNum);
-            return towerNum + otherTowerNum == 3; // Ensure that one tower matched to tower 1, other matched to tower 2
-            // Note that failed matches return 0
-        });
-    }
-
-    if (parsed.version) {
-        filteredCombos = filteredCombos.filter((combo) => {
-            if (parsed.version.includes('.')) {
-                return parsed.version == combo.VERSION;
-            } else {
-                return parsed.version == combo.VERSION || combo.VERSION.startsWith(`${parsed.version}.`);
-            }
-        });
-    }
-
-    if (parsed.person) {
-        function personFilter(_, completion) {
-            return completion.PERSON.toString().toLowerCase().split(' ').join('_') == parsed.person.split(' ').join('_');
-        }
-        filteredCombos = filterByCompletion(personFilter, filteredCombos);
-    }
-
-    if (parsed.map) {
-        const mapAbbr = Maps.mapToIndexAbbreviation(parsed.map);
-        function mapFilter(map) {
-            return map == mapAbbr;
-        }
-        filteredCombos = filterByCompletion(mapFilter, filteredCombos);
-    }
-
-    if (parsed.map_difficulty) {
-        function mapDifficultyFilter(map) {
-            const mapCanonical = Aliases.toAliasCanonical(map);
-            return Maps.allMapsFromMapDifficulty(parsed.map_difficulty).includes(mapCanonical);
-        }
-        filteredCombos = filterByCompletion(mapDifficultyFilter, filteredCombos);
-    }
-
-    // Unless searching by map or person, the command user wants OG completions and not alt map spam
-    if (includeOnlyOG(parsed)) {
-        function ogFilter(_, completion) {
-            return completion.OG;
-        }
-        filteredCombos = filterByCompletion(ogFilter, filteredCombos);
-    }
-    return filteredCombos;
 }
 
 function includeOnlyOG(parsed) {
     return parsed.version || (!parsed.person && !parsed.map && !parsed.map_difficulty);
 }
 
-function parseProvidedDefinedEntities(parsed) {
-    return []
-        .concat(parsed.tower_upgrades)
-        .concat(parsed.heroes)
-        .filter((el) => el); // Remove null items
-}
-
 function parsedProvidedEntities(parsed) {
-    return []
-        .concat(parsed.tower_upgrades)
-        .concat(parsed.tower_paths)
-        .concat(parsed.towers)
-        .concat(parsed.heroes)
+    return [parsed.entity1, parsed.entity2]
         .filter((el) => el); // Remove null items
-}
-
-function filterByCompletion(filter, combos) {
-    for (let i = combos.length - 1; i >= 0; i--) {
-        combos[i].MAPS = Object.keys(combos[i].MAPS)
-            .filter((map) => filter(map, combos[i].MAPS[map]))
-            .reduce((completion, map) => {
-                completion[map] = combos[i].MAPS[map];
-                return completion;
-            }, {});
-
-        if (Object.keys(combos[i].MAPS).length === 0) combos.splice(i, 1);
-    }
-    return combos;
-}
-
-function entityMatch(combo, entity, excludeMatch) {
-    let comboTowers = [combo.TOWER_1, combo.TOWER_2];
-    // If a match was previously made, we don't want to match to it again
-    // This is to deal with `/2tc wiz wiz#bot` for necromancer wlp
-    if (excludeMatch) {
-        comboTowers[excludeMatch - 1] = null;
-    }
-    if (entity.TYPE == 'TOWER') {
-        return (
-            comboTowers
-                .map((t) => {
-                    if (!t) return null;
-                    towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
-                    return Towers.towerUpgradeToTower(towerUpgrade);
-                })
-                .indexOf(entity.NAME) + 1
-        );
-    } else if (entity.TYPE == 'TOWER_UPGRADE') {
-        return (
-            comboTowers
-                .map((t) => {
-                    if (!t) return null;
-                    towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
-                    return Aliases.getCanonicalForm(towerUpgrade);
-                })
-                .indexOf(entity.NAME) + 1
-        );
-    } else if (entity.TYPE == 'HERO') {
-        return (
-            comboTowers
-                .map((t) => {
-                    if (!t) return null;
-                    return t.NAME.toLowerCase();
-                })
-                .indexOf(entity.NAME) + 1
-        );
-    } else if (entity.TYPE == 'TOWER_PATH') {
-        return (
-            comboTowers
-                .map((t) => {
-                    if (!t) return null;
-                    upgradeArray = t.UPGRADE.split('-').map((u) => parseInt(u));
-                    pathIndex = upgradeArray.indexOf(Math.max(...upgradeArray));
-
-                    towerUpgrade = Aliases.toAliasNormalForm(t.NAME);
-                    towerBase = Towers.towerUpgradeToTower(towerUpgrade);
-                    return `${towerBase}#${Towers.allPaths()[pathIndex]}`;
-                })
-                .indexOf(entity.NAME) + 1
-        );
-    } else {
-        throw `Somehow received tower that is not in any of [tower, tower_upgrade, tower_path, hero]`;
-    }
 }
 
 module.exports = {

@@ -149,7 +149,7 @@ async function execute(interaction) {
     const hero2 = e2.hero ? Aliases.toIndexNormalForm(e2.hero) : null;
 
     let newparsed = parsed.reduce(
-        (combinedParsed, nextParsed, i) => i > 1 ? combinedParsed.merge(nextParsed) : combinedParsed,
+        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
         new Parsed()
     );
     newparsed.entity1 = entityType1 ?? entity1 ?? hero1;
@@ -233,7 +233,7 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
                 
                 let obj = {};
 
-                const specifiedTower = parsedProvidedEntities(parsed);
+                const specifiedTower = parseProvidedEntities(parsed);
                 displayFields.forEach((field)=>{
                     if (field == 'Link') obj.Link = boldOg(Index.genCompletionLink(completion));
                     if (completion[field]) return obj[field] = boldOg(completion[field]);
@@ -248,7 +248,7 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
 }
 
 function getDisplayCols(parsed) {
-    definiteTowers = parsedProvidedEntities(parsed);
+    definiteTowers = parseProvidedDefinedEntities(parsed);
     if (parsed.person) {
         if (definiteTowers.length == 2) {
             return ['version', 'map', 'Link'];
@@ -282,7 +282,7 @@ function getDisplayCols(parsed) {
 function embedTitle(parsed, combos) {
     const multipleCombos = combos.length > 1;
 
-    const towers = parsedProvidedEntities(parsed);
+    const towers = parseProvidedEntities(parsed);
 
     let title = multipleCombos ? 'All 2TC Combos ' : 'Only 2TC Combo ';
     if (parsed.person) title += `by ${parsed.person} `;
@@ -299,7 +299,7 @@ function embedTitle(parsed, combos) {
 }
 
 function embedTitleNoCombos(parsed) {
-    const towers = parsedProvidedEntities(parsed);
+    const towers = parseProvidedEntities(parsed);
 
     let title = 'No Combos found ';
     if (parsed.person) title += `by "${parsed.person}" `;
@@ -319,8 +319,15 @@ function includeOnlyOG(parsed) {
     return parsed.version || (!parsed.person && !parsed.map && !parsed.map_difficulty);
 }
 
-function parsedProvidedEntities(parsed) {
+function parseProvidedEntities(parsed) {
     return [parsed.entity1, parsed.entity2]
+        .filter((el) => el); // Remove null items
+}
+
+function parseProvidedDefinedEntities(parsed) {
+    return []
+        .concat(parsed.tower_upgrades)
+        .concat(parsed.heroes)
         .filter((el) => el); // Remove null items
 }
 

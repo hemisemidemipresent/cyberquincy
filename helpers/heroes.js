@@ -49,6 +49,7 @@ const HERO_NAME_TO_BLOONOLOGY_LINK = {
     sauda: 'https://pastebin.com/raw/8E2TSndk',
     psi: 'https://pastebin.com/raw/9h9aAPUm',
     geraldo: 'https://pastebin.com/raw/rksZWhTV',
+    corvus: 'https://pastebin.com/raw/JVnXdsqZ'
 };
 
 function accumulatedXpCurve(

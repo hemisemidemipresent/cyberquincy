@@ -1,8 +1,8 @@
 {
     "adora": [
         "ad",
-        "ador",
         "ado",
+        "ador",
         "dora",
         "priestess",
         "highpriestess",
@@ -25,15 +25,20 @@
         "brick",
         "bri"
     ],
+    "corvus":[
+        "corv",
+        "crv",
+        "crow",
+        "caw"
+    ],
     "churchill": [
         "captain-churchill",
-        "captain_churchill",
         "chirch",
         "church",
+        "hill",
         "captain",
         "tank",
         "winston",
-        "hill",
         "cap"
     ],
     "etienne": [
@@ -82,10 +87,14 @@
         "pat-fusty",
         "pf",
         "fu",
-        "patfu",
-        "pat_fu",
+        "fusty",
         "fro",
         "snowman"
+    ],
+    "psi": [
+        "psy",
+        "Ψ",
+        "sigh"
     ],
     "quincy": [
         "q",
@@ -94,19 +103,11 @@
         "quincey",
         "quinc",
         "quonc",
-        "quonce",
-        "quoncy",
         "cyber",
-        "cq",
-        "uincy"
+        "cq"
     ],
     "sauda": [
         "saud",
         "sau"
-    ],
-    "psi": [
-        "psy",
-        "Ψ",
-        "sigh"
     ]
 }

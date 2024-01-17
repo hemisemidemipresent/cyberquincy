@@ -109,7 +109,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
                 value: totalCost,
                 inline: true
             },
-            { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
+            { name: 'Incorrect/out of date information?', value: `please report them [here](${discord})`, inline: true }
         ])
         .setFooter({ text: footer })
         .setColor(cyber);

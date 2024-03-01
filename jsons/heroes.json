@@ -28,7 +28,7 @@
 		"levelModifier": 1.425
 	},
 	"geraldo": {
-		"cost": 700,
+		"cost": 750,
 		"levelModifier": 1
 	},
 	"gwen": {
@@ -36,7 +36,7 @@
 		"levelModifier": 1
 	},
 	"jones": {
-		"cost": 750,
+		"cost": 700,
 		"levelModifier": 1
 	},
 	"obyn": {

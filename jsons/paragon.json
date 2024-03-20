@@ -255,5 +255,53 @@
             "bd": 0,
             "pierce": 60
         }
+    },
+    "monkey_sub":{
+        "strike": {
+            "cooldown": 240,
+            "damage": 30000,
+            "bd": 30000,
+            "pierce": 30
+        },
+        "aftershock": {
+            "damage": 150,
+            "bd": 150,
+            "pierce": 50
+        },
+        "fallout": {
+            "damage": 10,
+            "md": 40,
+            "bd": 50,
+            "pierce": 120,
+            "rate": 0.1
+        },
+        "aura": {
+            "damage": 50,
+            "cd": 50,
+            "bd": 500,
+            "pierce": 1000
+        },
+        "dart": {
+            "damage": 40,
+            "md": 160,
+            "bd": 300,
+            "pierce": 1,
+            "rate": 0.15
+        },
+        "airburst": {
+            "damage": 40,
+            "md": 80,
+            "bd": 180,
+            "pierce": 9
+        },
+        "missile": {
+            "damage": 1000,
+            "cd": 1000,
+            "bd": 20000
+        },
+        "explosion": {
+            "damage": 350,
+            "pierce": 10
+        }
     }
 }

@@ -33,7 +33,8 @@ builder = new SlashCommandBuilder()
                         { name: 'Monkey Buccaneer (Navarch of the Seas)', value: 'monkey_buccaneer' },
                         { name: 'Engineer Monkey (Master Builder)', value: 'engineer_monkey' },
                         { name: 'Monkey Ace (Goliath Doomship)', value: 'monkey_ace' },
-                        { name: 'Wizard Monkey (Magus Perfectus)', value: 'wizard_monkey' }
+                        { name: 'Wizard Monkey (Magus Perfectus)', value: 'wizard_monkey' },
+                        { name: 'Monkey Sub (Nautic Siege Core)', value: 'monkey_sub' },
                     )
             )
             .addIntegerOption((option) =>
@@ -292,6 +293,37 @@ async function paragon_stats(interaction) {
         - **Wall of Fire** 
          - ${pa.wof.d}d, ${pa.wof.bd}bd, ${pa.wof.ed}ed, ${pa.wof.p}p
          - 0.2s, 9s lifespan [both degree independent]
+        `;
+    } else if (tower === 'monkey_sub') {
+        let pa = JSON.parse(JSON.stringify(paragonStats.monkey_sub));
+        let attacks = Object.keys(pa);
+        attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
+        desc = `**Final Strike Activated Ability**
+        - ${pa.strike.cooldown}s cooldown
+        - After disabling itself for 15s, it launches 3 missiles (targets first, close, strong?): ${pa.strike.d}d, ${pa.strike.bd}bd, ${pa.strike.p}p, each missile creates *aftershock* and *fallout*s on track where they land
+         - *aftershock*: ${pa.aftershock.d}d, ${pa.aftershock.bd}bd, ${pa.aftershock.p}p, stuns affected bloons for 15s if they weren’t popped initially
+         - *fallout*: each puddle has ${pa.fallout.d}d, ${pa.fallout.md}md, ${pa.fallout.bd}bd, ${pa.fallout.p}p, ${pa.fallout.s}s, 36s lifespan
+        
+        ## SUBMERGED
+        **Radiation Aura**
+        - ${pa.aura.d}d, ${pa.aura.cd}cd, ${pa.aura.bd}bd, ${pa.aura.p}p, 0.5s, 52r
+         - decamo and degrow
+         - attack speed is not affected by degrees
+        **Support** (I don't think this scales w/ degree??)
+        Gives all normal Energizer buffs, AND:
+        - 5x damage, 3x pierce, __150%s*__ to Heroes in range *(This makes heroes attack 50% **slower**)
+        - 7x damage, 3x pierce to other Monkey Subs in range (note: does not affect First Strike ability)
+        - 10% ability cooldown reduction for all Paragons on screen
+        
+        ## UNSUBMERGED
+        **Dart**
+        - ${pa.dart.d}d, ${pa.dart.md}md, ${pa.dart.bd}bd, ${pa.dart.s}s, 1p (does not change with degree), splits into 3 *airburst*s on impact
+         - *airburst*: ${pa.airburst.d}d, +${pa.airburst.md}md, ${pa.airburst.bd}bd, ${pa.airburst.p}p
+        **Missile**
+        - **Pre-Emptive Strike**
+        - ${pa.missile.d}d, +${pa.missile.cd}cd, ${pa.missile.bd}bd
+         - emits *explosion* (${pa.explosion.d}d, ${pa.explosion.p}p, 12r blast)
+                
         `;
     }
     let messageEmbed = new Discord.EmbedBuilder()
@@ -638,3 +670,4 @@ module.exports = {
     data: builder,
     execute
 };
+

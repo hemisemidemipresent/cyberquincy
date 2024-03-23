@@ -255,6 +255,17 @@
         "thu": "https://media.discordapp.net/attachments/770247322633633792/1091540831585976451/onetwotree.png",
         "e": "1/1"
     },
+    "sulfur_springs": {
+        "ver": 41,
+        "len":32.177,
+        "lenStr": 32.177,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "yes",
+        "los": "yes",
+        "thu": "https://media.discordapp.net/attachments/770247322633633792/1219794798345715782/1000.png",
+        "e": "1/1"
+    },
     "covered_garden": {
         "ver": 33,
         "len": 19.8,
@@ -387,8 +398,8 @@
     },
     "water_park": {
         "ver": 38,
-        "len": [999, 999],
-        "lenStr": "999 Top\n999 Bottom",
+        "len": [18.1, 26.4],
+        "lenStr": "18.1 Vertical\n26.4 Horizontal\n",
         "obj": 0,
         "Cos": "N/A",
         "wa%": "Yes",
@@ -594,8 +605,13 @@
     },
     "x_factor": {
         "ver": 22,
-        "len": 18.1,
-        "lenStr": "18.1",
+        "len": [
+            21.0,
+            14.5,
+            20.9,
+            15.8
+        ],
+        "lenStr": "21.0\n14.5\n20.9\n15.8",
         "obj": 1,
         "Cos": "2000",
         "wa%": "N/A",
@@ -672,9 +688,9 @@
             11.7, 
             10.9,
             7.8,
-            4.3
+            5.2
         ],
-        "lenStr": "7.2 r6 - r17\n9.0 r18 - r35\n11.7 r36 - r53\n10.9 r54 - r71\n7.8 r72 - r89\n4.3 r90 - r∞",
+        "lenStr": "7.2 r6 - r17\n9.0 r18 - r35\n11.7 r36 - r53\n10.9 r54 - r71\n7.8 r72 - r89\n5.2 r90 - r∞",
         "obj": 0,
         "Cos": "N/A",
         "wa%": "Yes",
@@ -684,8 +700,8 @@
     },
     "dark_path": {
         "ver": 39,
-        "len": [],
-        "lenStr": "???",
+        "len": 18.8,
+        "lenStr": "18.8",
         "obj": 2,
         "Cos": "5500",
         "wa%": "No",
@@ -853,5 +869,16 @@
         "los": "no",
         "thu": "https://cdn.discordapp.com/attachments/770247322633633792/851658653336731678/Screenshot_200.png",
         "e": "2/4"
+    },
+    "glacial_trail": {
+        "ver": 26,
+        "len": 17.7,
+        "lenStr": 17.7,
+        "obj": 0,
+        "Cos": "N/A",
+        "wa%": "yes",
+        "los": "yes",
+        "thu": "https://cdn.discordapp.com/attachments/770247322633633792/851658653336731678/Screenshot_200.png",
+        "e": "1/1"
     }
 }

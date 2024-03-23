@@ -26,7 +26,7 @@ async function execute(interaction) {
         .setDescription(`Here is your info for ${name}`)
         .setColor(cyber)
         .addFields([
-            { name: 'Map length(RBS)', value: `${m.lenStr}`, inline: true },
+            { name: 'Map length', value: `${m.lenStr} RBS\n(on hard mode)`, inline: true },
             { name: 'Object count:', value: `${m.obj}`, inline: true },
             { name: 'Total $ to clear out all the objects', value: `$${m.Cos}`, inline: true },
             { name: 'Version added:', value: `${m.ver}`, inline: true },

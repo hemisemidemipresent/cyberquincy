@@ -1,0 +1,458 @@
+[
+    [
+        {
+            "investmentRequired": 0,
+            "tier": 1,
+            "knowledgeSets": [
+                {
+                    "level": 1,
+                    "mmCost": 0,
+                    "knowledges": [
+                        {
+                            "id": "FastTackAttacks",
+                            "prerequisites": []
+                        },
+                        {
+                            "id": "IncreasedLifespan",
+                            "prerequisites": []
+                        },
+                        {
+                            "id": "ExtraDartPops",
+                            "prerequisites": []
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "mmCost": 0,
+                    "knowledges": [
+                        {
+                            "id": "PoppyBlades",
+                            "prerequisites": [
+                                "HardTacks"
+                            ]
+                        },
+                        {
+                            "id": "HardTacks",
+                            "prerequisites": [
+                                "FastTackAttacks"
+                            ]
+                        },
+                        {
+                            "id": "FastGlue",
+                            "prerequisites": [
+                                "FastTackAttacks"
+                            ]
+                        },
+                        {
+                            "id": "CheapRangs",
+                            "prerequisites": [
+                                "IncreasedLifespan"
+                            ]
+                        },
+                        {
+                            "id": "FraggyFrags",
+                            "prerequisites": [
+                                "IncreasedLifespan"
+                            ]
+                        },
+                        {
+                            "id": "CheapRangs",
+                            "prerequisites": [
+                                "IncreasedLifespan"
+                            ]
+                        },
+                        {
+                            "id": "CrossbowReach",
+                            "prerequisites": [
+                                "ExtraDartPops"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "investmentRequired": 5,
+            "tier": 2,
+            "knowledgeSets": [
+                {
+                    "level": 3,
+                    "mmCost": 0,
+                    "knowledges": [
+                        {
+                            "id": "BigInferno",
+                            "prerequisites": [
+                                "PoppyBlades"
+                            ]
+                        },
+                        {
+                            "id": "IcyChill",
+                            "prerequisites": [
+                                "HardTacks"
+                            ]
+                        },
+                        {
+                            "id": "MoreSplattyGlue",
+                            "prerequisites": [
+                                "FastGlue"
+                            ]
+                        },
+                        {
+                            "id": "BudgetClusters",
+                            "prerequisites": [
+                                "FraggyFrags"
+                            ]
+                        },
+                        {
+                            "id": "ExtraBounce",
+                            "prerequisites": [
+                                "CheapRangs"
+                            ]
+                        },
+                        {
+                            "id": "4And4",
+                            "prerequisites": [
+                                "CrossbowReach"
+                            ]
+                        },
+                        {
+                            "id": "ForceVsForce",
+                            "prerequisites": [
+                                "CrossbowReach"
+                            ]
+                        },
+                        {
+                            "id": "AmbidextrousRangs",
+                            "prerequisites": [
+                                "ExtraBounce"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "investmentRequired": 8,
+            "tier": 3,
+            "knowledgeSets": [
+                {
+                    "level": 4,
+                    "mmCost": 240,
+                    "knowledges": [
+                        {
+                            "id": "SoCold",
+                            "prerequisites": [
+                                "IcyChill"
+                            ]
+                        },
+                        {
+                            "id": "AviationGradeGlue",
+                            "prerequisites": [
+                                "MoreSplattyGlue"
+                            ]
+                        },
+                        {
+                            "id": "MegaMauler",
+                            "prerequisites": [
+                                "AviationGradeGlue",
+                                "HardPress"
+                            ]
+                        },
+                        {
+                            "id": "HardPress",
+                            "prerequisites": [
+                                "ExtraBounce"
+                            ]
+                        },
+                        {
+                            "id": "MasterDoubleCross",
+                            "prerequisites": [
+                                "4And4"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "investmentRequired": 10,
+            "tier": 4,
+            "knowledgeSets": [
+                {
+                    "level": 5,
+                    "mmCost": 500,
+                    "knowledges": [
+                        {
+                            "id": "BigCryoBlast",
+                            "prerequisites": [
+                                "SoCold"
+                            ]
+                        },
+                        {
+                            "id": "Hypothermia",
+                            "prerequisites": [
+                                "SoCold"
+                            ]
+                        },
+                        {
+                            "id": "CheaperSolution",
+                            "prerequisites": [
+                                "AviationGradeGlue"
+                            ]
+                        },
+                        {
+                            "id": "ViolentImpact",
+                            "prerequisites": [
+                                "BudgetClusters"
+                            ]
+                        },
+                        {
+                            "id": "BonusMonkey",
+                            "prerequisites": [
+                                "MasterDoubleCross"
+                            ]
+                        },
+                        {
+                            "id": "LongTurbo",
+                            "prerequisites": [
+                                "HardPress"
+                            ]
+                        },
+                        {
+                            "id": "ComeOnEverybody",
+                            "prerequisites": [
+                                "BonusMonkey"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "level": 6,
+                    "mmCost": 1000,
+                    "knowledges": [
+                        {
+                            "id": "MoreCash",
+                            "prerequisites": [
+                                "CheaperSolution",
+                                "BonusMonkey"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "investmentRequired": 0,
+            "tier": 1,
+            "knowledgeSets": [
+                {
+                    "level": 1,
+                    "mmCost": 0,
+                    "knowledges": [
+                        {
+                            "id": "NavalUpgrades",
+                            "prerequisites": []
+                        },
+                        {
+                            "id": "AirforceUpgrades",
+                            "prerequisites": []
+                        },
+                        {
+                            "id": "EliteMilitaryTraining",
+                            "prerequisites": []
+                        }
+                    ]
+                },
+                {
+                    "level": 2,
+                    "mmCost": 0,
+                    "knowledges": [
+                        {
+                            "id": "BigBunch",
+                            "prerequisites": [
+                                "NavalUpgrades"
+                            ]
+                        },
+                        {
+                            "id": "AcceleratedAerodarts",
+                            "prerequisites": [
+                                "AirforceUpgrades"
+                            ]
+                        },
+                        {
+                            "id": "CeramicShock",
+                            "prerequisites": [
+                                "EliteMilitaryTraining"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "investmentRequired": 4,
+            "tier": 2,
+            "knowledgeSets": [
+                {
+                    "level": 3,
+                    "mmCost": 0,
+                    "knowledges": [
+                        {
+                            "id": "BreakingBallistic",
+                            "prerequisites": [
+                                "NavalUpgrades"
+                            ]
+                        },
+                        {
+                            "id": "FasterTakedowns",
+                            "prerequisites": [
+                                "BigBunch"
+                            ]
+                        },
+                        {
+                            "id": "TargetedPineapples",
+                            "prerequisites": [
+                                "AcceleratedAerodarts"
+                            ]
+                        },
+                        {
+                            "id": "RapidRazors",
+                            "prerequisites": [
+                                "AirforceUpgrades"
+                            ]
+                        },
+                        {
+                            "id": "CheaperMaiming",
+                            "prerequisites": [
+                                "CeramicShock"
+                            ]
+                        },
+                        {
+                            "id": "ExtraBurnyStuff",
+                            "prerequisites": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "investmentRequired": 8,
+            "tier": 3,
+            "knowledgeSets": [
+                {
+                    "level": 4,
+                    "mmCost": 240,
+                    "knowledges": [
+                        {
+                            "id": "QuadBurst",
+                            "prerequisites": [
+                                "BreakingBallistic"
+                            ]
+                        },
+                        {
+                            "id": "TradeAgreements",
+                            "prerequisites": [
+                                "FasterTakedowns"
+                            ]
+                        },
+                        {
+                            "id": "GunCoolant",
+                            "prerequisites": [
+                                "TargetedPineapples"
+                            ]
+                        },
+                        {
+                            "id": "PaintStripper",
+                            "prerequisites": [
+                                "ExtraBurnyStuff"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "level": 5,
+                    "mmCost": 500,
+                    "knowledges": [
+                        {
+                            "id": "ChargedChinooks",
+                            "prerequisites": [
+                                "RapidRazors"
+                            ]
+                        },
+                        {
+                            "id": "AeronauticSubsidy",
+                            "prerequisites": [
+                                "GunCoolant"
+                            ]
+                        },
+                        {
+                            "id": "MasterDefender",
+                            "prerequisites": [
+                                "CheaperMaiming"
+                            ]
+                        },
+                        {
+                            "id": "BudgetBattery",
+                            "prerequisites": [
+                                "PaintStripper"
+                            ]
+                        },
+                        {
+                            "id": "Wingmonkey",
+                            "prerequisites": [
+                                "AeronauticSubsidy"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "investmentRequired": 14,
+            "tier": 4,
+            "knowledgeSets": [
+                {
+                    "level": 6,
+                    "mmCost": 1000,
+                    "knowledges": [
+                        {
+                            "id": "SubAdmiral",
+                            "prerequisites": [
+                                "QuadBurst"
+                            ]
+                        },
+                        {
+                            "id": "MilitaryConscription",
+                            "prerequisites": [
+                                "TradeAgreements"
+                            ]
+                        },
+                        {
+                            "id": "AdvancedLogistics",
+                            "prerequisites": [
+                                "AeronauticSubsidy",
+                                "DoorGunner"
+                            ]
+                        },
+                        {
+                            "id": "BigBloonSabotage",
+                            "prerequisites": [
+                                "SubAdmiral",
+                                "MasterDefender"
+                            ]
+                        },
+                        {
+                            "id": "DoorGunner",
+                            "prerequisites": [
+                                "ChargedChinooks"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+]

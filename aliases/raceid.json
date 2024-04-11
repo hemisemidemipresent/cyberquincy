@@ -1,0 +1,611 @@
+{
+    "2018-12-13": [
+        "test"
+    ],
+    "2018-12-14": [
+        "first",
+        "first!"
+    ],
+    "PrimaryQualifiers": [
+        "pq",
+        "pqualifiers",
+        "primary-qualifiers"
+    ],
+    "RWandG": [
+        "RWG",
+        "red-white-green",
+        "red-white-and-green"
+    ],
+    "HardyRacers": [
+        "hardy",
+        "hardy-racers"
+    ],
+    "HNY": [
+        "new-year",
+        "happy-new-year",
+        "happy-new-years"
+    ],
+    "MilitaryQualifiers": [
+        "mqualifiers",
+        "military-qualifiers"
+    ],
+    "SharpTurns_ForReal": [
+        "sharp-turns",
+        "sturns"
+    ],
+    "aGoodAlternative": [
+        "aga",
+        "alternative",
+        "good-alternative"
+    ],
+    "Po-tay-toes": [
+        "potato",
+        "potatoes",
+        "potaytoes"
+    ],
+    "BurninRubber": [
+        "burning-rubber",
+        "burnin-rubber",
+        "rubber"
+    ],
+    "Let_it_go": [
+        "let-it-go",
+        "elsa",
+        "lig"
+    ],
+    "jsfgfw9y": [
+        "monkeying",
+        "monkeying-moon",
+        "monkeying-around-on-the-moon",
+        "monkeying-around",
+        "maotm"
+    ],
+    "EasyCHIMPS": [
+        "easy-chimps",
+        "an-easy-chimps-race",
+        "chimps-race"
+    ],
+    "DoYouNeedAHug": [
+        "do-you-need-a-hug",
+        "hug",
+        "do-you-need-a-hug?"
+    ],
+    "Last_Cent": [
+        "last-cent"
+    ],
+    "BoomBoomPow": [
+        "boom-boom-pow"
+    ],
+    "Deflation": [
+        "deflation-race"
+    ],
+    "CamoTrap": [
+        "camo-trap"
+    ],
+    "ForwardThinking": [
+        "forward-thinking"
+    ],
+    "HauntedSpeed": [
+        "haunted-speed"
+    ],
+    "BringingArDestruction": [
+        "b.a.d.",
+        "badv1",
+        "bringing-around-destruction",
+        "bringing-ar-destruction"
+    ],
+    "BackToTheBasics": [
+        "back-to-the-basics",
+        "back-to-basics"
+    ],
+    "Sinkorswim": [
+        "sink-or-swim",
+        "sink-swim"
+    ],
+    "quicksand": [
+        "one-foot-in-quicksand",
+        "quick-sand",
+        "one-foot"
+    ],
+    "Juggathing": [
+        "jugga-thing",
+        "jugga-things",
+        "whatarethosejuggathingscalled"
+    ],
+    "LittleOne": [
+        "little-one",
+        "give-me-that",
+        "you-have-the-little-one",
+        "givemethatyouhavethelittleone"
+    ],
+    "TimeFlies": [
+        "anniversary",
+        "2x-rewards",
+        "time-flies",
+        "anniversary-weekend"
+    ],
+    "HistoryBooks": [
+        "history",
+        "thisisoneforthehistorybooks",
+        "history-book",
+        "history-books"
+    ],
+    "whosthatpokemon": [
+        "who's-that-pokemon",
+        "pokemon"
+    ],
+    "NewTricks": [
+        "new-tricks-old-track",
+        "new-tricks"
+    ],
+    "jxzlma0j": [
+        "its-a-boat",
+        "a-boat",
+        "it's-a-boat"
+    ],
+    "Cowabombga": [
+        "cow"
+    ],
+    "SweetTricksYo": [
+        "sweet-tricks-yo"
+    ],
+    "DoubleTrouble": [
+        "prepare-for-trouble",
+        "make-it-double",
+        "prepare-for-trouble!",
+        "preparefortrouble!makeitdouble"
+    ],
+    "BroomBroom": [
+        "broom-broom"
+    ],
+    "A-maize-ing": [
+        "Amaizeing"
+    ],
+    "SquadGoals": [
+        "squad-goals"
+    ],
+    "Whoosh": [
+        "woosh",
+        "whooosh",
+        "whoooosh"
+    ],
+    "TheyHating": [
+        "stalling",
+        "hating",
+        "theyseemestalling,theyhating",
+        "theyseemestallingtheyhating"
+    ],
+    "ThereCanBeOnlyOne": [
+        "there-can-only-be-one"
+    ],
+    "InTheWall": [
+        "in-the-wall"
+    ],
+    "FreeTheMonkey": [
+        "free-the-monkey"
+    ],
+    "ChooseYourChampion": [
+        "choose-your-champion"
+    ],
+    "BattenDownTheHatches": [
+        "batten-down-the-hatches",
+        "hatches"
+    ],
+    "Allintogether": [
+        "all-in-together"
+    ],
+    "Slowitdown": [
+        "slow-it-down"
+    ],
+    "VeryVeryFrightening": [
+        "very-very-frightening"
+    ],
+    "CR:BADv2*": [
+        "badv2",
+        "b.a.d.v2",
+        "b.a.d.2",
+        "bringing-around-destruction2",
+        "bringing-ar-destruction2"
+    ],
+    "Hedgeyourbets*": [
+        "hedge-your-bets"
+    ],
+    "OneForAllAndAllForOne": [
+        "one",
+        "one-for-all",
+        "all-for-one",
+        "oneforallallforone"
+    ],
+    "SomeCamoWithYourCamo": [
+        "some-camo",
+        "your-camo",
+        "some-camo-with-your-camo"
+    ],
+    "IceAge": [
+        "ice-age"
+    ],
+    "SewerBloonway": [
+        "sewer-bloonway"
+    ],
+    "DangerouslyDeceivingTowers": [
+        "dangerously-deceiving-towers"
+    ],
+    "SnowLaughingMatter": [
+        "snow-laughing-matter"
+    ],
+    "Crossover": [
+        "cross",
+        "over",
+        "cross-over"
+    ],
+    "WhatsThePlan": [
+        "what's-the-plan",
+        "whats-the-plan"
+    ],
+    "Coasting": [],
+    "OneOfAKind": [
+        "one-of-a-kind"
+    ],
+    "MagicFire": [
+        "magic-fire"
+    ],
+    "NowYouSeeMe": [
+        "now-you-see-me"
+    ],
+    "BeMine": [
+        "valentine",
+        "valentines",
+        "valentines-special",
+        "be-mine"
+    ],
+    "PlayItByEar": [
+        "play-it-by-ear"
+    ],
+    "SeasTheDay": [
+        "seas-the-day"
+    ],
+    "SpintacularV2": [
+        "spintacular"
+    ],
+    "MOABBusters": [
+        "moab-busters",
+        "m.o.a.b.-busters"
+    ],
+    "HomeStay": [
+        "home-stay"
+    ],
+    "Antifreeze": [
+        "anti-freeze"
+    ],
+    "k8s2agpe": [
+        "slow-but-no-okay",
+        "slow-but-not-ok"
+    ],
+    "Levelup": [
+        "level-up"
+    ],
+    "CarGoBeepBeep": [
+        "car-go-beep-beep"
+    ],
+    "BackwardsThinking": [
+        "backwards-thinking"
+    ],
+    "HighestPoint": [
+        "highest-point"
+    ],
+    "LoompaOompa": [
+        "loompa-oompa"
+    ],
+    "TheAStream": [
+        "the-a-stream"
+    ],
+    "AdmiralOnDuty": [
+        "admiral-on-duty"
+    ],
+    "CurbedCubism": [
+        "curbed-cubism"
+    ],
+    "ReverseN": [
+        "reverse-'n",
+        "reverse-n"
+    ],
+    "ThreeStump": [
+        "3-stump",
+        "three-stump"
+    ],
+    "Crackell": [
+        "crackel"
+    ],
+    "Subcity": [
+        "sub-city"
+    ],
+    "HocusLotus": [
+        "hocus-lotus"
+    ],
+    "RaceHow": [
+        "how"
+    ],
+    "PumpkinPat": [
+        "pumpkin-pat"
+    ],
+    "DarkDarkGoose": [
+        "dark-dark-goose"
+    ],
+    "Activated": [
+        "activate"
+    ],
+    "ChutentHave": [
+        "chuten't-have",
+        "chutent-have"
+    ],
+    "AbnormalPrimary": [
+        "abnormal-primary"
+    ],
+    "kedm2ch1": [
+        "barrel-of-monkeys"
+    ],
+    "WaterWeHaveHere": [
+        "water-we-have-here"
+    ],
+    "TheFlightOfThePigeon": [
+        "pigeon",
+        "flight-of-the-pigeon"
+    ],
+    "GalaxyOne": [
+        "galaxy",
+        "galaxy-one"
+    ],
+    "LittleTownStrongMoabs": [
+        "little-town-strong-moabs",
+        "little-town-strong-m.o.a.b.s"
+    ],
+    "kfrog0t6": [
+        "golden-ticket"
+    ],
+    "SomebodyThatIUsedToKnow": [
+        "somebody-that-i-used-to-know"
+    ],
+    "kgbn8xt4": [
+        "decoded"
+    ],
+    "kgka79yd": [
+        "spook"
+    ],
+    "WigglinAndWobblin": [
+        "a-wigglin'",
+        "a-wigglin",
+        "a-wobblin'",
+        "a-wobblin",
+        "awigglinandawobblin",
+        "awigglin'andawobblin'"
+    ],
+    "ErrorNotFound": [
+        "error-not-found"
+    ],
+    "TheGreat100mDash": [
+        "the-great-100m-dash"
+    ],
+    "khpmwgdf": [
+        "doom-and-tomb"
+    ],
+    "TanksGiving_khzkg2k4": [
+        "tanks-giving"
+    ],
+    "WorkingOnForm_ki9pdqx4": [
+        "working-on-form"
+    ],
+    "Decrypting_kijmo8pe": [
+        "decrypting"
+    ],
+    "XMarksTheSpot_kijmpsc6": [
+        "X",
+        "x-marks-the-spot"
+    ],
+    "MerryChristmas_kijmqu10": [
+        "merry-christmas"
+    ],
+    "OutOfControl_kijmum70": [
+        "out-of-control"
+    ],
+    "DownhillAvalanche_kjnpk23r": [
+        "downhill-avalanche"
+    ],
+    "Moon_Guardian_kjxm9235": [
+        "moon-guardian"
+    ],
+    "AlternateFlow_kk7r1qa4": [
+        "alternate-flow"
+    ],
+    "EndOfTheRoad_kkhbuykv": [
+        "thisistheendoftheroad"
+    ],
+    "kkq76y9o": [
+        "race-this"
+    ],
+    "RoyalFlush_kl0byvjc": [
+        "royal-flush"
+    ],
+    "kl7av0t3": [
+        "double-double-trouble-trouble"
+    ],
+    "YouSnoozeYouLose_kllq7159": [
+        "you-snooze-you-lose"
+    ],
+    "DarkDangerousTimes_klvmg4xa": [
+        "dark-dangerous-times"
+    ],
+    "km5pephs": [
+        "yin-and-yang"
+    ],
+    "B_B_B_Boat_kmfnqeev": [
+        "b-b-b-boat"
+    ],
+    "kmpqiykw": [
+        "caught-outside-the-loop"
+    ],
+    "kmztbz9x": [
+        "no-pain-no-gain"
+    ],
+    "Patience_kn9dthf7": [
+        "patience"
+    ],
+    "Work_da_munky_knjp07a8": [
+        "work-da-munky"
+    ],
+    "This_is_my_last_resort_knttxn1d": [
+        "this-is-my-last-resort"
+    ],
+    "4_1_14_3_5_29_33_30_43_32_34_ko3q7okr": [
+        "4_1_14_3_5_29_33_30_43_32_34",
+        "4_1_14_3_5_29_33_30_43_32_34!",
+        "dance-monkey",
+        "dance-monkey!"
+    ],
+    "Thin_Ice_kodre2s1": [
+        "thin-ice"
+    ],
+    "Debmaerts_konuuzvl": [
+        "Debmaerts"
+    ],
+    "koxurryx": [
+        "dr-monkey's-race",
+        "dr.-monkey's-race",
+        "dr-monkeys-race",
+        "dr.-monkeys-race"
+    ],
+    "kp7qjbga": [
+        "slice-and-dice"
+    ],
+    "Corn-gratulations_kpiqnmog": [
+        "randy",
+        "corngrats",
+        "corngratulations",
+        "corn-gratulations"
+    ],
+    "Who_wants_to_be_a_millionaire_kprhx8qn": [
+        "whowantstobeamillionaire",
+        "millionaire",
+        "whowanttobeamillionaire"
+    ],
+    "Projecting_kq1s5xh9": [
+        "Projecting"
+    ],
+    "Cracking_Up_kqa9h0l5": [
+        "cracking-up"
+    ],
+    "Captain_Spice_kqlp06t0": [
+        "captain-spice"
+    ],
+    "The_Land_Befour_Time_kqvuwiu4": [
+        "the-land-befour-time",
+        "the-land-before-time",
+        "land-befour-time",
+        "land-before-time"
+    ],
+    "Machine_learning_kr5ueub8": [
+        "machine-learning"
+    ],
+    "krfl1to5": [
+        "chimptastic"
+    ],
+    "Giving_110_percent_krmwt3bz": [
+        "giving-110-percent",
+        "giving-110%"
+    ],
+    "krzji4dd": [
+        "exponential",
+        "exp4",
+        "exponential-4",
+        "exponential-four"
+    ],
+    "Unlucky_ks9t6px3": [
+        "unlucky"
+    ],
+    "Bad_to_the_bone_ksjjgwof": [
+        "bad-to-the-bone"
+    ],
+    "Tappity_Tap_Tap_kstryaji": [
+        "tappity-tap-tap"
+    ],
+    "Triplicity_kt3tush7": [
+        "triplicity"
+    ],
+    "Ready_Set_No_ktdogfkw": [
+        "ready-set-no"
+    ],
+    "Pondering_Pat_ktnvfjkz": [
+        "pondering-pat"
+    ],
+    "Few_Two_Many_ktxtepn9": [
+        "few-two-many",
+        "few-too-many"
+    ],
+    "ku7sesrm": [
+        "bloons-of-the-corn"
+    ],
+    "Bubblewrap_in_the_morning_kuhqmi73": [
+        "bubblewrap",
+        "bubblewrap-in-the-morning"
+    ],
+    "kurtyd0l": [
+        "404"
+    ],
+    "kv1sirf5": [
+        "a_b_c_d_e_f_g"
+    ],
+    "kvbtr1qx": [
+        "2_3_5_7_11"
+    ],
+    "Dark_side_of_the_Moon_kvltltfk": [
+        "dark_side_of_the_moon",
+        "dark_moon",
+        "dark_side"
+    ],
+    "A_Stroll_in_the_Park_hyx8": [
+        "A_Stroll_in_the_Park"
+    ],
+    "kw5lwbk6": [
+        "something_else"
+    ],
+    "Bad_egg_kwfm6jpk": [
+        "bad_egg"
+    ],
+    "ekaR_kwpu00a3": [
+        "ekar"
+    ],
+    "Captarn_kwzsz43l": [
+        "captarn"
+    ],
+    "Lotus_of_the_jungle_kx8dwx14": [
+        "lotus_of_the_jungle"
+    ],
+    "Chracetmas_kx8dxktj": [
+        "Chracetmas",
+        "christmas"
+    ],
+    "New_Race_New_You_kx8dxt2b": [
+        "new_race",
+        "new_you",
+        "new_race_new_you"
+    ],
+    "Making_waves_kx8dyahy": [
+        "making_waves"
+    ],
+    "505_Not_phound_kydqb6ke": [
+        "505_not_phound"
+    ],
+    "Loop_De_Loop_kynt6aj9": [
+        "loop_de_loop"
+    ],
+    "Top_5_Percent_kyxua6rl": [
+        "top_5_percent",
+        "top5%"
+    ],
+    "Trowel_and_error_kz7sfc4l": [
+        "trowel",
+        "trower_and_error"
+    ],
+    "30_Speed_kzhndbga": [
+        "30_speed"
+    ]
+}

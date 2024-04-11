@@ -1,0 +1,17 @@
+{
+    "shooty_turret": ["shooty", "turret", "turr"],
+    "stack_of_old_nails": ["stack", "nails"],
+    "creepy_idol": ["creep", "creepy", "idol"],
+    "jar_of_pickles": ["jar", "pickles", "pick"],
+    "see_invisibility_potion": ["invis", "see_invis", "see", "invisibility_pot"],
+    "tube_of_amaz-o-glue": ["tube", "aoglue", "amaz_o_glue"],
+    "sharpening_stone": ["sharpen", "sharpening", "sstone"],
+    "worn_hero's_cape": ["hcape", "heros_cape"],
+    "blade_trap": ["gerstrom"],
+    "bottle_of_'gerry's_fire'_hot_sauce": ["gerry's_fire", "gfire", "hot_sauce"],
+    "fertilizer": ["fert"],
+    "pet_rabbit": ["rabbit"],
+    "rejuv_potion": ["rejuv", "rejuv_pot", "revujination_potion", "rejuvination_pot"],
+    "genie_bottle": ["genie"],
+    "paragon_power_totem": ["paragon_totem", "ptotem"]
+}

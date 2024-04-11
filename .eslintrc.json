@@ -1,0 +1,20 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "indent": ["warn", 4, {"SwitchCase": 1}],
+        "no-case-declarations": "off",
+        "no-inner-declarations": "off",
+        "no-undef": "off",
+        "object-curly-spacing": ["warn", "always"],
+        "semi": ["warn", "always"],
+        "space-in-parens":["warn", "never"]
+    }
+}

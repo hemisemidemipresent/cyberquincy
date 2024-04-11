@@ -1,0 +1,62 @@
+{
+    "standard": [
+        "std",
+        "stndrd",
+        "stdrd",
+        "normal"
+    ],
+    "primaryonly": [
+        "primary",
+        "prmy",
+        "pmy"
+    ],
+    "deflation": [
+        "defl",
+        "def",
+        "deflate"
+    ],
+    "militaryonly": [
+        "mil",
+        "military",
+        "milt"
+    ],
+    "apopalypse": [
+        "apop"
+    ],
+    "reverse": [
+        "rev",
+        "revrse"
+    ],
+    "magiconly": [
+        "magonly",
+        "magic"
+    ],
+    "doublehp": [
+        "dhp",
+        "dhpmoab",
+        "dhpmoabs"
+    ],
+    "halfcash": [
+        "half_cash",
+        "hcc",
+        "hc",
+        "half"
+    ],
+    "abr": [
+        "alternate",
+        "alternatebloonsrounds",
+        "alt"
+    ],
+    "impoppable": [
+        "impop",
+        "impopp",
+        "imp"
+    ],
+    "chimps": [
+        "chmp",
+        "chmps"
+    ],
+    "predet_chimps": [
+        "predet"
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "beginner": [
+        "beg"
+    ],
+    "intermediate": [
+        "int"
+    ],
+    "advanced": [
+        "adv"
+    ],
+    "expert": [
+        "exp",
+        "expr",
+        "exprt"
+    ]
+}

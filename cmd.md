@@ -1,0 +1,1 @@
+There is currently no "list of commands"-style documentation, however one can easily find all of cyber quincy's slash comamnds by scrolling through the discord list

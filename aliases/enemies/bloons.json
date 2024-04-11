@@ -1,0 +1,15 @@
+{
+    "red": ["reed"],
+    "blue": ["blu"],
+    "green": ["gren"],
+    "yellow": ["yello"],
+    "pink": ["pnk"],
+    "black": [],
+    "white": ["wite"],
+    "lead": ["metal"],
+    "purple": ["purpur","purp"],
+    "zebra": ["oreo"],
+    "rainbow": ["spectrum"],
+    "ceramic": ["ceram"],
+    "super_ceramic": ["sceram"]
+}

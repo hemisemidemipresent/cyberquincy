@@ -248,7 +248,7 @@ async function calc(interaction) {
 function costOfHero(hero, difficulty, numDiscounts) {
     const mediumCost = heroes[hero].cost;
     if (!mediumCost) throw `${hero} does not have entry in heroes.json`;
-    return bHelper.difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts);
+    return bHelper.difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts, true);
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly

@@ -1,7 +1,9 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
 const gHelper = require('../helpers/general.js');
+const bHelper = require('./bloons-general');
 const heroes = require('../jsons/heroes.json');
+const gerrysShop = require('../jsons/geraldos_shop.json');
 
 BASE_XP_TO_GET_LEVEL = [
     null, // Slot for non-existent level-0
@@ -145,6 +147,18 @@ function levelingCurve(
     });
 }
 
+function costOfHero(hero, difficulty, numDiscounts) {
+    const mediumCost = heroes[hero].cost;
+    if (!mediumCost) throw `${hero} does not have an entry in heroes.json`;
+    return bHelper.heroDifficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts);
+}
+
+function costOfGerryShopItem(item, difficulty) {
+    const mediumCost = gerrysShop[item];
+    if (!mediumCost) throw `${item} does not have an entry in geraldos_shop.json`;
+    return bHelper.difficultyDiscountPriceMult(mediumCost, difficulty, 0, true);
+}
+
 function isHero(candidate) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     return allHeroes().includes(candidate.toLowerCase());
@@ -171,6 +185,8 @@ module.exports = {
     HERO_NAME_TO_BLOONOLOGY_LINK,
     levelingCurve,
     levelingChart,
+    costOfHero,
+    costOfGerryShopItem,
     isHero,
     allHeroes,
     allGerrysShopItems,

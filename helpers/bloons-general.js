@@ -5,11 +5,11 @@ const PRICE_MULTS = {
     impoppable: 1.2
 };
 
-NUM_DISCOUNTS_TO_FACTOR = {
-    0: 1,
-    1: 0.85,
-    2: 0.8,
-    3: 0.75
+const NUM_DISCOUNTS_TO_FACTOR = {
+    0: 0,
+    1: 0.15,
+    2: 0.2,
+    3: 0.25
 };
 
 class DiscountError extends Error {}
@@ -23,27 +23,35 @@ function rawDifficultyMult(mediumCost, difficulty) {
 }
 
 function difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts, baseTower = false) {
-    const discountFactor = NUM_DISCOUNTS_TO_FACTOR[numDiscounts];
-    if (!discountFactor) {
+    if (!(numDiscounts in NUM_DISCOUNTS_TO_FACTOR)) {
         throw new DiscountError(`Cannot apply ${numDiscounts} discounts (must be between 0 and 3)`);
     }
-    let unroundedCost = rawDifficultyMult(mediumCost, difficulty) * discountFactor;
-    if (baseTower) return specialRound(unroundedCost);
-
-    unroundedCost = Math.floor(unroundedCost);
-    return Math.round(unroundedCost / 5) * 5;
+    let percentageDiscount = NUM_DISCOUNTS_TO_FACTOR[numDiscounts];
+    let unroundedCost = rawDifficultyMult(mediumCost, difficulty);
+    if (!baseTower) unroundedCost = Math.floor(unroundedCost);
+    unroundedCost *= 1 - percentageDiscount;
+    return roundEven5(unroundedCost);
 }
 
-// for base tower costs only
-// it rounds to the nearest 5, but at exactly 2.5 it rounds down and at exactly 7.5 it rounds up
-function specialRound(c) {
-    const quotient = Math.floor(c / 10) * 10;
-    let remainder = c % 10;
-    let rounded = remainder === 2.5 ? 0 : 5 * Math.round(remainder / 5);
-    return quotient + rounded;
+function heroDifficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts) {
+    if (!(numDiscounts in NUM_DISCOUNTS_TO_FACTOR)) {
+        throw new DiscountError(`Cannot apply ${numDiscounts} discounts (must be between 0 and 3)`);
+    }
+    let percentageDiscount = NUM_DISCOUNTS_TO_FACTOR[numDiscounts];
+    let unroundedCost = rawDifficultyMult(mediumCost, difficulty);
+    unroundedCost *= 1 - percentageDiscount;
+    return roundEven5(unroundedCost);
 }
+
+// Rounds to the nearest 5, but rounds to the nearest 10 when equidistant
+function roundEven5 (num) {
+    if (num % 10 === 2.5) return Math.floor(num / 5) * 5;
+    return Math.round(num / 5) * 5;
+}
+
 module.exports = {
     rawDifficultyMult,
     difficultyDiscountPriceMult,
+    heroDifficultyDiscountPriceMult,
     DiscountError
 };

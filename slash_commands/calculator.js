@@ -11,9 +11,6 @@ const RoundParser = require('../parser/round-parser');
 
 const { red, cyber, black } = require('../jsons/colors.json');
 
-const heroes = require('../jsons/heroes.json');
-const gerrysShop = require('../jsons/geraldos_shop.json');
-
 const exprOption = new SlashCommandStringOption()
     .setName('expr')
     .setDescription('Expression (press TAB when done)')
@@ -244,13 +241,6 @@ async function calc(interaction) {
     }
 }
 
-// TODO: Use hero json
-function costOfHero(hero, difficulty, numDiscounts) {
-    const mediumCost = heroes[hero].cost;
-    if (!mediumCost) throw `${hero} does not have entry in heroes.json`;
-    return bHelper.difficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts);
-}
-
 // Decipher what type of operand it is, and convert to cost accordingly
 function parseAndValueToken(t, i, difficulty) {
     const undiscountedToken = t.replace(/'*$/, '');
@@ -261,7 +251,7 @@ function parseAndValueToken(t, i, difficulty) {
     else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if (Heroes.isGerrysShopItem(tokenCanonical)) {
-        return gerrysShop[tokenCanonical];
+        return Heroes.costOfGerryShopItem(tokenCanonical, difficulty);
     } else if (Towers.isTowerUpgrade(undiscountedToken, true)) {
         let [tower, upgradeSet] = tokenCanonical.split('#');
         // Catches tower upgrades with crosspaths like wiz#401
@@ -277,7 +267,7 @@ function parseAndValueToken(t, i, difficulty) {
         // Catches base tower names/aliases
         return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts);
     } else if (Heroes.isHero(tokenCanonical)) {
-        return costOfHero(tokenCanonical, difficulty, numDiscounts);
+        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts);
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }

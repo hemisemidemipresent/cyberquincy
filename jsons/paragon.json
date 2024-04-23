@@ -2,7 +2,7 @@
     "dart_monkey": {
         "pierce": 200,
         "damage": 15,
-        "cd": 75,
+        "cd": 90,
         "bd": 80,
         "rate": 0.4
     },
@@ -187,7 +187,7 @@
             "rate": 0.11
         },
         "carpet": {
-            "cooldown": 45,
+            "cooldown": 50,
             "damage": 20000,
             "bd": 20000,
             "pierce": 150
@@ -195,9 +195,9 @@
     },
     "wizard_monkey":{
         "arcane": {
-            "damage": 50,
-            "md": 250,
-            "bd": 100,
+            "damage": 100,
+            "md": 300,
+            "bd": 150,
             "pierce": 25,
             "rate": 0.275
         },
@@ -207,7 +207,7 @@
             "pierce": 50
         },
         "drain": {
-            "damage": 200,
+            "damage": 100,
             "bd": 0,
             "pierce": 1
         },
@@ -259,8 +259,8 @@
     "monkey_sub":{
         "strike": {
             "cooldown": 240,
-            "damage": 30000,
-            "bd": 30000,
+            "damage": 50000,
+            "bd": 10000,
             "pierce": 30
         },
         "aftershock": {
@@ -270,8 +270,8 @@
         },
         "fallout": {
             "damage": 10,
-            "md": 40,
-            "bd": 50,
+            "md": 60,
+            "bd": 30,
             "pierce": 120,
             "rate": 0.1
         },

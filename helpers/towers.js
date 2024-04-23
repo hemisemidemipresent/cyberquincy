@@ -1,5 +1,5 @@
 const gHelper = require('./general.js');
-const bHelper = require('./bloons-general');
+const bHelper = require('./bloons-general.js');
 const costs = require('../jsons/costs.json');
 const costs_b2 = require('../jsons/costs_b2.json');
 
@@ -434,32 +434,30 @@ function subUpgradesFromUpgradeSet(upgradeSet) {
     return subUpgrades;
 }
 
-function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, battles2 = false) {
-    const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet);
-    let totalCost = 0;
-    subUpgrades.forEach((subUpgrade) => {
-        totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, battles2);
-    });
-    return totalCost;
-}
-
-function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, battles2 = false) {
+function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, mkDiscounts = [], battles2 = false) {
     let [path, tier] = pathTierFromUpgradeSet(upgrade);
     const costData = battles2 ? costs_b2 : costs;
     const tower = costData[towerName];
     const isBaseTower = upgrade === '000';
-    const baseCost = isBaseTower ? tower.cost : tower.upgrades[path][`${tier}`];
-    return bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, isBaseTower);
+    let cost = isBaseTower ? tower.cost : tower.upgrades[path][`${tier}`];
+    numDiscounts = tier <= 3 ? numDiscounts : 0;
+    return bHelper.difficultyDiscountPriceMult(towerName, upgrade, cost, difficulty, numDiscounts, mkDiscounts);
+}
+
+function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, mkDiscounts = [], battles2 = false) {
+    const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet);
+    let totalCost = 0;
+    subUpgrades.forEach((subUpgrade) => {
+        totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
+    });
+    return totalCost;
 }
 
 function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscounts = 0, battles2 = false) {
-    const costData = battles2 ? costs_b2 : costs;
-    const tower = costData[towerName];
     let result = [0, 0, 0, 0, 0, 0];
-    for (let tier = 1; tier <= 5; ++tier) {
-        const baseCost = tower.upgrades[path][`${tier}`];
-        result[tier] += result[tier-1] + bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, false);
-    }
+    upgradesFromPath(path).forEach((upgrade, tier) => {
+        result[tier + 1] += result[tier] + costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts, [], battles2);
+    });
     return result;
 }
 

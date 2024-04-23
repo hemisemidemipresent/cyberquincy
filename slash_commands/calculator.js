@@ -4,6 +4,7 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 const Lexer = require('lex');
 const gHelper = require('../helpers/general.js');
 const bHelper = require('../helpers/bloons-general');
+const mkDiscounts = require('../jsons/mk/discounts.json');
 
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round2.json');
@@ -26,11 +27,18 @@ const difficulty = new SlashCommandStringOption()
         { name: 'Impoppable', value: 'impoppable' }
     );
 
+const mk = new SlashCommandStringOption()
+    .setName('mk')
+    .setDescription('Max MK enabled')
+    .setRequired(false)
+    .addChoices({ name: 'yes', value: 'Yes' });
+
 builder = new SlashCommandBuilder()
     .setName('calc')
     .setDescription('Evaluate an expression to get a final cost')
     .addStringOption(exprOption)
-    .addStringOption(difficulty);
+    .addStringOption(difficulty)
+    .addStringOption(mk);
 
 async function calc(interaction) {
     // Use a "lexer" to parse the operator/operand tokens
@@ -82,6 +90,7 @@ async function calc(interaction) {
     // Get the original command arguments string back (other than the command name)
     const expression = interaction.options.getString('expr').replace(/"/, "''").toLowerCase();
     const difficulty = interaction.options.getString('difficulty') || 'hard';
+    const mk = !!interaction.options.getString('mk');
 
     if (expression === 'help') {
         let helpEmbed = new Discord.EmbedBuilder()
@@ -174,6 +183,9 @@ async function calc(interaction) {
 
     try {
         i = 0;
+        let simpleMkDiscounts;
+        if (mk) simpleMkDiscounts = JSON.parse(JSON.stringify(mkDiscounts.tower_discounts));
+
         parsed.forEach(function (c) {
             i++;
             switch (c) {
@@ -189,7 +201,7 @@ async function calc(interaction) {
                     break;
                 default:
                     // Convert symbolic terms to bloons-ingame-monetary values
-                    stack.push(parseAndValueToken(c, i, difficulty));
+                    stack.push(parseAndValueToken(c, i, difficulty, simpleMkDiscounts));
             }
         });
     } catch (e) {
@@ -242,7 +254,7 @@ async function calc(interaction) {
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
-function parseAndValueToken(t, i, difficulty) {
+function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
     const undiscountedToken = t.replace(/'*$/, '');
     const numDiscounts = t.match(/'*$/)?.[0]?.length;
     const tokenCanonical = Aliases.canonicizeArg(undiscountedToken);
@@ -255,19 +267,19 @@ function parseAndValueToken(t, i, difficulty) {
     } else if (Towers.isTowerUpgrade(undiscountedToken, true)) {
         let [tower, upgradeSet] = tokenCanonical.split('#');
         // Catches tower upgrades with crosspaths like wiz#401
-        return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts);
+        return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
     } else if (Towers.isTowerUpgrade(undiscountedToken.replace('!', '#'), true)) {
         // Catches all other tower ugprades
         let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken.replace('!', '#')).split('#');
-        return Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts);
+        return Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
     } else if (Towers.isTowerUpgrade(tokenCanonical)) {
         let [tower, upgrade] = tokenCanonical.split('#');
-        return Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts);
+        return Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts, simpleMkDiscounts);
     } else if (Towers.isTower(tokenCanonical)) {
         // Catches base tower names/aliases
-        return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts);
+        return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts, simpleMkDiscounts);
     } else if (Heroes.isHero(tokenCanonical)) {
-        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts);
+        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, !!simpleMkDiscounts);
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }

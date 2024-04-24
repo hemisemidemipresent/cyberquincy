@@ -21,6 +21,7 @@ module.exports = {
      * works for stuff like addtional cd, md and fd
      */
     getDmgMod(d, x) {
+        if (x === 100) return d * 2;
         x--;
         let d_x = d * (1 + x * 0.01);
         return d_x;

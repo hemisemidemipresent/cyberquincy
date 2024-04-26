@@ -157,6 +157,8 @@ async function execute(interaction) {
 
     const map = newparsed.map ? Aliases.toIndexNormalForm(newparsed.map) : null;
 
+
+    // after all that wrangling, construct the search parameters to btd6 index API
     const searchParams = new URLSearchParams(
         Object.entries({
             towerquery: JSON.stringify([newparsed.entity1, newparsed.entity2].filter(val => val)),
@@ -187,6 +189,9 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
     }
 
     if (combos.length == 1) {
+        
+        // Only one combo found
+
         let challengeEmbed = new Discord.EmbedBuilder()
             .setTitle(embedTitle(parsed, combos))
             .setColor(palered);
@@ -200,7 +205,11 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
         challengeEmbed.addFields([{ name: 'OG?', value: combo.og ? 'OG' : 'ALT', inline: true }]);
 
         return await interaction.editReply({ embeds: [challengeEmbed] });
+
     } else {
+
+        // Multiple combos found
+
         let numOGCompletions = 0;
 
         for (let i = 0; i < combos.length; i++) {
@@ -226,6 +235,8 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
 
         const displayFields = getDisplayCols(parsed);
         searchParams.set('count', '10');
+
+        // "Magic function" for pagination
         return await Index.displayOneOrMultiplePagesNew(interaction, fetch2tc, searchParams, displayFields, 
             completion => {
 

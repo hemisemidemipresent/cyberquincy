@@ -147,16 +147,16 @@ function levelingCurve(
     });
 }
 
-function costOfHero(hero, difficulty, numDiscounts) {
+function costOfHero(hero, difficulty, numDiscounts, mk) {
     const mediumCost = heroes[hero].cost;
     if (!mediumCost) throw `${hero} does not have an entry in heroes.json`;
-    return bHelper.heroDifficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts);
+    return bHelper.heroDifficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts, mk);
 }
 
 function costOfGerryShopItem(item, difficulty) {
     const mediumCost = gerrysShop[item];
     if (!mediumCost) throw `${item} does not have an entry in geraldos_shop.json`;
-    return bHelper.difficultyDiscountPriceMult(mediumCost, difficulty, 0, true);
+    return bHelper.roundEven5(bHelper.rawDifficultyMult(mediumCost, difficulty));
 }
 
 function isHero(candidate) {

@@ -1,7 +1,5 @@
 const MapParser = require('../parser/map-parser');
 
-const gHelper = require('../helpers/general.js');
-
 const { red, palegreen } = require('../jsons/colors.json');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
@@ -49,9 +47,8 @@ async function ltc(map, modifier) {
     searchParams = new URLSearchParams(searchParams);
     const { results } = await fetchltc(searchParams);
     const result = results[0];
-    console.log(map)
 
-    if (!result) return new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LTC found for ${map}`);
+    if (!result) return new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LTC found for ${map}`).setColor(red);
 
     const towerset = JSON.parse(result.towerset);
     const upgradeset = JSON.parse(result.upgradeset);

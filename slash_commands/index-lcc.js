@@ -2,7 +2,7 @@ const MapParser = require('../parser/map-parser.js');
 
 const gHelper = require('../helpers/general.js');
 
-const { paleyellow } = require('../jsons/colors.json');
+const { red, paleyellow } = require('../jsons/colors.json');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
@@ -38,7 +38,7 @@ async function lcc(map) {
     
     const result = results[0];
 
-    if (!result) return new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LCC found for ${map}`);
+    if (!result) return new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LCC found for ${map}`).setColor(red);
 
     let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${map} LCC Combo`).setColor(paleyellow);
 

@@ -51,11 +51,19 @@ module.exports = {
             ed: round(ed_tot, 1)
         };
     },
+    /**
+     * @param {int} p pierce at degree 1
+     * @param {int} x degree
+     */
     getPiece(p, x) {
         x--;
         let p_x = p * (1 + x * 0.01) + x;
         return p_x;
     },
+    /**
+     * @param {int} s attack speed (seconds per attack) at degree 1
+     * @param {int} x degree
+     */
     getSpeed(s, x) {
         x--;
         let s_x = s / (1 + Math.sqrt(x * 50) * 0.01);

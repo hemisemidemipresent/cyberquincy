@@ -272,8 +272,8 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
     } else if (Heroes.isGerrysShopItem(tokenCanonical)) {
         return Heroes.costOfGerryShopItem(tokenCanonical, difficulty);
     } else if (Towers.isTowerUpgrade(undiscountedToken, true)) {
-        let [tower, upgradeSet] = tokenCanonical.split('#');
         // Catches tower upgrades with crosspaths like wiz#401
+        let [tower, upgradeSet] = tokenCanonical.split('#');
         return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
     } else if (Towers.isTowerUpgrade(undiscountedToken.replace('!', '#'), true)) {
         // Catches all other tower ugprades
@@ -283,7 +283,8 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
         let ret = Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
         simpleMkDiscounts.comeOnEverybody = tmp;
         return ret;
-    } else if (Towers.isTowerUpgrade(tokenCanonical)) {
+    } else if (Towers.isTowerUpgrade(tokenCanonical, true)) {
+        // for upgrade names like "sotf" the tokenCanonical contains the upgrade format "druid#050"
         let [tower, upgrade] = tokenCanonical.split('#');
         let tmp = simpleMkDiscounts.comeOnEverybody;
         simpleMkDiscounts.comeOnEverybody = 0;

@@ -183,8 +183,15 @@ async function calc(interaction) {
 
     try {
         i = 0;
-        let simpleMkDiscounts;
-        if (mk) simpleMkDiscounts = JSON.parse(JSON.stringify(mkDiscounts.tower_discounts));
+        let simpleMkDiscounts = {
+            comeOnEverybody: 0,
+            discounts: []
+        };
+        if (mk) {
+            simpleMkDiscounts.comeOnEverybody = mkDiscounts.misc_discounts.come_on_everybody;
+            simpleMkDiscounts.discounts = JSON.parse(JSON.stringify(mkDiscounts.tower_discounts));
+        }
+
 
         parsed.forEach(function (c) {
             i++;
@@ -271,12 +278,21 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
     } else if (Towers.isTowerUpgrade(undiscountedToken.replace('!', '#'), true)) {
         // Catches all other tower ugprades
         let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken.replace('!', '#')).split('#');
-        return Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
+        let tmp = simpleMkDiscounts.comeOnEverybody;
+        simpleMkDiscounts.comeOnEverybody = 0;
+        let ret = Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
+        simpleMkDiscounts.comeOnEverybody = tmp;
+        return ret;
     } else if (Towers.isTowerUpgrade(tokenCanonical)) {
         let [tower, upgrade] = tokenCanonical.split('#');
-        return Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts, simpleMkDiscounts);
+        let tmp = simpleMkDiscounts.comeOnEverybody;
+        simpleMkDiscounts.comeOnEverybody = 0;
+        let ret = Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts, simpleMkDiscounts);
+        simpleMkDiscounts.comeOnEverybody = tmp;
+        return ret;
     } else if (Towers.isTower(tokenCanonical)) {
         // Catches base tower names/aliases
+        simpleMkDiscounts.comeOnEverybody = 0;
         return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts, simpleMkDiscounts);
     } else if (Heroes.isHero(tokenCanonical)) {
         return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, !!simpleMkDiscounts);
@@ -285,7 +301,7 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
     }
 }
 
-class UnrecognizedTokenError extends Error {}
+class UnrecognizedTokenError extends Error { }
 
 async function execute(interaction) {
     await calc(interaction);

@@ -1,9 +1,5 @@
 const gHelper = require('./general.js');
-<<<<<<< HEAD
-const bHelper = require('./bloons-general');
-=======
 const bHelper = require('./bloons-general.js');
->>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 const costs = require('../jsons/costs.json');
 const costs_b2 = require('../jsons/costs_b2.json');
 
@@ -311,13 +307,8 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
 
 function allUpgradeCrosspathSets() {
     let result = new Set();
-<<<<<<< HEAD
-    for (let mainPath=0; mainPath<=5; ++mainPath) {
-        for (let crossPath=0; crossPath<=2; ++crossPath) {
-=======
     for (let mainPath = 0; mainPath <= 5; ++mainPath) {
         for (let crossPath = 0; crossPath <= 2; ++crossPath) {
->>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
             result.add(`${mainPath}${crossPath}0`);
             result.add(`${mainPath}0${crossPath}`);
             result.add(`0${mainPath}${crossPath}`);
@@ -443,38 +434,11 @@ function subUpgradesFromUpgradeSet(upgradeSet) {
     return subUpgrades;
 }
 
-<<<<<<< HEAD
-function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, battles2 = false) {
-    const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet);
-    let totalCost = 0;
-    subUpgrades.forEach((subUpgrade) => {
-        totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, battles2);
-    });
-    return totalCost;
-}
-
-function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, battles2 = false) {
-=======
 function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, mkDiscounts = {}, battles2 = false) {
->>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
     let [path, tier] = pathTierFromUpgradeSet(upgrade);
     const costData = battles2 ? costs_b2 : costs;
     const tower = costData[towerName];
     const isBaseTower = upgrade === '000';
-<<<<<<< HEAD
-    const baseCost = isBaseTower ? tower.cost : tower.upgrades[path][`${tier}`];
-    return bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, isBaseTower);
-}
-
-function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscounts = 0, battles2 = false) {
-    const costData = battles2 ? costs_b2 : costs;
-    const tower = costData[towerName];
-    let result = [0, 0, 0, 0, 0, 0];
-    for (let tier = 1; tier <= 5; ++tier) {
-        const baseCost = tower.upgrades[path][`${tier}`];
-        result[tier] += result[tier-1] + bHelper.difficultyDiscountPriceMult(baseCost, difficulty, tier <= 3 ? numDiscounts : 0, false);
-    }
-=======
     let cost = isBaseTower ? tower.cost : tower.upgrades[path][`${tier}`];
     numDiscounts = tier <= 3 ? numDiscounts : 0;
     return bHelper.difficultyDiscountPriceMult(towerName, upgrade, cost, difficulty, numDiscounts, mkDiscounts);
@@ -512,7 +476,6 @@ function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscoun
     upgradesFromPath(path).forEach((upgrade, tier) => {
         result[tier + 1] += result[tier] + costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts, {}, battles2);
     });
->>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
     return result;
 }
 

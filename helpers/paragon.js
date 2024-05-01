@@ -21,10 +21,7 @@ module.exports = {
      * works for stuff like addtional cd, md and fd
      */
     getDmgMod(d, x) {
-<<<<<<< HEAD
-=======
         if (x === 100) return d * 2;
->>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
         x--;
         let d_x = d * (1 + x * 0.01);
         return d_x;
@@ -54,25 +51,19 @@ module.exports = {
             ed: round(ed_tot, 1)
         };
     },
-<<<<<<< HEAD
-=======
     /**
      * @param {int} p pierce at degree 1
      * @param {int} x degree
      */
->>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
     getPiece(p, x) {
         x--;
         let p_x = p * (1 + x * 0.01) + x;
         return p_x;
     },
-<<<<<<< HEAD
-=======
     /**
      * @param {int} s attack speed (seconds per attack) at degree 1
      * @param {int} x degree
      */
->>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
     getSpeed(s, x) {
         x--;
         let s_x = s / (1 + Math.sqrt(x * 50) * 0.01);

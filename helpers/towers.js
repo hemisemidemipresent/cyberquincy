@@ -307,8 +307,8 @@ function crossPathTierFromUpgradeSet(upgradeSet) {
 
 function allUpgradeCrosspathSets() {
     let result = new Set();
-    for (let mainPath=0; mainPath<=5; ++mainPath) {
-        for (let crossPath=0; crossPath<=2; ++crossPath) {
+    for (let mainPath = 0; mainPath <= 5; ++mainPath) {
+        for (let crossPath = 0; crossPath <= 2; ++crossPath) {
             result.add(`${mainPath}${crossPath}0`);
             result.add(`${mainPath}0${crossPath}`);
             result.add(`0${mainPath}${crossPath}`);
@@ -434,7 +434,7 @@ function subUpgradesFromUpgradeSet(upgradeSet) {
     return subUpgrades;
 }
 
-function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, mkDiscounts = [], battles2 = false) {
+function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, mkDiscounts = {}, battles2 = false) {
     let [path, tier] = pathTierFromUpgradeSet(upgrade);
     const costData = battles2 ? costs_b2 : costs;
     const tower = costData[towerName];
@@ -444,19 +444,37 @@ function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, mk
     return bHelper.difficultyDiscountPriceMult(towerName, upgrade, cost, difficulty, numDiscounts, mkDiscounts);
 }
 
-function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, mkDiscounts = [], battles2 = false) {
+function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, mkDiscounts = {}, battles2 = false) {
     const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet);
+    const [path, tier] = pathTierFromUpgradeSet(upgradeSet);
+    const pathUpgrades = upgradesFromPath(path);
+    const crossPathUpgrades = upgradesFromPath(crossPathTierFromUpgradeSet(upgradeSet)[0]);
     let totalCost = 0;
     subUpgrades.forEach((subUpgrade) => {
-        totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
+        const tier = pathTierFromUpgradeSet(subUpgrade)[1];
+        if ((pathUpgrades.includes(subUpgrade) && (tier === "4" || tier === "5")) || crossPathUpgrades.includes(subUpgrade)) {
+            totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
+        } else {
+            if ("comeOnEverybody" in mkDiscounts) {
+                let tmp = mkDiscounts.comeOnEverybody;
+                mkDiscounts.comeOnEverybody = 0;
+                totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
+                mkDiscounts.comeOnEverybody = tmp;
+            } else {
+                totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
+            }
+        }
     });
+
+    if (tier !== "3" && tier !== "4" && "comeOnEverybody" in mkDiscounts) mkDiscounts.comeOnEverybody = 0;
+
     return totalCost;
 }
 
 function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscounts = 0, battles2 = false) {
     let result = [0, 0, 0, 0, 0, 0];
     upgradesFromPath(path).forEach((upgrade, tier) => {
-        result[tier + 1] += result[tier] + costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts, [], battles2);
+        result[tier + 1] += result[tier] + costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts, {}, battles2);
     });
     return result;
 }

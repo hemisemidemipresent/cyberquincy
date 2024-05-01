@@ -1,4 +1,5 @@
 const MapParser = require('../parser/map-parser.js');
+<<<<<<< HEAD
 const GoogleSheetsHelper = require('../helpers/google-sheets.js');
 
 const gHelper = require('../helpers/general.js');
@@ -16,6 +17,12 @@ const COLS = {
 };
 
 const { paleyellow } = require('../jsons/colors.json');
+=======
+
+const gHelper = require('../helpers/general.js');
+
+const { red, paleyellow } = require('../jsons/colors.json');
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
@@ -36,6 +43,7 @@ async function execute(interaction) {
 
     if (parsed.hasErrors()) {
         return await interaction.reply('Map provided not valid');
+<<<<<<< HEAD
     } else {
         let challengeEmbed = await lcc(parsed.map);
         return await interaction.reply({ embeds: [challengeEmbed] });
@@ -100,10 +108,54 @@ async function lcc(btd6_map) {
                 { name: gHelper.toTitleCase(field), value: values[field].toString(), inline: true }
             ]);
     }
+=======
+    }
+
+    let challengeEmbed = await lcc(Aliases.toIndexNormalForm(parsed.map));
+    return await interaction.reply({ embeds: [challengeEmbed] });
+    
+}
+
+async function lcc(map) {
+
+    const searchParams = new URLSearchParams({ map, count: 100, pending: 0 });
+
+    let { results } = await fetchlcc(searchParams);
+    
+    const result = results[0];
+
+    if (!result) return new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LCC found for ${map}`).setColor(red);
+
+    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${map} LCC Combo`).setColor(paleyellow);
+
+    let link = 'none';
+    if (result.link) link = `[Link](${result.link})`;
+
+    challengeEmbed.addFields([
+        { name: 'Map', value: result.map, inline: true },
+        { name: 'Cost', value: gHelper.numberAsCost(result.money), inline: true },
+        { name: 'Version', value: result.version, inline: true },
+        { name: 'Date', value: result.date, inline: true },
+        { name: 'Person', value: result.person, inline: true },
+        { name: 'Link', value: link, inline: true }
+    ]);
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 
     return challengeEmbed;
 }
 
+<<<<<<< HEAD
+=======
+async function fetchlcc(searchParams) {
+    let res = await fetch('https://btd6index.win/fetch-lcc?' + searchParams);
+    let resJson = await res.json();
+    if ('error' in resJson) 
+        throw new Error(resJson.error);
+    return resJson;
+}
+
+
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 module.exports = {
     data: builder,
     execute

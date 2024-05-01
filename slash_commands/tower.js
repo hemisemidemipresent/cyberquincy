@@ -91,8 +91,13 @@ async function embedBloonology(towerName, upgrade, isB2) {
         totalCost = `${easyTotalCost} - easy\n${mediumTotalCost} - medium\n${hardTotalCost} - hard\n${impopTotalCost} - impoppable\n`;
     }
     if (isB2) {
+<<<<<<< HEAD
         cost = `${Towers.costOfTowerUpgrade(towerName, upgrade, 'medium', undefined, isB2)} - battles2\n`;
         totalCost = `${Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium', undefined, isB2)} - battles2\n`;
+=======
+        cost = `${Towers.costOfTowerUpgrade(towerName, upgrade, 'medium', 0, {}, isB2)} - battles2\n`;
+        totalCost = `${Towers.costOfTowerUpgradeSet(towerName, upgrade, 'medium', 0, {}, isB2)} - battles2\n`;
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
     }
 
     let embed = new Discord.EmbedBuilder()

@@ -61,7 +61,10 @@ async function fetchInfo(info, reload = false) {
 
 const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js');
 const { scrapeAllBalanceChanges } = require('../services/index/balances_scraper');
+<<<<<<< HEAD
 const { URLSearchParams } = require('url');
+=======
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 
 async function scrapeInfo(info) {
     switch (info) {
@@ -338,7 +341,11 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
 /**
  * @async
  * @callback fetchFn
+<<<<<<< HEAD
  * @param {URLSearchParams} searchParams
+=======
+ * @param {import('url').URLSearchParams} searchParams
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
  * @returns {*}
  */
 
@@ -357,7 +364,11 @@ async function displayOneOrMultiplePages(interaction, colData, setCustomFields) 
  * 
  * @param {import('discord.js').Interaction} interaction 
  * @param {fetchFn} fetchFn 
+<<<<<<< HEAD
  * @param {URLSearchParams} searchParams 
+=======
+ * @param {import('url').URLSearchParams} searchParams 
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
  * @param {string[]} displayFields
  * @param {completionToFields} completionToFields
  * @param {setOtherDisplayFields} setOtherDisplayFields

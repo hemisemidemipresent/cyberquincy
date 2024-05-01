@@ -1,0 +1,193 @@
+{
+    "misc_discounts": {
+        "insider_trades": 0.02,
+        "come_on_everybody": 0.05,
+        "hero_favors": 0.1
+    },
+    "tower_discounts": [
+        {
+            "upgrades": {
+                "wizard_monkey": [
+                    "100",
+                    "001"
+                ]
+            },
+            "discount": -25,
+            "uses": -1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "boomerang_monkey": [
+                    "000"
+                ]
+            },
+            "discount": -50,
+            "uses": -1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "bomb_shooter": [
+                    "003"
+                ],
+                "ninja_monkey": [
+                    "300"
+                ],
+                "druid": [
+                    "020"
+                ]
+            },
+            "discount": -100,
+            "uses": -1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "banana_farm": [
+                    "000"
+                ]
+            },
+            "discount": -100,
+            "uses": 1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "spike_factory": [
+                    "000"
+                ]
+            },
+            "discount": -150,
+            "uses": 1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "mortar_monkey": [
+                    "040"
+                ]
+            },
+            "discount": -600,
+            "uses": -1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "glue_gunner": [
+                    "400"
+                ],
+                "sniper_monkey": [
+                    "400"
+                ]
+            },
+            "discount": -1000,
+            "uses": -1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "spike_factory": [
+                    "400"
+                ]
+            },
+            "discount": -1500,
+            "uses": -1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "banana_farm": [
+                    "000"
+                ],
+                "monkey_village": [
+                    "000"
+                ]
+            },
+            "discount": 0.02,
+            "uses": -1,
+            "applied_absolute": false
+        },
+        {
+            "upgrades": {
+                "sniper_monkey": [
+                    "000"
+                ],
+                "monkey_sub": [
+                    "000"
+                ],
+                "monkey_buccaneer": [
+                    "000"
+                ],
+                "monkey_ace": [
+                    "000"
+                ],
+                "heli_pilot": [
+                    "000"
+                ],
+                "mortar_monkey": [
+                    "000"
+                ],
+                "dartling_gunner": [
+                    "000"
+                ]
+            },
+            "discount": 0.05,
+            "uses": -1,
+            "applied_absolute": false
+        },
+        {
+            "upgrades": {
+                "monkey_ace": [
+                    "500",
+                    "050",
+                    "005"
+                ]
+            },
+            "discount": 0.1,
+            "uses": -1,
+            "applied_absolute": true
+        },
+        {
+            "upgrades": {
+                "sniper_monkey": [
+                    "000"
+                ],
+                "monkey_sub": [
+                    "000"
+                ],
+                "monkey_buccaneer": [
+                    "000"
+                ],
+                "monkey_ace": [
+                    "000"
+                ],
+                "heli_pilot": [
+                    "000"
+                ],
+                "mortar_monkey": [
+                    "000"
+                ],
+                "dartling_gunner": [
+                    "000"
+                ]
+            },
+            "discount": 0.33,
+            "uses": 1,
+            "applied_absolute": false
+        },
+        {
+            "upgrades": {
+                "dart_monkey": [
+                    "000"
+                ],
+                "glue_gunner": [
+                    "000"
+                ]
+            },
+            "discount": 1,
+            "uses": 1,
+            "applied_absolute": false
+        }
+    ]
+}

@@ -1,4 +1,5 @@
 const MapParser = require('../parser/map-parser');
+<<<<<<< HEAD
 const GoogleSheetsHelper = require('../helpers/google-sheets');
 
 const gHelper = require('../helpers/general.js');
@@ -70,6 +71,10 @@ const COLS = {
         CURRENT: 'X'
     }
 };
+=======
+
+const { red, palegreen } = require('../jsons/colors.json');
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
@@ -99,11 +104,16 @@ async function execute(interaction) {
         return await interaction.reply('Map provided not valid');
     } else {
         const modifier = interaction.options.getString('modifier');
+<<<<<<< HEAD
         let challengeEmbed = await ltc(canonicalMap, modifier);
+=======
+        let challengeEmbed = await ltc(Aliases.toIndexNormalForm(canonicalMap), modifier);
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
         return await interaction.reply({ embeds: [challengeEmbed] });
     }
 }
 
+<<<<<<< HEAD
 async function ltc(btd6_map, modifier) {
     const sheet = GoogleSheetsHelper.sheetByName(Btd6Index, 'ltc');
 
@@ -254,6 +264,57 @@ function getColumnSet(mapRow, sheet) {
     }
 
     throw `Could not find header row`;
+=======
+async function ltc(map, modifier) {
+
+    let searchParams = {
+        map: map,
+        count: 100,
+        pending: 0
+    };
+    if (modifier) searchParams.completiontype = modifier;
+
+    searchParams = new URLSearchParams(searchParams);
+    const { results } = await fetchltc(searchParams);
+    const result = results[0];
+
+    if (!result) return new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LTC found for ${map}`).setColor(red);
+
+    const towerset = JSON.parse(result.towerset);
+    const upgradeset = JSON.parse(result.upgradeset);
+
+
+    const challengeEmbed = new Discord.EmbedBuilder();
+
+    challengeEmbed.setTitle(`${modifier ?? ''} ${map} LTC combo`);
+    challengeEmbed.setColor(palegreen);
+
+    for (let i = 0; i < towerset.length; i++) {
+        challengeEmbed.addFields([{ name: `Tower ${i+1}`, value: `${towerset[i]} (${upgradeset[i]})`, inline: true }]);
+    }
+
+    let link = 'none';
+    if (result.link) link = `[Link](${result.link})`;
+
+    challengeEmbed.addFields([
+        { name: 'Map', value: result.map, inline: true },
+        { name: 'Version', value: result.version, inline: true },
+        { name: 'Date', value: result.date, inline: true },
+        { name: 'Person', value: result.person, inline: true },
+        { name: 'Link', value: link, inline: true }
+    ]);
+
+    return challengeEmbed;
+
+}
+
+async function fetchltc(searchParams) {
+    let res = await fetch('https://btd6index.win/fetch-ltc?' + searchParams);
+    let resJson = await res.json();
+    if ('error' in resJson)
+        throw new Error(resJson.error);
+    return resJson;
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 }
 
 module.exports = {

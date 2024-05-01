@@ -102,9 +102,17 @@
     ],
     "sulfur_springs": [
         "su",
+<<<<<<< HEAD
         "sulfur_springs",
         "sulfur",
         "sulphur_springs",
         "sulphur"
     ]
 }
+=======
+        "sulphur_springs",
+        "sulfur",
+        "sulphur"
+    ]
+}
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866

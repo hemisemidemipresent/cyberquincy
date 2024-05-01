@@ -20,7 +20,11 @@ const { palered } = require('../jsons/colors.json');
 
 BANNED_HEROES = ['sauda', 'geraldo', 'corvus'];
 
+<<<<<<< HEAD
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+=======
+const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandBooleanOption } = require('discord.js');
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 
 const entity1Option = new SlashCommandStringOption()
     .setName('entity1')
@@ -36,13 +40,23 @@ const mapOption = new SlashCommandStringOption().setName('map').setDescription('
 
 const personOption = new SlashCommandStringOption().setName('person').setDescription('Completer').setRequired(false);
 
+<<<<<<< HEAD
+=======
+const ogOption = new SlashCommandBooleanOption().setName('og').setDescription('filter for only OG completions/only non-OG').setRequired(false);
+
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 builder = new SlashCommandBuilder()
     .setName('2tc')
     .setDescription('Search and Browse Completed 2TC Index Combos')
     .addStringOption(entity1Option)
     .addStringOption(entity2Option)
     .addStringOption(mapOption)
+<<<<<<< HEAD
     .addStringOption(personOption);
+=======
+    .addStringOption(personOption)
+    .addBooleanOption(ogOption);
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 
 function parseEntity(interaction, num) {
     const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
@@ -140,6 +154,10 @@ async function execute(interaction) {
     const e1 = parsed[0];
     const e2 = parsed[1];
 
+<<<<<<< HEAD
+=======
+    // we have to check if what was inputted is a tower (upgrade) name, a tower upgrade directly or a hero
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
     const entityType1 = e1.tower ? Aliases.toIndexNormalForm(e1.tower) : null;
     const entity1 = e1.tower_upgrade ? Towers.towerUpgradeToIndexNormalForm(e1.tower_upgrade) : null;
     const hero1 = e1.hero ? Aliases.toIndexNormalForm(e1.hero) : null;
@@ -154,17 +172,35 @@ async function execute(interaction) {
     );
     newparsed.entity1 = entityType1 ?? entity1 ?? hero1;
     newparsed.entity2 = entityType2 ?? entity2 ?? hero2;
+<<<<<<< HEAD
 
     const map = newparsed.map ? Aliases.toIndexNormalForm(newparsed.map) : null;
 
     const searchParams = new URLSearchParams(
         Object.entries({
             towerquery: JSON.stringify([newparsed.entity1, newparsed.entity2].filter(val => val)),
+=======
+    
+    const towers = [newparsed.entity1, newparsed.entity2].filter(val => val);
+    const map = newparsed.map ? Aliases.toIndexNormalForm(newparsed.map) : null;
+
+    let og = interaction.options.getBoolean('og'); 
+    if (og) og = og + 0; // cursed way to convert true/false into 1/0
+    // after all that wrangling, construct the search parameters to btd6 index API
+    const searchParams = new URLSearchParams(
+        Object.entries({
+            towerquery: JSON.stringify(towers),
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
             map,
             person: newparsed.person,
             difficulty: newparsed.map_difficulty,
             pending: '0',
+<<<<<<< HEAD
             count: '100'
+=======
+            count: '100',
+            og: og
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
         }).filter(([,value]) => value !== null && value !== undefined)
     );
 
@@ -187,6 +223,12 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
     }
 
     if (combos.length == 1) {
+<<<<<<< HEAD
+=======
+        
+        // Only one combo found
+
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
         let challengeEmbed = new Discord.EmbedBuilder()
             .setTitle(embedTitle(parsed, combos))
             .setColor(palered);
@@ -200,7 +242,15 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
         challengeEmbed.addFields([{ name: 'OG?', value: combo.og ? 'OG' : 'ALT', inline: true }]);
 
         return await interaction.editReply({ embeds: [challengeEmbed] });
+<<<<<<< HEAD
     } else {
+=======
+
+    } else {
+
+        // Multiple combos found
+
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
         let numOGCompletions = 0;
 
         for (let i = 0; i < combos.length; i++) {
@@ -226,6 +276,11 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
 
         const displayFields = getDisplayCols(parsed);
         searchParams.set('count', '10');
+<<<<<<< HEAD
+=======
+
+        // "Magic function" for pagination
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
         return await Index.displayOneOrMultiplePagesNew(interaction, fetch2tc, searchParams, displayFields, 
             completion => {
 

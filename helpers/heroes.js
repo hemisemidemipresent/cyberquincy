@@ -1,7 +1,13 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
 const gHelper = require('../helpers/general.js');
+<<<<<<< HEAD
 const heroes = require('../jsons/heroes.json');
+=======
+const bHelper = require('./bloons-general');
+const heroes = require('../jsons/heroes.json');
+const gerrysShop = require('../jsons/geraldos_shop.json');
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 
 BASE_XP_TO_GET_LEVEL = [
     null, // Slot for non-existent level-0
@@ -92,7 +98,17 @@ function accumulatedXpCurve(
         xpGain == null ? null : (acc = acc + xpGain)
     );
 }
+<<<<<<< HEAD
 
+=======
+/**
+ * Returns an array as to how much xp a hero must get (cumulatively) to reach a certain level
+ * e.g. returned_arr = [null, 0, 9, 180, 640, 1640, 3500, 6780, ...] 
+ * means that you can find the cumulative xp needed to reach level n by simply doing returned_arr[n]
+ * @param {string} hero 
+ * @returns {Array[int]}
+ */
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 function heroLevelXpRequirements(hero) {
     heroSpecificLevelingMultiplier = heroes[hero]['levelModifier'];
     if (!heroSpecificLevelingMultiplier) throw `${hero} does not have "levelModifier" entry in heroes.json`;
@@ -117,7 +133,20 @@ function levelingChart(hero, startingRound, mapDifficulty) {
         })
     );
 }
+<<<<<<< HEAD
 
+=======
+/**
+ * Returns an array as to which round a hero will reach which level
+ * e.g. returned_arr = [null, 7, 9, 11, 14, 19, ...] 
+ * means that you can find the round a hero will reach level n by simply doing returned_arr[n]
+ * @param {string} hero 
+ * @param {int} startingRound 
+ * @param {string} mapDifficulty 
+ * @param {int} energizerAcquiredRound 
+ * @returns {Array[int]}
+ */
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 function levelingCurve(
     hero,
     startingRound,
@@ -145,6 +174,21 @@ function levelingCurve(
     });
 }
 
+<<<<<<< HEAD
+=======
+function costOfHero(hero, difficulty, numDiscounts, mk) {
+    const mediumCost = heroes[hero].cost;
+    if (!mediumCost) throw `${hero} does not have an entry in heroes.json`;
+    return bHelper.heroDifficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts, mk);
+}
+
+function costOfGerryShopItem(item, difficulty) {
+    const mediumCost = gerrysShop[item];
+    if (!mediumCost) throw `${item} does not have an entry in geraldos_shop.json`;
+    return bHelper.roundEven5(bHelper.rawDifficultyMult(mediumCost, difficulty));
+}
+
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
 function isHero(candidate) {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     return allHeroes().includes(candidate.toLowerCase());
@@ -171,6 +215,11 @@ module.exports = {
     HERO_NAME_TO_BLOONOLOGY_LINK,
     levelingCurve,
     levelingChart,
+<<<<<<< HEAD
+=======
+    costOfHero,
+    costOfGerryShopItem,
+>>>>>>> afbdfaf2bba9e4dfaea6cdfb8939cc5399e6a866
     isHero,
     allHeroes,
     allGerrysShopItems,

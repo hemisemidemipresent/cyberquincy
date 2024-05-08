@@ -296,7 +296,7 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
         simpleMkDiscounts.comeOnEverybody = 0;
         return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts, simpleMkDiscounts);
     } else if (Heroes.isHero(tokenCanonical)) {
-        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, !!simpleMkDiscounts);
+        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, !!simpleMkDiscounts.comeOnEverybody);
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }

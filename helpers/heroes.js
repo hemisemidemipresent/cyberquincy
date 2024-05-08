@@ -94,7 +94,13 @@ function accumulatedXpCurve(
         xpGain == null ? null : (acc = acc + xpGain)
     );
 }
-
+/**
+ * Returns an array as to how much xp a hero must get (cumulatively) to reach a certain level
+ * e.g. returned_arr = [null, 0, 9, 180, 640, 1640, 3500, 6780, ...] 
+ * means that you can find the cumulative xp needed to reach level n by simply doing returned_arr[n]
+ * @param {string} hero 
+ * @returns {Array[int]}
+ */
 function heroLevelXpRequirements(hero) {
     heroSpecificLevelingMultiplier = heroes[hero]['levelModifier'];
     if (!heroSpecificLevelingMultiplier) throw `${hero} does not have "levelModifier" entry in heroes.json`;
@@ -119,7 +125,16 @@ function levelingChart(hero, startingRound, mapDifficulty) {
         })
     );
 }
-
+/**
+ * Returns an array as to which round a hero will reach which level
+ * e.g. returned_arr = [null, 7, 9, 11, 14, 19, ...] 
+ * means that you can find the round a hero will reach level n by simply doing returned_arr[n]
+ * @param {string} hero 
+ * @param {int} startingRound 
+ * @param {string} mapDifficulty 
+ * @param {int} energizerAcquiredRound 
+ * @returns {Array[int]}
+ */
 function levelingCurve(
     hero,
     startingRound,

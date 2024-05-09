@@ -272,8 +272,7 @@
             "damage": 10,
             "md": 60,
             "bd": 30,
-            "pierce": 120,
-            "rate": 0.1
+            "pierce": 120
         },
         "aura": {
             "damage": 50,

@@ -150,7 +150,7 @@ async function paragon_stats(interaction) {
                 **main shuriken** - ${pa.shuriken.d}d, ${pa.shuriken.bd}bd, ${pa.shuriken.ed}ed, +${pa.shuriken.cad} camo damage, ${pa.shuriken.p}p, 8j, ${pa.shuriken.s}s, 70r
                 • 15% chance to distract
 
-                **flash bomb** - ${pa.fbomb.d}d, ${pa.fbomb.bd}bd, ${pa.fbomb.ed}ed, +${pa.fbomb.cad} camo damage, ${pa.fbomb.p}p, 5j, ${pa.fbomb.s}s, 70r, emites **blue shurikens** on impact
+                **flash bomb** - ${pa.fbomb.d}d, ${pa.fbomb.bd}bd, ${pa.fbomb.ed}ed, +${pa.fbomb.cad} camo damage, ${pa.fbomb.p}p, 5j, ${pa.fbomb.s}s, 70r, emits **blue shurikens** on impact
                 **blue shurikens** - ${pa.blues.d}d, ${pa.blues.bd}bd, ${pa.blues.ed}ed, +${pa.blues.cad} camo damage, ${pa.blues.p}p, 3j
                 • 15% chance to distract
                 **sticky bomb** - 3?s to detonate, ∞r, ${pa.sbomb.s}s
@@ -300,20 +300,20 @@ async function paragon_stats(interaction) {
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
         desc = `**Final Strike Activated Ability**
         - ${pa.strike.cooldown}s cooldown
-        - After disabling itself for 15s, it launches 3 missiles (targets first, close, strong?): ${pa.strike.d}d, ${pa.strike.bd}bd, ${pa.strike.p}p, each missile creates *aftershock* and *fallout*s on track where they land
+        - After disabling itself for 15s, it launches 3 missiles (targets first, close, strong): ${pa.strike.d}d, ${pa.strike.bd}bd, ${pa.strike.p}p, each missile creates *aftershock* and scatters 5 *fallout*s on track where they land
          - *aftershock*: ${pa.aftershock.d}d, ${pa.aftershock.bd}bd, ${pa.aftershock.p}p, stuns affected bloons for 15s if they weren’t popped initially
-         - *fallout*: each puddle has ${pa.fallout.d}d, ${pa.fallout.md}md, ${pa.fallout.bd}bd, ${pa.fallout.p}p, ${pa.fallout.s}s, 36s lifespan
+         - *fallout*: each puddle has ${pa.fallout.d}d, ${pa.fallout.md}md, ${pa.fallout.bd}bd, ${pa.fallout.p}p, 0.1s, 36s lifespan
         
         ## SUBMERGED
         **Radiation Aura**
         - ${pa.aura.d}d, ${pa.aura.cd}cd, ${pa.aura.bd}bd, ${pa.aura.p}p, 0.5s, 52r
          - decamo and degrow
          - attack speed is not affected by degrees
-        **Support** (I don't think this scales w/ degree??)
-        Gives all normal Energizer buffs, AND:
-        - 5x damage, 3x pierce, __150%s*__ to Heroes in range *(This makes heroes attack 50% **slower**)
+        **Support** [degree independent]
+        Gives Energizer normal ability cooldown buffs, AND:
+        - 5x damage, 3x pierce, __150%s*__, 5x XP to Heroes in range *(This makes heroes attack 33% **slower**)
         - 7x damage, 3x pierce to other Monkey Subs in range (note: does not affect First Strike ability)
-        - 10% ability cooldown reduction for all Paragons on screen
+        - 10% ability cooldown reduction for all Paragons in range
         
         ## UNSUBMERGED
         **Dart**
@@ -323,7 +323,6 @@ async function paragon_stats(interaction) {
         - **Pre-Emptive Strike**
         - ${pa.missile.d}d, +${pa.missile.cd}cd, ${pa.missile.bd}bd
          - emits *explosion* (${pa.explosion.d}d, ${pa.explosion.p}p, 12r blast)
-                
         `;
     }
     let messageEmbed = new Discord.EmbedBuilder()

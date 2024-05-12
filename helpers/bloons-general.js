@@ -39,12 +39,10 @@ function difficultyDiscountPriceMult(towerName, upgrade, mediumCost, difficulty,
 
     let absoluteDiscount = 0;
     let percentageDiscount = NUM_DISCOUNTS_TO_FACTOR[numDiscounts];
-    percentageDiscount += mkDiscounts.length && numDiscounts ? mkMiscDiscounts.insider_trades : 0;
-
+    percentageDiscount += mkDiscounts && numDiscounts ? mkMiscDiscounts.insider_trades : 0;
     if ("comeOnEverybody" in mkDiscounts && mkDiscounts.comeOnEverybody > 0) {
         percentageDiscount += mkDiscounts.comeOnEverybody;
     }
-
     if ("discounts" in mkDiscounts) {
         for (let discountGroup of mkDiscounts.discounts) {
             const upgrades = discountGroup.upgrades;
@@ -68,7 +66,6 @@ function difficultyDiscountPriceMult(towerName, upgrade, mediumCost, difficulty,
             if ((cost + absoluteDiscount) * (1 - percentageDiscount) <= 0) return 0;
         }
     }
-
     cost = (cost + absoluteDiscount) * (1 - percentageDiscount);
     return roundEven5(cost);
 }

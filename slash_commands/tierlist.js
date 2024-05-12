@@ -62,7 +62,10 @@ const versionTierlists = [
     'https://www.reddit.com/r/btd6/comments/121t4mn/comprehensive_tier_list_for_chimps_by_path/',
     'https://www.reddit.com/r/btd6/comments/13azbxb/comprehensive_tier_list_for_chimps_by_path/',
     'https://www.reddit.com/r/btd6/comments/14vnk2b/comprehensive_tier_list_for_chimps_by_path/',
-    'https://www.reddit.com/r/btd6/comments/15ut583/comprehensive_tier_list_for_chimps_by_path/'
+    'https://www.reddit.com/r/btd6/comments/15ut583/comprehensive_tier_list_for_chimps_by_path/',
+    'https://www.reddit.com/r/btd6/comments/17xo8d4/comprehensive_tier_list_for_chimps_by_path/',
+    'https://www.reddit.com/r/btd6/comments/196on6s/comprehensive_tier_list_for_chimps_by_path/',
+    'https://www.reddit.com/r/btd6/comments/1baqo9m/comprehensive_tier_list_for_chimps_by_path/',
 ];
 
 module.exports = {

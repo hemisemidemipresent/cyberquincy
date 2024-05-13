@@ -293,10 +293,14 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
         return ret;
     } else if (Towers.isTower(tokenCanonical)) {
         // Catches base tower names/aliases
+        let tmp = simpleMkDiscounts.comeOnEverybody;
         simpleMkDiscounts.comeOnEverybody = 0;
-        return Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts, simpleMkDiscounts);
+        let ret = Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts, simpleMkDiscounts);
+        if (Towers.allPrimaryTowers().includes(tokenCanonical)) return ret;
+        simpleMkDiscounts.comeOnEverybody = tmp;
+        return ret;
     } else if (Heroes.isHero(tokenCanonical)) {
-        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, !!simpleMkDiscounts);
+        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, !!simpleMkDiscounts.comeOnEverybody);
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }

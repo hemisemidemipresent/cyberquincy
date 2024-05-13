@@ -446,13 +446,17 @@ function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, mk
 
 function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, mkDiscounts = {}, battles2 = false) {
     const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet);
-    const [path, tier] = pathTierFromUpgradeSet(upgradeSet);
+    const [path, mainTier] = pathTierFromUpgradeSet(upgradeSet);
     const pathUpgrades = upgradesFromPath(path);
     const crossPathUpgrades = upgradesFromPath(crossPathTierFromUpgradeSet(upgradeSet)[0]);
+    const primaryTowers = allPrimaryTowers();
     let totalCost = 0;
     subUpgrades.forEach((subUpgrade) => {
         const tier = pathTierFromUpgradeSet(subUpgrade)[1];
-        if ((pathUpgrades.includes(subUpgrade) && (tier === "4" || tier === "5")) || crossPathUpgrades.includes(subUpgrade)) {
+        if (primaryTowers.includes(towerName) && (
+            (pathUpgrades.includes(subUpgrade) && tier >= "4") ||
+            (crossPathUpgrades.includes(subUpgrade) && mainTier >= "3")
+        )) {
             totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
         } else {
             if ("comeOnEverybody" in mkDiscounts) {
@@ -466,7 +470,9 @@ function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts =
         }
     });
 
-    if (tier !== "3" && tier !== "4" && "comeOnEverybody" in mkDiscounts) mkDiscounts.comeOnEverybody = 0;
+    if (primaryTowers.includes(towerName) && mainTier !== "3" && mainTier !== "4" && "comeOnEverybody" in mkDiscounts) {
+        mkDiscounts.comeOnEverybody = 0;
+    }
 
     return totalCost;
 }
@@ -484,6 +490,10 @@ module.exports = {
     towerNameToBloonologyLink,
     towerUpgradeToTower,
     towerUpgradeToUpgrade,
+    allPrimaryTowers,
+    allMilitaryTowers,
+    allMagicTowers,
+    allSupportTowers,
     allTowerUpgrades,
     allTowers,
     allTowerPaths,

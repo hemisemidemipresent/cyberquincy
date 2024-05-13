@@ -161,7 +161,6 @@ async function embedBloonology(heroName, level, heroItem, heroSpell, interaction
         if(interaction.options.getSubcommand() === 'geraldo') descForDescription = item;
         else if(interaction.options.getSubcommand() === 'corvus') descForDescription = spell;
         else descForDescription = descWithoutLevel;
-        console.log(c + ' , ' + d + ' , ' + e + ' , ' + f + ' , ' + spell);
     }
 
     const embed = new Discord.EmbedBuilder()
@@ -188,7 +187,6 @@ async function execute(interaction) {
     const heroLevel = interaction.options.getInteger('hero_lvl');
     const heroItem = interaction.options.getString('item');
     const heroSpell = interaction.options.getString('spell');
-    console.log(heroName + ' , ' + heroLevel + ' , ' + heroItem + ' , ' + heroSpell);
 
     const embed = await embedBloonology(heroName, heroLevel, heroItem, heroSpell, interaction);
 

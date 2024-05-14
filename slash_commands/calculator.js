@@ -300,7 +300,7 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
         simpleMkDiscounts.comeOnEverybody = tmp;
         return ret;
     } else if (Heroes.isHero(tokenCanonical)) {
-        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, !!simpleMkDiscounts.comeOnEverybody);
+        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, simpleMkDiscounts.discounts.length);
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }

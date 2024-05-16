@@ -98,6 +98,17 @@ function calculate(cashNeeded, round, mode, extraEor, thrives) {
         rounds.push(cashSoFar);
         addToTotal = 0;
         round++;
+        if (round > roundLimit) {
+            if (thrives) break;
+            return new Discord.EmbedBuilder()
+                .setTitle(
+                    `If you start popping at ${originalRound}, you can't get ${gHelper.numberAsCost(
+                        cashNeeded
+                    )} from popping bloons before random freeplay`
+                )
+                .setFooter({ text: 'freeplay rounds are random, hence cash is random' })
+                .setColor(orange);
+        }
     }
 
     if (thrives) {

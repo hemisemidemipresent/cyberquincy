@@ -101,6 +101,7 @@ function calculate(cashNeeded, round, mode, extraEor, thrives) {
     }
 
     if (thrives) {
+        thrives = Math.min(thrives, Math.floor((round - originalRound) / 2));
         thriveRounds = thriveHelper.getOptimalThrives(originalRound, round - 1, thrives, mode);
         round = originalRound;
         cashSoFar = 0;

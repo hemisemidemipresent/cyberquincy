@@ -3,6 +3,7 @@ const income = require('../jsons/income-normal.json');
 const abrincome = require('../jsons/income-abr.json');
 const gHelper = require('../helpers/general.js');
 const { cyber, orange } = require('../jsons/colors.json');
+const thriveHelper = require('../helpers/thrive.js');
 
 builder = new SlashCommandBuilder()
     .setName('cash')
@@ -10,6 +11,8 @@ builder = new SlashCommandBuilder()
 
     .addIntegerOption((option) => option.setName('cash_needed').setDescription('How much cash you need').setRequired(true))
     .addIntegerOption((option) => option.setName('round').setDescription('The round you start saving up').setRequired(true))
+    .addIntegerOption((option) => option.setName('extra_round_income').setDescription('Any additional income per round, NOT affected by thrive').setRequired(false))
+    .addIntegerOption((option) => option.setName('thrives').setDescription('Number of thrives').setRequired(false))
     .addStringOption((option) =>
         option
             .setName('game_mode')
@@ -23,14 +26,16 @@ builder = new SlashCommandBuilder()
     );
 
 function validateInput(interaction) {
-    cash_needed = interaction.options.get('cash_needed');
+    cashNeeded = interaction.options.get('cash_needed');
     mode = interaction.options.getString('game_mode') || 'chimps';
     round = interaction.options.getInteger('round');
+    extraIncome = interaction.options.getInteger('extra_round_income') || 0;
+    thrives = interaction.options.getInteger('thrives') || 0;
 
     // Validations
-    if (cash_needed < 1) return `Must enter positive numbers for cash_needed (${cash_needed})`;
+    if (cashNeeded < 1) return `Must enter positive number for cash_needed (${cash_needed})`;
 
-    if (round < 1) return `Must enter positive numbers for round (${round})`;
+    if (round < 1) return `Must enter positive number for round (${round})`;
     if (round > 140) return `R${round} is random (not predetermined); therefore the calculation won't be consistent`;
 
     if (mode == 'abr') {
@@ -38,6 +43,11 @@ function validateInput(interaction) {
         if (round > 100)
             return `R${round} is random (not predetermined) in ABR; therefore the calculation won't be consistent`;
     }
+
+    if (extraIncome < 0) return `Must enter non-negative number for extra_round_income (${extra_income})`;
+
+    if (thrives < 0) return `Must enter non-negative number for thrives (${thrives})`;
+
     return;
 }
 
@@ -51,27 +61,40 @@ async function execute(interaction) {
     cashNeeded = interaction.options.getInteger('cash_needed');
     mode = interaction.options.getString('game_mode') || 'chimps';
     round = interaction.options.getInteger('round');
+    extraEor = interaction.options.getInteger('extra_round_income') || 0;
+    thrives = interaction.options.getInteger('thrives') || 0;
 
-    let embed;
-    if (mode === 'chimps') embed = calculate(cashNeeded, round, income, 140, 1);
-    else if (mode === 'abr') embed = calculate(cashNeeded, round, abrincome, 100, 1);
-    else if (mode === 'halfcash') embed = calculate(cashNeeded, round, income, 140, 0.5);
+    let embed = calculate(cashNeeded, round, mode, extraEor, thrives);
 
     await interaction.reply({ embeds: [embed] });
 }
 
-function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
-    // "r" is the roundset array
+function calculate(cashNeeded, round, mode, extraEor, thrives) {
+    let r; // "r" is the roundset array
+    let incomeMultiplier = 1;
+    let roundLimit = 140;
+    switch (mode) {
+        case 'chimps':
+            r = income;
+            break;
+        case 'abr':
+            r = abrincome;
+            roundLimit = 100;
+            break;
+        case 'halfcash':
+            r = income;
+            incomeMultiplier = 0.5;
+            break;
+    }
+
     let cashSoFar = 0;
     let originalRound = round;
+    let rounds = [];
+    let thriveRounds = [];
 
     while (Math.round(cashSoFar) < cashNeeded) {
-        addToTotal = parseInt(r[round].cashThisRound);
-        cashSoFar += addToTotal * incomeMultiplier;
-        addToTotal = 0;
-        round++;
-
-        if (round > roundLimit)
+        if (round > roundLimit) {
+            if (thrives) break;
             return new Discord.EmbedBuilder()
                 .setTitle(
                     `If you start popping at ${originalRound}, you can't get ${gHelper.numberAsCost(
@@ -80,7 +103,46 @@ function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
                 )
                 .setFooter({ text: 'freeplay rounds are random, hence cash is random' })
                 .setColor(orange);
+        }
+
+        addToTotal = parseInt(r[round].cashThisRound) + extraEor;
+        cashSoFar += addToTotal * incomeMultiplier;
+        rounds.push(cashSoFar);
+        addToTotal = 0;
+        round++;
     }
+
+    if (thrives) {
+        thrives = Math.min(thrives, Math.ceil((round - originalRound) / 2));
+        thriveRounds = thriveHelper.getOptimalThrives(originalRound, round - 1, thrives, mode);
+        round = originalRound;
+        cashSoFar = 0;
+        while (Math.round(cashSoFar) < cashNeeded) {
+            if (round > roundLimit)
+                return new Discord.EmbedBuilder()
+                    .setTitle(
+                        `If you start popping at ${originalRound}, you can't get ${gHelper.numberAsCost(
+                            cashNeeded
+                        )} from popping bloons before random freeplay`
+                    )
+                    .setFooter({ text: 'freeplay rounds are random, hence cash is random' })
+                    .setColor(orange);
+
+            cashSoFar = rounds[round - originalRound];
+            cashSoFar += thriveRounds[round - originalRound][0] * incomeMultiplier;
+            round++;
+        }
+        thriveRounds = thriveRounds[round - originalRound - 1][1];
+
+        for (let i of thriveRounds) {
+            rounds[i - originalRound] += thriveHelper.getRoundThriveIncome(i) * incomeMultiplier;
+            for (let j = i + 1; j < round; j++) {
+                rounds[j - originalRound] += thriveHelper.getRoundThriveIncome(i) * incomeMultiplier;
+                rounds[j - originalRound] += thriveHelper.getRoundThriveIncome(i + 1) * incomeMultiplier;
+            }
+        }
+    }
+
     round--;
     // list them in a table
     let start = originalRound;
@@ -88,20 +150,27 @@ function calculate(cashNeeded, round, r, roundLimit, incomeMultiplier) {
     let table = '```\nstart | $0\n';
     let ellipsisUsed = false;
     for (let i = start; i <= end; i++) {
+        let cumCash = rounds[i - start];
         if (i - start > 2 && end - i > 2) {
+            if (thriveRounds.includes(i)) {
+                table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)} (thrive)\n`;
+                ellipsisUsed = false;
+                continue;
+            }
             if (!ellipsisUsed) table += '⋮\n';
             ellipsisUsed = true;
             continue;
         }
-        let cumCash = r[i].cumulativeCash - r[start - 1].cumulativeCash;
-        cumCash *= incomeMultiplier;
-        table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}\n`;
+        table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}` + (thriveRounds.includes(i) ? ' (thrive)\n' : '\n');
+
     }
     table += '```';
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(
-            `If you start popping (saving up) at round ${originalRound}, you should get $${cashNeeded} during round ${round}`
+            `If you start popping (saving up) at round ${originalRound}` +
+            (thrives ? ' and thrive at the start of the indicated rounds' : '') +
+            `, you should get $${cashNeeded} during round ${round}`
         )
         .setDescription(table)
         .setColor(cyber);

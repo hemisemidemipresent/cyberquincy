@@ -29,7 +29,7 @@ function getOptimalThrives(start, end, thrives, roundSet = "regular") {
         for (let j = 0; j < totalRounds - 2 * (thrives - i - 1); j++) {
             if (j <= 2 * i + 1) {
                 let totalIncome = incomeData.reduce(
-                    (a, b, ind) => (ind >= start - 1 && ind < start + j) ? a + b : a, 0
+                    (a, b, ind) => (ind >= start && ind <= start + j) ? a + b : a, 0
                 );
                 let thriveRounds = Array(Math.floor(j / 2) + 1).fill().map((_, ind) => start + 2 * ind);
                 dp[i][j] = [totalIncome, thriveRounds];

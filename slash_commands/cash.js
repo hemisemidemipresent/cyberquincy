@@ -93,11 +93,6 @@ function calculate(cashNeeded, round, mode, extraEor, thrives) {
     let thriveRounds = [];
 
     while (Math.round(cashSoFar) < cashNeeded) {
-        addToTotal = parseInt(r[round].cashThisRound) + extraEor;
-        cashSoFar += addToTotal * incomeMultiplier;
-        rounds.push(cashSoFar);
-        addToTotal = 0;
-        round++;
         if (round > roundLimit) {
             if (thrives) break;
             return new Discord.EmbedBuilder()
@@ -109,18 +104,20 @@ function calculate(cashNeeded, round, mode, extraEor, thrives) {
                 .setFooter({ text: 'freeplay rounds are random, hence cash is random' })
                 .setColor(orange);
         }
+
+        addToTotal = parseInt(r[round].cashThisRound) + extraEor;
+        cashSoFar += addToTotal * incomeMultiplier;
+        rounds.push(cashSoFar);
+        addToTotal = 0;
+        round++;
     }
 
     if (thrives) {
-        thrives = Math.min(thrives, Math.floor((round - originalRound) / 2));
+        thrives = Math.min(thrives, Math.ceil((round - originalRound) / 2));
         thriveRounds = thriveHelper.getOptimalThrives(originalRound, round - 1, thrives, mode);
         round = originalRound;
         cashSoFar = 0;
         while (Math.round(cashSoFar) < cashNeeded) {
-            cashSoFar = rounds[round - originalRound];
-            cashSoFar += thriveRounds[round - originalRound][0] * incomeMultiplier;
-            round++;
-
             if (round > roundLimit)
                 return new Discord.EmbedBuilder()
                     .setTitle(
@@ -130,6 +127,10 @@ function calculate(cashNeeded, round, mode, extraEor, thrives) {
                     )
                     .setFooter({ text: 'freeplay rounds are random, hence cash is random' })
                     .setColor(orange);
+
+            cashSoFar = rounds[round - originalRound];
+            cashSoFar += thriveRounds[round - originalRound][0] * incomeMultiplier;
+            round++;
         }
         thriveRounds = thriveRounds[round - originalRound - 1][1];
 

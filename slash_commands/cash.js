@@ -26,7 +26,7 @@ builder = new SlashCommandBuilder()
     );
 
 function validateInput(interaction) {
-    cashNeeded = interaction.options.get('cash_needed');
+    cashNeeded = interaction.options.getInteger('cash_needed');
     mode = interaction.options.getString('game_mode') || 'chimps';
     round = interaction.options.getInteger('round');
     extraIncome = interaction.options.getInteger('extra_round_income') || 0;

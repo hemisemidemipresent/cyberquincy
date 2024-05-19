@@ -250,7 +250,7 @@ async function calc(interaction) {
     } else {
         // G2g!
         const embed = new Discord.EmbedBuilder()
-            .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(1))) // At MOST 1 decimal place
+            .setTitle(gHelper.numberAsCost(Number.isInteger(output) ? output : output.toFixed(2))) // At most 2 decimal places
             .setDescription(`\`${expression}\``)
             .setColor(cyber);
         if (mk) embed.setFooter({ text: 'Max Monkey Knowledge is enabled (including "free" towers)' });

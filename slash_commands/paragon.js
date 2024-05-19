@@ -599,7 +599,7 @@ function lex(input, operator, value, difficulty) {
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
-function valueByCost(t, i, difficulty) {
+function valueByCost(t, i, difficulty, simpleMkDiscounts) {
     const canonicalToken = Aliases.canonicizeArg(t);
 
     if (Towers.isTower(canonicalToken)) {

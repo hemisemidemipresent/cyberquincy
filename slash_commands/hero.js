@@ -20,22 +20,27 @@ const itemOptions = new SlashCommandStringOption()
     .setName('item')
     .setDescription('Geraldo\'s Shop Item that you are looking for information on')
     .setRequired(true);
-    shop.forEach(item => {itemOptions.addChoices({ name: Aliases.toIndexNormalForm(item), value: item });
+
+shop.forEach(item => {
+    itemOptions.addChoices({ name: Aliases.toIndexNormalForm(item), value: item });
 });
 
 const spellOptions = new SlashCommandStringOption()
     .setName('spell')
     .setDescription('Corvus\'s spell that you are looking for information on')
     .setRequired(true);
-    spellbook.forEach(spell => {spellOptions.addChoices({ name: Aliases.toIndexNormalForm(spell), value: spell });
-});
+
+spellbook.forEach(spell => {
+    spellOptions.addChoices({ name: Aliases.toIndexNormalForm(spell), value: spell });
+}
+);
 
 const builder = new SlashCommandBuilder()
     .setName('hero')
     .setDescription('hi :3')
     .addSubcommand((subcommand) =>
         subcommand
-            .setName('heros')
+            .setName('heroes')
             .setDescription('Find information for each hero')
             .addStringOption(heroOption)
             .addIntegerOption((option) =>
@@ -74,70 +79,89 @@ async function embedBloonology(heroName, level, heroItem, heroSpell, interaction
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
-    
+
     const body = res.data;
     const cleaned = body.replace(/\t/g, '').replace(/\r/g, '').trim();
     const sentences = cleaned.split(/\n\n/);
 
     const desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
-    
+
     let descWithoutLevel;
-    if(interaction.options.getSubcommand() === 'geraldo') descWithoutLevel = desc.split('\n').slice(5);
-    else if(interaction.options.getSubcommand() === 'corvus') descWithoutLevel = desc.split('\n').slice(10);
+    if (interaction.options.getSubcommand() === 'geraldo') descWithoutLevel = desc.split('\n').slice(5);
+    else if (interaction.options.getSubcommand() === 'corvus') descWithoutLevel = desc.split('\n').slice(10);
     else descWithoutLevel = desc.split('\n').slice(1).join('\n');
 
     const descWithoutChanges = descWithoutLevel.slice(0, descWithoutLevel.indexOf(' '));
-    const descWithoutAbilities = descWithoutChanges.slice(0,descWithoutChanges.indexOf('# Activated Abilities'));
+    const descWithoutAbilities = descWithoutChanges.slice(0, descWithoutChanges.indexOf('# Activated Abilities'));
 
-
-    if(descWithoutChanges.join('\n').includes(heroItem) == false){
+    if (descWithoutChanges.join('\n').includes(heroItem) == false) {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Geraldo does not have this item at the current level, please try again.');
     }
 
-    if(descWithoutChanges.join('\n').includes(heroSpell) == false){
+    if (descWithoutChanges.join('\n').includes(heroSpell) == false) {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Corvus does not have this spell at the current level, please try again.');
     }
 
 
+    // hemi: ngl I'm not sure what sort of indexing is going on in these a, b, c, d, e, f variables are from alexmi but im just gonna leave them there
     //geraldo
-    let item;
-    let a = descWithoutChanges.indexOf("## " + shop[shop.indexOf(heroItem)+1]);
+    let a = descWithoutChanges.indexOf("## " + shop[shop.indexOf(heroItem) + 1]);
     let b = descWithoutChanges.indexOf("## " + heroItem);
-    a === -1 ? item = descWithoutChanges.slice(b).join('\n') : item = descWithoutChanges.slice(b, a).join('\n');
-    
+    let item = a === -1 ? descWithoutChanges.slice(b).join('\n') : descWithoutChanges.slice(b, a).join('\n');
+
     //corvus
     let spells = [], spell;
 
-    level == 1 ? spells = spellbook.slice(0,1).concat(spellbook.slice(4,5)).concat(spellbook.slice(12,13))
-    : (level > 1 && level < 4) ? spells = spellbook.slice(0,1).concat(spellbook.slice(4,7)).concat(spellbook.slice(12,13))
-    : level == 4 ? spells = spellbook.slice(0,1).concat(spellbook.slice(4,8)).concat(spellbook.slice(12,14))
-    : level == 5 ? spells = spellbook.slice(0,2).concat(spellbook.slice(4,9)).concat(spellbook.slice(12,15))
-    : level == 6 ? spells = spellbook.slice(0,2).concat(spellbook.slice(4,10)).concat(spellbook.slice(12,15))
-    : level == 7 ? spells = spellbook.slice(0,3).concat(spellbook.slice(4,11)).concat(spellbook.slice(12,15))
-    : (level > 7 && level < 10) ? spells = spellbook.slice(0,11).concat(spellbook.slice(12,15))
-    : (level > 9 && level < 13) ? spells = spellbook.slice(0,11).concat(spellbook.slice(12,16))
-    : (level > 12 && level < 21) ? spells = spellbook : spells = 'hi :)';
-    
-    let c = descWithoutChanges.indexOf("## " + spells[spells.indexOf(heroSpell)+1]);
+    // hemi: @alexmi what the heck is this
+    // level == 1 ? spells = spellbook.slice(0,1).concat(spellbook.slice(4,5)).concat(spellbook.slice(12,13))
+    // : (level > 1 && level < 4) ? spells = spellbook.slice(0,1).concat(spellbook.slice(4,7)).concat(spellbook.slice(12,13))
+    // : level == 4 ? spells = spellbook.slice(0,1).concat(spellbook.slice(4,8)).concat(spellbook.slice(12,14))
+    // : level == 5 ? spells = spellbook.slice(0,2).concat(spellbook.slice(4,9)).concat(spellbook.slice(12,15))
+    // : level == 6 ? spells = spellbook.slice(0,2).concat(spellbook.slice(4,10)).concat(spellbook.slice(12,15))
+    // : level == 7 ? spells = spellbook.slice(0,3).concat(spellbook.slice(4,11)).concat(spellbook.slice(12,15))
+    // : (level > 7 && level < 10) ? spells = spellbook.slice(0,11).concat(spellbook.slice(12,15))
+    // : (level > 9 && level < 13) ? spells = spellbook.slice(0,11).concat(spellbook.slice(12,16))
+    // : (level > 12 && level < 21) ? spells = spellbook : spells = 'hi :)';
+
+    // hemi: whatever Im not gonna bother "cleaning this up" too
+    if (level == 1)
+        spells = spellbook.slice(0, 1).concat(spellbook.slice(4, 5)).concat(spellbook.slice(12, 13));
+    else if (level == 2 || level == 3)
+        spells = spellbook.slice(0, 1).concat(spellbook.slice(4, 7)).concat(spellbook.slice(12, 13));
+    else if (level == 4)
+        spells = spellbook.slice(0, 1).concat(spellbook.slice(4, 8)).concat(spellbook.slice(12, 14));
+    else if (level == 5)
+        spells = spellbook.slice(0, 2).concat(spellbook.slice(4, 9)).concat(spellbook.slice(12, 15));
+    else if (level == 6)
+        spells = spellbook.slice(0, 2).concat(spellbook.slice(4, 10)).concat(spellbook.slice(12, 15));
+    else if (level == 7)
+        spells = spellbook.slice(0, 3).concat(spellbook.slice(4, 11)).concat(spellbook.slice(12, 15));
+    else if (level == 8 || level == 9)
+        spells = spellbook.slice(0, 11).concat(spellbook.slice(12, 15));
+    else if (level >= 10 && level <= 12)
+        spells = spellbook.slice(0, 11).concat(spellbook.slice(12, 16));
+    else if (level >= 13)
+        spells = spellbook;
+
+
+    let c = descWithoutChanges.indexOf("## " + spells[spells.indexOf(heroSpell) + 1]);
     let d = descWithoutChanges.indexOf("## " + heroSpell);
-    let e = descWithoutAbilities.indexOf("## " + spells[spells.indexOf(heroSpell)+1]);
+    let e = descWithoutAbilities.indexOf("## " + spells[spells.indexOf(heroSpell) + 1]);
     let f = descWithoutAbilities.indexOf("## " + heroSpell);
 
-    if(level < 3){
-        c === -1 ? spell = descWithoutChanges.slice(d).join('\n') : spell = descWithoutChanges.slice(d, c).join('\n');
+    if (level < 3) {
+        spell = c === -1 ? descWithoutChanges.slice(d).join('\n') : descWithoutChanges.slice(d, c).join('\n');
     } else {
-        e === -1 ? spell = descWithoutAbilities.slice(f).join('\n') : spell = descWithoutAbilities.slice(f, e).join('\n');
+        spell =  e === -1 ? descWithoutAbilities.slice(f).join('\n') : descWithoutAbilities.slice(f, e).join('\n');
     }
-
-
 
     if (typeof desc != 'string') {
         return new Discord.EmbedBuilder().setColor(red).setTitle('The bloonology datapiece is missing');
     }
 
     let title;
-    if(interaction.options.getSubcommand() === 'geraldo') title = `${Aliases.toIndexNormalForm(heroItem)} (Level-${level})`;
-    else if(interaction.options.getSubcommand() === 'corvus') title = `${Aliases.toIndexNormalForm(heroSpell)} (Level-${level})`
+    if (interaction.options.getSubcommand() === 'geraldo') title = `${Aliases.toIndexNormalForm(heroItem)} (Level-${level})`;
+    else if (interaction.options.getSubcommand() === 'corvus') title = `${Aliases.toIndexNormalForm(heroSpell)} (Level-${level})`;
     else level ? `${Aliases.toIndexNormalForm(heroName)} (Level-${level})` : `${Aliases.toIndexNormalForm(heroName)} (All Levels)`;
 
     // overflow
@@ -148,9 +172,9 @@ async function embedBloonology(heroName, level, heroItem, heroSpell, interaction
         const descLines = descWithoutLevel.split('\n');
         descLines.forEach((line) => {
             // add to description until char limit is reached
-            if (descForDescription.length + line.length < 4096) 
+            if (descForDescription.length + line.length < 4096)
                 return descForDescription += line + '\n';
-            
+
             // (assuming fields array is not empty) add to value of latest field
             if (fields[0] && fields[fields.length - 1].value.length + line.length < 1024)
                 return fields[fields.length - 1].value += line + '\n';
@@ -158,8 +182,8 @@ async function embedBloonology(heroName, level, heroItem, heroSpell, interaction
             fields.push({ name: '\u200b', value: line + '\n' });
         });
     } else {
-        if(interaction.options.getSubcommand() === 'geraldo') descForDescription = item;
-        else if(interaction.options.getSubcommand() === 'corvus') descForDescription = spell;
+        if (interaction.options.getSubcommand() === 'geraldo') descForDescription = item;
+        else if (interaction.options.getSubcommand() === 'corvus') descForDescription = spell;
         else descForDescription = descWithoutLevel;
     }
 
@@ -182,12 +206,11 @@ async function execute(interaction) {
     }
 
     let heroName = interaction.options.getString('hero');
-    if(interaction.options.getSubcommand() === 'geraldo') heroName = 'geraldo';
-    if(interaction.options.getSubcommand() === 'corvus') heroName = 'corvus';
+    if (interaction.options.getSubcommand() === 'geraldo') heroName = 'geraldo';
+    if (interaction.options.getSubcommand() === 'corvus') heroName = 'corvus';
     const heroLevel = interaction.options.getInteger('hero_lvl');
     const heroItem = interaction.options.getString('item');
     const heroSpell = interaction.options.getString('spell');
-
     const embed = await embedBloonology(heroName, heroLevel, heroItem, heroSpell, interaction);
 
     return await interaction.reply({ embeds: [embed] });

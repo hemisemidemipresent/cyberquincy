@@ -3,6 +3,7 @@ const r = require('../jsons/income-normal.json');
 const abr = require('../jsons/income-abr.json');
 const gHelper = require('../helpers/general.js');
 const { red, magenta, yellow } = require('../jsons/colors.json');
+const thriveHelper = require('../helpers/thrive.js');
 
 builder = new SlashCommandBuilder()
     .setName('income')
@@ -10,6 +11,8 @@ builder = new SlashCommandBuilder()
 
     .addIntegerOption((option) => option.setName('start_round').setDescription('Only/Starting Round').setRequired(true))
     .addIntegerOption((option) => option.setName('end_round').setDescription('End Round').setRequired(false))
+    .addIntegerOption((option) => option.setName('extra_round_income').setDescription('Any additional income per round, NOT affected by thrive').setRequired(false))
+    .addIntegerOption((option) => option.setName('thrives').setDescription('Number of thrives').setRequired(false))
     .addStringOption((option) =>
         option
             .setName('game_mode')
@@ -24,35 +27,46 @@ builder = new SlashCommandBuilder()
 
 function validateInput(interaction) {
     mode = interaction.options.getString('game_mode') || 'chimps';
-    startround = interaction.options.getInteger('start_round');
-    endround = interaction.options.getInteger('end_round') || startround;
+    startRound = interaction.options.getInteger('start_round');
+    endRound = interaction.options.getInteger('end_round') || startRound;
+    extraIncome = interaction.options.getInteger('extra_round_income') || 0;
+    thrives = interaction.options.getInteger('thrives') || 0;
 
     // Validations
-    if (startround < 1 || endround < 1) {
-        return `Must enter positive numbers for rounds (${endround < startround ? endround : startround})`;
+    if (startRound < 1 || endRound < 1) {
+        return `Must enter positive number for rounds (${endRound < startRound ? endRound : startRound})`;
     }
-    if (endround < startround) {
-        return `You entered a lower end round than start round`;
+    if (endRound < startRound) {
+        return `Must enter a higher end round than start round`;
     }
-    if (startround > 140 || endround > 140) {
-        return `R${
-            endround > startround ? endround : startround
-        } is not predetermined; therefore the calculation won't be consistent`;
+    if (startRound > 140 || endRound > 140) {
+        return `R${endRound > startRound ? endRound : startRound} is not predetermined;` +
+            ' therefore the calculation won\'t be consistent';
     }
     if (mode == 'abr') {
-        if (startround < 3 || endround < 3) {
+        if (startRound < 3 || endRound < 3) {
             return 'There is no support for rounds 1 and 2 abr income calculation';
         }
-        if (startround > 100 || endround > 100) {
-            return `R${
-                endround > startround ? endround : startround
-            } is not predetermined in ABR; therefore the calculation won't be consistent`;
+        if (startRound > 100 || endRound > 100) {
+            return `R${endRound > startRound ? endRound : startRound} is not predetermined in ABR;` +
+                ' therefore the calculation won\'t be consistent';
         }
     }
+
+    if (extraIncome < 0) {
+        return `Must enter non-negative number for extra_round_income (${extraIncome})`;
+    }
+    if (thrives < 0) {
+        return `Must enter non-negative number for thrives (${thrives})`;
+    }
+    if (startRound == endRound && thrives) {
+        return 'Thrives are not supported for single round calculations';
+    }
+
     return null;
 }
 
-function incomeEmbed(mode, start, end) {
+function incomeEmbed(mode, start, end, extraEor = 0, thrives = 0) {
     let roundset = r;
     let multiplier = 1;
     let modeName = 'CHIMPS';
@@ -76,34 +90,66 @@ function incomeEmbed(mode, start, end) {
             .setTitle(`You earn $${gHelper.round(cashThisRound)} in ${modeName} on round ${start}`)
             .setColor(magenta);
     }
-    // multiple-round data
 
+    let thriveRounds = [];
+    let cumulativeExtraIncome = new Array(end - start + 1).fill(0);
+
+    if (extraEor) {
+        for (let i = start; i <= end; i++) {
+            cumulativeExtraIncome[i - start] = (i - start + 1) * extraEor;
+        }
+    }
+
+    if (thrives) {
+        thrives = Math.min(thrives, Math.ceil((end - start + 1) / 2));
+        thriveRounds = thriveHelper.getOptimalThrives(start, end, thrives, mode);
+        thriveRounds = thriveRounds[end - start][1];
+
+        for (let i of thriveRounds) {
+            cumulativeExtraIncome[i - start] += thriveHelper.getRoundThriveIncome(i);
+            for (let j = i + 1; j <= end; j++) {
+                cumulativeExtraIncome[j - start] += thriveHelper.getRoundThriveIncome(i);
+                cumulativeExtraIncome[j - start] += thriveHelper.getRoundThriveIncome(i + 1);
+            }
+        }
+    }
+
+
+    // multiple-round data
     // list them all out in a table
     let table = '```\nstart | $0\n';
     let ellipsisUsed = false;
     for (let i = start; i <= end; i++) {
+        let cumCash = roundset[i].cumulativeCash - roundset[start - 1].cumulativeCash;
+        cumCash += cumulativeExtraIncome[i - start];
+        cumCash *= multiplier;
         if (i - start > 2 && end - i > 2) {
+            if (thriveRounds.includes(i)) {
+                table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)} (thrive)\n`;
+                ellipsisUsed = false;
+                continue;
+            }
             if (!ellipsisUsed) table += '⋮\n';
             ellipsisUsed = true;
             continue;
         }
-        let cumCash = roundset[i].cumulativeCash - roundset[start - 1].cumulativeCash;
-        cumCash *= multiplier;
-        table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}\n`;
+        table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}` + (thriveRounds.includes(i) ? ' (thrive)\n' : '\n');
     }
     table += '```';
 
     // form embed
     let income = roundset[end].cumulativeCash - roundset[start - 1].cumulativeCash;
+    income += cumulativeExtraIncome[end - start];
     income *= multiplier;
     return new Discord.EmbedBuilder()
-        .setTitle(`You will earn $${gHelper.round(income)} in ${modeName} from r${start}-r${end}`)
+        .setTitle(`You will earn $${gHelper.round(income)} in ${modeName} from r${start}-r${end}` +
+            (thrives ? ' if you thrive at the start of the indicated rounds' : ''))
         .setDescription(table)
         .setColor(magenta);
 }
 
-function chincomeEmbed(mode, round) {
-    incomes = calculateChincomes(mode, round);
+function chincomeEmbed(mode, round, extraEor = 0) {
+    incomes = calculateChincomes(mode, round, extraEor);
 
     const modeTitled = (function (mode) {
         switch (mode) {
@@ -161,12 +207,12 @@ function chincomeEmbed(mode, round) {
     return embed;
 }
 
-function calculateChincomes(mode, round) {
+function calculateChincomes(mode, round, extraEor = 0) {
     let incomes;
     if (mode == 'abr') {
-        incomes = calculateAbrChincomes(round);
+        incomes = calculateAbrChincomes(round, extraEor);
     } else {
-        incomes = calculateNormalChincomes(round);
+        incomes = calculateNormalChincomes(round, extraEor);
         if (mode == 'halfcash') {
             for (incomeType in incomes) {
                 incomes[incomeType] /= 2;
@@ -181,7 +227,7 @@ function calculateChincomes(mode, round) {
     return incomes;
 }
 
-function calculateAbrChincomes(round) {
+function calculateAbrChincomes(round, extraEor = 0) {
     let incomes = {
         rincome: null,
         chincomeExclusive: null,
@@ -194,14 +240,14 @@ function calculateAbrChincomes(round) {
     };
 
     index = round;
-    incomes.rincome = abr[index].cashThisRound;
+    incomes.rincome = abr[index].cashThisRound + extraEor;
     // start is r3
-    incomes.chincomeExclusive = abr[index - 1].cumulativeCash;
+    incomes.chincomeExclusive = abr[index - 1].cumulativeCash + (index - 3) * extraEor;
 
-    incomes.chincomeInclusive = abr[index].cumulativeCash;
-    if (round < 100) incomes.lincomeInclusive = abr[100].cumulativeCash - abr[index - 1].cumulativeCash;
+    incomes.chincomeInclusive = abr[index].cumulativeCash + (index - 2) * extraEor;
+    if (round < 100) incomes.lincomeInclusive = abr[100].cumulativeCash - abr[index - 1].cumulativeCash + (101 - index) * extraEor;
 
-    if (round < 99) incomes.lincomeExclusive = abr[100].cumulativeCash - abr[index].cumulativeCash;
+    if (round < 99) incomes.lincomeExclusive = abr[100].cumulativeCash - abr[index].cumulativeCash + (100 - index) * extraEor;
 
     if (round > 100) incomes.superChincomeInclusive = 'abr past 100 is random'; // these wont actually be shown in the embed since <round> cannot be greater than 100 if mode is abr
 
@@ -212,7 +258,7 @@ function calculateAbrChincomes(round) {
     return incomes;
 }
 
-function calculateNormalChincomes(round) {
+function calculateNormalChincomes(round, extraEor = 0) {
     let incomes = {
         rincome: null,
         chincomeExclusive: null,
@@ -226,18 +272,18 @@ function calculateNormalChincomes(round) {
 
     index = round;
 
-    incomes.rincome = r[index].cashThisRound;
-    if (round > 6) incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650;
+    incomes.rincome = r[index].cashThisRound + extraEor;
+    if (round > 6) incomes.chincomeExclusive = r[index - 1].cumulativeCash - r[5].cumulativeCash + 650 + (index - 6) * extraEor;
 
-    incomes.chincomeInclusive = r[index].cumulativeCash - r[5].cumulativeCash + 650;
-    if (round < 100) incomes.lincomeInclusive = r[100].cumulativeCash - r[index - 1].cumulativeCash;
+    incomes.chincomeInclusive = r[index].cumulativeCash - r[5].cumulativeCash + 650 + (index - 5) * extraEor;
+    if (round < 100) incomes.lincomeInclusive = r[100].cumulativeCash - r[index - 1].cumulativeCash + (101 - index) * extraEor;
 
-    if (round < 99) incomes.lincomeExclusive = r[100].cumulativeCash - r[index].cumulativeCash;
+    if (round < 99) incomes.lincomeExclusive = r[100].cumulativeCash - r[index].cumulativeCash + (100 - index) * extraEor;
 
-    if (round > 100) incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash;
+    if (round > 100) incomes.superChincomeInclusive = r[index].cumulativeCash - r[100].cumulativeCash + (index - 100) * extraEor;
 
-    incomes.superLincomeInclusive = r[140].cumulativeCash - r[index - 1].cumulativeCash;
-    if (round < 140) incomes.superLincomeExclusive = r[140].cumulativeCash - r[index].cumulativeCash;
+    incomes.superLincomeInclusive = r[140].cumulativeCash - r[index - 1].cumulativeCash + (141 - index) * extraEor;
+    if (round < 140) incomes.superLincomeExclusive = r[140].cumulativeCash - r[index].cumulativeCash + (140 - index) * extraEor;
 
     return incomes;
 }
@@ -254,14 +300,16 @@ async function execute(interaction) {
     mode = interaction.options.getString('game_mode') || 'chimps';
     startround = interaction.options.getInteger('start_round');
     endround = interaction.options.getInteger('end_round') || startround;
+    extraEor = interaction.options.getInteger('extra_round_income') || 0;
+    thrives = interaction.options.getInteger('thrives') || 0;
 
     if (startround == endround && startround >= 6) {
         return await interaction.reply({
-            embeds: [chincomeEmbed(mode, startround)]
+            embeds: [chincomeEmbed(mode, startround, extraEor)]
         });
     } else {
         return await interaction.reply({
-            embeds: [incomeEmbed(mode, startround, endround)]
+            embeds: [incomeEmbed(mode, startround, endround, extraEor, thrives)]
         });
     }
 }

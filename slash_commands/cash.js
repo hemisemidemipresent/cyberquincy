@@ -26,14 +26,14 @@ builder = new SlashCommandBuilder()
     );
 
 function validateInput(interaction) {
-    cashNeeded = interaction.options.get('cash_needed');
+    cashNeeded = interaction.options.getInteger('cash_needed');
     mode = interaction.options.getString('game_mode') || 'chimps';
     round = interaction.options.getInteger('round');
     extraIncome = interaction.options.getInteger('extra_round_income') || 0;
     thrives = interaction.options.getInteger('thrives') || 0;
 
     // Validations
-    if (cashNeeded < 1) return `Must enter positive number for cash_needed (${cash_needed})`;
+    if (cashNeeded < 1) return `Must enter positive number for cash_needed (${cashNeeded})`;
 
     if (round < 1) return `Must enter positive number for round (${round})`;
     if (round > 140) return `R${round} is random (not predetermined); therefore the calculation won't be consistent`;
@@ -44,7 +44,7 @@ function validateInput(interaction) {
             return `R${round} is random (not predetermined) in ABR; therefore the calculation won't be consistent`;
     }
 
-    if (extraIncome < 0) return `Must enter non-negative number for extra_round_income (${extra_income})`;
+    if (extraIncome < 0) return `Must enter non-negative number for extra_round_income (${extraIncome})`;
 
     if (thrives < 0) return `Must enter non-negative number for thrives (${thrives})`;
 
@@ -162,7 +162,6 @@ function calculate(cashNeeded, round, mode, extraEor, thrives) {
             continue;
         }
         table += `${`r${i}`.padEnd(6)}| $${gHelper.round(cumCash, 1)}` + (thriveRounds.includes(i) ? ' (thrive)\n' : '\n');
-
     }
     table += '```';
 

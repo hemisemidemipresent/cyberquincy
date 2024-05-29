@@ -264,8 +264,8 @@
             "pierce": 30
         },
         "aftershock": {
-            "damage": 150,
-            "bd": 150,
+            "damage": 10000,
+            "bd": 5000,
             "pierce": 50
         },
         "fallout": {

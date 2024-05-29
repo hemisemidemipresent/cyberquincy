@@ -3,6 +3,7 @@ const MapParser = require('../parser/map-parser');
 const { red, palegreen } = require('../jsons/colors.json');
 
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const { genCompletionLink } = require('../helpers');
 
 let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
 
@@ -63,8 +64,7 @@ async function ltc(map, modifier) {
         challengeEmbed.addFields([{ name: `Tower ${i+1}`, value: `${towerset[i]} (${upgradeset[i]})`, inline: true }]);
     }
 
-    let link = 'none';
-    if (result.link) link = `[Link](${result.link})`;
+    let link = genCompletionLink(result);
 
     challengeEmbed.addFields([
         { name: 'Map', value: result.map, inline: true },

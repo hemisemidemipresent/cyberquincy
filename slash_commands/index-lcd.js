@@ -1,6 +1,7 @@
 const MapParser = require('../parser/map-parser.js');
 
 const gHelper = require('../helpers/general.js');
+const { genCompletionLink } = require('../helpers/index.js');
 
 const { red, paleyellow } = require('../jsons/colors.json');
 
@@ -40,8 +41,7 @@ async function lcd(map) {
 
     let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${map} LCD Combo`).setColor(paleyellow);
 
-    let link = 'none';
-    if (result.link) link = `[Link](${result.link})`;
+    let link = genCompletionLink(result);
 
     challengeEmbed.addFields([
         { name: 'Map', value: result.map, inline: true },

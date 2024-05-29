@@ -1,6 +1,7 @@
 const MapParser = require('../parser/map-parser.js');
 
 const gHelper = require('../helpers/general.js');
+const { genCompletionLink } = require('../helpers/index.js');
 
 const { red, paleyellow } = require('../jsons/colors.json');
 
@@ -42,7 +43,7 @@ async function lcc(map) {
 
     let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${map} LCC (Latest Version)`).setColor(paleyellow);
 
-    let link = result.link ? `[Link](${result.link})` : 'none';
+    let link = genCompletionLink(result);
     challengeEmbed.addFields([
         { name: 'Cost', value: gHelper.numberAsCost(result.money), inline: true },
         { name: 'Version', value: result.version, inline: true },
@@ -63,7 +64,7 @@ async function lcc(map) {
 
     let challengeEmbed2 = new Discord.EmbedBuilder().setTitle(`${map} LCC (Cheapest)`).setColor(paleyellow);
 
-    link = result.link ? `[Link](${result.link})` : 'none';
+    link = genCompletionLink(result);
     challengeEmbed2.addFields([
         { name: 'Cost', value: gHelper.numberAsCost(result.money), inline: true },
         { name: 'Version', value: result.version, inline: true },

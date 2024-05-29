@@ -97,13 +97,17 @@
     ],
     "water_park": [
         "wa",
-        "wpark",
-        "wprk"
+        "wpark"
     ],
     "sulfur_springs": [
         "su",
-        "sulphur_springs",
         "sulfur",
-        "sulphur"
+        "sulphur",
+        "sulphur_springs"
+    ],
+    "protect_the_yacht": [
+        "pty",
+        "yacht",
+        "mr_beast"
     ]
 }

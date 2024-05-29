@@ -42,6 +42,8 @@ async function execute(interaction) {
         embed = new Discord.EmbedBuilder().setColor(cyber).setTitle(`No Aliases Found for \`${alias}\``);
     }
 
+    embed.addFields([{ name: 'Want a new alias?', value: `suggest them [here](${discord})` }]);
+
     return await interaction.reply({ embeds: [embed] });
 }
 

@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { cyber } = require('../jsons/colors.json');
+const { discord } = require('../aliases/misc.json');
 
 builder = new SlashCommandBuilder()
     .setName('alias')

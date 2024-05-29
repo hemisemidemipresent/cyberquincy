@@ -54,7 +54,10 @@ async function lcc(map) {
     results = results.sort((a, b) => a.money - b.money);
 
     // cheapest and latest version are the same
-    if (result.filekey == results[0].filekey) return [challengeEmbed];
+    if (result.filekey == results[0].filekey) { 
+        challengeEmbed.setFooter({ text: 'This is the cheapest combo' }); 
+        return [challengeEmbed];
+    }
 
     result = results[0];
 

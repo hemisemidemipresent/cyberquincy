@@ -1,7 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { cyber } = require('../jsons/colors.json');
-const map = require('../jsons/map.json');
-const { discord } = require('../aliases/misc.json');
+const { cyber, red } = require('../jsons/colors.json');
 const Maps = require('../helpers/maps');
 
 const FuzzySet = require('fuzzyset.js');
@@ -19,23 +17,61 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     let name = interaction.options.getString('map_name');
-    let m = map[name]; // map object
+
+    let searchParams = new URLSearchParams(Object.entries({ map: name }));
+
+    let res = await fetch('https://btd6index.win/fetch-map-info?' + searchParams);
+    let mapJson = await res.json();
+    // error or empty object
+    if ('error' in mapJson || Object.keys(mapJson).length === 0) {
+        return await interaction.reply({
+            embeds: [
+                new Discord.EmbedBuilder()
+                    .setTitle('Error!')
+                    .setDescription(`An error occured while [fetching information](https://btd6index.win/fetch-map-info?${searchParams}) for ${name}`)
+                    .setColor(red)
+            ]
+        });
+    }
 
     let mapEmbed = new Discord.EmbedBuilder()
-        .setTitle('Map info')
+        .setTitle(`Map information for ${name}`)
         .setDescription(`Here is your info for ${name}`)
         .setColor(cyber)
         .addFields([
-            { name: 'Map length', value: `${m.lenStr} RBS\n(on hard mode)`, inline: true },
-            { name: 'Object count:', value: `${m.obj}`, inline: true },
-            { name: 'Total $ to clear out all the objects', value: `$${m.Cos}`, inline: true },
-            { name: 'Version added:', value: `${m.ver}`, inline: true },
-            { name: 'Water body percentage/Has water?', value: `${m['wa%']}`, inline: true },
-            { name: 'Entrances/Exits', value: `${m.e}`, inline: true },
-            { name: 'Bug reporting', value: `report [here](${discord})`, inline: true }
-            //'Line of sight obstructions', `${m.los}`, true)
+            { name: 'Abbreviation', value: mapJson.abbreviation, inline: true },
+            { name: 'Map Difficulty', value: mapJson.difficulty, inline: true },
+            { name: 'Version added:', value: mapJson.version, inline: true }
         ]);
-    if (m.thu) mapEmbed.setThumbnail(m.thu);
+
+
+    // map length
+    if (!mapJson.lengthNotes) mapEmbed.addFields([{ name: 'Map length (RBS)', value: `${mapJson.length}`, inline: true }]);
+    else {
+        mapEmbed.addFields([
+            { name: 'Path Length (RBS)', value: `Average: ${mapJson.length}\n\n${mapJson.lengthNotes}` },
+        ]);
+    }
+    mapEmbed.addFields([
+        { name: 'Entrances/Exits', value: `${mapJson.numEntrances} entrance(s), ${mapJson.numExits} exit(s)`, inline: true },
+        { name: 'Object count', value: `${mapJson.numObjects} objects`, inline: true },
+    ]);
+
+    if (mapJson.removalCost) {
+        if (!mapJson.removalCostNotes) mapEmbed.addFields([{ name: 'Cost to Remove/Activate All Objects', value: mapJson.removalCost, inline: true }]);
+        else mapEmbed.addFields([{ name: 'Object Removal/Activation', value: `Cost: ${mapJson.removalCost}\n\n${mapJson.removalCostNotes}` }]);
+    }
+
+    mapEmbed.addFields([
+        { name: 'Has water?', value: mapJson.hasWater == 1 ? 'yes' : 'no', inline: true },
+        { name: 'Line of sight obstructions', value: mapJson.hasLOS == 1 ? 'yes' : 'no', inline: true }
+
+    ]);
+
+    if (mapJson.miscNotes) mapEmbed.addFields([{ name:'Miscellaneous Notes', value: mapJson.miscNotes }]);
+
+    mapEmbed.setFooter({ text: 'RBS measured on hard mode, so values are different from bloons wiki. Data taken from btd6index.win' });
+
 
     return await interaction.reply({ embeds: [mapEmbed] });
 }
@@ -45,11 +81,14 @@ async function onAutocomplete(interaction) {
     const map_name_partial = hoistedOptions.find((option) => option.name == 'map_name'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = map_name_partial.value;
 
-    let fs = FuzzySet(Maps.allMaps());
+
+    let allMaps = Maps.allMaps().map(mapName => Aliases.toIndexNormalForm(mapName));
+
+    let fs = FuzzySet(allMaps);
     let values = fs.get(value, null, 0.2);
     responseArr = [];
     if (!values)
-        responseArr = Maps.allMaps()
+        responseArr = allMaps
             .slice(0, 25) // discord only allows 25 options at a time
             .map((map) => {
                 return { name: map, value: map }; // cant inline because we are returning an object :(

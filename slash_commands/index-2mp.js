@@ -3,6 +3,7 @@ const { displayOneOrMultiplePagesNew, altMapsFields, genCompletionLink } = requi
 const Maps = require('../helpers/maps');
 
 const { paleblue } = require('../jsons/colors.json');
+const { discord } = require('../aliases/misc.json');
 
 const Parsed = require('../parser/parsed.js');
 
@@ -82,6 +83,9 @@ async function execute(interaction) {
         } catch (e) {
             challengeEmbed = err(e);
         }
+
+        // add support server link
+        challengeEmbed.addFields([{ name: 'Found something wrong?', value: `please report them [here](${discord})` }]);
 
         return await interaction.editReply({
             embeds: [challengeEmbed]
@@ -256,6 +260,8 @@ async function embed2MPAlt(resJson, entity, map) {
     if (altCombo.og) {
         return embed2MPOG(entity);
     }
+
+    console.log(resJson);
 
     // Embed and send the message
     let challengeEmbed = new Discord.EmbedBuilder()

@@ -17,6 +17,7 @@ const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps');
 
 const { palered } = require('../jsons/colors.json');
+const { discord } = require('../aliases/misc.json');
 
 BANNED_HEROES = ['sauda', 'geraldo', 'corvus'];
 
@@ -136,7 +137,7 @@ async function execute(interaction) {
         });
     }
     await interaction.deferReply();
-    
+
     // I give up on anything remotely elegant to construct the request from the parsed output ~hemi
     const parsed = parseAll(interaction);
 
@@ -158,12 +159,13 @@ async function execute(interaction) {
     );
     newparsed.entity1 = entityType1 ?? entity1 ?? hero1;
     newparsed.entity2 = entityType2 ?? entity2 ?? hero2;
-    
+
     const towers = [newparsed.entity1, newparsed.entity2].filter(val => val);
     const map = newparsed.map ? Aliases.toIndexNormalForm(newparsed.map) : null;
 
-    let og = interaction.options.getBoolean('og'); 
-    if (og) og = og + 0; // cursed way to convert true/false into 1/0
+    let og = interaction.options.getBoolean('og');
+    if (og) og = og + 0; // cursed way to convert true into 1 (false remains 'false' and not 0 since we don't want to exclude OGs even when false)
+    
     // after all that wrangling, construct the search parameters to btd6 index API
     const searchParams = new URLSearchParams(
         Object.entries({
@@ -174,11 +176,11 @@ async function execute(interaction) {
             pending: '0',
             count: '100',
             og: og
-        }).filter(([,value]) => value !== null && value !== undefined)
+        }).filter(([, value]) => value !== null && value !== undefined)
     );
 
     let resJson = await fetch2tc(searchParams);
-    
+
     await displayCombos(interaction, resJson, newparsed, searchParams);
 }
 
@@ -196,7 +198,7 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
     }
 
     if (combos.length == 1) {
-        
+
         // Only one combo found
 
         let challengeEmbed = new Discord.EmbedBuilder()
@@ -204,24 +206,37 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
             .setColor(palered);
 
         const combo = combos[0];
+
         // i give up I'm hardcoding the fields to use for displaying a single combo ~hemi
-        const fields = ['tower1', 'tower2', 'map', 'version', 'date', 'person'];
+        let fields = ['tower1', 'tower2', 'map', 'date', 'person'];
+        // only OG combos have version infomation
+        if (combo.og) fields.push('version');
+
         fields.forEach((field) => challengeEmbed.addFields([{ name: gHelper.toTitleCase(field), value: combo[field], inline: true }]));
 
         challengeEmbed.addFields([{ name: 'Link', value: Index.genCompletionLink(combo), inline: true }]);
         challengeEmbed.addFields([{ name: 'OG?', value: combo.og ? 'OG' : 'ALT', inline: true }]);
 
+        // add support server link
+        challengeEmbed.addFields([{ name: 'Found something wrong?', value: `please report them [here](${discord})` }]);
+
         return await interaction.editReply({ embeds: [challengeEmbed] });
 
     } else {
-
         // Multiple combos found
 
-        let numOGCompletions = 0;
+        
 
-        for (let i = 0; i < combos.length; i++) {
-            if (combos[i].og) numOGCompletions += 1;
-        }
+        // console.log(combos.length)
+
+        // for (let i = 0; i < combos.length; i++) {
+        //     if (combos[i].og) numOGCompletions += 1;
+        // }
+        let OGSearchParams = new URLSearchParams(searchParams);
+        OGSearchParams.set('og', 1);
+        let resJson = await fetch2tc(OGSearchParams);
+        let numOGCompletions = resJson.count;
+
 
         function setOtherDisplayFields(challengeEmbed) {
             challengeEmbed
@@ -244,15 +259,15 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
         searchParams.set('count', '10');
 
         // "Magic function" for pagination
-        return await Index.displayOneOrMultiplePagesNew(interaction, fetch2tc, searchParams, displayFields, 
+        return await Index.displayOneOrMultiplePagesNew(interaction, fetch2tc, searchParams, displayFields,
             completion => {
 
                 const boldOg = (str) => completion.og ? `**${str}**` : str;
-                
+
                 let obj = {};
 
                 const specifiedTower = parseProvidedEntities(parsed);
-                displayFields.forEach((field)=>{
+                displayFields.forEach((field) => {
                     if (field == 'Link') obj.Link = boldOg(Index.genCompletionLink(completion));
                     if (completion[field]) return obj[field] = boldOg(completion[field]);
                     if (field == 'unspecified_tower') {

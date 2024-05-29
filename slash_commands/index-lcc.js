@@ -25,9 +25,9 @@ async function execute(interaction) {
         return await interaction.reply('Map provided not valid');
     }
 
-    let challengeEmbed = await lcc(Aliases.toIndexNormalForm(parsed.map));
-    return await interaction.reply({ embeds: [challengeEmbed] });
-    
+    let embeds = await lcc(Aliases.toIndexNormalForm(parsed.map));
+    return await interaction.reply({ embeds: embeds });
+
 }
 
 async function lcc(map) {
@@ -35,18 +35,15 @@ async function lcc(map) {
     const searchParams = new URLSearchParams({ map, count: 100, pending: 0 });
 
     let { results } = await fetchlcc(searchParams);
-    
-    const result = results[0];
 
-    if (!result) return new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LCC found for ${map}`).setColor(red);
+    let result = results[0];
 
-    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${map} LCC Combo`).setColor(paleyellow);
+    if (!result) return [new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LCC found for ${map}`).setColor(red)];
 
-    let link = 'none';
-    if (result.link) link = `[Link](${result.link})`;
+    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${map} LCC (Latest Version)`).setColor(paleyellow);
 
+    let link = result.link ? `[Link](${result.link})` : 'none';
     challengeEmbed.addFields([
-        { name: 'Map', value: result.map, inline: true },
         { name: 'Cost', value: gHelper.numberAsCost(result.money), inline: true },
         { name: 'Version', value: result.version, inline: true },
         { name: 'Date', value: result.date, inline: true },
@@ -54,13 +51,31 @@ async function lcc(map) {
         { name: 'Link', value: link, inline: true }
     ]);
 
-    return challengeEmbed;
+    results = results.sort((a, b) => a.money - b.money);
+
+    // cheapest and latest version are the same
+    if (result.filekey == results[0].filekey) return [challengeEmbed];
+
+    result = results[0];
+
+    let challengeEmbed2 = new Discord.EmbedBuilder().setTitle(`${map} LCC (Cheapest)`).setColor(paleyellow);
+
+    link = result.link ? `[Link](${result.link})` : 'none';
+    challengeEmbed2.addFields([
+        { name: 'Cost', value: gHelper.numberAsCost(result.money), inline: true },
+        { name: 'Version', value: result.version, inline: true },
+        { name: 'Date', value: result.date, inline: true },
+        { name: 'Person', value: result.person, inline: true },
+        { name: 'Link', value: link, inline: true }
+    ]);
+
+    return [challengeEmbed, challengeEmbed2];
 }
 
 async function fetchlcc(searchParams) {
     let res = await fetch('https://btd6index.win/fetch-lcc?' + searchParams);
     let resJson = await res.json();
-    if ('error' in resJson) 
+    if ('error' in resJson)
         throw new Error(resJson.error);
     return resJson;
 }

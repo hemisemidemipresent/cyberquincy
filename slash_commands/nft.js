@@ -25,10 +25,10 @@ const builder = new SlashCommandBuilder()
     );
 
 const DIFFICULTY_TO_BASE_VALUE = {
-    easy: 635,
-    medium: 750,
-    hard: 810,
-    impoppable: 900
+    easy: 550,
+    medium: 650,
+    hard: 700,
+    impoppable: 780
 };
 
 /**

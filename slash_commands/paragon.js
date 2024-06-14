@@ -167,7 +167,7 @@ async function paragon_stats(interaction) {
                 **Rapid Fire Hooks** - Has 10 hooks “stored”, MOABs, BFBs, and DDTs use 1 hook while ZOMGs use 2 hooks, 1s between each pull, generates 2x normal cash, 10s to replenish [cooldown _might_ be shorter with higher degree]
 
                 **Main ship:**
-                **plasma dart**? - ${pa.plasmaDarts.d}d, ${pa.plasmaDarts.md}md, ${pa.plasmaDarts.bd}bd, ${pa.plasmaDarts.ed}ed, ${pa.plasmaDarts.p}p, ${pa.plasmaDarts.s}s, 60r, 10j (per set of 3 cannons, so effectively 30j per side)
+                **plasma dart**? - ${pa.plasmaDarts.d}d, ${pa.plasmaDarts.md}md, ${pa.plasmaDarts.bd}bd, ${pa.plasmaDarts.ed}ed, ${pa.plasmaDarts.p}p, ${pa.plasmaDarts.s}s, 60r, 6j (per set of 3 cannons, so effectively 18j per side)
                 **cannonball** - ${pa.cannonball.d}d, ${pa.cannonball.md}md, ${pa.cannonball.bd}bd, ${pa.cannonball.ed}ed, ${pa.cannonball.p}p, ${pa.cannonball.s}s, 60r, 3j (per set of 3 cannons, effectively 9j each side)
                 
                 **Fighter Planes:**

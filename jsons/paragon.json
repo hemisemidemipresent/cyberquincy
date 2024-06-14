@@ -165,14 +165,14 @@
     },
     "monkey_ace": {
         "radial": {
-            "damage": 200,
-            "bd": 200,
+            "damage": 300,
+            "bd": 300,
             "pierce": 35,
             "rate": 0.66
         },
         "seeking": {
-            "damage": 200,
-            "bd": 200,
+            "damage": 300,
+            "bd": 300,
             "rate": 0.66
         },
         "explosion": {
@@ -181,8 +181,8 @@
             "pierce": 35
         },
         "forward": {
-            "damage": 300,
-            "bd": 300,
+            "damage": 150,
+            "bd": 150,
             "pierce": 50,
             "rate": 0.11
         },

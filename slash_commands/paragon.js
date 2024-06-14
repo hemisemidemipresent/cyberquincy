@@ -225,10 +225,10 @@ async function paragon_stats(interaction) {
         let attacks = Object.keys(pa);
         attacks.forEach((key) => (pa[key] = pHelp.getLevelledObj(pa[key], x)));
         desc = `**Radial Darts** (purple trail)
-        • ${pa.radial.d}d, ${pa.radial.bd}bd, ${pa.radial.ed}ed, ${pa.radial.p}p, 16j, ${pa.radial.s}s
+        • ${pa.radial.d}d, ${pa.radial.bd}bd, ${pa.radial.ed}ed, ${pa.radial.p}p, 12j, ${pa.radial.s}s
         
         **Seeking Missiles** (green trail)
-        • ${pa.seeking.d}d, ${pa.seeking.bd}bd, ${pa.seeking.ed}ed, 4j, ${pa.seeking.s}s, on hit: creates explosion
+        • ${pa.seeking.d}d, ${pa.seeking.bd}bd, ${pa.seeking.ed}ed, 8j, ${pa.seeking.s}s, on hit: creates explosion
            
         **explosion** - ${pa.explosion.d}d, ${pa.explosion.bd}bd, ${pa.explosion.ed}ed, ${pa.explosion.p}p
         

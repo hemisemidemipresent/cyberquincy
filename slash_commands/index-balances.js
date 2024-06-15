@@ -41,11 +41,11 @@ const filterOption = new SlashCommandStringOption()
     .setRequired(false)
     .addChoices(
         { name: '✅/❌', value: '✅/❌' },
-        { name: '🟡/🟦', value: '🟡/🟦' },
+        { name: '🛠️/🔄', value: '🛠️/🔄' },
         { name: '✅', value: '✅' },
         { name: '❌', value: '❌' },
-        { name: '🟡', value: '🟡' },
-        { name: '🟦', value: '🟦' }
+        { name: '🛠️', value: '🛠️' },
+        { name: '🔄', value: '🔄' }
     );
 
 builder = new SlashCommandBuilder()
@@ -60,8 +60,8 @@ builder = new SlashCommandBuilder()
 const BALANCE_TYPE_MAPPINGS = {
     '✅': 'Buffs',
     '❌': 'Nerfs',
-    '⚠️': 'Fixes',
-    '↔': 'Changes'
+    '🛠️': 'Fixes',
+    '🔄': 'Changes'
 };
 
 function parseEntity(interaction) {
@@ -150,10 +150,10 @@ async function execute(interaction) {
         for (const version in entityBalances) {
             for (const balanceType in entityBalances[version]) {
                 for (const note of entityBalances[version][balanceType]) {
-                    // "⚠️ 3+xx blah blah blah ..."
-                    // or for heroes "⚠️ blah blah blah"
+                    // "✅ 3+xx blah blah blah ..."
+                    // or for heroes "✅ blah blah blah"
                     // there is some safeguarding against extra or not enough spaces
-                    const mat = note.match(/(✅|❌|⚠️|↔)? *(?:((?:\d|x|(?:\d\+)){3}) )?/);
+                    const mat = note.match(/(✅|❌|🛠️|🔄)? *(?:((?:\d|x|(?:\d\+)){3}) )?/);
 
                     // Will be undefined for hero
                     balanceTowerUpgrade = mat?.[2];
@@ -170,6 +170,7 @@ async function execute(interaction) {
 
                     balanceSymbol = mat[1];
 
+                    // needs to change based on balance type
                     if (!matchesBalanceType(balanceSymbol, parsed)) {
                         continue;
                     }

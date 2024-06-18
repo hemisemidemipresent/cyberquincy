@@ -78,7 +78,7 @@ function accumulatedXpCurve(
         }
 
         energizerFactor = round >= energizerAcquiredRound ? 1.5 : 1;
-        mkFactor = mk ? 1.15 : 1; // only considers the monkey knowledge "Self Taught Heroes" which increases XP gain by 10%, and not "Monkeys Together Strong"
+        mkFactor = mk ? 1.1 * 1.05 * 1.08 : 1;
 
         if (round == startingRound - 1) {
             xpGains.push(0);

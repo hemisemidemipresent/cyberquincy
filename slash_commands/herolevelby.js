@@ -89,7 +89,7 @@ async function displayHeroPlacementRounds(interaction) {
         description += `by **r${goalRound}** `;
         description += `on **${mapDifficulty}** maps.`;
 
-        if (mk) description += `\nThis includes the monkey knowledge **Self Taught Heroes** (+10% XP) and **Monkeys Together Strong** (+5% for a single hero)`;
+        if (mk) description += `\nThis includes the monkey knowledge **Monkey Education** (+8% XP) **Self Taught Heroes** (+10% XP) and **Monkeys Together Strong** (+5% for a single hero) (stacks multiplicatively)`;
 
         const embed = new Discord.EmbedBuilder()
             .setDescription(description)

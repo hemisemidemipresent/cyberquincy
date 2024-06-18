@@ -57,7 +57,8 @@ const HERO_NAME_TO_BLOONOLOGY_LINK = {
 function accumulatedXpCurve(
     startingRound,
     mapDifficulty,
-    energizerAcquiredRound
+    energizerAcquiredRound,
+    mk
 ) {
     mapSpecificLevelingMultiplier =
         LEVELING_MAP_DIFFICULTY_MODIFIERS[mapDifficulty.toUpperCase()];
@@ -77,6 +78,7 @@ function accumulatedXpCurve(
         }
 
         energizerFactor = round >= energizerAcquiredRound ? 1.5 : 1;
+        mkFactor = mk ? 1.15 : 1; // only considers the monkey knowledge "Self Taught Heroes" which increases XP gain by 10%, and not "Monkeys Together Strong"
 
         if (round == startingRound - 1) {
             xpGains.push(0);
@@ -84,7 +86,7 @@ function accumulatedXpCurve(
             xpGains.push(null);
         } else {
             xpGains.push(
-                baseXpGainGain * mapSpecificLevelingMultiplier * energizerFactor
+                baseXpGainGain * mapSpecificLevelingMultiplier * energizerFactor * mkFactor
             );
         }
     }
@@ -113,9 +115,14 @@ function heroLevelXpRequirements(hero) {
     });
 }
 
-function levelingChart(hero, startingRound, mapDifficulty) {
+function levelingChart(hero, startingRound, mapDifficulty, mk) {
     heroXpGains = heroLevelXpRequirements(hero);
-    accumulatedXp = accumulatedXpCurve(startingRound, mapDifficulty);
+    accumulatedXp = accumulatedXpCurve(
+        startingRound, 
+        mapDifficulty, 
+        null, // no energizer
+        mk
+    );
 
     return [null].concat(
         accumulatedXp.map((axp) => {
@@ -139,12 +146,14 @@ function levelingCurve(
     hero,
     startingRound,
     mapDifficulty,
-    energizerAcquiredRound = Infinity
+    energizerAcquiredRound = Infinity,
+    mk = false
 ) {
     accumulatedXp = accumulatedXpCurve(
         startingRound,
         mapDifficulty,
-        energizerAcquiredRound
+        energizerAcquiredRound,
+        mk
     );
 
     return heroLevelXpRequirements(hero).map((txp) => {

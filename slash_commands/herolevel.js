@@ -1,7 +1,8 @@
 const {
     SlashCommandBuilder,
     SlashCommandStringOption,
-    SlashCommandIntegerOption
+    SlashCommandIntegerOption,
+    SlashCommandBooleanOption
 } = require('discord.js');
 
 const gHelper = require('../helpers/general.js');
@@ -32,25 +33,37 @@ const energizerRoundOption = new SlashCommandIntegerOption()
     .setDescription('Optional Round Energizer was Placed')
     .setRequired(false);
 
+const mkOption = new SlashCommandBooleanOption()
+    .setName('monkey_knowledge')
+    .setDescription('If monkey knowledge is on or not')
+    .setRequired(false);
+
 builder = new SlashCommandBuilder()
     .setName('herolevel')
     .setDescription('See how heroes level based on your inputted parameters (optionally with energizer)')
     .addStringOption(heroOption)
     .addIntegerOption(heroLevelOption)
     .addStringOption(mapDifficultyOption)
-    .addIntegerOption(energizerRoundOption);
+    .addIntegerOption(energizerRoundOption)
+    .addBooleanOption(mkOption);
 
 function generateHeroLevels(interaction) {
     hero = interaction.options.getString('hero');
     placementRound = interaction.options.getInteger('placement_round');
     mapDifficulty = interaction.options.getString('map_difficulty');
     energizerRound = interaction.options.getInteger('energizer_placement_round');
+    mk = interaction.options.getBoolean('monkey_knowledge');
 
-    heroLevels = Heroes.levelingCurve(hero, placementRound, mapDifficulty, energizerRound || Infinity);
+    heroLevels = Heroes.levelingCurve(hero, placementRound, mapDifficulty, energizerRound || Infinity, mk || false);
     let res = table(gHelper.range(1, 20), heroLevels.slice(1));
+
+    let desc = description(placementRound, mapDifficulty, energizerRound);
+
+    if (mk) desc += `\nThis includes the monkey knowledge **Self Taught Heroes** (+10% XP) and **Monkeys Together Strong** (+5% for a single hero)`;
+
     const embed = new Discord.EmbedBuilder()
         .setTitle(`${gHelper.toTitleCase(hero)} Leveling Chart`)
-        .setDescription(description(placementRound, mapDifficulty, energizerRound))
+        .setDescription(desc)
         .addFields([{ name: '\u200b', value: `${res}` }])
         .setColor(cyber);
     return embed;

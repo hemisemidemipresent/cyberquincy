@@ -13,6 +13,7 @@ function numberWithCommas(x) {
 }
 
 function numberAsCost(x) {
+    x = round(x, 1); // prevents excessive decimal points
     let commas = numberWithCommas(x);
     if (x.toString().startsWith('$')) return commas;
 

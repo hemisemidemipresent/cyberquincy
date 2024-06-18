@@ -1,5 +1,6 @@
 const {
     SlashCommandBuilder,
+    SlashCommandBooleanOption,
     SlashCommandStringOption,
     SlashCommandIntegerOption,
     ComponentType,
@@ -34,21 +35,28 @@ Maps.allMapDifficulties().forEach((difficulty) => {
     mapDifficultyOption.addChoices({ name: gHelper.toTitleCase(difficulty), value: difficulty });
 });
 
+const mkOption = new SlashCommandBooleanOption()
+    .setName('monkey_knowledge')
+    .setDescription('If monkey knowledge is on or not')
+    .setRequired(false);
+
 builder = new SlashCommandBuilder()
     .setName('herolevelby')
     .setDescription('See how late you can place a hero to reach a specified level by a specified round')
     .addStringOption(heroOption)
     .addIntegerOption(desiredLevelOption)
     .addIntegerOption(goalRoundOption)
-    .addStringOption(mapDifficultyOption);
+    .addStringOption(mapDifficultyOption)
+    .addBooleanOption(mkOption);
 
 async function displayHeroPlacementRounds(interaction) {
     hero = interaction.options.getString('hero');
     desiredLevel = interaction.options.getInteger('desired_level');
     goalRound = interaction.options.getInteger('goal_round');
     mapDifficulty = interaction.options.getString('map_difficulty');
+    mk = interaction.options.getBoolean('monkey_knowledge');
 
-    const heroPlacementRound = calculateHeroPlacementRound(hero, goalRound, desiredLevel, mapDifficulty);
+    const heroPlacementRound = calculateHeroPlacementRound(hero, goalRound, desiredLevel, mapDifficulty, mk || false);
 
     let startingRounds = [];
     if (heroPlacementRound == -Infinity)
@@ -80,6 +88,8 @@ async function displayHeroPlacementRounds(interaction) {
         description += `to reach **lvl-${desiredLevel}** `;
         description += `by **r${goalRound}** `;
         description += `on **${mapDifficulty}** maps.`;
+
+        if (mk) description += `\nThis includes the monkey knowledge **Self Taught Heroes** (+10% XP) and **Monkeys Together Strong** (+5% for a single hero)`;
 
         const embed = new Discord.EmbedBuilder()
             .setDescription(description)
@@ -175,14 +185,14 @@ async function displayHeroPlacementRounds(interaction) {
     await displayHeroLevels();
 }
 
-function calculateHeroPlacementRound(hero, goalRound, desiredHeroLevel, mapDifficulty) {
+function calculateHeroPlacementRound(hero, goalRound, desiredHeroLevel, mapDifficulty, mk) {
     // Uses binary-search to find the round that produces the highest non-negative value
     // (implying that the hero has JUST reached the desiredHeroLevel by the specified goalRound)
     roundForLevelUpTo = gHelper.binaryLambdaSearch(
         6, // min possible placement round
         goalRound, // max possible placement round
         (startingRound) => {
-            return costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty);
+            return costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty, mk);
         }
     );
 
@@ -207,8 +217,8 @@ function calculateLaterPlacementRounds(hero, startingRounds, goalRound, desiredH
 // The cost to upgrade the hero to the given desiredHeroLevel on the goalRound
 // If it's 0 or negative, that means the level has been reached naturally
 // If it's positive, it means the player needs to pay to get the level
-function costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty) {
-    heroLevelingChart = Heroes.levelingChart(hero, startingRound, mapDifficulty);
+function costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty, mk) {
+    heroLevelingChart = Heroes.levelingChart(hero, startingRound, mapDifficulty, mk);
     return heroLevelingChart[goalRound][desiredHeroLevel];
 }
 

@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
-const axios = require('axios');
 const Towers = require('../helpers/towers.js');
 const { footer } = require('../aliases/misc.json');
 const { isValidEmbedField } = require('../helpers/discord');
@@ -31,15 +30,6 @@ const builder = new SlashCommandBuilder()
     .addStringOption(pathOption);
 
 async function embedBloonology(towerName, upgrade) {
-    let link = Towers.TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
-    let res;
-    try {
-        res = await axios.get(link);
-    } catch {
-        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
-    }
-    let body = res.data;
-
     const firstXIndex = upgrade.indexOf('x');
     const lastXIndex = upgrade.lastIndexOf('x');
 
@@ -68,26 +58,19 @@ async function embedBloonology(towerName, upgrade) {
         upgrade.substring(lastXIndex + 1)
     ];
 
-    const descriptions = body.split(/(?=^\s*[0-5]{3}\s*$)/m); // Checks for 3 digit tower id
+    let noCrosspathDescription;
+    try {
+        noCrosspathDescription = await Towers.towerUpgradeToMainBloonology(towerName, noCrosspathUpgrade, false);
+    } catch {
+        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
+    }
 
-    const noCrosspathDescription = cleanDescription(
-        descriptions.find((description) => description.substr(0, 3) == noCrosspathUpgrade)
-    )
-        .substr(3)
-        .split(/(?:__Changes from Previous Tier__)|(?:Changes from previous tier:)/i)[0];
-
-    const crosspathDescriptions = crosspathUpgrades.map((u) =>
-        cleanDescription(descriptions.find((description) => description.substr(0, 3) == u).substr(3))
-    );
-
-    const crosspathBenefits = crosspathDescriptions.map((desc) =>
-        desc
-            .split(/(?:__Crosspath Benefits__)|(?:Crosspath Benefits:)/i)[1]
-            ?.trim()
-            .split('\n')
-            .map((n) => `• ${n}`)
-            .join('\n')
-    );
+    let crosspathBenefits;
+    try {
+        crosspathBenefits = await Towers.towerUpgradesToCrosspathChangeBloonology(towerName, crosspathUpgrades, false, true);
+    } catch {
+        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
+    }
 
     const title =
         Towers.towerUpgradeFromTowerAndPathAndTier(towerName, ...Towers.pathTierFromUpgradeSet(noCrosspathUpgrade)) +
@@ -133,16 +116,6 @@ async function execute(interaction) {
     const embed = await embedBloonology(tower, towerPath);
 
     return await interaction.reply({ embeds: [embed] });
-}
-
-// background info: there are 2 newlines present in the string: \n and \r. \n is preferred
-function cleanDescription(desc) {
-    return desc
-        .toString()
-        .replace(/\n/g, '') // removes all newlines \n
-        .replace(/\r \t/g, '\n') // removes all \r + tab
-        .replace(/ \t-/g, '-    ') // removes remaining tabs
-        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
 }
 
 module.exports = {

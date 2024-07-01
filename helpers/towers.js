@@ -2,6 +2,7 @@ const gHelper = require('./general.js');
 const bHelper = require('./bloons-general.js');
 const costs = require('../jsons/costs.json');
 const costs_b2 = require('../jsons/costs_b2.json');
+const axios = require('axios');
 
 const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     dart_monkey: 'https://pastebin.com/raw/FK4a9ZSi',
@@ -52,10 +53,193 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK_B2 = {
     monkey_village: 'https://pastebin.com/raw/h28ruxxd',
     engineer: 'https://pastebin.com/raw/NPGKFNEv'
 };
+const BLOONOLOGY_INDENT = 6;
+const BLOONOLOGY_BASE_CHANGE_HEADERS = [
+    "__changes from 0-0-0__",
+    "changes from 000:"
+];
+const BLOONOLOGY_TIER_CHANGE_HEADERS = [
+    "__changes from previous tier__",
+    "changes from previous tier:"
+];
+const BLOONOLOGY_CROSSPATH_CHANGE_HEADERS = [
+    "__crosspath benefits__",
+    "crosspath benefits:"
+];
 
 function towerNameToBloonologyLink(towerName, isB2) {
     let array = isB2 ? TOWER_NAME_TO_BLOONOLOGY_LINK_B2 : TOWER_NAME_TO_BLOONOLOGY_LINK;
     return array[towerName];
+}
+
+async function towerNameToBloonologyList(towerName, isB2) {
+    let link = towerNameToBloonologyLink(towerName, isB2);
+    res = await axios.get(link);
+    let body = res.data;
+    return body.split(/(?=^\s*[0-5]{3}\s*$)/m).filter(x => isValidUpgradeSet(x.substr(0, 3)));
+}
+
+function cleanBloonology(description) {
+    description = description.trim();
+    description = description.replace(/\r?\n|\r/g, "\n"); // Normalize line endings
+    description = description.replace(/[\u2000-\u200F\u202A-\u202F]/g, ""); // Remove invisible characters
+    description = description.replace("\t", "      ");
+    let firstIndent = description.match(/^( +).*$/m);
+    let indentSize = BLOONOLOGY_INDENT;
+    if (firstIndent) indentSize = firstIndent[1].length;
+    return description.split("\n").map((line) => { // Normalize indentation
+        line = line.trimEnd();
+        let trimmed = line.trim();
+        indent = Math.round((line.length - trimmed.length) / indentSize) * BLOONOLOGY_INDENT;
+        if (indent >= BLOONOLOGY_INDENT && !trimmed.startsWith("-")) {
+            trimmed = "- " + trimmed;
+        }
+        return "\u200B ".repeat(indent) + trimmed;
+    }).join("\n");
+}
+
+async function towerUpgradeToFullBloonology(towerName, upgrade, isB2) {
+    let list = await towerNameToBloonologyList(towerName, isB2);
+    return cleanBloonology(list.find(x => x.substr(0, 3) === upgrade).substr(3));
+}
+
+async function towerUpgradesToFullBloonology(towerName, upgrades, isB2) {
+    let list = await towerNameToBloonologyList(towerName, isB2);
+    return upgrades.map(upgrade => cleanBloonology(list.find(x => x.substr(0, 3) === upgrade).substr(3)));
+}
+
+function splitBloonology(description) {
+    let ret = ["", "", "", ""]; // Main, Base, Tier, Crosspath
+    let ind = 0;
+    for (let line of description.split("\n")) {
+        if (BLOONOLOGY_BASE_CHANGE_HEADERS.includes(line.trim().toLowerCase())) {
+            ind = 1;
+        } else if (BLOONOLOGY_TIER_CHANGE_HEADERS.includes(line.trim().toLowerCase())) {
+            ind = 2;
+        } else if (BLOONOLOGY_CROSSPATH_CHANGE_HEADERS.includes(line.trim().toLowerCase())) {
+            ind = 3;
+        } else {
+            ret[ind] += line + "\n";
+        }
+    }
+    return ret.map(x => x.trim());
+}
+
+async function towerUpgradeToMainBloonology(towerName, upgrade, isB2, summary = false) {
+    let description = await towerUpgradeToFullBloonology(towerName, upgrade, isB2);
+    description = splitBloonology(description)[0];
+    if (summary) {
+        return description
+            .replace(/\u200B/g, "")
+            .split("\n")
+            .map(x => x.trim())
+            .filter(x => x.length)
+            .join(" ♦ ");
+    }
+    return description;
+}
+
+async function towerUpgradesToMainBloonology(towerName, upgrades, isB2, summary = false) {
+    let descriptions = await towerUpgradesToFullBloonology(towerName, upgrades, isB2);
+    descriptions = descriptions.map(x => splitBloonology(x)[0]);
+    if (summary) {
+        return descriptions.map(
+            description => description
+                .replace(/\u200B/g, "")
+                .split("\n")
+                .map(x => x.trim())
+                .filter(x => x.length)
+                .join(" ♦ ")
+        );
+    }
+    return descriptions;
+}
+
+async function towerUpgradeToBaseChangeBloonology(towerName, upgrade, isB2, summary = false) {
+    let description = await towerUpgradeToFullBloonology(towerName, upgrade, isB2);
+    description = splitBloonology(description)[1];
+    if (summary) {
+        return description
+            .replace(/\u200B/g, "")
+            .split("\n")
+            .map(x => "⟴ " + x.trim())
+            .join("\n");
+    }
+    return description;
+}
+
+async function towerUpgradesToBaseChangeBloonology(towerName, upgrades, isB2, summary = false) {
+    let descriptions = await towerUpgradesToFullBloonology(towerName, upgrades, isB2);
+    descriptions = descriptions.map(x => splitBloonology(x)[1]);
+    if (summary) {
+        return descriptions.map(
+            description => description
+                .replace(/\u200B/g, "")
+                .split("\n")
+                .map(x => "⟴ " + x.trim())
+                .join("\n")
+        );
+    }
+    return descriptions;
+}
+
+async function towerUpgradeToTierChangeBloonology(towerName, upgrade, isB2, summary = false) {
+    let description = await towerUpgradeToFullBloonology(towerName, upgrade, isB2);
+    description = splitBloonology(description)[["100", "010", "001"].includes(upgrade) ? 1 : 2];
+
+    if (summary) {
+        return description
+            .replace(/\u200B/g, "")
+            .split("\n")
+            .map(x => "⟴ " + x.trim())
+            .join("\n");
+    }
+    return description;
+}
+
+async function towerUpgradesToTierChangeBloonology(towerName, upgrades, isB2, summary = false) {
+    let descriptions = await towerUpgradesToFullBloonology(towerName, upgrades, isB2);
+    descriptions = descriptions.map(
+        (x, ind) => splitBloonology(x)[["100", "010", "001"].includes(upgrades[ind]) ? 1 : 2]
+    );
+    if (summary) {
+        return descriptions.map(
+            description => description
+                .replace(/\u200B/g, "")
+                .split("\n")
+                .map(x => "⟴ " + x.trim())
+                .join("\n")
+        );
+    }
+    return descriptions;
+}
+
+async function towerUpgradeToCrosspathChangeBloonology(towerName, upgrade, isB2, summary = false) {
+    let description = await towerUpgradeToFullBloonology(towerName, upgrade, isB2);
+    description = splitBloonology(description)[3];
+    if (summary) {
+        return description
+            .replace(/\u200B/g, "")
+            .split("\n")
+            .map(x => "• " + x.trim())
+            .join("\n");
+    }
+    return description;
+}
+
+async function towerUpgradesToCrosspathChangeBloonology(towerName, upgrades, isB2, summary = false) {
+    let descriptions = await towerUpgradesToFullBloonology(towerName, upgrades, isB2);
+    descriptions = descriptions.map(x => splitBloonology(x)[3]);
+    if (summary) {
+        return descriptions.map(
+            description => description
+                .replace(/\u200B/g, "")
+                .split("\n")
+                .map(x => "• " + x.trim())
+                .join("\n")
+        );
+    }
+    return descriptions;
 }
 
 function towerUpgradeToTower(towerUpgrade) {
@@ -488,6 +672,16 @@ function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscoun
 module.exports = {
     TOWER_NAME_TO_BLOONOLOGY_LINK,
     towerNameToBloonologyLink,
+    towerUpgradeToFullBloonology,
+    towerUpgradesToFullBloonology,
+    towerUpgradeToMainBloonology,
+    towerUpgradesToMainBloonology,
+    towerUpgradeToTierChangeBloonology,
+    towerUpgradesToTierChangeBloonology,
+    towerUpgradeToCrosspathChangeBloonology,
+    towerUpgradesToCrosspathChangeBloonology,
+    towerUpgradeToBaseChangeBloonology,
+    towerUpgradesToBaseChangeBloonology,
     towerUpgradeToTower,
     towerUpgradeToUpgrade,
     allPrimaryTowers,

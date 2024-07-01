@@ -83,7 +83,7 @@ function cleanBloonology(description) {
     description = description.trim();
     description = description.replace(/\r?\n|\r/g, "\n"); // Normalize line endings
     description = description.replace(/[\u2000-\u200F\u202A-\u202F]/g, ""); // Remove invisible characters
-    description = description.replace(/\t/g, "      ");
+    description = description.replace(/\t/g, " ".repeat(BLOONOLOGY_INDENT));
     let firstIndent = description.match(/^( +).*$/m);
     let indentSize = BLOONOLOGY_INDENT;
     if (firstIndent) indentSize = firstIndent[1].length;

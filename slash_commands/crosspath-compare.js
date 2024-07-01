@@ -47,28 +47,28 @@ async function embedBloonology(towerName, upgrade) {
 
     const crosspathUpgrades = [
         upgrade.substring(0, firstXIndex) +
-            '1' +
-            upgrade.substring(firstXIndex + 1, lastXIndex) +
-            '0' +
-            upgrade.substring(lastXIndex + 1),
+        '1' +
+        upgrade.substring(firstXIndex + 1, lastXIndex) +
+        '0' +
+        upgrade.substring(lastXIndex + 1),
         upgrade.substring(0, firstXIndex) +
-            '2' +
-            upgrade.substring(firstXIndex + 1, lastXIndex) +
-            '0' +
-            upgrade.substring(lastXIndex + 1),
+        '2' +
+        upgrade.substring(firstXIndex + 1, lastXIndex) +
+        '0' +
+        upgrade.substring(lastXIndex + 1),
         upgrade.substring(0, firstXIndex) +
-            '0' +
-            upgrade.substring(firstXIndex + 1, lastXIndex) +
-            '1' +
-            upgrade.substring(lastXIndex + 1),
+        '0' +
+        upgrade.substring(firstXIndex + 1, lastXIndex) +
+        '1' +
+        upgrade.substring(lastXIndex + 1),
         upgrade.substring(0, firstXIndex) +
-            '0' +
-            upgrade.substring(firstXIndex + 1, lastXIndex) +
-            '2' +
-            upgrade.substring(lastXIndex + 1)
+        '0' +
+        upgrade.substring(firstXIndex + 1, lastXIndex) +
+        '2' +
+        upgrade.substring(lastXIndex + 1)
     ];
 
-    const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+    const descriptions = body.split(/(?=^\s*[0-5]{3}\s*$)/m); // Checks for 3 digit tower id
 
     const noCrosspathDescription = cleanDescription(
         descriptions.find((description) => description.substr(0, 3) == noCrosspathUpgrade)

@@ -57,7 +57,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
 
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
-    const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+    const allUpgradeDescriptions = body.split(/(?=^\s*[0-5]{3}\s*$)/m); // Checks for 3 digit tower id
 
     const upgradeDescription = cleanDescription(
         allUpgradeDescriptions.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3)
@@ -126,7 +126,7 @@ async function embedBloonologySummary(towerName, isB2) {
     }
     let body = res.data;
 
-    const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
+    const descriptions = body.split(/(?=^\s*[0-5]{3}\s*$)/m); // Checks for 3 digit tower id
 
     const tierUpgrades = [];
     let idx, tier;

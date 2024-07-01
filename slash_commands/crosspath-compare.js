@@ -68,7 +68,7 @@ async function embedBloonology(towerName, upgrade) {
         upgrade.substring(lastXIndex + 1)
     ];
 
-    const descriptions = body.split(/(?=\s*[0-5]{3}\s*\n)/g); // Checks for 3 digit tower id
+    const descriptions = body.split(/(?=^\s*[0-5]{3}\s*$)/m); // Checks for 3 digit tower id
 
     const noCrosspathDescription = cleanDescription(
         descriptions.find((description) => description.substr(0, 3) == noCrosspathUpgrade)

@@ -55,6 +55,10 @@
 		"cost": 540,
 		"levelModifier": 1
 	},
+	"rosalia": {
+		"cost": 875,
+		"levelModifier": 1.425
+	},
 	"sauda": {
 		"cost": 600,
 		"levelModifier": 1.425

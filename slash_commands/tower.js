@@ -7,8 +7,6 @@ const {
     SlashCommandStringOption
 } = require('discord.js');
 
-const axios = require('axios');
-
 const Towers = require('../helpers/towers.js');
 
 const { discord, footer } = require('../aliases/misc.json');
@@ -46,22 +44,13 @@ function parseTowerPath(interaction) {
 
 // the function that creates the embed for bloonology that will get sent
 async function embedBloonology(towerName, upgrade, isB2) {
-    let link = Towers.towerNameToBloonologyLink(towerName, isB2);
-    let res;
+    let upgradeDescription;
     try {
-        res = await axios.get(link);
-    } catch {
+        upgradeDescription = await Towers.towerUpgradeToFullBloonology(towerName, upgrade, isB2);
+    } catch (e) {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
-    let body = res.data;
-
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
-
-    const allUpgradeDescriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
-
-    const upgradeDescription = cleanDescription(
-        allUpgradeDescriptions.find((fullDescription) => fullDescription.substr(0, 3) == upgrade).substr(3)
-    );
 
     const formattedUpgrade = upgrade.split('').join('-');
     const formattedTowerName = Aliases.toIndexNormalForm(towerName);
@@ -117,16 +106,12 @@ async function embedBloonology(towerName, upgrade, isB2) {
 }
 
 async function embedBloonologySummary(towerName, isB2) {
-    let link = Towers.towerNameToBloonologyLink(towerName, isB2);
-    let res;
+    let baseDescription;
     try {
-        res = await axios.get(link);
+        baseDescription = await Towers.towerUpgradeToMainBloonology(towerName, "000", isB2, true);
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
-    let body = res.data;
-
-    const descriptions = body.split('\r\n\r\n'); // each newline is \r\n\r\n
 
     const tierUpgrades = [];
     let idx, tier;
@@ -136,38 +121,18 @@ async function embedBloonologySummary(towerName, isB2) {
         }
     }
 
-    const pathDescriptions = tierUpgrades.map((u) =>
-        cleanDescription(descriptions.find((description) => description.substr(0, 3) == u).substr(3))
-    );
-
-    const splitTexts = [
-        '__Changes from 0-0-0__',
-        'Changes from 000:',
-        '__Changes from Previous Tier__',
-        'Changes from previous tier:',
-        '__Crosspath Benefits__',
-        'Crosspath Benefits:'
-    ];
-    const splitTextsRegexStr = splitTexts.map((st) => `(?:${st})`).join('|');
-
-    const pathBenefits = pathDescriptions.map((desc) => {
-        // We're relying on Changes from Previous Tier being the first header after the upgrade details
-        const rawBenefits = desc.split(new RegExp(splitTextsRegexStr, 'i'))[1]?.trim();
-        return rawBenefits
-            .split('\n')
-            .map((n) => `⟴ ${n}`)
-            .join('\n');
-    });
+    let pathBenefits;
+    try {
+        pathBenefits = await Towers.towerUpgradesToTierChangeBloonology(towerName, tierUpgrades, isB2, true);
+    } catch {
+        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
+    }
 
     const headers = tierUpgrades.map((u) => {
         const [path, tier] = Towers.pathTierFromUpgradeSet(u);
         const upgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(towerName, path, tier);
         return `${upgradeName} (${u})`;
     });
-
-    const placedTowerDescription = cleanDescription(
-        descriptions.find((description) => description.substr(0, 3) == '000').substr(3)
-    );
 
     const title = Aliases.toIndexNormalForm(towerName) + ' Summary';
 
@@ -176,11 +141,7 @@ async function embedBloonologySummary(towerName, isB2) {
     embed.addFields([
         {
             name: `Base Stats`,
-            value: placedTowerDescription
-                .split(/(?:\n|\r)+/)
-                .map((s) => s.trim().replace(/\u200E/g, ''))
-                .filter((s) => s.length > 0)
-                .join(' ♦ ')
+            value: baseDescription
         }
     ]);
 
@@ -252,12 +213,3 @@ module.exports = {
     data: builder,
     execute
 };
-// background info: there are 2 newlines present in the string: \n and \r. \n is preferred
-function cleanDescription(desc) {
-    return desc
-        .toString()
-        .replace(/\n/g, '') // removes all newlines \n
-        .replace(/\r \t/g, '\n') // removes all \r + tab
-        .replace(/ \t-/g, '-    ') // removes remaining tabs
-        .replace(/\r/g, '\n'); // switches back all remaining \r with \n
-}

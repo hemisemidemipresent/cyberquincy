@@ -127,6 +127,9 @@ async function scrapeAllBalanceChanges() {
         },
         "corvus": {
             "versionAdded": "40.0"
+        },
+        "rosalia": {
+            "versionAdded": "43.0"
         }
     };
     

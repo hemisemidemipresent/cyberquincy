@@ -5,7 +5,6 @@
         "ador",
         "dora",
         "priestess",
-        "highpriestess",
         "odour",
         "odoura"
     ],
@@ -62,19 +61,17 @@
         "gwendolin",
         "gwendolyn",
         "scientist",
-        "gwendolin",
         "gwend",
         "gwendo",
         "fire"
     ],
     "jones": [
         "striker_jones",
-        "striker-jones",
-        "SJ",
         "sj",
         "striker",
         "bones",
-        "biker"
+        "biker",
+        "stroker"
     ],
     "obyn": [
         "obyn-greenfoot",
@@ -105,6 +102,11 @@
         "quonc",
         "cyber",
         "cq"
+    ],
+    "rosalia": [
+        "ros",
+        "rosa",
+        "rosalina"
     ],
     "sauda": [
         "saud",

@@ -51,7 +51,8 @@ const HERO_NAME_TO_BLOONOLOGY_LINK = {
     sauda: 'https://pastebin.com/raw/8E2TSndk',
     psi: 'https://pastebin.com/raw/9h9aAPUm',
     geraldo: 'https://pastebin.com/raw/rksZWhTV',
-    corvus: 'https://pastebin.com/raw/JVnXdsqZ'
+    corvus: 'https://pastebin.com/raw/JVnXdsqZ',
+    rosalia: 'https://pastebin.com/raw/CbXjwva7'
 };
 
 function accumulatedXpCurve(
@@ -78,8 +79,9 @@ function accumulatedXpCurve(
         }
 
         energizerFactor = round >= energizerAcquiredRound ? 1.5 : 1;
-        mkFactor = mk ? 1.1 * 1.05 * 1.08 : 1;
-
+        // mkFactor = mk ? 1.1 * 1.05 * 1.08 : 1;
+        mkFactor = 1;
+        
         if (round == startingRound - 1) {
             xpGains.push(0);
         } else if (round < startingRound) {

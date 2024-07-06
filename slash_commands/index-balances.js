@@ -301,6 +301,12 @@ async function displayPages(interaction, pages, versionAdded, parsed) {
             embed.addFields([{ name: `**${header}**`, value: pages[pageIdx][header] }]);
         }
 
+        let footer = [];
+        for(const emoji in BALANCE_TYPE_MAPPINGS) {
+            footer.push(`${emoji} ${BALANCE_TYPE_MAPPINGS[emoji]}`);
+        }
+        embed.setFooter({ text: footer.join(' • ') });
+
         if (includedButtons.length > 0) {
             includedButtons.find((b) => b.data.disabled).setLabel(`${pageIdx + 1}/${pages.length}`);
         }

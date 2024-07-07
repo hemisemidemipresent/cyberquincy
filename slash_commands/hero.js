@@ -1,8 +1,7 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
-const { HERO_NAME_TO_BLOONOLOGY_LINK } = require('../helpers/heroes');
+const { HERO_NAME_TO_BLOONOLOGY_LINK, heroNameToBloonologyList } = require('../helpers/bloonology');
 
-const axios = require('axios');
 const { footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colors.json');
 
@@ -28,21 +27,14 @@ function validateInput(interaction) {
 }
 
 async function embedBloonology(heroName, level) {
-    const link = HERO_NAME_TO_BLOONOLOGY_LINK[heroName];
-    let res = '';
-
+    let sentences;
     try {
-        res = await axios.get(link);
+        sentences = await heroNameToBloonologyList(heroName);
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
 
-    const body = res.data;
-    const cleaned = body.replace(/\t/g, '').replace(/\r/g, '').trim();
-    const sentences = cleaned.split(/\n\n/);
-
     const desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
-    const descWithoutLevel = desc.split('\n').slice(1).join('\n');
     if (typeof desc != 'string') {
         return new Discord.EmbedBuilder().setColor(red).setTitle('The bloonology datapiece is missing');
     }
@@ -55,13 +47,13 @@ async function embedBloonology(heroName, level) {
     // TODO: Check for total chars > 6000
     let fields = [];
     let descForDescription = '';
-    if (descWithoutLevel.length > 4096) {
-        const descLines = descWithoutLevel.split('\n');
+    if (desc.length > 4096) {
+        const descLines = desc.split('\n');
         descLines.forEach((line) => {
             // add to description until char limit is reached
-            if (descForDescription.length + line.length < 4096) 
+            if (descForDescription.length + line.length < 4096)
                 return descForDescription += line + '\n';
-            
+
             // (assuming fields array is not empty) add to value of latest field
             if (fields[0] && fields[fields.length - 1].value.length + line.length < 1024)
                 return fields[fields.length - 1].value += line + '\n';
@@ -69,7 +61,7 @@ async function embedBloonology(heroName, level) {
             fields.push({ name: '\u200b', value: line + '\n' });
         });
     } else {
-        descForDescription = descWithoutLevel;
+        descForDescription = desc;
     }
 
     const embed = new Discord.EmbedBuilder()

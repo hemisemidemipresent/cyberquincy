@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 const Towers = require('../helpers/towers.js');
+const Bloonology = require('../helpers/bloonology.js');
 const { footer } = require('../aliases/misc.json');
 const { isValidEmbedField } = require('../helpers/discord');
 const { red, cyber } = require('../jsons/colors.json');
@@ -9,7 +10,7 @@ const towerOption = new SlashCommandStringOption()
     .setName('tower')
     .setDescription('The tower you are finding information for')
     .setRequired(true);
-Object.keys(Towers.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
+Object.keys(Bloonology.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
     towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
 });
 
@@ -60,14 +61,14 @@ async function embedBloonology(towerName, upgrade) {
 
     let noCrosspathDescription;
     try {
-        noCrosspathDescription = await Towers.towerUpgradeToMainBloonology(towerName, noCrosspathUpgrade, false);
+        noCrosspathDescription = await Bloonology.towerUpgradeToMainBloonology(towerName, noCrosspathUpgrade, false);
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
 
     let crosspathBenefits;
     try {
-        crosspathBenefits = await Towers.towerUpgradesToCrosspathChangeBloonology(towerName, crosspathUpgrades, false, true);
+        crosspathBenefits = await Bloonology.towerUpgradesToCrosspathChangeBloonology(towerName, crosspathUpgrades, false, true);
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }

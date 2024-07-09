@@ -1,13 +1,12 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const axios = require('axios');
 const FuzzySet = require('fuzzyset.js');
 
 const { discord, footer } = require('../aliases/misc.json');
 const { cyber } = require('../jsons/colors.json');
+const { getRelicBloonology } = require('../helpers/bloonology.js');
 
 let cachedRelics = {};
-let relicNames = [];
 
 builder = new SlashCommandBuilder()
     .setName('relic')
@@ -21,7 +20,7 @@ builder = new SlashCommandBuilder()
     );
 
 async function validateInput(interaction) {
-    if (Object.keys(cachedRelics).length === 0) await updateRelicArr();
+    if (Object.keys(cachedRelics).length === 0) cachedRelics = await getRelicBloonology();
 
     let relicName = interaction.options.getString('relic_name');
     if (!cachedRelics[relicName])
@@ -48,11 +47,12 @@ async function execute(interaction) {
     return await interaction.reply({ embeds: [embed] });
 }
 async function onAutocomplete(interaction) {
-    if (Object.keys(cachedRelics).length === 0) await updateRelicArr();
+    if (Object.keys(cachedRelics).length === 0) cachedRelics = await getRelicBloonology();
 
     const hoistedOptions = interaction.options._hoistedOptions; // array of the previous thing, each for each autocomplete field
     const relic_name_partial = hoistedOptions.find((option) => option.name == 'relic_name'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = relic_name_partial.value;
+    const relicNames = Object.keys(cachedRelics);
 
     let fs = FuzzySet(relicNames);
     const values = fs.get(value, null, 0.2);
@@ -69,16 +69,6 @@ async function onAutocomplete(interaction) {
     await interaction.respond(responseArr);
 }
 
-async function updateRelicArr() {
-    let res = await axios.get('https://pastebin.com/raw/RMqJQApE');
-    const allRelics = res.data.split('\r\n\r\n'); // each newline is \r\n\r\n
-    allRelics.forEach((relic) => {
-        let relicName = relic.split('\r\n')[0];
-        relicName = relicName.replace(/\*\*/g, '');
-        cachedRelics[relicName] = relic;
-        relicNames.push(relicName);
-    });
-}
 module.exports = {
     data: builder,
     execute,

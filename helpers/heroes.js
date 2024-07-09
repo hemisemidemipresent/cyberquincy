@@ -122,7 +122,7 @@ function levelingChart(hero, startingRound, mapDifficulty, mk) {
     accumulatedXp = accumulatedXpCurve(
         startingRound, 
         mapDifficulty, 
-        null, // no energizer
+        Infinity, // no energizer
         mk
     );
 

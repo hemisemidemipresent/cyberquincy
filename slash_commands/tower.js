@@ -8,6 +8,7 @@ const {
 } = require('discord.js');
 
 const Towers = require('../helpers/towers.js');
+const Bloonology = require('../helpers/bloonology.js');
 
 const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colors.json');
@@ -16,7 +17,7 @@ const towerOption = new SlashCommandStringOption()
     .setName('tower')
     .setDescription('The tower you are finding information for')
     .setRequired(true);
-Object.keys(Towers.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
+Object.keys(Bloonology.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
     towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
 });
 
@@ -46,7 +47,7 @@ function parseTowerPath(interaction) {
 async function embedBloonology(towerName, upgrade, isB2) {
     let upgradeDescription;
     try {
-        upgradeDescription = await Towers.towerUpgradeToFullBloonology(towerName, upgrade, isB2);
+        upgradeDescription = await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2);
     } catch (e) {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
@@ -108,7 +109,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
 async function embedBloonologySummary(towerName, isB2) {
     let baseDescription;
     try {
-        baseDescription = await Towers.towerUpgradeToMainBloonology(towerName, "000", isB2, true);
+        baseDescription = await Bloonology.towerUpgradeToMainBloonology(towerName, "000", isB2, true);
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
@@ -123,7 +124,7 @@ async function embedBloonologySummary(towerName, isB2) {
 
     let pathBenefits;
     try {
-        pathBenefits = await Towers.towerUpgradesToTierChangeBloonology(towerName, tierUpgrades, isB2, true);
+        pathBenefits = await Bloonology.towerUpgradesToTierChangeBloonology(towerName, tierUpgrades, isB2, true);
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }

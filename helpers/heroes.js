@@ -36,25 +36,6 @@ LEVELING_MAP_DIFFICULTY_MODIFIERS = {
     EXPERT: 1.3,
 };
 
-const HERO_NAME_TO_BLOONOLOGY_LINK = {
-    quincy: 'https://pastebin.com/raw/ASpHNduS',
-    gwendolin: 'https://pastebin.com/raw/rZYjbEhX',
-    striker_jones: 'https://pastebin.com/raw/hrH8q0bd',
-    obyn_greenfoot: 'https://pastebin.com/raw/x2WiKEWi',
-    captain_churchill: 'https://pastebin.com/raw/cqaHnhgB',
-    benjamin: 'https://pastebin.com/raw/j6X3mazy',
-    ezili: 'https://pastebin.com/raw/dYu1B9bp',
-    pat_fusty: 'https://pastebin.com/raw/2YRMFjPG',
-    adora: 'https://pastebin.com/raw/WnsgkWRc',
-    admiral_brickell: 'https://pastebin.com/raw/amw39T29',
-    etienne: 'https://pastebin.com/raw/UxN2Wx1F',
-    sauda: 'https://pastebin.com/raw/8E2TSndk',
-    psi: 'https://pastebin.com/raw/9h9aAPUm',
-    geraldo: 'https://pastebin.com/raw/rksZWhTV',
-    corvus: 'https://pastebin.com/raw/JVnXdsqZ',
-    rosalia: 'https://pastebin.com/raw/CbXjwva7'
-};
-
 function accumulatedXpCurve(
     startingRound,
     mapDifficulty,
@@ -81,7 +62,7 @@ function accumulatedXpCurve(
         energizerFactor = round >= energizerAcquiredRound ? 1.5 : 1;
         // mkFactor = mk ? 1.1 * 1.05 * 1.08 : 1;
         mkFactor = 1;
-        
+
         if (round == startingRound - 1) {
             xpGains.push(0);
         } else if (round < startingRound) {
@@ -208,7 +189,6 @@ function allGerrysShopItems() {
 }
 
 module.exports = {
-    HERO_NAME_TO_BLOONOLOGY_LINK,
     levelingCurve,
     levelingChart,
     costOfHero,

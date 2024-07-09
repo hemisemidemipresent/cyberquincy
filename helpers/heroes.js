@@ -60,8 +60,7 @@ function accumulatedXpCurve(
         }
 
         energizerFactor = round >= energizerAcquiredRound ? 1.5 : 1;
-        // mkFactor = mk ? 1.1 * 1.05 * 1.08 : 1;
-        mkFactor = 1;
+        mkFactor = mk ? 1.1 * 1.05 * 1.08 : 1;
 
         if (round == startingRound - 1) {
             xpGains.push(0);

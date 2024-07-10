@@ -311,7 +311,7 @@ async function paragon_stats(interaction) {
          - attack speed is not affected by degrees
         **Support** [degree independent]
         Gives Energizer normal ability cooldown buffs, AND:
-        - 5x damage, 3x pierce, __150%s*__, 5x XP to Heroes in range *(This makes heroes attack 33% **slower**)
+        - 6x damage, 3x pierce, __130%s*__, 5x XP to Heroes in range *(This makes heroes attack 23.1% **slower**)
         - 7x damage, 3x pierce to other Monkey Subs in range (note: does not affect First Strike ability)
         - 10% ability cooldown reduction for all Paragons in range
         

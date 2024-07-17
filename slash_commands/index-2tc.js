@@ -268,7 +268,7 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
 
                 let specifiedTower = parseProvidedDefinedEntities(parsed)[0];
 
-                specifiedTower = specifiedTower ? Towers.towerUpgradeToIndexNormalForm(entities) : specifiedTower;
+                specifiedTower = specifiedTower ? Towers.towerUpgradeToIndexNormalForm(specifiedTower) : specifiedTower;
                 displayFields.forEach((field) => {
                     if (field == 'Link') obj.Link = boldOg(Index.genCompletionLink(completion));
                     if (completion[field]) return obj[field] = boldOg(completion[field]);

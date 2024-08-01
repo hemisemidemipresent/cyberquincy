@@ -1,0 +1,56 @@
+{
+    "xyz": [
+        "mermonkey",
+        "merm",
+        "mermaid",
+        "mer"
+    ],
+    "100": [
+        "trident_efficiency"
+    ],
+    "200": [
+        "trident_swiftness"
+    ],
+    "300": [
+        "abyss_dweller"
+    ],
+    "400": [
+        "abyssal_warrior",
+        "abyss_warrior"
+    ],
+    "500": [
+        "lord_of_the_abyss",
+        "lota"
+    ],
+    "010": [
+        "sharper_prongs"
+    ],
+    "020": [
+        "tidal_chill"
+    ],
+    "030": [
+        "riptide_champion"
+    ],
+    "040": [
+        "arctic_knight"
+    ],
+    "050": [
+        "popseidon",
+        "poseidon"
+    ],
+    "001": [
+        "echosense_precision"
+    ],
+    "002": [
+        "echosense_network"
+    ],
+    "003": [
+        "alluring_melody"
+    ],
+    "004": [
+        "symphonic_resonance"
+    ],
+    "005": [
+        "the_final_harmonic"
+    ]
+}

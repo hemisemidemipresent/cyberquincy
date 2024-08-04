@@ -24,7 +24,8 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     spike_factory: 'https://pastebin.com/raw/tTHZWiSi',
     monkey_village: 'https://pastebin.com/raw/e2QHaQSD',
     engineer: 'https://pastebin.com/raw/rTHT0L21',
-    beast_handler: 'https://pastebin.com/raw/B3VF2rRq'
+    beast_handler: 'https://pastebin.com/raw/B3VF2rRq',
+    mermonkey: 'https://pastebin.com/raw/sS6rm5Bj'
 };
 const TOWER_NAME_TO_BLOONOLOGY_LINK_B2 = {
     dart_monkey: 'https://pastebin.com/raw/E4sjy0RY',

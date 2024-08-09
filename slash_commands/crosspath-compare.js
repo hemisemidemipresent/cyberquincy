@@ -96,16 +96,19 @@ async function embedBloonology(towerName, upgrade) {
         ]);
     } else {
         const descriptionLines = noCrosspathDescription.split('\n');
-        const splitPointIndex = descriptionLines.length / 2;
-        // Please tell me descriptions won't need 3 fields lol
-        const descriptionParts = [
-            descriptionLines.slice(0, splitPointIndex).join('\n'),
-            descriptionLines.slice(splitPointIndex).join('\n')
-        ];
-        embed.addFields([
-            { name: `${noCrosspathUpgrade} Stats`, value: descriptionParts[0] },
-            { name: '\u200b', value: descriptionParts[1] }
-        ]);
+        let fields = [];
+        let fieldValue = '';
+        for (const line of descriptionLines) {
+            if (fieldValue.length + line.length + 1 > 1024) {
+                fields.push({ name: '\u200b', value: fieldValue.trim() });
+                fieldValue = '';
+            }
+            fieldValue += line + '\n';
+        }
+        fields.push({ name: '\u200b', value: fieldValue.trim() });
+        fields[0].name = `${noCrosspathUpgrade} Stats`;
+
+        embed.addFields(fields);
     }
     return embed;
 }

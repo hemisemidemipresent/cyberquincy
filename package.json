@@ -39,7 +39,7 @@
         "discord.js": "^14.8.0",
         "filepath": "^1.1.0",
         "fuzzyset.js": "^1.0.7",
-        "google-spreadsheet": "^3.3.0",
+        "google-spreadsheet": "^4.1.2",
         "lex": "^1.7.9",
         "pluralize": "^8.0.0"
     },

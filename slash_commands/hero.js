@@ -44,7 +44,7 @@ async function embedBloonology(heroName, level) {
     let title = level
         ? `${Aliases.toIndexNormalForm(heroName)} (Level-${level})`
         : `${Aliases.toIndexNormalForm(heroName)} (All Levels)`;
-    if (latestVersion !== null) title += ` (${latestVersion})`;
+    if (latestVersion !== null) title += ` (v${latestVersion})`;
 
     // overflow
     // TODO: Check for total chars > 6000

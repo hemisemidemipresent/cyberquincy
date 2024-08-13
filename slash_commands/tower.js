@@ -66,7 +66,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
     if (isB2) title += ' (battles2)';
-    if (latestVersion !== null) title += ` (${latestVersion})`;
+    if (latestVersion !== null) title += ` (v${latestVersion})`;
 
     let cost = '';
     let totalCost = '';

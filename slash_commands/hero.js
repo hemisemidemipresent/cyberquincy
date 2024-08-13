@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
-const { HERO_NAME_TO_BLOONOLOGY_LINK, heroNameToBloonologyList } = require('../helpers/bloonology');
+const Bloonology = require('../helpers/bloonology');
 
 const { footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colors.json');
@@ -9,7 +9,7 @@ const heroOption = new SlashCommandStringOption()
     .setName('hero')
     .setDescription('The hero you are finding information for')
     .setRequired(true);
-Object.keys(HERO_NAME_TO_BLOONOLOGY_LINK).forEach((hero) => {
+Object.keys(Bloonology.HERO_NAME_TO_BLOONOLOGY_LINK).forEach((hero) => {
     heroOption.addChoices({ name: Aliases.toIndexNormalForm(hero), value: hero });
 });
 const builder = new SlashCommandBuilder()
@@ -28,8 +28,10 @@ function validateInput(interaction) {
 
 async function embedBloonology(heroName, level) {
     let sentences;
+    let latestVersion;
     try {
-        sentences = await heroNameToBloonologyList(heroName);
+        sentences = await Bloonology.heroNameToBloonologyList(heroName);
+        latestVersion = await Bloonology.heroLatestVersion(heroName);
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
@@ -39,9 +41,10 @@ async function embedBloonology(heroName, level) {
         return new Discord.EmbedBuilder().setColor(red).setTitle('The bloonology datapiece is missing');
     }
 
-    const title = level
+    let title = level
         ? `${Aliases.toIndexNormalForm(heroName)} (Level-${level})`
         : `${Aliases.toIndexNormalForm(heroName)} (All Levels)`;
+    if (latestVersion !== null) title += ` (${latestVersion})`;
 
     // overflow
     // TODO: Check for total chars > 6000

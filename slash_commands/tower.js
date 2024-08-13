@@ -46,8 +46,10 @@ function parseTowerPath(interaction) {
 // the function that creates the embed for bloonology that will get sent
 async function embedBloonology(towerName, upgrade, isB2) {
     let upgradeDescription;
+    let latestVersion;
     try {
         upgradeDescription = await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2);
+        latestVersion = await Bloonology.towerLatestVersion(towerName, isB2);
     } catch (e) {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
@@ -64,6 +66,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
     if (isB2) title += ' (battles2)';
+    if (latestVersion !== null) title += ` (${latestVersion})`;
 
     let cost = '';
     let totalCost = '';

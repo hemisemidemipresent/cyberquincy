@@ -96,6 +96,22 @@ async function towerNameToBloonologyList(towerName, isB2) {
     return body.split(/(?=^\s*[0-5]{3}\s*$)/m).filter(x => isValidUpgradeSet(x.substr(0, 3)));
 }
 
+async function towerLatestVersion(towerName, isB2) {
+    let link = towerNameToBloonologyLink(towerName, isB2);
+    res = await axios.get(link);
+    let body = res.data;
+    version = body.match(/^Version: ([0-9.]*)$/m);
+    return version === null ? null : version[1];
+}
+
+async function heroLatestVersion(heroName) {
+    let link = HERO_NAME_TO_BLOONOLOGY_LINK[heroName];
+    res = await axios.get(link);
+    let body = res.data;
+    version = body.match(/^Version: ([0-9.]*)$/m);
+    return version === null ? null : version[1];
+}
+
 function cleanBloonology(description) {
     description = description.trim();
     description = description.replace(/\r?\n|\r/g, "\n"); // Normalize line endings
@@ -264,7 +280,9 @@ async function heroNameToBloonologyList(heroName) {
     let link = HERO_NAME_TO_BLOONOLOGY_LINK[heroName];
     res = await axios.get(link);
     let body = res.data;
-    return body.split(/^\s*(?:level\s(?:1?[0-9]|20)|all\slevels)\s*$/im).filter(x => x.length).map(cleanBloonology);
+    return body.split(/^\s*(?:level\s(?:1?[0-9]|20)|all\slevels)\s*$/im)
+        .filter(x => x.length && x.search(/Version: [0-9.]*/i) === -1)
+        .map(cleanBloonology);
 }
 
 async function getRelicBloonology() {
@@ -286,6 +304,8 @@ module.exports = {
     TOWER_NAME_TO_BLOONOLOGY_LINK_B2,
     HERO_NAME_TO_BLOONOLOGY_LINK,
     towerNameToBloonologyLink,
+    towerLatestVersion,
+    heroLatestVersion,
     towerUpgradeToFullBloonology,
     towerUpgradesToFullBloonology,
     towerUpgradeToMainBloonology,

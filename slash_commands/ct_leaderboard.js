@@ -12,9 +12,10 @@ builder = new SlashCommandBuilder()
     .addIntegerOption((option) => option.setName('page').setDescription('Which page of the leaderboard').setRequired(false));
 
 function getCurrentCT() {
-    const thirtysixthCT = new Date(1703023200000);
+    // const thirtysixthCT = new Date(1703023200000);
+    const fiftysecondCT = new Date(1722981600000);
     const twoWeeks = 1209600000;
-    return Math.floor((Date.now() - thirtysixthCT) / twoWeeks) + 36;
+    return Math.floor((Date.now() - fiftysecondCT) / twoWeeks) + 52;
 }
 
 function validateInput(interaction) {
@@ -86,7 +87,7 @@ async function execute(interaction) {
             .setTitle(`CT Event #${getCurrentCT()} Page ${page}`)
             .setDescription('```\n' + desc + '```')
             .setColor(lightgreen)
-            .setFooter({ text: `Total players: ${event.totalScores_player}, Total teams: ${event.totalScores_team}` });
+            .setFooter({ text: `Total players: ${event.totalScores_player}, Total teams: ${event.totalScores_team}, id: ${event.id}` });
 
         let components = [];
         if (json.prev) components.push(new ButtonBuilder().setCustomId('-1').setLabel('⬅️').setStyle(ButtonStyle.Primary));

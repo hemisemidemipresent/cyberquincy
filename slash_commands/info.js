@@ -25,7 +25,7 @@ async function execute(interaction) {
         .setURL(`${discord}`)
         .setDescription(`Cyber Quincy is battling ${guildCount} waves of bloons`)
         .addFields([
-            { name: 'ping:', value: `Response time: ${responseTime}ms`, inline: true },
+            { name: 'ping:', value: `${responseTime}ms`, inline: true },
             { name: 'time since last restart:', value: `${uptime}`, inline: true },
             { name: 'discord server, join for updates (happens pretty often)', value: `${discord}`, inline: true }
         ])

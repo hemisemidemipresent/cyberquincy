@@ -187,9 +187,9 @@
             "rate": 0.11
         },
         "carpet": {
-            "cooldown": 50,
-            "damage": 20000,
-            "bd": 20000,
+            "cooldown": 60,
+            "damage": 30000,
+            "bd": 0,
             "pierce": 150
         }
     },
@@ -259,19 +259,19 @@
     "monkey_sub":{
         "strike": {
             "cooldown": 240,
-            "damage": 50000,
-            "bd": 10000,
+            "damage": 60000,
+            "bd": 0,
             "pierce": 30
         },
         "aftershock": {
-            "damage": 10000,
-            "bd": 5000,
+            "damage": 15000,
+            "bd": 0,
             "pierce": 50
         },
         "fallout": {
             "damage": 10,
-            "md": 60,
-            "bd": 30,
+            "md": 90,
+            "bd": 0,
             "pierce": 120
         },
         "aura": {

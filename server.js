@@ -3,7 +3,6 @@ const { Client, GatewayIntentBits, InteractionType, ChatInputCommandInteraction 
 function main() {
     globalRequirements();
     consoleBootup();
-    googleSheetsInitialization();
     configureAliases();
     slashCommandCenter = setupSlashCommandCenter();
     generateCommandListeners(slashCommandCenter);
@@ -36,16 +35,6 @@ function consoleBootup() {
         });
         console.log('<Program Directive> Discord Bot Client is ready');
     });
-}
-
-async function googleSheetsInitialization() {
-    let btd6index = require('./1/config.json')['btd6index'];
-    if (!btd6index) return;
-
-    const GoogleSheetsHelper = require('./helpers/google-sheets.js');
-    // Load the BTD6 Index
-    global.Btd6Index = await GoogleSheetsHelper.load(GoogleSheetsHelper.BTD6_INDEX_KEY);
-    // console.log('<INITIATE> Btd6 Index has been loaded');
 }
 
 function configureAliases() {

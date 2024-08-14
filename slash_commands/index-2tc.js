@@ -224,14 +224,6 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
 
     } else {
         // Multiple combos found
-
-        
-
-        // console.log(combos.length)
-
-        // for (let i = 0; i < combos.length; i++) {
-        //     if (combos[i].og) numOGCompletions += 1;
-        // }
         let OGSearchParams = new URLSearchParams(searchParams);
         OGSearchParams.set('og', 1);
         let resJson = await fetch2tc(OGSearchParams);
@@ -268,7 +260,6 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
 
                 let specifiedTower = parseProvidedDefinedEntities(parsed)[0];
 
-                specifiedTower = specifiedTower ? Towers.towerUpgradeToIndexNormalForm(specifiedTower) : specifiedTower;
                 displayFields.forEach((field) => {
                     if (field == 'Link') obj.Link = boldOg(Index.genCompletionLink(completion));
                     if (completion[field]) return obj[field] = boldOg(completion[field]);
@@ -361,8 +352,8 @@ function parseProvidedEntities(parsed) {
 
 function parseProvidedDefinedEntities(parsed) {
     return []
-        .concat(parsed.tower_upgrades)
-        .concat(parsed.heroes)
+        .concat(parsed.tower_upgrades?.map(upgrade => Towers.towerUpgradeToIndexNormalForm(upgrade)))
+        .concat(parsed.heroes?.map(hero => Aliases.toIndexNormalForm(hero)))
         .filter((el) => el); // Remove null items
 }
 

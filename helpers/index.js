@@ -59,13 +59,13 @@ async function fetchInfo(info, reload = false) {
     return allCombos;
 }
 
-const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js');
+// const { scrapeAll2TCCombos } = require('../services/index/2tc_scraper.js');
 const { scrapeAllBalanceChanges } = require('../services/index/balances_scraper');
 
 async function scrapeInfo(info) {
     switch (info) {
-        case '2tc':
-            return await scrapeAll2TCCombos();
+        // case '2tc':
+        //     return await scrapeAll2TCCombos();
         case 'balances':
             return await scrapeAllBalanceChanges();
         default:
@@ -369,13 +369,16 @@ async function displayOneOrMultiplePagesNew(interaction, fetchFn, searchParams, 
     const createPage = async () => {
         let resJson = await fetchFn(searchParams);
         let offset = parseInt(searchParams.get('offset') ?? '0');
-        count = resJson.count;
+        let count = resJson.count;
+        
         const challengeEmbed = new Discord.EmbedBuilder();
+        
         let content = `**Results ${offset+1}-${offset+resJson.results.length} of ${count}**`;
+
         const completionsFields = resJson.results.map(completionToFields);
         const fieldWidths = displayFields.map(field => Math.max(
-            ...completionsFields.map(completionFields => {
-                return field === 'Link' ? 4 : completionFields[field].length;
+            ...completionsFields.map(completionField => {
+                return field === 'Link' ? 4 : completionField[field].length;
             }),
             field.length
         ));

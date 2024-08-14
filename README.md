@@ -24,9 +24,7 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 
 1. make a new discord bot in [discord dev page](https://discord.com/developers/applications), and copy the token into `./1/config.json` as `token`.
 
-2. you need credentials for google-spreadsheet (I recommend [this video to set up credentials](https://www.youtube.com/watch?v=UGN6EUi4Yio) and paste the credentials in `./1/config.json`). (Not strictly necessary, but many commands require it.)
-
-3. to register slash commands type `node register`
+2. to register slash commands type `node register`
 
 4. to run type `node server`, or to run with sharding run `node index`
 

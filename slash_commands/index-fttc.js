@@ -208,7 +208,8 @@ const FTTC_TOWER_ABBREVIATIONS = {
     spike_factory: 'spk',
     monkey_village: 'vil',
     engineer: 'eng',
-    beast_handler: 'bst'
+    beast_handler: 'bst',
+    mermonkey: 'mrm',
 };
 
 async function displayFttcFilterAll(interaction, parsed) {

@@ -52,17 +52,23 @@ async function embedBloonology(heroName, level) {
     let descForDescription = '';
     if (desc.length > 4096) {
         const descLines = desc.split('\n');
-        descLines.forEach((line) => {
+        let i = 0;
+        for (; i < descLines.length; i++) {
             // add to description until char limit is reached
-            if (descForDescription.length + line.length < 4096)
-                return descForDescription += line + '\n';
-
+            if (descForDescription.length + descLines[i].length < 4096) {
+                descForDescription += descLines[i] + '\n';
+            } else {
+                break;
+            }
+        }
+        for (; i < descLines.length; i++) {
             // (assuming fields array is not empty) add to value of latest field
-            if (fields[0] && fields[fields.length - 1].value.length + line.length < 1024)
-                return fields[fields.length - 1].value += line + '\n';
-
-            fields.push({ name: '\u200b', value: line + '\n' });
-        });
+            if (fields[0] && fields[fields.length - 1].value.length + descLines[i].length < 1024) {
+                fields[fields.length - 1].value += descLines[i] + '\n';
+            } else {
+                fields.push({ name: '\u200b', value: descLines[i] + '\n' });
+            }
+        }
     } else {
         descForDescription = desc;
     }

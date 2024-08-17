@@ -211,38 +211,38 @@
     },
     "Dreadbloon": {
         "desc": "Dreadbloon has several special immunities to entire tower categories that cycle at each damage phase, while also passively spawning beefy Dreadrock Bloons, detailed below.",
-        "normalDesc": "**Immunities**: Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.\n\n**Ceramic Armor Shell**: Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 3,750 HP). Dreadbloon moves at **0.3x speed** while its Shell is active.\n\n**Dreadrock Bloons**: **Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull (exact amount unknown). Each Dreadrock Bloon has **both MOAB and BOSS properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. The Rock's speed is always 88% of a Red Bloon.",
-        "eliteDesc": "**Immunities**: Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.\n\n**Ceramic Armor Shell**: Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 7,500 HP). Dreadbloon moves at **0.35x speed** while its Shell is active.\n\n**Dreadrock Bloons**: **Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull (exact amount unknown). Each Dreadrock Bloon has **both MOAB and BOSS properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. The Rock's speed is always 88% of a Red Bloon.",
+        "normalDesc": "**Immunities**: Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.\n\n**Ceramic Armor Shell**: Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 3,750 HP). Dreadbloon moves at **0.3x speed** while its Shell is active.\n\n**Dreadrock Bloons**: **Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull. Each Dreadrock Bloon has **both MOAB and BOSS properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. The Rock's speed is always 88% of a Red Bloon.",
+        "eliteDesc": "**Immunities**: Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.\n\n**Ceramic Armor Shell**: Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 7,500 HP). Dreadbloon moves at **0.35x speed** while its Shell is active.\n\n**Dreadrock Bloons**: **Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull. Each Dreadrock Bloon has **both MOAB and BOSS properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. The Rock's speed is always 88% of a Red Bloon.",
         "normal": [
             {
                 "tier": 1,
                 "hp": 7500,
                 "speed": 0.05,
-                "desc": "Dreadrock HP: 300\nLives lost per leaked Dreadrock: 5"
+                "desc": "Dreadrock HP: 300\nLives lost per leaked Dreadrock: 5\nNumber of Dreadrock bloons spawned at each skull: 5"
             },
             {
                 "tier": 2,
                 "hp": 25000,
                 "speed": 0.05,
-                "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 10"
+                "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 10\nNumber of Dreadrock bloons spawned at each skull: 7"
             },
             {
                 "tier": 3,
                 "hp": 120000,
                 "speed": 0.05,
-                "desc": "Dreadrock HP: 900\nLives lost per leaked Dreadrock: 15"
+                "desc": "Dreadrock HP: 900\nLives lost per leaked Dreadrock: 15\nNumber of Dreadrock bloons spawned at each skull: 10"
             },
             {
                 "tier": 4,
                 "hp": 280000,
                 "speed": 0.06,
-                "desc": "Dreadrock HP: 5000\nLives lost per leaked Dreadrock: 20"
+                "desc": "Dreadrock HP: 5000\nLives lost per leaked Dreadrock: 20\nNumber of Dreadrock bloons spawned at each skull: 14"
             },
             {
                 "tier": 5,
                 "hp": 1000000,
                 "speed": 0.06,
-                "desc": "Dreadrock HP: 12000\nLives lost per leaked Dreadrock: 25"
+                "desc": "Dreadrock HP: 12000\nLives lost per leaked Dreadrock: 25\nNumber of Dreadrock bloons spawned at each skull: 19"
             }
         ],
         "elite": [
@@ -250,31 +250,31 @@
                 "tier": 1,
                 "hp": 15000,
                 "speed": 0.052,
-                "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 20"
+                "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 20\nNumber of Dreadrock bloons spawned at each skull: 5"
             },
             {
                 "tier": 2,
                 "hp": 90000,
                 "speed": 0.052,
-                "desc": "Dreadrock HP: 2500\nLives lost per leaked Dreadrock: 30"
+                "desc": "Dreadrock HP: 2500\nLives lost per leaked Dreadrock: 30\nNumber of Dreadrock bloons spawned at each skull: 7"
             },
             {
                 "tier": 3,
                 "hp": 650000,
                 "speed": 0.052,
-                "desc": "Dreadrock HP: 10000\nLives lost per leaked Dreadrock: 50"
+                "desc": "Dreadrock HP: 10000\nLives lost per leaked Dreadrock: 50\nNumber of Dreadrock bloons spawned at each skull: 10"
             },
             {
                 "tier": 4,
                 "hp": 2625000,
                 "speed": 0.06,
-                "desc": "Dreadrock HP: 22000\nLives lost per leaked Dreadrock: 75"
+                "desc": "Dreadrock HP: 22000\nLives lost per leaked Dreadrock: 75\nNumber of Dreadrock bloons spawned at each skull: 14"
             },
             {
                 "tier": 5,
                 "hp": 12500000,
                 "speed": 0.06,
-                "desc": "Dreadrock HP: 45000\nLives lost per leaked Dreadrock: 100"
+                "desc": "Dreadrock HP: 45000\nLives lost per leaked Dreadrock: 100\nNumber of Dreadrock bloons spawned at each skull: 19"
             }
         ],
         "customRounds": "\nLeads & Ceramics become Fortified\nZebras -> Leads\nRainbows -> Ceramics\nFor rounds 40-69, every other regular MOAB is fortified (BFBs+ unaffected)\nFor rounds 70+, every MOAB is fortified (BFBs+ unaffected)\nThere are some exceptions:\nR 39|18 Rainbows -> 12 fLeads, 6 Ceramics\nR 40|MOAB -> 10 fLeads, 8 fCeramics\nR 43|10 Rainbows -> 10 fLeads\nR 46|replaced by 1 fMOAB\nR 60|replaced by 3 fMOABs, 40 fLeads\nR 80|replaced by a copy of R75\n"

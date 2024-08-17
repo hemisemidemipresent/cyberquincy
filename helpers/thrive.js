@@ -1,5 +1,5 @@
-const regIncomes = require('../jsons/income-normal.json');
-const abrIncomes = require('../jsons/income-abr.json');
+const regIncomes = require('../jsons/round_sets/regular.json');
+const abrIncomes = require('../jsons/round_sets/abr.json');
 
 const THRIVE_MULTIPLIER = 0.25;
 

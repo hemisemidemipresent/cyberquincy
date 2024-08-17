@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const r = require('../jsons/income-normal.json');
-const abr = require('../jsons/income-abr.json');
+const r = require('../jsons/round_sets/regular.json');
+const abr = require('../jsons/round_sets/abr.json');
 const gHelper = require('../helpers/general.js');
 const { red, magenta, yellow } = require('../jsons/colors.json');
 const thriveHelper = require('../helpers/thrive.js');
@@ -42,15 +42,6 @@ function validateInput(interaction) {
     if (startRound > 140 || endRound > 140) {
         return `R${endRound > startRound ? endRound : startRound} is not predetermined;` +
             ' therefore the calculation won\'t be consistent';
-    }
-    if (mode == 'abr') {
-        if (startRound < 3 || endRound < 3) {
-            return 'There is no support for rounds 1 and 2 abr income calculation';
-        }
-        if (startRound > 100 || endRound > 100) {
-            return `R${endRound > startRound ? endRound : startRound} is not predetermined in ABR;` +
-                ' therefore the calculation won\'t be consistent';
-        }
     }
 
     if (extraIncome < 0) {
@@ -193,10 +184,8 @@ function chincomeEmbed(mode, round, extraEor = 0) {
     if (round > 100) {
         embed.addFields([{ name: `Start R101 -> End R${round}`, value: incomes.superChincomeInclusive }]);
     }
-    if (mode !== 'abr') {
-        embed.addFields([{ name: `Start R${round} -> End R140`, value: incomes.superLincomeInclusive }]);
-    }
-    if (round < 140 && mode !== 'abr') {
+    embed.addFields([{ name: `Start R${round} -> End R140`, value: incomes.superLincomeInclusive }]);
+    if (round < 140) {
         embed.addFields([{ name: `Start R${round + 1} -> End R140`, value: incomes.superLincomeExclusive }]);
     }
 
@@ -242,18 +231,17 @@ function calculateAbrChincomes(round, extraEor = 0) {
     index = round;
     incomes.rincome = abr[index].cashThisRound + extraEor;
     // start is r3
-    incomes.chincomeExclusive = abr[index - 1].cumulativeCash + (index - 3) * extraEor;
+    incomes.chincomeExclusive = abr[index - 1].cumulativeCash - abr[1].cashThisRound - abr[2].cashThisRound + (index - 3) * extraEor;
 
-    incomes.chincomeInclusive = abr[index].cumulativeCash + (index - 2) * extraEor;
+    incomes.chincomeInclusive = abr[index].cumulativeCash - abr[1].cashThisRound - abr[2].cashThisRound + (index - 2) * extraEor;
     if (round < 100) incomes.lincomeInclusive = abr[100].cumulativeCash - abr[index - 1].cumulativeCash + (101 - index) * extraEor;
 
     if (round < 99) incomes.lincomeExclusive = abr[100].cumulativeCash - abr[index].cumulativeCash + (100 - index) * extraEor;
 
-    if (round > 100) incomes.superChincomeInclusive = 'abr past 100 is random'; // these wont actually be shown in the embed since <round> cannot be greater than 100 if mode is abr
+    if (round > 100) incomes.superChincomeInclusive = abr[index].cumulativeCash - abr[100].cumulativeCash + (index - 100) * extraEor;
 
-    incomes.superLincomeInclusive = 'abr past 100 is random';
-
-    if (round < 140) incomes.superLincomeExclusive = 'abr past 100 is random';
+    incomes.superLincomeInclusive = abr[140].cumulativeCash - abr[index - 1].cumulativeCash + (141 - index) * extraEor;
+    if (round < 140) incomes.superLincomeExclusive = abr[140].cumulativeCash - abr[index].cumulativeCash + (140 - index) * extraEor;
 
     return incomes;
 }

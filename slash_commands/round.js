@@ -1,10 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 const FBG = require('../jsons/freeplay.json');
-const json = require('../jsons/rounds_topper.json');
-const roundContents = require('../jsons/round_contents.json');
-const rounds2 = require('../jsons/round2.json');
-const cashAbr = require('../jsons/income-abr.json');
+const roundContents = require('../jsons/round_sets/round_contents.json');
+const rounds2 = require('../jsons/round_sets/regular.json');
+const cashAbr = require('../jsons/round_sets/abr.json');
 
 const roundHelper = require('../helpers/rounds');
 const enemyHelper = require('../helpers/enemies');
@@ -94,20 +93,6 @@ function getBloonSets(round) {
     return bloonSets;
 }
 
-function getLength(round, roundInfo) {
-    let roundArray = roundInfo[round];
-    let longest = 0;
-    let end = 0;
-    for (i = 0; i < roundArray.length; i++) {
-        end = parseInt(roundArray[i][3]);
-        if (end > longest) {
-            longest = end;
-        }
-    }
-    longest /= 60; //btd6 is 60fps game
-    return Math.round(longest * 100) / 100;
-}
-
 async function execute(interaction) {
     validationFailure = validateInput(interaction);
     if (validationFailure) {
@@ -122,24 +107,17 @@ async function execute(interaction) {
 
     let isAbr = game_mode == 'abr';
 
-    if (round > 140 || (isAbr && round > 100)) {
+    if (round > 140) {
         let ramp = freeplay(round, isAbr);
         return await interaction.reply({ embeds: [ramp] });
     }
 
     [xp, totalxp] = calculateXps(round);
-    let roundInfo = isAbr ? json.alt : json.reg;
-    let roundLength = getLength(round, roundInfo);
+    let roundLength = isAbr ? cashAbr[round].roundLength : rounds2[round].roundLength;
     let roundContent = roundContents[`${isAbr ? 'a' : ''}r${round}`].split(',').join('\n');
     let roundRBE = isAbr ? cashAbr[round].rbe : rounds2[round].rbe;
-    let roundCash = rounds2[round].cashThisRound;
-    if (isAbr) {
-        if (round > 2) {
-            roundCash = cashAbr[round].cashThisRound;
-        } else {
-            roundCash = 'ABR cash data not available for R1/R2';
-        }
-    }
+    let roundCash = isAbr ? cashAbr[round].cashThisRound : rounds2[round].cashThisRound;
+
     const roundEmbed = new Discord.EmbedBuilder()
         .setTitle(`R${round}` + (isAbr ? ' ABR' : ''))
         .setDescription(`${roundContent}`)

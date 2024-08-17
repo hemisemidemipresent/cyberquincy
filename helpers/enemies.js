@@ -4,7 +4,7 @@ const gHelper = require('../helpers/general');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const roundContents = require('../jsons/round_contents.json');
+const roundContents = require('../jsons/round_sets/round_contents.json');
 
 ENEMIES = [
     (BLOONS = [
@@ -118,11 +118,11 @@ class Enemy {
      * This means a camo ceramic will also match with regrow camo ceramic, and any further fortified ones, but will not match with a normal ceramic
      */
     roundAppearanceDescriptionPattern() {
-        const camo = this.camo && this.name != DDT ? ' Camo' : '(?<camo> Camo)?';
-        const regrow = this.regrow && this.name != DDT ? ' Regrowth' : '(?<regrowth> Regrowth)?';
+        const camo = this.camo && this.name != DDT ? 'Camo ' : '(?<camo>Camo )?';
+        const regrow = this.regrow && this.name != DDT ? 'Regrow ' : '(?<regrow>Regrow )?';
         const fortified = this.fortified ? 'Fortified ' : '(?<fortified>Fortified )?';
-        const name = this.formatName(this.isMOAB());
-        return new RegExp(`(?<number>\\d+) ${fortified}${name}${camo}${regrow}(?:,|$)`, 'g');
+        const name = this.formatName();
+        return new RegExp(`(?<number>\\d+) ${fortified}${camo}${regrow}${name}s?(?:,|$)`, 'g');
     }
 
     isFreeplay() {
@@ -174,9 +174,9 @@ class Enemy {
                 let number = appearance.groups.number;
                 let fortified = appearance.groups.fortified ? 'f' : '';
                 let camo = appearance.groups.camo ? 'c' : '';
-                let regrowth = appearance.groups.regrowth ? 'r' : '';
+                let regrow = appearance.groups.regrow ? 'r' : '';
                 appearancesStrs.push(
-                    `${number}${fortified}${camo}${regrowth}`
+                    `${number}${fortified}${camo}${regrow}`
                 );
             }
 

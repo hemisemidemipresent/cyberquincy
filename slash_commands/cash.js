@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const income = require('../jsons/income-normal.json');
-const abrincome = require('../jsons/income-abr.json');
+const income = require('../jsons/round_sets/regular.json');
+const abrincome = require('../jsons/round_sets/abr.json');
 const gHelper = require('../helpers/general.js');
 const { cyber, orange } = require('../jsons/colors.json');
 const thriveHelper = require('../helpers/thrive.js');
@@ -38,12 +38,6 @@ function validateInput(interaction) {
     if (round < 1) return `Must enter positive number for round (${round})`;
     if (round > 140) return `R${round} is random (not predetermined); therefore the calculation won't be consistent`;
 
-    if (mode == 'abr') {
-        if (round < 3) return 'There is no support for rounds 1 and 2 abr income calculations';
-        if (round > 100)
-            return `R${round} is random (not predetermined) in ABR; therefore the calculation won't be consistent`;
-    }
-
     if (extraIncome < 0) return `Must enter non-negative number for extra_round_income (${extraIncome})`;
 
     if (thrives < 0) return `Must enter non-negative number for thrives (${thrives})`;
@@ -79,7 +73,6 @@ function calculate(cashNeeded, round, mode, extraEor, thrives) {
             break;
         case 'abr':
             r = abrincome;
-            roundLimit = 100;
             break;
         case 'halfcash':
             r = income;

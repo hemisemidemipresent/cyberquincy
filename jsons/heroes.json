@@ -17,7 +17,7 @@
 	},
 	"corvus": {
 		"cost": 925,
-		"levelModifier": 1.71
+		"levelModifier": 1.425
 	},
 	"etienne": {
 		"cost": 850,
@@ -59,8 +59,8 @@
 		"cost": 600,
 		"levelModifier": 1.425
 	},
-    "rosalia": {
-        "cost": 875,
-        "levelModifier": 1.425
-    }
+	"rosalia": {
+		"cost": 875,
+		"levelModifier": 1.425
+	}
 }

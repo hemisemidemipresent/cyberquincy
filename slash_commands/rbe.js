@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const r = require('../jsons/round2.json');
-const abr = require('../jsons/round2-abr.json');
+const r = require('../jsons/round_sets/regular.json');
+const abr = require('../jsons/round_sets/abr.json');
 
 const { magenta } = require('../jsons/colors.json');
 
@@ -31,19 +31,8 @@ function validateInput(interaction) {
         return `You entered a lower end round than start round`;
     }
     if (startround > 140 || endround > 140) {
-        return `R${
-            endround > startround ? endround : startround
-        } is not predetermined; therefore the calculation won't be consistent`;
-    }
-    if (mode == 'abr') {
-        if (startround < 3 || endround < 3) {
-            return 'There is no support for rounds 1 and 2 abr calculation';
-        }
-        if (startround > 100 || endround > 100) {
-            return `R${
-                endround > startround ? endround : startround
-            } is not predetermined in ABR; therefore the calculation won't be consistent`;
-        }
+        return `R${endround > startround ? endround : startround}`
+            + 'is not predetermined; therefore the calculation won\'t be consistent';
     }
     return null;
 }

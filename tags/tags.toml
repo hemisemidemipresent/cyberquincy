@@ -71,3 +71,24 @@ receives tier 0 overclock benefits
 
 [cave-monkey.embeds.footer]
 text = "{credits}"
+
+[sexpert]
+keywords = ["sentry expert"]
+content = """
+In the following formulas, bloon values is equal to the bloon count over the total number of bloons on screen.
+e.g. `Ceramic` = (Number of ceramics on screen)/(Total number of bloons on screen)
+
+`SentryCount`s are global (i.e. it counts sentries from all engineers)
+
+```
+CrushingSentryScore = (Ceramic + Purple) / 2 - CrushingSentryCount / 100
+
+BoomSentryScore = (2*Lead - 2*Black - Moab) / 6 - BoomSentryCount / 100
+
+ColdSentryScore = (Pink + Purple + Ceramic - White - Lead) / 5 - ColdSentryCount / 100
+
+EnergySentryScore = (2*Zebra + 2*Rainbow + 2*Moab + 4*Bfb + 9*Zomg + 5*Ddt + 20*Bad - 2*Purple) / 16 - EnergySentryCount / 100
+```
+Depending on which score is the highest, the sentry expert will spawn the corresponding sentry type
+In event of a tie, Crush > Boom > Cold > Energy
+"""

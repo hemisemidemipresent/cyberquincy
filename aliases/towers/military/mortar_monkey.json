@@ -4,8 +4,8 @@
     "100": ["bigger_blast"],
     "200": ["bloon_buster", "buster"],
     "300": ["shell_shock", "sshock", "shock"],
-    "400": ["the_big_one", "bigone", "big", "tbo", "tb0"],
-    "500": ["the_biggest_one", "tb1"],
+    "400": ["the_big_one", "big_one", "big", "tbo", "tb0"],
+    "500": ["the_biggest_one", "biggest_one", "tb1"],
 
     "010": ["faster_reload_(mortar_monkey)"],
     "020": ["rapid_reload"],

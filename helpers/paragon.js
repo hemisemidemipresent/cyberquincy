@@ -56,6 +56,7 @@ module.exports = {
      * @param {int} x degree
      */
     getPiece(p, x) {
+        if (x === 100) return p * 2 + 100;
         x--;
         let p_x = p * (1 + x * 0.01) + x;
         return p_x;

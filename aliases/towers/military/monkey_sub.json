@@ -3,7 +3,7 @@
 
     "100": ["longer_range"],
     "200": ["advanced_intel", "intel"],
-    "300": ["submerge_and_support", "sas", "submerge"],
+    "300": ["submerge_and_support", "sas", "submerge", "sns"],
     "400": ["bloontonium_reactor", "react", "reactor"],
     "500": ["energizer", "energiser", "engz", "egz", "gizer"],
 

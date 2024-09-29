@@ -10,7 +10,7 @@
     "010": ["advanced_targeting", "atargeting"],
     "020": ["faster_barrel_spin", "faster_spin"],
     "030": ["hydra_rocket_pods", "hydra", "pods", "hrp", "hrps", "hyde", "hyd", "hy"],
-    "040": ["rocket_storm", "rstorm"],
+    "040": ["rocket_storm", "rstorm", "rorm"],
     "050": ["m.a.d", "m_a_d", "moab_assured_destroyer"],
 
     "001": ["faster_swivel"],

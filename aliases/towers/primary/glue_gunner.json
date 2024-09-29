@@ -4,7 +4,7 @@
     "100": ["glue_soak", "gl_soak", "g_soak"],
     "200": ["corrosive_glue", "corrosive"],
     "300": ["bloon_dissolver", "diss", "dissolver"],
-    "400": ["bloon_liquefier", "liq","liquefier", "liquid"],
+    "400": ["bloon_liquefier", "liq", "liquefier", "liquid"],
     "500": ["the_bloon_solver", "bsol", "solv", "solver", "solve"],
 
     "010": ["bigger_globs", "globs"],
@@ -16,6 +16,6 @@
     "001": ["stickier_glue", "stickier"],
     "002": ["stronger_glue"],
     "003": ["moab_glue", "mglue"],
-    "004": ["relentless_glue", "relentless", "relent", "rel", "relglue"],
+    "004": ["relentless_glue", "relentless", "relent", "rel", "relglue", "rglue"],
     "005": ["super_glue", "sglue"]
 }

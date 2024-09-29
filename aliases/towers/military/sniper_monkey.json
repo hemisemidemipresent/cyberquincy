@@ -9,13 +9,13 @@
 
     "010": ["night_vision_goggles", "nvg", "goggles", "night_vision"],
     "020": ["shrapnel_shot", "shrapnel"],
-    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb","bbullet"],
+    "030": ["bouncing_bullet", "bouncing", "bouncingbullet", "bb", "bbullet"],
     "040": ["supply_drop", "supply", "sd"],
     "050": ["elite_sniper", "es", "esniper"],
 
     "001": ["fast_firing"],
     "002": ["even_faster_firing"],
     "003": ["semi_automatic", "semi", "semiauto"],
-    "004": ["full_auto_rifle", "fully_automatic", "full_auto", "fully_auto"],
+    "004": ["full_auto_rifle", "fully_automatic", "full_auto", "fully_auto", "fauto"],
     "005": ["elite_defender", "ed", "edef"]
 }

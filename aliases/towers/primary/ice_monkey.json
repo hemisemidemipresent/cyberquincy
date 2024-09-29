@@ -4,7 +4,7 @@
     "100": ["permafrost", "p_frost"],
     "200": ["cold_snap"],
     "300": ["ice_shards", "shards", "ishards"],
-    "400": ["embrittlement", "brittle", "brit", "brittlement", "britt"],
+    "400": ["embrittlement", "brittle", "brit", "brittlement", "britt", "embrit", "embritt"],
     "500": ["super_brittle", "sbrit", "sbrittle", "super_brit", "sbritt", "sbrike"],
 
     "010": ["enhanced_freeze", "enhanced"],

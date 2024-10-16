@@ -1,11 +1,11 @@
 {
-    "xyz": ["spact","factory","spike","spac","spak","spanc","spikes","spi","spk","sf","spacc","spike_shooter","spactory"],
+    "xyz": ["spact", "factory", "spike", "spac", "spak", "spanc", "spikes", "spi", "spk", "sf", "spacc", "spike_shooter", "spactory"],
 
     "100": ["bigger_stacks"],
     "200": ["white_hot_spikes", "white_hot"],
     "300": ["spiked_balls", "sballs", "spalls"],
     "400": ["spiked_mines", "spines"],
-    "500": ["super_mines", "swines","smines"],
+    "500": ["super_mines", "swines", "smines"],
 
     "010": ["faster_production"],
     "020": ["even_faster_production"],

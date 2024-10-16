@@ -1,9 +1,9 @@
 {
-    "xyz": ["bomb", "bmb", "bomb-shooter", "bs", "cannon", "canon", "can", "💣","boom","💥"],
+    "xyz": ["bomb", "bmb", "bomb-shooter", "bs", "cannon", "canon", "can", "💣", "boom", "💥"],
 
     "100": ["bigger_bombs"],
     "200": ["heavy_bombs"],
-    "300": ["really_big_bombs", "idk_some_sort_of_alias"],
+    "300": ["really_big_bombs", "idk_some_sort_of_alias", "rbb"],
     "400": ["bloon_impact", "impact", "blimpact"],
     "500": ["bloon_crush", "crush", "crunch", "bcrush", "crunchy"],
 
@@ -14,8 +14,8 @@
     "050": ["moab_eliminator", "elim", "moab_elim", "green_shark"],
 
     "001": ["extra_range"],
-    "002": ["frag_bombs"],
+    "002": ["frag_bombs", "frag", "frags"],
     "003": ["cluster_bombs", "cluster"],
-    "004": ["recursive_cluster", "recursive", "clusters", "recurs", "recurse", "recur"],
+    "004": ["recursive_cluster", "recursive", "clusters", "recurs", "recurse", "recur", "rcluster"],
     "005": ["bomb_blitz", "blitz", "bblitz"]
 }

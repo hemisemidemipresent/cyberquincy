@@ -8,13 +8,13 @@
     "500": ["superstorm", "super_storm", "storm", "sstorm"],
 
     "010": ["thorn_swarm", "swarm"],
-    "020": ["heart_of_oak", "oak"],
+    "020": ["heart_of_oak", "oak", "hoa"],
     "030": ["druid_of_the_jungle", "jungle", "dotj"],
     "040": ["jungle's_bounty", "bounty", "jbounty", "jb"],
     "050": ["spirit_of_the_forest", "spirit", "sotf", "soft"],
 
     "001": ["druidic_reach", "reach"],
-    "002": ["heart_of_vengance", "vengance"],
+    "002": ["heart_of_vengance", "vengance", "hov"],
     "003": ["druid_of_wrath", "dow", "wrath"],
     "004": ["poplust", "lust", "pop", "popl"],
     "005": ["avatar_of_wrath", "aow"]

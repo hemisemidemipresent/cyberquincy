@@ -16,6 +16,6 @@
     "001": ["twin_guns", "twin", "twins"],
     "002": ["airburst_darts", "airburst"],
     "003": ["triple_guns", "triple", "t_guns", "trip_guns"],
-    "004": ["armor_piercing_darts", "armour_piercing_darts", "ap", "apd", "ad_darts", "ap_darts"],
+    "004": ["armor_piercing_darts", "armour_piercing_darts", "apd", "ap_darts"],
     "005": ["sub_commander", "subcom", "scom", "scomm"]
 }

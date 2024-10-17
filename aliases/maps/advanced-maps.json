@@ -88,5 +88,9 @@
     "castle_revenge": [
         "ca",
         "revenge"
+    ],
+    "ancient_portal": [
+        "ap",
+        "ap physics"
     ]
 }

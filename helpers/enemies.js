@@ -569,7 +569,7 @@ function getSpeedRamping(r) {
     else if (r <= 100) v = 1 + (r - 80) * 0.02;
     else if (r <= 150) v = 1.6 + (r - 101) * 0.02;
     else if (r <= 200) v = 3.0 + (r - 151) * 0.02;
-    else if (r <= 250) v = 4.5 + (r - 201) * 0.02;
+    else if (r <= 251) v = 4.5 + (r - 201) * 0.02;
     else v = 6.0 + (r - 252) * 0.02;
     return gHelper.round(v, 2);
 }

@@ -1,5 +1,5 @@
 [
-    "**gold-blade**: blades are equally spaced starting from 22.5° (instead of 0°)\n**gold-glaive**: arcs clockwise (instead of anticlockwise)",
+    "**golden-blade**: blades are equally spaced starting from 22.5° (instead of 0°)\n**golden-glaive**: arcs clockwise (instead of anticlockwise)",
     "**moab-missile**: slightly faster projectile speed\n**gold-spectre-1**: figure-infinite flight path\n**gold-spectre-2**: figure-eight flight path\nprojectile speed and size buffs do stack, but are capped at +100%",
     "**arcane-blast**: slightly wider spread\n**push**: none, a TSG can only have one push attack (if magic is sacrificed both times, the highest level is used)",
     "**buff**: none, but the buff from TSG sacrifices is considered distinct to the buff from temple sacrifices, and so can stack together (even if it is a separate temple)"

@@ -147,7 +147,7 @@ async function paragon_stats(interaction) {
                 All towers granted global camo detection
                 Deals 25% damage to all non-Boss MOABs that spawn (does not stack with x5x ninja)
 
-                **main shuriken** - ${pa.shuriken.d}d, ${pa.shuriken.bd}bd, ${pa.shuriken.ed}ed, +${pa.shuriken.cad} camo damage, ${pa.shuriken.p}p, 8j, ${pa.shuriken.s}s, 70r
+                **main shuriken** - ${pa.shuriken.d}d, ${pa.shuriken.bd}bd, ${pa.shuriken.ed}ed, +${pa.shuriken.cad} camo damage, +${pa.shuriken.std}d to sticky targets, +${pa.shuriken.std}d to stunned targets, ${pa.shuriken.p}p, 8j, ${pa.shuriken.s}s, 70r
                 • 15% chance to distract
 
                 **flash bomb** - ${pa.fbomb.d}d, ${pa.fbomb.bd}bd, ${pa.fbomb.ed}ed, +${pa.fbomb.cad} camo damage, ${pa.fbomb.p}p, 5j, ${pa.fbomb.s}s, 70r, emits **blue shurikens** on impact
@@ -167,12 +167,12 @@ async function paragon_stats(interaction) {
                 **Rapid Fire Hooks** - Has 10 hooks “stored”, MOABs, BFBs, and DDTs use 1 hook while ZOMGs use 2 hooks, 1s between each pull, generates 2x normal cash, 10s to replenish [cooldown _might_ be shorter with higher degree]
 
                 **Main ship:**
-                **plasma dart**? - ${pa.plasmaDarts.d}d, ${pa.plasmaDarts.md}md, ${pa.plasmaDarts.bd}bd, ${pa.plasmaDarts.ed}ed, ${pa.plasmaDarts.p}p, ${pa.plasmaDarts.s}s, 60r, 6j (per set of 3 cannons, so effectively 18j per side)
-                **cannonball** - ${pa.cannonball.d}d, ${pa.cannonball.md}md, ${pa.cannonball.bd}bd, ${pa.cannonball.ed}ed, ${pa.cannonball.p}p, ${pa.cannonball.s}s, 60r, 3j (per set of 3 cannons, effectively 9j each side)
+                **plasma dart** - ${pa.plasmaDarts.d}d, ${pa.plasmaDarts.md}md, ${pa.plasmaDarts.bd}bd, ${pa.plasmaDarts.ed}ed, ${pa.plasmaDarts.p}p, ${pa.plasmaDarts.s}s, 60r, 6j (per set of 3 cannons, so effectively 18j per side), normal
+                **cannonball** - ${pa.cannonball.d}d, ${pa.cannonball.md}md, ${pa.cannonball.bd}bd, ${pa.cannonball.ed}ed, ${pa.cannonball.p}p, ${pa.cannonball.s}s, 60r, 3j (per set of 3 cannons, effectively 9j each side), normal
                 
                 **Fighter Planes:**
-                **dart** - ${pa.darts.d}d,  ${pa.darts.bd}bd, ${pa.darts.ed}ed, ${pa.darts.p}p, ${pa.darts.s}s
-                **anti-MOAB missile** - ${pa.antiMOAB.d}md,  ${pa.antiMOAB.bd}bd, ${pa.antiMOAB.ed}ed, ${pa.antiMOAB.p}p, ${pa.antiMOAB.s}s, 4j
+                **dart** - ${pa.darts.d}d,  ${pa.darts.bd}bd, ${pa.darts.ed}ed, ${pa.darts.p}p, ${pa.darts.s}s, normal
+                **anti-MOAB missile** - ${pa.antiMOAB.d}md,  ${pa.antiMOAB.bd}bd, ${pa.antiMOAB.ed}ed, ${pa.antiMOAB.p}p, ${pa.antiMOAB.s}s, 4j, normal
                 
                 **buffs**
                 [degree independent]
@@ -190,9 +190,9 @@ async function paragon_stats(interaction) {
         desc = `__**Main Guns**__
                 70r
                 **nail-guns** - ${pa.nailGuns.d}d, ${pa.nailGuns.bd}bd, ${pa.nailGuns.ed}ed, ${pa.nailGuns.p}p, ${pa.nailGuns.s}s, 3j (technically all 3 projectiles are separate attacks) 
-                • on hit, applies *pinned* status on up to ceramics: bloon can’t move for 1s
-                • on hit, applies *stun* status on up to zomgs: bloon can’t move for 1s
-                • **nail-guns** attack gets +10% attack speed each round additively, maxes at 0.05s (6x faster) [max speed is degree independent] 
+                • on hit, applies *pinned* status on up to ceramics: bloon can’t move for 5s
+                • on hit, applies *stun* status on up to zomgs: bloon can’t move for 5s
+                • **nail-guns** attack gets +30% attack speed each round additively, maxes at 0.15s (6.67x faster) [max speed is degree independent] 
         
                 __**Activated Ability**__
                 • ${pa.ability.cooldown}s cooldown, cycles between spawning Green, Red, and Blue Mega Sentries in that order. 
@@ -200,7 +200,8 @@ async function paragon_stats(interaction) {
                 __**Green Mega Sentry**__
                 70r
                 **endpoint** - ${pa.endpoint.d}d, ${pa.endpoint.bd}bd, ${pa.endpoint.ed}ed, ${pa.endpoint.p}p, ${pa.endpoint.s}s
-                **beam** - ${pa.beam.d}d, ${pa.beam.bd}bd, ${pa.beam.ed}ed, ${pa.beam.p}p, ${pa.beam.s}s (this works exactly like plasma accelerator) 
+                **beam** - ${pa.beam.d}d, ${pa.beam.bd}bd, ${pa.beam.ed}ed, ${pa.beam.p}p, ${pa.beam.s}s 
+                (this works exactly like plasma accelerator, so plasma type for both)
         
                 __**Red Mega Sentry**__
                 70r
@@ -208,7 +209,7 @@ async function paragon_stats(interaction) {
         
                 __**Blue Mega Sentry**__
                 70r
-                **missile** - ${pa.missile.d}d, ${pa.missile.md}md, ${pa.missile.bd}bd, ${pa.missile.ed}ed, ${pa.missile.p}p, each bloon uses 2p, ${pa.missile.s}s, creates **explosion** on each hit
+                **missile** - ${pa.missile.d}d, ${pa.missile.md}md, ${pa.missile.bd}bd, ${pa.missile.ed}ed, ${pa.missile.p}p, each bloon uses 2p, ${pa.missile.s}s, creates **explosion** (plasma type) on each hit
                 • **explosion** - ${pa.explosion.d}d, ${pa.explosion.bd}bd, ${pa.explosion.ed}ed, ${pa.explosion.p}p, 30r blast 
         
                 When all Mega Sentries are sold or replaced, they do ${pa.sell.d}d, ${pa.sell.bd}bd, ${pa.sell.ed}ed to ${pa.sell.p} bloons within 40r
@@ -306,7 +307,7 @@ async function paragon_stats(interaction) {
         
         ## SUBMERGED
         **Radiation Aura**
-        - ${pa.aura.d}d, ${pa.aura.cd}cd, ${pa.aura.bd}bd, ${pa.aura.p}p, 0.5s, 52r
+        - ${pa.aura.d}d, ${pa.aura.cd}cd, ${pa.aura.bd}bd, ${pa.aura.p}p, 0.28s, 52r
          - decamo and degrow
          - attack speed is not affected by degrees
         **Support** [degree independent]

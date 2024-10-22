@@ -1,36 +1,36 @@
 [
     [
-        "**sun-blast** buffed: +5p (25)",
-        "**sun-blast** buffed: +1d (6), +5p (25)\n**gold-blade-1** - 15d, 10p, 2.0s, 8j",
-        "**sun-blast** buffed: +1d (6), +5p (25), 90%s (0.054)\n**gold-blade-1** - 15d, 10p, 2.0s, 8j",
-        "**sun-blast** buffed: +1d (6), +5p (25), 80%s (0.048)\n**gold-blade-2** - 25d, 20p, 1.5s, 8j",
-        "**sun-blast** buffed: +2d (7), +5p (25), 80%s (0.048)\n**gold-blade-2** - 25d, 20p, 1.5s, 8j",
-        "**sun-blast** buffed: +2d (7), +10p (30), 70%s (0.042)\n**gold-blade-2** - 25d, 20p, 1.5s, 8j\n**gold-glaive-1** - 10d, 50p, 1.3s",
-        "**sun-blast** buffed: +3d (8), +15p (35), 70%s (0.042)\n**gold-blade-2** - 25d, 20p, 1.5s, 8j\n**gold-glaive-1** - 10d, 50p, 1.3s",
-        "**sun-blast** buffed: +4d (9), +20p (40), 70%s (0.042)\n**gold-blade-2** - 25d, 20p, 1.5s, 8j\n**gold-glaive-2** - 20d, 50p, 0.8s",
-        "**sun-blast** buffed: +5d (10), +20p (40), 60%s (0.036)\n**gold-blade-2** - 25d, 20p, 1.5s, 8j\n**gold-glaive-3** - 30d, 50p, 0.5s"
+        "**sun-blast** buffed: +2p (22)",
+        "**sun-blast** buffed: +1d (6), +2p (22)\n**golden-blade-1** - 150d, 100p, 2.0s, 8j",
+        "**sun-blast** buffed: +1d (6), +2p (22), 90%s (0.054)\n**golden-blade-1** - 150d, 100p, 2.0s, 8j",
+        "**sun-blast** buffed: +1d (6), +2p (22), 80%s (0.048)\n**golden-blade-2** - 250d, 200p, 1.5s, 8j",
+        "**sun-blast** buffed: +2d (7), +2p (22), 80%s (0.048)\n**golden-blade-2** - 250d, 200p, 1.5s, 8j",
+        "**sun-blast** buffed: +2d (7), +4p (24), 70%s (0.042)\n**golden-blade-2** - 250d, 200p, 1.5s, 8j\n**golden-glaive-1** - 50d, 50p, 1.3s",
+        "**sun-blast** buffed: +3d (8), +7p (27), 70%s (0.042)\n**golden-blade-2** - 250d, 200p, 1.5s, 8j\n**golden-glaive-1** - 50d, 50p, 1.3s",
+        "**sun-blast** buffed: +4d (9), +10p (30), 70%s (0.042)\n**golden-blade-2** - 250d, 200p, 1.5s, 8j\n**golden-glaive-2** - 100d, 50p, 0.8s",
+        "**sun-blast** buffed: +5d (10), +10p (30), 60%s (0.036)\n**golden-blade-2** - 250d, 200p, 1.5s, 8j\n**golden-glaive-3** - 150d, 50p, 0.5s"
     ],
     [
         "nothing noticeable",
-        "**sun-blast** buffed: +5p (25)",
-        "**sun-blast** buffed: +5p (25)\n**moab-missile-1** - 1d, +74md (75), 50p, ∞r, 3.0s",
-        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +5p (25)\n**moab-missile-2** - 1d, +74md (75), 50p, ∞r, 1.5s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
-        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +10p (30)\n**moab-missile-2** - 1d, +74md (75), 50p, ∞r, 1.5s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
-        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +10p (30)\n**moab-missile-2** - 1d, +74md (75), 50p, ∞r, 1.5s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist\n\n(nothing noticeable over level 5)",
-        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +15p (35)\n**moab-missile-3** - 1d, +74md (75), 50p, ∞r, 1.0s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
-        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +15p (35)\n**moab-missile-3** - 1d, +74md (75), 50p, ∞r, 1.0s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
-        "**sun-blast** buffed: +15p (35), +75% projectile speed and size\n**moab-missile-3** - 1d, +74md (75), 50p, ∞r, 1.0s\n**gold-spectre-1** and **gold-spectre-2** subtowers:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - **gold-spectre-1** flies clockwise, **gold-spectre-2** flies anticlockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist"
+        "**sun-blast** buffed: +3p (23)",
+        "**sun-blast** buffed: +3p (23)\n**moab-missile-1** - 1d, +74md (75), 50p, ∞r, 3.0s",
+        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +3p (23)\n**moab-missile-2** - 1d, +74md (75), 50p, ∞r, 1.5s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
+        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +6p (26)\n**moab-missile-2** - 1d, +74md (75), 50p, ∞r, 1.5s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
+        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +6p (26)\n**moab-missile-2** - 1d, +74md (75), 50p, ∞r, 1.5s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist\n\n(nothing noticeable over level 5)",
+        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +10p (30)\n**moab-missile-3** - 1d, +74md (75), 50p, ∞r, 1.0s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
+        "+1 damage multiplier (ie double)\n**sun-blast** buffed: +10p (30)\n**moab-missile-3** - 1d, +74md (75), 50p, ∞r, 1.0s\n**gold-spectre-1** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
+        "**sun-blast** buffed: +10p (30), +75% projectile speed and size\n**moab-missile-3** - 1d, +74md (75), 50p, ∞r, 1.0s\n**gold-spectre-1** and **gold-spectre-2** subtowers:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 10p, 0.3s\n ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 30p, 0.3s\n‎ ‎ ‎ ‎ ‎ ‎ - **gold-spectre-1** flies clockwise, **gold-spectre-2** flies anticlockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist"
     ],
     [
         "nothing noticeable",
-        "**arcane-blast-1** - 20d, 7p, 4.0s, 4j",
-        "**sun-blast** buffed: 10% chance to knock back bloons\n**arcane-blast-1** - 20d, 7p, 4.0s, 4j",
-        "**sun-blast** buffed: 10% chance to knock back bloons\n**arcane-blast-2** - 30d, 7p, 2.0s, 4j",
-        "**sun-blast** buffed: 10% chance to knock back bloons\n**arcane-blast-2** - 30d, 7p, 2.0s, 4j\n**push-1** - 0d, 500p, 5.0s, knock back bloons",
-        "**sun-blast** buffed: 20% chance to knock back bloons\n**arcane-blast-2** - 30d, 7p, 2.0s, 4j\n**push-1** - 0d, 500p, 5.0s, knock back bloons",
-        "**sun-blast** buffed: 20% chance to knock back bloons\n**arcane-blast-2** - 30d, 7p, 2.0s, 4j\n**push-2** - 0d, 500p, 5.0s, knock back bloons and moabs",
-        "**sun-blast** buffed: 20% chance to knock back bloons\n**arcane-blast-3** - 35d, 7p, 2.0s, 6j\n**push-2** - 0d, 500p, 5.0s, knock back bloons and moabs",
-        "**sun-blast** buffed: 20% chance to knock back bloons\n**arcane-blast-3** - 35d, 7p, 2.0s, 6j\n**push-2** - 0d, 500p, 5.0s, knock back bloons and moabs\n**spawns-avatar** - 30s, unbuffable, spawns **mini-avatar**\n**mini-avatar**:\n‎ ‎ ‎ ‎ ‎ ‎ - **beam** attack - 4d, 3j, 6p, 50r, 0.03s, plasma type\n‎ ‎ ‎ ‎ ‎ ‎ - 65s lifetime"
+        "**arcane-blast-1** - 40d, 7p, 4.0s, 4j",
+        "**sun-blast** buffed: 10% chance to knock back bloons\n**arcane-blast-1** - 40d, 7p, 4.0s, 4j",
+        "**sun-blast** buffed: 10% chance to knock back bloons\n**arcane-blast-2** - 60d, 7p, 2.0s, 4j",
+        "**sun-blast** buffed: 10% chance to knock back bloons\n**arcane-blast-2** - 60d, 7p, 2.0s, 4j\n**push-1** - 0d, 500p, 5.0s, knock back bloons",
+        "**sun-blast** buffed: 20% chance to knock back bloons\n**arcane-blast-2** - 60d, 7p, 2.0s, 4j\n**push-1** - 0d, 500p, 5.0s, knock back bloons",
+        "**sun-blast** buffed: 20% chance to knock back bloons\n**arcane-blast-2** - 60d, 7p, 2.0s, 4j\n**push-2** - 0d, 500p, 5.0s, knock back bloons and moabs",
+        "**sun-blast** buffed: 20% chance to knock back bloons\n**arcane-blast-3** - 70d, 7p, 2.0s, 6j\n**push-2** - 0d, 500p, 5.0s, knock back bloons and moabs",
+        "**sun-blast** buffed: 20% chance to knock back bloons\n**arcane-blast-3** - 70d, 7p, 2.0s, 6j\n**push-2** - 0d, 500p, 5.0s, knock back bloons and moabs\n**spawns-avatar** - 30s, unbuffable, spawns **mini-avatar**\n**mini-avatar**:\n‎ ‎ ‎ ‎ ‎ ‎ - **beam** attack - 4d, 3j, 6p, 50r, 0.03s, plasma type\n‎ ‎ ‎ ‎ ‎ ‎ - 65s lifetime"
     ],
     [
         "+5r (70)",

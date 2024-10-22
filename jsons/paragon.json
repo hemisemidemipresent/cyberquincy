@@ -47,23 +47,24 @@
             "pierce": 4,
             "damage": 32,
             "bd": 32,
-            "cad": 6
+            "cad": 16,
+            "std": 64
         },
         "fbomb": {
             "rate": 1.5,
             "pierce": 50,
             "damage": 96,
             "bd": 96,
-            "cad": 20
+            "cad": 48
         },
         "blues": {
             "pierce": 20,
             "damage": 80,
             "bd": 80,
-            "cad": 16
+            "cad": 40
         },
         "sbomb": {
-            "rate": 5.5,
+            "rate": 6.5,
             "pierce": 1,
             "damage": 16000,
             "bd": 32000,
@@ -71,9 +72,9 @@
         },
         "sbombsplash": {
             "pierce": 10,
-            "damage": 3500,
-            "bd": 1400,
-            "cad": 700
+            "damage": 4200,
+            "bd": 2100,
+            "cad": 2100
         }
     },
     "monkey_buccaneer": {
@@ -109,10 +110,10 @@
     },
     "engineer_monkey": {
         "nailGuns": {
-            "damage": 100,
+            "damage": 300,
             "bd": 100,
             "pierce": 15,
-            "rate": 0.3
+            "rate": 1
         },
         "ability": {
             "cooldown": 20
@@ -275,22 +276,22 @@
             "pierce": 120
         },
         "aura": {
-            "damage": 50,
-            "cd": 50,
-            "bd": 500,
+            "damage": 250,
+            "cd": 250,
+            "bd": 250,
             "pierce": 1000
         },
         "dart": {
             "damage": 40,
             "md": 160,
-            "bd": 300,
+            "bd": 200,
             "pierce": 1,
             "rate": 0.15
         },
         "airburst": {
             "damage": 40,
             "md": 80,
-            "bd": 180,
+            "bd": 100,
             "pierce": 9
         },
         "missile": {

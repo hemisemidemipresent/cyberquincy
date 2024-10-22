@@ -75,6 +75,7 @@ text = "{credits}"
 [sexpert]
 keywords = ["sentry expert"]
 content = """
+## Sentry Expert Sentry Spawning Mechanics
 In the following formulas, bloon values is equal to the bloon count over the total number of bloons on screen.
 e.g. `Ceramic` = (Number of ceramics on screen)/(Total number of bloons on screen)
 

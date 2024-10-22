@@ -4,7 +4,7 @@ const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption
 const Lexer = require('lex');
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 
-const { justStatsFooter } = require('../aliases/misc.json');
+const { discord, justStatsFooter } = require('../aliases/misc.json');
 const { red, paragon } = require('../jsons/colors.json');
 
 const reqs = require('../jsons/power_degree_req.json');
@@ -329,9 +329,13 @@ async function paragon_stats(interaction) {
     let messageEmbed = new Discord.EmbedBuilder()
         .setTitle(`\`${tower}\` paragon - level ${level}`)
         .setDescription(desc.replace(/ {4}/g, ''))
+        .setFields([
+            { name: 'Incorrect/out of date information?', value: `Go yell at hemi [here](${discord})` }
+        ])
         .setFooter({ text: justStatsFooter })
         .setColor(paragon);
     return await interaction.reply({ embeds: [messageEmbed] });
+    
 }
 
 // ----------------------------------------------------------------

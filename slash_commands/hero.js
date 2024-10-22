@@ -2,7 +2,7 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 const Bloonology = require('../helpers/bloonology');
 
-const { footer } = require('../aliases/misc.json');
+const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colors.json');
 
 const heroOption = new SlashCommandStringOption()
@@ -72,6 +72,8 @@ async function embedBloonology(heroName, level) {
     } else {
         descForDescription = desc;
     }
+
+    fields.push({ name: 'Incorrect/out of date information?', value: `please report them [here](${discord})` });
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(title)

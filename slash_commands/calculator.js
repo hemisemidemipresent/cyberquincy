@@ -29,7 +29,7 @@ const difficulty = new SlashCommandStringOption()
 
 const mk = new SlashCommandStringOption()
     .setName('mk')
-    .setDescription('Max MK enabled')
+    .setDescription('Max Monkey Knowledge enabled?')
     .setRequired(false)
     .addChoices({ name: 'yes', value: 'Yes' });
 
@@ -39,6 +39,41 @@ builder = new SlashCommandBuilder()
     .addStringOption(exprOption)
     .addStringOption(difficulty)
     .addStringOption(mk);
+
+const helpEmbed =new Discord.EmbedBuilder()
+    .setTitle('`/calc` HELP')
+    .setDescription('**Cash Calculator**')
+    .addFields([
+        { name: '`r52`,`R100`', value: 'Cumulative cash earned after specified round (6-100)' },
+        { name: '`33.21`, `69.4201`', value: 'Literally just numbers work' },
+        {
+            name: '`wiz!420`, `super!100`, `dart` (same as `dart!000`), `wlp` (same as `wiz!050`)',
+            value: 'INDIVIDUAL COST of tower!upgradeSet'
+        },
+        { name: '`wiz#420`, `super#000`', value: 'TOTAL COST of tower#upgradeSet' },
+        { name: '`adora`, `brick`', value: 'Base cost of hero (no leveling cost calculations included)' },
+        {
+            name: 'Operators',
+            value: "`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power), `'` (discount operator)"
+        },
+        {
+            name: 'Examples',
+            value: `\`/calc expr:r99 - wiz#025 - super#052\` (2tc test)
+                            \`/calc expr:ninja#502 + ninja#030' * 20\` (GMN + single-discounted shinobi army)
+                            \`/calc expr:vil#002 + (vill#302 + vill#020)' + vill!400\` (camo-mentoring double discount village setup)`
+        },
+        {
+            name: 'Notes',
+            value: ` • For ambiguous tokens like \`wiz!220\` and \`super!101\` (there is no path/crosspath), the upgrade is assumed to be the leftmost non-zero digit
+                             • You can use this calculator for non-cash-related calculations as well. Just ignore the dollar sign in the result.`
+        }
+    ])
+    .setColor(black);
+
+
+async function helpPage(interaction) {
+    return await interaction.reply({ embeds: [helpEmbed] });
+}
 
 async function calc(interaction) {
     // Use a "lexer" to parse the operator/operand tokens
@@ -92,39 +127,6 @@ async function calc(interaction) {
     const difficulty = interaction.options.getString('difficulty') || 'hard';
     const mk = !!interaction.options.getString('mk');
 
-    if (expression === 'help') {
-        let helpEmbed = new Discord.EmbedBuilder()
-            .setTitle('`/calc` HELP')
-            .setDescription('**Cash Calculator**')
-            .addFields([
-                { name: '`r52`,`R100`', value: 'Cumulative cash earned after specified round (6-100)' },
-                { name: '`33.21`, `69.4201`', value: 'Literally just numbers work' },
-                {
-                    name: '`wiz!420`, `super!100`, `dart` (same as `dart!000`), `wlp` (same as `wiz!050`)',
-                    value: 'INDIVIDUAL COST of tower!upgradeSet'
-                },
-                { name: '`wiz#420`, `super#000`', value: 'TOTAL COST of tower#upgradeSet' },
-                { name: '`adora`, `brick`', value: 'Base cost of hero (no leveling cost calculations included)' },
-                {
-                    name: 'Operators',
-                    value: "`+`, `-`, `*`, `/`, `%` (remainder), `^` (raise to power), `'` (discount operator)"
-                },
-                {
-                    name: 'Examples',
-                    value: `\`/calc expr:r99 - wiz#025 - super#052\` (2tc test)
-                            \`/calc expr:ninja#502 + ninja#030' * 20\` (GMN + single-discounted shinobi army)
-                            \`/calc expr:vil#002 + (vill#302 + vill#020)' + vill!400\` (camo-mentoring double discount village setup)`
-                },
-                {
-                    name: 'Notes',
-                    value: ` • For ambiguous tokens like \`wiz!220\` and \`super!101\` (there is no path/crosspath), the upgrade is assumed to be the leftmost non-zero digit
-                             • You can use this calculator for non-cash-related calculations as well. Just ignore the dollar sign in the result.`
-                }
-            ])
-            .setColor(black);
-        return await interaction.reply({ embeds: [helpEmbed] });
-    }
-
     try {
         parsed = parse(expression);
     } catch (e) {
@@ -133,26 +135,27 @@ async function calc(interaction) {
         if (c) {
             footer = '';
             if (c === '<') footer = "Did you try to tag another discord user? That's definitely not allowed here.";
+
+            const errorEmbed = new Discord.EmbedBuilder()
+                .setTitle(`Unexpected character "${c}"`)
+                .setDescription(
+                    `"\`${c}\`" is not a valid character in the \`/calc\` expression.`
+                )
+                .setColor(red)
+                .setFooter(footer ? { text: footer } : null);
+
             return await interaction.reply({
-                embeds: [
-                    new Discord.EmbedBuilder()
-                        .setTitle(`Unexpected character "${c}"`)
-                        .setDescription(
-                            `"\`${c}\`" is not a valid character in the \`/calc\` expression.\nUse \`/calc expr: help\` to see the help page`
-                        )
-                        .setColor(red)
-                        .setFooter(footer ? { text: footer } : null)
-                ],
-                components: []
+                embeds: [errorEmbed, helpEmbed],
+                ephemeral: true
             });
         } else if (e instanceof LexicalParseError) {
+            const errorEmbed =                     new Discord.EmbedBuilder()
+                .setTitle(e.message)
+                .setDescription(`\`${expression}\``)
+                .setColor(red);
             return await interaction.reply({
-                embeds: [
-                    new Discord.EmbedBuilder()
-                        .setTitle(e.message)
-                        .setDescription(`\`${expression}\`\nUse \`/calc expr: help\` to see the help page`)
-                        .setColor(red)
-                ]
+                embeds: [errorEmbed, helpEmbed],
+                ephemeral: true
             });
         } else throw e;
     }
@@ -215,11 +218,13 @@ async function calc(interaction) {
         if (e instanceof UnrecognizedTokenError) {
             // Catches nonsensical tokens
             return await interaction.reply({
-                embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red)]
+                embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red), helpEmbed],
+                ephemeral: true
             });
         } else if (e instanceof bHelper.DiscountError) {
             return await interaction.reply({
-                embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red)]
+                embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red), helpEmbed],
+                ephemeral: true
             });
         } else {
             throw e;
@@ -230,22 +235,22 @@ async function calc(interaction) {
     let output = stack.pop();
 
     if (isNaN(output)) {
+        const errorEmbed = new Discord.EmbedBuilder()
+            .setTitle('Error processing expression. Did you add an extra operator?')
+            .setDescription(`\`${expression}\``)
+            .setColor(red);
         return await interaction.reply({
-            embeds: [
-                new Discord.EmbedBuilder()
-                    .setTitle('Error processing expression. Did you add an extra operator?')
-                    .setDescription(`\`${expression}\`\nUse \`/calc expr: help\` to see the help page`)
-                    .setColor(red)
-            ]
+            embeds: [errorEmbed, helpEmbed],
+            ephemeral: true
         });
     } else if (stack.length > 0) {
+        const errorEmbed = new Discord.EmbedBuilder()
+            .setTitle('Error processing expression. Did you leave out an operator?')
+            .setDescription(`\`${expression}\``)
+            .setColor(red);
         return await interaction.reply({
-            embeds: [
-                new Discord.EmbedBuilder()
-                    .setTitle('Error processing expression. Did you leave out an operator?')
-                    .setDescription(`\`${expression}\`\nUse \`/calc expr: help\` to see the help page`)
-                    .setColor(red)
-            ]
+            embeds: [errorEmbed, helpEmbed],
+            ephemeral: true
         });
     } else {
         // G2g!
@@ -309,6 +314,8 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
 class UnrecognizedTokenError extends Error { }
 
 async function execute(interaction) {
+    const expression = interaction.options.getString('expr').toLowerCase();
+    if (expression === 'help') await helpPage(interaction);
     await calc(interaction);
 }
 

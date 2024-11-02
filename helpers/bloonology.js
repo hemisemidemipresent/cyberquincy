@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { isValidUpgradeSet } = require('./towers');
+const { round } = require('./general');
 
 const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     dart_monkey: 'https://pastebin.com/raw/FK4a9ZSi',
@@ -299,6 +300,334 @@ async function getRelicBloonology() {
     return relicMap;
 }
 
+function damageDescription(stats) {
+    let desc = `${stats.d}d, `
+        + (stats.cd > 0 ? `+${stats.cd}cd (${stats.tcd}), ` : "")
+        + (stats.fd > 0 ? `+${stats.fd}fd (${stats.tfd}), ` : "")
+        + (stats.md > 0 ? `+${stats.md}md (${stats.tmd}), ` : "")
+        + (stats.cad > 0 ? `+${stats.cad} camo damage (${stats.tcad}), ` : "");
+    if (stats.bd > 0) {
+        desc += `+${stats.bd}bd` + (stats.bdm > 1 ? ", " : ` (${stats.tbd}), `);
+    }
+    desc += (stats.bdm > 1 ? `×${stats.bdm}bd (${stats.tbd}), ` : "")
+        + (stats.edm > 1 ? `×${stats.edm}ed (${stats.ted}), ` : "");
+
+    return desc.substring(0, desc.length - 2);
+}
+
+function attackDescription(stats) {
+    let desc = damageDescription(stats) + ", "
+        + (stats.p ? `${stats.p}p, ` : "")
+        + (stats.s ? `${stats.s}s, ` : "");
+
+    return desc.substring(0, desc.length - 2);
+}
+
+function extraDamageDescription(stats) {
+    let desc = (stats.sd ? `+${stats.sd}d (${stats.tsd}) to stunned bloons, ` : "")
+        + (stats.std ? `+${stats.std}d (${stats.tstd}) to bloons with *sticky* status, ` : "");
+
+    return desc.substring(0, desc.length - 2);
+}
+
+function dartParagonBloonology(stats) {
+    let { main, mini } = stats;
+
+    let desc = `85r
+*juggernaut*- ${attackDescription(main)}, 3j, normal, camo
+    - expires when it hits the map border
+    - can rebound off walls and rehit bloons after rebound
+    - emits 6 *mini-juggernaut*s when 50% or 0 pierce is left
+        - emits all remaining sets on expiration
+        - *mini-juggernaut*- ${attackDescription(mini)}, normal, camo
+            - can rebound off walls and rehit bloons after rebound`;
+
+    return cleanBloonology(desc);
+}
+
+function boomerParagonBloonology(stats) {
+    let { main, mainDot, orbit, press, pressExplosion, pressDot } = stats;
+
+    let desc = `60r
+*glaive*- ${attackDescription(main)}, normal, camo
+    - can jump to a nearby target after hitting
+        - unlimited jump distance
+    - first hit applies *shred* status- (${damageDescription(mainDot)})/1s, normal, 15.1s duration
+    - can travel through walls
+
+*orbital-glaive*- ${attackDescription(orbit)}, normal, camo
+    - zone, 50r
+    - cannot be range-buffed
+
+*press* - ${attackDescription(press)}, normal, camo
+    - 100r
+    - only targets blimps
+    - can attack through walls
+    - can rehit bloons every 0.1s
+    - creates *explosion* instead of returning
+        - *explosion*- ${attackDescription(pressExplosion)}, normal, camo
+            - 50 blast radius
+            - applies *burn* status- (${damageDescription(pressDot)})/1s, normal, 4s duration
+    - applies *stun* for 0.25s
+    - applies *pushback* to bloons
+        - MOABs move back 1 unit, BFBs 0.5 units, DDTs and ZOMGs 0.25 units
+
+*buff* - all primary towers get 90%s, including paragons`;
+
+    return cleanBloonology(desc);
+}
+
+function ninjaParagonBloonology(stats) {
+    let { shuriken, fbomb, blues, sbomb, sbombSplash } = stats;
+
+    let desc = `70r
+*shuriken*- ${attackDescription(shuriken)}, 8j, normal, camo
+    - ${extraDamageDescription(shuriken)}
+    - 15% chance to send non-blimps back 100-150 units
+        - ceramics are sent back 50-75 units
+    - strong seeking
+
+*flash-bomb*- ${attackDescription(fbomb)}, 5j, normal, camo
+    - 40 blast radius
+    - stuns non-blimps for 3s, blimps for 1s
+    - 15% chance to send non-blimps back 10-300 units
+    - each emits 3 *blue-shuriken*s on impact
+        - *blue-shuriken*- ${attackDescription(blues)}, normal, camo
+            - cannot rehit the same bloon
+            - 15% chance to send non-blimps back 10-300 units
+            - strong seeking
+
+*sticky-bomb*- ${sbomb.s}s, normal, camo
+    - ∞r
+    - only targets blimps without *sticky* status
+    - targets the strongest bloon
+    - applies *sticky* status- (${damageDescription(sbomb)})/2.95s, normal, 3s duration
+        - damage soaks through blimp layers
+        - creates *explosion* after 2.95s
+            - *explosion*- ${attackDescription(sbombSplash)}, normal, camo
+                - 40 blast radius
+                - 15% chance to send non-blimps back 10-300 units
+
+*sabotage*- All bloons move at 50% speed and blimps spawn with 75% health (does not stack with x4+x ninja)
+*buff*- all towers get camo detection`;
+
+    return cleanBloonology(desc);
+}
+
+function buccParagonBloonology(stats) {
+    let { cannonball, plasmaDarts, darts, missile, ability } = stats;
+
+    let desc = `60r
+*battery*- 3 sets of *cannonball* (effective 9j) and *plasma-dart* (effective 18j) per side, each with a 180° field of view
+    *cannonball*- ${attackDescription(cannonball)}, 3j, normal, camo
+        - 40 blast radius
+    *plasma-dart*- ${attackDescription(plasmaDarts)}, 6j, normal, camo
+
+*hook*- 1s, hooks and destroys the strongest blimp on-screen using up to 2 hooks, camo
+    - has 10 hooks available
+    - ZOMGs require the use of 2 hooks
+    - once all 10 hooks are used, the attack is disabled for 10s before replenishing the 10 hooks
+
+spawns 3 *aircraft* subtowers
+    - ∞r
+    - *dart*- ${attackDescription(darts)}, normal, camo
+    - *missile*- ${attackDescription(missile)}, 4j, normal, camo
+        - only targets blimps
+        - 30 blast radius
+        - seeking (57.3 turn radius)
+        
+*income*- $3200 income at the end of each round
+*buff*- all water towers and monkey aces get 85%s, including paragons, excluding itself
+*trade-deal-buff*- towers in range excluding itself get +10% sellback rate, up to 95%
+    - not stackable
+*empire-buff*- affects up to 20 xx3+ buccaneers, prioritising xx4 buccaneers
+    - gets +10d, +10cd, +10md
+    - gets +$20 income for every affected xx4 buccaneer
+    - gets +$15 income for every affected xx3 buccaneer
+    - does not affect itself
+provides two platforms that can each accomodate 1 small or medium footprint land tower
+
+**Mega Hook** ability: ${ability.cooldown}s cooldown, hooks and destroys the strongest blimp on-screen, including BADs, camo
+    - initial cooldown of ${round(ability.cooldown / 3, 1)}s
+    - can only be used 2 times per round`;
+
+    return cleanBloonology(desc);
+}
+
+function engiParagonBloonology(stats) {
+    let { nailGuns, megaExplosion, endpoint, beam, modExplosion, modPlasma, plasma, missile, explosion, ability } = stats;
+
+    let desc = `70r
+*nail-gun*- ${attackDescription(nailGuns)}, 3j, normal, camo
+    - stuns bloons for 5s
+    - gets +30% attack speed at the end of each round
+        - (this is an attack speed buff, not an attack cooldown buff. To convert to attack cooldown buff, do 1 / (buff))
+        - maxes at 0.15s attack cooldown
+
+**Mega Sentry** ability: ${ability.cooldown}s cooldown, cycles between spawning green, red, and blue mega sentries in that order
+    - *green-mega-sentry*
+        - 70r
+        - creates *mega-explosion* on expiration
+            - *mega-explosion*- ${attackDescription(megaExplosion)}, plasma, camo
+                - 40 blast radius
+        - *beam*- ${attackDescription(beam)}, plasma, camo
+        - *endpoint*- ${attackDescription(endpoint)} ${beam.s}s, plasma, camo
+            - uses the remaining pierce from *beam*
+        - *sentry*- 6s, spawns *plasma-sentry* subtower that lasts 19s
+            - cannot be rate-buffed
+
+    - *red-mega-sentry*
+        - 70r
+        - creates *mega-explosion* on expiration
+        - *plasma*- ${attackDescription(plasma)}, 4j, plasma, camo
+        - *sentry*- 6s, spawns *plasma-sentry* subtower that lasts 19s
+            - cannot be rate-buffed
+
+    - *blue-mega-sentry*
+        - 70r
+        - creates *mega-explosion* on expiration
+        - *missile*- ${attackDescription(missile)}, normal, camo
+            - each bloon uses 2p
+            - creates *explosion* on impact
+                - *explosion*- ${attackDescription(explosion)}, normal, camo
+                    - 30 blast radius
+        - *sentry*- 6s, spawns *plasma-sentry* subtower that lasts 19s
+            - cannot be rate-buffed
+
+    - *plasma-sentry*
+        - 50r
+        - creates *explosion* on expiration
+            - *explosion*- ${attackDescription(modExplosion)}, plasma, camo
+                - zone, 50r
+        - *plasma*- ${attackDescription(modPlasma)}, plasma, camo`;
+
+    return cleanBloonology(desc);
+}
+
+function aceParagonBloonology(stats) {
+    let { radial, radialExplosion, seeking, seekingExplosion, forward, carpet } = stats;
+
+    let desc = `∞r
+    - dummy 22r
+*radial-dart*- ${attackDescription(radial)}, 12j, normal, camo
+    - creates *dart-explosion* when out of pierce
+        - *dart-explosion*- ${attackDescription(radialExplosion)}, normal, camo
+
+*seeking-missile*- ${attackDescription(seeking)}, 1p, 8j, normal, camo
+    - only targets blimps
+    - cannot be pierce-buffed
+    - seeking (53.7 turn radius)
+    - creates *explosion* on impact
+        - *explosion*- ${attackDescription(seekingExplosion)}, normal, camo
+
+*forward-dart*- ${attackDescription(forward)}, 2j, normal, camo
+    - light seeking (222.8 turn radius)
+    - has a 60° field of view
+
+**Carpet Bomb** ability: ${carpet.cooldown}s cooldown, drops 8 *bomb*s along the selected path with 0.067s between each bomb
+    - *bomb*- ${attackDescription(carpet)}, normal, camo
+        - 50 blast radius
+        - if a layer is not popped, it is stunned for 8s
+        - takes 0.75s to explode
+    - the first *bomb* drops after 2.65s to 3.6s depending on the distance of the path start from the screen edge
+    - 3.4s to 4.35s total delay until the first *bomb*`;
+
+    return cleanBloonology(desc);
+}
+
+function wizParagonBloonology(stats) {
+    let { arcane, drain, flamethrower, wof, flame, fireball, metamorphosis, explosion, burn, zomg, bfb } = stats;
+
+    let desc = `80r
+*mana-graveyard*- 100,000 mana capacity
+    - 50%s on all attacks except *phoenix* when at least 50,000 mana is left
+
+*arcane-blast*- ${attackDescription(arcane)}, normal, camo
+    - seeking (31.8 turn radius)
+    - uses 50 mana per attack
+    - spawns *zombie-bloon* when a bloon is popped
+        - *zombie-bloon*- 150d, +150bd, 50p, normal, camo
+            - lasts 16s
+            - travels at the same speed as a base red bloon
+            - uses 250 mana per spawn
+
+*drain-beam*- ${attackDescription(drain)}, 0.05s, normal, camo
+    - 120r
+    - cannot be rate-buffed
+    - gains 250 mana per attack
+
+*phoenix* subtower
+    - ∞r
+    - *flame*- ${attackDescription(flame)}, normal, camo
+        - uses 50 mana per attack
+    - *fireball*- ${attackDescription(fireball)}, 8j, normal, camo
+
+**Arcane Metamorphosis** ability: ${metamorphosis.cooldown}s cooldown, activates *flamethrower* and *fire-wall* attacks, disables all other attacks
+    - drains 5000 mana per second, ends when 0 mana is left
+    - *flamethrower*- ${attackDescription(flamethrower)}, 2j, normal, camo
+    - *fire-wall*- ${wof.s}, normal, camo
+        - spawns up to 5 *wall-of-fire*s at least 0.1s apart when hitting a bloon
+            - *wall-of-fire*- ${damageDescription(wof)}, ${wof.p}p, 0.1s, normal, camo
+                - cannot be rate-buffed
+                - lasts 9s
+
+**Phoenix Explosion** ability: ${explosion.cooldown}s cooldown, uses all mana and disables *phoenix* for 10s
+    - creates *explosion* at the *phoenix* position
+        - *explosion*- ∞p, normal, camo
+            - 100 blast radius
+            - applies *burn* status- (${damageDescription(burn)})/0.5s, fire, 30.05s duration
+    - spawns 1 *zomg-zombie* in range per 9000 mana in the graveyard, up to 10 *zomg-zombie*s
+        - *zomg-zombie*- ${attackDescription(zomg)}, normal, camo
+            - lasts 10s
+            - travels at the same speed as a base red bloon
+            - spawns 4 *bfb-zombie*s upon expiration or when out of pierce
+                - *bfb-zombie*- ${attackDescription(bfb)}, normal, camo
+                    - lasts 7s
+                    - travels at the same speed as a base red bloon`;
+
+    return cleanBloonology(desc);
+}
+
+function subParagonBloonology(stats) {
+    let { aura, preemptive, explosion, dart, airburst, strike, aftershock, fallout } = stats;
+
+    let desc = `52r
+### SUBMERGED
+*radiation*- ${attackDescription(aura)}, 0.28s, normal, removes camo and regrow
+    - zone, 52r
+    - cannot be rate-buffed
+*submerge-buff*- 600%d, 300%p, 130%s, 500% xp per round for heroes in range
+    - 130%s makes heroes attack slower
+    - 700%d, 300%p for monkey subs in range
+        - does not affect x4+x sub's ability
+    - 50% ability cooldown for water towers in range excluding paragons
+    - 90% ability cooldown for paragons in range
+    - 80% ability cooldown for all other towers excluding paragons
+### UNSUBMERGED
+*dart*- ${damageDescription(dart)}, 1p, ${dart.s}s, normal, camo
+    - strong seeking (27.1 turn radius)
+    - can attack bloons in the range of other towers
+    - creates *airburst* on impact
+        - *airburst*- ${attackDescription(airburst)}, 3j, normal, camo
+*pre-emptive-missile*- ${attackDescription(preemptive)}, 1p, normal, camo
+    - creates *explosion* on impact
+        - *explosion*- ${attackDescription(explosion)}, normal, camo
+
+**Final Strike** ability: ${strike.cooldown}s cooldown, disables all attacks for 15s, launches 3 *missile*s that target strong, first, and close
+    - *missile*- ${attackDescription(strike)}, normal, camo
+        - 60 blast radius
+        - creates *aftershock* and 5 *fallout-puddle*s on the track in 60r on impact
+            - *aftershock*- ${attackDescription(aftershock)}, normal, camo
+                - 180 blast radius
+                - if a layer is not popped, it is stunned for 15s
+            - *fallout-puddle*- ${attackDescription(fallout)}, 0.1s, normal, camo
+                - lasts 36s
+                - cannot be rate-buffed
+    - the *missile*s strike after 15.65s, 15.7s, and 15.75s respectively`;
+
+    return cleanBloonology(desc);
+}
+
 module.exports = {
     TOWER_NAME_TO_BLOONOLOGY_LINK,
     TOWER_NAME_TO_BLOONOLOGY_LINK_B2,
@@ -317,5 +646,13 @@ module.exports = {
     towerUpgradeToBaseChangeBloonology,
     towerUpgradesToBaseChangeBloonology,
     heroNameToBloonologyList,
-    getRelicBloonology
+    getRelicBloonology,
+    dartParagonBloonology,
+    boomerParagonBloonology,
+    ninjaParagonBloonology,
+    buccParagonBloonology,
+    engiParagonBloonology,
+    aceParagonBloonology,
+    wizParagonBloonology,
+    subParagonBloonology
 };

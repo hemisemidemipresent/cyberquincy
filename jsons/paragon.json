@@ -1,307 +1,363 @@
 {
     "dart_monkey": {
-        "pierce": 200,
-        "damage": 15,
-        "cd": 90,
-        "bd": 80,
-        "rate": 0.4
+        "main": {
+            "pierce": 210,
+            "damage": 15,
+            "cd": 75,
+            "bd": 80,
+            "edm": 2,
+            "rate": 0.4
+        },
+        "mini": {
+            "pierce": 200,
+            "damage": 15,
+            "cd": 90,
+            "bd": 80,
+            "edm": 2
+        }
     },
     "boomerang_monkey": {
         "main": {
+            "pierce": 80,
             "damage": 20,
             "bd": 50,
-            "rate": 0.04,
-            "pierce": 100
+            "edm": 2,
+            "rate": 0.04
         },
         "mainDot": {
             "damage": 750,
-            "bd": 0
+            "bd": 0,
+            "edm": 2
         },
         "orbit": {
+            "pierce": 80,
             "damage": 42,
             "cd": 20,
             "md": 20,
             "bd": 150,
-            "rate": 0.1,
-            "pierce": 1000
+            "edm": 2,
+            "rate": 0.1
         },
         "press": {
+            "pierce": 300,
             "damage": 1,
             "md": 19,
-            "rate": 3,
-            "pierce": 300
+            "bd": 0,
+            "edm": 2,
+            "rate": 3
         },
-        "explosion": {
+        "pressExplosion": {
+            "pierce": 20,
             "damage": 2500,
             "bd": 4000,
-            "pierce": 20
+            "edm": 2
         },
-        "burn": {
+        "pressDot": {
             "damage": 500,
-            "isDot": true
+            "bd": 0,
+            "edm": 2
         }
     },
     "ninja_monkey": {
         "shuriken": {
-            "rate": 0.217,
             "pierce": 4,
             "damage": 32,
             "bd": 32,
             "cad": 16,
-            "std": 64
+            "sd": 64,
+            "std": 15,
+            "edm": 2,
+            "rate": 0.217
         },
         "fbomb": {
-            "rate": 1.5,
             "pierce": 50,
             "damage": 96,
             "bd": 96,
-            "cad": 48
+            "cad": 48,
+            "edm": 2,
+            "rate": 1.5
         },
         "blues": {
             "pierce": 20,
             "damage": 80,
             "bd": 80,
-            "cad": 40
+            "cad": 40,
+            "edm": 2
         },
         "sbomb": {
-            "rate": 6.5,
-            "pierce": 1,
             "damage": 16000,
             "bd": 32000,
-            "cad": 3200
+            "cad": 3200,
+            "edm": 2,
+            "rate": 6.5
         },
-        "sbombsplash": {
+        "sbombSplash": {
             "pierce": 10,
             "damage": 4200,
             "bd": 2100,
-            "cad": 2100
+            "cad": 2100,
+            "edm": 2
         }
     },
     "monkey_buccaneer": {
-        "ability": {
-            "cooldown": 30
-        },
-        "plasmaDarts": {
-            "damage": 25,
-            "md": 30,
-            "bd": 30,
-            "pierce": 10,
-            "rate": 0.25
-        },
         "cannonball": {
+            "pierce": 28,
             "damage": 60,
             "md": 60,
             "bd": 60,
-            "pierce": 28,
+            "edm": 2,
+            "rate": 0.25
+        },
+        "plasmaDarts": {
+            "pierce": 10,
+            "damage": 25,
+            "md": 30,
+            "bd": 30,
+            "edm": 2,
             "rate": 0.25
         },
         "darts": {
+            "pierce": 17,
             "damage": 44,
             "bd": 44,
-            "pierce": 14,
+            "edm": 2,
             "rate": 0.18
         },
-        "antiMOAB": {
+        "missile": {
+            "pierce": 10,
             "damage": 200,
             "bd": 200,
-            "pierce": 10,
+            "edm": 2,
             "rate": 1.8
+        },
+        "ability": {
+            "cooldown": 30
         }
     },
     "engineer_monkey": {
         "nailGuns": {
-            "damage": 300,
-            "bd": 100,
             "pierce": 15,
+            "damage": 300,
+            "bd": 500,
+            "edm": 2,
             "rate": 1
         },
-        "ability": {
-            "cooldown": 20
+        "megaExplosion": {
+            "pierce": 50,
+            "damage": 30000,
+            "bd": 40000,
+            "edm": 2
         },
         "endpoint": {
             "damage": 100,
             "bd": 250,
-            "pierce": 10,
-            "rate": 0.2
+            "edm": 2
         },
         "beam": {
+            "pierce": 10,
             "damage": 20,
             "bd": 30,
-            "pierce": 10,
+            "edm": 2,
             "rate": 0.2
         },
-        "plasma": {
-            "damage": 5,
+        "modExplosion": {
+            "pierce": 50,
+            "damage": 100,
             "bd": 0,
-            "pierce": 10,
-            "rate": 0.05
+            "edm": 2
         },
-        "missile": {
-            "damage": 0,
-            "md": 750,
-            "pierce": 20,
-            "rate": 0.5
-        },
-        "explosion": {
-            "damage": 3,
-            "pierce": 20
-        },
-        "sell": {
-            "damage": 30000,
-            "bd": 40000,
-            "pierce": 100
-        },
-        "mod_plasma": {
+        "modPlasma": {
+            "pierce": 5,
             "damage": 4,
             "md": 2,
             "bd": 4,
-            "pierce": 5,
+            "edm": 2,
             "rate": 0.06
         },
-        "mod_sell": {
-            "damage": 100,
+        "plasma": {
+            "pierce": 10,
+            "damage": 5,
             "bd": 0,
-            "pierce": 50
+            "edm": 2,
+            "rate": 0.05
+        },
+        "missile": {
+            "pierce": 20,
+            "damage": 0,
+            "md": 750,
+            "rate": 0.5
+        },
+        "explosion": {
+            "pierce": 20,
+            "damage": 3,
+            "bd": 0,
+            "edm": 2
+        },
+        "ability": {
+            "cooldown": 20
         }
     },
     "monkey_ace": {
         "radial": {
-            "damage": 300,
-            "bd": 300,
             "pierce": 35,
-            "rate": 0.66
-        },
-        "seeking": {
-            "damage": 300,
-            "bd": 300,
-            "rate": 0.66
-        },
-        "explosion": {
             "damage": 200,
             "bd": 200,
-            "pierce": 35
+            "edm": 2,
+            "rate": 0.66
+        },
+        "radialExplosion": {
+            "pierce": 1,
+            "damage": 300,
+            "bd": 300,
+            "edm": 2
+        },
+        "seeking": {
+            "damage": 200,
+            "bd": 200,
+            "edm": 2,
+            "rate": 0.66
+        },
+        "seekingExplosion": {
+            "pierce": 35,
+            "damage": 300,
+            "bd": 300,
+            "edm": 2
         },
         "forward": {
+            "pierce": 50,
             "damage": 150,
             "bd": 150,
-            "pierce": 50,
+            "edm": 2,
             "rate": 0.11
         },
         "carpet": {
-            "cooldown": 60,
+            "pierce": 150,
             "damage": 30000,
             "bd": 0,
-            "pierce": 150
+            "edm": 2,
+            "cooldown": 60
         }
     },
-    "wizard_monkey":{
+    "wizard_monkey": {
         "arcane": {
+            "pierce": 25,
             "damage": 100,
             "md": 300,
             "bd": 150,
-            "pierce": 25,
+            "edm": 2,
             "rate": 0.275
         },
-        "zombie": {
-            "damage": 150,
-            "bd": 150,
-            "pierce": 50
-        },
         "drain": {
+            "pierce": 1,
             "damage": 100,
             "bd": 0,
-            "pierce": 1
+            "edm": 2
+        },
+        "flamethrower": {
+            "pierce": 100,
+            "damage": 500,
+            "bd": 1000,
+            "edm": 2,
+            "rate": 0.05
+        },
+        "wof": {
+            "pierce": 60,
+            "damage": 25,
+            "bd": 0,
+            "edm": 2,
+            "rate": 6.5
         },
         "flame": {
+            "pierce": 100,
             "damage": 200,
             "bd": 50,
-            "pierce": 100,
+            "edm": 2,
             "rate": 0.2
         },
         "fireball": {
+            "pierce": 100,
             "damage": 400,
             "bd": 400,
-            "pierce": 100,
+            "edm": 2,
             "rate": 2
+        },
+        "metamorphosis": {
+            "cooldown": 120
         },
         "explosion": {
             "cooldown": 40
         },
         "burn": {
             "damage": 2500,
-            "bd": 0
+            "bd": 0,
+            "edm": 2
         },
         "zomg": {
+            "pierce": 200,
             "damage": 4000,
             "bd": 8000,
-            "pierce": 200
+            "edm": 2
         },
         "bfb": {
+            "pierce": 50,
             "damage": 700,
             "bd": 0,
-            "pierce": 50
-        },
-        "flamethrower": {
-            "damage": 500,
-            "bd": 1000,
-            "pierce": 100,
-            "rate": 0.1
-        },
-        "metamorphosis": {
-            "cooldown": 120
-        },
-        "wof": {
-            "rate": 6.5,
-            "damage": 25,
-            "bd": 0,
-            "pierce": 60
+            "edm": 2
         }
     },
-    "monkey_sub":{
-        "strike": {
-            "cooldown": 240,
-            "damage": 60000,
-            "bd": 0,
-            "pierce": 30
-        },
-        "aftershock": {
-            "damage": 15000,
-            "bd": 0,
-            "pierce": 50
-        },
-        "fallout": {
-            "damage": 10,
-            "md": 90,
-            "bd": 0,
-            "pierce": 120
-        },
+    "monkey_sub": {
         "aura": {
+            "pierce": 1000,
             "damage": 250,
             "cd": 250,
             "bd": 250,
-            "pierce": 1000
+            "edm": 2
+        },
+        "preemptive": {
+            "damage": 1000,
+            "cd": 1000,
+            "bd": 20000,
+            "edm": 2
+        },
+        "explosion": {
+            "pierce": 10,
+            "damage": 350,
+            "bd": 0,
+            "edm": 2
         },
         "dart": {
             "damage": 40,
             "md": 160,
             "bd": 200,
-            "pierce": 1,
+            "edm": 2,
             "rate": 0.15
         },
         "airburst": {
+            "pierce": 9,
             "damage": 40,
             "md": 80,
             "bd": 100,
-            "pierce": 9
+            "edm": 2
         },
-        "missile": {
-            "damage": 1000,
-            "cd": 1000,
-            "bd": 20000
+        "strike": {
+            "pierce": 30,
+            "damage": 60000,
+            "bd": 0,
+            "edm": 2,
+            "cooldown": 240
         },
-        "explosion": {
-            "damage": 350,
-            "pierce": 10
+        "aftershock": {
+            "pierce": 120,
+            "damage": 15000,
+            "bd": 0,
+            "edm": 2
+        },
+        "fallout": {
+            "pierce": 60,
+            "damage": 10,
+            "md": 90,
+            "bd": 0,
+            "edm": 2
         }
     }
 }

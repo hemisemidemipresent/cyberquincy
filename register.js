@@ -4,6 +4,7 @@ const { Routes } = require('discord-api-types/v9');
 const { activeToken, activeClientID } = require('./helpers/config');
 const { testing, testingGuild } = require('./1/config.json');
 const { ApplicationCommandOptionType } = require('discord.js');
+global.Discord = require('discord.js');
 
 async function loadAliases() {
     const AliasRepository = require('./alias-repository.js');

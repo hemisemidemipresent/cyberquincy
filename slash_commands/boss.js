@@ -15,7 +15,8 @@ const builder = new SlashCommandBuilder()
                 { name: 'Gravelord Lych', value: 'Lych' },
                 { name: 'Vortex: Deadly Master of Air', value: 'Vortex' },
                 { name: 'Dreadbloon: Armored Behemoth', value: 'Dreadbloon' },
-                { name: 'Reality Warper Phayze', value: 'Phayze' }
+                { name: 'Reality Warper Phayze', value: 'Phayze' },
+                { name: 'Blastapopoulos: Demon of the Core', value: 'Blastapopoulos' }
             )
             .setRequired(true)
     )
@@ -47,15 +48,19 @@ async function execute(interaction) {
 }
 
 function process(data, name, tier, isElite) {
-    let embed = new Discord.EmbedBuilder().setTitle(`${isElite ? 'Elite' : ''} ${name} Tier ${tier}`);
-    let desc = data.desc + '\n\n' + (isElite ? data.eliteDesc : data.normalDesc);
-    let obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
-    desc += `\n\n**Stats**:
+    let embed = new Discord.EmbedBuilder()
+        .setTitle(`${isElite ? 'Elite' : ''} ${name} Tier ${tier}`);
+
+    const desc = isElite ? data.eliteDesc.join('\n') : data.normalDesc.join('\n');
+
+    const obj = isElite ? data.elite[tier - 1] : data.normal[tier - 1];
+    const generalDesc = `**Stats**:
 Health: ${gHelper.numberWithCommas(obj.hp)}
 Speed: ${obj.speed}x red bloon speed
 ${obj.desc}
 \`\`\`${data.customRounds}\`\`\``;
-    embed.setDescription(desc);
+
+    embed.setDescription([data.desc, desc, generalDesc].join('\n\n'));
     return embed;
 }
 

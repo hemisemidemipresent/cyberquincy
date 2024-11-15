@@ -40,7 +40,7 @@ builder = new SlashCommandBuilder()
     .addStringOption(difficulty)
     .addStringOption(mk);
 
-const helpEmbed =new Discord.EmbedBuilder()
+const helpEmbed = new Discord.EmbedBuilder()
     .setTitle('`/calc` HELP')
     .setDescription('**Cash Calculator**')
     .addFields([
@@ -149,7 +149,7 @@ async function calc(interaction) {
                 ephemeral: true
             });
         } else if (e instanceof LexicalParseError) {
-            const errorEmbed =                     new Discord.EmbedBuilder()
+            const errorEmbed = new Discord.EmbedBuilder()
                 .setTitle(e.message)
                 .setDescription(`\`${expression}\``)
                 .setColor(red);

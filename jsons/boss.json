@@ -1,352 +1,556 @@
 {
-    "Bloonarius": {
-        "desc": "No fancy gimmicks, just spawns a bunch of Bloons and has a bunch of health.",
-        "normalDesc": "",
-        "eliteDesc": "",
-        "normal": [
-            {
-                "tier": 1,
-                "hp": 20000,
-                "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **8 greens**\nfor every 25% of HP lost spawns **30 greens and 30 ceramics**"
-            },
-            {
-                "tier": 2,
-                "hp": 75000,
-                "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **15 yellows**\nfor every 25% of HP lost spawns **60 yellows and 60 ceramics**"
-            },
-            {
-                "tier": 3,
-                "hp": 350000,
-                "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **25 pinks**\nfor every 25% of HP lost spawns **100 pinks and 6 MOABs**"
-            },
-            {
-                "tier": 4,
-                "hp": 750000,
-                "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **15 zebras**\nfor every 25% of HP lost spawns **60 zebras and 10 ZOMGs**"
-            },
-            {
-                "tier": 5,
-                "hp": 3000000,
-                "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **25 rainbows**\nfor every 25% of HP lost spawns **100 rainbows and 1 BAD**"
-            }
-        ],
-        "elite": [
-            {
-                "tier": 1,
-                "hp": 50000,
-                "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **10 pinks**\nfor every 12.5% of HP lost spawns **40 pinks and 70 ceramics**"
-            },
-            {
-                "tier": 2,
-                "hp": 300000,
-                "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **10 rainbows**\nfor every 12.5% of HP lost spawns **40 rainbows and 16 BFBs**"
-            },
-            {
-                "tier": 3,
-                "hp": 2000000,
-                "speed": 0.05,
-                "desc": "for every 1% of HP lost spawns **13 ceramics**\nfor every 12.5% of HP lost spawns **50 ceramics, 1 BAD and 9 DDTs**"
-            },
-            {
-                "tier": 4,
-                "hp": 8000000,
-                "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **12 MOABs**\nfor every 12.5% of HP lost spawns **100 regrow fortified ceramics, 2 fortified BADs and 20 fortified DDTs**"
-            },
-            {
-                "tier": 5,
-                "hp": 40000000,
-                "speed": 0.06,
-                "desc": "for every 1% of HP lost spawns **8 DDTs**\nfor every 25% of HP lost spawns **30 MOABs and 4 fortified BAD**"
-            }
-        ],
-        "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs"
-    },
-    "Lych": {
-        "desc": "The Lych is complicated; it can gain health from towers sold while it's on screen and also heals from buffs along with removing them and stunning affected towers. Lych cannot heal above its starting health.",
-        "normalDesc": "**Sell Life Steal**: Heals **1%** HP per highest tier of the tower sacrificed (example: a tier 5 tower would heal 5% of lych's max HP, crosspathing doesn't matter).\n\n**Buff Life Steal**: Heals **2%** HP for each buff stolen and stuns affected towers for **5 seconds**. The buff steal has **100 range** at tiers 1-4 and **infinite range** at tier 5. Can only steal buffs once per 12 seconds.\n\n**Reanimated Blimps**: Reanimated blimps at each skull phase spawn based off of popped blimps from the **past 20 seconds** at all tiers. Reanimated blimps have the same properties as their normal counterparts (i.e. can be stunned, insta-killed, etc)\n\n**Lych-Soul**: The Lych-Soul's speed is always **100%** of a Red Bloon. The Lych-Soul has the same properties as the main boss.",
-        "eliteDesc": "**Sell Life Steal**: Heals **1%** HP per highest tier of the tower sacrificed (example: a tier 5 tower would heal 5% of lych's max HP, crosspathing doesn't matter).\n\n**Buff Life Steal**: Heals **4%** HP for each buff stolen and stuns affected towers for **5 seconds**. The buff steal has **100 range** at tiers 1-4 and **infinite range** at tier 5. Can only steal buffs once per 12 seconds.\n\n**Reanimated Blimps**: Reanimated blimps at each skull phase spawn based off of popped blimps from the **past 20 seconds** at all tiers. Reanimated blimps have the same properties as their normal counterparts (i.e. can be stunned, insta-killed, etc)\n\n**Lych-Soul**: The Lych-Soul's speed is always **100%** of a Red Bloon. The Lych-Soul has the same properties as the main boss.",
-        "normal": [
-            {
-                "tier": 1,
-                "hp": 14000,
-                "speed": 0.092,
-                "desc": "Reanimated Blimp Stats: **1.6x** speed and **4x** health\nLych-Soul Health: 1280\nLych-Soul Life Steal (per 4 seconds): 1"
-            },
-            {
-                "tier": 2,
-                "hp": 52500,
-                "speed": 0.092,
-                "desc": "Reanimated Blimp Stats: **1.7x** speed and **6x** health\nLych-Soul Health: 3050\nLych-Soul Life Steal (per 4 seconds): 2"
-            },
-            {
-                "tier": 3,
-                "hp": 220000,
-                "speed": 0.10,
-                "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 7000\nLych-Soul Life Steal (per 4 seconds): 5"
-            },
-            {
-                "tier": 4,
-                "hp": 525000,
-                "speed": 0.108,
-                "desc": "Reanimated Blimp Stats: **1.9x** speed and **8x** health\nLych-Soul Health: 14500\nLych-Soul Life Steal (per 4 seconds): 10"
-            },
-            {
-                "tier": 5,
-                "hp": 2100000,
-                "speed": 0.108,
-                "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 47000\nLych-Soul Life Steal (per 4 seconds): 17"
-            }
-        ],
-        "elite": [
-            {
-                "tier": 1,
-                "hp": 30000,
-                "speed": 0.1,
-                "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 1,600\nLych-Soul Life Steal (per 4 seconds): 11"
-            },
-            {
-                "tier": 2,
-                "hp": 180000,
-                "speed": 0.108,
-                "desc": "Reanimated Blimp Stats: **1.9x** speed and **8x** health\nLych-Soul Health: 5,600\nLych-Soul Life Steal (per 4 seconds): 12"
-            },
-            {
-                "tier": 3,
-                "hp": 1100000,
-                "speed": 0.116,
-                "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 25,000\nLych-Soul Life Steal (per 4 seconds): 15"
-            },
-            {
-                "tier": 4,
-                "hp": 4800000,
-                "speed": 0.12,
-                "desc": "Reanimated Blimp Stats: **2.1x** speed and **10x** health\nLych-Soul Health: 100,000\nLych-Soul Life Steal (per 4 seconds): 20"
-            },
-            {
-                "tier": 5,
-                "hp": 24000000,
-                "speed": 0.124,
-                "desc": "Reanimated Blimp Stats: **2.2x** speed and **12x** health\nLych-Soul Health: 485,000\nLych-Soul Life Steal (per 4 seconds): 27"
-            }
-        ],
-        "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 41|+1 MOAB\nR 42|+1 MOAB\nR 43|+1 fMOAB\nR 44|+2 spaced MOABs\nR 45|+1 fMOAB, +1 MOAB\nR 46|+1 MOAB, +1 fMOAB\nR 47|+2 spaced fMOABs\nR 48|+2 very spaced fMOABs\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 10 ZOMGs, 15 DDTs"
-    },
-    "Vortex": {
-        "desc": "Vortex is the fastest Boss in the game so far, but that's not all it has up its sleeve. It has lots of abilities on its damage phases, detailed below.",
-        "normalDesc": "**Projectile Destruction**: happens immediately once Vortex reaches a damage phase AND every **5 seconds**\n\n**Projectile Reflection**: The reflection occurs within **80r** and lasts for **6 seconds** after each damage phase and on spawn. This reflects **every** projectile except for instant-hitters (i.e. Sniper, First Strike ability, etc)..\n\n**Tower Stun**: Affects towers within **60r** once a damage phase is reached at all tiers. During the stun, all towers affected cannot be sold.\n\n**Knockback**: On each damage phase, Vortex is knocked back by **100 units** for all tiers.\n\n**Slipstream**: Affects all Bloons behind Vortex, causing them to move at **2.5x** speed at all tiers.",
-        "eliteDesc": "**Projectile Destruction**: happens immediately once Vortex reaches a damage phase AND every **5 seconds**\n\n**Projectile Reflection**: The reflection occurs within **80r** and lasts for **6 seconds** after each damage phase and on spawn. This reflects **every** projectile except for instant-hitters (i.e. Sniper, First Strike ability, etc)..\n\n**Tower Stun**: Affects towers within **60r** once a damage phase is reached at all tiers. During the stun, all towers affected cannot be sold.\n\n**Knockback**: On each damage phase, Vortex is knocked back by **100 units** for all tiers.\n\n**Slipstream**: Affects all Bloons behind Vortex, causing them to move at **2.5x** speed at all tiers.",
-        "normal": [
-            {
-                "tier": 1,
-                "hp": 20000,
-                "speed": 0.144,
-                "desc": "Stun duration: 16s\nStun radius: 60r"
-            },
-            {
-                "tier": 2,
-                "hp": 62800,
-                "speed": 0.144,
-                "desc": "Stun duration: 19s\nStun radius: 65r"
-            },
-            {
-                "tier": 3,
-                "hp": 294000,
-                "speed": 0.156,
-                "desc": "Stun duration: 21s\nStun radius: 70r"
-            },
-            {
-                "tier": 4,
-                "hp": 628000,
-                "speed": 0.162,
-                "desc": "Stun duration: 24s\nStun radius: 75r"
-            },
-            {
-                "tier": 5,
-                "hp": 2512000,
-                "speed": 0.168,
-                "desc": "Stun duration: 27s\nProjectile Destruction Stun radius: 80r"
-            }
-        ],
-        "elite": [
-            {
-                "tier": 1,
-                "hp": 41800,
-                "speed": 0.15,
-                "desc": "Stun duration: 18s\nProjectile Destruction Stun radius: 60r"
-            },
-            {
-                "tier": 2,
-                "hp": 251000,
-                "speed": 0.162,
-                "desc": "Stun duration: 21s\nProjectile Destruction Stun radius: 65r"
-            },
-            {
-                "tier": 3,
-                "hp": 1675000,
-                "speed": 0.18,
-                "desc": "Stun duration: 24s\nProjectile Destruction Stun radius: 70r"
-            },
-            {
-                "tier": 4,
-                "hp": 6700000,
-                "speed": 0.186,
-                "desc": "Stun duration: 27s\nProjectile Destruction Stun radius: 75r"
-            },
-            {
-                "tier": 5,
-                "hp": 33500000,
-                "speed": 0.192,
-                "desc": "Stun duration: 30s\nProjectile Destruction Stun radius: 80r"
-            }
-        ],
-        "customRounds": "R  5|+6 spaced yellows\nR 12|+1 layer to all Bloons\nR 24|Camo Green replaced by Camo Yellow, Blues replaced by Pinks\nR 30|+4 spaced yellows, +5 spaced pinks\nR 40|MOAB replaced by 6 ceramics\nR 41|+60 clumped pinks\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs"
-    },
-    "Dreadbloon": {
-        "desc": "Dreadbloon has several special immunities to entire tower categories that cycle at each damage phase, while also passively spawning beefy Dreadrock Bloons, detailed below.",
-        "normalDesc": "**Immunities**: Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.\n\n**Ceramic Armor Shell**: Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 3,750 HP). Dreadbloon moves at **0.3x speed** while its Shell is active.\n\n**Dreadrock Bloons**: **Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull. Each Dreadrock Bloon has **both MOAB and BOSS properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. The Rock's speed is always 88% of a Red Bloon.",
-        "eliteDesc": "**Immunities**: Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.\n\n**Ceramic Armor Shell**: Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 7,500 HP). Dreadbloon moves at **0.35x speed** while its Shell is active.\n\n**Dreadrock Bloons**: **Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull. Each Dreadrock Bloon has **both MOAB and BOSS properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. The Rock's speed is always 88% of a Red Bloon.",
-        "normal": [
-            {
-                "tier": 1,
-                "hp": 7500,
-                "speed": 0.05,
-                "desc": "Dreadrock HP: 300\nLives lost per leaked Dreadrock: 5\nNumber of Dreadrock bloons spawned at each skull: 5"
-            },
-            {
-                "tier": 2,
-                "hp": 25000,
-                "speed": 0.05,
-                "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 10\nNumber of Dreadrock bloons spawned at each skull: 7"
-            },
-            {
-                "tier": 3,
-                "hp": 120000,
-                "speed": 0.05,
-                "desc": "Dreadrock HP: 900\nLives lost per leaked Dreadrock: 15\nNumber of Dreadrock bloons spawned at each skull: 10"
-            },
-            {
-                "tier": 4,
-                "hp": 280000,
-                "speed": 0.06,
-                "desc": "Dreadrock HP: 5000\nLives lost per leaked Dreadrock: 20\nNumber of Dreadrock bloons spawned at each skull: 14"
-            },
-            {
-                "tier": 5,
-                "hp": 1000000,
-                "speed": 0.06,
-                "desc": "Dreadrock HP: 12000\nLives lost per leaked Dreadrock: 25\nNumber of Dreadrock bloons spawned at each skull: 19"
-            }
-        ],
-        "elite": [
-            {
-                "tier": 1,
-                "hp": 15000,
-                "speed": 0.052,
-                "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 20\nNumber of Dreadrock bloons spawned at each skull: 5"
-            },
-            {
-                "tier": 2,
-                "hp": 90000,
-                "speed": 0.052,
-                "desc": "Dreadrock HP: 2500\nLives lost per leaked Dreadrock: 30\nNumber of Dreadrock bloons spawned at each skull: 7"
-            },
-            {
-                "tier": 3,
-                "hp": 650000,
-                "speed": 0.052,
-                "desc": "Dreadrock HP: 10000\nLives lost per leaked Dreadrock: 50\nNumber of Dreadrock bloons spawned at each skull: 10"
-            },
-            {
-                "tier": 4,
-                "hp": 2625000,
-                "speed": 0.06,
-                "desc": "Dreadrock HP: 22000\nLives lost per leaked Dreadrock: 75\nNumber of Dreadrock bloons spawned at each skull: 14"
-            },
-            {
-                "tier": 5,
-                "hp": 12500000,
-                "speed": 0.06,
-                "desc": "Dreadrock HP: 45000\nLives lost per leaked Dreadrock: 100\nNumber of Dreadrock bloons spawned at each skull: 19"
-            }
-        ],
-        "customRounds": "\nLeads & Ceramics become Fortified\nZebras -> Leads\nRainbows -> Ceramics\nFor rounds 40-69, every other regular MOAB is fortified (BFBs+ unaffected)\nFor rounds 70+, every MOAB is fortified (BFBs+ unaffected)\nThere are some exceptions:\nR 39|18 Rainbows -> 12 fLeads, 6 Ceramics\nR 40|MOAB -> 10 fLeads, 8 fCeramics\nR 43|10 Rainbows -> 10 fLeads\nR 46|replaced by 1 fMOAB\nR 60|replaced by 3 fMOABs, 40 fLeads\nR 80|replaced by a copy of R75\n"
-    },
-    "Phayze": {
-        "desc": "Phayze is a camo boss bloon that has a variety of \"reality-warping\" gimmicks, and resistance to camo removal.",
-        "normalDesc": "Spawns with **Camo**, and has 3 skulls.\n\n**Dash**: on every skull, it skips forward 8% of the total track length.\n\n**Reality Shield**: On spawn and every time a skull is reached, Phayze has a Reality Shield, of which it's HP of **1/4 of the total health of the raw blimp**. This means the **effective health** of the blimp when including the shield is **2x** the base health\nThe Reality Shield also increases its **movement speed** when it is active, which depends on the tier of the boss.\n\n**Radar Jam**: disables all non-innate camo-seeing buffs as well as restoring its camo property if it has been stripped every **24s**.\n\n**Global Attack Cooldown Multiplier**:\n- skull 1: **1.1x**\n- skull 2: **1.15x**\n- skull 3: **1.2x**\n(a multiplier of 1.1x means your towers will take 1.1x longer in between attacks)\n\n\"Opening a tear in the fabric of reality\": When each skull is reached, Phayze opens a tear in the fabric reality where it was, which allows bloons to spawn further along the track. (This disappears once Phayze is killed)",
-        "eliteDesc": "Spawns with **Camo**, and has 5 skulls.\n\n**Dash**: on every skull, it skips forward 8% of the total track length.\n\n**Reality Shield**: On spawn and every time a skull is reached, Phayze has a Reality Shield, of which it's HP of **1/4 of the total health of the raw blimp**. This means the **effective health** of the blimp when including the shield is **2.5x** the base health.\nThe Reality Shield also increases its **movement speed** when it is active, which depends on the tier of the boss.\n\n**Radar Jam**: disables all non-innate camo-seeing buffs as well as restoring its camo property if it has been stripped every **24s**.\n\n**Global Attack Cooldown Multiplier**: also changes based on the tier of the boss.\n\n\"Opening a tear in the fabric of reality\": When each skull is reached, Phayze opens a tear in the fabric reality where it was, which allows bloons to spawn further along the track. (this disappears once Phayze is killed)",
-        "normal": [
-            {
-                "tier": 1,
-                "hp": 10000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 20,000\nReality Shield bonus: **+30%** speed"
-            },
-            {
-                "tier": 2,
-                "hp": 37500,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 75,000\nReality Shield bonus: **+35%** speed"
-            },
-            {
-                "tier": 3,
-                "hp": 175000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 350,000\nReality Shield bonus: **+40%** speed"
-            },
-            {
-                "tier": 4,
-                "hp": 375000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 750,000\nReality Shield bonus: **+45%** speed"
-            },
-            {
-                "tier": 5,
-                "hp": 1500000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 3,000,000\nReality Shield bonus: **+50%** speed"
-            }
-        ],
-        "elite": [
-            {
-                "tier": 1,
-                "hp": 20000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 50,000\nReality Shield bonus: **+50%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.1x\n- skull 2 - 1.15x\n- skull 3 - 1.2x\n- skull 4 - 1.25x\n- skull 5 - 1.3x"
-            },
-            {
-                "tier": 2,
-                "hp": 120000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 300,000\nReality Shield bonus: **+55%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.1x\n- skull 2 - 1.15x\n- skull 3 - 1.2x\n- skull 4 - 1.25x\n- skull 5 - 1.3x"
-            },
-            {
-                "tier": 3,
-                "hp": 800000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 2,000,000\nReality Shield bonus: **+60%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.2x\n- skull 2 - 1.3x\n- skull 3 - 1.4x\n- skull 4 - 1.5x\n- skull 5 - 1.6x"
-            },
-            {
-                "tier": 4,
-                "hp": 3200000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 2,000,000\nReality Shield bonus: **+65%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.3x\n- skull 2 - 1.45x\n- skull 3 - 1.6x\n- skull 4 - 1.75x\n- skull 5 - 1.9x"
-            },
-            {
-                "tier": 5,
-                "hp": 16000000,
-                "speed": 0.36,
-                "desc": "Effective Health with Reality Shield: 40,000,000\nReality Shield bonus: **+70%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.4x\n- skull 2 - 1.6x\n- skull 3 - 1.8x\n- skull 4 - 2.0x\n- skull 5 - 2.2x"
-            }
-        ],
-        "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs\nR120|replaced by 12 ZOMGs, 12 BFBs and 24 fortified MOABs"
-    }
+  "Bloonarius": {
+    "desc": "No fancy gimmicks, just spawns a bunch of Bloons and has a bunch of health.",
+    "normalDesc": [""],
+    "eliteDesc": [""],
+    "normal": [
+      {
+        "tier": 1,
+        "hp": 20000,
+        "speed": 0.05,
+        "desc": "for every 1% of HP lost spawns **8 greens**\nfor every 25% of HP lost spawns **30 greens and 30 ceramics**"
+      },
+      {
+        "tier": 2,
+        "hp": 75000,
+        "speed": 0.05,
+        "desc": "for every 1% of HP lost spawns **15 yellows**\nfor every 25% of HP lost spawns **60 yellows and 60 ceramics**"
+      },
+      {
+        "tier": 3,
+        "hp": 350000,
+        "speed": 0.05,
+        "desc": "for every 1% of HP lost spawns **25 pinks**\nfor every 25% of HP lost spawns **100 pinks and 6 MOABs**"
+      },
+      {
+        "tier": 4,
+        "hp": 750000,
+        "speed": 0.06,
+        "desc": "for every 1% of HP lost spawns **15 zebras**\nfor every 25% of HP lost spawns **60 zebras and 10 ZOMGs**"
+      },
+      {
+        "tier": 5,
+        "hp": 3000000,
+        "speed": 0.06,
+        "desc": "for every 1% of HP lost spawns **25 rainbows**\nfor every 25% of HP lost spawns **100 rainbows and 1 BAD**"
+      }
+    ],
+    "elite": [
+      {
+        "tier": 1,
+        "hp": 50000,
+        "speed": 0.05,
+        "desc": "for every 1% of HP lost spawns **10 pinks**\nfor every 12.5% of HP lost spawns **40 pinks and 70 ceramics**"
+      },
+      {
+        "tier": 2,
+        "hp": 300000,
+        "speed": 0.05,
+        "desc": "for every 1% of HP lost spawns **10 rainbows**\nfor every 12.5% of HP lost spawns **40 rainbows and 16 BFBs**"
+      },
+      {
+        "tier": 3,
+        "hp": 2000000,
+        "speed": 0.05,
+        "desc": "for every 1% of HP lost spawns **13 ceramics**\nfor every 12.5% of HP lost spawns **50 ceramics, 1 BAD and 9 DDTs**"
+      },
+      {
+        "tier": 4,
+        "hp": 8000000,
+        "speed": 0.06,
+        "desc": "for every 1% of HP lost spawns **12 MOABs**\nfor every 12.5% of HP lost spawns **100 regrow fortified ceramics, 2 fortified BADs and 20 fortified DDTs**"
+      },
+      {
+        "tier": 5,
+        "hp": 40000000,
+        "speed": 0.06,
+        "desc": "for every 1% of HP lost spawns **8 DDTs**\nfor every 25% of HP lost spawns **30 MOABs and 4 fortified BAD**"
+      }
+    ],
+    "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs"
+  },
+  "Lych": {
+    "desc": "The Lych is complicated; it can gain health from towers sold while it's on screen and also heals from buffs along with removing them and stunning affected towers. Lych cannot heal above its starting health.",
+    "normalDesc": [
+      "### Sell Life Steal",
+      "Heals **1%** HP per highest tier of the tower sacrificed (example: a tier 5 tower would heal 5% of lych's max HP, crosspathing doesn't matter).",
+      "### Buff Life Steal",
+      "Heals **2%** HP for each buff stolen and stuns affected towers for **5 seconds**. The buff steal has **100 range** at tiers 1-4 and **infinite range** at tier 5. Can only steal buffs once per 12 seconds.",
+      "### Reanimated Blimps",
+      "Reanimated blimps at each skull phase spawn based off of popped blimps from the **past 20 seconds** at all tiers. Reanimated blimps have the same properties as their normal counterparts (i.e. can be stunned, insta-killed, etc)",
+      "### Lych-Soul",
+      "The Lych-Soul's speed is always **100%** of a Red Bloon. The Lych-Soul has the same properties as the main boss."
+    ],
+    "eliteDesc": [
+      "### Sell Life Steal",
+      "Heals **1%** HP per highest tier of the tower sacrificed (example: a tier 5 tower would heal 5% of lych's max HP, crosspathing doesn't matter).",
+      "### Buff Life Steal",
+      "Heals **4%** HP for each buff stolen and stuns affected towers for **5 seconds**. The buff steal has **100 range** at tiers 1-4 and **infinite range** at tier 5. Can only steal buffs once per 12 seconds.",
+      "### Reanimated Blimps",
+      "Reanimated blimps at each skull phase spawn based off of popped blimps from the **past 20 seconds** at all tiers. Reanimated blimps have the same properties as their normal counterparts (i.e. can be stunned, insta-killed, etc)",
+      "### Lych-Soul",
+      "The Lych-Soul's speed is always **100%** of a Red Bloon. The Lych-Soul has the same properties as the main boss."
+    ],
+    "normal": [
+      {
+        "tier": 1,
+        "hp": 14000,
+        "speed": 0.092,
+        "desc": "Reanimated Blimp Stats: **1.6x** speed and **4x** health\nLych-Soul Health: 1280\nLych-Soul Life Steal (per 4 seconds): 1"
+      },
+      {
+        "tier": 2,
+        "hp": 52500,
+        "speed": 0.092,
+        "desc": "Reanimated Blimp Stats: **1.7x** speed and **6x** health\nLych-Soul Health: 3050\nLych-Soul Life Steal (per 4 seconds): 2"
+      },
+      {
+        "tier": 3,
+        "hp": 220000,
+        "speed": 0.1,
+        "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 7000\nLych-Soul Life Steal (per 4 seconds): 5"
+      },
+      {
+        "tier": 4,
+        "hp": 525000,
+        "speed": 0.108,
+        "desc": "Reanimated Blimp Stats: **1.9x** speed and **8x** health\nLych-Soul Health: 14500\nLych-Soul Life Steal (per 4 seconds): 10"
+      },
+      {
+        "tier": 5,
+        "hp": 2100000,
+        "speed": 0.108,
+        "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 47000\nLych-Soul Life Steal (per 4 seconds): 17"
+      }
+    ],
+    "elite": [
+      {
+        "tier": 1,
+        "hp": 30000,
+        "speed": 0.1,
+        "desc": "Reanimated Blimp Stats: **1.8x** speed and **7x** health\nLych-Soul Health: 1,600\nLych-Soul Life Steal (per 4 seconds): 11"
+      },
+      {
+        "tier": 2,
+        "hp": 180000,
+        "speed": 0.108,
+        "desc": "Reanimated Blimp Stats: **1.9x** speed and **8x** health\nLych-Soul Health: 5,600\nLych-Soul Life Steal (per 4 seconds): 12"
+      },
+      {
+        "tier": 3,
+        "hp": 1100000,
+        "speed": 0.116,
+        "desc": "Reanimated Blimp Stats: **2x** speed and **9x** health\nLych-Soul Health: 25,000\nLych-Soul Life Steal (per 4 seconds): 15"
+      },
+      {
+        "tier": 4,
+        "hp": 4800000,
+        "speed": 0.12,
+        "desc": "Reanimated Blimp Stats: **2.1x** speed and **10x** health\nLych-Soul Health: 100,000\nLych-Soul Life Steal (per 4 seconds): 20"
+      },
+      {
+        "tier": 5,
+        "hp": 24000000,
+        "speed": 0.124,
+        "desc": "Reanimated Blimp Stats: **2.2x** speed and **12x** health\nLych-Soul Health: 485,000\nLych-Soul Life Steal (per 4 seconds): 27"
+      }
+    ],
+    "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 41|+1 MOAB\nR 42|+1 MOAB\nR 43|+1 fMOAB\nR 44|+2 spaced MOABs\nR 45|+1 fMOAB, +1 MOAB\nR 46|+1 MOAB, +1 fMOAB\nR 47|+2 spaced fMOABs\nR 48|+2 very spaced fMOABs\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 10 ZOMGs, 15 DDTs"
+  },
+  "Vortex": {
+    "desc": "Vortex is the fastest Boss in the game so far, but that's not all it has up its sleeve. It has lots of abilities on its damage phases, detailed below.",
+    "normalDesc": [
+      "### Storm Pulse",
+      "Destroys all nearby projectiles in a 80 unit radius. (This includes spike factories, bloon trap and bananas, but does not include powers like Camo Trap).",
+      "Happens every **5 seconds** and immediately once Vortex reaches a skull",
+
+      "### Slipstream",
+      "Affects all Bloons behind Vortex, causing them to move at **2.5x** speed at all tiers.",
+
+      "## On Skull",
+      "Upon reaching a skull:",
+      "### Projectile Reflection",
+      "The reflection occurs within **80r** and lasts for **6 seconds** after each skull and on spawn. This reflects **every** projectile except for instant-hitters (i.e. Sniper, First Strike ability, etc)...",
+
+      "### Tower Stun",
+      "Affects towers within **60r**. During the stun, all towers affected cannot be sold.",
+
+      "### Knockback",
+      "Vortex is knocked back by **100 units** for all tiers."
+    ],
+    "eliteDesc": [
+      "### Storm Pulse",
+      "Destroys all nearby projectiles in a 80 unit radius. (This includes spike factories, bloon trap and bananas, but does not include powers like Camo Trap).",
+      "Happens every **5 seconds** and immediately once Vortex reaches a skull",
+
+      "### Slipstream",
+      "Affects all Bloons behind Vortex, causing them to move at **2.5x** speed at all tiers.",
+
+      "## On Skull",
+      "Upon reaching a skull:",
+      "### Projectile Reflection",
+      "The reflection occurs within **80r** and lasts for **6 seconds** after each skull and on spawn. This reflects **every** projectile except for instant-hitters (i.e. Sniper, First Strike ability, etc)...",
+
+      "### Tower Stun",
+      "Affects towers within **60r**. During the stun, all towers affected cannot be sold.",
+
+      "### Knockback",
+      "Vortex is knocked back by **100 units** for all tiers."
+    ],
+    "normal": [
+      {
+        "tier": 1,
+        "hp": 20000,
+        "speed": 0.144,
+        "desc": "Stun duration: 16s\nStun radius: 60r"
+      },
+      {
+        "tier": 2,
+        "hp": 62800,
+        "speed": 0.144,
+        "desc": "Stun duration: 19s\nStun radius: 65r"
+      },
+      {
+        "tier": 3,
+        "hp": 294000,
+        "speed": 0.156,
+        "desc": "Stun duration: 21s\nStun radius: 70r"
+      },
+      {
+        "tier": 4,
+        "hp": 628000,
+        "speed": 0.162,
+        "desc": "Stun duration: 24s\nStun radius: 75r"
+      },
+      {
+        "tier": 5,
+        "hp": 2512000,
+        "speed": 0.168,
+        "desc": "Stun duration: 27s\nProjectile Destruction Stun radius: 80r"
+      }
+    ],
+    "elite": [
+      {
+        "tier": 1,
+        "hp": 41800,
+        "speed": 0.15,
+        "desc": "Stun duration: 18s\nProjectile Destruction Stun radius: 60r"
+      },
+      {
+        "tier": 2,
+        "hp": 251000,
+        "speed": 0.162,
+        "desc": "Stun duration: 21s\nProjectile Destruction Stun radius: 65r"
+      },
+      {
+        "tier": 3,
+        "hp": 1675000,
+        "speed": 0.18,
+        "desc": "Stun duration: 24s\nProjectile Destruction Stun radius: 70r"
+      },
+      {
+        "tier": 4,
+        "hp": 6700000,
+        "speed": 0.186,
+        "desc": "Stun duration: 27s\nProjectile Destruction Stun radius: 75r"
+      },
+      {
+        "tier": 5,
+        "hp": 33500000,
+        "speed": 0.192,
+        "desc": "Stun duration: 30s\nProjectile Destruction Stun radius: 80r"
+      }
+    ],
+    "customRounds": "R  5|+6 spaced yellows\nR 12|+1 layer to all Bloons\nR 24|Camo Green replaced by Camo Yellow, Blues replaced by Pinks\nR 30|+4 spaced yellows, +5 spaced pinks\nR 40|MOAB replaced by 6 ceramics\nR 41|+60 clumped pinks\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs"
+  },
+  "Dreadbloon": {
+    "desc": "Dreadbloon has several special immunities to entire tower categories that cycle at each damage phase, while also passively spawning beefy Dreadrock Bloons, detailed below.",
+    "normalDesc": [
+      "### Immunities",
+      "Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.",
+      "### Ceramic Armor Shell",
+      "Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 3,750 HP). Dreadbloon moves at **0.3x speed** while its Shell is active.",
+      "### Dreadrock Bloons",
+      "**Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull. Each Dreadrock Bloon has **both MOAB and BOSS properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. The Rock's speed is always 88% of a Red Bloon."
+    ],
+    "eliteDesc": [
+      "### Immunities",
+      "Begins with an immunity to Primary, then changes to Military -> Magic -> Support after each phase. **This also affects Paragons** of those tower categories. Immunities apply to newly spawned Dreadrock Bloons and its Ceramic Armor Shell. Dreadbloon also has **lead properties**, but this does not affect its Shell or Dreadrock Bloons.",
+      "### Ceramic Armor Shell",
+      "Created when the boss spawns and at every damage phase. Has the HP of **half that of the entire Tier** (ex - every T1 shell has 7,500 HP). Dreadbloon moves at **0.35x speed** while its Shell is active.",
+      "### Dreadrock Bloons",
+      "**Spawned passively** as Dreadbloon's Shell is still active. A group of Dreadrock Bloons are also spawned at each skull. Each Dreadrock Bloon has **both MOAB and BOSS properties**, and **cannot be stalled or instakilled**. Towers set to 'strong' will always target Dreadrock Bloons over everything else. The Rock's speed is always 88% of a Red Bloon."
+    ],
+    "normal": [
+      {
+        "tier": 1,
+        "hp": 7500,
+        "speed": 0.05,
+        "desc": "Dreadrock HP: 300\nLives lost per leaked Dreadrock: 5\nNumber of Dreadrock bloons spawned at each skull: 5"
+      },
+      {
+        "tier": 2,
+        "hp": 25000,
+        "speed": 0.05,
+        "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 10\nNumber of Dreadrock bloons spawned at each skull: 7"
+      },
+      {
+        "tier": 3,
+        "hp": 120000,
+        "speed": 0.05,
+        "desc": "Dreadrock HP: 900\nLives lost per leaked Dreadrock: 15\nNumber of Dreadrock bloons spawned at each skull: 10"
+      },
+      {
+        "tier": 4,
+        "hp": 280000,
+        "speed": 0.06,
+        "desc": "Dreadrock HP: 5000\nLives lost per leaked Dreadrock: 20\nNumber of Dreadrock bloons spawned at each skull: 14"
+      },
+      {
+        "tier": 5,
+        "hp": 1000000,
+        "speed": 0.06,
+        "desc": "Dreadrock HP: 12000\nLives lost per leaked Dreadrock: 25\nNumber of Dreadrock bloons spawned at each skull: 19"
+      }
+    ],
+    "elite": [
+      {
+        "tier": 1,
+        "hp": 15000,
+        "speed": 0.052,
+        "desc": "Dreadrock HP: 600\nLives lost per leaked Dreadrock: 20\nNumber of Dreadrock bloons spawned at each skull: 5"
+      },
+      {
+        "tier": 2,
+        "hp": 90000,
+        "speed": 0.052,
+        "desc": "Dreadrock HP: 2500\nLives lost per leaked Dreadrock: 30\nNumber of Dreadrock bloons spawned at each skull: 7"
+      },
+      {
+        "tier": 3,
+        "hp": 650000,
+        "speed": 0.052,
+        "desc": "Dreadrock HP: 10000\nLives lost per leaked Dreadrock: 50\nNumber of Dreadrock bloons spawned at each skull: 10"
+      },
+      {
+        "tier": 4,
+        "hp": 2625000,
+        "speed": 0.06,
+        "desc": "Dreadrock HP: 22000\nLives lost per leaked Dreadrock: 75\nNumber of Dreadrock bloons spawned at each skull: 14"
+      },
+      {
+        "tier": 5,
+        "hp": 12500000,
+        "speed": 0.06,
+        "desc": "Dreadrock HP: 45000\nLives lost per leaked Dreadrock: 100\nNumber of Dreadrock bloons spawned at each skull: 19"
+      }
+    ],
+    "customRounds": "\nLeads & Ceramics become Fortified\nZebras -> Leads\nRainbows -> Ceramics\nFor rounds 40-69, every other regular MOAB is fortified (BFBs+ unaffected)\nFor rounds 70+, every MOAB is fortified (BFBs+ unaffected)\nThere are some exceptions:\nR 39|18 Rainbows -> 12 fLeads, 6 Ceramics\nR 40|MOAB -> 10 fLeads, 8 fCeramics\nR 43|10 Rainbows -> 10 fLeads\nR 46|replaced by 1 fMOAB\nR 60|replaced by 3 fMOABs, 40 fLeads\nR 80|replaced by a copy of R75\n"
+  },
+  "Phayze": {
+    "desc": "Phayze is a camo boss bloon that has a variety of \"reality-warping\" gimmicks, and resistance to camo removal.",
+    "normalDesc": [
+      "Spawns with **Camo**, and has 3 skulls.",
+      "",
+      "**Dash**: on every skull, it skips forward 8% of the total track length.",
+      "",
+      "**Reality Shield**: On spawn and every time a skull is reached, Phayze has a Reality Shield, of which it's HP of **1/4 of the total health of the raw blimp**. This means the **effective health** of the blimp when including the shield is **2x** the base health",
+      "The Reality Shield also increases its **movement speed** when it is active, which depends on the tier of the boss.",
+      "",
+      "**Radar Jam**: disables all non-innate camo-seeing buffs as well as restoring its camo property if it has been stripped every **24s**.",
+      "",
+      "**Global Attack Cooldown Multiplier**:",
+      "- skull 1: **1.1x**",
+      "- skull 2: **1.15x**",
+      "- skull 3: **1.2x**",
+      "(a multiplier of 1.1x means your towers will take 1.1x longer in between attacks)",
+      "",
+      "\"Opening a tear in the fabric of reality\": When each skull is reached, Phayze opens a tear in the fabric reality where it was, which allows bloons to spawn further along the track. (This disappears once Phayze is killed)"
+    ],
+    "eliteDesc": [
+      "Spawns with **Camo**, and has 5 skulls.",
+      "",
+      "**Dash**: on every skull, it skips forward 8% of the total track length.",
+      "",
+      "**Reality Shield**: On spawn and every time a skull is reached, Phayze has a Reality Shield, of which it's HP of **1/4 of the total health of the raw blimp**. This means the **effective health** of the blimp when including the shield is **2.5x** the base health.",
+      "The Reality Shield also increases its **movement speed** when it is active, which depends on the tier of the boss.",
+      "",
+      "**Radar Jam**: disables all non-innate camo-seeing buffs as well as restoring its camo property if it has been stripped every **24s**.",
+      "",
+      "**Global Attack Cooldown Multiplier**: also changes based on the tier of the boss.",
+      "",
+      "\"Opening a tear in the fabric of reality\": When each skull is reached, Phayze opens a tear in the fabric reality where it was, which allows bloons to spawn further along the track. (this disappears once Phayze is killed)"
+    ],
+    "normal": [
+      {
+        "tier": 1,
+        "hp": 10000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 20,000\nReality Shield bonus: **+30%** speed"
+      },
+      {
+        "tier": 2,
+        "hp": 37500,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 75,000\nReality Shield bonus: **+35%** speed"
+      },
+      {
+        "tier": 3,
+        "hp": 175000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 350,000\nReality Shield bonus: **+40%** speed"
+      },
+      {
+        "tier": 4,
+        "hp": 375000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 750,000\nReality Shield bonus: **+45%** speed"
+      },
+      {
+        "tier": 5,
+        "hp": 1500000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 3,000,000\nReality Shield bonus: **+50%** speed"
+      }
+    ],
+    "elite": [
+      {
+        "tier": 1,
+        "hp": 20000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 50,000\nReality Shield bonus: **+50%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.1x\n- skull 2 - 1.15x\n- skull 3 - 1.2x\n- skull 4 - 1.25x\n- skull 5 - 1.3x"
+      },
+      {
+        "tier": 2,
+        "hp": 120000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 300,000\nReality Shield bonus: **+55%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.1x\n- skull 2 - 1.15x\n- skull 3 - 1.2x\n- skull 4 - 1.25x\n- skull 5 - 1.3x"
+      },
+      {
+        "tier": 3,
+        "hp": 800000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 2,000,000\nReality Shield bonus: **+60%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.2x\n- skull 2 - 1.3x\n- skull 3 - 1.4x\n- skull 4 - 1.5x\n- skull 5 - 1.6x"
+      },
+      {
+        "tier": 4,
+        "hp": 3200000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 2,000,000\nReality Shield bonus: **+65%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.3x\n- skull 2 - 1.45x\n- skull 3 - 1.6x\n- skull 4 - 1.75x\n- skull 5 - 1.9x"
+      },
+      {
+        "tier": 5,
+        "hp": 16000000,
+        "speed": 0.36,
+        "desc": "Effective Health with Reality Shield: 40,000,000\nReality Shield bonus: **+70%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.4x\n- skull 2 - 1.6x\n- skull 3 - 1.8x\n- skull 4 - 2.0x\n- skull 5 - 2.2x"
+      }
+    ],
+    "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs\nR120|replaced by 12 ZOMGs, 12 BFBs and 24 fortified MOABs"
+  },
+  "Blastapopoulos": {
+    "desc": "",
+    "normalDesc": [
+        "Every 2 seconds, all Damage over Time (DoT) effects (including sticky bomb) are removed from Blastapopoulos",
+        "## Heat",
+        "Everytime it is hit by a projectile, it will gain/lose heat",
+        "- Weak to purple: +3 heat per projectile",
+        "- Ice (including mid-path mermaid): **-5** heat per projectile",
+        "- Other projectiles: +1 heat per projectile",
+        "- Blastapopoulos passively loses ??? heat/sec while on screen",
+        "## Upon reaching a Skull",
+        "- 3 towers (closest, furthest, most expensive) get hit by a fireball, magma pool surrounding the tower (radius of 30) lasts for 15s",
+        "- Initial 4s stun, then: 150%s, 80% range, 50% projectile speed, and unsellable for the remaining time",
+        "- Spawns 6 pyroclastic rocks within 50r, 24s duration",
+        "- Instantly fills 25% heat",
+        "## On Overheat",
+        "- Adds 10s to all cooldowns",
+        "- Burns all projectiles in range for 0.2s",
+        "- Stuns all towers for 5s",
+        "- For the next 20s, newly placed towers will also be stunned for 5s"
+    ],
+    "eliteDesc": [
+        "Every 2 seconds, all Damage over Time (DoT) effects (including sticky bomb) are removed from Blastapopoulos",
+        "## Heat",
+        "Everytime it is hit by a projectile, it will gain/lose heat",
+        "- Weak to purple: +3 heat per projectile",
+        "- Ice (including mid-path mermaid): **-5** heat per projectile",
+        "- Other projectiles: +1 heat per projectile",
+        "- Blastapopoulos passively loses ??? heat/sec while on screen",
+        "## Upon reaching a Skull",
+        "- 3 towers (closest, furthest, most expensive) get hit by a fireball, magma pool surrounding the tower (radius of 30) lasts for 15s",
+        "- Initial 4s stun, then: 150%s, 80% range, 50% projectile speed, and unsellable for the remaining time",
+        "- Spawns 8 pyroclastic rocks within 50r, 24s duration",
+        "- Instantly fills 25% heat",
+        "## On Overheat",
+        "- Adds 15s to all cooldowns",
+        "- Burns all projectiles in range for 0.2s",
+        "- Stuns all towers for 5s",
+        "- For the next 20s, newly placed towers will also be stunned for 5s"
+    ],
+    "normal": [
+      {
+        "tier": 1,
+        "hp": 17500,
+        "speed": 0.04,
+        "desc": "Max heat: 1,750\nGlobal effect: 85% range, Ability cooldown increased by +10%"
+      },
+      {
+        "tier": 2,
+        "hp": 65000,
+        "speed": 0.04,
+        "desc": "Max heat: 6,500\nGlobal effect: 85% range, Ability cooldown increased by +15%"
+      },
+      {
+        "tier": 3,
+        "hp": 300000,
+        "speed": 0.04,
+        "desc": "Max heat: 30,000\nGlobal effect: 85% range, Ability cooldown increased by +20%"
+      },
+      {
+        "tier": 4,
+        "hp": 650000,
+        "speed": 0.04,
+        "desc": "Max heat: 65,000\nGlobal effect: 85% range, Ability cooldown increased by +25%"
+      },
+      {
+        "tier": 5,
+        "hp": 3000000,
+        "speed": 0.04,
+        "desc": "Max heat: 300,000\nGlobal effect: 85% range, Ability cooldown increased by +30%"
+      }
+    ],
+    "elite": [
+      {
+        "tier": 1,
+        "hp": 43000,
+        "speed": 0.04,
+        "desc": "Max heat: 1,750\nGlobal effect: 85% range, Ability cooldown increased by +10%"
+      },
+      {
+        "tier": 2,
+        "hp": 270000,
+        "speed": 0.04,
+        "desc": "Max heat: 6,500\nGlobal effect: 85% range, Ability cooldown increased by +15%"
+      },
+      {
+        "tier": 3,
+        "hp": 1700000,
+        "speed": 0.04,
+        "desc": "Max heat: 30,000\nGlobal effect: 85% range, Ability cooldown increased by +20%"
+      },
+      {
+        "tier": 4,
+        "hp": 7000000,
+        "speed": 0.04,
+        "desc": "Max heat: 65,000\nGlobal effect: 85% range, Ability cooldown increased by +25%"
+      },
+      {
+        "tier": 5,
+        "hp": 35000000,
+        "speed": 0.04,
+        "desc": "Max heat: 300,000\nGlobal effect: 85% range, Ability cooldown increased by +30%"
+      }
+    ],
+    "customRounds": "R 40| MOAB replaced with 6 Ceramics\nR 60| BFB replaced with 6 MOABs\nR 80| ZOMG replaced with 6 BFBs\nR100| BAD replaced with 4 ZOMGs and 6 DDTs"
+  }
 }

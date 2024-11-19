@@ -576,14 +576,15 @@ function wizParagonBloonology(stats) {
         - *explosion*- ∞p, normal, camo
             - 100 blast radius
             - applies *burn* status- (${damageDescription(burn)})/0.5s, fire, 30.05s duration
-    - spawns 1 *zomg-zombie* in range per 9000 mana in the graveyard, up to 10 *zomg-zombie*s
-        - *zomg-zombie*- ${attackDescription(zomg)}, normal, camo
+    - spawns 1 *zombie-zomg* in range per 9000 mana in the graveyard, up to 10 *zombie-zomg*s
+        - *zombie-zomg*- ${attackDescription(zomg)}, normal, camo
             - lasts 10s
             - travels at the same speed as a base red bloon
-            - spawns 4 *bfb-zombie*s upon expiration or when out of pierce
-                - *bfb-zombie*- ${attackDescription(bfb)}, normal, camo
+            - spawns 4 *zombie-bfb*s upon expiration or when out of pierce
+                - *zombie-bfb*- ${attackDescription(bfb)}, normal, camo
                     - lasts 7s
-                    - travels at the same speed as a base red bloon`;
+                    - travels at the same speed as a base red bloon
+                    - cannot rehit the same bloon`;
 
     return cleanBloonology(desc);
 }

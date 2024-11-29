@@ -1,4 +1,11 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ComponentType,
+    SlashCommandBuilder,
+    SlashCommandStringOption
+} = require('discord.js');
 
 const Bloonology = require('../helpers/bloonology');
 
@@ -20,23 +27,40 @@ const builder = new SlashCommandBuilder()
         option.setName('hero_lvl').setDescription('The hero level that you want the information for').setRequired(false)
     );
 
+const backButton = new ButtonBuilder()
+    .setCustomId('back')
+    .setLabel('Previous')
+    .setEmoji('⬅️')
+    .setStyle(ButtonStyle.Secondary);
+const forwardButton = new ButtonBuilder()
+    .setCustomId('forward')
+    .setLabel('Next')
+    .setEmoji('➡️')
+    .setStyle(ButtonStyle.Secondary);
+
 function validateInput(interaction) {
     const heroLevel = interaction.options.getInteger('hero_lvl');
     if (heroLevel && (heroLevel > 20 || heroLevel < 1))
         return `Invalid hero level \`${heroLevel}\` provided!\nHero level must be from \`1\` to \`20\` (inclusive)`;
 }
 
-async function embedBloonology(heroName, level) {
+async function embedBloonology(heroName, level, page = 0) {
     let sentences;
     let latestVersion;
+    let desc;
     try {
-        sentences = await Bloonology.heroNameToBloonologyList(heroName);
         latestVersion = await Bloonology.heroLatestVersion(heroName);
+        if (heroName == "corvus" && level >= 5) {
+            sentences = await Bloonology.corvusBloonology(level);
+            desc = sentences[0] + "\n\n" + sentences[1][page] + "\n\n" + sentences[2];
+        } else {
+            sentences = await Bloonology.heroNameToBloonologyList(heroName);
+            desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
+        }
     } catch {
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
 
-    const desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
     if (typeof desc != 'string') {
         return new Discord.EmbedBuilder().setColor(red).setTitle('The bloonology datapiece is missing');
     }
@@ -95,10 +119,50 @@ async function execute(interaction) {
 
     const heroName = interaction.options.getString('hero');
     const heroLevel = interaction.options.getInteger('hero_lvl');
+    let pageIndex = 0;
 
     const embed = await embedBloonology(heroName, heroLevel);
+    if (heroName == "corvus" && heroLevel >= 5) {
+        await interaction.reply({ embeds: [embed], components: [new ActionRowBuilder().addComponents(forwardButton)] });
+    } else {
+        await interaction.reply({ embeds: [embed] });
+    }
 
-    return await interaction.reply({ embeds: [embed] });
+    // collector filter
+    const filter = (selection) => {
+        // Ensure user clicking button is same as the user that started the interaction
+        if (selection.user.id !== interaction.user.id) return false;
+        // Ensure that the button press corresponds with this interaction and wasn't a button press on the previous interaction
+        if (selection.message.interaction.id !== interaction.id) return false;
+        return true;
+    };
+
+    const collector = interaction.channel.createMessageComponentCollector({
+        filter,
+        componentType: ComponentType.Button,
+        time: 60000
+    });
+
+    collector.on('collect', async (buttonInteraction) => {
+        buttonInteraction.deferUpdate();
+        if (buttonInteraction.customId === 'forward') pageIndex++;
+        if (buttonInteraction.customId === 'back') pageIndex--;
+
+        let row = new ActionRowBuilder();
+        if (pageIndex > 0) row.addComponents(backButton);
+        if (pageIndex < 3) row.addComponents(forwardButton);
+        await interaction.editReply({
+            embeds: [await embedBloonology(heroName, heroLevel, pageIndex)],
+            components: [row]
+        });
+    });
+
+    collector.on('end', async () => {
+        await interaction.editReply({
+            embeds: [await embedBloonology(heroName, heroLevel, pageIndex)],
+            components: []
+        });
+    });
 }
 
 module.exports = {

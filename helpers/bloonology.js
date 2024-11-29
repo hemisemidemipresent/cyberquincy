@@ -629,6 +629,41 @@ function subParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
+async function corvusBloonology(level) {
+    const spellPages = {
+        "spear": 0,
+        "aggression": 0,
+        "malevolence": 0,
+        "storm": 0,
+        "repel": 1,
+        "echo": 1,
+        "haste": 1,
+        "trample": 1,
+        "frostbound": 2,
+        "ember": 2,
+        "ancestral might": 2,
+        "overload": 2,
+        "nourishment": 3,
+        "soul barrier": 3,
+        "vision": 3,
+        "recovery": 3
+    };
+    let descs = await heroNameToBloonologyList("corvus");
+    let desc = descs[level - 1];
+    let [header, spellsDesc, footer] = desc.split("\n\n");
+    let spells = spellsDesc.split(/^\*\*(.*)\*\*\s*$/m).map(x => x.trim()).slice(1);
+    let pages = [
+        [],
+        [],
+        [],
+        []
+    ];
+    for (let i = 0; i < spells.length; i += 2) {
+        pages[spellPages[spells[i].toLowerCase()]].push(`**${spells[i]}**\n${spells[i + 1]}`);
+    }
+    return [header, pages.filter(x => x.length > 0).map(x => x.join("\n")), footer];
+}
+
 module.exports = {
     TOWER_NAME_TO_BLOONOLOGY_LINK,
     TOWER_NAME_TO_BLOONOLOGY_LINK_B2,
@@ -655,5 +690,6 @@ module.exports = {
     engiParagonBloonology,
     aceParagonBloonology,
     wizParagonBloonology,
-    subParagonBloonology
+    subParagonBloonology,
+    corvusBloonology
 };

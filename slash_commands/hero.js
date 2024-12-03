@@ -155,11 +155,12 @@ async function execute(interaction) {
             embeds: [await embedBloonology(heroName, heroLevel, pageIndex)],
             components: [row]
         });
+
+        await collector.resetTimer();
     });
 
     collector.on('end', async () => {
         await interaction.editReply({
-            embeds: [await embedBloonology(heroName, heroLevel, pageIndex)],
             components: []
         });
     });

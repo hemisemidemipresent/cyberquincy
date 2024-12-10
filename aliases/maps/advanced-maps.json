@@ -92,5 +92,10 @@
     "ancient_portal": [
         "ap",
         "ap physics"
+    ],
+    "last_resort": [
+        "lr",
+        "last",
+        "last remote"
     ]
 }

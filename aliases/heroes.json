@@ -1,116 +1,66 @@
 {
-    "adora": [
-        "ad",
-        "ado",
-        "ador",
-        "dora",
-        "priestess",
-        "odour",
-        "odoura"
-    ],
-    "benjamin": [
-        "dj",
-        "ben",
-        "benj",
-        "benny",
-        "boi",
-        "benjammin",
-        "yeet",
-        "boy"
-    ],
-    "brickell": [
-        "admiral-brickell",
-        "admiral",
-        "brick",
-        "bri"
-    ],
-    "corvus": [
-        "corv",
-        "crv",
-        "crow",
-        "caw"
-    ],
-    "churchill": [
-        "captain-churchill",
-        "chirch",
-        "church",
-        "hill",
-        "captain",
-        "tank",
-        "winston",
-        "cap"
-    ],
-    "etienne": [
-        "et",
-        "eti"
-    ],
-    "ezili": [
-        "voodo",
-        "vm",
-        "ezi",
-        "ezil",
-        "voodoo"
-    ],
-    "geraldo": [
-        "ger",
-        "gerry",
-        "morshu",
-        "gerald"
-    ],
-    "gwen": [
-        "gwendolin",
-        "gwendolyn",
-        "scientist",
-        "gwend",
-        "gwendo",
-        "fire"
-    ],
-    "jones": [
-        "striker_jones",
-        "sj",
-        "striker",
-        "bones",
-        "biker",
-        "stroker"
-    ],
-    "obyn": [
-        "obyn-greenfoot",
-        "obiwan",
-        "obi",
-        "oby",
-        "obeyn"
-    ],
-    "pat": [
-        "pat-fusty",
-        "pf",
-        "fu",
-        "fusty",
-        "fro",
-        "snowman"
-    ],
-    "psi": [
-        "psy",
-        "Ψ",
-        "sigh"
-    ],
-    "quincy": [
-        "q",
-        "quin",
-        "cyberquincy",
-        "quincey",
-        "quinc",
-        "quonc",
-        "cyber",
-        "cq"
-    ],
-    "rosalia": [
-        "ros",
-        "rosa",
-        "rosalina",
-        "lia"
-    ],
-    "sauda": [
-        "saud",
-        "sau"
-    ]
+	"adora": {
+		"cost": 1000,
+		"levelModifier": 1.71
+	},
+	"benjamin": {
+		"cost": 1200,
+		"levelModifier": 1.5
+	},
+	"brickell": {
+		"cost": 900,
+		"levelModifier": 1.425
+	},
+	"churchill": {
+		"cost": 2000,
+		"levelModifier": 1.71
+	},
+	"corvus": {
+		"cost": 1025,
+		"levelModifier": 1.425
+	},
+	"etienne": {
+		"cost": 850,
+		"levelModifier": 1
+	},
+	"ezili": {
+		"cost": 600,
+		"levelModifier": 1.425
+	},
+	"geraldo": {
+		"cost": 750,
+		"levelModifier": 1
+	},
+	"gwen": {
+		"cost": 725,
+		"levelModifier": 1
+	},
+	"jones": {
+		"cost": 700,
+		"levelModifier": 1
+	},
+	"obyn": {
+		"cost": 650,
+		"levelModifier": 1
+	},
+	"pat": {
+		"cost": 800,
+		"levelModifier": 1.425
+	},
+	"psi": {
+		"cost": 1000,
+		"levelModifier": 1.5
+	},
+	"quincy": {
+		"cost": 540,
+		"levelModifier": 1
+	},
+	"sauda": {
+		"cost": 600,
+		"levelModifier": 1.425
+	},
+	"rosalia": {
+		"cost": 875,
+		"levelModifier": 1.425
+	}
 }

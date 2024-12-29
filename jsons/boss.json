@@ -67,7 +67,7 @@
         "desc": "for every 1% of HP lost spawns **8 DDTs**\nfor every 25% of HP lost spawns **30 MOABs and 4 fortified BAD**"
       }
     ],
-    "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 6 ZOMGs, 12 DDTs"
+    "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs"
   },
   "Lych": {
     "desc": "The Lych is complicated; it can gain health from towers sold while it's on screen and also heals from buffs along with removing them and stunning affected towers. Lych cannot heal above its starting health.",
@@ -445,7 +445,7 @@
         "desc": "Effective Health with Reality Shield: 40,000,000\nReality Shield bonus: **+70%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.4x\n- skull 2 - 1.6x\n- skull 3 - 1.8x\n- skull 4 - 2.0x\n- skull 5 - 2.2x"
       }
     ],
-    "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs\nR120|replaced by 12 ZOMGs, 12 BFBs and 24 fortified MOABs"
+    "customRounds": "R 40|MOAB replaced by 6 ceramics\nR 60|BFB replaced by 6 MOABs\nR 80|ZOMG replaced by 6 BFBs\nR100|BAD replaced by 4 ZOMGs, 6 DDTs"
   },
   "Blastapopoulos": {
     "desc": "",

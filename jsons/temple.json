@@ -16,9 +16,9 @@
         "**sun-blast** buffed: +12% projectile speed\n**ballistic-missile** buffed: 75d, 50p, 50%s (1.5s), ∞r",
         "**sun-blast** buffed: +24% projectile speed\n**ballistic-missile**: 75d, 50p, 1.5s, ∞r",
         "**sun-blast** buffed: +24% projectile speed\n**ballistic-missile**: 75d, 50p, 1.5s, ∞r\nNew Attack **mini-spectre**:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 50p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 10p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
-        "**sun-blast** buffed: +36% projectile speed\n**ballistic-missile**: 75d, 50p, 1.5s, ∞r\n**mini-spectre** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 50p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 10p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist\n\n(nothing noticeable over level 5)",
-        "**sun-blast** buffed: +36% projectile speed\n**ballistic-missile** buffed: 75d, 50p, 1/3s (1.0s), ∞r\n**mini-spectre** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 50p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 10p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist\n\n(nothing noticeable over level 5)",
-        "**sun-blast** buffed: +50% projectile speed\n**ballistic-missile**: 75d, 50p, 1.0s, ∞r\n**mini-spectre** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 50p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 10p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist\n\n(nothing noticeable over level 5)",
+        "**sun-blast** buffed: +36% projectile speed\n**ballistic-missile**: 75d, 50p, 1.5s, ∞r\n**mini-spectre** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 50p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 10p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
+        "**sun-blast** buffed: +36% projectile speed\n**ballistic-missile** buffed: 75d, 50p, 1/3s (1.0s), ∞r\n**mini-spectre** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 50p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 10p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
+        "**sun-blast** buffed: +50% projectile speed\n**ballistic-missile**: 75d, 50p, 1.0s, ∞r\n**mini-spectre** subtower:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 10d, 50p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - bomb - 6d, 10p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - flies clockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist",
         "**sun-blast** buffed: +50% projectile speed\n**ballistic-missile**: 75d, 50p, 1.0s, ∞r\n2 **mini-spectre** subtowers:\n‎ ‎ ‎ ‎ ‎ ‎ - dart - 15d, 10p, 0.15s\n ‎ ‎ ‎ ‎ ‎ - bomb - 10d, 30p, 0.15s\n‎ ‎ ‎ ‎ ‎ ‎ - **gold-spectre-1** flies clockwise, **gold-spectre-2** flies anticlockwise\n‎ ‎ ‎ ‎ ‎ ‎ - inherits buffs provided by other towers, except alchemist"
     ],
     [
@@ -40,7 +40,7 @@
         "+5r (70)\n$2000 end of round income\nGains a **buff** to all towers in range: **+3p**, 90%s, +20%r, 10% discount\n+50% cash to all bloons popped within range",
         "+5r (70)\n$2000 end of round income\nGains a **buff** to all towers in range: **+1d**, +3p, 90%s, +20%r, 10% discount\n+50% cash to all bloons popped within range",
         "+5r (70)\n$2000 end of round income\nGains a **buff** to all towers in range: +1d, +3p, 90%s, +20%r, **+10% (20%) discount**\n+50% cash to all bloons popped within range",
-        "+5r (70)\n+$2500 ($5000) end of round income\nGains a **buff** to all towers in range: +1d, +3p, **80%s**, +20%r, 20% discount\n+50% cash to all bloons popped within range",
-        "+5r (70)\n$5000 end of round income\nGains a **buff** to all towers in range: **+2d**, +3p, 80%s, +20%r, 20% discount\n+50% cash to all bloons popped within range"
+        "+5r (70)\n+$2500 ($5000) end of round income\nGains a **buff** to all towers in range: +1d, +3p, **81%s**, +20%r, 20% discount\n+50% cash to all bloons popped within range",
+        "+5r (70)\n$5000 end of round income\nGains a **buff** to all towers in range: **+2d**, +3p, 81%s, +20%r, 20% discount\n+50% cash to all bloons popped within range"
     ]
 ]

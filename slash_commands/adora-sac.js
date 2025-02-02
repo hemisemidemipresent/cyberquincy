@@ -15,7 +15,7 @@ TOWER_PRIORITIES.set('beast_handler', -620); // water tower in some paths
 TOWER_PRIORITIES.set('heli_pilot', -500); // can't be placed on midnight mansion
 TOWER_PRIORITIES.set('monkey_ace', -380); // weird in 2mp
 TOWER_PRIORITIES.set('sniper_monkey', -250); // weird in 2mp
-TOWER_PRIORITIES.set('druid_monkey', -120); // jungle druid is weird in 2mp
+TOWER_PRIORITIES.set('druid', -120); // jungle druid is weird in 2mp
 
 builder = new SlashCommandBuilder()
     .setName('adora-sac')

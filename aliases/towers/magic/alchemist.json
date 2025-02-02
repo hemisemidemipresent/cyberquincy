@@ -1,5 +1,5 @@
 {
-    "xyz": ["alch", "alchemist", "alk", "alcc", "alc", "potion", "beer", "wine", "liquor", "intoxicant"],
+    "xyz": ["alch", "alchemist", "alk", "alc"],
 
     "100": ["larger_potions"],
     "200": ["acidic_mixture_drip", "amd"],

@@ -204,10 +204,10 @@ const FTTC_TOWER_ABBREVIATIONS = {
     super_monkey: 'sup',
     ninja_monkey: 'nin',
     alchemist: 'alc',
-    druid_monkey: 'dru',
+    druid: 'dru',
     spike_factory: 'spk',
     monkey_village: 'vil',
-    engineer: 'eng',
+    engineer_monkey: 'eng',
     beast_handler: 'bst',
     mermonkey: 'mrm',
 };

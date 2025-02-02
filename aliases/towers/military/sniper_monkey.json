@@ -3,7 +3,7 @@
 
     "100": ["full_metal_jacket", "fmj"],
     "200": ["larger_calibre", "larger_caliber"],
-    "300": ["deadly_precision", "dprecision", "precision"],
+    "300": ["deadly_precision", "dprecision", "dprec", "precision"],
     "400": ["maim_moab", "maim", "maimoab", "mainmoan"],
     "500": ["cripple_moab", "cripple"],
 

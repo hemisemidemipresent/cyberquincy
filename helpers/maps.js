@@ -124,9 +124,10 @@ function mapsNotPossible(entity) {
 
     let impossibleMaps = [];
     if (Towers.isWaterEntity(canonicalEntity)) {
-        impossibleMaps = impossibleMaps.concat(
-            allNonWaterMaps().map((m) => mapToIndexAbbreviation(m))
-        );
+        // water towers are now technically possible?
+        /* impossibleMaps = impossibleMaps.concat(
+            // allNonWaterMaps().map((m) => mapToIndexAbbreviation(m))
+        );*/
     } else if (Towers.isOfTower(canonicalEntity, 'heli_pilot')) {
         impossibleMaps.push('MN');
     }

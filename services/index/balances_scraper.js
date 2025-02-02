@@ -65,7 +65,7 @@ async function scrapeAllBalanceChanges() {
         "alchemist": {
             "versionAdded": "1.0"
         },
-        "druid_monkey": {
+        "druid": {
             "versionAdded": "1.0"
         },
         "banana_farm": {
@@ -77,7 +77,7 @@ async function scrapeAllBalanceChanges() {
         "monkey_village": {
             "versionAdded": "1.0"
         },
-        "engineer": {
+        "engineer_monkey": {
             "versionAdded": "12.0"
         },
         "beast_handler": {

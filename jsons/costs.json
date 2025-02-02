@@ -441,7 +441,7 @@
             }
         }
     },
-    "druid_monkey": {
+    "druid": {
         "cost": 400,
         "upgrades": {
             "top_path": {
@@ -545,7 +545,7 @@
             }
         }
     },
-    "engineer": {
+    "engineer_monkey": {
         "cost": 350,
         "upgrades": {
             "top_path": {

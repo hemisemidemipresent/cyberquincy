@@ -20,11 +20,11 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     super_monkey: 'https://pastebin.com/raw/SUxZg6Dk',
     ninja_monkey: 'https://pastebin.com/raw/kPAF2hqw',
     alchemist: 'https://pastebin.com/raw/76m7ATYF',
-    druid_monkey: 'https://pastebin.com/raw/4egsjcpa',
+    druid: 'https://pastebin.com/raw/4egsjcpa',
     banana_farm: 'https://pastebin.com/raw/Es0nVqt1',
     spike_factory: 'https://pastebin.com/raw/tTHZWiSi',
     monkey_village: 'https://pastebin.com/raw/e2QHaQSD',
-    engineer: 'https://pastebin.com/raw/rTHT0L21',
+    engineer_monkey: 'https://pastebin.com/raw/rTHT0L21',
     beast_handler: 'https://pastebin.com/raw/B3VF2rRq',
     mermonkey: 'https://pastebin.com/raw/sS6rm5Bj'
 };
@@ -46,11 +46,11 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK_B2 = {
     super_monkey: 'https://pastebin.com/raw/kJ2NQFJM',
     ninja_monkey: 'https://pastebin.com/raw/AQgwfKvC',
     alchemist: 'https://pastebin.com/raw/w85rRVjV',
-    druid_monkey: 'https://pastebin.com/raw/KNXR24g2',
+    druid: 'https://pastebin.com/raw/KNXR24g2',
     banana_farm: 'https://pastebin.com/raw/H2UEFh0E',
     spike_factory: 'https://pastebin.com/raw/pAy8v9Ge',
     monkey_village: 'https://pastebin.com/raw/h28ruxxd',
-    engineer: 'https://pastebin.com/raw/NPGKFNEv'
+    engineer_monkey: 'https://pastebin.com/raw/NPGKFNEv'
 };
 const HERO_NAME_TO_BLOONOLOGY_LINK = {
     quincy: 'https://pastebin.com/raw/ASpHNduS',

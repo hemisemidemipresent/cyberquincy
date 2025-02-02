@@ -11,7 +11,7 @@
     "020": ["spy_plane"],
 	"030": ["bomber_ace", "bomber"],
 	"040": ["ground_zero", "gz"],
-	"050": ["tsar_bomba", "tb", "tsar", "bomba", "bombagang"],
+	"050": ["tsar_bomba", "tb", "tsar", "bomba"],
 
     "001": ["sharper_darts"],
     "002": ["centered_path"],

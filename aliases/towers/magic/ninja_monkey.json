@@ -1,5 +1,5 @@
 {
-    "xyz": ["ninja", "ninja-monkey", "n", "ninj", "shuriken", "nin", "samurai"],
+    "xyz": ["ninja", "ninja-monkey", "n", "ninj", "nin"],
 
     "100": ["ninja_discipline", "discipline"],
     "200": ["sharp_shurikens", "shurikens"],
@@ -9,7 +9,7 @@
 
     "010": ["distraction"],
     "020": ["counter-espionage", "counter", "espionage"],
-    "030": ["shinobi_tactics", "shinobi", "shin", "chinobi", "tactics", "tact", "tacts"],
+    "030": ["shinobi_tactics", "shinobi", "shin", "tactics", "tact"],
     "040": ["bloon_sabotage", "sabo", "b_sabo"],
     "050": ["grand_saboteur", "gsabo"],
 

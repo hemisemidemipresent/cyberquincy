@@ -11,8 +11,7 @@ class AliasRepository extends Array {
     async asyncAliasFiles() {
         // {source_directory: handling function}
         const SPECIAL_HANDLING_CASES = {
-            './aliases/towers': this.loadTowerAliasFile,
-            './aliases/raceid.json': this.loadRaceAlias,
+            './aliases/towers': this.loadTowerAliasFile
         };
 
         for await (const absolutePath of filesHelper.getFiles('./aliases', [
@@ -95,22 +94,6 @@ class AliasRepository extends Array {
         }
     }
 
-    loadRaceAlias(f) {
-        let raceIDs = require(f);
-        let entries = Object.entries(raceIDs);
-        for (let i = 0; i < Object.entries(raceIDs).length; i++) {
-            let race = entries[i];
-            const aliases = race[1];
-            let canonical = race[0];
-            aliases.push('r#' + i.toString());
-            const nextAliasGroup = {
-                canonical: canonical,
-                aliases: aliases,
-                sourcefile: f,
-            };
-            this.addAliasGroup(nextAliasGroup);
-        }
-    }
     // Ensure that none of the aliases clash before adding it in
     addAliasGroup(ag) {
         try {
@@ -317,7 +300,11 @@ class AliasRepository extends Array {
     }
 
     toAliasNormalForm(indexForm) {
-        return indexForm.toLowerCase().split(' ').join('_');
+        // index legacy cases
+        let aliasNormalForm = indexForm.toLowerCase().split(' ').join('_');
+        if (aliasNormalForm == "engineer") return "engineer_monkey";
+        if (aliasNormalForm == "druid_monkey") return "druid";
+        return aliasNormalForm;
     }
 
     toAliasCanonical(indexForm) {
@@ -325,18 +312,15 @@ class AliasRepository extends Array {
     }
 
     toIndexNormalForm(canonical) {
-        return canonical
+        let indexNormalForm = canonical
             .split('_')
             .map((tk) => gHelper.toTitleCase(tk))
             .join(' ')
             .replace(/ \(.*\)/, ''); // Parentheticals are used to avoid clashing aliases (e.g. double shot) but are filtered out when displayed
-    }
-
-    allRaces() {
-        let arr = this.getAliasGroupsFromSameFileAs('2018-12-13').map(
-            (ag) => ag.canonical
-        );
-        return arr;
+        // index legacy cases
+        if (indexNormalForm == "Engineer Monkey") return "Engineer";
+        if (indexNormalForm == "Druid") return "Druid Monkey";
+        return indexNormalForm;
     }
 
     // Arg looks like `arg` or `argp1#argp2`

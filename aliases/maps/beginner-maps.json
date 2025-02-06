@@ -88,17 +88,12 @@
     "monkey_meadow": [
         "mm",
         "m_meadow",
-        "monkey_meadows",
         "meadow",
         "monkey"
     ],
     "end_of_the_road": [
         "er",
-        "road",
-        "endroad",
-        "end_road",
         "end",
-        "road",
         "eotr"
     ],
     "the_cabin": [
@@ -124,8 +119,7 @@
     "middle_of_the_road": [
         "mr",
 	    "motr",
-	    "middle_road",
-	    "middleroad"
+        "mother"
     ],
     "tinkerton": [
         "tk",

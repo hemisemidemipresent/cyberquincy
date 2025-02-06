@@ -2,8 +2,7 @@
     "infernal": [
         "if",
         "i",
-        "inf",
-        "fireymap"
+        "inf"
     ],
     "workshop": [
         "w",
@@ -43,8 +42,8 @@
     "dark_castle": [
         "dc",
         "dca",
-        "dank_castle",
         "dank",
+        "dank_castle",
         "castle"
     ],
     "ravine": [
@@ -65,10 +64,9 @@
         "dark",
         "dungeon",
         "dungeons",
-        "darkdungeon",
-        "darkdungeons",
         "dark_dungeon",
-        "dark_dungeons"
+        "d&d",
+        "dnd"
     ],
     "glacial_trail": [
         "gt",

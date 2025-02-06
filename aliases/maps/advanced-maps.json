@@ -11,8 +11,7 @@
     ],
     "high_finance": [
         "hf",
-        "hifi",
-        "hi-fi",
+        "hi_fi",
         "finance",
         "fin",
         "high"
@@ -39,8 +38,7 @@
         "pond",
         "ppond",
         "pats_pond",
-        "patspond",
-        "pat's"
+        "pats"
     ],
     "geared": [
         "gd",
@@ -71,7 +69,7 @@
         "sc",
         "sunk",
         "sunken",
-        "scull"
+        "s_col"
     ],
     "midnight_mansion": [
         "mn",
@@ -80,7 +78,7 @@
     ],
     "erosion": [
         "e",
-        "erode"
+        "ero"
     ],
     "dark_path": [
         "dp"
@@ -91,11 +89,16 @@
     ],
     "ancient_portal": [
         "ap",
-        "ap physics"
+        "ap_physics"
     ],
     "last_resort": [
         "lr",
         "last",
-        "last remote"
+        "last_remote"
+    ],
+    "enchanted_glade": [
+        "eg",
+        "glade",
+        "eglade"
     ]
 }

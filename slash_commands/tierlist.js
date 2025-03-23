@@ -27,7 +27,7 @@ async function execute(interaction) {
         });
 
     const version = interaction.options.getInteger('version');
-    const text = versionTierlists[version] ?? `The tier list for v${version} hasn't been released yet, go complain to index`;
+    const text = versionTierlists[version] ?? `The tier list for v${version} hasn't been released yet, go complain on tierlist discord server`;
 
     return await interaction.reply({ content: text });
 }
@@ -69,7 +69,11 @@ const versionTierlists = [
     'https://www.reddit.com/r/btd6/comments/1baqo9m/comprehensive_tier_list_for_chimps_by_path/',
     'https://www.reddit.com/r/btd6/comments/1d0iy0y/comprehensive_tier_list_for_chimps_by_path/',
     'https://www.reddit.com/r/btd6/comments/1drlj6n/comprehensive_tier_list_for_chimps_by_path/',
-    'v44 tierlist hasnt came out yet (if it has ping hemi)'
+    'https://www.reddit.com/r/btd6/comments/1f0g57d/comprehensive_tier_list_for_chimps_by_path/',
+    'https://www.reddit.com/r/btd6/comments/1gms9uo/comprehensive_tier_list_for_chimps_by_path/',
+    'https://www.reddit.com/r/btd6/comments/1htmvum/comprehensive_tier_list_for_chimps_by_path/',
+    'https://www.reddit.com/r/btd6/comments/1j5ymow/comprehensive_tier_list_for_chimps_by_path/',
+    //'v48 tierlist hasnt came out yet (if it has ping hemi)'
 ];
 
 module.exports = {

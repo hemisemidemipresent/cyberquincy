@@ -295,7 +295,7 @@ async function getRelicBloonology() {
         let lines = relic.split("\n");
         let relicName = lines[0].replace(/\*\*/g, "").trim();
         let relicDescription = lines.slice(1).join("\n").trim();
-        relicMap[relicName] = relicDescription;
+        relicMap[relicName] = cleanBloonology(relicDescription);
     }
     return relicMap;
 }
@@ -629,6 +629,68 @@ function subParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
+function tackParagonBloonology(stats) {
+    let { blade, tack, eruption, meteor, fireball } = stats;
+
+    let desc = `42.3r
+*blade*- ${attackDescription(blade)}, 4j, normal
+    - emits *tack*s when out of pierce or expired
+        - *tack*- ${attackDescription(tack)}, 6j, normal
+
+**Eruption** ability: ${eruption.cooldown}s cooldown, activates *fire-zone* and doubles *blade* and *tack* projectile lifespan for 9.05s
+    - initial cooldown of ${round(eruption.cooldown / 3, 1)}s
+    - *fire-zone*- ${attackDescription(eruption)}, normal
+        - 45r
+        
+**Meteor Impact** ability: ${meteor.cooldown}s cooldown, launches a *meteor* at a bloon
+    - initial cooldown of ${round(meteor.cooldown / 3, 1)}s
+    - *meteor*- ${attackDescription(meteor)}, normal
+        - emits *fireball*s on impact
+            - *fireball*- ${attackDescription(fireball)}, 32j, normal
+                - strong seeking
+        - 120 blast radius`;
+
+    return cleanBloonology(desc);
+}
+
+function spacParagonBloonology(stats) {
+    let { mine, mineExplosion, spike, burst, spikeageddon, spikeExplosion, spikeBall } = stats;
+
+    let desc = `42r
+*mine*- ${attackDescription(mine)}, normal, camo
+    - creates *mine-explosion* for each pierce used and on expiry
+        - *mine-explosion*- ${attackDescription(mineExplosion)}, normal, camo
+            - 30 blast radius
+    - creates *spikes* on the track in 42r when *mine* runs out of pierce or expires
+        - *spikes*- ${attackDescription(spike)}, 10j, normal, camo
+            - lasts 2 rounds or 9-11s
+    - lasts 5 rounds or 300s
+
+*carpet-of-spikes*- range increases by 16.67 per second until the whole map is covered
+    - bloons in range take (30d, +100md, +800bd)/0.5s, ∞p, normal, camo
+
+**Controlled Burst** ability: ${burst.cooldown}s cooldown, applies *buff* to itself for 10s
+    - initial cooldown of ${round(burst.cooldown / 3, 1)}s
+    - *buff*- attacks get 25%s
+        - (${round(mine.s / 4, 4)}s for *mine*)
+    - can only be used once per round
+        
+**Spikeageddon** ability: ${spikeageddon.cooldown}s cooldown, launches *spike-bomb*s onto each track in reverse every 0.6s
+    - initial cooldown of ${round(spikeageddon.cooldown / 3, 1)}s
+    - if any *spike-bomb*s exist on-screen, they are detonated and no new *spike-bomb*s are launched
+    - *spike-bomb*- 1p, normal, camo
+        - cannot be pierce-buffed
+        - creates *spike-ball*s on the track and *spike-explosion* on contact or expiry
+            - *spike-ball*- ${attackDescription(spikeBall)}, 3j, normal, camo
+                - lasts 5 rounds or 300s
+            - *spike-explosion*- ${attackDescription(spikeExplosion)}, normal, camo
+                - 150 blast radius
+        - lasts 5 rounds or 400s
+    - each *spike-bomb* is launched 60 units apart on average along each track`;
+
+    return cleanBloonology(desc);
+}
+
 async function corvusBloonology(level) {
     const spellPages = {
         "spear": 0,
@@ -691,5 +753,7 @@ module.exports = {
     aceParagonBloonology,
     wizParagonBloonology,
     subParagonBloonology,
+    tackParagonBloonology,
+    spacParagonBloonology,
     corvusBloonology
 };

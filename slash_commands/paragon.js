@@ -36,6 +36,8 @@ builder = new SlashCommandBuilder()
                         { name: 'Monkey Ace (Goliath Doomship)', value: 'monkey_ace' },
                         { name: 'Wizard Monkey (Magus Perfectus)', value: 'wizard_monkey' },
                         { name: 'Monkey Sub (Nautic Siege Core)', value: 'monkey_sub' },
+                        { name: 'Tack Shooter (Crucible of Steel and Flame)', value: 'tack_shooter' },
+                        { name: 'Spike Factory (Mega Massive Munitions Factory)', value: 'spike_factory' },
                     )
             )
             .addIntegerOption((option) =>
@@ -135,6 +137,12 @@ async function paragon_stats(interaction) {
             break;
         case 'monkey_sub':
             desc = bloonology.subParagonBloonology(stats);
+            break;
+        case 'tack_shooter':
+            desc = bloonology.tackParagonBloonology(stats);
+            break;
+        case 'spike_factory':
+            desc = bloonology.spacParagonBloonology(stats);
             break;
     }
 

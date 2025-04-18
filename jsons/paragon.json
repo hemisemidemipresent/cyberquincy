@@ -359,5 +359,91 @@
             "bd": 0,
             "edm": 2
         }
+    },
+    "tack_shooter": {
+        "blade": {
+            "pierce": 5,
+            "damage": 20,
+            "bd": 30,
+            "edm": 2,
+            "rate": 0.0325
+        },
+        "tack": {
+            "pierce": 3,
+            "damage": 10,
+            "bd": 20,
+            "edm": 2
+        },
+        "eruption": {
+            "pierce": 60,
+            "damage": 250,
+            "bd": 250,
+            "edm": 2,
+            "rate": 1,
+            "cooldown": 20
+        },
+        "meteor": {
+            "pierce": 500,
+            "damage": 50000,
+            "bd": 0,
+            "edm": 2,
+            "cooldown": 90
+        },
+        "fireball": {
+            "pierce": 2,
+            "damage": 700,
+            "bd": 0,
+            "edm": 2
+        }
+    },
+    "spike_factory": {
+        "mine": {
+            "pierce": 100,
+            "damage": 70,
+            "bd": 0,
+            "edm": 2,
+            "rate": 10
+        },
+        "mineExplosion": {
+            "pierce": 30,
+            "damage": 80,
+            "cd": 60,
+            "fd": 20,
+            "bd": 0,
+            "edm": 2
+        },
+        "spike": {
+            "pierce": 10,
+            "damage": 20,
+            "md": 180,
+            "bd": 250,
+            "edm": 2
+        },
+        "burst": {
+            "pierce": 500,
+            "damage": 50000,
+            "bd": 0,
+            "edm": 2,
+            "cooldown": 10
+        },
+        "spikeageddon": {
+            "cooldown": 75
+        },
+        "spikeExplosion": {
+            "pierce": 120,
+            "damage": 10000,
+            "fd": 5000,
+            "md": 25000,
+            "bd": 0,
+            "edm": 2
+        },
+        "spikeBall": {
+            "pierce": 10,
+            "damage": 100,
+            "fd": 50,
+            "md": 250,
+            "bd": 0,
+            "edm": 2
+        }
     }
 }

@@ -18,7 +18,7 @@
     },
     "boomerang_monkey": {
         "main": {
-            "pierce": 80,
+            "pierce": 60,
             "damage": 20,
             "bd": 50,
             "edm": 2,
@@ -30,7 +30,7 @@
             "edm": 2
         },
         "orbit": {
-            "pierce": 80,
+            "pierce": 200,
             "damage": 42,
             "cd": 20,
             "md": 20,

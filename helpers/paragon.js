@@ -39,9 +39,9 @@ module.exports = {
      * @param {int} x degree
      */
     getPierce(p, x) {
-        if (x === 100) return p * 2 + 100;
+        if (x === 100) return p * 2 + 10;
         x--;
-        let p_x = p * (1 + x * 0.01) + x;
+        let p_x = Math.floor(p * (1 + x * 0.01)) + 0.1 * x;
         return p_x;
     },
     /**

@@ -1,6 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
-const { shuffle } = require('../helpers/general');
+// const { shuffle } = require('../helpers/general');
 
 const quiz = require('../jsons/quiz.json');
 const Quiz = require('../helpers/quiz.js');
@@ -10,6 +10,8 @@ const { discord } = require('../aliases/misc.json');
 
 let numbers = [0, 1, 2, 3];
 const emojis = [':regional_indicator_a:', ':regional_indicator_b:', ':regional_indicator_c:', ':regional_indicator_d:'];
+const CORRECT_EMOJI = ':white_check_mark:';
+const WRONG_EMOJI = ':x:';
 
 builder = new SlashCommandBuilder().setName('quiz').setDescription('test your knowledge in all things bloons-related');
 
@@ -18,11 +20,11 @@ async function execute(interaction) {
 }
 
 async function loadQuestion(interaction) {
-    item = quiz[Math.floor(Math.random() * quiz.length)];
-    module.exports.item = item;
+    const id = Math.floor(Math.random() * quiz.length);
+    item = quiz[id];
     options = item.optns;
 
-    shuffle(numbers);
+    // numbers = shuffle(numbers); // randomize the order of the options - sometimes the answers should be in a specific order so it would be weird if it was randomized
 
     const buttons = new ActionRowBuilder().addComponents(
         new ButtonBuilder().setCustomId(numbers[0].toString()).setLabel('A').setStyle(ButtonStyle.Primary),
@@ -43,7 +45,8 @@ async function loadQuestion(interaction) {
             { name: 'options', value: string },
             { name: 'please contribute', value: `join [this server](${discord}) to suggest a question` }
         ])
-        .setColor(cyber);
+        .setColor(cyber)
+        .setFooter({ text: JSON.stringify({ id }) });
 
     await interaction.reply({
         embeds: [QuestionEmbed],
@@ -56,10 +59,27 @@ async function onButtonClick(interaction) {
         return await loadQuestion(interaction);
     }
 
+    if (interaction.user.id !== interaction.message.interaction.user.id) return; // someone else pressed the button
+
     const id = interaction.customId;
     const userID = interaction.user.id;
-    const item = module.exports.item;
 
+    const question = JSON.parse(interaction.message.embeds[0].data.footer.text);
+    questionId = question.id;
+    const item = quiz[questionId];
+
+    const userOption = item.optns[id];
+    const correctOption = item.optns[item.ans];
+    const answerText = item.optns.map((opt, index) => {
+        let line = `${emojis[index]} ${opt} `;
+        if (opt === correctOption) {
+            line += CORRECT_EMOJI;
+        } else if (opt === userOption) {
+            line += WRONG_EMOJI;
+        }
+        return line + '\n';
+    });
+    
     if (item.ans == id) {
         Quiz.answerCorrect(userID);
         let streak = Quiz.getStreak(userID);
@@ -68,19 +88,20 @@ async function onButtonClick(interaction) {
             .setDescription(
                 `${streak}\nNOTE: streak will not be carried over when the bot restarts and that might happen randomly.`
             )
+            .addFields([{ name: item.question, value: `||${answerText.join('')}||` }])
             .setColor(turq)
             .setFooter({ text: 'run /quiz again to play again' });
         await interaction.update({ embeds: [correctEmbed], components: [] });
     } else {
         Quiz.answerWrong(userID);
         let streak = Quiz.getStreak(userID);
-
+        
         let wrongEmbed = new Discord.EmbedBuilder()
             .setTitle('Game over! You got the wrong answer!')
             .setDescription(
                 `${streak}\nNOTE: streak will not be carried over when the bot restarts and that might happen randomly.`
             )
-            .addFields([{ name: 'answer', value: `||${item.optns[item.ans]}||` }])
+            .addFields([{ name: item.question, value: `||${answerText.join('')}||` }])
             .setColor(orange)
             .setFooter({ text: 'run /quiz again to play again' });
 

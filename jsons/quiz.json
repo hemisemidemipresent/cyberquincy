@@ -42,12 +42,12 @@
     {
         "question": "How many base tower types are there in Bloons TD 2?",
         "optns": [
+            "5",
             "6",
-            "8",
             "7",
-            "5"
+            "8"
         ],
-        "ans": 0
+        "ans": 1
     },
     {
         "question": "What is the cheapest tower in Bloons TD 4?",
@@ -64,7 +64,7 @@
         "optns": [
             "Freezing",
             "Piercing",
-            "Wind",
+            "Glue",
             "Bombs"
         ],
         "ans": 0
@@ -102,38 +102,38 @@
     {
         "question": "How many Ceramic Bloons does an MOAB contain?",
         "optns": [
-            "8",
-            "4",
             "2",
-            "6"
+            "4",
+            "6",
+            "8"
         ],
         "ans": 1
     },
     {
         "question": "Bloons Tower Defense for iPhone and iPod touch was a port of which version of the web games?",
         "optns": [
+            "Bloons TD",
             "Bloons TD 2",
-            "Bloons TD 4",
             "Bloons TD 3",
-            "Bloons TD"
+            "Bloons TD 4"
         ],
         "ans": 2
     },
     {
         "question": "In Bloons TD 2, each tower had 2 upgrades. In Bloons TD 3 there were 4. How many upgrades for each tower are there in Bloons TD 4?",
         "optns": [
-            "4",
+            "2",
             "3",
-            "5",
-            "2"
+            "4",
+            "5"
         ],
-        "ans": 0
+        "ans": 3
     },
     {
         "question": "What upgrade to the Monkey Apprentice is able to send Bloons back down the path?",
         "optns": [
             "Summon Tornado",
-            "Fireball",
+            "Summon Whirlwind",
             "Reverso",
             "Bloon Control"
         ],
@@ -172,35 +172,35 @@
     {
         "question": "How much money do you start a game of Bloons TD with?",
         "optns": [
-            "650",
             "500",
-            "900",
-            "750"
-        ],
-        "ans": 0
-    },
-    {
-        "question": "On easy mode in Bloons TD 2, how many tracks can you choose from?",
-        "optns": [
-            "12",
-            "1",
-            "8",
-            "3"
+            "650",
+            "750",
+            "900"
         ],
         "ans": 1
     },
     {
-        "question": "Which version of Bloons Tower Defense introduced the Super Monkey?",
+        "question": "On easy mode in Bloons TD 2, how many tracks can you choose from?",
         "optns": [
-            "Bloons TD 2",
-            "Bloons TD 4",
-            "Bloons TD ",
-            "Bloons TD 3"
+            "1",
+            "3",
+            "8",
+            "12"
         ],
-        "ans": 2
+        "ans": 0
     },
     {
-        "question": "In Bloons TD 4, which of the following towers has the biggest attack radius?",
+        "question": "Which version of Bloons Tower Defense introduced the Super Monkey?",
+        "optns": [
+            "Bloons TD ",
+            "Bloons TD 2",
+            "Bloons TD 3",
+            "Bloons TD 4"
+        ],
+        "ans": 0
+    },
+    {
+        "question": "In Bloons TD 4, which of the following towers has the biggest default attack radius?",
         "optns": [
             "Boomerang Thrower",
             "Bomb Tower",
@@ -212,12 +212,12 @@
     {
         "question": "How many waves were there in hard mode in Bloons TD 2?",
         "optns": [
+            "40",
             "50",
             "75",
-            "40",
             "60"
         ],
-        "ans": 0
+        "ans": 1
     },
     {
         "question": "What is the secret of the Monkey Temple in Bloons TD 4 Expansion?",
@@ -232,22 +232,22 @@
     {
         "question": "Which version of Bloons TD introduced road spikes?",
         "optns": [
-            "Bloons TD 3",
             "Bloons TD",
             "Bloons TD 2",
+            "Bloons TD 3",
             "Bloons TD 4"
         ],
-        "ans": 2
+        "ans": 1
     },
     {
         "question": "How many different Bloon types were there in the original Bloons Tower Defense?",
         "optns": [
-            "6",
-            "5",
             "4",
+            "5",
+            "6",
             "8"
         ],
-        "ans": 0
+        "ans": 2
     },
     {
         "question": "What is the most expensive tower?",
@@ -255,7 +255,7 @@
             "Banana Farm",
             "Super Monkey",
             "Tack Shooter",
-            "Monkey Beacon        "
+            "Monkey Beacon"
         ],
         "ans": 1
     },
@@ -342,42 +342,42 @@
     {
         "question": "How many Basic tracks were in BTD4?",
         "optns": [
-            "16",
-            "11",
             "6",
-            "9"
+            "9",
+            "11",
+            "16"
         ],
-        "ans": 3
+        "ans": 1
     },
     {
         "question": "What are Thermal bloons?",
         "optns": [
-            "Black,White",
-            "Pink",
-            "Moab Class",
-            "Black,White,Zebra,Purple"
+            "Pink bloons",
+            "Black and White bloons",
+            "MOAB-class bloons",
+            "Black, White, Zebra, and Purple bloons"
         ],
         "ans": 3
     },
     {
         "question": "How much did the Cannon Tower cost in the original BTD?",
         "optns": [
+            "650",
             "740",
-            "1100",
             "900",
-            "650"
+            "1100"
         ],
         "ans": 2
     },
     {
         "question": "How many Rounds were as of easy in BTD4?",
         "optns": [
+            "40",
             "50",
             "55",
-            "75",
-            "40"
+            "75"
         ],
-        "ans": 0
+        "ans": 1
     },
     {
         "question": "How much did the Boomerang thrower cost in BTD3?",
@@ -390,14 +390,14 @@
         "ans": 0
     },
     {
-        "question": "Towers costs are pricy in Impoppable BTD6, How much does a Sniper tower cost on Impoppable?",
+        "question": "Towers costs are pricy on Impoppable (BTD6), how much does a Sniper tower cost on Impoppable?",
         "optns": [
             "210",
             "360",
-            "420",
-            "415"
+            "415",
+            "420"
         ],
-        "ans": 2
+        "ans": 3
     },
     {
         "question": "Tier 5s were added in BTD6, Which Tier 5 deals more damage the more bloons there are?",
@@ -414,7 +414,7 @@
         "optns": [
             "4 ZOMG",
             "2 ZOMG 3 DDT",
-            "10 ZOMG 1 DDT",
+            "5 ZOMG 1 DDT",
             "3 ZOMG 2 DDT"
         ],
         "ans": 1
@@ -422,12 +422,12 @@
     {
         "question": "How much does the Trade Empire upgrade produce per round?",
         "optns": [
+            "220",
             "500",
             "800",
-            "220",
             "820"
         ],
-        "ans": 1
+        "ans": 2
     },
     {
         "question": "Adora was added in BTD6 14.0, Who is she?",
@@ -442,35 +442,35 @@
     {
         "question": "Fortified Leads would drain you alot of lives, How many Lives would 45 Fortified Leads drain?",
         "optns": [
+            "660",
             "1170",
-            "66",
-            "180",
-            "1800"
+            "1350",
+            "1886"
         ],
-        "ans": 0
+        "ans": 1
     },
     {
-        "question": "The Engineer got added into BTD6, What version was it added?",
+        "question": "In which version of BTD6 was the engineer added?",
         "optns": [
-            "14.0",
-            "12.0",
             "6.0",
+            "12.0",
+            "14.0",
             "16.1"
         ],
         "ans": 1
     },
     {
-        "question": "Monkey Knowledge is an Additive Feature, What was the first game to add it?",
+        "question": "Monkey Knowledge is an Additive Feature, what was the first game to add it?",
         "optns": [
             "BTD5 Mobile",
             "BMC",
             "BTD6",
-            "Bloons TD Adventure time"
+            "Bloons TD Adventure Time"
         ],
         "ans": 1
     },
     {
-        "question": "BTD6 Was released in 2018 , When was its Initial Release?",
+        "question": "BTD6 was released on which date in 2018?",
         "optns": [
             "June 12",
             "May 29",
@@ -480,7 +480,7 @@
         "ans": 3
     },
     {
-        "question": "Ninja Kiwi accounts have Avatar icons, Which BTD5 Tower wasnt a Ninja Kiwi Icon?",
+        "question": "Ninja Kiwi accounts have avatar icons, which BTD5 tower wasn't a Ninja Kiwi icon?",
         "optns": [
             "Spike Factory",
             "Monkey Ace",
@@ -490,7 +490,7 @@
         "ans": 0
     },
     {
-        "question": "Pat's Pond map was added in 9.0 in BTD6, Which monkey does it belong to?",
+        "question": "Pat's Pond map was added in 9.0 in BTD6, which monkey does it belong to?",
         "optns": [
             "Heli Pilot",
             "Obyn Greenfoot",
@@ -503,11 +503,11 @@
         "question": "What year was BTD3 Released?",
         "optns": [
             "2008",
-            "2011",
             "2009",
+            "2011",
             "2013"
         ],
-        "ans": 2
+        "ans": 1
     },
     {
         "question": "How do you get the Achievement \"Thats not how Boats work\" in Bloons TD Adventure time?",
@@ -522,12 +522,12 @@
     {
         "question": "How many damage does any monkey deal to a Cripple MOAB Stunned bloon?",
         "optns": [
-            "5",
-            "12",
             "2",
-            "7"
+            "5",
+            "7",
+            "12"
         ],
-        "ans": 0
+        "ans": 1
     },
     {
         "question": "What tier 4 Monkey has no ability before 27.0?",
@@ -552,12 +552,12 @@
     {
         "question": "How many difficulties did BTD3 Have?",
         "optns": [
-            "4",
+            "2",
             "3",
-            "7",
-            "2"
+            "4",
+            "7"
         ],
-        "ans": 1
+        "ans": 2
     },
     {
         "question": "Which bloon is a Mighty Zeppelin?",
@@ -570,14 +570,14 @@
         "ans": 3
     },
     {
-        "question": "What's the slowest ever Bloon?",
+        "question": "What's the slowest ever Bloon? (BTD6)",
         "optns": [
             "Bloonarius the Inflator",
             "Dreadbloon",
             "B.A.D",
             "Z.O.M.G"
         ],
-        "ans": 0
+        "ans": 1
     },
     {
         "question": "What's the only tower that can be placed on both Land and Water in BTD5?",
@@ -682,7 +682,7 @@
     {
         "question": "How much did it cost to upgrade from Watermelon Spitter to Watermelon Spitter Pro",
         "optns": [
-            "5000 MM",
+            "5000",
             "3345",
             "2500",
             "500"
@@ -720,34 +720,14 @@
         "ans": 1
     },
     {
-        "question": "How many community races are there",
-        "optns": [
-            "5",
-            "6",
-            "7",
-            "8"
-        ],
-        "ans": 0
-    },
-    {
         "question": "Which map that won the map contest was implemented first",
         "optns": [
             "Bazaar",
             "Geared",
             "Slons",
-            "Quincy's eyebrow"
+            "Covered Garden"
         ],
         "ans": 1
-    },
-    {
-        "question": "When did cyber quincy implement q!minesweeper",
-        "optns": [
-            "30 Nov",
-            "29 Nov",
-            "1 Dec",
-            "14 May"
-        ],
-        "ans": 0
     },
     {
         "question": "What is Monkey Meadow map called in the btd6 code",
@@ -755,7 +735,7 @@
             "Tutorial",
             "MonkeyMeadow",
             "monkey_meadow",
-            "Quincy's eyebrow"
+            "Beginner"
         ],
         "ans": 0
     },
@@ -766,16 +746,6 @@
             "Australia sucks the aliens would probaby get killed by a koala",
             "who is argentina",
             "who is calculas"
-        ],
-        "ans": 3
-    },
-    {
-        "question": "What is adora?",
-        "optns": [
-            "the most op thing in the game",
-            "a very powerful hero",
-            "one who everyone loves",
-            "flaming hot trash"
         ],
         "ans": 3
     },
@@ -847,7 +817,7 @@
             "11",
             "9"
         ],
-        "ans": 2
+        "ans": 1
     },
     {
         "question": "Which monkey does **NOT** wear cool glasses?",
@@ -857,7 +827,7 @@
             "Unstable Concoction",
             "IFR"
         ],
-        "ans": 2
+        "ans": 1
     },
     {
         "question": "Which 2 Monkeys were added to BTD5?",

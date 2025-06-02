@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { isValidUpgradeSet } = require('./towers');
 const { round } = require('./general');
+const templeStats = require('../jsons/temple.json');
 
 const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     dart_monkey: 'https://pastebin.com/raw/FK4a9ZSi',
@@ -81,6 +82,7 @@ const BLOONOLOGY_TIER_CHANGE_HEADERS = [
     "changes from previous tier:"
 ];
 const BLOONOLOGY_CROSSPATH_CHANGE_HEADERS = [
+    "__crosspath changes__",
     "__crosspath benefits__",
     "crosspath benefits:"
 ];
@@ -654,7 +656,7 @@ function tackParagonBloonology(stats) {
 }
 
 function spacParagonBloonology(stats) {
-    let { mine, mineExplosion, spike, burst, spikeageddon, spikeExplosion, spikeBall } = stats;
+    let { mine, mineExplosion, spike, carpet, burst, spikeageddon, spikeExplosion, spikeBall } = stats;
 
     let desc = `42r
 *mine*- ${attackDescription(mine)}, normal, camo
@@ -665,9 +667,8 @@ function spacParagonBloonology(stats) {
         - *spikes*- ${attackDescription(spike)}, 10j, normal, camo
             - lasts 2 rounds or 9-11s
     - lasts 5 rounds or 300s
-
 *carpet-of-spikes*- range increases by 16.67 per second until the whole map is covered
-    - bloons in range take (30d, +100md, +800bd)/0.5s, ∞p, normal, camo
+    - bloons in range take (${damageDescription(carpet)})/0.5s, ∞p, normal, camo
 
 **Controlled Burst** ability: ${burst.cooldown}s cooldown, applies *buff* to itself for 10s
     - initial cooldown of ${round(burst.cooldown / 3, 1)}s
@@ -689,6 +690,195 @@ function spacParagonBloonology(stats) {
     - each *spike-bomb* is launched 60 units apart on average along each track`;
 
     return cleanBloonology(desc);
+}
+
+function sacrificeToLevel(cash) {
+    const sacrificeThresholds = [300, 1001, 2001, 4001, 7501, 10001, 15001, 25001, 50001];
+    for (let i = 0; i < 9; i++) {
+        if (cash < sacrificeThresholds[i]) return i;
+    }
+    return 9;
+}
+
+function primaryTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = false) {
+    let level1 = sacrificeToLevel(sacrifice1);
+    let level2 = sacrificeToLevel(sacrifice2);
+    let dmgMult = vtsg ? 2 : 1;
+    let lines = [];
+    let { glaive: glaive1, buff: buff1, blade: blade1 } = templeStats.primary[level1];
+    let { glaive: glaive2, buff: buff2, blade: blade2 } = templeStats.primary[level2];
+
+    if (level1 > 0 && level2 > 0) {
+        lines.push("### Primary Sacrifice");
+    } else if (level1 > 0 || level2 > 0) {
+        lines.push(`### Primary Sacrifice ($${Math.max(sacrifice1, sacrifice2)} - level ${Math.max(level1, level2)}/9)`);
+    }
+
+    if (buff1 || buff2) {
+        let rate = (buff1 ? buff1.rate : 1) * (buff2 ? buff2.rate : 1);
+        lines.push(`*sun-blast* gets ${round(rate * 100)}%s (${round(templeStats.base[upgrade].rate * rate, 4)}s)`);
+    }
+
+    if (glaive1) lines.push(`*glaive1*- ${glaive1.damage * dmgMult}d, 50p, ${glaive1.rate}s, normal
+    - can jump to a nearby target after hitting
+        - 150 jump distance`);
+    if (glaive2) lines.push(`*glaive2*- ${glaive2.damage * dmgMult}d, 50p, ${glaive2.rate}s, normal
+    - can jump to a nearby target after hitting
+        - 150 jump distance`);
+
+    if (blade1) lines.push(`*blade1*- ${blade1.damage * dmgMult}d, ${blade1.pierce}p, ${blade1.rate}s, 8j, normal`);
+    if (blade2) lines.push(`*blade2*- ${blade2.damage * dmgMult}d, ${blade2.pierce}p, ${blade2.rate}s, 8j, normal`);
+
+    return lines;
+}
+
+function militaryTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = false) {
+    let level1 = sacrificeToLevel(sacrifice1);
+    let level2 = sacrificeToLevel(sacrifice2);
+    let dmgMult = vtsg ? 2 : 1;
+    let lines = [];
+    let { missile: missile1, buff: buff1, spectre: spectre1 } = templeStats.military[level1];
+    let { missile: missile2, buff: buff2, spectre: spectre2 } = templeStats.military[level2];
+
+    if (level1 > 0 && level2 > 0) {
+        lines.push("### Military Sacrifice");
+    } else if (level1 > 0 || level2 > 0) {
+        lines.push(`### Military Sacrifice ($${Math.max(sacrifice1, sacrifice2)} - level ${Math.max(level1, level2)}/9)`);
+    }
+
+    if (buff1 || buff2) {
+        let damage = (buff1 ? buff1.damage : 0) + (buff2 ? buff2.damage : 0);
+        let projSpeed = (buff1 ? buff1.projSpeed : 1) * (buff2 ? buff2.projSpeed : 1);
+        lines.push(`*sun-blast* gets +${damage}d (${(templeStats.base[upgrade].damage + damage) * dmgMult}d), ${round(projSpeed * 100)}% projectile speed`);
+    }
+
+    let damage = templeStats.base.missile.damage * dmgMult;
+    let md = templeStats.base.missile.md * dmgMult;
+    if (missile1) lines.push(`*missile1*- ${damage}d, +${md}md (${damage + md}), 50p, ${missile1.rate}s, normal
+    - ∞r
+    - only targets blimps
+    - moderate seeking (43 turn radius)`);
+    if (missile2) lines.push(`*missile2*- ${damage}d, +${md}md (${damage + md}), 50p, ${missile2.rate}s, normal
+    - ∞r
+    - moderate seeking (55.7 turn radius)`);
+
+    if (spectre1) lines.push(`spawns ${spectre1.planes > 1 ? `${spectre1.planes} *mini-spectre1* subtowers` : "*mini-spectre1* subtower"}
+    - ∞r
+    - *barrage1*- 0.15s alternates between *dart1* and *bomb1* attacks
+        - *dart1*- ${spectre1.dart.damage * dmgMult}d, 50p, sharp
+        - *bomb1*- ${spectre1.bomb.damage * dmgMult}d, ${spectre1.bomb.pierce}p, explosive`);
+    if (spectre2) lines.push(`spawns ${spectre2.planes > 1 ? `${spectre2.planes} *mini-spectre2* subtowers` : "*mini-spectre2* subtower"}
+    - ∞r
+    - *barrage2*- 0.15s alternates between *dart2* and *bomb2* attacks
+        - *dart2*- ${spectre2.dart.damage * dmgMult}d, 50p, sharp
+        - *bomb2*- ${spectre2.bomb.damage * dmgMult}d, ${spectre2.bomb.pierce}p, explosive`);
+
+    return lines;
+}
+
+function magicTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = false) {
+    let level1 = sacrificeToLevel(sacrifice1);
+    let level2 = sacrificeToLevel(sacrifice2);
+    let dmgMult = vtsg ? 2 : 1;
+    let avatarDamage = templeStats.base.avatar.damage + (vtsg ? 25 : 0);
+    let lines = [];
+    let { bolt: bolt1, buff: buff1, push: push1 } = templeStats.magic[level1];
+    let { bolt: bolt2, buff: buff2, push: push2 } = templeStats.magic[level2];
+
+    if (level1 > 0 && level2 > 0) {
+        lines.push("### Magic Sacrifice");
+    } else if (level1 > 0 || level2 > 0) {
+        lines.push(`### Magic Sacrifice ($${Math.max(sacrifice1, sacrifice2)} - level ${Math.max(level1, level2)}/9)`);
+    }
+
+    if (buff1 || buff2) {
+        let pierce = (buff1 ? buff1.pierce : 0) + (buff2 ? buff2.pierce : 0);
+        let projSize = (buff1 ? buff1.projSize : 1) * (buff2 ? buff2.projSize : 1);
+        let wind = (buff1 && buff1.wind ? buff1.wind : 0) + (buff2 && buff2.wind ? buff2.wind : 0);
+        lines.push(`*sun-blast* gets +${pierce}p (${templeStats.base[upgrade].pierce + pierce}p), ${round(projSize * 100)}% projectile size`);
+        if (wind > 0) lines.push(`*sun-blast* gets ${round(wind * 100)}% chance to blow back non-blimps 33-d units
+    - d is the distance of the bloon from the entrance`);
+    }
+
+    if (bolt1) lines.push(`*bolt-spray1*- ${bolt1.projectiles} *bolt1* attacks
+    - *bolt1*- ${bolt1.damage * dmgMult}d, 15p, ${bolt1.rate}s, normal
+        - moderate seeking (37 turn radius)`);
+    if (bolt2) lines.push(`*bolt-spray2*- ${bolt2.projectiles} *bolt2* attacks
+    - *bolt2*- ${bolt2.damage * dmgMult}d, 15p, ${bolt2.rate}s, normal
+        - moderate seeking (37 turn radius)`);
+
+    if (push1) lines.push(`*wind-blast1*- 500p, 5s, normal
+    - 65 blast radius
+    - blows back ${push1.target} 33-d units
+        - d is the distance of the bloon from the entrance
+    - removes glue and frozen properties`);
+    if (push2) lines.push(`*wind-blast2*- 500p, 5s, normal
+    - 65 blast radius
+    - blows back ${push2.target} 33-d units
+        - d is the distance of the bloon from the entrance
+    - removes glue and frozen properties`);
+
+    if (level1 === 9) lines.push(`*avatar1*- 30s, spawns a *mini-avatar* subtower that lasts 65s
+    - cannot be rate-buffed`);
+    if (level2 === 9) lines.push(`*avatar2*- 30s, spawns a *mini-avatar* subtower that lasts 65s
+    - cannot be rate-buffed`);
+    if (level1 === 9 || level2 === 9) lines.push(`    - *mini-avatar*
+        - 50r
+        - *mini-blast*- ${avatarDamage}d, 6p, 0.03s, 3j, plasma`);
+
+    return lines;
+}
+
+function supportTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0) {
+    let level1 = sacrificeToLevel(sacrifice1);
+    let level2 = sacrificeToLevel(sacrifice2);
+    let lines = [];
+    let { eor: eor1, buff: buff1 } = templeStats.support[level1];
+    let { eor: eor2, buff: buff2 } = templeStats.support[level2];
+
+    if (level1 > 0 && level2 > 0) {
+        lines.push(`### Support Sacrifice
++10r (${templeStats.base[upgrade].range + 10}r)`);
+    } else if (level1 > 0 || level2 > 0) {
+        lines.push(`### Support Sacrifice ($${Math.max(sacrifice1, sacrifice2)} - level ${Math.max(level1, level2)}/9)
++5r (${templeStats.base[upgrade].range + 5}r)`);
+    }
+
+    if (eor1) lines.push(`*income1*- $${eor1.income} income at the end of each round`);
+    if (eor2) lines.push(`*income2*- $${eor2.income} income at the end of each round`);
+
+    if (buff1 || buff2) {
+        let income = (buff1 && buff1.income ? buff1.income : 0) + (buff2 && buff2.income ? buff2.income : 0);
+        let damage = (buff1 && buff1.damage ? buff1.damage : 0) + (buff2 && buff2.damage ? buff2.damage : 0);
+        let pierce = (buff1 && buff1.pierce ? buff1.pierce : 0) + (buff2 && buff2.pierce ? buff2.pierce : 0);
+        let rate = (buff1 && buff1.rate ? buff1.rate : 1) * (buff2 && buff2.rate ? buff2.rate : 1);
+        let range = (buff1 && buff1.range ? buff1.range : 1) * (buff2 && buff2.range ? buff2.range : 1);
+
+        if (income > 0) lines.push(`*income-buff*- +${round(income * 100)}% income from bloons popped in range`);
+        if (buff1) lines.push(`*${buff1.discount === 0.1 ? "minor" : "major"}-discount1*- ${round(buff1.discount * 100)}% discount on all towers and upgrades up to tier 5 in range
+    - stacks with *${buff1.discount === 0.1 ? "major" : "minor"}-discount* from another temple`);
+        if (buff2) lines.push(`*${buff2.discount === 0.1 ? "minor" : "major"}-discount2*- ${round(buff2.discount * 100)}% discount on all towers and upgrades up to tier 5 in range`);
+        if (buff1 && buff2) lines.push(`    - total ${round((buff1.discount + buff2.discount) * 100)}% discount`);
+
+        let line = "*support-buff*- all towers in range get ";
+        if (damage > 0) line += `+${damage}d, `;
+        if (pierce > 0) line += `+${pierce}p, `;
+        if (rate < 1) line += `${round(rate * 100)}%s, `;
+        if (range > 1) line += `+${round(range * 100)}%r, `;
+        lines.push(line.substring(0, line.length - 2));
+        lines.push("    - affects *mini-avatar*s in range and *mini-spectre*s");
+    }
+
+    return lines;
+}
+
+function templeBloonology(upgrade, primary1, military1, magic1, support1, primary2 = 0, military2 = 0, magic2 = 0, support2 = 0, vtsg = false) {
+    return cleanBloonology([
+        ...primaryTempleBloonology(upgrade, primary1, primary2, vtsg),
+        ...militaryTempleBloonology(upgrade, military1, military2, vtsg),
+        ...magicTempleBloonology(upgrade, magic1, magic2, vtsg),
+        ...supportTempleBloonology(upgrade, support1, support2)
+    ].join("\n"));
 }
 
 async function corvusBloonology(level) {
@@ -755,5 +945,6 @@ module.exports = {
     subParagonBloonology,
     tackParagonBloonology,
     spacParagonBloonology,
+    templeBloonology,
     corvusBloonology
 };

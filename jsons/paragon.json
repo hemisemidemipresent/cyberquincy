@@ -419,6 +419,12 @@
             "bd": 250,
             "edm": 2
         },
+        "carpet": {
+            "damage": 30,
+            "md": 100,
+            "bd": 800,
+            "edm": 2
+        },
         "burst": {
             "pierce": 500,
             "damage": 50000,

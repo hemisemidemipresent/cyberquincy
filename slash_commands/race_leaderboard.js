@@ -103,7 +103,7 @@ async function execute(interaction) {
         const collector = inter.channel.createMessageComponentCollector({
             filter,
             componentType: ComponentType.Button,
-            time: 20000,
+            time: 60000,
             max: 1,
             maxComponents: 1,
             maxUsers: 1

@@ -206,8 +206,6 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
 
         const combo = combos[0];
 
-        console.log(`Displaying 2TC combo: ${JSON.stringify(combo)}`);
-
         // i give up I'm hardcoding the fields to use for displaying a single combo ~hemi
         let fields = ['tower1', 'tower2', 'map', 'person'];
         // only OG combos have version and date infomation

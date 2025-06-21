@@ -1,0 +1,21 @@
+{
+    "xyz": ["desperado", "desp"],
+
+    "100": ["quickdraw"],
+    "200": ["standoff"],
+    "300": ["big_iron"],
+    "400": ["twin_sixes"],
+    "500": ["the_blazing_sun", "blazing_sun"],
+
+    "010": ["eagle_eye"],
+    "020": ["bullseye"],
+    "030": ["deadeye"],
+    "040": ["bounty_hunter", "hunter", "bhunter"],
+    "050": ["golden_justice", "justice"],
+
+    "001": ["wanderer"],
+    "002": ["nomad"],
+    "003": ["enforcer"],
+    "004": ["avenger"],
+    "005": ["the_desert_phantom", "desert_phantom", "phantom"]
+}

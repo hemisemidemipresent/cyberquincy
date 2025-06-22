@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
@@ -100,7 +100,7 @@ async function paragon_stats(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     // could be more concise in terms of code?
@@ -219,14 +219,14 @@ async function paragon_degree(interaction) {
     };
 
     let totalMoneySpent = lex(expression, operator, valueByCost, difficulty);
-    if (isNaN(totalMoneySpent)) return await interaction.reply({ embeds: [totalMoneySpent], ephemeral: true });
+    if (isNaN(totalMoneySpent)) return await interaction.reply({ embeds: [totalMoneySpent], flags: MessageFlags.Ephemeral });
 
     let totalUpgradeCount = lex(expression, operator, valueByUpgrade, difficulty);
     let totalT5 = lex(expression, operator, valueByT5, difficulty);
     let totems = lex(expression, operator, valueByTotem, difficulty);
 
     let popCount = lex(pops, pop_operator, valueByPop, difficulty);
-    if (isNaN(popCount)) return await interaction.reply({ embeds: [popCount], ephemeral: true });
+    if (isNaN(popCount)) return await interaction.reply({ embeds: [popCount], flags: MessageFlags.Ephemeral });
 
     let injectedCash = interaction.options.getInteger('injected_cash');
     if (injectedCash < 0) return await interaction.reply({
@@ -237,7 +237,7 @@ async function paragon_degree(interaction) {
                     `You can only input a nonegative number into \`injected_cash\`, when ${injectedCash} is a negative number. Use \`/paragon degree expr: help pops: 0 injected_cash: 0\` for help.`
                 )
                 .setColor(red)
-        ], ephemeral: true
+        ], flags: MessageFlags.Ephemeral
     });
 
     totalMoneySpent += Math.ceil(injectedCash / 1.05);

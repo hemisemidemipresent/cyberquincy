@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const gHelper = require('../helpers/general.js');
 
 const Bosses = require('../jsons/boss.json');
@@ -35,7 +35,7 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     const tier = interaction.options.getInteger('tier');
     const boss = interaction.options.getString('name');

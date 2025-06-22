@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ComponentType } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, MessageFlags, SlashCommandBuilder } = require('discord.js');
 
 const axios = require('axios');
 
@@ -29,7 +29,7 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     await interaction.deferReply();

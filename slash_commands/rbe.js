@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const r = require('../jsons/round_sets/regular.json');
 const abr = require('../jsons/round_sets/abr.json');
 
@@ -42,7 +42,7 @@ async function execute(interaction) {
     if (validationFailure) {
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 

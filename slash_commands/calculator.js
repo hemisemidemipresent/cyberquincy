@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
@@ -146,7 +146,7 @@ async function calc(interaction) {
 
             return await interaction.reply({
                 embeds: [errorEmbed, helpEmbed],
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         } else if (e instanceof LexicalParseError) {
             const errorEmbed = new Discord.EmbedBuilder()
@@ -155,7 +155,7 @@ async function calc(interaction) {
                 .setColor(red);
             return await interaction.reply({
                 embeds: [errorEmbed, helpEmbed],
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         } else throw e;
     }
@@ -219,12 +219,12 @@ async function calc(interaction) {
             // Catches nonsensical tokens
             return await interaction.reply({
                 embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red), helpEmbed],
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         } else if (e instanceof bHelper.DiscountError) {
             return await interaction.reply({
                 embeds: [new Discord.EmbedBuilder().setTitle(e.message).setColor(red), helpEmbed],
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         } else {
             throw e;
@@ -241,7 +241,7 @@ async function calc(interaction) {
             .setColor(red);
         return await interaction.reply({
             embeds: [errorEmbed, helpEmbed],
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     } else if (stack.length > 0) {
         const errorEmbed = new Discord.EmbedBuilder()
@@ -250,7 +250,7 @@ async function calc(interaction) {
             .setColor(red);
         return await interaction.reply({
             embeds: [errorEmbed, helpEmbed],
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     } else {
         // G2g!

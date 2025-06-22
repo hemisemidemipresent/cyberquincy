@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 const {
     Enemy,
     ENEMIES,
@@ -58,7 +58,7 @@ async function execute(interaction) {
     if (validationFailure) {
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 

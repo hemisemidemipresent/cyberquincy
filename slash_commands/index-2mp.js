@@ -7,7 +7,7 @@ const { discord } = require('../aliases/misc.json');
 
 const Parsed = require('../parser/parsed.js');
 
-const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
 let entityOption = new SlashCommandStringOption().setName('entity').setDescription('Hero/Tower/Upgrade').setRequired(false);
 
@@ -36,7 +36,7 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     const parsed = parseAll(interaction).reduce(

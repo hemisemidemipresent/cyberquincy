@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { btd6Version } = require('../1/config.json');
 
 builder = new SlashCommandBuilder()
@@ -23,7 +23,7 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     const version = interaction.options.getInteger('version');

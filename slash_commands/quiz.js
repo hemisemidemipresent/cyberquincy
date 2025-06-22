@@ -48,10 +48,20 @@ async function loadQuestion(interaction) {
         .setColor(cyber)
         .setFooter({ text: JSON.stringify({ id }) });
 
-    await interaction.reply({
+    const response = await interaction.reply({
         embeds: [QuestionEmbed],
-        components: [buttons]
+        components: [buttons],
+        withResponse: true
     });
+
+    const collectorFilter = i => i.user.id === interaction.user.id;
+
+    try {
+        await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+    } catch (e) {
+        console.error(e);
+        await interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', embeds: [], components: [] });
+    }
 }
 
 async function onButtonClick(interaction) {

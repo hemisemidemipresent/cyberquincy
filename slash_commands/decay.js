@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { lightgreen } = require('../jsons/colors.json');
 const decayMult = [
     1, 1, 1, 1, 1, 1.0514814, 1.1057236, 1.1628803, 1.2231139, 1.2865961, 1.3535084, 1.4240429, 1.4984032, 1.5768039,
@@ -40,7 +40,7 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     let score = interaction.options.getString('score');

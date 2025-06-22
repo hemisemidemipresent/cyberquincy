@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption, ComponentType } = require('discord.js');
 
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageFlags } = require('discord.js');
 
 const { cyber } = require('../jsons/colors.json');
 
@@ -124,7 +124,7 @@ async function execute(interaction) {
     if (validationFailure) {
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 

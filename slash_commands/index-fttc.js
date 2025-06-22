@@ -9,7 +9,7 @@ const { displayOneOrMultiplePagesNew, genCompletionLink } = require('../helpers/
 
 const { paleorange } = require('../jsons/colors.json');
 
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
 
 const mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(false);
 
@@ -41,7 +41,7 @@ async function execute(interaction) {
     if (validationFailure) {
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 

@@ -1,4 +1,5 @@
 const {
+    MessageFlags,
     SlashCommandBuilder,
     SlashCommandStringOption,
     SlashCommandIntegerOption,
@@ -127,7 +128,7 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     return await interaction.reply({

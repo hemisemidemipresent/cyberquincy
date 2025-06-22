@@ -3,6 +3,7 @@ const {
     ButtonBuilder,
     ButtonStyle,
     ComponentType,
+    MessageFlags,
     SlashCommandBuilder,
     SlashCommandStringOption
 } = require('discord.js');
@@ -113,7 +114,7 @@ async function execute(interaction) {
     if (validationFailure) {
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 

@@ -21,7 +21,7 @@ const { discord } = require('../aliases/misc.json');
 
 BANNED_HEROES = ['sauda', 'geraldo', 'corvus'];
 
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandBooleanOption } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption, SlashCommandBooleanOption } = require('discord.js');
 
 const entity1Option = new SlashCommandStringOption()
     .setName('entity1')
@@ -133,7 +133,7 @@ async function execute(interaction) {
     if (validationFailure) {
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
     await interaction.deferReply();

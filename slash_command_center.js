@@ -1,4 +1,5 @@
-fs = require('fs');
+const fs = require('fs');
+const { MessageFlags } = require('discord.js');
 
 function commandFiles() {
     const commandFiles = fs.readdirSync('./slash_commands').filter((file) => file.endsWith('.js'));
@@ -28,7 +29,7 @@ async function handleCommand(interaction) {
     } catch (error) {
         console.error(error);
         try {
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+            await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
         } catch {
             // Unknown Interaction
         }
@@ -71,7 +72,9 @@ function extendStructure(_class) {
 
     const deferReply = prototype.deferReply;
     prototype.deferReply = async function (options = {}) {
-        options.ephemeral = this.options.getBoolean('hide') ?? Boolean(options.ephemeral);
+        const ephemeral = this.options.getBoolean('hide') ?? Boolean(options.ephemeral);
+        
+        if (ephemeral) options.flags = MessageFlags.Ephemeral;
 
         return deferReply.call(this, options);
     };
@@ -79,10 +82,13 @@ function extendStructure(_class) {
     const reply = prototype.reply;
     prototype.reply = async function (options) {
         const ephemeral = this.options.getBoolean('hide') ?? Boolean(options.ephemeral);
-        options = {
-            ...(typeof options === 'object' ? options : { content: options }),
-            ephemeral
-        };
+        if (ephemeral)
+            options = {
+                // Ensure options is an object. This is because sometimes `reply()` is called with just a string.
+                ...(typeof options === 'object' ? options : { content: options }),
+                // Set ephemeral flag
+                flags: options.flags ? options.flags + MessageFlags.Ephemeral : MessageFlags.Ephemeral,
+            };
 
         const message = await (this.deferred || this.replied ? this.followUp(options) : reply.call(this, options));
 

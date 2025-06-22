@@ -1,10 +1,11 @@
 const {
+    ButtonStyle,
+    ComponentType,
+    MessageFlags,
     SlashCommandBuilder,
     SlashCommandBooleanOption,
     SlashCommandStringOption,
     SlashCommandIntegerOption,
-    ComponentType,
-    ButtonStyle
 } = require('discord.js');
 
 const gHelper = require('../helpers/general.js');
@@ -242,7 +243,7 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     await displayHeroPlacementRounds(interaction);

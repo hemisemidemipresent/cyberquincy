@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const income = require('../jsons/round_sets/regular.json');
 const abrincome = require('../jsons/round_sets/abr.json');
 const gHelper = require('../helpers/general.js');
@@ -50,7 +50,7 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     cashNeeded = interaction.options.getInteger('cash_needed');
     mode = interaction.options.getString('game_mode') || 'chimps';

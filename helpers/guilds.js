@@ -10,13 +10,13 @@ async function enterGuild(guild) {
             .setColor(cyber)
             .setDescription(`Hi! I am Cyber Quincy. I am a BTD6 discord bot.`)
             .addFields([
-                { name: 'General Info', value: `[List of commands](https://cq.netlify.com)\n[Discord server](${discord})` },
+                { name: 'General Info', value: `[Discord server](${discord})` },
                 {
                     name: 'You should know...',
                     value: `The most popular commands by far are those that describe towers, \`/tower\` (tower path format: \`010\`, \`420\`, etc)`
                 }
             ])
-            .setFooter({ text: `Use \`/help\` for more information` });
+            .setFooter({ text: `Use /help for more information` });
 
         await channeltosend.send({ embeds: [helpEmbed] });
     }

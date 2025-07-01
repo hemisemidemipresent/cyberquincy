@@ -72,7 +72,7 @@ function extendStructure(_class) {
 
     const deferReply = prototype.deferReply;
     prototype.deferReply = async function (options = {}) {
-        const ephemeral = this.options.getBoolean('hide') ?? Boolean(options.ephemeral);
+        const ephemeral = this.options.getBoolean('hide') ?? Boolean(options.flags & MessageFlags.Ephemeral);
         
         if (ephemeral) options.flags = MessageFlags.Ephemeral;
 
@@ -81,13 +81,14 @@ function extendStructure(_class) {
 
     const reply = prototype.reply;
     prototype.reply = async function (options) {
-        const ephemeral = this.options.getBoolean('hide') ?? Boolean(options.ephemeral);
+        const ephemeral = this.options.getBoolean('hide') ?? Boolean(options.flags & MessageFlags.Ephemeral);
+        console.log(options.flags & MessageFlags.Ephemeral)
         if (ephemeral)
             options = {
                 // Ensure options is an object. This is because sometimes `reply()` is called with just a string.
                 ...(typeof options === 'object' ? options : { content: options }),
-                // Set ephemeral flag
-                flags: options.flags ? options.flags + MessageFlags.Ephemeral : MessageFlags.Ephemeral,
+                // Force set ephemeral flag
+                flags: options.flags |= MessageFlags.Ephemeral,
             };
 
         const message = await (this.deferred || this.replied ? this.followUp(options) : reply.call(this, options));

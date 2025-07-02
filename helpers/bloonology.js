@@ -27,7 +27,8 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     monkey_village: 'https://pastebin.com/raw/e2QHaQSD',
     engineer_monkey: 'https://pastebin.com/raw/rTHT0L21',
     beast_handler: 'https://pastebin.com/raw/B3VF2rRq',
-    mermonkey: 'https://pastebin.com/raw/sS6rm5Bj'
+    mermonkey: 'https://pastebin.com/raw/sS6rm5Bj',
+    desperado: 'https://pastebin.com/raw/zc7nhqq0'
 };
 const TOWER_NAME_TO_BLOONOLOGY_LINK_B2 = {
     dart_monkey: 'https://pastebin.com/raw/E4sjy0RY',

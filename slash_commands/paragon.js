@@ -4,6 +4,8 @@ const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption, SlashComman
 const Lexer = require('lex');
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 
+const bHelper = require('../helpers/bloons-general.js');
+
 const { discord, justStatsFooter } = require('../aliases/misc.json');
 const { red, paragon } = require('../jsons/colors.json');
 
@@ -11,7 +13,26 @@ const reqs = require('../jsons/power_degree_req.json');
 const pHelp = require('../helpers/paragon');
 const paragonStats = require('../jsons/paragon.json');
 const bloonology = require('../helpers/bloonology');
-// const paragonCosts = require('../jsons/paragon_costs.json');
+const paragonCosts = require('../jsons/paragon_costs.json');
+
+const paragonSelector = new SlashCommandStringOption()
+    .setName('tower')
+    .setDescription('The tower you want to find the paragon for')
+    .setRequired(true)
+// TODO: consolidate 'dart_monkey', 'boomerang_monkey', 'ninja_monkey' and 'monkey_buccaneer' somewhere,
+// and populate the StringOption for the slash command with them
+    .addChoices(
+        { name: 'Dart Monkey (Apex Plasma Master)', value: 'dart_monkey' },
+        { name: 'Boomerang Monkey (Glaive Dominus)', value: 'boomerang_monkey' },
+        { name: 'Ninja Monkey (Ascended Shadow)', value: 'ninja_monkey' },
+        { name: 'Monkey Buccaneer (Navarch of the Seas)', value: 'monkey_buccaneer' },
+        { name: 'Engineer Monkey (Master Builder)', value: 'engineer_monkey' },
+        { name: 'Monkey Ace (Goliath Doomship)', value: 'monkey_ace' },
+        { name: 'Wizard Monkey (Magus Perfectus)', value: 'wizard_monkey' },
+        { name: 'Monkey Sub (Nautic Siege Core)', value: 'monkey_sub' },
+        { name: 'Tack Shooter (Crucible of Steel and Flame)', value: 'tack_shooter' },
+        { name: 'Spike Factory (Mega Massive Munitions Factory)', value: 'spike_factory' },
+    );
 
 builder = new SlashCommandBuilder()
     .setName('paragon')
@@ -20,26 +41,7 @@ builder = new SlashCommandBuilder()
         subcommand
             .setName('stats')
             .setDescription('Find out the stats for paragons of various degrees!')
-            .addStringOption(
-                new SlashCommandStringOption()
-                    .setName('tower')
-                    .setDescription('The tower you want to find the paragon for')
-                    .setRequired(true)
-                    // TODO: consolidate 'dart_monkey', 'boomerang_monkey', 'ninja_monkey' and 'monkey_buccaneer' somewhere,
-                    // and populate the StringOption for the slash command with them
-                    .addChoices(
-                        { name: 'Dart Monkey (Apex Plasma Master)', value: 'dart_monkey' },
-                        { name: 'Boomerang Monkey (Glaive Dominus)', value: 'boomerang_monkey' },
-                        { name: 'Ninja Monkey (Ascended Shadow)', value: 'ninja_monkey' },
-                        { name: 'Monkey Buccaneer (Navarch of the Seas)', value: 'monkey_buccaneer' },
-                        { name: 'Engineer Monkey (Master Builder)', value: 'engineer_monkey' },
-                        { name: 'Monkey Ace (Goliath Doomship)', value: 'monkey_ace' },
-                        { name: 'Wizard Monkey (Magus Perfectus)', value: 'wizard_monkey' },
-                        { name: 'Monkey Sub (Nautic Siege Core)', value: 'monkey_sub' },
-                        { name: 'Tack Shooter (Crucible of Steel and Flame)', value: 'tack_shooter' },
-                        { name: 'Spike Factory (Mega Massive Munitions Factory)', value: 'spike_factory' },
-                    )
-            )
+            .addStringOption(paragonSelector)
             .addIntegerOption((option) =>
                 option.setName('degree').setDescription('The degree of the paragon').setRequired(true)
             )
@@ -48,6 +50,7 @@ builder = new SlashCommandBuilder()
         subcommand
             .setName('degree')
             .setDescription('Calculate the degree of a paragon!')
+            .addStringOption(paragonSelector)
             .addStringOption(
                 new SlashCommandStringOption()
                     .setName('expr')
@@ -166,7 +169,7 @@ async function paragon_degree(interaction) {
     const expression = interaction.options.getString('expr');
     const difficulty = interaction.options.getString('difficulty') || 'hard';
     const pops = interaction.options.getString('pops');
-
+    const tower = interaction.options.getString('tower');
     if (expression === 'help')
         return await interaction.reply({
             embeds: [
@@ -191,7 +194,7 @@ async function paragon_degree(interaction) {
         });
 
     // there is an issue where if a user just inputs a number (e.g. dart#020 + 3) the output would be gibberish.
-    //So parsed numbers will be objects instead
+    // So parsed numbers will be objects instead
     // The error that gets thrown is a UnrecognizedTokenError despite it being recognised, this can be changed later if necessary.
     const operator = {
         // addition must only be between 2 monkey-values, and raw numbers should be thrown out
@@ -242,7 +245,10 @@ async function paragon_degree(interaction) {
 
     totalMoneySpent += Math.ceil(injectedCash / 1.05);
 
-    let powerCost = totalMoneySpent / 25;
+    let paragonCost = paragonCosts[tower];    
+    paragonCost = bHelper.rawDifficultyMult(paragonCost, difficulty);
+
+    let powerCost = totalMoneySpent / (paragonCost / 20_000);
     let powerUpgrade = totalUpgradeCount * 100;
     let powerT5 = totalT5 * 6000;
     let powerTotem = totems * 2000;
@@ -255,6 +261,7 @@ async function paragon_degree(interaction) {
 
     let totalPower = powerCost + powerUpgrade + powerT5 + powerTotem + powerPops;
 
+    // round to 1 decimal place
     powerCost = Number.isInteger(powerCost) ? powerCost : powerCost.toFixed(1);
     powerUpgrade = Number.isInteger(powerUpgrade) ? powerUpgrade : powerUpgrade.toFixed(1);
     powerT5 = Number.isInteger(powerT5) ? powerT5 : powerT5.toFixed(1);

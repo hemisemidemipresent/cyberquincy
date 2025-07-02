@@ -375,7 +375,7 @@ function boomerParagonBloonology(stats) {
     - applies *pushback* to bloons
         - MOABs move back 1 unit, BFBs 0.5 units, DDTs and ZOMGs 0.25 units
 
-*buff* - all primary towers get 90%s, including paragons`;
+*buff* - all primary towers including paragons get 90%s`;
 
     return cleanBloonology(desc);
 }
@@ -412,7 +412,7 @@ function ninjaParagonBloonology(stats) {
                 - 15% chance to send non-blimps back 10-300 units
 
 *sabotage*- All bloons move at 50% speed and blimps spawn with 75% health (does not stack with x4+x ninja)
-*buff*- all towers get camo detection`;
+*buff*- all towers including paragons get camo detection`;
 
     return cleanBloonology(desc);
 }
@@ -440,7 +440,7 @@ spawns 3 *aircraft* subtowers
         - seeking (57.3 turn radius)
         
 *income*- $3200 income at the end of each round
-*buff*- all water towers and monkey aces get 85%s, including paragons, excluding itself
+*buff*- all water towers and monkey aces including paragons get 85%s, excluding itself
 *trade-deal-buff*- towers in range excluding itself get +10% sellback rate, up to 95%
     - not stackable
 *empire-buff*- affects up to 20 xx3+ buccaneers, prioritising xx4 buccaneers
@@ -458,7 +458,7 @@ provides two platforms that can each accomodate 1 small or medium footprint land
 }
 
 function engiParagonBloonology(stats) {
-    let { nailGuns, megaExplosion, endpoint, beam, modExplosion, modPlasma, plasma, missile, explosion, ability } = stats;
+    let { nailGuns, megaExplosion, endpoint, beam, modExplosion, modPlasma, plasma, missile, explosion, megaSentry, powerGlove } = stats;
 
     let desc = `70r
 *nail-gun*- ${attackDescription(nailGuns)}, 3j, normal, camo
@@ -467,7 +467,8 @@ function engiParagonBloonology(stats) {
         - (this is an attack speed buff, not an attack cooldown buff. To convert to attack cooldown buff, do 1 / (buff))
         - maxes at 0.15s attack cooldown
 
-**Mega Sentry** ability: ${ability.cooldown}s cooldown, cycles between spawning green, red, and blue mega sentries in that order
+**Mega Sentry** ability: ${megaSentry.cooldown}s cooldown, cycles between spawning green, red, and blue mega sentries in that order
+    - initial cooldown of ${megaSentry.cooldown}s
     - *green-mega-sentry*
         - 70r
         - creates *mega-explosion* on expiration
@@ -502,7 +503,15 @@ function engiParagonBloonology(stats) {
         - creates *explosion* on expiration
             - *explosion*- ${attackDescription(modExplosion)}, plasma, camo
                 - zone, 50r
-        - *plasma*- ${attackDescription(modPlasma)}, plasma, camo`;
+        - *plasma*- ${attackDescription(modPlasma)}, plasma, camo
+
+**Power Glove** ability: ${powerGlove.cooldown}s cooldown, gives a tower 60%s and 125%r if it is a village
+    - initial cooldown of ${powerGlove.cooldown}s
+    - lasts 30s on paragons and tier 5 towers, 45s on tier 4 towers, and 60s on tier 3 and below towers
+    - lasts 60s on heroes
+    - banana farms get ceil(x / 0.6) income ticks per round where x is the original ticks per round
+    - does not affect xx5 village income
+    - applies the same buff to all non-paragon towers in 24r of the target tower for 15s`;
 
     return cleanBloonology(desc);
 }
@@ -528,6 +537,7 @@ function aceParagonBloonology(stats) {
     - has a 60° field of view
 
 **Carpet Bomb** ability: ${carpet.cooldown}s cooldown, drops 8 *bomb*s along the selected path with 0.067s between each bomb
+    - initial cooldown of ${carpet.cooldown}s
     - *bomb*- ${attackDescription(carpet)}, normal, camo
         - 50 blast radius
         - if a layer is not popped, it is stunned for 8s
@@ -566,6 +576,7 @@ function wizParagonBloonology(stats) {
     - *fireball*- ${attackDescription(fireball)}, 8j, normal, camo
 
 **Arcane Metamorphosis** ability: ${metamorphosis.cooldown}s cooldown, activates *flamethrower* and *fire-wall* attacks, disables all other attacks
+    - initial cooldown of ${metamorphosis.cooldown}s
     - drains 5000 mana per second, ends when 0 mana is left
     - *flamethrower*- ${attackDescription(flamethrower)}, 2j, normal, camo
     - *fire-wall*- ${wof.s}, normal, camo
@@ -575,6 +586,7 @@ function wizParagonBloonology(stats) {
                 - lasts 9s
 
 **Phoenix Explosion** ability: ${explosion.cooldown}s cooldown, uses all mana and disables *phoenix* for 10s
+    - initial cooldown of ${explosion.cooldown}s
     - creates *explosion* at the *phoenix* position
         - *explosion*- ∞p, normal, camo
             - 100 blast radius
@@ -618,6 +630,7 @@ function subParagonBloonology(stats) {
         - *explosion*- ${attackDescription(explosion)}, normal, camo
 
 **Final Strike** ability: ${strike.cooldown}s cooldown, disables all attacks for 15s, launches 3 *missile*s that target strong, first, and close
+    - initial cooldown of ${strike.cooldown}s
     - *missile*- ${attackDescription(strike)}, normal, camo
         - 60 blast radius
         - creates *aftershock* and 5 *fallout-puddle*s on the track in 60r on impact

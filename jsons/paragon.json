@@ -138,7 +138,7 @@
         "nailGuns": {
             "pierce": 15,
             "damage": 300,
-            "bd": 500,
+            "bd": 300,
             "edm": 2,
             "rate": 1
         },
@@ -193,8 +193,11 @@
             "bd": 0,
             "edm": 2
         },
-        "ability": {
+        "megaSentry": {
             "cooldown": 20
+        },
+        "powerGlove": {
+            "cooldown": 45
         }
     },
     "monkey_ace": {
@@ -375,7 +378,7 @@
             "edm": 2
         },
         "eruption": {
-            "pierce": 60,
+            "pierce": 80,
             "damage": 250,
             "bd": 250,
             "edm": 2,
@@ -387,7 +390,7 @@
             "damage": 50000,
             "bd": 0,
             "edm": 2,
-            "cooldown": 90
+            "cooldown": 60
         },
         "fireball": {
             "pierce": 2,

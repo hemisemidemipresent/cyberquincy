@@ -100,5 +100,10 @@
         "eg",
         "glade",
         "eglade"
+    ],
+    "sunset_gulch": [
+        "sg",
+        "gulch",
+        "sunset"
     ]
 }

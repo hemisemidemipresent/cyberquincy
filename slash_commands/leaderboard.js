@@ -12,7 +12,7 @@ const {
 
 builder = new SlashCommandBuilder()
     .setName('leaderboard')
-    .setDescription('See leaderbpards for BTD6 events');
+    .setDescription('See leaderboards for BTD6 events');
 
 const RACE_EMOJI = '<:RaceEvent:1385934643806601278>';
 

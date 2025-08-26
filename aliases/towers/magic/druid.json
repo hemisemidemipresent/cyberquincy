@@ -4,8 +4,8 @@
     "100": ["hard_thorns"],
     "200": ["heart_of_thunder", "thunder"],
     "300": ["druid_of_the_storm", "dots"],
-    "400": ["ball_lightning", "blightning", "ball", "bling", "ball_light"],
-    "500": ["superstorm", "super_storm", "storm", "sstorm"],
+    "400": ["ball_lightning", "blightning", "ball", "bling"],
+    "500": ["superstorm", "super_storm", "storm", "sstorm", "mos", "moss"],
 
     "010": ["thorn_swarm", "swarm"],
     "020": ["heart_of_oak", "oak", "hoa"],

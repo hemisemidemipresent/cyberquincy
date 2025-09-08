@@ -194,6 +194,7 @@ const FTTC_TOWER_ABBREVIATIONS = {
     ice_monkey: 'ice',
     glue_gunner: 'glu',
     sniper_monkey: 'sni',
+    desperado: 'des',
     monkey_sub: 'sub',
     monkey_buccaneer: 'buc',
     monkey_ace: 'ace',
@@ -205,11 +206,11 @@ const FTTC_TOWER_ABBREVIATIONS = {
     ninja_monkey: 'nin',
     alchemist: 'alc',
     druid: 'dru',
+    mermonkey: 'mrm',
     spike_factory: 'spk',
     monkey_village: 'vil',
     engineer_monkey: 'eng',
     beast_handler: 'bst',
-    mermonkey: 'mrm',
 };
 
 async function displayFttcFilterAll(interaction, parsed) {

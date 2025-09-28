@@ -70,7 +70,8 @@ const HERO_NAME_TO_BLOONOLOGY_LINK = {
     psi: 'https://pastebin.com/raw/9h9aAPUm',
     geraldo: 'https://pastebin.com/raw/rksZWhTV',
     corvus: 'https://pastebin.com/raw/JVnXdsqZ',
-    rosalia: 'https://pastebin.com/raw/CbXjwva7'
+    rosalia: 'https://pastebin.com/raw/CbXjwva7',
+    silas: 'https://pastebin.com/YzUizHHx'
 };
 const RELIC_BLOONOLOGY_LINK = 'https://pastebin.com/raw/RMqJQApE';
 const BLOONOLOGY_INDENT = 6;

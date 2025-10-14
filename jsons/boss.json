@@ -384,31 +384,31 @@
     "normal": [
       {
         "tier": 1,
-        "hp": 10000,
-        "speed": 0.36,
+        "hp": 9500,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 20,000\nReality Shield bonus: **+30%** speed"
       },
       {
         "tier": 2,
-        "hp": 37500,
-        "speed": 0.36,
+        "hp": 35000,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 75,000\nReality Shield bonus: **+35%** speed"
       },
       {
         "tier": 3,
-        "hp": 175000,
-        "speed": 0.36,
+        "hp": 160000,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 350,000\nReality Shield bonus: **+40%** speed"
       },
       {
         "tier": 4,
-        "hp": 375000,
-        "speed": 0.36,
+        "hp": 350000,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 750,000\nReality Shield bonus: **+45%** speed"
       },
       {
         "tier": 5,
-        "hp": 1500000,
+        "hp": 1450000,
         "speed": 0.36,
         "desc": "Effective Health with Reality Shield: 3,000,000\nReality Shield bonus: **+50%** speed"
       }
@@ -416,32 +416,32 @@
     "elite": [
       {
         "tier": 1,
-        "hp": 20000,
-        "speed": 0.36,
+        "hp": 19000,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 50,000\nReality Shield bonus: **+50%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.1x\n- skull 2 - 1.15x\n- skull 3 - 1.2x\n- skull 4 - 1.25x\n- skull 5 - 1.3x"
       },
       {
         "tier": 2,
-        "hp": 120000,
-        "speed": 0.36,
+        "hp": 110000,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 300,000\nReality Shield bonus: **+55%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.1x\n- skull 2 - 1.15x\n- skull 3 - 1.2x\n- skull 4 - 1.25x\n- skull 5 - 1.3x"
       },
       {
         "tier": 3,
-        "hp": 800000,
-        "speed": 0.36,
+        "hp": 770000,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 2,000,000\nReality Shield bonus: **+60%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.2x\n- skull 2 - 1.3x\n- skull 3 - 1.4x\n- skull 4 - 1.5x\n- skull 5 - 1.6x"
       },
       {
         "tier": 4,
-        "hp": 3200000,
-        "speed": 0.36,
+        "hp": 3100000,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 8,000,000\nReality Shield bonus: **+65%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.3x\n- skull 2 - 1.45x\n- skull 3 - 1.6x\n- skull 4 - 1.75x\n- skull 5 - 1.9x"
       },
       {
         "tier": 5,
-        "hp": 16000000,
-        "speed": 0.36,
+        "hp": 15500000,
+        "speed": 0.32,
         "desc": "Effective Health with Reality Shield: 40,000,000\nReality Shield bonus: **+70%** speed\nGlobal Attack Cooldown Multipliers:\n- skull 1 - 1.4x\n- skull 2 - 1.6x\n- skull 3 - 1.8x\n- skull 4 - 2.0x\n- skull 5 - 2.2x"
       }
     ],

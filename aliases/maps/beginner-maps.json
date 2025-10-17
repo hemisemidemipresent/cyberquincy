@@ -130,5 +130,9 @@
         "sp",
         "spa",
         "pits"
+    ],
+    "three_mines_round": [
+        "tmr",
+        "3mr"
     ]
 }

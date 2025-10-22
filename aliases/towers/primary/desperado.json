@@ -4,14 +4,14 @@
     "100": ["quickdraw"],
     "200": ["standoff"],
     "300": ["big_iron"],
-    "400": ["twin_sixes"],
-    "500": ["the_blazing_sun", "blazing_sun"],
+    "400": ["twin_sixes", "twix"],
+    "500": ["the_blazing_sun", "blazing_sun", "tbs", "buns"],
 
     "010": ["eagle_eye"],
     "020": ["bullseye"],
     "030": ["deadeye"],
     "040": ["bounty_hunter", "hunter", "bhunter"],
-    "050": ["golden_justice", "justice"],
+    "050": ["golden_justice", "justice", "gustice", "gust"],
 
     "001": ["wanderer"],
     "002": ["nomad"],

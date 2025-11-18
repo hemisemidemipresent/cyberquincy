@@ -62,5 +62,9 @@
 	"rosalia": {
 		"cost": 875,
 		"levelModifier": 1.425
-	}
+	},
+    "silas": {
+        "cost": 850,
+        "levelModifier": 1.5
+    }
 }

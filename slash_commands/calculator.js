@@ -45,7 +45,7 @@ const helpEmbed = new Discord.EmbedBuilder()
     .setTitle('`/calc` HELP')
     .setDescription('**Cash Calculator**')
     .addFields([
-        { name: '`r52`,`R100`', value: 'Cumulative cash earned after specified round (6-100)' },
+        { name: '`r52`,`R140`', value: 'Cumulative cash earned after specified round (6-140) in CHIMPS' },
         { name: '`33.21`, `69.4201`', value: 'Literally just numbers work' },
         {
             name: '`wiz!420`, `super!100`, `dart` (same as `dart!000`), `wlp` (same as `wiz!050`)',

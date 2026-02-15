@@ -8,6 +8,7 @@ const mkDiscounts = require('../jsons/mk/discounts.json');
 
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round_sets/regular.json');
+const abr = require('../jsons/round_sets/abr.json')
 const RoundParser = require('../parser/round-parser');
 
 const { red, cyber, black } = require('../jsons/colors.json');
@@ -44,7 +45,7 @@ const helpEmbed = new Discord.EmbedBuilder()
     .setTitle('`/calc` HELP')
     .setDescription('**Cash Calculator**')
     .addFields([
-        { name: '`r52`,`R100`', value: 'Cumulative cash earned after specified round (6-100)' },
+        { name: '`r52`,`R140`', value: 'Cumulative cash earned after specified round (6-140) in CHIMPS' },
         { name: '`33.21`, `69.4201`', value: 'Literally just numbers work' },
         {
             name: '`wiz!420`, `super!100`, `dart` (same as `dart!000`), `wlp` (same as `wiz!050`)',
@@ -274,6 +275,8 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
     if (!isNaN(undiscountedToken)) return Number(undiscountedToken);
     else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
+    } else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS', true)).round)) {
+        return abr[round].cumulativeCash - abr[5].cumulativeCash + 650;
     } else if (Heroes.isGerrysShopItem(tokenCanonical)) {
         return Heroes.costOfGerryShopItem(tokenCanonical, difficulty);
     } else if (Towers.isTowerUpgrade(undiscountedToken, true)) {

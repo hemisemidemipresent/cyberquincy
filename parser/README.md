@@ -1,5 +1,7 @@
 # Parsing
 
+### NOTE: This is fairly deprecated due to the introduction of slash commands
+
 ## Table of Contents
 
 -   [For Command Developers](#command-devs)

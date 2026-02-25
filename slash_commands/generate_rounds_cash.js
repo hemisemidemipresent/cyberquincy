@@ -20,11 +20,12 @@ const {
 const roundHelper   = require('../helpers/rounds');
 const roundContents = require('../jsons/round_sets/round_contents.json');
 const regularJson   = require('../jsons/round_sets/regular.json');
+const abrJson       = require('../jsons/round_sets/abr.json');
 
-// Build a round -> roundLength lookup from the existing regular.json
-const roundLengths = Object.fromEntries(
-    regularJson.map(entry => [entry.round, entry.roundLength])
-);
+const roundLengthsByMode = {
+    r:  Object.fromEntries(regularJson.map(entry => [entry.round, entry.roundLength])),
+    ar: Object.fromEntries(abrJson.map(entry => [entry.round, entry.roundLength])),
+};
 
 // ─── Parser helpers ───────────────────────────────────────────────────────────
 
@@ -46,7 +47,7 @@ function parseRoundString(roundStr, roundNum) {
         if (!m) continue;
 
         const count = parseInt(m[1], 10);
-        let   desc  = m[2].toLowerCase();
+        let desc = m[2].toLowerCase();
 
         let fortified = false, camo = false, regrow = false;
 
@@ -83,6 +84,7 @@ function parseRoundString(roundStr, roundNum) {
  */
 function buildRoundStats(mode = 'r') {
     const STARTING_CASH = 650;
+    const roundLengths = roundLengthsByMode[mode];
 
     // Collect all round numbers for this mode, sorted ascending
     const roundNums = Object.keys(roundContents)

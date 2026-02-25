@@ -141,6 +141,8 @@ function buildRoundStats(mode = 'r') {
 // ─── Discord slash command ────────────────────────────────────────────────────
 
 module.exports = {
+    developer: true, // not registered globally; used programmatically by devs only
+
     data: new SlashCommandBuilder()
         .setName('roundstats')
         .setDescription('Get BTD6 round-by-round RBE and cash stats as a JSON file')

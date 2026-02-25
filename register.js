@@ -51,7 +51,7 @@ async function registerCommands() {
     } else {
         const commands = slashCommandCenter
             .commandFiles()
-            .filter((file) => !file.beta)
+            .filter((file) => !file.beta && !file.developer) // skip beta and developer-only commands when registering globally
             .map(getCommandBody);
         await rest
             .put(Routes.applicationCommands(activeClientID()), { body: commands })

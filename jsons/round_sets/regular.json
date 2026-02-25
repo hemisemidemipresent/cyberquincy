@@ -911,361 +911,361 @@
     {
         "round": "101",
         "rbe": 20020,
-        "cashThisRound": 764,
+        "cashThisRound": 1101.8,
         "bloons": 510,
         "roundLength": 9.5,
         "cumulativeRBE": 2062933,
-        "cumulativeCash": 180408.4
+        "cumulativeCash": 180746.2
     },
     {
         "round": "102",
         "rbe": 199826,
-        "cashThisRound": 2451.2,
+        "cashThisRound": 3800.72,
         "bloons": 40,
         "roundLength": 46.5,
         "cumulativeRBE": 2262759,
-        "cumulativeCash": 182859.6
+        "cumulativeCash": 184546.92
     },
     {
         "round": "103",
         "rbe": 507908,
-        "cashThisRound": 6170.4,
+        "cashThisRound": 9750.84,
         "bloons": 358,
         "roundLength": 19,
         "cumulativeRBE": 2770667,
-        "cumulativeCash": 189030
+        "cumulativeCash": 194297.76
     },
     {
         "round": "104",
         "rbe": 387472,
-        "cashThisRound": 7591.5,
+        "cashThisRound": 12024,
         "bloons": 814,
         "roundLength": 22,
         "cumulativeRBE": 3158139,
-        "cumulativeCash": 196621.5
+        "cumulativeCash": 206321.76
     },
     {
         "round": "105",
         "rbe": 152340,
-        "cashThisRound": 4401.25,
+        "cashThisRound": 6919,
         "bloons": 455,
         "roundLength": 9,
         "cumulativeRBE": 3310479,
-        "cumulativeCash": 201022.75
+        "cumulativeCash": 213240.76
     },
     {
         "round": "106",
         "rbe": 113376,
-        "cashThisRound": 1977.65,
+        "cashThisRound": 3040.64,
         "bloons": 93,
         "roundLength": 33.5,
         "cumulativeRBE": 3423855,
-        "cumulativeCash": 203000.4
+        "cumulativeCash": 216281.4
     },
     {
         "round": "107",
         "rbe": 447384,
-        "cashThisRound": 3865.7,
+        "cashThisRound": 6060.92,
         "bloons": 554,
         "roundLength": 10,
         "cumulativeRBE": 3871239,
-        "cumulativeCash": 206866.1
+        "cumulativeCash": 222342.32
     },
     {
         "round": "108",
         "rbe": 643088,
-        "cashThisRound": 6003.95,
+        "cashThisRound": 9481.52,
         "bloons": 19,
         "roundLength": 24,
         "cumulativeRBE": 4514327,
-        "cumulativeCash": 212870.05
+        "cumulativeCash": 231823.84
     },
     {
         "round": "109",
         "rbe": 552345,
-        "cashThisRound": 7648.25,
+        "cashThisRound": 12111.8,
         "bloons": 90,
         "roundLength": 18,
         "cumulativeRBE": 5066672,
-        "cumulativeCash": 220518.3
+        "cumulativeCash": 243935.64
     },
     {
         "round": "110",
         "rbe": 141410,
-        "cashThisRound": 2687.75,
+        "cashThisRound": 4174.4,
         "bloons": 55,
         "roundLength": 36,
         "cumulativeRBE": 5208082,
-        "cumulativeCash": 223206.05
+        "cumulativeCash": 248110.04
     },
     {
         "round": "111",
         "rbe": 949472,
-        "cashThisRound": 9667.55,
+        "cashThisRound": 15341.48,
         "bloons": 31,
         "roundLength": 18.5,
         "cumulativeRBE": 6157554,
-        "cumulativeCash": 232873.6
+        "cumulativeCash": 263451.52
     },
     {
         "round": "112",
         "rbe": 261648,
-        "cashThisRound": 2670.8,
+        "cashThisRound": 4146.08,
         "bloons": 48,
         "roundLength": 20,
         "cumulativeRBE": 6419202,
-        "cumulativeCash": 235544.4
+        "cumulativeCash": 267597.6
     },
     {
         "round": "113",
         "rbe": 231102,
-        "cashThisRound": 3184.5,
+        "cashThisRound": 4967.4,
         "bloons": 174,
         "roundLength": 21.5,
         "cumulativeRBE": 6650304,
-        "cumulativeCash": 238728.9
+        "cumulativeCash": 272565
     },
     {
         "round": "114",
         "rbe": 483416,
-        "cashThisRound": 5608.15,
+        "cashThisRound": 8844.64,
         "bloons": 103,
         "roundLength": 30,
         "cumulativeRBE": 7133720,
-        "cumulativeCash": 244337.05
+        "cumulativeCash": 281409.64
     },
     {
         "round": "115",
         "rbe": 492396,
-        "cashThisRound": 5609.15,
+        "cashThisRound": 8845.64,
         "bloons": 103,
         "roundLength": 30,
         "cumulativeRBE": 7626116,
-        "cumulativeCash": 249946.2
+        "cumulativeCash": 290255.28
     },
     {
         "round": "116",
         "rbe": 575600,
-        "cashThisRound": 4148.9,
+        "cashThisRound": 6508.64,
         "bloons": 426,
         "roundLength": 15,
         "cumulativeRBE": 8201716,
-        "cumulativeCash": 254095.1
+        "cumulativeCash": 296763.92
     },
     {
         "round": "117",
         "rbe": 75010,
-        "cashThisRound": 1161.75,
+        "cashThisRound": 1728.6,
         "bloons": 295,
         "roundLength": 14,
         "cumulativeRBE": 8276726,
-        "cumulativeCash": 255256.85
+        "cumulativeCash": 298492.52
     },
     {
         "round": "118",
         "rbe": 398784,
-        "cashThisRound": 4450.1,
+        "cashThisRound": 6989.36,
         "bloons": 42,
         "roundLength": 16,
         "cumulativeRBE": 8675510,
-        "cumulativeCash": 259706.95
+        "cumulativeCash": 305481.88
     },
     {
         "round": "119",
         "rbe": 319020,
-        "cashThisRound": 2220.9,
+        "cashThisRound": 3422.04,
         "bloons": 3,
         "roundLength": 25.5,
         "cumulativeRBE": 8994530,
-        "cumulativeCash": 261927.85
+        "cumulativeCash": 308903.92
     },
     {
         "round": "120",
         "rbe": 431808,
-        "cashThisRound": 5252.8,
+        "cashThisRound": 8272.48,
         "bloons": 48,
         "roundLength": 51,
         "cumulativeRBE": 9426338,
-        "cumulativeCash": 267180.65
+        "cumulativeCash": 317176.4
     },
     {
         "round": "121",
         "rbe": 516500,
-        "cashThisRound": 1593.48,
+        "cashThisRound": 3652.2,
         "bloons": 48,
         "roundLength": 15,
         "cumulativeRBE": 9942838,
-        "cumulativeCash": 268774.13
+        "cumulativeCash": 320828.6
     },
     {
         "round": "122",
         "rbe": 386730,
-        "cashThisRound": 2083.5,
+        "cashThisRound": 4875.75,
         "bloons": 285,
         "roundLength": 20,
         "cumulativeRBE": 10329568,
-        "cumulativeCash": 270857.63
+        "cumulativeCash": 325704.35
     },
     {
         "round": "123",
         "rbe": 629936,
-        "cashThisRound": 2723.16,
+        "cashThisRound": 6473.4,
         "bloons": 208,
         "roundLength": 40,
         "cumulativeRBE": 10959504,
-        "cumulativeCash": 273580.79
+        "cumulativeCash": 332177.75
     },
     {
         "round": "124",
         "rbe": 738600,
-        "cashThisRound": 2511.5,
+        "cashThisRound": 5942.75,
         "bloons": 75,
         "roundLength": 30,
         "cumulativeRBE": 11698104,
-        "cumulativeCash": 276092.29
+        "cumulativeCash": 338120.5
     },
     {
         "round": "125",
         "rbe": 939624,
-        "cashThisRound": 4548.48,
+        "cashThisRound": 11033.7,
         "bloons": 126,
         "roundLength": 40,
         "cumulativeRBE": 12637728,
-        "cumulativeCash": 280640.77
+        "cumulativeCash": 349154.2
     },
     {
         "round": "126",
         "rbe": 141778,
-        "cashThisRound": 980.52,
+        "cashThisRound": 2112.3,
         "bloons": 100,
         "roundLength": 27,
         "cumulativeRBE": 12779506,
-        "cumulativeCash": 281621.29
+        "cumulativeCash": 351266.5
     },
     {
         "round": "127",
         "rbe": 178248,
-        "cashThisRound": 1324.76,
+        "cashThisRound": 2971.4,
         "bloons": 72,
         "roundLength": 14,
         "cumulativeRBE": 12957754,
-        "cumulativeCash": 282946.05
+        "cumulativeCash": 354237.9
     },
     {
         "round": "128",
         "rbe": 322048,
-        "cashThisRound": 1820.18,
+        "cashThisRound": 4208.45,
         "bloons": 269,
         "roundLength": 28,
         "cumulativeRBE": 13279802,
-        "cumulativeCash": 284766.23
+        "cumulativeCash": 358446.35
     },
     {
         "round": "129",
         "rbe": 826792,
-        "cashThisRound": 2240.76,
+        "cashThisRound": 5258.4,
         "bloons": 263,
         "roundLength": 28,
         "cumulativeRBE": 14106594,
-        "cumulativeCash": 287006.99
+        "cumulativeCash": 363704.75
     },
     {
         "round": "130",
         "rbe": 307968,
-        "cashThisRound": 1784.48,
+        "cashThisRound": 4116.2,
         "bloons": 204,
         "roundLength": 40,
         "cumulativeRBE": 14414562,
-        "cumulativeCash": 288791.47
+        "cumulativeCash": 367820.95
     },
     {
         "round": "131",
         "rbe": 1461456,
-        "cashThisRound": 2427.36,
+        "cashThisRound": 5721.9,
         "bloons": 18,
         "roundLength": 39,
         "cumulativeRBE": 15876018,
-        "cumulativeCash": 291218.83
+        "cumulativeCash": 373542.85
     },
     {
         "round": "132",
         "rbe": 1268688,
-        "cashThisRound": 3184.48,
+        "cashThisRound": 7613.2,
         "bloons": 224,
         "roundLength": 41,
         "cumulativeRBE": 17144706,
-        "cumulativeCash": 294403.31
+        "cumulativeCash": 381156.05
     },
     {
         "round": "133",
         "rbe": 1153341,
-        "cashThisRound": 3305.94,
+        "cashThisRound": 7915.35,
         "bloons": 91,
         "roundLength": 43,
         "cumulativeRBE": 18298047,
-        "cumulativeCash": 297709.25
+        "cumulativeCash": 389071.4
     },
     {
         "round": "134",
-        "rbe": 374839,
-        "cashThisRound": 1454,
+        "rbe": 374840,
+        "cashThisRound": 3284,
         "bloons": 40,
         "roundLength": 24.01,
         "cumulativeRBE": 18672887,
-        "cumulativeCash": 299163.25
+        "cumulativeCash": 392355.4
     },
     {
         "round": "135",
         "rbe": 1386840,
-        "cashThisRound": 2103.3,
+        "cashThisRound": 4905.75,
         "bloons": 35,
         "roundLength": 24,
         "cumulativeRBE": 20059727,
-        "cumulativeCash": 301266.55
+        "cumulativeCash": 397261.15
     },
     {
         "round": "136",
         "rbe": 402624,
-        "cashThisRound": 1699.52,
+        "cashThisRound": 3894.8,
         "bloons": 120,
         "roundLength": 45,
         "cumulativeRBE": 20462351,
-        "cumulativeCash": 302966.07
+        "cumulativeCash": 401155.95
     },
     {
         "round": "137",
         "rbe": 1143984,
-        "cashThisRound": 3531.12,
+        "cashThisRound": 8472.3,
         "bloons": 90,
         "roundLength": 8.1,
         "cumulativeRBE": 21606335,
-        "cumulativeCash": 306497.19
+        "cumulativeCash": 409628.25
     },
     {
         "round": "138",
         "rbe": 442872,
-        "cashThisRound": 1198.12,
+        "cashThisRound": 2638.3,
         "bloons": 126,
         "roundLength": 40,
         "cumulativeRBE": 22049207,
-        "cumulativeCash": 307695.31
+        "cumulativeCash": 412266.55
     },
     {
         "round": "139",
         "rbe": 401346,
-        "cashThisRound": 2166.86,
+        "cashThisRound": 5058.65,
         "bloons": 253,
         "roundLength": 45,
         "cumulativeRBE": 22450553,
-        "cumulativeCash": 309862.17
+        "cumulativeCash": 417325.2
     },
     {
         "round": "140",
         "rbe": 645440,
-        "cashThisRound": 773.84,
+        "cashThisRound": 1574.6,
         "bloons": 2,
         "roundLength": 45.5,
         "cumulativeRBE": 23095993,
-        "cumulativeCash": 310636.01
+        "cumulativeCash": 418899.8
     }
 ]

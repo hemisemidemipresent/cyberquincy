@@ -305,7 +305,7 @@ async function displayPages(interaction, pages, versionAdded, parsed) {
         for(const emoji in BALANCE_TYPE_MAPPINGS) {
             footer.push(`${emoji} ${BALANCE_TYPE_MAPPINGS[emoji]}`);
         }
-        embed.setFooter({ text: footer.join(' • ') });
+        embed.setFooter({ text: "INDEX HAS NOT UPDATED BALANCES SINCE LIKE v43 btw " + footer.join(' • ') });
 
         if (includedButtons.length > 0) {
             includedButtons.find((b) => b.data.disabled).setLabel(`${pageIdx + 1}/${pages.length}`);

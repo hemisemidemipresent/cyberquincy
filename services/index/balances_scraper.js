@@ -130,6 +130,9 @@ async function scrapeAllBalanceChanges() {
         },
         "rosalia": {
             "versionAdded": "43.0"
+        },
+        "silas": {
+            "versionAdded": "43.0"
         }
     };
     

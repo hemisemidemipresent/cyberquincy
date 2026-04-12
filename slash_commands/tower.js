@@ -11,6 +11,9 @@ const {
 const Towers = require('../helpers/towers.js');
 const Bloonology = require('../helpers/bloonology.js');
 
+const { scrapeCosts } = require('../services/wiki/costs_scraper');
+
+
 const { discord, footer } = require('../aliases/misc.json');
 const { red, cyber } = require('../jsons/colors.json');
 
@@ -22,6 +25,12 @@ Object.keys(Bloonology.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
     towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
 });
 
+const reloadOption = new SlashCommandStringOption()
+    .setName('reload')
+    .setDescription('Do you need to reload prices from the wiki but for a much slower runtime?')
+    .setRequired(false)
+    .addChoices({ name: 'Yes', value: 'yes' });
+
 const builder = new SlashCommandBuilder()
     .setName('tower')
     .setDescription('Find information for each tower')
@@ -29,11 +38,12 @@ const builder = new SlashCommandBuilder()
     .addStringOption((option) =>
         option.setName('tower_path').setDescription('The tower path that you want the information for').setRequired(true)
     )
-    .addBooleanOption((option) => option.setName('battles2').setDescription('Is this for battles 2?').setRequired(false));
+    .addBooleanOption((option) => option.setName('battles2').setDescription('Is this for battles 2?').setRequired(false))
+    .addStringOption(reloadOption);
 
 function validateInput(interaction) {
     const towerPath = parseTowerPath(interaction);
-    if (!towerPath) return;
+    if (!towerPath) return 'No tower path specified';
     if (isNaN(towerPath)) return "Tower path provided isn't `base` and contains non-numerical characters";
     if (!Towers.isValidUpgradeSet(towerPath)) return 'Invalid tower path provided!';
 }
@@ -159,13 +169,30 @@ async function execute(interaction) {
     const validationFailure = validateInput(interaction);
     if (validationFailure)
         return await interaction.reply({
-            content: validationFailure,
+            embeds: [
+                new Discord.EmbedBuilder()
+                    .setTitle("Invalid tower path!")
+                    .setDescription(
+                        `## What is a tower path?
+                        - It is a three-digit number like \`010\`, \`052\`, \`014\` or even \`000\`.
+                        - the first digit represents the number of upgrades applied on the top path
+                        - the second digit represents the number of upgrades applied on the middle path
+                        - the third digit represents the number of upgrades on the bottom path
+                        - So in this image, the tower path would be \`015\`:`)
+                    .setImage('https://i.imgur.com/ePWcSnu.png')
+            ],
             flags: MessageFlags.Ephemeral
         });
 
     const tower = interaction.options.getString('tower');
     const towerPath = parseTowerPath(interaction);
     const isB2 = interaction.options.getBoolean('battles2') || false;
+
+    const forceReload = interaction.options.getString('reload') ? true : false;
+    if (forceReload) {
+        await interaction.deferReply();
+        await scrapeCosts();
+    }
 
     let embed = await embedBloonology(tower, towerPath, isB2);
 

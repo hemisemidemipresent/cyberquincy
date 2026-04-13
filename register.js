@@ -1,6 +1,6 @@
 // registers slash commands
 const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const { Routes } = require('discord-api-types/v10');
 const { activeToken, activeClientID } = require('./helpers/config');
 const { testing, testingGuild } = require('./1/config.json');
 const { ApplicationCommandOptionType } = require('discord.js');

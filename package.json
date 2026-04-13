@@ -26,10 +26,11 @@
     },
     "homepage": "https://github.com/hemisemidemipresent/cyberquincy#readme",
     "dependencies": {
+        "@discordjs/rest": "^2.6.1",
         "@ltd/j-toml": "^1.33.0",
         "axios": "^1.15.0",
         "cheerio": "^1.0.0-rc.11",
-        "discord-api-types": "^0.26.1",
+        "discord-api-types": "^0.38.45",
         "discord.js": "^14.26.2",
         "filepath": "^1.1.0",
         "fuzzyset.js": "^1.0.7",

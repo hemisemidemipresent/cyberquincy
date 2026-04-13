@@ -1,9 +1,6 @@
 const roundHelper = require('./rounds');
 const gHelper = require('../helpers/general');
 
-const axios = require('axios');
-const cheerio = require('cheerio');
-
 const roundContents = require('../jsons/round_sets/round_contents.json');
 
 ENEMIES = [
@@ -299,8 +296,8 @@ class Enemy {
 
     /**
      *
-     * @summary Goes to the enemy page specified by the type (green, rainbow, bfb, etc.), "scrolls to" the #Variants section, and scrapes the correct image url using axios/cheerio
-     * @returns The image URL for the enemy's full description
+     * @summary Fetches the correct image url from bloons wiki's mediawiki's hashed subdirectories
+     * @returns The image URL for the enemy
      */
     async thumbnail() {
         const camo = this.camo ? 'Camo' : '';

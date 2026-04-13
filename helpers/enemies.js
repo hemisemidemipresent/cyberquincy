@@ -306,45 +306,27 @@ class Enemy {
         const camo = this.camo ? 'Camo' : '';
         const regrow = this.regrow ? 'Regrow' : '';
         const fortified = this.fortified ? 'Fortified' : '';
-
-        let bloonPageLink;
-        let bloonSelectors; // Image alts can be named in multiple different ways, arbitrarily
+        let bloonName;
         if (this.isBloon()) {
-            // Green_Bloon, Ceramic_Bloon, etc.
-            // https://bloons.fandom.com/wiki/Green_Bloon
-            bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true).split(' ').join('_')}`;
-            const selectorKey = `${fortified}${camo}${regrow}${this.formatName()}.png`;
-            bloonSelectors = [selectorKey, `BTD6${selectorKey}`];
-            if (regrow) {
-                bloonSelectors = bloonSelectors.concat(bloonSelectors.map((search) => search.replace(/Regrow/, 'Regrowth')));
-            }
+            bloonName = `BTD6 bloon ${this.formatName()}${regrow}${fortified}${camo}`;
         } else if (this.isMOAB()) {
-            // https://bloons.fandom.com/wiki/M.O.A.B.
-            // Separating the letters with dots is the safest way to go to the right page
-            // i.e. /MOAB would bring you to a disambiguation
-            bloonPageLink = `https://bloons.fandom.com/wiki/${this.formatName(true)}`;
-            const selectorKey = `${fortified}${this.formatName()}.png`;
-            bloonSelectors = [`BTD63D${selectorKey}`, `3D${selectorKey}`, `BTD3D${selectorKey}`, `BTD6${selectorKey}`];
-            if (fortified) {
-                bloonSelectors = bloonSelectors.concat(bloonSelectors.map((search) => search.replace(/Fortified/, 'F')));
-            }
-        }
-        const response = await axios.get(bloonPageLink);
-        let $ = cheerio.load(response.data);
-
-        for (const search of bloonSelectors) {
-            let imageTile = $(this.thumbnailImageTileSelector(search));
-            if (imageTile.length > 0) {
-                // Return the full image url at the first match for the correct bloon tile
-                return imageTile.attr('data-src');
-            }
+            const allCapsName = this.formatName();
+            bloonName = `BTD6 bloon ${allCapsName.charAt(0)}${allCapsName.slice(1).toLowerCase()}${fortified}`;
         }
 
-        return null;
-    }
 
-    thumbnailImageTileSelector(search) {
-        return `table.article-table img[alt=${search}]`;
+        const response = await fetch("https://www.bloonswiki.com/api.php?action=query&gcmtitle=Category:BTD6_Bloon_sprites&gcmlimit=100&prop=imageinfo&iiprop=url&generator=categorymembers&format=json");
+        const rawJson = await response.json();
+        const json = rawJson?.query?.pages;
+        if (json) {
+            for (let i = 0; i < Object.keys(json).length; i++){
+                const key = Object.keys(json)[i];
+                const obj = json[key];
+                if (obj.title.includes(bloonName)) {
+                    return obj?.imageinfo[0]?.url;
+                }
+            }
+        }
     }
 
     actuallyExists() {
@@ -574,6 +556,8 @@ function getSpeedRamping(r) {
     return gHelper.round(v, 2);
 }
 
+
+
 module.exports = {
     BASE_RED_BLOON_SECONDS_PER_SECOND,
     ENEMIES_THAT_CAN_BE_SUPER,
@@ -596,5 +580,5 @@ module.exports = {
      * @param {int} round
      * @returns {int} multiplicative percentage increase
      */
-    getSpeedRamping
+    getSpeedRamping,
 };

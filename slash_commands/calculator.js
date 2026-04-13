@@ -8,7 +8,7 @@ const mkDiscounts = require('../jsons/mk/discounts.json');
 
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round_sets/regular.json');
-const abr = require('../jsons/round_sets/abr.json')
+const abr = require('../jsons/round_sets/abr.json');
 const RoundParser = require('../parser/round-parser');
 
 const { red, cyber, black } = require('../jsons/colors.json');

@@ -43,7 +43,7 @@ class RoundParser {
         // Ultimately at play is just a natural number parser with bounds
         this.delegateParser = new NaturalNumberParser(startRound, endRound);
 
-        this.abr = abr
+        this.abr = abr;
     }
 
     parse(arg) {

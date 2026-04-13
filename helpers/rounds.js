@@ -32,6 +32,18 @@ function cashFactorForRound(r) {
     }
 }
 
+/**
+ * 
+ * @param {int} round the round number
+ */
+function roundBudget(round) {
+    if (round > 100) return round * 4000 - 225000;
+    let budget = round ** 7.7;
+    let helper = round ** 1.75;
+    if (round > 50) return budget * 5e-11 + helper + 20;
+    return ((1 + round * 0.01) * (round * -3 + 400) * ((budget * 5e-11 + helper + 20) / 160) * 0.6);
+}
+
 module.exports = {
     IMPOPPABLE_ROUNDS,
     HARD_ROUNDS,

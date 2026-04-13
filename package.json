@@ -22,12 +22,10 @@
         "url": "https://github.com/hemisemidemipresent/cyberquincy/issues"
     },
     "engines": {
-        "node": "18.x"
+        "node": "22.x"
     },
     "homepage": "https://github.com/hemisemidemipresent/cyberquincy#readme",
     "dependencies": {
-        "@discordjs/builders": "^0.15.0",
-        "@discordjs/rest": "^0.2.0-canary.0",
         "@ltd/j-toml": "^1.33.0",
         "axios": "^1.15.0",
         "cheerio": "^1.0.0-rc.11",

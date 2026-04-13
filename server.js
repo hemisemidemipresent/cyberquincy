@@ -26,7 +26,7 @@ function globalRequirements() {
 }
 
 function consoleBootup() {
-    client.once('ready', () => {
+    client.once('clientReady', () => {
         client.user.setPresence({
             activity: {
                 name: `/help`

@@ -188,7 +188,6 @@ function parsePerson(interaction) {
 async function embed2MPOG(entity) {
     let resJson = await fetch2mp(new URLSearchParams({
         towerquery: JSON.stringify([entity]),
-        pending: '0',
         count: '100'
     }));
 

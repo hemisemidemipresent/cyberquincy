@@ -31,7 +31,7 @@ async function execute(interaction) {
 }
 
 async function lcd(map) {
-    const searchParams = new URLSearchParams({ map, count: 100, pending: 0 });
+    const searchParams = new URLSearchParams({ map, count: 100 });
 
     let { results } = await fetchlcd(searchParams);
 

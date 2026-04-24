@@ -33,7 +33,7 @@ async function execute(interaction) {
 
 async function lcc(map) {
 
-    const searchParams = new URLSearchParams({ map, count: 100, pending: 0 });
+    const searchParams = new URLSearchParams({ map, count: 100 });
 
     let { results } = await fetchlcc(searchParams);
 

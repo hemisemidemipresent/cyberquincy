@@ -173,7 +173,6 @@ async function execute(interaction) {
             map,
             person: newparsed.person,
             difficulty: newparsed.map_difficulty,
-            pending: '0',
             count: '100',
             og: og
         }).filter(([, value]) => value !== null && value !== undefined)

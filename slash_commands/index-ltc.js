@@ -41,7 +41,6 @@ async function ltc(map, modifier) {
     let searchParams = {
         map: map,
         count: 100,
-        pending: 0
     };
     if (modifier) searchParams.completiontype = modifier;
 

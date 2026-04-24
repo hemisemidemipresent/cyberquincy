@@ -76,7 +76,7 @@ function parseMap(interaction) {
     const mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
     const map = interaction.options.getString('map');
     if (map) {
-        const canonicalMap = Aliases.getCanonicalForm(map);
+        const canonicalMap = Aliases.getCanonicalForm(map, Aliases.MAP);
         if (canonicalMap) {
             return CommandParser.parse([canonicalMap], mapParser);
         } else {
@@ -165,7 +165,7 @@ async function execute(interaction) {
 
     let og = interaction.options.getBoolean('og');
     if (og) og = og + 0; // cursed way to convert true into 1 (false remains 'false' and not 0 since we don't want to exclude OGs even when false)
-    
+
     // after all that wrangling, construct the search parameters to btd6 index API
     const searchParams = new URLSearchParams(
         Object.entries({

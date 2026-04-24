@@ -1,109 +1,24 @@
 {
-    "cornfield": [
-        "cf",
-        "corn",
-        "field"
-    ],
-    "spillway": [
-        "sw",
-        "spill",
-        "way"
-    ],
-    "high_finance": [
-        "hf",
-        "hi_fi",
-        "finance",
-        "fin",
-        "high"
-    ],
-    "another_brick": [
-        "ab",
-        "abrick",
-        "another"
-    ],
-    "off_the_coast": [
-        "of",
-        "off",
-        "otc",
-        "coast"
-    ],
-    "peninsula": [
-        "pn",
-        "peni",
-        "pen",
-        "penin"
-    ],
-    "pat's_pond": [
-        "pp",
-        "pond",
-        "ppond",
-        "pats_pond",
-        "pats"
-    ],
-    "geared": [
-        "gd",
-        "gear",
-        "grd",
-        "geard"
-    ],
-    "underground": [
-        "ug",
-        "under",
-        "ground"
-    ],
-    "cargo": [
-        "cg",
-        "cgo",
-        "car",
-        "go"
-    ],
-    "mesa": [
-        "ms"
-    ],
-    "x_factor": [
-        "xf",
-        "xfac",
-        "factor"
-    ],
-    "sunken_columns": [
-        "sc",
-        "sunk",
-        "sunken",
-        "s_col"
-    ],
-    "midnight_mansion": [
-        "mn",
-        "midnight",
-        "mansion"
-    ],
-    "erosion": [
-        "e",
-        "ero"
-    ],
-    "dark_path": [
-        "dp"
-    ],
-    "castle_revenge": [
-        "ca",
-        "revenge"
-    ],
-    "ancient_portal": [
-        "ap",
-        "ap_physics"
-    ],
-    "last_resort": [
-        "lr",
-        "last",
-        "last_remote"
-    ],
-    "enchanted_glade": [
-        "eg",
-        "glade",
-        "eglade"
-    ],
-    "sunset_gulch": [
-        "sg",
-        "gulch",
-        "sunset"
-    ]
+    "cornfield": ["cf", "corn", "field"],
+    "spillway": ["sw", "spill", "way"],
+    "high_finance": ["hf", "hi_fi", "finance", "fin", "high"],
+    "another_brick": ["ab", "abrick", "another"],
+    "off_the_coast": ["of", "off", "otc", "coast"],
+    "peninsula": ["pn", "peni", "pen", "penin"],
+    "pat's_pond": ["pp", "pond", "ppond", "pats_pond", "pats"],
+    "geared": ["gd", "gear", "grd", "geard"],
+    "underground": ["ug", "under", "ground"],
+    "cargo": ["cg", "cgo", "car", "go"],
+    "mesa": ["ms"],
+    "x_factor": ["xf", "xfac", "factor"],
+    "sunken_columns": ["sc", "sunk", "sunken", "s_col"],
+    "midnight_mansion": ["mn", "midnight", "mansion"],
+    "erosion": ["e", "ero"],
+    "dark_path": ["dp"],
+    "castle_revenge": ["ca", "revenge"],
+    "last_resort": ["lr", "last", "last_remote"],
+    "enchanted_glade": ["eg", "glade", "eglade"],
+    "sunset_gulch": ["sg", "gulch", "sunset"],
+    "party_parade": ["pa", "pap", "papa"],
+    "mushroom_grotto": ["mg", "mushroom", "shroom"]
 }

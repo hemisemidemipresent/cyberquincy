@@ -21,7 +21,7 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     const mapArg = interaction.options.getString('map');
-    const canonicalMap = Aliases.getCanonicalForm(mapArg);
+    const canonicalMap = Aliases.getCanonicalForm(mapArg, Aliases.MAP);
 
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 

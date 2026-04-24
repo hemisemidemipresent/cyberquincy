@@ -48,9 +48,9 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 
 The bot accepts bloons input from a wide variety of sources, and as a result has many aliases for different towers, heroes, maps, bloons, difficulties, gamemodes, geraldo shop items, etc...
 
-The current system is set up in a way that no two _things_ can have the same alias as each other. This has often caused great anguish among some people wanting aliases like `dd` or `dc` to be both aliases of the map and the tower. With the introduction of slash commands, it is now possible to use different options to give context to different input, theoretically making "multi-aliases" work. However, in the past, when text-based input was the only way to call bots, this sort of ambiguity was not acceptable, and the alias system was not built in mind to accept these sorts of ambiguity. As a result, the current alias system still relies on the uniqueness of aliases.
+<!--The current system is set up in a way that no two _things_ can have the same alias as each other. This has often caused great anguish among some people wanting aliases like `dd` or `dc` to be both aliases of the map and the tower. With the introduction of slash commands, it is now possible to use different options to give context to different input, theoretically making "multi-aliases" work. However, in the past, when text-based input was the only way to call bots, this sort of ambiguity was not acceptable, and the alias system was not built in mind to accept these sorts of ambiguity. As a result, the current alias system still relies on the uniqueness of aliases.
 
-TL;DR: In the past ambiguity was unacceptable and the changes needed to be made to allow "multi-aliases" are a bit too fundamental to just do it
+TL;DR: In the past ambiguity was unacceptable and the changes needed to be made to allow "multi-aliases" are a bit too fundamental to just do it-->
 
 There are three main types of aliases dealt within the code base:
 
@@ -63,4 +63,4 @@ There are three main types of aliases dealt within the code base:
 
 The final special case is that Gwendolin is just `gwen`/`Gwen` in all three types
 
-For more information, see `alias-repository.js`
+For more information, see `alias-repository.js` and `./aliases/README.md`

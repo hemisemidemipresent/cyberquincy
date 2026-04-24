@@ -1,15 +1,6 @@
 {
-    "moon_landing": [
-        "ml",
-        "moon",
-        "landing"
-    ],
-    "cracked": [
-        "cr",
-        "ck",
-        "crkd",
-        "crack"
-    ],
+    "moon_landing": ["ml", "moon", "landing"],
+    "cracked": ["cr", "ck", "crkd", "crack"],
     "kartsndarts": [
         "kd",
         "kar",
@@ -19,102 +10,27 @@
         "kartsn",
         "knd"
     ],
-    "firing_range": [
-        "fr",
-        "fir",
-        "firing"
-    ],
-    "adora's_temple": [
-        "at",
-        "atemple",
-        "adora's"
-    ],
-    "downstream": [
-        "ds",
-        "down"
-    ],
-    "streambed": [
-        "sb",
-        "stream"
-    ],
-    "spring_spring": [
-        "ss",
-        "spring"
-    ],
-    "spice_islands": [
-        "si",
-        "spice"
-    ],
-    "bazaar": [
-        "bz",
-        "baz"
-    ],
-    "haunted": [
-        "ha",
-        "haunt"
-    ],
-    "chutes": [
-        "ch",
-        "chut"
-    ],
-    "rake": [
-        "r",
-        "rk",
-        "rke"
-    ],
-    "encrypted": [
-        "en",
-        "crypt",
-        "encrypt"
-    ],
-    "balance": [
-        "ba",
-        "balanced",
-        "bal"
-    ],
-    "bloonarius_prime": [
-        "blp",
-        "bloonarius",
-        "bprime"
-    ],
-    "quiet_street": [
-        "qs",
-        "quiet"
-    ],
-    "quarry": [
-        "qy"
-    ],
-    "covered_garden": [
-        "ga",
-        "covered",
-        "garden",
-        "cgar"
-    ],
-    "polyphemus": [
-        "py",
-        "poly"
-    ],
-    "water_park": [
-        "wa",
-        "wpark"
-    ],
-    "sulfur_springs": [
-        "su",
-        "sulfur",
-        "sulphur",
-        "sulphur_springs"
-    ],
-    "protect_the_yacht": [
-        "yt",
-        "yacht",
-        "mr_beast"
-    ],
-    "luminous_cove": [
-        "lc",
-        "luminous",
-        "cove",
-        "lumi",
-        "lum",
-        "lcove"
-    ]
+    "firing_range": ["fr", "fir", "firing"],
+    "adora's_temple": ["at", "atemple", "adora's"],
+    "downstream": ["ds", "down"],
+    "streambed": ["sb", "stream"],
+    "spring_spring": ["ss", "spring"],
+    "spice_islands": ["si", "spice"],
+    "bazaar": ["bz", "baz"],
+    "haunted": ["ha", "haunt"],
+    "chutes": ["ch", "chut"],
+    "rake": ["r", "rk", "rke"],
+    "encrypted": ["en", "crypt", "encrypt"],
+    "balance": ["ba", "balanced", "bal"],
+    "bloonarius_prime": ["blp", "bloonarius", "bprime"],
+    "quiet_street": ["qs", "quiet"],
+    "quarry": ["qy"],
+    "covered_garden": ["ga", "covered", "garden", "cgar"],
+    "polyphemus": ["py", "poly"],
+    "water_park": ["wa", "wpark"],
+    "sulfur_springs": ["su", "sulfur", "sulphur", "sulphur_springs"],
+    "protect_the_yacht": ["yt", "yacht", "mr_beast"],
+    "ancient_portal": ["ap", "ap_physics"],
+    "luminous_cove": ["lc", "luminous", "cove", "lumi", "lum", "lcove"],
+    "lost_crevasse": ["lcr", "lost"]
 }

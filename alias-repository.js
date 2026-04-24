@@ -4,6 +4,14 @@ const gHelper = require('./helpers/general.js');
 const filesHelper = require('./helpers/files.js');
 
 class AliasRepository extends Array {
+    constructor() {
+        super();
+        // initializes alias "supergroup" enums
+        // string values are purely used for comparison
+        this.MAP = "MAP/MAP_DIFFICULTY";
+        this.TOWER = "TOWER/HERO/GERALDO_SHOP";
+    }
+
     ////////////////////////////////////////////////////
     // Configuration/Initialization
     ////////////////////////////////////////////////////
@@ -117,7 +125,7 @@ class AliasRepository extends Array {
             // Remove duplicates, maintaining alias order
             ag.aliases = ag.aliases.filter((v, i, a) => a.indexOf(v) === i);
             // Make sure that none of these aliases overlap with other alias sets
-            this.preventSharedAliases(ag);
+            // this.preventSharedAliases(ag);
         } catch (e) {
             if (e instanceof AliasError) {
                 console.log(e.message);
@@ -125,6 +133,13 @@ class AliasRepository extends Array {
                 console.log(e.name);
             }
         }
+        // assign supergroup
+        if (ag.sourcefile.includes("towers") || ag.sourcefile.includes("heroes") || ag.sourcefile.includes("geraldo"))
+            ag.supergroup = this.TOWER;
+
+        else if (ag.sourcefile.includes("maps") || ag.sourcefile.includes("map-difficulties"))
+            ag.supergroup = this.MAP;
+
         this.push(ag);
     }
 
@@ -224,32 +239,42 @@ class AliasRepository extends Array {
     ////////////////////////////////////////////////////
 
     // Converts a member of an alias group to its canonical form
-    getCanonicalForm(aliasMember) {
+    getCanonicalForm(aliasMember, supergroup) {
         if (!aliasMember) return null;
         aliasMember = aliasMember.replace(/ /g, '_');
-        let ag = this.getAliasGroup(aliasMember.toLowerCase());
+        let ag = this.getAliasGroup(aliasMember.toLowerCase(), supergroup);
         if (ag) return ag.canonical;
         else return null;
     }
 
-    // Returns a single key-values pair alias group, `{canonical: [aliases]}`,
-    // in which aliasMember is found
-    getAliasGroup(aliasMember) {
+    // Returns a single key-values pair alias group, `{canonical: [aliases]}`, in which aliasMember is found
+    // if it is found in multiple supergroups and a supergroup is not specified,
+    // either return the first one or return an array (behavior controlled by 3rd argument `returnAll`)
+    getAliasGroup(aliasMember, supergroup, returnAll) {
         let ags = this.filter(
             (ag) =>
-                ag.canonical == aliasMember || ag.aliases.includes(aliasMember)
+                ag.canonical == aliasMember || ag.aliases.includes(aliasMember) && (ag.supergroup == supergroup || !supergroup)
         );
         if (!ags || ags.length == 0) {
             return null;
         } else if (ags.length == 1) {
             return ags[0];
         } else {
+            if (!supergroup) {
+                if (returnAll) return ags; // used in /alias
+
+                // maybe throw instead?
+                console.trace(`getAliasGroup(${aliasMember}) belongs to ambiguous supergroups. Please specify a supergroup.`);
+                return ags[0]; // idk just return the first one
+            }
+            // a supergroup is specified and yet there are duplicates...
             throw (
-                `Multiple alises groups found sharing a given alias member` +
-                `(something went horribly wrong): ${ags.map(
-                    (ag) => ag.canonical
-                )}`
+                `Multiple alias groups within a supergroup found sharing a given alias member` +
+                    `(something went horribly wrong): ${ags.map(
+                        (ag) => ag.canonical
+                    )}`
             );
+
         }
     }
 

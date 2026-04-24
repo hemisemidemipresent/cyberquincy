@@ -45,7 +45,7 @@ async function execute(interaction) {
     );
 
     await interaction.deferReply();
-    
+
     const entityType = parsed.tower ? Aliases.toIndexNormalForm(parsed.tower) : null;
     const entity = parsed.tower_upgrade ? Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade) : null;
     const hero = parsed.hero ? Aliases.toIndexNormalForm(parsed.hero) : null;
@@ -61,7 +61,7 @@ async function execute(interaction) {
             count: '100'
         }).filter(([,value]) => value !== null && value !== undefined)
     );
-    
+
     if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
         fetchParams.set('og', '1');
         const resJson = await fetch2mp(fetchParams);
@@ -163,7 +163,7 @@ function parseMap(interaction) {
     const mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
     const map = interaction.options.getString('map');
     if (map) {
-        const canonicalMap = Aliases.getCanonicalForm(map);
+        const canonicalMap = Aliases.getCanonicalForm(map, Aliases.MAP);
         if (canonicalMap) {
             return CommandParser.parse([canonicalMap], mapParser);
         } else {

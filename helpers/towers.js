@@ -5,7 +5,7 @@ const costs_b2 = require('../jsons/costs_b2.json');
 
 function towerUpgradeToTower(towerUpgrade) {
     if (!towerUpgrade) return null;
-    canonical = Aliases.getCanonicalForm(towerUpgrade);
+    canonical = Aliases.getCanonicalForm(towerUpgrade, Aliases.TOWER);
     if (!canonical) return null;
     return canonical.split('#')[0];
 }
@@ -131,7 +131,7 @@ function allGroupTowerCanonicals(group) {
 }
 
 function allWaterTowers() {
-    return ['sub', 'bucc', 'brick'].map((t) => Aliases.getCanonicalForm(t));
+    return ['sub', 'bucc', 'brick'].map((t) => Aliases.getCanonicalForm(t, Aliases.TOWER));
 }
 
 function isWaterEntity(entity) {
@@ -189,7 +189,7 @@ function towerUpgradeToIndexNormalForm(upgrade) {
 
 function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
     // Re-assign tower to canonical and ensure that it exists and is a tower
-    if (!(tower = Aliases.getCanonicalForm(tower)) || !allTowers().includes(tower)) {
+    if (!(tower = Aliases.getCanonicalForm(tower, Aliases.TOWER)) || !allTowers().includes(tower)) {
         throw 'First argument must be a tower';
     }
 

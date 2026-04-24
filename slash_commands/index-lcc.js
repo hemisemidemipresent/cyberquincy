@@ -16,7 +16,7 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     const mapArg = interaction.options.getString('map');
-    const canonicalMap = Aliases.getCanonicalForm(mapArg);
+    const canonicalMap = Aliases.getCanonicalForm(mapArg, Aliases.MAP);
 
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 
@@ -55,8 +55,8 @@ async function lcc(map) {
     results = results.sort((a, b) => a.money - b.money);
 
     // cheapest and latest version are the same
-    if (result.filekey == results[0].filekey) { 
-        challengeEmbed.setFooter({ text: 'This is the cheapest combo' }); 
+    if (result.filekey == results[0].filekey) {
+        challengeEmbed.setFooter({ text: 'This is the cheapest combo' });
         return [challengeEmbed];
     }
 

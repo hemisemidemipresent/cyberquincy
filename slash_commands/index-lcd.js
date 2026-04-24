@@ -16,7 +16,7 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     const mapArg = interaction.options.getString('map');
-    const canonicalMap = Aliases.getCanonicalForm(mapArg);
+    const canonicalMap = Aliases.getCanonicalForm(mapArg, Aliases.MAP);
 
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 
@@ -34,7 +34,7 @@ async function lcd(map) {
     const searchParams = new URLSearchParams({ map, count: 100, pending: 0 });
 
     let { results } = await fetchlcd(searchParams);
-    
+
     const result = results[0];
 
     if (!result) return new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LCD found for ${map}`).setColor(red);
@@ -58,7 +58,7 @@ async function lcd(map) {
 async function fetchlcd(searchParams) {
     let res = await fetch('https://btd6index.win/fetch-lcd?' + searchParams);
     let resJson = await res.json();
-    if ('error' in resJson) 
+    if ('error' in resJson)
         throw new Error(resJson.error);
     return resJson;
 }

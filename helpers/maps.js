@@ -28,7 +28,7 @@ function allNonWaterMaps() {
         'W',
         'XF',
         'MN',
-    ].map((m) => Aliases.getCanonicalForm(m.toLowerCase()));
+    ].map((m) => Aliases.getCanonicalForm(m.toLowerCase()), Aliases.MAP);
 }
 
 function allMapsFromMapDifficulty(mapDifficulty) {

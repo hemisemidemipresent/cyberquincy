@@ -16,7 +16,8 @@ const builder = new SlashCommandBuilder()
                 { name: 'Vortex: Deadly Master of Air', value: 'Vortex' },
                 { name: 'Dreadbloon: Armored Behemoth', value: 'Dreadbloon' },
                 { name: 'Reality Warper Phayze', value: 'Phayze' },
-                { name: 'Blastapopoulos: Demon of the Core', value: 'Blastapopoulos' }
+                { name: 'Blastapopoulos: Demon of the Core', value: 'Blastapopoulos' },
+                { name: 'Diamondback: The Village Devourer', value: 'Diamondback' }
             )
             .setRequired(true)
     )

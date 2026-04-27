@@ -351,11 +351,11 @@ class AliasRepository extends Array {
     // Arg looks like `arg` or `argp1#argp2`
     // This converts each arg part to its canonical form.
     // `spact#025` gets converted to `spike_factory#025` for example.
-    canonicizeArg(arg) {
+    canonicizeArg(arg, supergroup) {
         if (arg.startsWith('r#')) return Aliases.getCanonicalForm(arg) || arg; // for r#100 race args
         return arg
             .split('#')
-            .map((t) => Aliases.getCanonicalForm(t) || t)
+            .map((t) => Aliases.getCanonicalForm(t, supergroup) || t)
             .join('#');
     }
 }

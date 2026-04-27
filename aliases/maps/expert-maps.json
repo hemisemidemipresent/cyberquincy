@@ -1,24 +1,24 @@
 {
-  "infernal": ["if", "i", "inf"],
-  "workshop": ["w", "ws", "wk", "work", "shop"],
-  "quad": ["qd", "kwad"],
-  "muddy_puddles": ["mp", "muddles", "mpuddles", "muddy", "cuddles"],
-  "#ouch": ["ou", "#o", "o", "couch", "ouch"],
-  "bloody_puddles": ["bp", "bloodles", "bloody"],
-  "flooded_valley": ["fv", "flooded", "valley"],
-  "dark_castle": ["dc", "dca", "dank", "dank_castle", "castle"],
-  "ravine": ["rv", "rav"],
-  "blons": ["bl", "corner", "slons"],
-  "sanctuary": ["sa", "sanc"],
-  "dark_dungeons": [
-    "dd",
-    "dark",
-    "dungeon",
-    "dungeons",
-    "dark_dungeon",
-    "d&d",
-    "dnd"
-  ],
-  "glacial_trail": ["gt", "glac", "glacier"],
-  "tricky_tracks": ["tt", "trt", "ttr", "trtr"]
+    "infernal": ["if", "i", "inf"],
+    "workshop": ["w", "ws", "wk", "work", "shop"],
+    "quad": ["qd", "kwad"],
+    "muddy_puddles": ["mp", "muddles", "mpuddles", "muddy", "cuddles"],
+    "#ouch": ["ou", "#o", "o", "couch", "ouch"],
+    "bloody_puddles": ["bp", "bloodles", "bloody"],
+    "flooded_valley": ["fv", "flooded", "valley"],
+    "dark_castle": ["dc", "dca", "dank", "dank_castle", "castle"],
+    "ravine": ["rv", "rav"],
+    "blons": ["bl", "corner", "slons"],
+    "sanctuary": ["sa", "sanc"],
+    "dark_dungeons": [
+        "dd",
+        "dark",
+        "dungeon",
+        "dungeons",
+        "dark_dungeon",
+        "d&d",
+        "dnd"
+    ],
+    "glacial_trail": ["gt", "glac", "glacier"],
+    "tricky_tracks": ["tt", "trt", "ttr", "trtr"]
 }

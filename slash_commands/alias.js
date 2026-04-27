@@ -10,27 +10,40 @@ builder = new SlashCommandBuilder()
     );
 
 async function execute(interaction) {
-    const alias = interaction.options.getString('alias').replace(/ /g, '_');
-    const canonicizedAlias = Aliases.canonicizeArg(alias);
-    const aliasSet = Aliases.getAliasSet(canonicizedAlias);
+    let alias = interaction.options.getString('alias').replace(/ /g, '_');
+    // const canonicizedAlias = Aliases.canonicizeArg(alias);
+    // const aliasSet = Aliases.getAliasSet(canonicizedAlias);
+
+    let aliasGroups = Aliases.getAliasGroup(alias, null, true);
 
     let embed;
-    if (aliasSet) {
-        // Don't show all separator variations of every alias; just show the variation entered in the file
-        const simplifiedAliases = [];
-        const displayedAliases = [];
-        aliasSet.forEach((a) => {
-            const simplifiedAlias = a.replace(/_|-/g, '');
-            if (!simplifiedAliases.includes(simplifiedAlias)) {
-                simplifiedAliases.push(simplifiedAlias);
-                displayedAliases.push(a);
-            }
-        });
 
+    if (!aliasGroups) {
+        embed = new Discord.EmbedBuilder().setColor(cyber).setTitle(`No Aliases Found for \`${alias}\``);
+    } else {
+        let description = "";
+
+        if (!Array.isArray(aliasGroups)) {
+            aliasGroups = [aliasGroups];
+        }
+        aliasGroups.forEach((aliasGroup) => {
+        // Don't show all separator variations of every alias; just show the variation entered in the file
+            const simplifiedAliases = [];
+            const displayedAliases = [];
+            aliasGroup.aliases.forEach((a) => {
+                const simplifiedAlias = a.replace(/_|-/g, '');
+                if (!simplifiedAliases.includes(simplifiedAlias)) {
+                    simplifiedAliases.push(simplifiedAlias);
+                    displayedAliases.push(a);
+                }
+            });
+            console.log(aliasGroup);
+            description += `${aliasGroup.supergroup}:\n${displayedAliases.join(", ")}\n\n`;
+        });
         embed = new Discord.EmbedBuilder()
             .setColor(cyber)
             .setTitle(`Aliases of \`${alias}\``)
-            .setDescription(displayedAliases.join(', '))
+            .setDescription(description)
             .addFields([
                 {
                     name: 'Note',
@@ -39,9 +52,11 @@ async function execute(interaction) {
                         '• Most slash commands even allow you to replace these separators with spaces, as in `spirit of the forest`'
                 }
             ]);
-    } else {
-        embed = new Discord.EmbedBuilder().setColor(cyber).setTitle(`No Aliases Found for \`${alias}\``);
+
+
     }
+
+
 
     embed.addFields([{ name: 'Want a new alias?', value: `suggest them [here](${discord})` }]);
 

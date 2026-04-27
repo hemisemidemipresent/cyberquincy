@@ -1,15 +1,7 @@
 {
     "moon_landing": ["ml", "moon", "landing"],
     "cracked": ["cr", "ck", "crkd", "crack"],
-    "kartsndarts": [
-        "kd",
-        "kar",
-        "kart",
-        "karts",
-        "karts_n_darts ",
-        "kartsn",
-        "knd"
-    ],
+    "kartsndarts": ["kd", "kar", "kart", "karts", "karts_n_darts", "knd"],
     "firing_range": ["fr", "fir", "firing"],
     "adora's_temple": ["at", "atemple", "adora's"],
     "downstream": ["ds", "down"],
@@ -30,7 +22,7 @@
     "water_park": ["wa", "wpark"],
     "sulfur_springs": ["su", "sulfur", "sulphur", "sulphur_springs"],
     "protect_the_yacht": ["yt", "yacht", "mr_beast"],
-    "ancient_portal": ["ap", "ap_physics"],
+    "ancient_portal": ["ap", "ap_physics", "aportal", "portal"],
     "luminous_cove": ["lc", "luminous", "cove", "lumi", "lum", "lcove"],
     "lost_crevasse": ["lcr", "lost"]
 }

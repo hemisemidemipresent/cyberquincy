@@ -9,7 +9,7 @@
 
     "010": ["bigger_jets", "jets"],
     "020": ["ifr"],
-    "030": ["downdraft", "ddraft", "draft"],
+    "030": ["downdraft", "dd", "ddraft", "draft"],
     "040": ["support_chinook", "chinook", "support", "chin"],
     "050": ["special_poperations", "marine", "mar", "spop"],
 

@@ -57,7 +57,6 @@ async function execute(interaction) {
             map,
             person: parsed.person,
             difficulty: parsed.map_difficulty,
-            pending: '0',
             count: '100'
         }).filter(([,value]) => value !== null && value !== undefined)
     );
@@ -383,12 +382,14 @@ async function display2MPFilterAll(interaction, fetchParams, parsed) {
         ['Tower', 'Map', 'Person', 'Link'].filter(col => !excludedColumns.includes(col)),
         completion => {
             const boldOg = (str) => completion.og ? `**${str}**` : str;
+            const italicizePending = (str) => completion.pending ? `_${str}_` : str;
+            const addTextDecoration = (str) => italicizePending(boldOg(str));
 
             return {
-                'Tower': boldOg(completion.entity),
-                'Map': boldOg(completion.map),
-                'Person': boldOg(completion.person),
-                'Link': boldOg(genCompletionLink(completion))
+                'Tower': addTextDecoration(completion.entity),
+                'Map': addTextDecoration(completion.map),
+                'Person': addTextDecoration(completion.person),
+                'Link': addTextDecoration(genCompletionLink(completion))
             };
         },
         embed => {

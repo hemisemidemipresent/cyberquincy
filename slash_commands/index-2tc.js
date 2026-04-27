@@ -52,7 +52,7 @@ function parseEntity(interaction, num) {
     const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
     const entity = interaction.options.getString(`entity${num}`);
     if (entity) {
-        const canonicalEntity = Aliases.canonicizeArg(entity);
+        const canonicalEntity = Aliases.canonicizeArg(entity, Aliases.TOWER);
         if (canonicalEntity) {
             let parsed = CommandParser.parse([canonicalEntity], entityParser);
             // Alias tier 1 and 2 towers to base tower
@@ -164,6 +164,7 @@ async function execute(interaction) {
     const map = newparsed.map ? Aliases.toIndexNormalForm(newparsed.map) : null;
 
     let og = interaction.options.getBoolean('og');
+    newparsed.og = og;
     if (og) og = og + 0; // cursed way to convert true into 1 (false remains 'false' and not 0 since we don't want to exclude OGs even when false)
 
     // after all that wrangling, construct the search parameters to btd6 index API
@@ -215,6 +216,8 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
         challengeEmbed.addFields([{ name: 'Link', value: Index.genCompletionLink(combo), inline: true }]);
         challengeEmbed.addFields([{ name: 'OG?', value: combo.og ? 'OG' : 'ALT', inline: true }]);
 
+        if (combo.pending) challengeEmbed.setFooter({ text: "This completion is pending verification" });
+
         // add support server link
         challengeEmbed.addFields([{ name: 'Found something wrong?', value: `please report them [here](${discord})` }]);
 
@@ -227,22 +230,21 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
         let resJson = await fetch2tc(OGSearchParams);
         let numOGCompletions = resJson.count;
 
-
         function setOtherDisplayFields(challengeEmbed) {
             challengeEmbed
                 .setTitle(embedTitle(parsed, combos))
                 .setColor(palered);
 
-            if (!includeOnlyOG(parsed)) {
-                if (numOGCompletions == 1) {
-                    challengeEmbed.setFooter({ text: `---\nOG completion bolded` });
-                }
-                if (numOGCompletions > 1) {
-                    challengeEmbed.setFooter({
-                        text: `---\n${numOGCompletions} OG completions bolded`
-                    });
-                }
+            let footerText = "---\n";
+            if (!parsed.og) { // i.e. not exclusively OG completions
+
+                if (numOGCompletions == 1)
+                    footerText += `OG completion bolded\n`;
+                if (numOGCompletions > 1)
+                    footerText += `${numOGCompletions} OG completions bolded\n`;
             }
+            footerText += "Pending completions italicized";
+            challengeEmbed.setFooter({ text: footerText });
         }
 
         const displayFields = getDisplayCols(parsed);
@@ -253,17 +255,21 @@ async function displayCombos(interaction, resJson, parsed, searchParams) {
             completion => {
 
                 const boldOg = (str) => completion.og ? `**${str}**` : str;
+                const italicizePending = (str) => completion.pending ? `_${str}_` : str;
+                const addTextDecoration = (str) => italicizePending(boldOg(str));
 
                 let obj = {};
+
+                // console.log(completion);
 
                 let specifiedTower = parseProvidedDefinedEntities(parsed)[0];
 
                 displayFields.forEach((field) => {
-                    if (field == 'Link') obj.Link = boldOg(Index.genCompletionLink(completion));
-                    if (completion[field]) return obj[field] = boldOg(completion[field]);
+                    if (field == 'Link') obj.Link = addTextDecoration(Index.genCompletionLink(completion));
+                    if (completion[field]) return obj[field] = addTextDecoration(completion[field]);
                     if (field == 'unspecified_tower') {
-                        if (completion.tower1 == specifiedTower) obj.unspecified_tower = boldOg(completion.tower2);
-                        else if (completion.tower2 == specifiedTower) obj.unspecified_tower = boldOg(completion.tower1);
+                        if (completion.tower1 == specifiedTower) obj.unspecified_tower = addTextDecoration(completion.tower2);
+                        else if (completion.tower2 == specifiedTower) obj.unspecified_tower = addTextDecoration(completion.tower1);
                     }
                 });
                 return obj;
@@ -337,10 +343,6 @@ function embedTitleNoCombos(parsed) {
     }
     if (parsed.version) title += `in v${parsed.version} `;
     return title.slice(0, title.length - 1);
-}
-
-function includeOnlyOG(parsed) {
-    return parsed.version || (!parsed.person && !parsed.map && !parsed.map_difficulty);
 }
 
 function parseProvidedEntities(parsed) {

@@ -23,5 +23,8 @@
     "middle_of_the_road": ["mr", "motr", "mother"],
     "tinkerton": ["tk", "tink", "tinker"],
     "spa_pits": ["sp", "spa", "pits"],
-    "three_mines_round": ["tmr", "3mr"]
+    "tar_pits": ["tp", "tar", "tarp"],
+    "three_mines_round": ["tmr", "3mr"],
+    "skull_tweak": ["st"],
+    "party_peak": ["pr"]
 }

@@ -1,12 +1,15 @@
 {
     "dart_monkey": 150000,
-    "boomerang_monkey": 250000,
+    "boomerang_monkey": 375000,
     "ninja_monkey": 500000,
     "monkey_buccaneer": 550000,
-    "engineer_monkey": 650000,
+    "engineer_monkey": 600000,
     "monkey_ace": 900000,
     "wizard_monkey": 800000,
     "monkey_sub": 400000,
     "tack_shooter": 200000,
-    "spike_factory": 750000
+    "spike_factory": 750000,
+    "bomb_shooter": 650000,
+    "druid": 475000,
+    "ice_monkey": 300000
 }

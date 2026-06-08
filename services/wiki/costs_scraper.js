@@ -2,7 +2,8 @@ const fs = require("fs");
 
 async function scrapeCosts() {
     // NOTE: currently as of writing there are "only" 412 upgrades, but if NK keeps adding more and more towers we may need to make 2 requests
-    const URL = "https://www.bloonswiki.com/api.php?action=cargoquery&tables=btd6_upgrades&fields=tower,path,tier,cost&format=json&limit=500";
+    const URL =
+        "https://www.bloonswiki.com/api.php?action=cargoquery&tables=btd6_upgrades&fields=tower,path,tier,cost&format=json&limit=500";
     let response = await fetch(URL);
 
     if (!response.ok) return console.warn("tower upgrade cost scraping failed");
@@ -36,7 +37,8 @@ async function scrapeParagonCosts() {
     const paragons = rawJson?.cargoquery;
     let paragonCosts = JSON.parse(fs.readFileSync("./jsons/paragon_costs.json"));
     paragons.forEach((paragon) => {
-        paragonCosts[Aliases.toAliasNormalForm(paragon.tower)] = paragon.cost;
+        paragon = paragon.title;
+        paragonCosts[Aliases.toAliasNormalForm(paragon.tower)] = parseInt(paragon.cost);
     });
     fs.writeFileSync("./jsons/paragon_costs.json", JSON.stringify(paragonCosts, null, 4));
 

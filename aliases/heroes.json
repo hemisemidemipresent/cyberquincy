@@ -1,119 +1,20 @@
 {
-    "adora": [
-        "ad",
-        "ado",
-        "ador",
-        "dora",
-        "priestess",
-        "odour",
-        "odoura"
-    ],
-    "benjamin": [
-        "dj",
-        "ben",
-        "benj",
-        "benny",
-        "boi",
-        "benjammin",
-        "yeet",
-        "boy"
-    ],
-    "brickell": [
-        "admiral-brickell",
-        "admiral",
-        "brick",
-        "bri"
-    ],
-    "corvus": [
-        "corv",
-        "crv",
-        "crow",
-        "caw"
-    ],
-    "churchill": [
-        "captain-churchill",
-        "chirch",
-        "church",
-        "hill",
-        "captain",
-        "tank",
-        "winston",
-        "cap"
-    ],
-    "etienne": [
-        "et",
-        "eti"
-    ],
-    "ezili": [
-        "voodo",
-        "vm",
-        "ezi",
-        "ezil",
-        "voodoo"
-    ],
-    "geraldo": [
-        "ger",
-        "gerry",
-        "morshu",
-        "gerald"
-    ],
-    "gwen": [
-        "gwendolin",
-        "gwendolyn",
-        "scientist",
-        "gwend",
-        "gwendo",
-        "fire"
-    ],
-    "jones": [
-        "striker_jones",
-        "sj",
-        "striker",
-        "bones",
-        "biker",
-        "stroker"
-    ],
-    "obyn": [
-        "obyn-greenfoot",
-        "obiwan",
-        "obi",
-        "oby",
-        "obeyn"
-    ],
-    "pat": [
-        "pat-fusty",
-        "pf",
-        "fu",
-        "fusty",
-        "fro",
-        "snowman"
-    ],
-    "psi": [
-        "psy",
-        "Ψ",
-        "sigh"
-    ],
-    "quincy": [
-        "q",
-        "quin",
-        "cyberquincy",
-        "quincey",
-        "quinc",
-        "quonc",
-        "cyber",
-        "cq"
-    ],
-    "rosalia": [
-        "ros",
-        "rosa",
-        "rosalina",
-        "lia"
-    ],
-    "sauda": [
-        "saud",
-        "sau"
-    ],
-    "silas": [
-        "sil"
-    ]
+    "adora": ["ad", "ado", "ador", "dora", "priestess", "odour", "odoura"],
+    "benjamin": ["dj", "ben", "benj", "benny", "boi", "benjammin", "yeet", "boy"],
+    "brickell": ["admiral-brickell", "admiral", "brick", "bri"],
+    "corvus": ["corv", "crv", "crow", "caw"],
+    "churchill": ["captain-churchill", "chirch", "church", "hill", "captain", "tank", "winston", "cap"],
+    "etienne": ["et", "eti"],
+    "ezili": ["voodo", "vm", "ezi", "ezil", "voodoo"],
+    "geraldo": ["ger", "gerry", "morshu", "gerald"],
+    "gwen": ["gwendolin", "gwendolyn", "scientist", "gwend", "gwendo", "fire"],
+    "jones": ["striker_jones", "sj", "striker", "bones", "biker", "stroker"],
+    "obyn": ["obyn-greenfoot", "obiwan", "obi", "oby", "obeyn"],
+    "pat": ["pat-fusty", "pf", "fu", "fusty", "fro", "snowman"],
+    "psi": ["psy", "Ψ", "sigh"],
+    "quincy": ["q", "quin", "cyberquincy", "quincey", "quinc", "quonc", "cyber", "cq"],
+    "rosalia": ["ros", "rosa", "rosalina", "lia"],
+    "sauda": ["saud", "sau"],
+    "silas": ["sil"],
+    "dan": ["dan_d'monke", "d'monke"]
 }

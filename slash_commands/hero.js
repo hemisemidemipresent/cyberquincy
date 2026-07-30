@@ -46,37 +46,31 @@ function validateInput(interaction) {
 }
 
 async function embedBloonology(heroName, level, page = 0) {
-    let sentences;
-    let latestVersion;
-    let desc;
+    let version, data;
     try {
-        latestVersion = await Bloonology.heroLatestVersion(heroName);
-        if (heroName == "corvus" && level >= 5) {
-            sentences = await Bloonology.corvusBloonology(level);
-            desc = sentences[0] + "\n\n" + sentences[1][page] + "\n\n" + sentences[2];
-        } else {
-            sentences = await Bloonology.heroNameToBloonologyList(heroName);
-            desc = level ? sentences[level - 1] : sentences[sentences.length - 1].trim();
-        }
-    } catch {
+        ({ version, data } = level
+            ? await Bloonology.heroLevelToBloonology(heroName, level, page)
+            : await Bloonology.heroSummary(heroName));
+    } catch (e) {
+        console.error(`Error fetching bloonology for ${heroName} ${level}: ${e}`);
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
 
-    if (typeof desc != 'string') {
+    if (typeof data != 'string') {
         return new Discord.EmbedBuilder().setColor(red).setTitle('The bloonology datapiece is missing');
     }
 
     let title = level
         ? `${Aliases.toIndexNormalForm(heroName)} (Level-${level})`
         : `${Aliases.toIndexNormalForm(heroName)} (All Levels)`;
-    if (latestVersion !== null) title += ` (v${latestVersion})`;
+    if (version !== null) title += ` (v${version})`;
 
     // overflow
     // TODO: Check for total chars > 6000
     let fields = [];
     let descForDescription = '';
-    if (desc.length > 4096) {
-        const descLines = desc.split('\n');
+    if (data.length > 4096) {
+        const descLines = data.split('\n');
         let i = 0;
         for (; i < descLines.length; i++) {
             // add to description until char limit is reached
@@ -95,7 +89,7 @@ async function embedBloonology(heroName, level, page = 0) {
             }
         }
     } else {
-        descForDescription = desc;
+        descForDescription = data;
     }
 
     fields.push({ name: 'Incorrect/out of date information?', value: `please report them [here](${discord})` });

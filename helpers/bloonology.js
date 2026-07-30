@@ -76,53 +76,25 @@ const HERO_NAME_TO_BLOONOLOGY_LINK = {
 const RELIC_BLOONOLOGY_LINK = 'https://pastebin.com/raw/RMqJQApE';
 const BLOONOLOGY_INDENT = 6;
 const BLOONOLOGY_BASE_CHANGE_HEADERS = [
-    "__changes from 0-0-0__",
+    "__Changes from 0-0-0__",
     "changes from 000:"
 ];
 const BLOONOLOGY_TIER_CHANGE_HEADERS = [
-    "__changes from previous tier__",
+    "__Changes from Previous Tier__",
     "changes from previous tier:"
 ];
 const BLOONOLOGY_CROSSPATH_CHANGE_HEADERS = [
-    "__crosspath changes__",
+    "__Crosspath Changes__",
     "__crosspath benefits__",
     "crosspath benefits:"
 ];
-
-function towerNameToBloonologyLink(towerName, isB2) {
-    let array = isB2 ? TOWER_NAME_TO_BLOONOLOGY_LINK_B2 : TOWER_NAME_TO_BLOONOLOGY_LINK;
-    return array[towerName];
-}
-
-async function towerNameToBloonologyList(towerName, isB2) {
-    let link = towerNameToBloonologyLink(towerName, isB2);
-    res = await axios.get(link);
-    let body = res.data;
-    return body.split(/(?=^\s*[0-5]{3}\s*$)/m).filter(x => isValidUpgradeSet(x.substr(0, 3)));
-}
-
-async function towerLatestVersion(towerName, isB2) {
-    let link = towerNameToBloonologyLink(towerName, isB2);
-    res = await axios.get(link);
-    let body = res.data;
-    version = body.match(/^Version: ([0-9.]*)$/m);
-    return version === null ? null : version[1];
-}
-
-async function heroLatestVersion(heroName) {
-    let link = HERO_NAME_TO_BLOONOLOGY_LINK[heroName];
-    res = await axios.get(link);
-    let body = res.data;
-    version = body.match(/^Version: ([0-9.]*)$/m);
-    return version === null ? null : version[1];
-}
 
 function cleanBloonology(description) {
     description = description.trim();
     description = description.replace(/\r?\n|\r/g, "\n"); // Normalize line endings
     description = description.replace(/[\u2000-\u200F\u202A-\u202F]/g, ""); // Remove invisible characters
     description = description.replace(/\t/g, " ".repeat(BLOONOLOGY_INDENT));
-    let firstIndent = description.match(/^( +).*$/m);
+    let firstIndent = description.match(/^( +)\S/m);
     let indentSize = BLOONOLOGY_INDENT;
     if (firstIndent) indentSize = firstIndent[1].length;
     return description.split("\n").map((line) => { // Normalize indentation
@@ -137,157 +109,205 @@ function cleanBloonology(description) {
     }).join("\n");
 }
 
-async function towerUpgradeToFullBloonology(towerName, upgrade, isB2) {
-    let list = await towerNameToBloonologyList(towerName, isB2);
-    return cleanBloonology(list.find(x => x.substr(0, 3) === upgrade).substr(3));
+async function towerBloonologyData(towerName, isB2) {
+    const link = isB2 ? TOWER_NAME_TO_BLOONOLOGY_LINK_B2[towerName] : TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
+    const res = await axios.get(link);
+    const version = res.data.match(/^\s*Version: ([0-9.]+)\s*$/im);
+    const data = {};
+    let upgrade, key;
+
+    for (const line of res.data.split(/\r?\n|\r/g)) {
+        const match = line.match(/^\s*([0-9]{3})\s*$/);
+
+        if (match && isValidUpgradeSet(match[1])) {
+            upgrade = match[1];
+            key = "description";
+            data[upgrade] = { description: "", baseChange: "", tierChange: "", crosspathChange: "" };
+        } else if (upgrade) {
+            if (BLOONOLOGY_BASE_CHANGE_HEADERS.some(header => line.trim().toLowerCase() === header.toLowerCase())) {
+                key = "baseChange";
+            } else if (BLOONOLOGY_TIER_CHANGE_HEADERS.some(header => line.trim().toLowerCase() === header.toLowerCase())) {
+                key = "tierChange";
+            } else if (BLOONOLOGY_CROSSPATH_CHANGE_HEADERS.some(header => line.trim().toLowerCase() === header.toLowerCase())) {
+                key = "crosspathChange";
+            } else {
+                data[upgrade][key] += line + "\n";
+            }
+        }
+    }
+
+    for (const upgrade in data) {
+        for (const key in data[upgrade]) {
+            data[upgrade][key] = cleanBloonology(data[upgrade][key]);
+        }
+    }
+
+    return { version: version ? version[1] : null, data: data };
+}
+
+async function heroBloonologyData(heroName) {
+    const res = await axios.get(HERO_NAME_TO_BLOONOLOGY_LINK[heroName]);
+    const version = res.data.match(/^\s*Version: ([0-9.]+)\s*$/im);
+    const [levels, summary] = res.data.split(/^\s*all levels\s*$/im);
+    const data = {};
+    let level;
+
+    for (const line of levels.split(/\r?\n|\r/g)) {
+        const match = line.match(/^\s*level\s+([1-9]|1[0-9]|20)\s*$/i);
+
+        if (match) {
+            level = match[1];
+            data[level] = "";
+        } else if (level) {
+            data[level] += line + "\n";
+        }
+    }
+
+    for (const level in data) {
+        data[level] = cleanBloonology(data[level]);
+    }
+
+    return { version: version ? version[1] : null, data: data, summary: summary ? cleanBloonology(summary) : null };
 }
 
 async function towerUpgradesToFullBloonology(towerName, upgrades, isB2) {
-    let list = await towerNameToBloonologyList(towerName, isB2);
-    return upgrades.map(upgrade => cleanBloonology(list.find(x => x.substr(0, 3) === upgrade).substr(3)));
-}
+    if (!Array.isArray(upgrades)) {
+        upgrades = [upgrades];
+    }
+    const { version, data } = await towerBloonologyData(towerName, isB2);
+    const bloonology = {};
 
-function splitBloonology(description) {
-    let ret = ["", "", "", ""]; // Main, Base, Tier, Crosspath
-    let ind = 0;
-    for (let line of description.split("\n")) {
-        if (BLOONOLOGY_BASE_CHANGE_HEADERS.includes(line.trim().toLowerCase())) {
-            ind = 1;
-        } else if (BLOONOLOGY_TIER_CHANGE_HEADERS.includes(line.trim().toLowerCase())) {
-            ind = 2;
-        } else if (BLOONOLOGY_CROSSPATH_CHANGE_HEADERS.includes(line.trim().toLowerCase())) {
-            ind = 3;
-        } else {
-            ret[ind] += line + "\n";
+    if (towerName === "beast_handler") {
+        return { version: version, data: beastHandlerBloonology(data, upgrades) };
+    }
+
+    for (const upgrade of upgrades) {
+        bloonology[upgrade] = data[upgrade].description.trim();
+        if (data[upgrade].baseChange) {
+            bloonology[upgrade] += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0] + "\n" + data[upgrade].baseChange;
+        }
+        if (data[upgrade].tierChange) {
+            bloonology[upgrade] += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[upgrade].tierChange;
+        }
+        if (data[upgrade].crosspathChange) {
+            bloonology[upgrade] += "\n\n" + BLOONOLOGY_CROSSPATH_CHANGE_HEADERS[0] + "\n" + data[upgrade].crosspathChange;
         }
     }
-    return ret.map(x => x.trim());
-}
 
-async function towerUpgradeToMainBloonology(towerName, upgrade, isB2, summary = false) {
-    let description = await towerUpgradeToFullBloonology(towerName, upgrade, isB2);
-    description = splitBloonology(description)[0];
-    if (summary) {
-        return description
-            .replace(/\u200B/g, "")
-            .split("\n")
-            .map(x => x.trim())
-            .filter(x => x.length)
-            .join(" ♦ ");
+    if (upgrades.length === 1) {
+        return { version: version, data: bloonology[upgrades[0]] };
     }
-    return description;
+    return { version: version, data: bloonology };
 }
 
-async function towerUpgradesToMainBloonology(towerName, upgrades, isB2, summary = false) {
-    let descriptions = await towerUpgradesToFullBloonology(towerName, upgrades, isB2);
-    descriptions = descriptions.map(x => splitBloonology(x)[0]);
-    if (summary) {
-        return descriptions.map(
-            description => description
+async function towerUpgradesToSplitBloonology(towerName, upgrades, isB2, summary = false) {
+    if (!Array.isArray(upgrades)) {
+        upgrades = [upgrades];
+    }
+    const { version, data } = await towerBloonologyData(towerName, isB2);
+    const bloonology = {};
+
+    for (const upgrade of upgrades) {
+        const src = data[upgrade];
+        bloonology[upgrade] = {
+            description: src.description,
+            baseChange: src.baseChange,
+            tierChange: ["100", "010", "001"].includes(upgrade) ? src.baseChange : src.tierChange,
+            crosspathChange: src.crosspathChange
+        };
+
+        if (summary) {
+            bloonology[upgrade].baseChange = bloonology[upgrade].baseChange
                 .replace(/\u200B/g, "")
                 .split("\n")
-                .map(x => x.trim())
-                .filter(x => x.length)
-                .join(" ♦ ")
-        );
-    }
-    return descriptions;
-}
-
-async function towerUpgradeToBaseChangeBloonology(towerName, upgrade, isB2, summary = false) {
-    let description = await towerUpgradeToFullBloonology(towerName, upgrade, isB2);
-    description = splitBloonology(description)[1];
-    if (summary) {
-        return description
-            .replace(/\u200B/g, "")
-            .split("\n")
-            .map(x => "⟴ " + x.trim())
-            .join("\n");
-    }
-    return description;
-}
-
-async function towerUpgradesToBaseChangeBloonology(towerName, upgrades, isB2, summary = false) {
-    let descriptions = await towerUpgradesToFullBloonology(towerName, upgrades, isB2);
-    descriptions = descriptions.map(x => splitBloonology(x)[1]);
-    if (summary) {
-        return descriptions.map(
-            description => description
+                .map(x => "⟴ " + x.trim().replace(/^-\s*/, ""))
+                .join("\n");
+            bloonology[upgrade].tierChange = bloonology[upgrade].tierChange
                 .replace(/\u200B/g, "")
                 .split("\n")
-                .map(x => "⟴ " + x.trim())
-                .join("\n")
-        );
-    }
-    return descriptions;
-}
-
-async function towerUpgradeToTierChangeBloonology(towerName, upgrade, isB2, summary = false) {
-    let description = await towerUpgradeToFullBloonology(towerName, upgrade, isB2);
-    description = splitBloonology(description)[["100", "010", "001"].includes(upgrade) ? 1 : 2];
-
-    if (summary) {
-        return description
-            .replace(/\u200B/g, "")
-            .split("\n")
-            .map(x => "⟴ " + x.trim())
-            .join("\n");
-    }
-    return description;
-}
-
-async function towerUpgradesToTierChangeBloonology(towerName, upgrades, isB2, summary = false) {
-    let descriptions = await towerUpgradesToFullBloonology(towerName, upgrades, isB2);
-    descriptions = descriptions.map(
-        (x, ind) => splitBloonology(x)[["100", "010", "001"].includes(upgrades[ind]) ? 1 : 2]
-    );
-    if (summary) {
-        return descriptions.map(
-            description => description
+                .map(x => "⟴ " + x.trim().replace(/^-\s*/, ""))
+                .join("\n");
+            bloonology[upgrade].crosspathChange = bloonology[upgrade].crosspathChange
                 .replace(/\u200B/g, "")
                 .split("\n")
-                .map(x => "⟴ " + x.trim())
-                .join("\n")
-        );
+                .map(x => "• " + x.trim().replace(/^-\s*/, ""))
+                .join("\n");
+        }
     }
-    return descriptions;
+
+    if (upgrades.length === 1) {
+        return { version: version, data: bloonology[upgrades[0]] };
+    }
+    return { version: version, data: bloonology };
 }
 
-async function towerUpgradeToCrosspathChangeBloonology(towerName, upgrade, isB2, summary = false) {
-    let description = await towerUpgradeToFullBloonology(towerName, upgrade, isB2);
-    description = splitBloonology(description)[3];
-    if (summary) {
-        return description
-            .replace(/\u200B/g, "")
-            .split("\n")
-            .map(x => "• " + x.trim())
-            .join("\n");
+function beastHandlerBloonology(data, upgrades) {
+    const bloonology = {};
+
+    for (const upgrade of upgrades) {
+        if (!data[upgrade]) {
+            const [main, crosspath] = [...upgrade]
+                .map((c, i) => "0".repeat(i) + c + "0".repeat(2 - i))
+                .sort((a, b) => Math.max(...b) - Math.max(...a));
+
+            bloonology[upgrade] = data[main].description.trim();
+            bloonology[upgrade] += "\n\n" + data[crosspath].description.match(/^[0-9]+r\s*(.*)/ms)[1].trim();
+
+            if (Math.max(...main) < 3) {
+                bloonology[upgrade] += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0]
+                    + "\n" + data[main].baseChange
+                    + "\n" + data[crosspath].crosspathChange;
+            } else {
+                bloonology[upgrade] += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[main].tierChange;
+                bloonology[upgrade] += "\n\n" + BLOONOLOGY_CROSSPATH_CHANGE_HEADERS[0] + "\n" + data[crosspath].crosspathChange;
+            }
+        } else {
+            bloonology[upgrade] = data[upgrade].description.trim();
+            if (data[upgrade].baseChange) {
+                bloonology[upgrade] += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0] + "\n" + data[upgrade].baseChange;
+            }
+            if (data[upgrade].tierChange) {
+                bloonology[upgrade] += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[upgrade].tierChange;
+            }
+        }
     }
-    return description;
+
+    if (upgrades.length === 1) {
+        return bloonology[upgrades[0]];
+    }
+    return bloonology;
 }
 
-async function towerUpgradesToCrosspathChangeBloonology(towerName, upgrades, isB2, summary = false) {
-    let descriptions = await towerUpgradesToFullBloonology(towerName, upgrades, isB2);
-    descriptions = descriptions.map(x => splitBloonology(x)[3]);
-    if (summary) {
-        return descriptions.map(
-            description => description
-                .replace(/\u200B/g, "")
-                .split("\n")
-                .map(x => "• " + x.trim())
-                .join("\n")
-        );
+async function heroLevelToBloonology(heroName, level, page = 0) {
+    const { version, data } = await heroBloonologyData(heroName);
+    if (heroName === "corvus" && level >= 5) {
+        return { version: version, data: corvusBloonology(data[level], page) };
     }
-    return descriptions;
+    return { version: version, data: data[level] };
 }
 
-async function heroNameToBloonologyList(heroName) {
-    let link = HERO_NAME_TO_BLOONOLOGY_LINK[heroName];
-    res = await axios.get(link);
-    let body = res.data;
-    return body.split(/^\s*(?:level\s(?:1?[0-9]|20)|all\slevels)\s*$/im)
-        .filter(x => x.length && x.search(/Version: [0-9.]*/i) === -1)
-        .map(cleanBloonology);
+async function heroSummary(heroName) {
+    const { version, summary } = await heroBloonologyData(heroName);
+    return { version: version, data: summary };
+}
+
+function corvusBloonology(description, page = 0) {
+    const spellPages = [
+        ["spear", "aggression", "malevolence", "storm"],
+        ["repel", "echo", "haste", "trample"],
+        ["frostbound", "ember", "ancestral might", "overload"],
+        ["nourishment", "soul barrier", "vision", "recovery"]
+    ];
+    const parts = description.split("\n\n");
+    if (parts.length !== 3) {
+        throw new Error("Invalid Corvus description format, expected 3 sections, got " + parts.length);
+    }
+
+    const spells = parts[1].split(/^\s*(?=\*\*.+\*\*)/m).filter(section => {
+        const match = section.match(/^\s*\*\*(.+)\*\*/);
+        return match && spellPages[page].includes(match[1].trim().toLowerCase());
+    }).join("");
+    return parts[0].trim() + "\n\n" + spells.trim() + "\n\n" + parts[2].trim();
 }
 
 async function getRelicBloonology() {
@@ -896,59 +916,14 @@ function templeBloonology(upgrade, primary1, military1, magic1, support1, primar
     ].join("\n"));
 }
 
-async function corvusBloonology(level) {
-    const spellPages = {
-        "spear": 0,
-        "aggression": 0,
-        "malevolence": 0,
-        "storm": 0,
-        "repel": 1,
-        "echo": 1,
-        "haste": 1,
-        "trample": 1,
-        "frostbound": 2,
-        "ember": 2,
-        "ancestral might": 2,
-        "overload": 2,
-        "nourishment": 3,
-        "soul barrier": 3,
-        "vision": 3,
-        "recovery": 3
-    };
-    let descs = await heroNameToBloonologyList("corvus");
-    let desc = descs[level - 1];
-    let [header, spellsDesc, footer] = desc.split("\n\n");
-    let spells = spellsDesc.split(/^\*\*(.*)\*\*\s*$/m).map(x => x.trim()).slice(1);
-    let pages = [
-        [],
-        [],
-        [],
-        []
-    ];
-    for (let i = 0; i < spells.length; i += 2) {
-        pages[spellPages[spells[i].toLowerCase()]].push(`**${spells[i]}**\n${spells[i + 1]}`);
-    }
-    return [header, pages.filter(x => x.length > 0).map(x => x.join("\n")), footer];
-}
-
 module.exports = {
     TOWER_NAME_TO_BLOONOLOGY_LINK,
     TOWER_NAME_TO_BLOONOLOGY_LINK_B2,
     HERO_NAME_TO_BLOONOLOGY_LINK,
-    towerNameToBloonologyLink,
-    towerLatestVersion,
-    heroLatestVersion,
-    towerUpgradeToFullBloonology,
     towerUpgradesToFullBloonology,
-    towerUpgradeToMainBloonology,
-    towerUpgradesToMainBloonology,
-    towerUpgradeToTierChangeBloonology,
-    towerUpgradesToTierChangeBloonology,
-    towerUpgradeToCrosspathChangeBloonology,
-    towerUpgradesToCrosspathChangeBloonology,
-    towerUpgradeToBaseChangeBloonology,
-    towerUpgradesToBaseChangeBloonology,
-    heroNameToBloonologyList,
+    towerUpgradesToSplitBloonology,
+    heroLevelToBloonology,
+    heroSummary,
     getRelicBloonology,
     dartParagonBloonology,
     boomerParagonBloonology,

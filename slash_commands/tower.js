@@ -60,12 +60,11 @@ function parseTowerPath(interaction) {
 
 // the function that creates the embed for bloonology that will get sent
 async function embedBloonology(towerName, upgrade, isB2) {
-    let upgradeDescription;
-    let latestVersion;
+    let version, data;
     try {
-        upgradeDescription = await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2);
-        latestVersion = await Bloonology.towerLatestVersion(towerName, isB2);
+        ({ version, data } = await Bloonology.towerUpgradesToFullBloonology(towerName, upgrade, isB2));
     } catch (e) {
+        console.error(`Error fetching bloonology for ${towerName} ${upgrade}: ${e}`);
         return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
     }
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
@@ -81,7 +80,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
     if (isB2) title += " (battles2)";
-    if (latestVersion !== null) title += ` (v${latestVersion})`;
+    if (version !== null) title += ` (v${version})`;
 
     let cost = "";
     let totalCost = "";
@@ -105,7 +104,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)
-        .setDescription(upgradeDescription)
+        .setDescription(data)
         .addFields([
             {
                 name: "cost",
@@ -125,25 +124,19 @@ async function embedBloonology(towerName, upgrade, isB2) {
 }
 
 async function embedBloonologySummary(towerName, isB2) {
-    let baseDescription;
-    try {
-        baseDescription = await Bloonology.towerUpgradeToMainBloonology(towerName, "000", isB2, true);
-    } catch {
-        return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
-    }
+    const tierUpgrades = [
+        "100", "010", "001",
+        "200", "020", "002",
+        "300", "030", "003",
+        "400", "040", "004",
+        "500", "050", "005"
+    ];
 
-    const tierUpgrades = [];
-    let idx, tier;
-    for (tier = 1; tier <= 5; tier++) {
-        for (idx = 0; idx < 3; idx++) {
-            tierUpgrades.push("000".slice(0, idx) + `${tier}` + "000".slice(idx + 1));
-        }
-    }
-
-    let pathBenefits;
+    let data;
     try {
-        pathBenefits = await Bloonology.towerUpgradesToTierChangeBloonology(towerName, tierUpgrades, isB2, true);
-    } catch {
+        ({ data } = await Bloonology.towerUpgradesToSplitBloonology(towerName, ["000", ...tierUpgrades], isB2, true));
+    } catch (e) {
+        console.error(`Error fetching bloonology for ${towerName}: ${e}`);
         return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
     }
 
@@ -160,11 +153,11 @@ async function embedBloonologySummary(towerName, isB2) {
     embed.addFields([
         {
             name: `Base Stats`,
-            value: baseDescription,
+            value: data["000"].description,
         },
     ]);
 
-    headers.forEach((header, idx) => embed.addFields([{ name: header, value: pathBenefits[idx], inline: true }]));
+    headers.forEach((header, idx) => embed.addFields([{ name: header, value: data[tierUpgrades[idx]].tierChange, inline: true }]));
 
     return embed;
 }

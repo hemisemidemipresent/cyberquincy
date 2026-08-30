@@ -17,9 +17,11 @@ const NUM_DISCOUNTS_TO_FACTOR = {
 class DiscountError extends Error { }
 
 // Rounds to the nearest 5, but rounds to the nearest 10 when equidistant
-function roundEven5(num) {
-    if (num % 5 === 2.5) return Math.round(num / 10) * 10;
-    return Math.round(num / 5) * 5;
+function specialRound(num) {
+    let quotient = Math.floor(num / 5) * 5
+    let residual = num % 5;
+    if (residual < 2.84) return quotient;
+    else return quotient + 5
 }
 
 function rawDifficultyMult(mediumCost, difficulty) {
@@ -67,7 +69,7 @@ function difficultyDiscountPriceMult(towerName, upgrade, mediumCost, difficulty,
         }
     }
     cost = (cost + absoluteDiscount) * (1 - percentageDiscount);
-    return roundEven5(cost);
+    return specialRound(cost);
 }
 
 function heroDifficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts = 0, mk = false) {
@@ -79,11 +81,11 @@ function heroDifficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts = 
     percentageDiscount += mk ? mkMiscDiscounts.hero_favors : 0;
     let unroundedCost = rawDifficultyMult(mediumCost, difficulty);
     unroundedCost *= 1 - percentageDiscount;
-    return roundEven5(unroundedCost);
+    return specialRound(unroundedCost);
 }
 
 module.exports = {
-    roundEven5,
+    specialRound,
     rawDifficultyMult,
     difficultyDiscountPriceMult,
     heroDifficultyDiscountPriceMult,

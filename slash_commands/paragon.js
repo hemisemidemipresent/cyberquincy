@@ -174,7 +174,7 @@ async function paragon_stats(interaction) {
     let messageEmbed = new Discord.EmbedBuilder()
         .setTitle(`\`${tower}\` paragon - level ${level}`)
         .setDescription(desc)
-        .setFields([{ name: "Incorrect/out of date information?", value: `Go yell at hemi [here](${discord})` }])
+        .setFields([{ name: "Something here is wrong?", value: `Go yell at hemi [here](${discord})` }])
         .setFooter({ text: justStatsFooter })
         .setColor(paragon);
     return await interaction.reply({ embeds: [messageEmbed] });

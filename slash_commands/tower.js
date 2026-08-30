@@ -124,7 +124,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
     if (isB2) title += " (battles2)";
-    if (latestVersion !== null) title += ` (v${latestVersion})`;
+    if (latestVersion) title += ` (v${latestVersion})`;
 
     let cost = "";
     let totalCost = "";
@@ -160,7 +160,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
                 value: totalCost,
                 inline: true,
             },
-            { name: "Incorrect/out of date information?", value: `please report them [here](${discord})` },
+            { name: "Something here is wrong?", value: `please report them [here](${discord})` },
         ])
         .setFooter({ text: footer })
         .setColor(cyber);

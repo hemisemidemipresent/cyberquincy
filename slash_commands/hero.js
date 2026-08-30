@@ -98,7 +98,7 @@ async function embedBloonology(heroName, level, page = 0) {
         descForDescription = desc;
     }
 
-    fields.push({ name: 'Incorrect/out of date information?', value: `please report them [here](${discord})` });
+    fields.push({ name: 'Something here is wrong?', value: `please report them [here](${discord})` });
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(title)

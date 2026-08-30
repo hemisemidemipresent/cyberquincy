@@ -1,6 +1,6 @@
 {
     "dart_monkey": {
-        "pageName": 200,
+        "pageName": "Dart_Monkey_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Sharp Shots (BTD6)",
@@ -27,7 +27,7 @@
         "paragon": "Apex Plasma Master"
     },
     "boomerang_monkey": {
-        "pageName": 315,
+        "pageName": "Boomerang_Monkey_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Improved Rangs (BTD6)",
@@ -54,7 +54,7 @@
         "paragon": "Glaive Dominus"
     },
     "bomb_shooter": {
-        "pageName": 375,
+        "pageName": "Bomb_Shooter_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Bigger Bombs (BTD6)",
@@ -81,7 +81,7 @@
         "paragon": "Ballistic Obliteration Missile Bunker"
     },
     "tack_shooter": {
-        "pageName": 260,
+        "pageName": "Tack_Shooter_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Faster Shooting (BTD6) (Tack Shooter)",
@@ -108,7 +108,7 @@
         "paragon": "Crucible of Steel and Flame"
     },
     "ice_monkey": {
-        "pageName": 400,
+        "pageName": "Ice_Monkey_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Permafrost (BTD6)",
@@ -135,7 +135,7 @@
         "paragon": "Herald of Everfrost"
     },
     "glue_gunner": {
-        "pageName": 225,
+        "pageName": "Glue_Gunner_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Glue Soak (BTD6)",
@@ -161,7 +161,7 @@
         }
     },
     "sniper_monkey": {
-        "pageName": 350,
+        "pageName": "Sniper_Monkey_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Full Metal Jacket (BTD6)",
@@ -187,7 +187,7 @@
         }
     },
     "monkey_sub": {
-        "pageName": 325,
+        "pageName": "Monkey_Sub_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Longer Range (BTD6)",
@@ -214,7 +214,7 @@
         "paragon": "Nautic Siege Core"
     },
     "monkey_buccaneer": {
-        "pageName": 400,
+        "pageName": "Monkey_Buccaneer_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Faster Shooting (BTD6) (Monkey Buccaneer)",
@@ -241,7 +241,7 @@
         "paragon": "Navarch of the Seas"
     },
     "monkey_ace": {
-        "pageName": 800,
+        "pageName": "Monkey_Ace_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Rapid Fire (BTD6)",
@@ -268,7 +268,7 @@
         "paragon": "Goliath Doomship"
     },
     "heli_pilot": {
-        "pageName": 1500,
+        "pageName": "Heli_Pilot_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Quad Darts (BTD6)",
@@ -294,7 +294,7 @@
         }
     },
     "mortar_monkey": {
-        "pageName": 600,
+        "pageName": "Mortar_Monkey_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Bigger Blast (BTD6)",
@@ -320,7 +320,7 @@
         }
     },
     "dartling_gunner": {
-        "pageName": 850,
+        "pageName": "Dartling_Gunner_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Focused Firing (BTD6)",
@@ -346,7 +346,7 @@
         }
     },
     "wizard_monkey": {
-        "pageName": 250,
+        "pageName": "Wizard Monkey (BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Guided Magic (BTD6)",
@@ -373,7 +373,7 @@
         "paragon": "Magus Perfectus"
     },
     "super_monkey": {
-        "pageName": 2500,
+        "pageName": "Super_Monkey_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Laser Blasts (BTD6)",
@@ -399,7 +399,7 @@
         }
     },
     "ninja_monkey": {
-        "pageName": 400,
+        "pageName": "Ninja_Monkey_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Ninja Discipline (BTD6)",
@@ -426,7 +426,7 @@
         "paragon": "Ascended Shadow"
     },
     "alchemist": {
-        "pageName": 550,
+        "pageName": "Alchemist_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Larger Potions (BTD6)",
@@ -452,7 +452,7 @@
         }
     },
     "druid": {
-        "pageName": 400,
+        "pageName": "Druid_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Hard Thorns (BTD6)",
@@ -479,7 +479,7 @@
         "paragon": "Root of all Nature"
     },
     "banana_farm": {
-        "pageName": 1250,
+        "pageName": "Banana_Farm_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Increased Production (BTD6)",
@@ -505,7 +505,7 @@
         }
     },
     "spike_factory": {
-        "pageName": 1000,
+        "pageName": "Spike_Factory_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Bigger Stacks (BTD6)",
@@ -532,7 +532,7 @@
         "paragon": "Mega Massive Munitions Factory"
     },
     "monkey_village": {
-        "pageName": 1200,
+        "pageName": "Monkey_Village_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Bigger Radius (BTD6)",
@@ -558,7 +558,7 @@
         }
     },
     "engineer_monkey": {
-        "pageName": 350,
+        "pageName": "Engineer_Monkey_(BTD6)",
         "upgrades": {
             "top_path": {
                 "1": "Sentry Gun (BTD6)",
@@ -585,7 +585,7 @@
         "paragon": "Master Builder"
     },
     "beast_handler": {
-        "pageName": 250,
+        "pageName": "Beast_Handler",
         "upgrades": {
             "top_path": {
                 "1": "Piranha",
@@ -611,7 +611,7 @@
         }
     },
     "mermonkey": {
-        "pageName": 375,
+        "pageName": "Mermonkey",
         "upgrades": {
             "top_path": {
                 "1": "Trident Efficiency",
@@ -637,7 +637,7 @@
         }
     },
     "desperado": {
-        "pageName": 300,
+        "pageName": "Desperado",
         "upgrades": {
             "top_path": {
                 "1": "Quickdraw (BTD6)",
@@ -720,6 +720,7 @@
         }
     },
     "skywarden": {
+        "pageName": "Skywarden",
         "upgrades": {
             "top_path": {
                 "1": "Aerial Attunement",

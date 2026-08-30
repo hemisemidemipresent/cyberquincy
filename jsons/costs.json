@@ -598,7 +598,7 @@
         }
     },
     "mermonkey": {
-        "cost": 375,
+        "cost": 300,
         "upgrades": {
             "top_path": {
                 "1": 150,

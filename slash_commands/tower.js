@@ -8,6 +8,8 @@ const {
     SlashCommandStringOption,
 } = require("discord.js");
 
+const FuzzySet = require('fuzzyset.js');
+
 const Towers = require("../helpers/towers.js");
 const Bloonology = require("../helpers/bloonology.js");
 
@@ -24,10 +26,10 @@ const towerOption = new SlashCommandStringOption()
     .setDescription("The tower you are finding information for")
     .setRequired(true)
     .setAutocomplete(true);
-// oh my god there are 26 towers but only 25 options in a string input
-Towers.allTowers().forEach((tower, index) => {
-    if (index < 25) towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
-});
+// oh my god there are 26 towers but only 25 options in a string input, we need to do autocomplete...
+// Towers.allTowers().forEach((tower, index) => {
+    // towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
+// });
 
 const reloadOption = new SlashCommandStringOption()
     .setName("reload")
@@ -51,10 +53,33 @@ const builder = new SlashCommandBuilder()
     .addStringOption(reloadOption);
 
 function validateInput(interaction) {
+    let tower = interaction.options.getString("tower");
+    tower = Aliases.toAliasNormalForm(tower)
+    if (!Towers.allTowers().includes(tower)) {
+        return new Discord.EmbedBuilder()
+            .setTitle("Invalid tower specified!")
+            .setDescription(
+                `${tower} is not a valid tower name`,
+            )
+            .setColor(red);
+    }
     const towerPath = parseTowerPath(interaction);
-    if (!towerPath) return "No tower path specified";
-    if (isNaN(towerPath)) return "Tower path provided isn't `base` and contains non-numerical characters";
-    if (!Towers.isValidUpgradeSet(towerPath)) return "Invalid tower path provided!";
+    if (!towerPath || isNaN(towerPath) || !Towers.isValidUpgradeSet(towerPath)) {
+        return new Discord.EmbedBuilder()
+            .setTitle("Invalid tower path!")
+            .setDescription(
+                `## What is a tower path?
+                - It is a three-digit number like \`010\`, \`052\`, \`014\` or even \`000\`.
+                - the first digit represents the number of upgrades applied on the top path
+                - the second digit represents the number of upgrades applied on the middle path
+                - the third digit represents the number of upgrades on the bottom path
+                - So in this image, the tower path would be \`015\`:`,
+            )
+            .setImage("https://i.imgur.com/ePWcSnu.png")
+            .setColor(red);
+    }
+
+
 }
 
 function parseTowerPath(interaction) {
@@ -70,17 +95,19 @@ async function embedBloonology(towerName, upgrade, isB2) {
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
     try {
-        // encapsulate into its own fn? Towers.wikiPageFromTowerUpgrade?
-        const paths = {
-            1: "top_path",
-            2: "middle_path",
-            3: "bottom_path",
-        };
+        // encapsulate into its own fn? Towers.wikiPageFromTowerUpgrade
+        let pageName = ""
+        if (tier == 0) pageName = pageNames[towerName].pageName
+        else pageName = pageNames[towerName].upgrades[path][tier]
+
+        upgradeDescription = `## [Bloons Wiki Link](${encodeURI("https://www.bloonswiki.com/" + pageName)})`;
+
+        if (towerName in Bloonology.TOWER_NAME_TO_BLOONOLOGY_LINK) {
+            upgradeDescription += `\n-# Bloonology stats:\n${await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2)}`
+            latestVersion = await Bloonology.towerLatestVersion(towerName, isB2);
+        }
 
 
-        let pageName = pageNames[towerName].upgrades[path][tier]
-        upgradeDescription = `## [Bloons Wiki Link](${encodeURI("https://www.bloonswiki.com/"+pageName)})\n-# The stats below may be outdated\n${await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2)}`;
-        latestVersion = await Bloonology.towerLatestVersion(towerName, isB2);
     } catch (e) {
         console.log(e)
         return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
@@ -190,22 +217,15 @@ async function execute(interaction) {
     if (validationFailure)
         return await interaction.reply({
             embeds: [
-                new Discord.EmbedBuilder()
-                    .setTitle("Invalid tower path!")
-                    .setDescription(
-                        `## What is a tower path?
-                        - It is a three-digit number like \`010\`, \`052\`, \`014\` or even \`000\`.
-                        - the first digit represents the number of upgrades applied on the top path
-                        - the second digit represents the number of upgrades applied on the middle path
-                        - the third digit represents the number of upgrades on the bottom path
-                        - So in this image, the tower path would be \`015\`:`,
-                    )
-                    .setImage("https://i.imgur.com/ePWcSnu.png"),
+                validationFailure
             ],
             flags: MessageFlags.Ephemeral,
         });
 
-    const tower = interaction.options.getString("tower");
+    let tower = interaction.options.getString("tower");
+    tower = Aliases.toAliasNormalForm(tower) // TODO: maybe replace with a towerparser to use aliases? (need to also update validation function)
+
+
     const towerPath = parseTowerPath(interaction);
     const isB2 = interaction.options.getBoolean("battles2") || false;
 
@@ -263,7 +283,39 @@ async function execute(interaction) {
     });
 }
 
+async function onAutocomplete(interaction) {
+    const hoistedOptions = interaction.options._hoistedOptions; // array of the previous thing, each for each autocomplete field
+    const tower_partial = hoistedOptions.find((option) => option.name == 'tower'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
+    const value = tower_partial.value;
+
+    let allTowers = Towers.allTowers()
+    let allTowerNames = allTowers.map(towerName => Aliases.toIndexNormalForm(towerName));
+
+    let fs = FuzzySet(allTowerNames);
+    let values = fs.get(value, null, 0.2);
+
+    responseArr = [];
+    if (value == "" || !values)
+        responseArr = allTowerNames
+            .slice(0, 25) // discord only allows 25 options at a time
+            .map((towerName) => {
+                const index = allTowerNames.indexOf(towerName)
+                return { name: towerName, value: allTowers[index] }; // cant inline because we are returning an object :(
+            });
+    else
+        values.forEach((value, i) => {
+            if (i >= 25) return
+            const towerName = value[1]
+            const index = allTowerNames.indexOf(towerName)
+            responseArr.push({ name: towerName, value: allTowers[index] });
+        });
+
+    await interaction.respond(responseArr);
+}
+
 module.exports = {
     data: builder,
     execute,
+    onAutocomplete,
 };
+

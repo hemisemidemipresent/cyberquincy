@@ -1,0 +1,21 @@
+{
+    "xyz": ["skywarden", "sky_warden", "sky"],
+
+    "100": ["arsenal_attunement", "aa"],
+    "200": ["zephyr_sense", "zephyr"],
+    "300": ["wind_weaver"],
+    "400": ["galesage", "gales"],
+    "500": ["farwind_seer", "farwind", "seer"],
+
+    "010": ["storm's_pulse", "storms_pulse", "storm's"],
+    "020": ["thundering_arc", "arc"],
+    "030": ["galvanic_conduit", "galvanic"],
+    "040": ["thunder's_decree", "sabo", "b_sabo"],
+    "050": ["stormwrath_archon", "stormwrath"],
+
+    "001": ["shatterpoint"],
+    "002": ["icebore"],
+    "003": ["coldchain", "cold_chain", "fbomb"],
+    "004": ["frozen_verdict"],
+    "005": ["winter's_mercy"]
+}

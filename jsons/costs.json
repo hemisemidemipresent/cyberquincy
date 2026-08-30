@@ -707,6 +707,7 @@
         }
     },
     "skywarden": {
+        "cost": 205,
         "upgrades": {
             "top_path": {
                 "1": 110,

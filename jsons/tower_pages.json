@@ -1,0 +1,785 @@
+{
+    "dart_monkey": {
+        "pageName": 200,
+        "upgrades": {
+            "top_path": {
+                "1": "Sharp Shots (BTD6)",
+                "2": "Razor Sharp Shots (BTD6)",
+                "3": "Spike-o-pult (BTD6)",
+                "4": "Juggernaut (BTD6)",
+                "5": "Ultra-Juggernaut (BTD6)"
+            },
+            "middle_path": {
+                "1": "Quick Shots (BTD6)",
+                "2": "Very Quick Shots (BTD6)",
+                "3": "Triple Shot (BTD6)",
+                "4": "Super Monkey Fan Club (BTD6)",
+                "5": "Plasma Monkey Fan Club (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Long Range Darts (BTD6)",
+                "2": "Enhanced Eyesight (BTD6)",
+                "3": "Crossbow (BTD6)",
+                "4": "Sharp Shooter (BTD6)",
+                "5": "Crossbow Master (BTD6)"
+            }
+        },
+        "paragon": "Apex Plasma Master"
+    },
+    "boomerang_monkey": {
+        "pageName": 315,
+        "upgrades": {
+            "top_path": {
+                "1": "Improved Rangs (BTD6)",
+                "2": "Glaives (BTD6)",
+                "3": "Glaive Ricochet (BTD6)",
+                "4": "M.O.A.R Glaives (BTD6)",
+                "5": "Glaive Lord (BTD6)"
+            },
+            "middle_path": {
+                "1": "Faster Throwing (BTD6) (Boomerang Monkey)",
+                "2": "Faster Rangs (BTD6)",
+                "3": "Bionic Boomerang (BTD6)",
+                "4": "Turbo Charge (BTD6)",
+                "5": "Perma Charge (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Long Range Rangs (BTD6)",
+                "2": "Red Hot Rangs (BTD6)",
+                "3": "Kylie Boomerang (BTD6)",
+                "4": "MOAB Press (BTD6)",
+                "5": "MOAB Domination (BTD6)"
+            }
+        },
+        "paragon": "Glaive Dominus"
+    },
+    "bomb_shooter": {
+        "pageName": 375,
+        "upgrades": {
+            "top_path": {
+                "1": "Bigger Bombs (BTD6)",
+                "2": "Heavy Bombs (BTD6)",
+                "3": "Really Big Bombs (BTD6)",
+                "4": "Bloon Impact (BTD6)",
+                "5": "Bloon Crush (BTD6)"
+            },
+            "middle_path": {
+                "1": "Faster Reload (BTD6) (Bomb Shooter)",
+                "2": "Missile Launcher (BTD6)",
+                "3": "MOAB Mauler (BTD6)",
+                "4": "MOAB Assassin (BTD6)",
+                "5": "MOAB Eliminator (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Extra Range (BTD6)",
+                "2": "Frag Bombs (BTD6)",
+                "3": "Cluster Bombs (BTD6)",
+                "4": "Recursive Cluster (BTD6)",
+                "5": "Bomb Blitz (BTD6)"
+            }
+        },
+        "paragon": "Ballistic Obliteration Missile Bunker"
+    },
+    "tack_shooter": {
+        "pageName": 260,
+        "upgrades": {
+            "top_path": {
+                "1": "Faster Shooting (BTD6) (Tack Shooter)",
+                "2": "Even Faster Shooting (BTD6)",
+                "3": "Hot Shots (BTD6)",
+                "4": "Ring of Fire (BTD6)",
+                "5": "Inferno Ring (BTD6)"
+            },
+            "middle_path": {
+                "1": "Long Range Tacks (BTD6)",
+                "2": "Super Range Tacks (BTD6)",
+                "3": "Blade Shooter (BTD6)",
+                "4": "Blade Maelstrom (BTD6)",
+                "5": "Super Maelstrom (BTD6)"
+            },
+            "bottom_path": {
+                "1": "More Tacks (BTD6)",
+                "2": "Even More Tacks (BTD6)",
+                "3": "Tack Sprayer (BTD6)",
+                "4": "Overdrive (BTD6)",
+                "5": "The Tack Zone (BTD6)"
+            }
+        },
+        "paragon": "Crucible of Steel and Flame"
+    },
+    "ice_monkey": {
+        "pageName": 400,
+        "upgrades": {
+            "top_path": {
+                "1": "Permafrost (BTD6)",
+                "2": "Cold Snap (BTD6)",
+                "3": "Ice Shards (BTD6)",
+                "4": "Embrittlement (BTD6)",
+                "5": "Super Brittle (BTD6)"
+            },
+            "middle_path": {
+                "1": "Enhanced Freeze (BTD6)",
+                "2": "Deep Freeze (BTD6)",
+                "3": "Arctic Wind (BTD6)",
+                "4": "Snowstorm (BTD6)",
+                "5": "Absolute Zero (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Larger Radius (BTD6)",
+                "2": "Re-Freeze (BTD6)",
+                "3": "Cryo Cannon (BTD6)",
+                "4": "Icicles (BTD6)",
+                "5": "Icicle Impale (BTD6)"
+            }
+        },
+        "paragon": "Herald of Everfrost"
+    },
+    "glue_gunner": {
+        "pageName": 225,
+        "upgrades": {
+            "top_path": {
+                "1": "Glue Soak (BTD6)",
+                "2": "Corrosive Glue (BTD6)",
+                "3": "Bloon Dissolver (BTD6)",
+                "4": "Bloon Liquefier (BTD6)",
+                "5": "The Bloon Solver (BTD6)"
+            },
+            "middle_path": {
+                "1": "Bigger Globs (BTD6)",
+                "2": "Glue Splatter (BTD6)",
+                "3": "Glue Hose (BTD6)",
+                "4": "Glue Strike (BTD6)",
+                "5": "Glue Storm (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Stickier Glue (BTD6)",
+                "2": "Stronger Glue (BTD6)",
+                "3": "MOAB Glue (BTD6)",
+                "4": "Relentless Glue (BTD6)",
+                "5": "Super Glue (BTD6)"
+            }
+        }
+    },
+    "sniper_monkey": {
+        "pageName": 350,
+        "upgrades": {
+            "top_path": {
+                "1": "Full Metal Jacket (BTD6)",
+                "2": "Large Calibre (BTD6)",
+                "3": "Deadly Precision (BTD6)",
+                "4": "Maim MOAB (BTD6)",
+                "5": "Cripple MOAB (BTD6)"
+            },
+            "middle_path": {
+                "1": "Night Vision Goggles (BTD6)",
+                "2": "Shrapnel Shot (BTD6)",
+                "3": "Bouncing Bullet (BTD6)",
+                "4": "Supply Drop (BTD6)",
+                "5": "Elite Sniper (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Fast Firing (BTD6)",
+                "2": "Even Faster Firing (BTD6)",
+                "3": "Semi-Automatic (BTD6)",
+                "4": "Full Auto Rifle (BTD6)",
+                "5": "Elite Defender (BTD6)"
+            }
+        }
+    },
+    "monkey_sub": {
+        "pageName": 325,
+        "upgrades": {
+            "top_path": {
+                "1": "Longer Range (BTD6)",
+                "2": "Advanced Intel (BTD6)",
+                "3": "Submerge and Support (BTD6)",
+                "4": "Bloontonium Reactor (BTD6)",
+                "5": "Energizer (BTD6)"
+            },
+            "middle_path": {
+                "1": "Barbed Darts (BTD6)",
+                "2": "Heat-tipped Darts (BTD6)",
+                "3": "Ballistic Missile (BTD6)",
+                "4": "First Strike Capability (BTD6)",
+                "5": "Pre-emptive Strike (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Twin Guns (BTD6)",
+                "2": "Airburst Darts (BTD6)",
+                "3": "Triple Guns (BTD6)",
+                "4": "Armor Piercing Darts (BTD6)",
+                "5": "Sub Commander (BTD6)"
+            }
+        },
+        "paragon": "Nautic Siege Core"
+    },
+    "monkey_buccaneer": {
+        "pageName": 400,
+        "upgrades": {
+            "top_path": {
+                "1": "Faster Shooting (BTD6) (Monkey Buccaneer)",
+                "2": "Double Shot (BTD6) (Monkey Buccaneer)",
+                "3": "Destroyer (BTD6)",
+                "4": "Aircraft Carrier (BTD6)",
+                "5": "Carrier Flagship (BTD6)"
+            },
+            "middle_path": {
+                "1": "Grape Shot (BTD6)",
+                "2": "Hot Shot (BTD6)",
+                "3": "Cannon Ship (BTD6)",
+                "4": "Monkey Pirates (BTD6)",
+                "5": "Pirate Lord (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Long Range (BTD6)",
+                "2": "Crow's Nest (BTD6)",
+                "3": "Merchantman (BTD6)",
+                "4": "Favored Trades (BTD6)",
+                "5": "Trade Empire (BTD6)"
+            }
+        },
+        "paragon": "Navarch of the Seas"
+    },
+    "monkey_ace": {
+        "pageName": 800,
+        "upgrades": {
+            "top_path": {
+                "1": "Rapid Fire (BTD6)",
+                "2": "Lots More Darts (BTD6)",
+                "3": "Fighter Plane (BTD6)",
+                "4": "Operation: Dart Storm (BTD6)",
+                "5": "Sky Shredder (BTD6)"
+            },
+            "middle_path": {
+                "1": "Exploding Pineapple (BTD6)",
+                "2": "Spy Plane (BTD6)",
+                "3": "Bomber Ace (BTD6)",
+                "4": "Ground Zero (BTD6)",
+                "5": "Tsar Bomba (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Sharper Darts (BTD6)",
+                "2": "Centered Path",
+                "3": "Neva-Miss Targeting (BTD6)",
+                "4": "Spectre (BTD6)",
+                "5": "Flying Fortress (BTD6)"
+            }
+        },
+        "paragon": "Goliath Doomship"
+    },
+    "heli_pilot": {
+        "pageName": 1500,
+        "upgrades": {
+            "top_path": {
+                "1": "Quad Darts (BTD6)",
+                "2": "Pursuit (BTD6)",
+                "3": "Razor Rotors (BTD6)",
+                "4": "Apache Dartship (BTD6)",
+                "5": "Apache Prime (BTD6)"
+            },
+            "middle_path": {
+                "1": "Bigger Jets (BTD6)",
+                "2": "IFR (BTD6)",
+                "3": "Downdraft (BTD6)",
+                "4": "Support Chinook (BTD6)",
+                "5": "Special Poperations (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Faster Darts (BTD6)",
+                "2": "Faster Firing (BTD6)",
+                "3": "MOAB Shove (BTD6)",
+                "4": "Comanche Defense (BTD6)",
+                "5": "Comanche Commander (BTD6)"
+            }
+        }
+    },
+    "mortar_monkey": {
+        "pageName": 600,
+        "upgrades": {
+            "top_path": {
+                "1": "Bigger Blast (BTD6)",
+                "2": "Bloon Buster (BTD6)",
+                "3": "Shell Shock (BTD6)",
+                "4": "The Big One (BTD6)",
+                "5": "The Biggest One (BTD6)"
+            },
+            "middle_path": {
+                "1": "Faster Reload (BTD6) (Mortar Monkey)",
+                "2": "Rapid Reload (BTD6)",
+                "3": "Heavy Shells (BTD6)",
+                "4": "Artillery Battery (BTD6)",
+                "5": "Pop and Awe (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Increased Accuracy (BTD6)",
+                "2": "Burny Stuff (BTD6)",
+                "3": "Signal Flare (BTD6)",
+                "4": "Shattering Shells (BTD6)",
+                "5": "Blooncineration (BTD6)"
+            }
+        }
+    },
+    "dartling_gunner": {
+        "pageName": 850,
+        "upgrades": {
+            "top_path": {
+                "1": "Focused Firing (BTD6)",
+                "2": "Laser Shock (BTD6)",
+                "3": "Laser Cannon (BTD6)",
+                "4": "Plasma Accelerator (BTD6)",
+                "5": "Ray of Doom (BTD6)"
+            },
+            "middle_path": {
+                "1": "Advanced Targeting (BTD6)",
+                "2": "Faster Barrel Spin (BTD6)",
+                "3": "Hydra Rocket Pods (BTD6)",
+                "4": "Rocket Storm (BTD6)",
+                "5": "M.A.D (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Faster Swivel (BTD6)",
+                "2": "Powerful Darts (BTD6)",
+                "3": "Buckshot (BTD6)",
+                "4": "Bloon Area Denial System (BTD6)",
+                "5": "Bloon Exclusion Zone (BTD6)"
+            }
+        }
+    },
+    "wizard_monkey": {
+        "pageName": 250,
+        "upgrades": {
+            "top_path": {
+                "1": "Guided Magic (BTD6)",
+                "2": "Arcane Blast (BTD6)",
+                "3": "Arcane Mastery (BTD6)",
+                "4": "Arcane Spike (BTD6)",
+                "5": "Archmage (BTD6)"
+            },
+            "middle_path": {
+                "1": "Fireball (BTD6)",
+                "2": "Wall of Fire (BTD6)",
+                "3": "Dragon's Breath (BTD6)",
+                "4": "Summon Phoenix (BTD6)",
+                "5": "Wizard Lord Phoenix (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Intense Magic (BTD6)",
+                "2": "Monkey Sense (BTD6)",
+                "3": "Shimmer (BTD6)",
+                "4": "Necromancer: Unpopped Army",
+                "5": "Prince of Darkness (BTD6)"
+            }
+        },
+        "paragon": "Magus Perfectus"
+    },
+    "super_monkey": {
+        "pageName": 2500,
+        "upgrades": {
+            "top_path": {
+                "1": "Laser Blasts (BTD6)",
+                "2": "Plasma Blasts (BTD6)",
+                "3": "Sun Avatar (BTD6)",
+                "4": "Sun Temple (BTD6)",
+                "5": "True Sun God (BTD6)"
+            },
+            "middle_path": {
+                "1": "Super Range (BTD6)",
+                "2": "Epic Range (BTD6)",
+                "3": "Robo Monkey (BTD6)",
+                "4": "Tech Terror (BTD6)",
+                "5": "The Anti-Bloon (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Knockback (BTD6)",
+                "2": "Ultravision (BTD6)",
+                "3": "Dark Knight (BTD6)",
+                "4": "Dark Champion (BTD6)",
+                "5": "Legend of the Night (BTD6)"
+            }
+        }
+    },
+    "ninja_monkey": {
+        "pageName": 400,
+        "upgrades": {
+            "top_path": {
+                "1": "Ninja Discipline (BTD6)",
+                "2": "Sharp Shurikens (BTD6)",
+                "3": "Double Shot (BTD6) (Ninja Monkey)",
+                "4": "Bloonjitsu (BTD6)",
+                "5": "Grandmaster Ninja (BTD6)"
+            },
+            "middle_path": {
+                "1": "Distraction (BTD6)",
+                "2": "Counter-Espionage (BTD6)",
+                "3": "Shinobi Tactics (BTD6)",
+                "4": "Bloon Sabotage (BTD6)",
+                "5": "Grand Saboteur (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Seeking Shuriken (BTD6)",
+                "2": "Caltrops (BTD6)",
+                "3": "Flash Bomb (BTD6)",
+                "4": "Sticky Bomb (BTD6)",
+                "5": "Master Bomber (BTD6)"
+            }
+        },
+        "paragon": "Ascended Shadow"
+    },
+    "alchemist": {
+        "pageName": 550,
+        "upgrades": {
+            "top_path": {
+                "1": "Larger Potions (BTD6)",
+                "2": "Acidic Mixture Dip (BTD6)",
+                "3": "Berserker Brew (BTD6)",
+                "4": "Stronger Stimulant (BTD6)",
+                "5": "Permanent Brew (BTD6)"
+            },
+            "middle_path": {
+                "1": "Stronger Acid (BTD6)",
+                "2": "Perishing Potions (BTD6)",
+                "3": "Unstable Concoction (BTD6)",
+                "4": "Transforming Tonic (BTD6)",
+                "5": "Total Transformation (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Faster Throwing (BTD6) (Alchemist)",
+                "2": "Acid Pool (BTD6)",
+                "3": "Lead to Gold (BTD6)",
+                "4": "Rubber to Gold (BTD6)",
+                "5": "Bloon Master Alchemist (BTD6)"
+            }
+        }
+    },
+    "druid": {
+        "pageName": 400,
+        "upgrades": {
+            "top_path": {
+                "1": "Hard Thorns (BTD6)",
+                "2": "Heart of Thunder (BTD6)",
+                "3": "Druid of the Storm (BTD6)",
+                "4": "Ball Lightning (BTD6)",
+                "5": "Monarch of Storms"
+            },
+            "middle_path": {
+                "1": "Thorn Swarm (BTD6)",
+                "2": "Heart of Oak (BTD6)",
+                "3": "Druid of the Jungle (BTD6)",
+                "4": "Jungle's Bounty (BTD6)",
+                "5": "Spirit of the Forest (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Druidic Reach (BTD6)",
+                "2": "Heart of Vengeance (BTD6)",
+                "3": "Druid of Wrath (BTD6)",
+                "4": "Poplust (BTD6)",
+                "5": "Avatar of Wrath (BTD6)"
+            }
+        },
+        "paragon": "Root of all Nature"
+    },
+    "banana_farm": {
+        "pageName": 1250,
+        "upgrades": {
+            "top_path": {
+                "1": "Increased Production (BTD6)",
+                "2": "Greater Production (BTD6)",
+                "3": "Banana Plantation (BTD6)",
+                "4": "Banana Research Facility (BTD6)",
+                "5": "Banana Central (BTD6)"
+            },
+            "middle_path": {
+                "1": "Long Life Bananas (BTD6)",
+                "2": "Valuable Bananas (BTD6)",
+                "3": "Monkey Bank (BTD6)",
+                "4": "IMF Loan (BTD6)",
+                "5": "Monkey-Nomics (BTD6)"
+            },
+            "bottom_path": {
+                "1": "EZ Collect",
+                "2": "Banana Salvage (BTD6)",
+                "3": "Marketplace (BTD6)",
+                "4": "Central Market (BTD6)",
+                "5": "Monkey Wall Street (BTD6)"
+            }
+        }
+    },
+    "spike_factory": {
+        "pageName": 1000,
+        "upgrades": {
+            "top_path": {
+                "1": "Bigger Stacks (BTD6)",
+                "2": "White Hot Spikes (BTD6)",
+                "3": "Spiked Balls (BTD6)",
+                "4": "Spiked Mines (BTD6)",
+                "5": "Super Mines (BTD6)"
+            },
+            "middle_path": {
+                "1": "Faster Production (BTD6)",
+                "2": "Even Faster Production (BTD6)",
+                "3": "MOAB SHREDR (BTD6)",
+                "4": "Spike Storm (BTD6)",
+                "5": "Carpet of Spikes (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Long Reach (BTD6)",
+                "2": "Smart Spikes (BTD6)",
+                "3": "Long Life Spikes (BTD6)",
+                "4": "Deadly Spikes (BTD6)",
+                "5": "Perma-Spike (BTD6)"
+            }
+        },
+        "paragon": "Mega Massive Munitions Factory"
+    },
+    "monkey_village": {
+        "pageName": 1200,
+        "upgrades": {
+            "top_path": {
+                "1": "Bigger Radius (BTD6)",
+                "2": "Jungle Drums (BTD6)",
+                "3": "Primary Training (BTD6)",
+                "4": "Primary Mentoring (BTD6)",
+                "5": "Primary Expertise (BTD6)"
+            },
+            "middle_path": {
+                "1": "Grow Blocker (BTD6)",
+                "2": "Radar Scanner (BTD6)",
+                "3": "Monkey Intelligence Bureau (BTD6)",
+                "4": "Call to Arms (BTD6)",
+                "5": "Homeland Defense (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Monkey Business (BTD6)",
+                "2": "Monkey Commerce (BTD6)",
+                "3": "Monkey Town (BTD6)",
+                "4": "Monkey City (BTD6)",
+                "5": "Monkeyopolis (BTD6)"
+            }
+        }
+    },
+    "engineer_monkey": {
+        "pageName": 350,
+        "upgrades": {
+            "top_path": {
+                "1": "Sentry Gun (BTD6)",
+                "2": "Faster Engineering (BTD6)",
+                "3": "Sprockets (BTD6)",
+                "4": "Sentry Expert (BTD6)",
+                "5": "Sentry Champion (BTD6)"
+            },
+            "middle_path": {
+                "1": "Larger Service Area (BTD6)",
+                "2": "Deconstruction (BTD6)",
+                "3": "Cleansing Foam (BTD6)",
+                "4": "Overclock (BTD6)",
+                "5": "Ultraboost (BTD6)"
+            },
+            "bottom_path": {
+                "1": "Oversize Nails (BTD6)",
+                "2": "Pin (BTD6)",
+                "3": "Double Gun (BTD6)",
+                "4": "Bloon Trap (BTD6)",
+                "5": "XXXL Trap (BTD6)"
+            }
+        },
+        "paragon": "Master Builder"
+    },
+    "beast_handler": {
+        "pageName": 250,
+        "upgrades": {
+            "top_path": {
+                "1": "Piranha",
+                "2": "Barracuda",
+                "3": "Great White",
+                "4": "Orca",
+                "5": "Megalodon"
+            },
+            "middle_path": {
+                "1": "Microraptor",
+                "2": "Adasaurus",
+                "3": "Velociraptor",
+                "4": "Tyrannosaurus Rex",
+                "5": "Giganotosaurus"
+            },
+            "bottom_path": {
+                "1": "Gyrfalcon",
+                "2": "Horned Owl",
+                "3": "Golden Eagle",
+                "4": "Giant Condor",
+                "5": "Pouākai"
+            }
+        }
+    },
+    "mermonkey": {
+        "pageName": 375,
+        "upgrades": {
+            "top_path": {
+                "1": "Trident Efficiency",
+                "2": "Trident Swiftness",
+                "3": "Abyss Dweller",
+                "4": "Abyssal Warrior",
+                "5": "Lord of the Abyss"
+            },
+            "middle_path": {
+                "1": "Sharper Prongs",
+                "2": "Tidal Chill",
+                "3": "Riptide Champion",
+                "4": "Arctic Knight",
+                "5": "Popseidon"
+            },
+            "bottom_path": {
+                "1": "Echosense Precision",
+                "2": "Echosense Network",
+                "3": "Alluring Melody",
+                "4": "Symphonic Resonance",
+                "5": "The Final Harmonic"
+            }
+        }
+    },
+    "desperado": {
+        "pageName": 300,
+        "upgrades": {
+            "top_path": {
+                "1": "Quickdraw (BTD6)",
+                "2": "Standoff",
+                "3": "Big Iron",
+                "4": "Twin Sixes",
+                "5": "The Blazing Sun"
+            },
+            "middle_path": {
+                "1": "Eagle Eye",
+                "2": "Bullseye (BTD6)",
+                "3": "Deadeye",
+                "4": "Bounty Hunter",
+                "5": "Golden Justice"
+            },
+            "bottom_path": {
+                "1": "Wanderer",
+                "2": "Nomad",
+                "3": "Enforcer",
+                "4": "Avenger",
+                "5": "The Desert Phantom"
+            }
+        }
+    },
+    "banana_farmer_pro": {
+        "upgrades": {
+            "top_path": {
+                "1": "Banana Vacuum",
+                "2": "Banana Peels",
+                "3": "Robo Farmer (BTD6)"
+            },
+            "middle_path": {
+                "1": "Camo Bananas",
+                "2": "Regrow Bananas",
+                "3": "Banana Intelligence Bureau"
+            },
+            "bottom_path": {
+                "1": "Adaptive Workers",
+                "2": "Monkey Banker",
+                "3": "Banana Financier"
+            }
+        }
+    },
+    "hype_boost_monkey": {
+        "upgrades": {
+            "top_path": {
+                "1": "Cheer",
+                "2": "Look Sharp",
+                "3": "Monkey Spirit"
+            },
+            "middle_path": {
+                "1": "Resistance",
+                "2": "High Reps",
+                "3": "No Quit"
+            },
+            "bottom_path": {
+                "1": "Condition",
+                "2": "Intensity",
+                "3": "Max Output"
+            }
+        }
+    },
+    "portable_lake_pro": {
+        "upgrades": {
+            "top_path": {
+                "1": "Luxury Pool",
+                "2": "Pristine Pool",
+                "3": "Jammin Bass-Drop Basin"
+            },
+            "middle_path": {
+                "1": "Cozy Radiant Bath",
+                "2": "Snug Ooze Surprise",
+                "3": "Release the Quacken"
+            },
+            "bottom_path": {
+                "1": "Rejuvenating Hotspring",
+                "2": "Therapeutic Mud Bath",
+                "3": "Soothing Geothermal Spa"
+            }
+        }
+    },
+    "skywarden": {
+        "upgrades": {
+            "top_path": {
+                "1": "Aerial Attunement",
+                "2": "Zephyr Sense",
+                "3": "Wind Weaver",
+                "4": "Galesage",
+                "5": "Farwind Seer"
+            },
+            "middle_path": {
+                "1": "Storm's Pulse",
+                "2": "Thundering Arc",
+                "3": "Galvanic Conduit",
+                "4": "Thunder's Decree",
+                "5": "Stormwrath Archon"
+            },
+            "bottom_path": {
+                "1": "Shatterpoint",
+                "2": "Icebore",
+                "3": "Coldchain",
+                "4": "Frozen Verdict",
+                "5": "Winter's Mercy"
+            }
+        }
+    },
+    "super_monkey_beacon": {
+        "upgrades": {
+            "top_path": {
+                "1": "Charged Beacon",
+                "2": "Storm Tremors",
+                "3": "Reverberation"
+            },
+            "middle_path": {
+                "1": "Mini Stormcaller",
+                "2": "Rapid Recharge",
+                "3": "Beacon of Legends"
+            },
+            "bottom_path": {
+                "1": "High Impact",
+                "2": "Bewildering Storm",
+                "3": "Piercing Wind"
+            }
+        }
+    },
+    "tech_bot_prime": {
+        "upgrades": {
+            "top_path": {
+                "1": "Initiate Link AMP",
+                "2": "Chain Link",
+                "3": "Lead the Storm"
+            },
+            "middle_path": {
+                "1": "AUT0.M8",
+                "2": "NEUR0.MAP",
+                "3": "CMDR.Ch1p"
+            },
+            "bottom_path": {
+                "1": "Drone Ambush Network",
+                "2": "Trigger Happy Drones",
+                "3": "Oh Boy, I Can't Wait!"
+            }
+        }
+    }
+}

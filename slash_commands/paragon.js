@@ -19,7 +19,7 @@ const pHelp = require("../helpers/paragon");
 const paragonStats = require("../jsons/paragon.json");
 const bloonology = require("../helpers/bloonology");
 const paragonCosts = require("../jsons/paragon_costs.json");
-const { scrapeParagonCosts } = require("../services/wiki/costs_scraper.js");
+const { scrapeCosts } = require("../services/wiki/costs_scraper.js");
 const paragonSelector = new SlashCommandStringOption()
     .setName("tower")
     .setDescription("The tower you want to find the paragon for")
@@ -121,7 +121,7 @@ async function paragon_stats(interaction) {
     const forceReload = interaction.options.getString("reload") ? true : false;
     if (forceReload) {
         await interaction.deferReply();
-        await scrapeParagonCosts();
+        await scrapeCosts();
     }
 
     // could be more concise in terms of code?

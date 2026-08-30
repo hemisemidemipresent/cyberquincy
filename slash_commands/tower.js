@@ -11,7 +11,10 @@ const {
 const Towers = require("../helpers/towers.js");
 const Bloonology = require("../helpers/bloonology.js");
 
+const pageNames = require("../jsons/tower_pages.json")
+
 const { scrapeCosts } = require("../services/wiki/costs_scraper");
+const { scrapePages } = require("../services/wiki/tower_page_scraper.js");
 
 const { discord, footer } = require("../aliases/misc.json");
 const { red, cyber } = require("../jsons/colors.json");
@@ -19,9 +22,11 @@ const { red, cyber } = require("../jsons/colors.json");
 const towerOption = new SlashCommandStringOption()
     .setName("tower")
     .setDescription("The tower you are finding information for")
-    .setRequired(true);
-Object.keys(Bloonology.TOWER_NAME_TO_BLOONOLOGY_LINK).forEach((tower) => {
-    towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
+    .setRequired(true)
+    .setAutocomplete(true);
+// oh my god there are 26 towers but only 25 options in a string input
+Towers.allTowers().forEach((tower, index) => {
+    if (index < 25) towerOption.addChoices({ name: Aliases.toIndexNormalForm(tower), value: tower });
 });
 
 const reloadOption = new SlashCommandStringOption()
@@ -62,13 +67,24 @@ function parseTowerPath(interaction) {
 async function embedBloonology(towerName, upgrade, isB2) {
     let upgradeDescription;
     let latestVersion;
+    const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
+
     try {
-        upgradeDescription = await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2);
+        // encapsulate into its own fn? Towers.wikiPageFromTowerUpgrade?
+        const paths = {
+            1: "top_path",
+            2: "middle_path",
+            3: "bottom_path",
+        };
+
+
+        let pageName = pageNames[towerName].upgrades[path][tier]
+        upgradeDescription = `## [Bloons Wiki Link](${encodeURI("https://www.bloonswiki.com/"+pageName)})\n-# The stats below may be outdated\n${await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2)}`;
         latestVersion = await Bloonology.towerLatestVersion(towerName, isB2);
     } catch (e) {
+        console.log(e)
         return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
     }
-    const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
     const formattedUpgrade = upgrade.split("").join("-");
     const formattedTowerName = Aliases.toIndexNormalForm(towerName);
@@ -197,6 +213,7 @@ async function execute(interaction) {
     if (forceReload) {
         await interaction.deferReply();
         await scrapeCosts();
+        await scrapePages();
     }
 
     let embed = await embedBloonology(tower, towerPath, isB2);

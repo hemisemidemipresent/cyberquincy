@@ -53,22 +53,22 @@ async function execute(interaction) {
         ]);
     }
     mapEmbed.addFields([
-        { name: 'Entrances/Exits', value: `${mapJson.numEntrances} entrance(s), ${mapJson.numExits} exit(s)`, inline: true },
-        { name: 'Object count', value: `${mapJson.numObjects} objects`, inline: true },
+        { name: 'Entrances/Exits', value: `${mapJson.numentrances} entrance(s), ${mapJson.numexits} exit(s)`, inline: true },
+        { name: 'Object count', value: `${mapJson.numobjects} objects`, inline: true },
     ]);
 
     if (mapJson.removalCost) {
-        if (!mapJson.removalCostNotes) mapEmbed.addFields([{ name: 'Cost to Remove/Activate All Objects', value: mapJson.removalCost, inline: true }]);
-        else mapEmbed.addFields([{ name: 'Object Removal/Activation', value: `Cost: ${mapJson.removalCost}\n\n${mapJson.removalCostNotes}` }]);
+        if (!mapJson.removalcostnotes) mapEmbed.addFields([{ name: 'Cost to Remove/Activate All Objects', value: mapJson.removalcost || 'none', inline: true }]);
+        else mapEmbed.addFields([{ name: 'Object Removal/Activation', value: `Cost: ${mapJson.removalcost}\n\n${mapJson.removalcostnotes}` }]);
     }
 
     mapEmbed.addFields([
-        { name: 'Has water?', value: mapJson.hasWater == 1 ? 'yes' : 'no', inline: true },
-        { name: 'Line of sight obstructions', value: mapJson.hasLOS == 1 ? 'yes' : 'no', inline: true }
+        { name: 'Has water?', value: mapJson.haswater ? 'yes' : 'no', inline: true },
+        { name: 'Line of sight obstructions', value: mapJson.haslos == 1 ? 'yes' : 'no', inline: true }
 
     ]);
 
-    if (mapJson.miscNotes) mapEmbed.addFields([{ name:'Miscellaneous Notes', value: mapJson.miscNotes }]);
+    if (mapJson.miscnotes) mapEmbed.addFields([{ name:'Miscellaneous Notes', value: mapJson.miscnotes }]);
 
     mapEmbed.setFooter({ text: 'RBS measured on hard mode, so values are different from bloons wiki. Data taken from btd6index.win' });
 

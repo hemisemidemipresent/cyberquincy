@@ -90,26 +90,19 @@ function parseTowerPath(interaction) {
 
 // the function that creates the embed for bloonology that will get sent
 async function embedBloonology(towerName, upgrade, isB2) {
-    let upgradeDescription;
-    let latestVersion;
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
+    let version, data;
     try {
-        // encapsulate into its own fn? Towers.wikiPageFromTowerUpgrade
-        let pageName = ""
-        if (tier == 0) pageName = pageNames[towerName].pageName
-        else pageName = pageNames[towerName].upgrades[path][tier]
-
-        upgradeDescription = `## [Bloons Wiki Link](${encodeURI("https://www.bloonswiki.com/" + pageName)})`;
-
-        if (towerName in Bloonology.TOWER_NAME_TO_BLOONOLOGY_LINK) {
-            upgradeDescription += `\n-# Bloonology stats:\n${await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2)}`
-            latestVersion = await Bloonology.towerLatestVersion(towerName, isB2);
+        if (towerName == "skywarden") {
+            data = "[no bloonology data for skywarden yet]";
+        } else {
+            ({ version, data } = await Bloonology.towerUpgradesToFullBloonology(towerName, upgrade, isB2));
         }
-
-
+        let pageName = tier == 0 ? pageNames[towerName].pageName : pageNames[towerName].upgrades[path][tier];
+        data = `## [Bloons Wiki Link](${encodeURI("https://www.bloonswiki.com/" + pageName)})\n` + data;
     } catch (e) {
-        console.log(e)
+        console.error(`Error fetching bloonology for ${towerName} ${upgrade}: ${e}`);
         return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
     }
 
@@ -124,7 +117,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
         title = `${upgradeName} (${formattedUpgrade} ${formattedTowerName})`;
     }
     if (isB2) title += " (battles2)";
-    if (latestVersion) title += ` (v${latestVersion})`;
+    if (version) title += ` (v${version})`;
 
     let cost = "";
     let totalCost = "";
@@ -148,7 +141,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
 
     let embed = new Discord.EmbedBuilder()
         .setTitle(title)
-        .setDescription(upgradeDescription)
+        .setDescription(data)
         .addFields([
             {
                 name: "cost",
@@ -168,25 +161,19 @@ async function embedBloonology(towerName, upgrade, isB2) {
 }
 
 async function embedBloonologySummary(towerName, isB2) {
-    let baseDescription;
-    try {
-        baseDescription = await Bloonology.towerUpgradeToMainBloonology(towerName, "000", isB2, true);
-    } catch {
-        return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
-    }
+    const tierUpgrades = [
+        "100", "010", "001",
+        "200", "020", "002",
+        "300", "030", "003",
+        "400", "040", "004",
+        "500", "050", "005"
+    ];
 
-    const tierUpgrades = [];
-    let idx, tier;
-    for (tier = 1; tier <= 5; tier++) {
-        for (idx = 0; idx < 3; idx++) {
-            tierUpgrades.push("000".slice(0, idx) + `${tier}` + "000".slice(idx + 1));
-        }
-    }
-
-    let pathBenefits;
+    let data;
     try {
-        pathBenefits = await Bloonology.towerUpgradesToTierChangeBloonology(towerName, tierUpgrades, isB2, true);
-    } catch {
+        ({ data } = await Bloonology.towerUpgradesToSplitBloonology(towerName, ["000", ...tierUpgrades], isB2, true));
+    } catch (e) {
+        console.error(`Error fetching bloonology for ${towerName}: ${e}`);
         return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
     }
 
@@ -203,11 +190,11 @@ async function embedBloonologySummary(towerName, isB2) {
     embed.addFields([
         {
             name: `Base Stats`,
-            value: baseDescription,
+            value: data["000"].description,
         },
     ]);
 
-    headers.forEach((header, idx) => embed.addFields([{ name: header, value: pathBenefits[idx], inline: true }]));
+    headers.forEach((header, idx) => embed.addFields([{ name: header, value: data[tierUpgrades[idx]].tierChange, inline: true }]));
 
     return embed;
 }

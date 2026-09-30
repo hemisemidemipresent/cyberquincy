@@ -31,45 +31,14 @@ const builder = new SlashCommandBuilder()
     .addStringOption(pathOption);
 
 async function embedBloonology(towerName, upgrade) {
-    const firstXIndex = upgrade.indexOf('x');
-    const lastXIndex = upgrade.lastIndexOf('x');
+    const noCrosspathUpgrade = upgrade.replace(/x/g, "0");
+    const crosspathUpgrades = ["10", "20", "01", "02"].map((u) => upgrade.replace("x", u[0]).replace("x", u[1]));
 
-    const noCrosspathUpgrade = upgrade.replace(/x/g, '0');
-
-    const crosspathUpgrades = [
-        upgrade.substring(0, firstXIndex) +
-        '1' +
-        upgrade.substring(firstXIndex + 1, lastXIndex) +
-        '0' +
-        upgrade.substring(lastXIndex + 1),
-        upgrade.substring(0, firstXIndex) +
-        '2' +
-        upgrade.substring(firstXIndex + 1, lastXIndex) +
-        '0' +
-        upgrade.substring(lastXIndex + 1),
-        upgrade.substring(0, firstXIndex) +
-        '0' +
-        upgrade.substring(firstXIndex + 1, lastXIndex) +
-        '1' +
-        upgrade.substring(lastXIndex + 1),
-        upgrade.substring(0, firstXIndex) +
-        '0' +
-        upgrade.substring(firstXIndex + 1, lastXIndex) +
-        '2' +
-        upgrade.substring(lastXIndex + 1)
-    ];
-
-    let noCrosspathDescription;
+    let data;
     try {
-        noCrosspathDescription = await Bloonology.towerUpgradeToMainBloonology(towerName, noCrosspathUpgrade, false);
-    } catch {
-        return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
-    }
-
-    let crosspathBenefits;
-    try {
-        crosspathBenefits = await Bloonology.towerUpgradesToCrosspathChangeBloonology(towerName, crosspathUpgrades, false, true);
-    } catch {
+        ({ data } = await Bloonology.towerUpgradesToSplitBloonology(towerName, [noCrosspathUpgrade, ...crosspathUpgrades], false, true));
+    } catch (e) {
+        console.error(`Error fetching bloonology for ${towerName}: ${e}`);
         return new Discord.EmbedBuilder().setColor(red).setTitle('Something went wrong while fetching the data');
     }
 
@@ -80,12 +49,14 @@ async function embedBloonology(towerName, upgrade) {
     let embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
 
     crosspathUpgrades.forEach((u, idx) => {
-        embed.addFields([{ name: u, value: crosspathBenefits[idx] || '\u200b', inline: true }]);
+        embed.addFields([{ name: u, value: data[u].crosspathChange || '\u200b', inline: true }]);
         if (idx % 2 == 1) {
             // This is the only way to get a 2 column format in discord :eyeroll:
             embed.addFields([{ name: '\u200b', value: '\u200b', inline: true }]);
         }
     });
+
+    const noCrosspathDescription = data[noCrosspathUpgrade].description;
 
     if (isValidEmbedField(noCrosspathDescription) || !noCrosspathDescription) {
         embed.addFields([

@@ -57,17 +57,14 @@ async function ltc(map, modifier) {
         return new Discord.EmbedBuilder().setTitle("Error!").setDescription(desc).setColor(red);
     }
 
-    const towerset = JSON.parse(result.towerset);
-    const upgradeset = JSON.parse(result.upgradeset);
-
     const challengeEmbed = new Discord.EmbedBuilder();
 
     challengeEmbed.setTitle(`${modifier ?? ""} ${map} LTC combo`);
     challengeEmbed.setColor(palegreen);
 
-    for (let i = 0; i < towerset.length; i++) {
+    for (let i = 0; i < result.towerset.length; i++) {
         challengeEmbed.addFields([
-            { name: `Tower ${i + 1}`, value: `${towerset[i]} (${upgradeset[i]})`, inline: true },
+            { name: `Tower ${i + 1}`, value: `${result.towerset[i]} (${result.upgradeset[i]})`, inline: true },
         ]);
     }
 

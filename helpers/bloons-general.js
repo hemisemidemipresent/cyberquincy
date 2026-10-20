@@ -1,10 +1,10 @@
 const mkMiscDiscounts = require('../jsons/mk/discounts.json').misc_discounts;
 
 const PRICE_MULTS = {
-    easy: 0.85,
-    medium: 1,
-    hard: 1.08,
-    impoppable: 1.2
+    easy: 0.15,
+    medium: 0,
+    hard: 0.08,
+    impoppable: 0.2
 };
 
 const NUM_DISCOUNTS_TO_FACTOR = {
@@ -18,18 +18,21 @@ class DiscountError extends Error { }
 
 // Rounds to the nearest 5, but rounds to the nearest 10 when equidistant
 function specialRound(num) {
-    let quotient = Math.floor(num / 5) * 5
+    let quotient = Math.floor(num / 5) * 5;
     let residual = num % 5;
-    if (residual < 2.84) return quotient;
-    else return quotient + 5
+    if (residual < 2.5) return quotient;
+    else return quotient + 5;
 }
 
 function rawDifficultyMult(mediumCost, difficulty) {
     const difficultyMultiplier = PRICE_MULTS[difficulty];
-    if (!difficultyMultiplier) {
+    if (!difficultyMultiplier && difficultyMultiplier !== 0) {
         throw `${difficulty} not a valid difficulty`;
     }
-    return mediumCost * difficultyMultiplier;
+    if (difficulty == "easy") {
+        return mediumCost - Math.floor(mediumCost * difficultyMultiplier);
+    }
+    return mediumCost + Math.floor(mediumCost * difficultyMultiplier);
 }
 
 function difficultyDiscountPriceMult(towerName, upgrade, mediumCost, difficulty, numDiscounts = 0, mkDiscounts = {}) {

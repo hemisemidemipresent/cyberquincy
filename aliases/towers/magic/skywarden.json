@@ -1,7 +1,7 @@
 {
     "xyz": ["skywarden", "sky_warden", "sky", "warden"],
 
-    "100": ["arsenal_attunement", "aa"],
+    "100": ["aerial_attunement", "aa"],
     "200": ["zephyr_sense", "zephyr"],
     "300": ["wind_weaver"],
     "400": ["galesage", "gales"],

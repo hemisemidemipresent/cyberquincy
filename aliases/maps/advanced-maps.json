@@ -19,6 +19,6 @@
     "last_resort": ["lr", "last", "last_remote"],
     "enchanted_glade": ["eg", "glade", "eglade"],
     "sunset_gulch": ["sg", "gulch", "sunset"],
-    "party_parade": ["pa", "pap", "papa"],
+    "party_parade": ["pa", "pap", "papa", "party", "parade"],
     "mushroom_grotto": ["mg", "mushroom", "shroom"]
 }

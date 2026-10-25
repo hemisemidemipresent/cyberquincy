@@ -44,7 +44,9 @@ function difficultyDiscountPriceMult(towerName, upgrade, mediumCost, difficulty,
 
     let absoluteDiscount = 0;
     let percentageDiscount = NUM_DISCOUNTS_TO_FACTOR[numDiscounts];
-    percentageDiscount += mkDiscounts && numDiscounts ? mkMiscDiscounts.insider_trades : 0;
+    // this is somewhat driving me insane, the `mkDiscounts` is leaky, even when theres no MK, it is still `{ comeOnEverybody: 0, discounts: [] }` for /calc
+    // we might have spaghetti-ed our way into this mess, and I'm scared to rewrite this stuff for now.
+    percentageDiscount += mkDiscounts.discounts.length > 0 && numDiscounts ? mkMiscDiscounts.insider_trades : 0;
     if ("comeOnEverybody" in mkDiscounts && mkDiscounts.comeOnEverybody > 0) {
         percentageDiscount += mkDiscounts.comeOnEverybody;
     }

@@ -13,7 +13,7 @@ const FuzzySet = require('fuzzyset.js');
 const Towers = require("../helpers/towers.js");
 const Bloonology = require("../helpers/bloonology.js");
 
-const pageNames = require("../jsons/tower_pages.json")
+const pageNames = require("../jsons/tower_pages.json");
 
 const { scrapeCosts } = require("../services/wiki/costs_scraper");
 const { scrapePages } = require("../services/wiki/tower_page_scraper.js");
@@ -54,7 +54,7 @@ const builder = new SlashCommandBuilder()
 
 function validateInput(interaction) {
     let tower = interaction.options.getString("tower");
-    tower = Aliases.toAliasNormalForm(tower)
+    tower = Aliases.toAliasNormalForm(tower);
     if (!Towers.allTowers().includes(tower)) {
         return new Discord.EmbedBuilder()
             .setTitle("Invalid tower specified!")
@@ -210,7 +210,7 @@ async function execute(interaction) {
         });
 
     let tower = interaction.options.getString("tower");
-    tower = Aliases.toAliasNormalForm(tower) // TODO: maybe replace with a towerparser to use aliases? (need to also update validation function)
+    tower = Aliases.toAliasNormalForm(tower); // TODO: maybe replace with a towerparser to use aliases? (need to also update validation function)
 
 
     const towerPath = parseTowerPath(interaction);
@@ -275,7 +275,7 @@ async function onAutocomplete(interaction) {
     const tower_partial = hoistedOptions.find((option) => option.name == 'tower'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
     const value = tower_partial.value;
 
-    let allTowers = Towers.allTowers()
+    let allTowers = Towers.allTowers();
     let allTowerNames = allTowers.map(towerName => Aliases.toIndexNormalForm(towerName));
 
     let fs = FuzzySet(allTowerNames);
@@ -286,14 +286,14 @@ async function onAutocomplete(interaction) {
         responseArr = allTowerNames
             .slice(0, 25) // discord only allows 25 options at a time
             .map((towerName) => {
-                const index = allTowerNames.indexOf(towerName)
+                const index = allTowerNames.indexOf(towerName);
                 return { name: towerName, value: allTowers[index] }; // cant inline because we are returning an object :(
             });
     else
         values.forEach((value, i) => {
-            if (i >= 25) return
-            const towerName = value[1]
-            const index = allTowerNames.indexOf(towerName)
+            if (i >= 25) return;
+            const towerName = value[1];
+            const index = allTowerNames.indexOf(towerName);
             responseArr.push({ name: towerName, value: allTowers[index] });
         });
 

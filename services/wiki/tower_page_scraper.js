@@ -23,18 +23,18 @@ async function scrapePages() {
         const obj = upgrade.title;
         const towerName = Aliases.toAliasNormalForm(obj.tower);
 
-        if (!pageNames[towerName]) pageNames[towerName] = {}
+        if (!pageNames[towerName]) pageNames[towerName] = {};
         if (!pageNames[towerName].upgrades) {
             pageNames[towerName].upgrades = {
                 "top_path": {},
                 "middle_path": {},
                 "bottom_path": {},
-            }
+            };
         }
         // paragon
         if (obj.path == -1 && obj.tier == 6) {
-            pageNames[towerName]["paragon"] = obj.pageName
-            return
+            pageNames[towerName]["paragon"] = obj.pageName;
+            return;
         }
         const path = paths[parseInt(obj.path)];
         if (pageNames[towerName]) pageNames[towerName].upgrades[path][obj.tier] = obj.pageName;

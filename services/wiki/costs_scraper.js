@@ -13,7 +13,7 @@ async function scrapeCosts() {
 
     // for whatever reason fs operates at the base on our directory
     let costs = JSON.parse(fs.readFileSync("./jsons/costs.json"));
-    let paragonCosts = {}
+    let paragonCosts = {};
     const paths = {
         1: "top_path",
         2: "middle_path",
@@ -22,18 +22,18 @@ async function scrapeCosts() {
     upgrades.forEach((upgrade) => {
         const obj = upgrade.title;
         const towerName = Aliases.toAliasNormalForm(obj.tower);
-        if (!costs[towerName]) costs[towerName] = {}
+        if (!costs[towerName]) costs[towerName] = {};
         if (!costs[towerName].upgrades) {
             costs[towerName].upgrades = {
                 "top_path": {},
                 "middle_path": {},
                 "bottom_path": {},
-            }
+            };
         }
         // paragon
         if (obj.path == -1 && obj.tier == 6) {
-            paragonCosts[towerName] = parseInt(obj.cost)
-            return
+            paragonCosts[towerName] = parseInt(obj.cost);
+            return;
         }
         const path = paths[parseInt(obj.path)];
         costs[towerName].upgrades[path][obj.tier] = parseInt(obj.cost);

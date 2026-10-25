@@ -229,7 +229,7 @@ async function displayFttcFilterAll(interaction, parsed) {
         completion => {
             const boldOg = (str) => completion.og ? `**${str}**` : str;
 
-            const towers = JSON.parse(completion.towerset).map(tower => {
+            const towers = completion.towerset.map(tower => {
                 const towerCanonical = Aliases.getCanonicalForm(tower);
                 const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
                 return parsed.towers && parsed.towers.includes(towerCanonical)

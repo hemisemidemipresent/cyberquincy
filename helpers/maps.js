@@ -111,8 +111,6 @@ function mapsNotPossible(entity) {
 
 module.exports = {
     allMaps,
-    allWaterMaps,
-    allNonWaterMaps,
     allMapsFromMapDifficulty,
     mapToMapDifficulty,
     beginnerMaps,

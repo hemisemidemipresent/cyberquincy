@@ -130,37 +130,6 @@ function allGroupTowerCanonicals(group) {
     return Aliases.getAliasGroupsFromSameImmediateDirectoryAs(GROUP_TO_TOWER[group]).map((ag) => ag.canonical);
 }
 
-function allWaterTowers() {
-    return ['sub', 'bucc', 'brick'].map((t) => Aliases.getCanonicalForm(t, Aliases.TOWER));
-}
-
-function isWaterEntity(entity) {
-    let entityToCompare;
-    if (isTowerPath(entity)) {
-        const [tower, path] = entity.split('#');
-        if (tower == 'beast_handler' && path == 'top_path') {
-            return true;
-        } else {
-            entityToCompare = tower;
-        }
-    } else if (isTowerUpgrade(entity)) {
-        const [tower, upgrade] = entity.split('#');
-        const [path] = pathTierFromUpgradeSet(upgrade);
-        if (tower == 'beast_handler' && path == 'top_path') {
-            return true;
-        } else {
-            entityToCompare = towerUpgradeToTower(entity);
-        }
-    } else if (Heroes.isHero(entity)) {
-        entityToCompare = entity;
-    } else if (isTower(entity)) {
-        entityToCompare = entity;
-    } else {
-        throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
-    }
-    return allWaterTowers().includes(entityToCompare);
-}
-
 function isOfTower(entity, tower) {
     return entity.split('#')[0] === tower;
 }
@@ -171,15 +140,6 @@ function towerPathtoPath(towerPath) {
 
 function towerPathToTower(towerPath) {
     return towerPath.split('#')[0];
-}
-
-function towerPathToIndexNormalForm(towerPath) {
-    let [tower, path] = towerPath.split('#');
-    path = path
-        .split('-')
-        .map((tk) => gHelper.toTitleCase(tk))
-        .join(' ');
-    return `${Aliases.toIndexNormalForm(tower)} (${path})`;
 }
 
 function towerUpgradeToIndexNormalForm(upgrade) {
@@ -194,7 +154,7 @@ function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
     }
 
     // Validate tier
-    if (!tier) return towerUpgradeToIndexNormalForm(`${tower}#222`);
+    if (!tier) return towerUpgradeToIndexNormalForm(`${tower}#000`);
 
     if (isNaN(tier)) throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
 
@@ -273,7 +233,7 @@ function allUpgradeCrosspathSets() {
  * allowCrosspath=true, the default, is the usual stuff, you see in the game, i.e. "022", "012", "205" etc
  * allowCrosspath=false is different, it only accepts those that specifically point to an upgrade,
  * e.g. "100", "200", "500", "030", "004", but not "024"
- * In addition, allowCrosspath=false also accepts "222" to mean "base tower"
+ * Both modes accept "000", the base tower
  *
  * @param {string} u upgradeSet
  * @param {boolean} allowCrosspath
@@ -283,8 +243,6 @@ function isValidUpgradeSet(u, allowCrosspath = true) {
     if (!gHelper.is_str(u) || u.length !== 3) return false;
 
     if (isNaN(u)) return false;
-
-    if (!allowCrosspath && u === '222') return true;
 
     // Get array of 3 digits, sorted in ascending order
     uSorted = u
@@ -344,20 +302,6 @@ function formatEntity(entity) {
         return towerUpgradeToIndexNormalForm(entity);
     } else if (Heroes.isHero(entity)) {
         return gHelper.toTitleCase(entity);
-    } else {
-        throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
-    }
-}
-
-function getEntityType(entity) {
-    if (isTower(entity)) {
-        return 'TOWER';
-    } else if (isTowerPath(entity)) {
-        return 'TOWER_PATH';
-    } else if (isTowerUpgrade(entity)) {
-        return 'TOWER_UPGRADE';
-    } else if (Heroes.isHero(entity)) {
-        return 'HERO';
     } else {
         throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
     }
@@ -445,12 +389,9 @@ module.exports = {
     isTowerUpgrade,
     isTower,
     isTowerPath,
-    allWaterTowers,
-    isWaterEntity,
     isOfTower,
     towerPathToTower,
     towerPathtoPath,
-    towerPathToIndexNormalForm,
     towerUpgradeToIndexNormalForm,
     towerUpgradeFromTowerAndPathAndTier,
     pathTierFromUpgradeSet,
@@ -460,7 +401,6 @@ module.exports = {
     isValidUpgradeSet,
     isValidTempleSet,
     formatEntity,
-    getEntityType,
     costOfTowerUpgrade,
     costOfTowerUpgradeSet,
     cumulativeTowerUpgradePathCosts

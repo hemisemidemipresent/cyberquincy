@@ -60,7 +60,7 @@ function parseEntity(interaction, num) {
                 const [, tier] = Towers.pathTierFromUpgradeSet(Towers.towerUpgradeToUpgrade(parsed.tower_upgrade));
                 if (tier < 3) {
                     const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade);
-                    parsed = CommandParser.parse([`${tower}#222`], entityParser);
+                    parsed = CommandParser.parse([`${tower}#000`], entityParser);
                 }
             }
             return parsed;

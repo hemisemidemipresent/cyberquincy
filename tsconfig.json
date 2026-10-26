@@ -1,0 +1,26 @@
+{
+    // Type-checking only: Bun (and tsx under Node.js) run .ts files directly, so tsc never emits output.
+    "compilerOptions": {
+        "target": "es2022",
+        "lib": ["es2023"],
+        "module": "preserve",
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "types": ["node"],
+        "noEmit": true,
+        // Bun and tsx transpile one file at a time; flag code that needs whole-program info
+        "isolatedModules": true,
+
+        // Existing .js files are allowed but not checked; opt a file in with `// @ts-check`
+        "allowJs": true,
+        "checkJs": false,
+
+        // Loosened for the migration; tighten (e.g. "strict": true) once most files are .ts
+        "strict": false,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": ["**/*.ts", "**/*.js", "jsons/**/*.json"],
+    "exclude": ["node_modules", "cache", "1"]
+}

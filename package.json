@@ -3,8 +3,15 @@
     "description": "A discord bot for btd6",
     "main": "server.js",
     "scripts": {
-        "register": "node register",
-        "test": "npm run register && node server.js",
+        "register": "bun register.js",
+        "start": "bun server.js",
+        "start:shards": "bun index.js",
+        "test": "bun run register && bun server.js",
+        "register:node": "tsx register.js",
+        "start:node": "tsx server.js",
+        "start:shards:node": "tsx index.js",
+        "test:node": "npm run register:node && tsx server.js",
+        "typecheck": "tsc",
         "refresh": "del /f package-lock.json && npm install"
     },
     "repository": {
@@ -38,6 +45,9 @@
         "pluralize": "^8.0.0"
     },
     "devDependencies": {
-        "eslint": "^8.51.0"
+        "@types/node": "^22.20.5",
+        "eslint": "^8.51.0",
+        "tsx": "^4.23.15",
+        "typescript": "^7.0.2"
     }
 }

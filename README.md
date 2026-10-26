@@ -20,13 +20,33 @@ Cyber Quincy is the most polished BTD6 discord bot from providing information on
 
 1. make a new discord bot in [discord dev page](https://discord.com/developers/applications), and copy the token into `./1/config.json` as `token`.
 
-2. to register slash commands type `node register`
+2. install dependencies with `bun install` (or `npm install`)
 
-4. to run type `node server`, or to run with sharding run `node index`
+3. to register slash commands type `bun run register`
+
+4. to run type `bun start`, or to run with sharding run `bun run start:shards`
+
+### Running with Node.js instead of Bun
+
+Node.js can't run the TypeScript files on its own, so the node scripts use [`tsx`](https://tsx.is) (installed as a dev dependency):
+
+1. `npm install`
+2. `npm run register:node` to register slash commands
+3. `npm run start:node` to run, or `npm run start:shards:node` to run with sharding
+
+`npm run test:node` registers and runs in one go (the Bun equivalent is `bun run test`).
+
+# TypeScript
+
+The project is being migrated from JavaScript to TypeScript gradually, so `.js` and `.ts` files live side by side and can `require`/`import` each other.
+
+-   run `npm run typecheck` (or `bun run typecheck`) to type-check the project. This only checks; it never generates files, since Bun and tsx run `.ts` files directly
+-   existing `.js` files are not type-checked unless they start with `// @ts-check`
+-   new files should preferably be written in TypeScript
 
 # Project Info
 
--   this project uses CommonJS modules (no `import` or `export`, just `require` and `module.exports`)
+-   existing `.js` files use CommonJS modules (`require` and `module.exports`)
 -   there is now ESLint for this project - there is an `.eslintrc.json` linter file now which should hopefully enforce a somewhat consistent code standard
 -   to use eslint to check for errors run `npx eslint <file or directory>`. Many text editors also have integration with eslint as well.
 

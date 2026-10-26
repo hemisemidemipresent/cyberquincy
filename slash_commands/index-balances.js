@@ -8,17 +8,6 @@ const { cyber } = require('../jsons/colors.json');
 const Index = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
 
-const OrParser = require('../parser/or-parser');
-
-const TowerParser = require('../parser/tower-parser');
-const TowerPathParser = require('../parser/tower-path-parser');
-const TowerUpgradeParser = require('../parser/tower-upgrade-parser');
-const HeroParser = require('../parser/hero-parser');
-
-const VersionParser = require('../parser/version-parser');
-
-const Parsed = require('../parser/parsed');
-
 const entityOption = new SlashCommandStringOption()
     .setName('entity')
     .setDescription('Tower/Path/Upgrade/Hero')
@@ -66,78 +55,39 @@ const BALANCE_TYPE_MAPPINGS = {
     '🔄': 'Changes'
 };
 
-function parseEntity(interaction) {
-    const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
-    const entity = interaction.options.getString('entity');
-    if (entity) {
-        const canonicalEntity = Towers.canonicalizeEntity(entity) ?? entity;
-        if (canonicalEntity) {
-            return CommandParser.parse([canonicalEntity], entityParser);
-        } else {
-            const parsed = new Parsed();
-            parsed.addError('Canonical not found');
-            return parsed;
-        }
-    } else return new Parsed();
-}
-
-function parseVersion(interaction, num) {
-    const v = interaction.options.getInteger(`version${num}`);
-    if (v) {
-        return CommandParser.parse([`v${v}`], new VersionParser(2));
-    } else return new Parsed();
-}
-
-function parseFilter(interaction) {
-    const parsed = new Parsed();
-    adjustedTypeFilter = interaction.options.getString('type_filter')?.replace('🟡', '⚠️')?.replace('🟦', '↔');
-    parsed.addField('balance_filter', adjustedTypeFilter);
-    return parsed;
-}
-
-function parseAll(interaction) {
-    const parsedEntity = parseEntity(interaction);
-    const parsedVersion1 = parseVersion(interaction, 1);
-    const parsedVersion2 = parseVersion(interaction, 2);
-    const parsedFilter = parseFilter(interaction);
-    return [parsedEntity, parsedVersion1, parsedVersion2, parsedFilter];
-}
-
-function validateInput(interaction) {
-    entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
-
-    let [parsedEntity, parsedVersion1, parsedVersion2, /*parsedFilter*/] = parseAll(interaction);
-
-    if (parsedEntity.hasErrors()) {
-        return 'Entity did not match a tower/upgrade/path/hero';
+// Returns either { error } or { input }; `entity` is a { kind, canonical } lookup result or null,
+// `versions` holds 0-2 version numbers as strings in ascending order
+function readInput(interaction) {
+    const entityArg = interaction.options.getString('entity');
+    let entity = null;
+    if (entityArg) {
+        entity = Towers.lookupTowerEntity(entityArg, { allowTowerPaths: true });
+        if (!entity) return { error: 'Entity did not match a tower/upgrade/path/hero' };
     }
 
-    if (parsedVersion1.hasErrors()) {
-        return `Parsed Version 1 must be a number >= 2`;
+    const versions = [];
+    for (const num of [1, 2]) {
+        const v = interaction.options.getInteger(`version${num}`);
+        if (!v) continue;
+        // Versions are written v#{#.#}, so at most 3 digits
+        if (v < 2 || v > 999) return { error: `Parsed Version ${num} must be a number >= 2` };
+        versions.push(String(v));
     }
+    versions.sort((v1, v2) => parseInt(v1) - parseInt(v2));
 
-    if (parsedVersion2.hasErrors()) {
-        return `Parsed Version 2 must be a number >= 2`;
-    }
+    const balanceFilter = interaction.options.getString('type_filter')?.replace('🟡', '⚠️')?.replace('🟦', '↔') || null;
+
+    return { input: { entity, versions, balanceFilter } };
 }
 
 async function execute(interaction) {
-    const validationFailure = validateInput(interaction);
-    if (validationFailure) {
+    const { error, input } = readInput(interaction);
+    if (error) {
         return await interaction.reply({
-            content: validationFailure,
+            content: error,
             flags: MessageFlags.Ephemeral
         });
     }
-
-    const parsed = parseAll(interaction).reduce(
-        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
-        new Parsed()
-    );
-
-    parsed.versions?.sort(function (v1, v2) {
-        return parseInt(v1) - parseInt(v2);
-    });
 
     await interaction.deferReply();
 
@@ -160,20 +110,20 @@ async function execute(interaction) {
                     // Will be undefined for hero
                     balanceTowerUpgrade = mat?.[2];
 
-                    if (!matchesEntity(entity, balanceTowerUpgrade, parsed)) {
+                    if (!matchesEntity(entity, balanceTowerUpgrade, input)) {
                         continue;
                     }
 
                     versionNumber = parseInt(version);
 
-                    if (!matchesVersions(versionNumber, parsed)) {
+                    if (!matchesVersions(versionNumber, input)) {
                         continue;
                     }
 
                     balanceSymbol = mat[1];
 
                     // needs to change based on balance type
-                    if (!matchesBalanceType(balanceSymbol, parsed)) {
+                    if (!matchesBalanceType(balanceSymbol, input)) {
                         continue;
                     }
 
@@ -190,18 +140,18 @@ async function execute(interaction) {
         }
     }
 
-    const pages = paginateBalances(filteredBalances, parsed);
+    const pages = paginateBalances(filteredBalances, input);
 
     let addedVersion = null;
-    if (hasEntity(parsed) && pages.length > 0) {
+    if (input.entity && pages.length > 0) {
         const soleEntity = Object.keys(filteredBalances[Object.keys(filteredBalances)[0]])[0];
         addedVersion = balances[soleEntity]?.versionAdded;
     }
 
-    await displayPages(interaction, pages, addedVersion, parsed);
+    await displayPages(interaction, pages, addedVersion, input);
 }
 
-function paginateBalances(balances, parsed) {
+function paginateBalances(balances, input) {
     const pages = [];
     let page = {};
     let header;
@@ -215,14 +165,14 @@ function paginateBalances(balances, parsed) {
     for (const version of sortedVersions) {
         for (const entity in balances[version]) {
             // HEADER
-            if (parsed.versions?.length == 1) {
-                if (hasEntity(parsed)) {
+            if (input.versions.length == 1) {
+                if (input.entity) {
                     header = `v${version} — ${Aliases.toIndexNormalForm(entity)}`;
                 } else {
                     header = Aliases.toIndexNormalForm(entity);
                 }
             } else {
-                if (hasEntity(parsed)) {
+                if (input.entity) {
                     header = `v${version}`;
                 } else {
                     header = `v${version} — ${Aliases.toIndexNormalForm(entity)}`;
@@ -263,10 +213,6 @@ function paginateBalances(balances, parsed) {
     return pages;
 }
 
-function hasEntity(parsed) {
-    return parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path;
-}
-
 const multipageButtons = [
     new ButtonBuilder().setCustomId('first').setLabel('⏪').setStyle(ButtonStyle.Primary),
     new ButtonBuilder().setCustomId('prev!').setLabel('⬅️').setStyle(ButtonStyle.Primary),
@@ -275,7 +221,7 @@ const multipageButtons = [
     new ButtonBuilder().setCustomId('last').setLabel('⏩').setStyle(ButtonStyle.Primary)
 ];
 
-async function displayPages(interaction, pages, versionAdded, parsed) {
+async function displayPages(interaction, pages, versionAdded, input) {
     pageIdx = 0;
     let embed;
 
@@ -293,7 +239,7 @@ async function displayPages(interaction, pages, versionAdded, parsed) {
     let displayedButtons;
 
     async function embedPage() {
-        embed = new EmbedBuilder().setTitle(title(parsed, pages.length > 0)).setColor(cyber);
+        embed = new EmbedBuilder().setTitle(title(input, pages.length > 0)).setColor(cyber);
 
         if (versionAdded) {
             embed.setDescription(`**Added in v${parseInt(versionAdded)}**`);
@@ -376,11 +322,11 @@ async function displayPages(interaction, pages, versionAdded, parsed) {
     await embedPage();
 }
 
-function title(parsed, hasResults = true) {
+function title(input, hasResults = true) {
     let title = hasResults ? 'All ' : 'No ';
 
-    if (parsed.balance_filter) {
-        title += parsed.balance_filter
+    if (input.balanceFilter) {
+        title += input.balanceFilter
             .split('/')
             .map((bf) => BALANCE_TYPE_MAPPINGS[bf])
             .join('/');
@@ -390,29 +336,27 @@ function title(parsed, hasResults = true) {
 
     if (!hasResults) title += ' Found';
 
-    if (hasEntity(parsed)) {
-        title += ` for ${Towers.formatEntity(parsed.tower || parsed.hero || parsed.tower_upgrade || parsed.tower_path)}`;
+    if (input.entity) {
+        title += ` for ${Towers.formatEntity(input.entity.canonical)}`;
     }
 
-    if (parsed.versions?.length == 1) {
-        title += ` in v${parsed.version}`;
-    } else if (parsed.versions?.length == 2) {
-        title += ` between v${parsed.versions[0]} and v${parsed.versions[1]}`;
+    if (input.versions.length == 1) {
+        title += ` in v${input.versions[0]}`;
+    } else if (input.versions.length == 2) {
+        title += ` between v${input.versions[0]} and v${input.versions[1]}`;
     }
 
     return title;
 }
 
-function matchesEntity(noteEntity, noteUpgrade, parsed) {
+function matchesEntity(noteEntity, noteUpgrade, { entity }) {
     // If no entity is provided, don't filter by entity
-    if (!hasEntity(parsed)) {
+    if (!entity) {
         return true;
     }
 
-    if (parsed.tower) {
-        return noteEntity == parsed.tower;
-    } else if (parsed.hero) {
-        return noteEntity == parsed.hero;
+    if (entity.kind === 'tower' || entity.kind === 'hero') {
+        return noteEntity == entity.canonical;
     }
 
     // TODO: add paragons to tower aliases
@@ -426,16 +370,16 @@ function matchesEntity(noteEntity, noteUpgrade, parsed) {
     }
 
     let entityUpgrades;
-    if (parsed.tower_upgrade) {
-        if (Towers.towerUpgradeToTower(parsed.tower_upgrade) != noteEntity) {
+    if (entity.kind === 'tower_upgrade') {
+        if (Towers.towerUpgradeToTower(entity.canonical) != noteEntity) {
             return false;
         }
-        entityUpgrades = [Towers.towerUpgradeToUpgrade(parsed.tower_upgrade)];
-    } else if (parsed.tower_path) {
-        if (Towers.towerPathToTower(parsed.tower_path) != noteEntity) {
+        entityUpgrades = [Towers.towerUpgradeToUpgrade(entity.canonical)];
+    } else if (entity.kind === 'tower_path') {
+        if (Towers.towerPathToTower(entity.canonical) != noteEntity) {
             return false;
         }
-        entityUpgrades = Towers.upgradesFromPath(Towers.towerPathtoPath(parsed.tower_path));
+        entityUpgrades = Towers.upgradesFromPath(Towers.towerPathtoPath(entity.canonical));
     }
 
     const entityPathTiers = entityUpgrades.map((u) => Towers.pathTierFromUpgradeSet(u));
@@ -445,20 +389,20 @@ function matchesEntity(noteEntity, noteUpgrade, parsed) {
     return entityPathTiers.some((pt) => notePathTiers.some((npt) => pt[0] == npt[0] && pt[1] == npt[1]));
 }
 
-function matchesVersions(noteVersion, parsed) {
-    if (!parsed.versions) return true;
+function matchesVersions(noteVersion, { versions }) {
+    if (versions.length == 0) return true;
 
-    if (parsed.versions.length == 1) {
-        return parseInt(noteVersion) == parseInt(parsed.version);
+    if (versions.length == 1) {
+        return parseInt(noteVersion) == parseInt(versions[0]);
     }
 
-    return parseInt(noteVersion) >= parseInt(parsed.versions[0]) && parseInt(noteVersion) <= parseInt(parsed.versions[1]);
+    return parseInt(noteVersion) >= parseInt(versions[0]) && parseInt(noteVersion) <= parseInt(versions[1]);
 }
 
-function matchesBalanceType(noteSymbol, parsed) {
-    if (!parsed.balance_filter) return true;
+function matchesBalanceType(noteSymbol, { balanceFilter }) {
+    if (!balanceFilter) return true;
 
-    return parsed.balance_filter.split('/').includes(noteSymbol);
+    return balanceFilter.split('/').includes(noteSymbol);
 }
 
 /**

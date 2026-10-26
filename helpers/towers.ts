@@ -2,7 +2,7 @@ import gHelper from './general.js';
 import bHelper from './bloons-general.js';
 import Heroes from './heroes.js';
 import Aliases from '../aliases';
-import { SUPERGROUPS, type TowerCategory } from '../alias-repository';
+import { SUPERGROUPS, type AliasMatch, type TowerCategory } from '../alias-repository';
 import costs from '../jsons/costs.json';
 import costs_b2 from '../jsons/costs_b2.json';
 
@@ -86,12 +86,46 @@ function lookupTowerPath(member: string): string | null {
     return tower && path ? `${tower}#${path}` : null;
 }
 
-/**
- * The canonical form of a tower, tower upgrade, hero, Geraldo item, tower path or crosspath, as a plain string.
- * Only for the parser-based commands, which re-check what kind of entity it is; prefer the typed lookups elsewhere.
- */
-function canonicalizeEntity(member: string): string | null {
-    return Aliases.lookupMultiple(member, SUPERGROUPS.TOWER)?.canonical ?? lookupTowerCrosspath(member) ?? lookupTowerPath(member);
+// Resolves user input like `sotf`, `base_dart` or `dart#030` to a tower upgrade; crosspaths like `dart#024` aren't upgrades
+function lookupTowerUpgrade(member: string): TowerUpgradeCanonical | null {
+    const crosspath = lookupTowerCrosspath(member);
+    return crosspath && isTowerUpgradeCanonical(crosspath) ? crosspath : null;
+}
+
+/** A tower, tower upgrade or hero, or (when allowed) a tower path such as `heli_pilot#top_path` */
+type TowerEntityMatch = AliasMatch<'tower' | 'tower_upgrade' | 'hero'> | { kind: 'tower_path'; canonical: string };
+
+// Resolves the "entity" input of the index commands
+function lookupTowerEntity(member: string, { allowTowerPaths = false } = {}): TowerEntityMatch | null {
+    const match = Aliases.lookupMultiple(member, ['tower', 'tower_upgrade', 'hero'] as const);
+    if (match) return match;
+
+    const upgrade = lookupTowerUpgrade(member);
+    if (upgrade) return { kind: 'tower_upgrade', canonical: upgrade };
+
+    const towerPath = allowTowerPaths ? lookupTowerPath(member) : null;
+    return towerPath ? { kind: 'tower_path', canonical: towerPath } : null;
+}
+
+// The index files tier 1 and 2 upgrades' combos under the base tower
+function baseTowerIfLowTier(entity: TowerEntityMatch): TowerEntityMatch {
+    if (entity.kind !== 'tower_upgrade') return entity;
+    const [, tier] = pathTierFromUpgradeSet(towerUpgradeToUpgrade(entity.canonical));
+    if (tier >= 3) return entity;
+    return { kind: 'tower_upgrade', canonical: toTowerUpgradeCanonical(`${towerUpgradeToTower(entity.canonical)}#000`) };
+}
+
+// The index's name for a tower, tower upgrade or hero; tower paths have none
+function towerEntityIndexName(entity: TowerEntityMatch | null): string | null {
+    switch (entity?.kind) {
+        case 'tower':
+        case 'hero':
+            return Aliases.toIndexNormalForm(entity.canonical);
+        case 'tower_upgrade':
+            return towerUpgradeToIndexNormalForm(entity.canonical);
+        default:
+            return null;
+    }
 }
 
 function allTowerPaths(): string[] {
@@ -473,7 +507,10 @@ export {
     toTowerCrosspathCanonical,
     lookupTowerCrosspath,
     lookupTowerPath,
-    canonicalizeEntity,
+    lookupTowerUpgrade,
+    lookupTowerEntity,
+    baseTowerIfLowTier,
+    towerEntityIndexName,
     allTowerPaths,
     allPaths,
     allTempleSets,

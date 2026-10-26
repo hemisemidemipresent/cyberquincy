@@ -1,4 +1,3 @@
-const MapParser = require("../parser/map-parser");
 const Aliases = require("../aliases");
 
 const { red, palegreen } = require("../jsons/colors.json");
@@ -25,20 +24,16 @@ builder = new SlashCommandBuilder()
     .addStringOption(comboModifierOption);
 
 async function execute(interaction) {
-    const mapArg = interaction.options.getString("map");
-    const canonicalMap = Aliases.lookup(mapArg, "map");
-
-    const parsed = CommandParser.parse([canonicalMap], new MapParser());
+    const map = Aliases.lookup(interaction.options.getString("map"), "map");
+    if (!map) {
+        return await interaction.reply("Map provided not valid");
+    }
 
     await interaction.deferReply();
 
-    if (parsed.hasErrors()) {
-        return await interaction.reply("Map provided not valid");
-    } else {
-        const modifier = interaction.options.getString("modifier");
-        let challengeEmbed = await ltc(Aliases.toIndexNormalForm(canonicalMap), modifier);
-        return await interaction.reply({ embeds: [challengeEmbed] });
-    }
+    const modifier = interaction.options.getString("modifier");
+    let challengeEmbed = await ltc(Aliases.toIndexNormalForm(map), modifier);
+    return await interaction.editReply({ embeds: [challengeEmbed] });
 }
 
 async function ltc(map, modifier) {

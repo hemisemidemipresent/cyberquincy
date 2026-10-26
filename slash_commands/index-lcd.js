@@ -1,4 +1,3 @@
-const MapParser = require('../parser/map-parser.js');
 const Aliases = require('../aliases');
 
 const gHelper = require('../helpers/general.js');
@@ -16,19 +15,15 @@ builder = new SlashCommandBuilder()
     .addStringOption(mapOption);
 
 async function execute(interaction) {
-    const mapArg = interaction.options.getString('map');
-    const canonicalMap = Aliases.lookup(mapArg, 'map');
-
-    const parsed = CommandParser.parse([canonicalMap], new MapParser());
-
-    await interaction.deferReply();
-
-    if (parsed.hasErrors()) {
+    const map = Aliases.lookup(interaction.options.getString('map'), 'map');
+    if (!map) {
         return await interaction.reply('Map provided not valid');
     }
 
-    let challengeEmbed = await lcd(Aliases.toIndexNormalForm(parsed.map));
-    return await interaction.reply({ embeds: [challengeEmbed] });
+    await interaction.deferReply();
+
+    let challengeEmbed = await lcd(Aliases.toIndexNormalForm(map));
+    return await interaction.editReply({ embeds: [challengeEmbed] });
 }
 
 async function lcd(map) {

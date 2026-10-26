@@ -1,10 +1,4 @@
-const MapParser = require('../parser/map-parser');
 const Aliases = require('../aliases');
-const NaturalNumberParser = require('../parser/natural-number-parser');
-const PersonParser = require('../parser/person-parser');
-const TowerParser = require('../parser/tower-parser');
-
-const Parsed = require('../parser/parsed');
 
 const { displayOneOrMultiplePagesNew, genCompletionLink } = require('../helpers/index.js');
 const Towers = require('../helpers/towers');
@@ -37,110 +31,62 @@ builder = new SlashCommandBuilder()
     .addStringOption(personOption);
 
 async function execute(interaction) {
-    await interaction.deferReply();
-
-    const validationFailure = validateInput(interaction);
-    if (validationFailure) {
+    const { error, input } = readInput(interaction);
+    if (error) {
         return await interaction.reply({
-            content: validationFailure,
+            content: error,
             flags: MessageFlags.Ephemeral
         });
     }
 
-    const parsed = parseAll(interaction).reduce(
-        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
-        new Parsed()
-    );
+    await interaction.deferReply();
 
-    return await displayFttcFilterAll(interaction, parsed);
+    return await displayFttcFilterAll(interaction, input);
 }
 
 ////////////////////////////////////////////////////////////
-// Parsing SlashCommand Input
+// Reading SlashCommand Input
 ////////////////////////////////////////////////////////////
 
-function parseMap(interaction) {
-    const map = interaction.options.getString('map');
-    if (map) {
-        const canonicalMap = Aliases.lookup(map, 'map');
-        if (canonicalMap) {
-            return CommandParser.parse([canonicalMap], new MapParser());
-        } else {
-            const parsed = new Parsed();
-            parsed.addError('Canonical not found');
-            return parsed;
-        }
-    } else return new Parsed();
-}
-
-function parseTower(interaction, num) {
-    const tower = interaction.options.getString(`tower${num}`);
-    if (tower) {
-        const canonicalTower = Aliases.lookup(tower, 'tower') ?? tower;
-        if (canonicalTower) {
-            return CommandParser.parse([canonicalTower], new TowerParser());
-        } else {
-            const parsed = new Parsed();
-            parsed.addError('Canonical not found');
-            return parsed;
-        }
-    } else return new Parsed();
-}
-
-function parsePerson(interaction) {
-    const u = interaction.options.getString('person')?.toLowerCase();
-    if (u) {
-        return CommandParser.parse([`user#${u}`], new PersonParser());
-    } else return new Parsed();
-}
-
-function parseNumTowerTypes(interaction) {
-    const n = interaction.options.getInteger('num_tower_types');
-    if (n || n == 0) {
-        return CommandParser.parse([n], new NaturalNumberParser());
-    } else return new Parsed();
-}
-
-function parseAll(interaction) {
-    const parsedMap = parseMap(interaction);
-    const parsedTower1 = parseTower(interaction, 1);
-    const parsedTower2 = parseTower(interaction, 2);
-    const parsedPerson = parsePerson(interaction);
-    const parsedNumTowerTypes = parseNumTowerTypes(interaction);
-
-    return [parsedMap, parsedTower1, parsedTower2, parsedNumTowerTypes, parsedPerson];
-}
-
-function validateInput(interaction) {
-    let [parsedMap, parsedTower1, parsedTower2, parsedNumTowerTypes, ] = parseAll(interaction);
-
-    if (parsedMap.hasErrors()) {
-        return `Map not valid`;
+// Returns either { error } or { input }; `map` and `towers` hold canonicals from alias lookups
+function readInput(interaction) {
+    const mapArg = interaction.options.getString('map');
+    let map = null;
+    if (mapArg) {
+        map = Aliases.lookup(mapArg, 'map');
+        if (!map) return { error: `Map not valid` };
     }
 
-    if (parsedTower1.hasErrors()) {
-        return 'Tower1 did not match a tower';
+    const towers = [];
+    for (const num of [1, 2]) {
+        const towerArg = interaction.options.getString(`tower${num}`);
+        if (!towerArg) continue;
+        const tower = Aliases.lookup(towerArg, 'tower');
+        if (!tower) return { error: `Tower${num} did not match a tower` };
+        towers.push(tower);
     }
 
-    if (parsedTower2.hasErrors()) {
-        return 'Tower2 did not match a tower';
+    // Discord already enforces a minimum of 1
+    const numTowerTypes = interaction.options.getInteger('num_tower_types') || null;
+    const person = interaction.options.getString('person')?.toLowerCase() || null;
+
+    if (numTowerTypes && towers.length > numTowerTypes) {
+        const formattedTowers = towers.map((t) => Aliases.toIndexNormalForm(t));
+        return {
+            error: `You searched more towers (${formattedTowers.join(', ')}) than the number of tower types you specified (${numTowerTypes})`
+        };
     }
 
-    const parsedTowers = parsedTower1.merge(parsedTower2);
-    if (parsedTowers.towers && parsedTowers.towers.length > parsedNumTowerTypes.natural_number) {
-        const formattedTowers = parsedTowers.towers.map((t) => Aliases.toIndexNormalForm(t));
-        return `You searched more towers (${formattedTowers.join(', ')}) than the number of tower types you specified (${
-            parsedNumTowerTypes.natural_number
-        })`;
+    if (map && numTowerTypes) {
+        return { error: `Map + Number of Tower Types either conflict or are redundant; don't search both` };
     }
 
-    if (parsedMap.map && parsedNumTowerTypes.hasAny()) {
-        return `Map + Number of Tower Types either conflict or are redundant; don't search both`;
-    }
+    return { input: { map, towers, numTowerTypes, person } };
 }
 
-function keepOnlyOG(parsed) {
-    return !parsed.hasAny() || (parsed.natural_number && !parsed.person && !parsed.tower);
+function keepOnlyOG({ map, towers, numTowerTypes, person }) {
+    const hasAny = map || towers.length > 0 || numTowerTypes || person;
+    return !hasAny || (numTowerTypes && !person && towers.length === 0);
 }
 
 ////////////////////////////////////////////////////////////
@@ -156,26 +102,26 @@ async function fetchFttc(searchParams) {
     return resJson;
 }
 
-function getUrlParams(parsed) {
-    params = new URLSearchParams();
+function getUrlParams(input) {
+    const params = new URLSearchParams();
 
-    if (parsed.map) {
-        params.set('map', Aliases.toIndexNormalForm(parsed.map));
+    if (input.map) {
+        params.set('map', Aliases.toIndexNormalForm(input.map));
     }
 
-    if (parsed.natural_number) {
-        params.set('towercount', parsed.natural_number);
+    if (input.numTowerTypes) {
+        params.set('towercount', input.numTowerTypes);
     }
 
-    if (parsed.towers) {
-        params.set('towerincludes', parsed.towers.map(t => `"${t}"`));
+    if (input.towers.length > 0) {
+        params.set('towerincludes', input.towers.map(t => `"${t}"`));
     }
 
-    if (parsed.person) {
-        params.set('person', parsed.person);
+    if (input.person) {
+        params.set('person', input.person);
     }
 
-    if(keepOnlyOG(parsed)) {
+    if(keepOnlyOG(input)) {
         params.set('og', 1);
     }
 
@@ -215,26 +161,26 @@ const FTTC_TOWER_ABBREVIATIONS = {
     beast_handler: 'bst',
 };
 
-async function displayFttcFilterAll(interaction, parsed) {
-    const fetchParams = getUrlParams(parsed);
+async function displayFttcFilterAll(interaction, input) {
+    const fetchParams = getUrlParams(input);
     if ((await fetchFttc(fetchParams)).count <= 0) {
-        return interaction.reply({
+        return interaction.editReply({
             embeds: [
-                new Discord.EmbedBuilder().setTitle(titleNoCombos(parsed))
+                new Discord.EmbedBuilder().setTitle(titleNoCombos(input))
             ]
         });
     }
     fetchParams.set('count', '10');
     return await displayOneOrMultiplePagesNew(
         interaction, fetchFttc, fetchParams,
-        includedColumns(parsed),
+        includedColumns(input),
         completion => {
             const boldOg = (str) => completion.og ? `**${str}**` : str;
 
             const towers = completion.towerset.map(tower => {
                 const towerCanonical = Aliases.lookup(tower, 'tower');
                 const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
-                return parsed.towers && parsed.towers.includes(towerCanonical)
+                return input.towers.includes(towerCanonical)
                     ? `**${towerAbbreviation}**`
                     : towerAbbreviation;
             }).join(' | ');
@@ -248,22 +194,22 @@ async function displayFttcFilterAll(interaction, parsed) {
         },
         embed => {
             embed
-                .setTitle(title(parsed))
+                .setTitle(title(input))
                 .setColor(paleorange)
                 .setFooter({ text: `---\nAny OG completion(s) bolded` });
         }
     );
 }
 
-function includedColumns(parsed) {
+function includedColumns(input) {
     // Setup / Data consolidation
     let displayCols = ['Towers', 'Map', 'Person', 'Link'];
 
-    if (parsed.person) {
+    if (input.person) {
         displayCols = displayCols.filter((col) => col != 'Person');
     }
 
-    if (parsed.map) {
+    if (input.map) {
         displayCols = displayCols.filter((col) => col != 'Map');
     }
 
@@ -274,24 +220,24 @@ function includedColumns(parsed) {
     return displayCols;
 }
 
-function title(parsed) {
+function title(input) {
     // t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';
     let t = 'All FTTC Combos ';
-    if (parsed.person) t += `by ${parsed.person} `;
-    if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
-    if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
-    if (parsed.towers) t += `including ${Aliases.toIndexNormalForm(parsed.towers[0])} `;
-    if (parsed.towers && parsed.towers[1]) t += `and ${Aliases.toIndexNormalForm(parsed.towers[1])} `;
+    if (input.person) t += `by ${input.person} `;
+    if (input.numTowerTypes) t += `with ${input.numTowerTypes} towers `;
+    if (input.map) t += `on ${Aliases.toIndexNormalForm(input.map)} `;
+    if (input.towers[0]) t += `including ${Aliases.toIndexNormalForm(input.towers[0])} `;
+    if (input.towers[1]) t += `and ${Aliases.toIndexNormalForm(input.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 
-function titleNoCombos(parsed) {
+function titleNoCombos(input) {
     let t = 'No FTTC Combos Found ';
-    if (parsed.person) t += `by "${parsed.person}" `;
-    if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
-    if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
-    if (parsed.towers) t += `including ${Aliases.toIndexNormalForm(parsed.towers[0])} `;
-    if (parsed.towers && parsed.towers[1]) t += `and ${Aliases.toIndexNormalForm(parsed.towers[1])} `;
+    if (input.person) t += `by "${input.person}" `;
+    if (input.numTowerTypes) t += `with ${input.numTowerTypes} towers `;
+    if (input.map) t += `on ${Aliases.toIndexNormalForm(input.map)} `;
+    if (input.towers[0]) t += `including ${Aliases.toIndexNormalForm(input.towers[0])} `;
+    if (input.towers[1]) t += `and ${Aliases.toIndexNormalForm(input.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 

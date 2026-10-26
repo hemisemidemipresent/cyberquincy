@@ -8,7 +8,8 @@ const { SUPERGROUPS } = require('../alias-repository');
 const { paleblue } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');
 
-const Parsed = require('../parser/parsed.js');
+const UserCommandError = require('../exceptions/user-command-error.js');
+const DeveloperCommandError = require('../exceptions/developer-command-error.js');
 
 const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 
@@ -35,52 +36,45 @@ async function fetch2mp(searchParams) {
 }
 
 async function execute(interaction) {
-    validationFailure = validateInput(interaction);
-    if (validationFailure)
+    const { error, input } = readInput(interaction);
+    if (error)
         return await interaction.reply({
-            content: validationFailure,
+            content: error,
             flags: MessageFlags.Ephemeral
         });
 
-    const parsed = parseAll(interaction).reduce(
-        (combinedParsed, nextParsed) => combinedParsed.merge(nextParsed),
-        new Parsed()
-    );
-
     await interaction.deferReply();
 
-    const entityType = parsed.tower ? Aliases.toIndexNormalForm(parsed.tower) : null;
-    const entity = parsed.tower_upgrade ? Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade) : null;
-    const hero = parsed.hero ? Aliases.toIndexNormalForm(parsed.hero) : null;
-    const map = parsed.map ? Aliases.toIndexNormalForm(parsed.map) : null;
+    const { entity, map, person } = input;
+    const entityName = Towers.towerEntityIndexName(entity);
 
     const fetchParams = new URLSearchParams(
         Object.entries({
-            towerquery: JSON.stringify([entityType ?? entity ?? hero].filter(val => val)),
-            map,
-            person: parsed.person,
-            difficulty: parsed.map_difficulty,
+            towerquery: JSON.stringify([entityName].filter(val => val)),
+            map: map?.kind === 'map' ? Aliases.toIndexNormalForm(map.canonical) : null,
+            person,
+            difficulty: map?.kind === 'map_difficulty' ? map.canonical : null,
             count: '100'
         }).filter(([,value]) => value !== null && value !== undefined)
     );
 
-    if (parsed.tower && !parsed.map && !parsed.map_difficulty && !parsed.person) {
+    if (entity?.kind === 'tower' && !map && !person) {
         fetchParams.set('og', '1');
         const resJson = await fetch2mp(fetchParams);
         return await interaction.editReply({
-            embeds: [embed2MPTowerStatistics(resJson, parsed.tower)]
+            embeds: [embed2MPTowerStatistics(resJson, entity.canonical)]
         });
-    } else if ((parsed.tower_upgrade || parsed.hero) && !parsed.person) {
+    } else if ((entity?.kind === 'tower_upgrade' || entity?.kind === 'hero') && !person) {
         const resJson = await fetch2mp(fetchParams);
         let challengeEmbed;
 
         try {
-            if (parsed.map_difficulty) {
-                challengeEmbed = embed2MPMapDifficulty(resJson, entity ?? hero, parsed.map_difficulty);
-            } else if (parsed.map) {
-                challengeEmbed = await embed2MPAlt(resJson, entity ?? hero, parsed.map);
+            if (map?.kind === 'map_difficulty') {
+                challengeEmbed = embed2MPMapDifficulty(resJson, entityName, map.canonical);
+            } else if (map?.kind === 'map') {
+                challengeEmbed = await embed2MPAlt(resJson, entityName, map.canonical);
             } else {
-                challengeEmbed = await embed2MPOG(entity ?? hero);
+                challengeEmbed = await embed2MPOG(entityName);
             }
         } catch (e) {
             challengeEmbed = err(e);
@@ -94,93 +88,40 @@ async function execute(interaction) {
         });
     }
     try {
-        return await display2MPFilterAll(interaction, fetchParams, parsed);
+        return await display2MPFilterAll(interaction, fetchParams, input);
     } catch (e) {
         return await interaction.editReply({ embeds: [err(e)] });
     }
 }
 
 ////////////////////////////////////////////////////////////
-// Parsing SlashCommand Input
+// Reading SlashCommand Input
 ////////////////////////////////////////////////////////////
 
-function validateInput(interaction) {
-    let [parsedEntity, parsedMap, parsedPerson] = parseAll(interaction);
+// Returns either { error } or { input }; `entity` and `map` are { kind, canonical } lookup results
+function readInput(interaction) {
+    const entityArg = interaction.options.getString('entity');
+    const mapArg = interaction.options.getString('map');
+    const person = interaction.options.getString('person')?.toLowerCase() || null;
 
-    if (parsedEntity.hasErrors()) {
-        return `Entity didn't match tower/upgrade/hero, including aliases`;
+    let entity = null;
+    if (entityArg) {
+        entity = Towers.lookupTowerEntity(entityArg);
+        if (!entity) return { error: `Entity didn't match tower/upgrade/hero, including aliases` };
+        entity = Towers.baseTowerIfLowTier(entity);
     }
 
-    if (parsedMap.hasErrors()) return `Map/Difficulty didn't match, including aliases`;
-
-    if ((parsedEntity.tower_upgrade || parsedEntity.hero) && parsedMap.map && parsedPerson.person) {
-        return "Don't search a person if you're already narrowing down your search to a specific completion";
+    let map = null;
+    if (mapArg) {
+        map = Aliases.lookupMultiple(mapArg, SUPERGROUPS.MAP);
+        if (!map) return { error: `Map/Difficulty didn't match, including aliases` };
     }
-}
 
-function parseAll(interaction) {
-    const parsedEntity = parseEntity(interaction);
-    const parsedMap = parseMap(interaction);
-    const person = parsePerson(interaction);
-    return [parsedEntity, parsedMap, person];
-}
+    if ((entity?.kind === 'tower_upgrade' || entity?.kind === 'hero') && map?.kind === 'map' && person) {
+        return { error: "Don't search a person if you're already narrowing down your search to a specific completion" };
+    }
 
-const OrParser = require('../parser/or-parser.js');
-
-const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
-const HeroParser = require('../parser/hero-parser.js');
-const TowerParser = require('../parser/tower-parser.js');
-const MapParser = require('../parser/map-parser.js');
-const MapDifficultyParser = require('../parser/map-difficulty-parser.js');
-const PersonParser = require('../parser/person-parser.js');
-
-const UserCommandError = require('../exceptions/user-command-error.js');
-const DeveloperCommandError = require('../exceptions/developer-command-error.js');
-
-function parseEntity(interaction) {
-    const entityParser = new OrParser(new TowerParser(), new TowerUpgradeParser(), new HeroParser());
-    const entity = interaction.options.getString('entity');
-    if (entity) {
-        const canonicalEntity = Towers.canonicalizeEntity(entity) ?? entity;
-        if (canonicalEntity) {
-            let parsed = CommandParser.parse([canonicalEntity], entityParser);
-            // Alias tier 1 and 2 towers to base tower
-            if (parsed.tower_upgrade) {
-                const [, tier] = Towers.pathTierFromUpgradeSet(Towers.towerUpgradeToUpgrade(parsed.tower_upgrade));
-                if (tier < 3) {
-                    const tower = Towers.towerUpgradeToTower(parsed.tower_upgrade);
-                    parsed = CommandParser.parse([`${tower}#000`], entityParser);
-                }
-            }
-            return parsed;
-        } else {
-            const parsed = new Parsed();
-            parsed.addError('Canonical not found');
-            return parsed;
-        }
-    } else return new Parsed();
-}
-
-function parseMap(interaction) {
-    const mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
-    const map = interaction.options.getString('map');
-    if (map) {
-        const canonicalMap = Aliases.lookupMultiple(map, SUPERGROUPS.MAP)?.canonical;
-        if (canonicalMap) {
-            return CommandParser.parse([canonicalMap], mapParser);
-        } else {
-            const parsed = new Parsed();
-            parsed.addError('Canonical not found');
-            return parsed;
-        }
-    } else return new Parsed();
-}
-
-function parsePerson(interaction) {
-    const person = interaction.options.getString('person')?.toLowerCase();
-    if (person) {
-        return CommandParser.parse([`user#${person}`], new PersonParser());
-    } else return new Parsed();
+    return { input: { entity, map, person } };
 }
 
 ////////////////////////////////////////////////////////////
@@ -373,11 +314,11 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
 // Custom Multipage Queries
 ////////////////////////////////////////////////////////////
 
-async function display2MPFilterAll(interaction, fetchParams, parsed) {
-    const excludedColumns = determineExcludedColumns(parsed);
+async function display2MPFilterAll(interaction, fetchParams, input) {
+    const excludedColumns = determineExcludedColumns(input);
     fetchParams.set('count', '0');
     if ((await fetch2mp(fetchParams)).count <= 0) {
-        throw new UserCommandError(titleFunction(parsed, true));
+        throw new UserCommandError(titleFunction(input, true));
     }
     fetchParams.set('count', '10');
     return await displayOneOrMultiplePagesNew(
@@ -397,14 +338,14 @@ async function display2MPFilterAll(interaction, fetchParams, parsed) {
         },
         embed => {
             embed
-                .setTitle(titleFunction(parsed))
+                .setTitle(titleFunction(input))
                 .setColor(paleblue)
                 .setFooter({ text: `---\nAny OG completion(s) bolded` });
         }
     );
 }
 
-function titleFunction(parsed, noCombos = false) {
+function titleFunction(input, noCombos = false) {
     let title;
     if (noCombos) {
         title = 'No 2MPs Completed';
@@ -412,43 +353,41 @@ function titleFunction(parsed, noCombos = false) {
         title = 'All 2MPs';
     }
 
-    if (parsed.tower) {
-        title += ` with ${Aliases.toIndexNormalForm(parsed.tower)}`;
-    } else if (parsed.tower_upgrade) {
-        title += ` with ${Towers.towerUpgradeToIndexNormalForm(parsed.tower_upgrade)}`;
-    } else if (parsed.hero) {
-        title += ` with ${Aliases.toIndexNormalForm(parsed.hero)}`;
+    const entityName = Towers.towerEntityIndexName(input.entity);
+    if (entityName) {
+        title += ` with ${entityName}`;
     }
 
-    if (parsed.map) {
-        title += ` on ${Aliases.toIndexNormalForm(parsed.map)}`;
-    } else if (parsed.map_difficulty) {
-        title += ` on ${Aliases.toIndexNormalForm(parsed.map_difficulty)} maps`;
+    if (input.map?.kind === 'map') {
+        title += ` on ${Aliases.toIndexNormalForm(input.map.canonical)}`;
+    } else if (input.map?.kind === 'map_difficulty') {
+        title += ` on ${Aliases.toIndexNormalForm(input.map.canonical)} maps`;
     }
 
-    if (parsed.person) {
-        title += ` by ${parsed.person}`;
+    if (input.person) {
+        title += ` by ${input.person}`;
     }
 
     return title;
 }
 
-function determineExcludedColumns(parsed) {
+function determineExcludedColumns({ entity, map, person }) {
     let excludedColumns = [];
+    const isCompletionEntity = entity?.kind === 'tower_upgrade' || entity?.kind === 'hero';
 
-    if (parsed.tower_upgrade || parsed.hero) {
+    if (isCompletionEntity) {
         excludedColumns.push('Tower');
     }
 
-    if (parsed.map) {
+    if (map?.kind === 'map') {
         excludedColumns.push('Map');
     }
 
-    if (parsed.person || !parsed.hasAny()) {
+    if (person || (!entity && !map)) {
         excludedColumns.push('Person');
     }
 
-    if (!parsed.tower_upgrade && !parsed.hero && !parsed.map && !parsed.person) {
+    if (!isCompletionEntity && map?.kind !== 'map' && !person) {
         excludedColumns.push('Person');
     }
 

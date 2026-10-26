@@ -1,4 +1,4 @@
-// conventions: topper conventions, x = deg
+// conventions: topper conventions, x = degree
 const { round } = require('./general');
 module.exports = {
     /**

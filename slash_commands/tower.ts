@@ -1,25 +1,31 @@
-const {
+import {
     ActionRowBuilder,
+    AutocompleteInteraction,
     ButtonBuilder,
     ButtonStyle,
+    ChatInputCommandInteraction,
     ComponentType,
+    EmbedBuilder,
     MessageFlags,
     SlashCommandBuilder,
     SlashCommandStringOption,
-} = require("discord.js");
+} from "discord.js";
 
-const FuzzySet = require('fuzzyset.js');
+import FuzzySet from "fuzzyset.js";
 
-const Towers = require("../helpers/towers.js");
-const Bloonology = require("../helpers/bloonology.js");
+import Aliases from "../aliases.js";
+import Towers from "../helpers/towers.js";
+import Bloonology from "../helpers/bloonology.js";
 
-const pageNames = require("../jsons/tower_pages.json");
+import pageNames from "../jsons/tower_pages.json";
 
-const { scrapeCosts } = require("../services/wiki/costs_scraper");
-const { scrapePages } = require("../services/wiki/tower_page_scraper.js");
+import { scrapeCosts } from "../services/wiki/costs_scraper";
+import { scrapePages } from "../services/wiki/tower_page_scraper.js";
 
-const { discord, footer } = require("../aliases/misc.json");
-const { red, cyber } = require("../jsons/colors.json");
+import { discord, footer } from "../aliases/misc.json";
+import Colors from "../helpers/colors";
+
+const { red, cyber } = Colors;
 
 const towerOption = new SlashCommandStringOption()
     .setName("tower")
@@ -52,11 +58,11 @@ const builder = new SlashCommandBuilder()
     )
     .addStringOption(reloadOption);
 
-function validateInput(interaction) {
+function validateInput(interaction: ChatInputCommandInteraction): EmbedBuilder | undefined {
     let tower = interaction.options.getString("tower");
     tower = Aliases.toAliasNormalForm(tower);
     if (!Towers.allTowers().includes(tower)) {
-        return new Discord.EmbedBuilder()
+        return new EmbedBuilder()
             .setTitle("Invalid tower specified!")
             .setDescription(
                 `${tower} is not a valid tower name`,
@@ -64,8 +70,8 @@ function validateInput(interaction) {
             .setColor(red);
     }
     const towerPath = parseTowerPath(interaction);
-    if (!towerPath || isNaN(towerPath) || !Towers.isValidUpgradeSet(towerPath)) {
-        return new Discord.EmbedBuilder()
+    if (!towerPath || isNaN(Number(towerPath)) || !Towers.isValidUpgradeSet(towerPath)) {
+        return new EmbedBuilder()
             .setTitle("Invalid tower path!")
             .setDescription(
                 `## What is a tower path?
@@ -82,17 +88,18 @@ function validateInput(interaction) {
 
 }
 
-function parseTowerPath(interaction) {
+function parseTowerPath(interaction: ChatInputCommandInteraction): string | undefined {
     const tp = interaction.options.getString("tower_path")?.toLowerCase();
     if (tp == "base") return "000";
     else return tp;
 }
 
 // the function that creates the embed for bloonology that will get sent
-async function embedBloonology(towerName, upgrade, isB2) {
+async function embedBloonology(towerName: string, upgrade: string, isB2: boolean): Promise<EmbedBuilder> {
     const [path, tier] = Towers.pathTierFromUpgradeSet(upgrade);
 
-    let version, data;
+    let version: string | undefined;
+    let data: string;
     try {
         if (towerName == "skywarden") {
             data = "[no bloonology data for skywarden yet]";
@@ -103,13 +110,13 @@ async function embedBloonology(towerName, upgrade, isB2) {
         data = `## [Bloons Wiki Link](${encodeURI("https://www.bloonswiki.com/" + pageName)})\n` + data;
     } catch (e) {
         console.error(`Error fetching bloonology for ${towerName} ${upgrade}: ${e}`);
-        return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
+        return new EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
     }
 
     const formattedUpgrade = upgrade.split("").join("-");
     const formattedTowerName = Aliases.toIndexNormalForm(towerName);
 
-    let title;
+    let title: string;
     if (tier == 0) {
         title = `${formattedTowerName} (${formattedUpgrade})`;
     } else {
@@ -139,7 +146,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
         totalCost = `${Towers.costOfTowerUpgradeSet(towerName, upgrade, "medium", 0, {}, isB2)} - battles2\n`;
     }
 
-    let embed = new Discord.EmbedBuilder()
+    let embed = new EmbedBuilder()
         .setTitle(title)
         .setDescription(data)
         .addFields([
@@ -160,7 +167,7 @@ async function embedBloonology(towerName, upgrade, isB2) {
     return embed;
 }
 
-async function embedBloonologySummary(towerName, isB2) {
+async function embedBloonologySummary(towerName: string, isB2: boolean): Promise<EmbedBuilder> {
     const tierUpgrades = [
         "100", "010", "001",
         "200", "020", "002",
@@ -174,7 +181,7 @@ async function embedBloonologySummary(towerName, isB2) {
         ({ data } = await Bloonology.towerUpgradesToSplitBloonology(towerName, ["000", ...tierUpgrades], isB2, true));
     } catch (e) {
         console.error(`Error fetching bloonology for ${towerName}: ${e}`);
-        return new Discord.EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
+        return new EmbedBuilder().setColor(red).setTitle("Something went wrong while fetching the data");
     }
 
     const headers = tierUpgrades.map((u) => {
@@ -185,7 +192,7 @@ async function embedBloonologySummary(towerName, isB2) {
 
     const title = Aliases.toIndexNormalForm(towerName) + " Summary";
 
-    const embed = new Discord.EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
+    const embed = new EmbedBuilder().setTitle(title).setFooter({ text: footer }).setColor(cyber);
 
     embed.addFields([
         {
@@ -199,7 +206,7 @@ async function embedBloonologySummary(towerName, isB2) {
     return embed;
 }
 
-async function execute(interaction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     const validationFailure = validateInput(interaction);
     if (validationFailure)
         return await interaction.reply({
@@ -230,7 +237,7 @@ async function execute(interaction) {
         .setLabel("See summary of all upgrades")
         .setStyle(ButtonStyle.Primary);
 
-    await interaction.reply({ embeds: [embed], components: [new ActionRowBuilder().addComponents(summaryBtn)] });
+    await interaction.reply({ embeds: [embed], components: [new ActionRowBuilder<ButtonBuilder>().addComponents(summaryBtn)] });
 
     // collector filter
     const filter = (selection) => {
@@ -256,7 +263,6 @@ async function execute(interaction) {
             await interaction.editReply({
                 embeds: [summaryEmbed],
                 components: [],
-                flags: MessageFlags.Ephemeral,
             });
         }
     });
@@ -270,10 +276,8 @@ async function execute(interaction) {
     });
 }
 
-async function onAutocomplete(interaction) {
-    const hoistedOptions = interaction.options._hoistedOptions; // array of the previous thing, each for each autocomplete field
-    const tower_partial = hoistedOptions.find((option) => option.name == 'tower'); // { name: 'option_name', type: 'STRING', value: '<value the user put in>', focused: true }
-    const value = tower_partial.value;
+export async function onAutocomplete(interaction: AutocompleteInteraction) {
+    const value = interaction.options.getFocused(); // the value the user has typed into the tower field so far
 
     let allTowers = Towers.allTowers();
     let allTowerNames = allTowers.map(towerName => Aliases.toIndexNormalForm(towerName));
@@ -281,7 +285,7 @@ async function onAutocomplete(interaction) {
     let fs = FuzzySet(allTowerNames);
     let values = fs.get(value, null, 0.2);
 
-    responseArr = [];
+    let responseArr = [];
     if (value == "" || !values)
         responseArr = allTowerNames
             .slice(0, 25) // discord only allows 25 options at a time
@@ -300,9 +304,4 @@ async function onAutocomplete(interaction) {
     await interaction.respond(responseArr);
 }
 
-module.exports = {
-    data: builder,
-    execute,
-    onAutocomplete,
-};
-
+export { builder as data };

@@ -1,6 +1,7 @@
 const { WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
 const { displayOneOrMultiplePagesNew, altMapsFields, genCompletionLink } = require('../helpers/index.js');
 const Maps = require('../helpers/maps');
+const Towers = require('../helpers/towers');
 
 const { paleblue } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');

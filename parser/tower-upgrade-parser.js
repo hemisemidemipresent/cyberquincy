@@ -1,4 +1,5 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
+const Towers = require('../helpers/towers');
 
 class TowerUpgradeParser {
     type() {

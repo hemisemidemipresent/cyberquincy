@@ -1,3 +1,5 @@
+const Towers = require('../helpers/towers');
+
 class UpgradeSetParser {
     type() {
         return 'upgrade_set';

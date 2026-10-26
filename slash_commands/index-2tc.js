@@ -15,6 +15,7 @@ const Parsed = require('../parser/parsed');
 const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps');
+const Towers = require('../helpers/towers');
 
 const { palered } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');

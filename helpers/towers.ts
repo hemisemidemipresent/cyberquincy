@@ -1,33 +1,58 @@
-const gHelper = require('./general.js');
-const bHelper = require('./bloons-general.js');
-const costs = require('../jsons/costs.json');
-const costs_b2 = require('../jsons/costs_b2.json');
+import gHelper from './general.js';
+import bHelper from './bloons-general.js';
+import Heroes from './heroes.js';
+import Aliases from '../aliases.js';
+import costs from '../jsons/costs.json';
+import costs_b2 from '../jsons/costs_b2.json';
 
-function towerUpgradeToTower(towerUpgrade) {
+import type { TowerTypeCanonical, TowerUpgradeCanonical, TowerUpgradeIndexNormalForm } from '../types/towers';
+
+function towerUpgradeToTower(towerUpgrade: string): string | null {
     if (!towerUpgrade) return null;
-    canonical = Aliases.getCanonicalForm(towerUpgrade, Aliases.TOWER);
+    const canonical = Aliases.getCanonicalForm(towerUpgrade, Aliases.TOWER);
     if (!canonical) return null;
     return canonical.split('#')[0];
 }
 
-function towerUpgradeToUpgrade(towerUpgrade) {
+function towerUpgradeToUpgrade(towerUpgrade: string): string {
     return towerUpgrade.split('#')[1];
 }
 
-function allTowerUpgrades() {
-    return []
-        .concat(allPrimaryTowerUpgrades())
-        .concat(allMilitaryTowerUpgrades())
-        .concat(allMagicTowerUpgrades())
-        .concat(allSupportTowerUpgrades());
+function allTowerUpgrades(): TowerUpgradeCanonical[] {
+    return [
+        ...allPrimaryTowerUpgrades(),
+        ...allMilitaryTowerUpgrades(),
+        ...allMagicTowerUpgrades(),
+        ...allSupportTowerUpgrades()
+    ];
 }
 
 // Gets all 0-0-0 tower names
-function allTowers() {
-    return [].concat(allPrimaryTowers()).concat(allMilitaryTowers()).concat(allMagicTowers()).concat(allSupportTowers());
+function allTowers(): TowerTypeCanonical[] {
+    return [...allPrimaryTowers(), ...allMilitaryTowers(), ...allMagicTowers(), ...allSupportTowers()];
 }
 
-function allTowerPaths() {
+function isTowerTypeCanonical(candidate: string): candidate is TowerTypeCanonical {
+    return (allTowers() as string[]).includes(candidate);
+}
+
+function toTowerTypeCanonical(candidate: string): TowerTypeCanonical {
+    if (!isTowerTypeCanonical(candidate)) throw new Error(`${candidate} is not a tower type canonical`);
+    return candidate;
+}
+
+function isTowerUpgradeCanonical(candidate: string): candidate is TowerUpgradeCanonical {
+    const [tower, upgradeSet, ...rest] = candidate.split('#');
+    if (rest.length > 0 || upgradeSet === undefined) return false;
+    return isTowerTypeCanonical(tower) && isValidUpgradeSet(upgradeSet, false);
+}
+
+function toTowerUpgradeCanonical(candidate: string): TowerUpgradeCanonical {
+    if (!isTowerUpgradeCanonical(candidate)) throw new Error(`${candidate} is not a tower upgrade canonical`);
+    return candidate;
+}
+
+function allTowerPaths(): string[] {
     const paths = allPaths();
     return allTowers()
         .map((tower) => {
@@ -48,7 +73,7 @@ function allTempleSets() {
             for (let k = 0; k < 3; k++) {
                 for (let l = 0; l < 3; l++) {
                     let path = '' + i + j + k + l;
-                    if (this.isValidTempleSet(path)) all.push(path); // holy shit this is stupid ~ the very person who wrote this
+                    if (isValidTempleSet(path)) all.push(path); // holy shit this is stupid ~ the very person who wrote this
                 }
             }
         }
@@ -56,7 +81,8 @@ function allTempleSets() {
     return all;
 }
 
-function isTowerUpgrade(candidate, allowCrosspath = false) {
+// Accepts any alias of a tower upgrade (e.g. `sotf` or `dart#030`), not just canonicals
+function isTowerUpgrade(candidate: string, allowCrosspath = false): boolean {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     if (!/[a-z]+#\d{3}/.test(candidate.toLowerCase())) return false;
 
@@ -69,69 +95,102 @@ function isTowerUpgrade(candidate, allowCrosspath = false) {
     return isTower(tower) && isValidUpgradeSet(upgradeSet, allowCrosspath);
 }
 
-function isTower(candidate) {
+// Case-insensitive, unlike isTowerTypeCanonical()
+function isTower(candidate: string): boolean {
     if (!candidate || !gHelper.is_str(candidate)) return false;
-    return allTowers().includes(candidate.toLowerCase());
+    return isTowerTypeCanonical(candidate.toLowerCase());
 }
 
-function isTowerPath(candidate) {
+function isTowerPath(candidate: string): boolean {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     return allTowerPaths().includes(candidate.toLowerCase());
 }
 
-function allPrimaryTowers() {
+function allPrimaryTowers(): TowerTypeCanonical[] {
     return allGroupTowers('PRIMARY');
 }
 
-function allMilitaryTowers() {
+function allMilitaryTowers(): TowerTypeCanonical[] {
     return allGroupTowers('MILITARY');
 }
 
-function allMagicTowers() {
+function allMagicTowers(): TowerTypeCanonical[] {
     return allGroupTowers('MAGIC');
 }
 
-function allSupportTowers() {
+function allSupportTowers(): TowerTypeCanonical[] {
     return allGroupTowers('SUPPORT');
 }
 
-function allPrimaryTowerUpgrades() {
+function allPrimaryTowerUpgrades(): TowerUpgradeCanonical[] {
     return allGroupTowerUpgrades('PRIMARY');
 }
 
-function allMilitaryTowerUpgrades() {
+function allMilitaryTowerUpgrades(): TowerUpgradeCanonical[] {
     return allGroupTowerUpgrades('MILITARY');
 }
 
-function allMagicTowerUpgrades() {
+function allMagicTowerUpgrades(): TowerUpgradeCanonical[] {
     return allGroupTowerUpgrades('MAGIC');
 }
 
-function allSupportTowerUpgrades() {
+function allSupportTowerUpgrades(): TowerUpgradeCanonical[] {
     return allGroupTowerUpgrades('SUPPORT');
 }
 
-function allGroupTowers(group) {
-    return allGroupTowerCanonicals(group).filter((u) => !u.includes('#'));
+// The tower alias files are the source of truth for which towers and upgrades exist
+function allGroupTowers(group: TowerGroup): TowerTypeCanonical[] {
+    return allGroupTowerCanonicals(group).filter((u) => !u.includes('#')) as TowerTypeCanonical[];
 }
 
-function allGroupTowerUpgrades(group) {
-    return allGroupTowerCanonicals(group).filter((u) => u.includes('#'));
+function allGroupTowerUpgrades(group: TowerGroup): TowerUpgradeCanonical[] {
+    return allGroupTowerCanonicals(group).filter((u) => u.includes('#')) as TowerUpgradeCanonical[];
 }
 
-GROUP_TO_TOWER = {
+const GROUP_TO_TOWER = {
     PRIMARY: 'DART',
     MILITARY: 'HELI',
     MAGIC: 'WIZ',
     SUPPORT: 'FARM'
 };
 
-function allGroupTowerCanonicals(group) {
+type TowerGroup = keyof typeof GROUP_TO_TOWER;
+
+function allGroupTowerCanonicals(group: TowerGroup): string[] {
     return Aliases.getAliasGroupsFromSameImmediateDirectoryAs(GROUP_TO_TOWER[group]).map((ag) => ag.canonical);
 }
 
 function isOfTower(entity, tower) {
     return entity.split('#')[0] === tower;
+}
+function allWaterTowers() {
+    return ['sub', 'bucc', 'brick'].map((t) => Aliases.getCanonicalForm(t, Aliases.TOWER));
+}
+function isWaterEntity(entity) {
+    let entityToCompare;
+    if (isTowerPath(entity)) {
+        const [tower, path] = entity.split('#');
+        if (tower == 'beast_handler' && path == 'top_path') {
+            return true;
+        } else {
+            entityToCompare = tower;
+        }
+    } else if (isTowerUpgrade(entity)) {
+        const [tower, upgrade] = entity.split('#');
+        const [path] = pathTierFromUpgradeSet(upgrade);
+        if (tower == 'beast_handler' && path == 'top_path') {
+            return true;
+        } else {
+            entityToCompare = towerUpgradeToTower(entity);
+        }
+    } else if (Heroes.isHero(entity)) {
+        entityToCompare = entity;
+    } else if (isTower(entity)) {
+        entityToCompare = entity;
+    } else {
+        throw `Entity ${entity} is not within allotted tower/path/upgrade/hero options`;
+    }
+    return allWaterTowers().includes(entityToCompare);
 }
 
 function towerPathtoPath(towerPath) {
@@ -142,40 +201,36 @@ function towerPathToTower(towerPath) {
     return towerPath.split('#')[0];
 }
 
-function towerUpgradeToIndexNormalForm(upgrade) {
+function towerUpgradeToIndexNormalForm(upgrade: TowerUpgradeCanonical): TowerUpgradeIndexNormalForm {
     const indexNormalUnformatted = Aliases.getAliasSet(upgrade)[1];
-    return Aliases.toIndexNormalForm(indexNormalUnformatted);
+    return Aliases.toIndexNormalForm(indexNormalUnformatted) as TowerUpgradeIndexNormalForm;
 }
 
-function towerUpgradeFromTowerAndPathAndTier(tower, path, tier) {
+function towerUpgradeFromTowerAndPathAndTier(tower: string, path: string, tier: string | number): TowerUpgradeIndexNormalForm {
     // Re-assign tower to canonical and ensure that it exists and is a tower
-    if (!(tower = Aliases.getCanonicalForm(tower, Aliases.TOWER)) || !allTowers().includes(tower)) {
+    if (!(tower = Aliases.getCanonicalForm(tower, Aliases.TOWER)) || !isTowerTypeCanonical(tower)) {
         throw 'First argument must be a tower';
     }
 
     // Validate tier
-    if (!tier) return towerUpgradeToIndexNormalForm(`${tower}#000`);
+    if (!tier) return towerUpgradeToIndexNormalForm(toTowerUpgradeCanonical(`${tower}#000`));
 
-    if (isNaN(tier)) throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
+    if (isNaN(Number(tier))) throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
 
-    try {
-        tier = parseInt(tier);
-    } catch (e) {
-        throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
-    }
+    const tierNum = parseInt(String(tier));
 
-    if (tier < 0 || tier > 5) throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
+    if (tierNum < 0 || tierNum > 5) throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
 
     // Validate path
     if (!allPaths().includes(path)) throw 'Second argument `path` must be top-path, middle-path, or bottom-path';
 
     // Convert path + tier to appropriate upgrade string like 003 or 400
     const pathNum = allPaths().indexOf(path) + 1;
-    const upgradeInt = tier * Math.pow(10, 3 - pathNum);
+    const upgradeInt = tierNum * Math.pow(10, 3 - pathNum);
     const upgradeStr = upgradeInt.toString().padStart(3, '0');
 
     // Combine tower with upgrade string to get tower upgrade canonical like wizard#300
-    return towerUpgradeToIndexNormalForm(`${tower}#${upgradeStr}`);
+    return towerUpgradeToIndexNormalForm(toTowerUpgradeCanonical(`${tower}#${upgradeStr}`));
 }
 
 function upgradesFromPath(path) {
@@ -234,18 +289,14 @@ function allUpgradeCrosspathSets() {
  * allowCrosspath=false is different, it only accepts those that specifically point to an upgrade,
  * e.g. "100", "200", "500", "030", "004", but not "024"
  * Both modes accept "000", the base tower
- *
- * @param {string} u upgradeSet
- * @param {boolean} allowCrosspath
- * @returns
  */
-function isValidUpgradeSet(u, allowCrosspath = true) {
+function isValidUpgradeSet(u: string, allowCrosspath = true): boolean {
     if (!gHelper.is_str(u) || u.length !== 3) return false;
 
-    if (isNaN(u)) return false;
+    if (isNaN(Number(u))) return false;
 
     // Get array of 3 digits, sorted in ascending order
-    uSorted = u
+    const uSorted = u
         .split('')
         .map((c) => parseInt(c))
         .sort();
@@ -273,7 +324,7 @@ function isValidUpgradeSet(u, allowCrosspath = true) {
  * @returns {boolean}
  */
 function isValidTempleSet(str) {
-    if (!gHelper.is_str) return false;
+    if (!gHelper.is_str(str)) return false;
     let upgrades = [];
     if (str.includes('/')) {
         if (str.length !== 7) return false;
@@ -296,7 +347,7 @@ function formatEntity(entity) {
     if (isTower(entity)) {
         return Aliases.toIndexNormalForm(entity);
     } else if (isTowerPath(entity)) {
-        [towerName, path] = entity.split('#');
+        const [towerName, path] = entity.split('#');
         return `${gHelper.toTitleCase(path.split('_').join(' '))} ` + `${Aliases.toIndexNormalForm(towerName)}`;
     } else if (isTowerUpgrade(entity)) {
         return towerUpgradeToIndexNormalForm(entity);
@@ -374,7 +425,7 @@ function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscoun
     return result;
 }
 
-module.exports = {
+export {
     towerUpgradeToTower,
     towerUpgradeToUpgrade,
     allPrimaryTowers,
@@ -383,12 +434,17 @@ module.exports = {
     allSupportTowers,
     allTowerUpgrades,
     allTowers,
+    isTowerTypeCanonical,
+    toTowerTypeCanonical,
+    isTowerUpgradeCanonical,
+    toTowerUpgradeCanonical,
     allTowerPaths,
     allPaths,
     allTempleSets,
     isTowerUpgrade,
     isTower,
     isTowerPath,
+    isWaterEntity,
     isOfTower,
     towerPathToTower,
     towerPathtoPath,

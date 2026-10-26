@@ -10,7 +10,6 @@ function main() {
 }
 
 function globalRequirements() {
-    global.Towers = require('./helpers/towers.js');
     global.Heroes = require('./helpers/heroes.js');
     global.AliasRepository = require('./alias-repository.js');
 

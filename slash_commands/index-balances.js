@@ -5,6 +5,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageFlags
 const { cyber } = require('../jsons/colors.json');
 
 const Index = require('../helpers/index.js');
+const Towers = require('../helpers/towers');
 
 const OrParser = require('../parser/or-parser');
 

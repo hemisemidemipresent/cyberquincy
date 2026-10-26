@@ -6,6 +6,7 @@ const TowerParser = require('../parser/tower-parser');
 const Parsed = require('../parser/parsed');
 
 const { displayOneOrMultiplePagesNew, genCompletionLink } = require('../helpers/index.js');
+const Towers = require('../helpers/towers');
 
 const { paleorange } = require('../jsons/colors.json');
 

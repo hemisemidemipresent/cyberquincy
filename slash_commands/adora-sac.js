@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgrade, isTowerUpgrade, cumulativeTowerUpgradePathCosts } = require('../helpers/towers.js');
+const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgrade, isTowerUpgrade, cumulativeTowerUpgradePathCosts } = require('../helpers/towers');
 const { red, cyber } = require('../jsons/colors.json');
 const { numberAsCost } = require('../helpers/general.js');
 

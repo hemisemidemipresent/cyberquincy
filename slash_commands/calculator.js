@@ -4,6 +4,7 @@ const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption } = require(
 const Lexer = require('lex');
 const gHelper = require('../helpers/general.js');
 const bHelper = require('../helpers/bloons-general');
+const Towers = require('../helpers/towers');
 const mkDiscounts = require('../jsons/mk/discounts.json');
 
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');

@@ -14,7 +14,7 @@ import {
 import FuzzySet from "fuzzyset.js";
 
 import Aliases from "../aliases.js";
-import Towers from "../helpers/towers.js";
+import * as Towers from "../helpers/towers";
 import Bloonology from "../helpers/bloonology.js";
 
 import pageNames from "../jsons/tower_pages.json";
@@ -61,7 +61,7 @@ const builder = new SlashCommandBuilder()
 function validateInput(interaction: ChatInputCommandInteraction): EmbedBuilder | undefined {
     let tower = interaction.options.getString("tower");
     tower = Aliases.toAliasNormalForm(tower);
-    if (!Towers.allTowers().includes(tower)) {
+    if (!Towers.isTowerTypeCanonical(tower)) {
         return new EmbedBuilder()
             .setTitle("Invalid tower specified!")
             .setDescription(

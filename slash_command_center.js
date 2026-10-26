@@ -2,7 +2,9 @@ const fs = require('fs');
 const { MessageFlags } = require('discord.js');
 
 function commandFiles() {
-    const commandFiles = fs.readdirSync('./slash_commands').filter((file) => file.endsWith('.js'));
+    const commandFiles = fs
+        .readdirSync('./slash_commands')
+        .filter((file) => file.endsWith('.js') || (file.endsWith('.ts') && !file.endsWith('.d.ts')));
     return commandFiles.map((file) => require(`./slash_commands/${file}`));
 }
 

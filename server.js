@@ -38,9 +38,8 @@ function consoleBootup() {
 }
 
 function configureAliases() {
-    const AliasRepository = require('./alias-repository.js');
-    global.Aliases = new AliasRepository();
-    Aliases.asyncAliasFiles();
+    // TODO: remove once every file requires ./aliases.js directly
+    global.Aliases = require('./aliases.js');
 }
 
 // function configureCommands() {

@@ -1,8 +1,8 @@
 const resolve = require('path').resolve;
-const readdir = require('fs').promises.readdir;
+const readdirSync = require('fs').readdirSync;
 
-async function* getFiles(dir, fileTypes) {
-    const dirents = await readdir(dir, { withFileTypes: true });
+function* getFiles(dir, fileTypes) {
+    const dirents = readdirSync(dir, { withFileTypes: true });
     for (const dirent of dirents) {
         const res = resolve(dir, dirent.name);
         if (dirent.isDirectory()) {

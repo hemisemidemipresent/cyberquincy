@@ -3,7 +3,6 @@ const { Client, GatewayIntentBits, InteractionType, ChatInputCommandInteraction 
 function main() {
     globalRequirements();
     consoleBootup();
-    configureAliases();
     slashCommandCenter = setupSlashCommandCenter();
     generateCommandListeners(slashCommandCenter);
     login();
@@ -11,7 +10,6 @@ function main() {
 
 function globalRequirements() {
     global.Heroes = require('./helpers/heroes.js');
-    global.AliasRepository = require('./alias-repository.js');
 
     global.Discord = require('discord.js');
     global.client = new Client({
@@ -34,11 +32,6 @@ function consoleBootup() {
         });
         console.log('<Program Directive> Discord Bot Client is ready');
     });
-}
-
-function configureAliases() {
-    // TODO: remove once every file requires ./aliases.js directly
-    global.Aliases = require('./aliases.js');
 }
 
 // function configureCommands() {

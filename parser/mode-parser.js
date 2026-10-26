@@ -1,4 +1,5 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
+const Aliases = require('../aliases');
 
 class ModeParser {
     type() {
@@ -8,7 +9,7 @@ class ModeParser {
     constructor(...permitted_modes) {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
-            Aliases.allModes(),
+            Aliases.canonicalsOfKind('game_mode'),
             permitted_modes.map(d => d.toLowerCase()),
         );
     }

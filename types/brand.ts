@@ -7,5 +7,8 @@ declare const brand: unique symbol;
  * A plain `T` can't be passed where `Brand<T, B>` is expected, so values must come from a validator
  * (an `isX()` type guard or a `toX()` function) or from a function that is known to produce them.
  * Keep `as X` casts inside those functions only.
+ *
+ * Brands stack: `Brand<Brand<string, "A">, "B">` is assignable to `Brand<string, "A">` but not the other way round,
+ * which models a subset (every B is an A).
  */
-export type Brand<T, B extends string> = T & { readonly [brand]: B };
+export type Brand<T, B extends string> = T & { readonly [brand]: { readonly [K in B]: true } };

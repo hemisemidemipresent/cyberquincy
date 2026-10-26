@@ -1,6 +1,7 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
 const gHelper = require('../helpers/general.js');
+const Aliases = require('../aliases');
 const bHelper = require('./bloons-general');
 const heroes = require('../jsons/heroes.json');
 const gerrysShop = require('../jsons/geraldos_shop.json');
@@ -80,9 +81,9 @@ function accumulatedXpCurve(
 }
 /**
  * Returns an array as to how much xp a hero must get (cumulatively) to reach a certain level
- * e.g. returned_arr = [null, 0, 9, 180, 640, 1640, 3500, 6780, ...] 
+ * e.g. returned_arr = [null, 0, 9, 180, 640, 1640, 3500, 6780, ...]
  * means that you can find the cumulative xp needed to reach level n by simply doing returned_arr[n]
- * @param {string} hero 
+ * @param {string} hero
  * @returns {Array[int]}
  */
 function heroLevelXpRequirements(hero) {
@@ -100,8 +101,8 @@ function heroLevelXpRequirements(hero) {
 function levelingChart(hero, startingRound, mapDifficulty, mk) {
     heroXpGains = heroLevelXpRequirements(hero);
     accumulatedXp = accumulatedXpCurve(
-        startingRound, 
-        mapDifficulty, 
+        startingRound,
+        mapDifficulty,
         Infinity, // no energizer
         mk
     );
@@ -116,12 +117,12 @@ function levelingChart(hero, startingRound, mapDifficulty, mk) {
 }
 /**
  * Returns an array as to which round a hero will reach which level
- * e.g. returned_arr = [null, 7, 9, 11, 14, 19, ...] 
+ * e.g. returned_arr = [null, 7, 9, 11, 14, 19, ...]
  * means that you can find the round a hero will reach level n by simply doing returned_arr[n]
- * @param {string} hero 
- * @param {int} startingRound 
- * @param {string} mapDifficulty 
- * @param {int} energizerAcquiredRound 
+ * @param {string} hero
+ * @param {int} startingRound
+ * @param {string} mapDifficulty
+ * @param {int} energizerAcquiredRound
  * @returns {Array[int]}
  */
 function levelingCurve(
@@ -162,7 +163,7 @@ function costOfHero(hero, difficulty, numDiscounts, mk) {
 function costOfGerryShopItem(item, difficulty) {
     const mediumCost = gerrysShop[item];
     if (!mediumCost) throw `${item} does not have an entry in geraldos_shop.json`;
-    return bHelper.roundEven5(bHelper.rawDifficultyMult(mediumCost, difficulty));
+    return bHelper.specialRound(bHelper.rawDifficultyMult(mediumCost, difficulty));
 }
 
 function isHero(candidate) {
@@ -171,9 +172,7 @@ function isHero(candidate) {
 }
 
 function allHeroes() {
-    const heroes = Aliases.getAliasGroupsFromSameFileAs('EZILI');
-
-    return heroes.map((ag) => ag.canonical);
+    return Aliases.canonicalsOfKind('hero');
 }
 
 function isGerrysShopItem(candidate) {
@@ -182,9 +181,7 @@ function isGerrysShopItem(candidate) {
 }
 
 function allGerrysShopItems() {
-    const items = Aliases.getAliasGroupsFromSameFileAs('FERTILIZER');
-
-    return items.map((ag) => ag.canonical);
+    return Aliases.canonicalsOfKind('geraldo_item');
 }
 
 module.exports = {

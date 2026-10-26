@@ -1,15 +1,15 @@
 import gHelper from './general.js';
 import bHelper from './bloons-general.js';
 import Heroes from './heroes.js';
-import Aliases from '../aliases.js';
+import Aliases from '../aliases';
+import { SUPERGROUPS, type TowerCategory } from '../alias-repository';
 import costs from '../jsons/costs.json';
 import costs_b2 from '../jsons/costs_b2.json';
 
-import type { TowerTypeCanonical, TowerUpgradeCanonical, TowerUpgradeIndexNormalForm } from '../types/towers';
+import type { TowerCrosspathCanonical, TowerTypeCanonical, TowerUpgradeCanonical, TowerUpgradeIndexNormalForm } from '../types/towers';
 
 function towerUpgradeToTower(towerUpgrade: string): string | null {
-    if (!towerUpgrade) return null;
-    const canonical = Aliases.getCanonicalForm(towerUpgrade, Aliases.TOWER);
+    const canonical = Aliases.lookupMultiple(towerUpgrade, SUPERGROUPS.TOWER)?.canonical;
     if (!canonical) return null;
     return canonical.split('#')[0];
 }
@@ -52,6 +52,48 @@ function toTowerUpgradeCanonical(candidate: string): TowerUpgradeCanonical {
     return candidate;
 }
 
+function isTowerCrosspathCanonical(candidate: string): candidate is TowerCrosspathCanonical {
+    const [tower, upgradeSet, ...rest] = candidate.split('#');
+    if (rest.length > 0 || upgradeSet === undefined) return false;
+    return isTowerTypeCanonical(tower) && isValidUpgradeSet(upgradeSet, true);
+}
+
+function toTowerCrosspathCanonical(candidate: string): TowerCrosspathCanonical {
+    if (!isTowerCrosspathCanonical(candidate)) throw new Error(`${candidate} is not a tower crosspath canonical`);
+    return candidate;
+}
+
+/**
+ * Resolves user input like `sotf`, `base_dart`, `dart#024` or `wiz#105` to a tower crosspath canonical.
+ * Crosspaths aren't aliases, so the part before `#` is looked up as a tower and the upgrade set is validated.
+ */
+function lookupTowerCrosspath(member: string): TowerCrosspathCanonical | null {
+    const upgrade = Aliases.lookup(member, 'tower_upgrade');
+    if (upgrade) return upgrade;
+
+    const [towerPart, upgradeSet, ...rest] = (member ?? '').split('#');
+    if (rest.length > 0 || upgradeSet === undefined || !isValidUpgradeSet(upgradeSet, true)) return null;
+    const tower = Aliases.lookup(towerPart, 'tower');
+    return tower ? toTowerCrosspathCanonical(`${tower}#${upgradeSet}`) : null;
+}
+
+// Resolves user input like `heli#top` to a tower path, e.g. `heli_pilot#top_path`
+function lookupTowerPath(member: string): string | null {
+    const [towerPart, pathPart, ...rest] = (member ?? '').split('#');
+    if (rest.length > 0 || pathPart === undefined) return null;
+    const tower = Aliases.lookup(towerPart, 'tower');
+    const path = Aliases.lookup(pathPart, 'path');
+    return tower && path ? `${tower}#${path}` : null;
+}
+
+/**
+ * The canonical form of a tower, tower upgrade, hero, Geraldo item, tower path or crosspath, as a plain string.
+ * Only for the parser-based commands, which re-check what kind of entity it is; prefer the typed lookups elsewhere.
+ */
+function canonicalizeEntity(member: string): string | null {
+    return Aliases.lookupMultiple(member, SUPERGROUPS.TOWER)?.canonical ?? lookupTowerCrosspath(member) ?? lookupTowerPath(member);
+}
+
 function allTowerPaths(): string[] {
     const paths = allPaths();
     return allTowers()
@@ -62,7 +104,7 @@ function allTowerPaths(): string[] {
 }
 
 function allPaths() {
-    return Aliases.getAliasGroupsFromSameFileAs('top-path').map((ag) => ag.canonical);
+    return Aliases.canonicalsOfKind('path');
 }
 
 function allTempleSets() {
@@ -86,13 +128,12 @@ function isTowerUpgrade(candidate: string, allowCrosspath = false): boolean {
     if (!candidate || !gHelper.is_str(candidate)) return false;
     if (!/[a-z]+#\d{3}/.test(candidate.toLowerCase())) return false;
 
-    let [tower, upgradeSet, anotherUpgradeSet] = Aliases.canonicizeArg(candidate).split('#');
+    const [towerPart, upgradeSet, anotherUpgradeSet] = candidate.split('#');
 
-    // If candidate is sotf#100, canonicize arg will return druid#050#100 which doesn't make sense.
-    // We catch this by ensuring that we only have tower#upgradeSet.
+    // Only accept tower#upgradeSet, so that e.g. druid#050#100 is rejected
     if (anotherUpgradeSet) return false;
 
-    return isTower(tower) && isValidUpgradeSet(upgradeSet, allowCrosspath);
+    return !!Aliases.lookup(towerPart, 'tower') && isValidUpgradeSet(upgradeSet, allowCrosspath);
 }
 
 // Case-insensitive, unlike isTowerTypeCanonical()
@@ -107,64 +148,51 @@ function isTowerPath(candidate: string): boolean {
 }
 
 function allPrimaryTowers(): TowerTypeCanonical[] {
-    return allGroupTowers('PRIMARY');
+    return allCategoryTowers('primary');
 }
 
 function allMilitaryTowers(): TowerTypeCanonical[] {
-    return allGroupTowers('MILITARY');
+    return allCategoryTowers('military');
 }
 
 function allMagicTowers(): TowerTypeCanonical[] {
-    return allGroupTowers('MAGIC');
+    return allCategoryTowers('magic');
 }
 
 function allSupportTowers(): TowerTypeCanonical[] {
-    return allGroupTowers('SUPPORT');
+    return allCategoryTowers('support');
 }
 
 function allPrimaryTowerUpgrades(): TowerUpgradeCanonical[] {
-    return allGroupTowerUpgrades('PRIMARY');
+    return allCategoryTowerUpgrades('primary');
 }
 
 function allMilitaryTowerUpgrades(): TowerUpgradeCanonical[] {
-    return allGroupTowerUpgrades('MILITARY');
+    return allCategoryTowerUpgrades('military');
 }
 
 function allMagicTowerUpgrades(): TowerUpgradeCanonical[] {
-    return allGroupTowerUpgrades('MAGIC');
+    return allCategoryTowerUpgrades('magic');
 }
 
 function allSupportTowerUpgrades(): TowerUpgradeCanonical[] {
-    return allGroupTowerUpgrades('SUPPORT');
+    return allCategoryTowerUpgrades('support');
 }
 
 // The tower alias files are the source of truth for which towers and upgrades exist
-function allGroupTowers(group: TowerGroup): TowerTypeCanonical[] {
-    return allGroupTowerCanonicals(group).filter((u) => !u.includes('#')) as TowerTypeCanonical[];
+function allCategoryTowers(category: TowerCategory): TowerTypeCanonical[] {
+    return Aliases.groupsOfKind('tower').filter((ag) => ag.towerCategory === category).map((ag) => ag.canonical);
 }
 
-function allGroupTowerUpgrades(group: TowerGroup): TowerUpgradeCanonical[] {
-    return allGroupTowerCanonicals(group).filter((u) => u.includes('#')) as TowerUpgradeCanonical[];
-}
-
-const GROUP_TO_TOWER = {
-    PRIMARY: 'DART',
-    MILITARY: 'HELI',
-    MAGIC: 'WIZ',
-    SUPPORT: 'FARM'
-};
-
-type TowerGroup = keyof typeof GROUP_TO_TOWER;
-
-function allGroupTowerCanonicals(group: TowerGroup): string[] {
-    return Aliases.getAliasGroupsFromSameImmediateDirectoryAs(GROUP_TO_TOWER[group]).map((ag) => ag.canonical);
+function allCategoryTowerUpgrades(category: TowerCategory): TowerUpgradeCanonical[] {
+    return Aliases.groupsOfKind('tower_upgrade').filter((ag) => ag.towerCategory === category).map((ag) => ag.canonical);
 }
 
 function isOfTower(entity, tower) {
     return entity.split('#')[0] === tower;
 }
 function allWaterTowers() {
-    return ['sub', 'bucc', 'brick'].map((t) => Aliases.getCanonicalForm(t, Aliases.TOWER));
+    return ['sub', 'bucc', 'brick'].map((t) => Aliases.lookupMultiple(t, SUPERGROUPS.TOWER)?.canonical);
 }
 function isWaterEntity(entity) {
     let entityToCompare;
@@ -201,14 +229,16 @@ function towerPathToTower(towerPath) {
     return towerPath.split('#')[0];
 }
 
+// The index's name for an upgrade is its first alias, e.g. `dart_monkey#030` -> `triple_shot` -> `Triple Shot`
 function towerUpgradeToIndexNormalForm(upgrade: TowerUpgradeCanonical): TowerUpgradeIndexNormalForm {
-    const indexNormalUnformatted = Aliases.getAliasSet(upgrade)[1];
-    return Aliases.toIndexNormalForm(indexNormalUnformatted) as TowerUpgradeIndexNormalForm;
+    const group = Aliases.lookupGroup(upgrade, 'tower_upgrade');
+    if (!group) throw new Error(`${upgrade} is not a tower upgrade`);
+    return Aliases.toIndexNormalForm(group.aliases[0]) as TowerUpgradeIndexNormalForm;
 }
 
-function towerUpgradeFromTowerAndPathAndTier(tower: string, path: string, tier: string | number): TowerUpgradeIndexNormalForm {
-    // Re-assign tower to canonical and ensure that it exists and is a tower
-    if (!(tower = Aliases.getCanonicalForm(tower, Aliases.TOWER)) || !isTowerTypeCanonical(tower)) {
+function towerUpgradeFromTowerAndPathAndTier(towerMember: string, path: string, tier: string | number): TowerUpgradeIndexNormalForm {
+    const tower = Aliases.lookup(towerMember, 'tower');
+    if (!tower) {
         throw 'First argument must be a tower';
     }
 
@@ -222,10 +252,11 @@ function towerUpgradeFromTowerAndPathAndTier(tower: string, path: string, tier: 
     if (tierNum < 0 || tierNum > 5) throw 'Third argument `tier` must be an integer between 0 and 5 inclusive';
 
     // Validate path
-    if (!allPaths().includes(path)) throw 'Second argument `path` must be top-path, middle-path, or bottom-path';
+    const paths: string[] = allPaths();
+    if (!paths.includes(path)) throw 'Second argument `path` must be top-path, middle-path, or bottom-path';
 
     // Convert path + tier to appropriate upgrade string like 003 or 400
-    const pathNum = allPaths().indexOf(path) + 1;
+    const pathNum = paths.indexOf(path) + 1;
     const upgradeInt = tierNum * Math.pow(10, 3 - pathNum);
     const upgradeStr = upgradeInt.toString().padStart(3, '0');
 
@@ -438,6 +469,11 @@ export {
     toTowerTypeCanonical,
     isTowerUpgradeCanonical,
     toTowerUpgradeCanonical,
+    isTowerCrosspathCanonical,
+    toTowerCrosspathCanonical,
+    lookupTowerCrosspath,
+    lookupTowerPath,
+    canonicalizeEntity,
     allTowerPaths,
     allPaths,
     allTempleSets,

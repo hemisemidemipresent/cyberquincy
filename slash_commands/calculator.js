@@ -1,10 +1,12 @@
 const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const Aliases = require('../aliases');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
 const gHelper = require('../helpers/general.js');
 const bHelper = require('../helpers/bloons-general');
 const Towers = require('../helpers/towers');
+const { SUPERGROUPS } = require('../alias-repository');
 const mkDiscounts = require('../jsons/mk/discounts.json');
 
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
@@ -271,45 +273,46 @@ async function calc(interaction) {
 function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
     const undiscountedToken = t.replace(/'*$/, '');
     const numDiscounts = t.match(/'*$/)?.[0]?.length;
-    const tokenCanonical = Aliases.canonicizeArg(undiscountedToken);
+    const match = Aliases.lookupMultiple(undiscountedToken, SUPERGROUPS.TOWER);
+    let crosspath;
 
     if (!isNaN(undiscountedToken)) return Number(undiscountedToken);
     else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
     } else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS', true)).round)) {
         return abr[round].cumulativeCash - abr[5].cumulativeCash + 650;
-    } else if (Heroes.isGerrysShopItem(tokenCanonical)) {
-        return Heroes.costOfGerryShopItem(tokenCanonical, difficulty);
-    } else if (Towers.isTowerUpgrade(undiscountedToken, true)) {
+    } else if (match?.kind === 'geraldo_item') {
+        return Heroes.costOfGerryShopItem(match.canonical, difficulty);
+    } else if (undiscountedToken.includes('#') && (crosspath = Towers.lookupTowerCrosspath(undiscountedToken))) {
         // Catches tower upgrades with crosspaths like wiz#401
-        let [tower, upgradeSet] = tokenCanonical.split('#');
+        let [tower, upgradeSet] = crosspath.split('#');
         return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
-    } else if (Towers.isTowerUpgrade(undiscountedToken.replace('!', '#'), true)) {
+    } else if (undiscountedToken.includes('!') && (crosspath = Towers.lookupTowerCrosspath(undiscountedToken.replace('!', '#')))) {
         // Catches all other tower ugprades
-        let [tower, upgradeSet] = Aliases.canonicizeArg(undiscountedToken.replace('!', '#')).split('#');
+        let [tower, upgradeSet] = crosspath.split('#');
         let tmp = simpleMkDiscounts.comeOnEverybody;
         simpleMkDiscounts.comeOnEverybody = 0;
         let ret = Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
         simpleMkDiscounts.comeOnEverybody = tmp;
         return ret;
-    } else if (Towers.isTowerUpgrade(tokenCanonical, true)) {
-        // for upgrade names like "sotf" the tokenCanonical contains the upgrade format "druid#050"
-        let [tower, upgrade] = tokenCanonical.split('#');
+    } else if (match?.kind === 'tower_upgrade') {
+        // for upgrade names like "sotf" the canonical is the upgrade format "druid#050"
+        let [tower, upgrade] = match.canonical.split('#');
         let tmp = simpleMkDiscounts.comeOnEverybody;
         simpleMkDiscounts.comeOnEverybody = 0;
         let ret = Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts, simpleMkDiscounts);
         simpleMkDiscounts.comeOnEverybody = tmp;
         return ret;
-    } else if (Towers.isTower(tokenCanonical)) {
+    } else if (match?.kind === 'tower') {
         // Catches base tower names/aliases
         let tmp = simpleMkDiscounts.comeOnEverybody;
         simpleMkDiscounts.comeOnEverybody = 0;
-        let ret = Towers.costOfTowerUpgrade(tokenCanonical, '000', difficulty, numDiscounts, simpleMkDiscounts);
-        if (Towers.allPrimaryTowers().includes(tokenCanonical)) return ret;
+        let ret = Towers.costOfTowerUpgrade(match.canonical, '000', difficulty, numDiscounts, simpleMkDiscounts);
+        if (Towers.allPrimaryTowers().includes(match.canonical)) return ret;
         simpleMkDiscounts.comeOnEverybody = tmp;
         return ret;
-    } else if (Heroes.isHero(tokenCanonical)) {
-        return Heroes.costOfHero(tokenCanonical, difficulty, numDiscounts, simpleMkDiscounts.discounts.length);
+    } else if (match?.kind === 'hero') {
+        return Heroes.costOfHero(match.canonical, difficulty, numDiscounts, simpleMkDiscounts.discounts.length);
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }

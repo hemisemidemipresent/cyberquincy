@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption, ComponentType } = require('discord.js');
+const Aliases = require('../aliases');
 
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageFlags } = require('discord.js');
 
@@ -69,7 +70,7 @@ function parseEntity(interaction) {
     const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
     const entity = interaction.options.getString('entity');
     if (entity) {
-        const canonicalEntity = Aliases.canonicizeArg(entity);
+        const canonicalEntity = Towers.canonicalizeEntity(entity) ?? entity;
         if (canonicalEntity) {
             return CommandParser.parse([canonicalEntity], entityParser);
         } else {

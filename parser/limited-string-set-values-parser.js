@@ -1,4 +1,5 @@
 pluralize = require('pluralize');
+const Aliases = require('../aliases');
 
 const DeveloperCommandError = require('../exceptions/developer-command-error.js');
 const UserCommandError = require('../exceptions/user-command-error.js');
@@ -76,7 +77,8 @@ class LimitedStringSetValuesParser {
         const exampleValues = acceptedValues
             .slice(0, Math.min(acceptedValues.length, NUM_EXAMPLE_VALUES))
             .map((v) => {
-                let aliases = Aliases.getAliasSet(v) || [v];
+                const group = Aliases.findAllGroups(v)[0];
+                let aliases = group ? [group.canonical, ...group.aliases] : [v];
                 return aliases[Math.floor(Math.random() * aliases.length)];
             });
 

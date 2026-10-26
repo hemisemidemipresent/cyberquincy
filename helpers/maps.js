@@ -1,3 +1,5 @@
+const Aliases = require('../aliases');
+const { SUPERGROUPS } = require('../alias-repository');
 const Towers = require('./towers');
 
 function allMaps() {
@@ -23,64 +25,46 @@ function allMapsFromMapDifficulty(mapDifficulty) {
 }
 
 function mapToMapDifficulty(m) {
-    const formattedMap = Aliases.toAliasCanonical(m);
-    if (beginnerMaps().includes(formattedMap)) {
-        return 'beginner';
-    } else if (intermediateMaps().includes(formattedMap)) {
-        return 'intermediate';
-    } else if (advancedMaps().includes(formattedMap)) {
-        return 'advanced';
-    } else if (expertMaps().includes(formattedMap)) {
-        return 'expert';
-    } else {
-        throw 'not a map';
-    }
+    const group = Aliases.lookupGroup(Aliases.toAliasNormalForm(m), 'map');
+    if (!group) throw 'not a map';
+    return group.mapDifficulty;
+}
+
+function mapsOfDifficulty(mapDifficulty) {
+    return Aliases.groupsOfKind('map')
+        .filter((ag) => ag.mapDifficulty === mapDifficulty)
+        .map((ag) => ag.canonical);
 }
 
 function beginnerMaps() {
-    return Aliases.getAliasGroupsFromSameFileAs('LOGS').map(
-        (ag) => ag.canonical
-    );
+    return mapsOfDifficulty('beginner');
 }
 
 function intermediateMaps() {
-    return Aliases.getAliasGroupsFromSameFileAs('HAUNTED').map(
-        (ag) => ag.canonical
-    );
+    return mapsOfDifficulty('intermediate');
 }
 
 function advancedMaps() {
-    return Aliases.getAliasGroupsFromSameFileAs('CORNFIELD').map(
-        (ag) => ag.canonical
-    );
+    return mapsOfDifficulty('advanced');
 }
 
 function expertMaps() {
-    return Aliases.getAliasGroupsFromSameFileAs('INFERNAL').map(
-        (ag) => ag.canonical
-    );
+    return mapsOfDifficulty('expert');
 }
 
 function allMapDifficulties() {
-    const map_difficulties =
-        Aliases.getAliasGroupsFromSameFileAs('INTERMEDIATE');
-
-    return map_difficulties.map((ag) => ag.canonical);
+    return Aliases.canonicalsOfKind('map_difficulty');
 }
 
+// The index abbreviation of a map is its first alias, e.g. dark_dungeons -> DD
 function mapToIndexAbbreviation(map) {
-    if (!map) return null;
-    const mapAliases = Aliases.getAliasSet(map);
-    if (!mapAliases) return null;
-    return mapAliases[1].toUpperCase();
+    const group = Aliases.lookupGroup(map, 'map');
+    if (!group) return null;
+    return group.aliases[0].toUpperCase();
 }
 
 function indexMapAbbreviationToMap(mapAbbr) {
-    const set = Aliases.getAliasSet(
-        mapAbbr.toLowerCase()
-    );
-    if (!set) return null;
-    return set[0];
+    return Aliases.lookup(mapAbbr, 'map');
 }
 
 function indexMapAbbreviationToNormalForm(mapAbbr) {
@@ -96,7 +80,7 @@ function indexNormalFormToMapAbbreviation(map) {
 }
 
 function mapsNotPossible(entity) {
-    const canonicalEntity = Aliases.toAliasCanonical(entity);
+    const canonicalEntity = Aliases.lookupMultiple(Aliases.toAliasNormalForm(entity), SUPERGROUPS.TOWER)?.canonical ?? null;
 
     let impossibleMaps = [];
     if (Towers.isWaterEntity(canonicalEntity)) {

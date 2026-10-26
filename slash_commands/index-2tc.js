@@ -1,5 +1,6 @@
 // btw rml I kinda updated it to use the website but it is quite scuffed so sorry if i bastardized your code
 const OrParser = require('../parser/or-parser.js');
+const Aliases = require('../aliases');
 
 const TowerUpgradeParser = require('../parser/tower-upgrade-parser.js');
 const TowerPathParser = require('../parser/tower-path-parser');
@@ -16,6 +17,7 @@ const gHelper = require('../helpers/general.js');
 const Index = require('../helpers/index.js');
 const Maps = require('../helpers/maps');
 const Towers = require('../helpers/towers');
+const { SUPERGROUPS } = require('../alias-repository');
 
 const { palered } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');
@@ -53,7 +55,7 @@ function parseEntity(interaction, num) {
     const entityParser = new OrParser(new TowerParser(), new TowerPathParser(), new TowerUpgradeParser(), new HeroParser());
     const entity = interaction.options.getString(`entity${num}`);
     if (entity) {
-        const canonicalEntity = Aliases.canonicizeArg(entity, Aliases.TOWER);
+        const canonicalEntity = Towers.canonicalizeEntity(entity) ?? entity;
         if (canonicalEntity) {
             let parsed = CommandParser.parse([canonicalEntity], entityParser);
             // Alias tier 1 and 2 towers to base tower
@@ -77,7 +79,7 @@ function parseMap(interaction) {
     const mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
     const map = interaction.options.getString('map');
     if (map) {
-        const canonicalMap = Aliases.getCanonicalForm(map, Aliases.MAP);
+        const canonicalMap = Aliases.lookupMultiple(map, SUPERGROUPS.MAP)?.canonical;
         if (canonicalMap) {
             return CommandParser.parse([canonicalMap], mapParser);
         } else {

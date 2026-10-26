@@ -1,3 +1,5 @@
+const Aliases = require('../../aliases');
+
 VERSION_COLUMN = 'C';
 TOWER_HEADER_ROW = 23;
 HERO_HEADER_ROW = 18;

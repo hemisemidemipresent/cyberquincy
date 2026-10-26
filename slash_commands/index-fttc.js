@@ -1,4 +1,5 @@
 const MapParser = require('../parser/map-parser');
+const Aliases = require('../aliases');
 const NaturalNumberParser = require('../parser/natural-number-parser');
 const PersonParser = require('../parser/person-parser');
 const TowerParser = require('../parser/tower-parser');
@@ -61,7 +62,7 @@ async function execute(interaction) {
 function parseMap(interaction) {
     const map = interaction.options.getString('map');
     if (map) {
-        const canonicalMap = Aliases.getCanonicalForm(map);
+        const canonicalMap = Aliases.lookup(map, 'map');
         if (canonicalMap) {
             return CommandParser.parse([canonicalMap], new MapParser());
         } else {
@@ -75,7 +76,7 @@ function parseMap(interaction) {
 function parseTower(interaction, num) {
     const tower = interaction.options.getString(`tower${num}`);
     if (tower) {
-        const canonicalTower = Aliases.canonicizeArg(tower);
+        const canonicalTower = Aliases.lookup(tower, 'tower') ?? tower;
         if (canonicalTower) {
             return CommandParser.parse([canonicalTower], new TowerParser());
         } else {
@@ -231,7 +232,7 @@ async function displayFttcFilterAll(interaction, parsed) {
             const boldOg = (str) => completion.og ? `**${str}**` : str;
 
             const towers = completion.towerset.map(tower => {
-                const towerCanonical = Aliases.getCanonicalForm(tower);
+                const towerCanonical = Aliases.lookup(tower, 'tower');
                 const towerAbbreviation = FTTC_TOWER_ABBREVIATIONS[towerCanonical].toUpperCase();
                 return parsed.towers && parsed.towers.includes(towerCanonical)
                     ? `**${towerAbbreviation}**`
@@ -279,8 +280,8 @@ function title(parsed) {
     if (parsed.person) t += `by ${parsed.person} `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
-    if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
-    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
+    if (parsed.towers) t += `including ${Aliases.toIndexNormalForm(parsed.towers[0])} `;
+    if (parsed.towers && parsed.towers[1]) t += `and ${Aliases.toIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 
@@ -289,8 +290,8 @@ function titleNoCombos(parsed) {
     if (parsed.person) t += `by "${parsed.person}" `;
     if (parsed.natural_number) t += `with ${parsed.natural_number} towers `;
     if (parsed.map) t += `on ${Aliases.toIndexNormalForm(parsed.map)} `;
-    if (parsed.towers) t += `including ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[0])} `;
-    if (parsed.towers && parsed.towers[1]) t += `and ${Towers.towerUpgradeToIndexNormalForm(parsed.towers[1])} `;
+    if (parsed.towers) t += `including ${Aliases.toIndexNormalForm(parsed.towers[0])} `;
+    if (parsed.towers && parsed.towers[1]) t += `and ${Aliases.toIndexNormalForm(parsed.towers[1])} `;
     return t.slice(0, t.length - 1);
 }
 

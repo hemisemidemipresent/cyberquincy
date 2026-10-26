@@ -4,6 +4,7 @@ const {
     SlashCommandStringOption,
     SlashCommandIntegerOption,
 } = require("discord.js");
+const Aliases = require("../aliases");
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require("lex");
@@ -455,12 +456,13 @@ function lex(input, operator, value, difficulty) {
 
 // Decipher what type of operand it is, and convert to cost accordingly
 function valueByCost(t, i, difficulty) {
-    const canonicalToken = Aliases.canonicizeArg(t);
+    const tower = Aliases.lookup(t, "tower");
+    const crosspath = Towers.lookupTowerCrosspath(t);
 
-    if (Towers.isTower(canonicalToken)) {
-        return Towers.costOfTowerUpgrade(canonicalToken, "000", difficulty);
-    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
-        let [tower, upgradeSet] = canonicalToken.split("#");
+    if (tower) {
+        return Towers.costOfTowerUpgrade(tower, "000", difficulty);
+    } else if (crosspath) {
+        let [tower, upgradeSet] = crosspath.split("#");
         return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty);
     } else if (t.toLowerCase() === "totem") {
         return 0; // totem
@@ -473,12 +475,12 @@ function valueByCost(t, i, difficulty) {
 
 // returns number of upgrades
 function valueByUpgrade(t, i) {
-    const canonicalToken = Aliases.canonicizeArg(t);
+    const crosspath = Towers.lookupTowerCrosspath(t);
 
-    if (Towers.isTower(canonicalToken)) {
+    if (Aliases.lookup(t, "tower")) {
         return 0;
-    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
-        let arr = Towers.towerUpgradeToUpgrade(canonicalToken)
+    } else if (crosspath) {
+        let arr = Towers.towerUpgradeToUpgrade(crosspath)
             .split("")
             .map((e) => parseInt(e));
         if (arr.includes(5)) return 0;
@@ -493,12 +495,12 @@ function valueByUpgrade(t, i) {
 }
 
 function valueByT5(t, i) {
-    const canonicalToken = Aliases.canonicizeArg(t);
+    const crosspath = Towers.lookupTowerCrosspath(t);
 
-    if (Towers.isTower(canonicalToken)) {
+    if (Aliases.lookup(t, "tower")) {
         return 0;
-    } else if (Towers.isTowerUpgrade(canonicalToken, true)) {
-        return canonicalToken.includes("5") ? 1 : 0;
+    } else if (crosspath) {
+        return crosspath.includes("5") ? 1 : 0;
     } else if (t.toLowerCase() === "totem") {
         return 0; // totem
     } else if (!isNaN(t)) {

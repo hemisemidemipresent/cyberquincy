@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const Aliases = require('../aliases');
 
 const Towers = require('../helpers/towers');
 const Bloonology = require('../helpers/bloonology.js');

@@ -1,6 +1,22 @@
 const { SlashCommandBuilder } = require('discord.js');
+const Aliases = require('../aliases');
 const { cyber } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');
+
+const KIND_LABELS = {
+    tower: 'Tower',
+    tower_upgrade: 'Tower upgrade',
+    hero: 'Hero',
+    geraldo_item: "Geraldo's shop item",
+    map: 'Map',
+    map_difficulty: 'Map difficulty',
+    difficulty: 'Difficulty',
+    game_mode: 'Game mode',
+    bloon: 'Bloon',
+    moab: 'MOAB',
+    path: 'Path',
+    misc: 'Misc'
+};
 
 builder = new SlashCommandBuilder()
     .setName('alias')
@@ -14,18 +30,15 @@ async function execute(interaction) {
     // const canonicizedAlias = Aliases.canonicizeArg(alias);
     // const aliasSet = Aliases.getAliasSet(canonicizedAlias);
 
-    let aliasGroups = Aliases.getAliasGroup(alias, null, true);
+    const aliasGroups = Aliases.findAllGroups(alias);
 
     let embed;
 
-    if (!aliasGroups) {
+    if (aliasGroups.length === 0) {
         embed = new Discord.EmbedBuilder().setColor(cyber).setTitle(`No Aliases Found for \`${alias}\``);
     } else {
         let description = "";
 
-        if (!Array.isArray(aliasGroups)) {
-            aliasGroups = [aliasGroups];
-        }
         aliasGroups.forEach((aliasGroup) => {
         // Don't show all separator variations of every alias; just show the variation entered in the file
             const simplifiedAliases = [];
@@ -38,7 +51,7 @@ async function execute(interaction) {
                 }
             });
             console.log(aliasGroup);
-            description += `${aliasGroup.supergroup}:\n${displayedAliases.join(", ")}\n\n`;
+            description += `${KIND_LABELS[aliasGroup.kind]} (${aliasGroup.canonical}):\n${displayedAliases.join(", ")}\n\n`;
         });
         embed = new Discord.EmbedBuilder()
             .setColor(cyber)

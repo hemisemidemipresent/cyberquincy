@@ -1,4 +1,5 @@
 LimitedStringSetValuesParser = require('./limited-string-set-values-parser.js');
+const Aliases = require('../aliases');
 
 class DifficultyParser {
     type() {
@@ -8,7 +9,7 @@ class DifficultyParser {
     constructor(...permitted_difficulties) {
         this.delegateParser = new LimitedStringSetValuesParser(
             this.type(),
-            Aliases.allDifficulties(),
+            Aliases.canonicalsOfKind('difficulty'),
             permitted_difficulties.map(d => d.toLowerCase()),
         );
     }

@@ -1,5 +1,6 @@
 // no, this is not about scraping information from the pages itself, but rather just about the pagenames
 const fs = require("fs");
+const Aliases = require("../../aliases");
 
 async function scrapePages() {
     // NOTE: currently as of writing there are "only" 412 upgrades, but if NK keeps adding more and more towers we may need to make 2 requests

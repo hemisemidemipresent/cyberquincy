@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgrade, isTowerUpgrade, cumulativeTowerUpgradePathCosts } = require('../helpers/towers');
+const Aliases = require('../aliases');
+const { isTower, allTowers, allUpgradeCrosspathSets, costOfTowerUpgrade, isTowerUpgrade, cumulativeTowerUpgradePathCosts, lookupTowerCrosspath } = require('../helpers/towers');
 const { red, cyber } = require('../jsons/colors.json');
 const { numberAsCost } = require('../helpers/general.js');
 
@@ -38,13 +39,14 @@ function parseExcludedTowers(excludedTowers) {
     const allUpgradeSets = allUpgradeCrosspathSets();
 
     for (let excludedTower of excludedTowersList) {
-        let canonicalForm = Aliases.canonicizeArg(excludedTower);
-        if (isTower(canonicalForm)) {
+        const tower = Aliases.lookup(excludedTower, 'tower');
+        const crosspath = lookupTowerCrosspath(excludedTower);
+        if (tower) {
             for (let upgradeSet of allUpgradeSets) {
-                result.add(`${canonicalForm}#${upgradeSet}`);
+                result.add(`${tower}#${upgradeSet}`);
             }
-        } else if (isTowerUpgrade(canonicalForm, true)) {
-            const [specifiedTower, specifiedUpgradeSet] = canonicalForm.split('#');
+        } else if (crosspath) {
+            const [specifiedTower, specifiedUpgradeSet] = crosspath.split('#');
             for (let upgradeSet of allUpgradeSets) {
                 if (parseInt(specifiedUpgradeSet[0]) <= parseInt(upgradeSet[0])
                     && parseInt(specifiedUpgradeSet[1]) <= parseInt(upgradeSet[1])

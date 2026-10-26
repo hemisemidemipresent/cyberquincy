@@ -1,7 +1,9 @@
 const { WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
+const Aliases = require('../aliases');
 const { displayOneOrMultiplePagesNew, altMapsFields, genCompletionLink } = require('../helpers/index.js');
 const Maps = require('../helpers/maps');
 const Towers = require('../helpers/towers');
+const { SUPERGROUPS } = require('../alias-repository');
 
 const { paleblue } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');
@@ -139,7 +141,7 @@ function parseEntity(interaction) {
     const entityParser = new OrParser(new TowerParser(), new TowerUpgradeParser(), new HeroParser());
     const entity = interaction.options.getString('entity');
     if (entity) {
-        const canonicalEntity = Aliases.canonicizeArg(entity);
+        const canonicalEntity = Towers.canonicalizeEntity(entity) ?? entity;
         if (canonicalEntity) {
             let parsed = CommandParser.parse([canonicalEntity], entityParser);
             // Alias tier 1 and 2 towers to base tower
@@ -163,7 +165,7 @@ function parseMap(interaction) {
     const mapParser = new OrParser(new MapParser(), new MapDifficultyParser());
     const map = interaction.options.getString('map');
     if (map) {
-        const canonicalMap = Aliases.getCanonicalForm(map, Aliases.MAP);
+        const canonicalMap = Aliases.lookupMultiple(map, SUPERGROUPS.MAP)?.canonical;
         if (canonicalMap) {
             return CommandParser.parse([canonicalMap], mapParser);
         } else {
@@ -288,7 +290,7 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
 
     // Get all map abbreviations for the specified map difficulty
     const permittedMapAbbrs = Maps.allMapsFromMapDifficulty(mapDifficulty).map((map) => Maps.mapToIndexAbbreviation(map));
-    const completedMaps = resJson.results.map(completion => Maps.mapToIndexAbbreviation(Aliases.getCanonicalForm(completion.map)));
+    const completedMaps = resJson.results.map(completion => Maps.mapToIndexAbbreviation(Aliases.lookup(completion.map, 'map')));
 
     // Format 3 columns: map, person, link
     let mapColumn = [];

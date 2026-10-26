@@ -1,4 +1,5 @@
 const fs = require("fs");
+const Aliases = require("../../aliases");
 
 async function scrapeCosts() {
     // NOTE: currently as of writing there are "only" 412 upgrades, but if NK keeps adding more and more towers we may need to make 2 requests

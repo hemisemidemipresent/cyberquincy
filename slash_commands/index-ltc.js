@@ -1,4 +1,5 @@
 const MapParser = require("../parser/map-parser");
+const Aliases = require("../aliases");
 
 const { red, palegreen } = require("../jsons/colors.json");
 
@@ -25,7 +26,7 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     const mapArg = interaction.options.getString("map");
-    const canonicalMap = Aliases.getCanonicalForm(mapArg, Aliases.MAP);
+    const canonicalMap = Aliases.lookup(mapArg, "map");
 
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 

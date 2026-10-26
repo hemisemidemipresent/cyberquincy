@@ -5,6 +5,7 @@ const {
     SlashCommandIntegerOption,
     SlashCommandBooleanOption
 } = require('discord.js');
+const Aliases = require('../aliases');
 
 const gHelper = require('../helpers/general.js');
 const Maps = require('../helpers/maps');

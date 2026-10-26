@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const Aliases = require('../aliases');
 const { cyber, red } = require('../jsons/colors.json');
 const Maps = require('../helpers/maps');
 

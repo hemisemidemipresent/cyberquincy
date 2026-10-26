@@ -1,4 +1,5 @@
 const MapParser = require('../parser/map-parser.js');
+const Aliases = require('../aliases');
 
 const gHelper = require('../helpers/general.js');
 const { genCompletionLink } = require('../helpers/index.js');
@@ -16,7 +17,7 @@ builder = new SlashCommandBuilder()
 
 async function execute(interaction) {
     const mapArg = interaction.options.getString('map');
-    const canonicalMap = Aliases.getCanonicalForm(mapArg, Aliases.MAP);
+    const canonicalMap = Aliases.lookup(mapArg, 'map');
 
     const parsed = CommandParser.parse([canonicalMap], new MapParser());
 

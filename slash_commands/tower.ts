@@ -13,7 +13,7 @@ import {
 
 import FuzzySet from "fuzzyset.js";
 
-import Aliases from "../aliases.js";
+import Aliases from "../aliases";
 import * as Towers from "../helpers/towers";
 import Bloonology from "../helpers/bloonology.js";
 
@@ -59,13 +59,12 @@ const builder = new SlashCommandBuilder()
     .addStringOption(reloadOption);
 
 function validateInput(interaction: ChatInputCommandInteraction): EmbedBuilder | undefined {
-    let tower = interaction.options.getString("tower");
-    tower = Aliases.toAliasNormalForm(tower);
-    if (!Towers.isTowerTypeCanonical(tower)) {
+    const towerInput = interaction.options.getString("tower");
+    if (!Aliases.lookup(towerInput, "tower")) {
         return new EmbedBuilder()
             .setTitle("Invalid tower specified!")
             .setDescription(
-                `${tower} is not a valid tower name`,
+                `${towerInput} is not a valid tower name`,
             )
             .setColor(red);
     }
@@ -216,8 +215,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             flags: MessageFlags.Ephemeral,
         });
 
-    let tower = interaction.options.getString("tower");
-    tower = Aliases.toAliasNormalForm(tower); // TODO: maybe replace with a towerparser to use aliases? (need to also update validation function)
+    const tower = Aliases.lookup(interaction.options.getString("tower"), "tower"); // validated above
 
 
     const towerPath = parseTowerPath(interaction);

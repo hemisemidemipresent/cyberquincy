@@ -6,11 +6,6 @@ const { testing, testingGuild } = require('./1/config.json');
 const { ApplicationCommandOptionType } = require('discord.js');
 global.Discord = require('discord.js');
 
-function loadAliases() {
-    // TODO: remove once every file requires ./aliases.js directly
-    global.Aliases = require('./aliases.js');
-}
-
 function addHideOptions(options) {
     const hasSubcommand = options.some(
         ({ type }) =>
@@ -36,8 +31,6 @@ function getCommandBody(file) {
 }
 
 async function registerCommands() {
-    loadAliases();
-
     slashCommandCenter = require('./slash_command_center');
 
     const rest = new REST({ version: '9' }).setToken(activeToken());

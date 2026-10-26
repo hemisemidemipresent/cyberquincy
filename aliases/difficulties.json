@@ -1,5 +1,6 @@
 {
     "easy": ["ez"],
     "medium": ["med", "medi"],
-    "hard": ["difficult", "hrd"]
+    "hard": ["difficult", "hrd"],
+    "impoppable": ["impop", "impopp", "imp"]
 }

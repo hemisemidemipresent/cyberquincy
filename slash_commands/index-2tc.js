@@ -16,12 +16,12 @@ const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption, SlashComman
 
 const entity1Option = new SlashCommandStringOption()
     .setName('entity1')
-    .setDescription('Tower/Path/Upgrade/Hero')
+    .setDescription('Tower/Upgrade/Hero')
     .setRequired(false);
 
 const entity2Option = new SlashCommandStringOption()
     .setName('entity2')
-    .setDescription('Tower/Path/Upgrade/Hero')
+    .setDescription('Tower/Upgrade/Hero')
     .setRequired(false);
 
 const mapOption = new SlashCommandStringOption().setName('map').setDescription('Map/Difficulty').setRequired(false);
@@ -46,8 +46,8 @@ function readInput(interaction) {
         const entityArg = interaction.options.getString(`entity${num}`);
         let entity = null;
         if (entityArg) {
-            entity = Towers.lookupTowerEntity(entityArg, { allowTowerPaths: true });
-            if (!entity) return { error: `Entity${num} did not match a tower/upgrade/path/hero` };
+            entity = Towers.lookupTowerEntity(entityArg);
+            if (!entity) return { error: `Entity${num} did not match a tower/upgrade/hero` };
             entity = Towers.baseTowerIfLowTier(entity);
         }
         entities.push(entity);
@@ -85,7 +85,6 @@ async function execute(interaction) {
     }
     await interaction.deferReply();
 
-    // Tower paths have no index name, so they don't narrow the search
     const towers = providedEntityNames(input);
     const map = input.map?.kind === 'map' ? Aliases.toIndexNormalForm(input.map.canonical) : null;
 
@@ -268,7 +267,7 @@ function embedTitleNoCombos(input) {
     return title.slice(0, title.length - 1);
 }
 
-// Index names of entity1 and entity2, skipping missing ones and tower paths
+// Index names of entity1 and entity2, skipping missing ones
 function providedEntityNames(input) {
     return input.entities.map((entity) => Towers.towerEntityIndexName(entity)).filter((el) => el);
 }

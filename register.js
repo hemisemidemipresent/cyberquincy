@@ -6,10 +6,9 @@ const { testing, testingGuild } = require('./1/config.json');
 const { ApplicationCommandOptionType } = require('discord.js');
 global.Discord = require('discord.js');
 
-async function loadAliases() {
-    const AliasRepository = require('./alias-repository.js');
-    global.Aliases = new AliasRepository();
-    await Aliases.asyncAliasFiles();
+function loadAliases() {
+    // TODO: remove once every file requires ./aliases.js directly
+    global.Aliases = require('./aliases.js');
 }
 
 function addHideOptions(options) {
@@ -37,7 +36,7 @@ function getCommandBody(file) {
 }
 
 async function registerCommands() {
-    await loadAliases();
+    loadAliases();
 
     slashCommandCenter = require('./slash_command_center');
 

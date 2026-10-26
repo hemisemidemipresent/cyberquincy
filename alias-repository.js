@@ -16,13 +16,20 @@ class AliasRepository extends Array {
     // Configuration/Initialization
     ////////////////////////////////////////////////////
 
-    async asyncAliasFiles() {
+    // Creates a repository with every alias file already loaded
+    static load() {
+        const repository = new AliasRepository();
+        repository.loadAliasFiles();
+        return repository;
+    }
+
+    loadAliasFiles() {
         // {source_directory: handling function}
         const SPECIAL_HANDLING_CASES = {
             './aliases/towers': this.loadTowerAliasFile
         };
 
-        for await (const absolutePath of filesHelper.getFiles('./aliases', [
+        for (const absolutePath of filesHelper.getFiles('./aliases', [
             '.json',
         ])) {
             let fpath = filepath.create(absolutePath);
@@ -91,7 +98,7 @@ class AliasRepository extends Array {
             // Hack to add appropriate base tower entry
             if (upgrade == 'xyz') {
                 const baseTowerAliasGroup = {
-                    canonical: `${baseName}#222`,
+                    canonical: `${baseName}#000`,
                     aliases: towerUpgrades['xyz']
                         .concat(baseName)
                         .map((al) => [`base_${al}`, `b_${al}`]).flat(),
@@ -352,10 +359,10 @@ class AliasRepository extends Array {
     // This converts each arg part to its canonical form.
     // `spact#025` gets converted to `spike_factory#025` for example.
     canonicizeArg(arg, supergroup) {
-        if (arg.startsWith('r#')) return Aliases.getCanonicalForm(arg) || arg; // for r#100 race args
+        if (arg.startsWith('r#')) return this.getCanonicalForm(arg) || arg; // for r#100 race args
         return arg
             .split('#')
-            .map((t) => Aliases.getCanonicalForm(t, supergroup) || t)
+            .map((t) => this.getCanonicalForm(t, supergroup) || t)
             .join('#');
     }
 }

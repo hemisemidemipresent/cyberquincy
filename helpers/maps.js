@@ -5,32 +5,6 @@ function allMaps() {
         .concat(expertMaps());
 }
 
-function allWaterMaps() {
-    return allMaps().filter(
-        (m) => !allNonWaterMaps().includes(m)
-    );
-}
-
-// TODO: rewrite this involving the q!map command results rather than hardcoding it
-function allNonWaterMaps() {
-    return [
-        'SY',
-        'TS',
-        'H',
-        'AR',
-        'MM',
-        'ML',
-        'KD',
-        'CF',
-        'GD',
-        'UG',
-        'MS',
-        'W',
-        'XF',
-        'MN',
-    ].map((m) => Aliases.getCanonicalForm(m.toLowerCase()), Aliases.MAP);
-}
-
 function allMapsFromMapDifficulty(mapDifficulty) {
     switch (mapDifficulty.toLowerCase()) {
         case 'beginner':

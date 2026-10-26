@@ -10,6 +10,5 @@
     "purple": ["purpur","purp"],
     "zebra": ["oreo"],
     "rainbow": ["spectrum"],
-    "ceramic": ["ceram"],
-    "super_ceramic": ["sceram"]
+    "ceramic": ["ceram", "super_ceramic", "sceram"]
 }

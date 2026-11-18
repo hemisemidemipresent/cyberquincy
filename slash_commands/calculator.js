@@ -13,7 +13,7 @@ const mkDiscounts = require('../jsons/mk/discounts.json');
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round_sets/regular.json');
 const abr = require('../jsons/round_sets/abr.json');
-const RoundParser = require('../parser/round-parser');
+const { parseRound } = require('../helpers/rounds');
 
 const { red, cyber, black } = require('../jsons/colors.json');
 
@@ -275,12 +275,12 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
     const undiscountedToken = t.replace(/'*$/, '');
     const numDiscounts = t.match(/'*$/)?.[0]?.length;
     const match = Aliases.lookupMultiple(undiscountedToken, SUPERGROUPS.TOWER);
-    let crosspath;
+    let crosspath, round;
 
     if (!isNaN(undiscountedToken)) return Number(undiscountedToken);
-    else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS')).round)) {
+    else if ((round = parseRound(undiscountedToken))) {
         return chimps[round].cumulativeCash - chimps[5].cumulativeCash + 650;
-    } else if ((round = CommandParser.parse([undiscountedToken], new RoundParser('PREDET_CHIMPS', true)).round)) {
+    } else if ((round = parseRound(undiscountedToken, true))) {
         return abr[round].cumulativeCash - abr[5].cumulativeCash + 650;
     } else if (match?.kind === 'geraldo_item') {
         return Heroes.costOfGerryShopItem(match.canonical, difficulty);

@@ -14,8 +14,6 @@ function globalRequirements() {
         intents: [GatewayIntentBits.Guilds]
     });
 
-    global.CommandParser = require('./parser/command-parser.js');
-
     global.UserCommandError = require('./exceptions/user-command-error.js');
     global.DeveloperCommandError = require('./exceptions/developer-command-error.js');
 }

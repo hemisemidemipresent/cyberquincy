@@ -141,8 +141,8 @@ async function embedBloonology(towerName: string, upgrade: string, isB2: boolean
         totalCost = `${easyTotalCost} - easy\n${mediumTotalCost} - medium\n${hardTotalCost} - hard\n${impopTotalCost} - impoppable\n`;
     }
     if (isB2) {
-        cost = `${Towers.costOfTowerUpgrade(towerName, upgrade, "medium", 0, {}, isB2)} - battles2\n`;
-        totalCost = `${Towers.costOfTowerUpgradeSet(towerName, upgrade, "medium", 0, {}, isB2)} - battles2\n`;
+        cost = `${Towers.costOfTowerUpgrade(towerName, upgrade, "medium", 0, null, isB2)} - battles2\n`;
+        totalCost = `${Towers.costOfTowerUpgradeSet(towerName, upgrade, "medium", 0, null, isB2)} - battles2\n`;
     }
 
     let embed = new EmbedBuilder()

@@ -1,11 +1,12 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
 import * as gHelper from './general';
-import bHelper from './bloons-general.js';
+import * as bHelper from './bloons-general';
 import Aliases from '../aliases';
 import heroesJson from '../jsons/heroes.json';
 import gerrysShopJson from '../jsons/geraldos_shop.json';
 
+import type { MonkeyKnowledgeModifiers } from './bloons-general';
 import type { DifficultyCanonical, GeraldoShopItemCanonical, HeroCanonical, MapDifficultyCanonical } from '../types/aliases';
 
 // Typed so tsc fails if the stats files miss a hero or item that has aliases
@@ -157,7 +158,12 @@ function levelingCurve(
     return curve;
 }
 
-function costOfHero(hero: HeroCanonical, difficulty: DifficultyCanonical, numDiscounts: number, mk: boolean): number {
+function costOfHero(
+    hero: HeroCanonical,
+    difficulty: DifficultyCanonical,
+    numDiscounts = 0,
+    mk: MonkeyKnowledgeModifiers | null = null
+): number {
     const mediumCost = heroes[hero]?.cost;
     if (!mediumCost) throw `${hero} does not have an entry in heroes.json`;
     return bHelper.heroDifficultyDiscountPriceMult(mediumCost, difficulty, numDiscounts, mk);

@@ -8,7 +8,6 @@ const bHelper = require('../helpers/bloons-general');
 const Towers = require('../helpers/towers');
 const Heroes = require('../helpers/heroes');
 const { SUPERGROUPS } = require('../alias-repository');
-const mkDiscounts = require('../jsons/mk/discounts.json');
 
 const { LexicalParser, LexicalParseError } = require('../helpers/calculator/lexical_parser');
 const chimps = require('../jsons/round_sets/regular.json');
@@ -191,15 +190,7 @@ async function calc(interaction) {
 
     try {
         i = 0;
-        let simpleMkDiscounts = {
-            comeOnEverybody: 0,
-            discounts: []
-        };
-        if (mk) {
-            simpleMkDiscounts.comeOnEverybody = mkDiscounts.misc_discounts.come_on_everybody;
-            simpleMkDiscounts.discounts = JSON.parse(JSON.stringify(mkDiscounts.tower_discounts));
-        }
-
+        const mkModifiers = mk ? bHelper.maxMonkeyKnowledge() : null;
 
         parsed.forEach(function (c) {
             i++;
@@ -216,7 +207,7 @@ async function calc(interaction) {
                     break;
                 default:
                     // Convert symbolic terms to bloons-ingame-monetary values
-                    stack.push(parseAndValueToken(c, i, difficulty, simpleMkDiscounts));
+                    stack.push(parseAndValueToken(c, i, difficulty, mkModifiers));
             }
         });
     } catch (e) {
@@ -271,7 +262,7 @@ async function calc(interaction) {
 }
 
 // Decipher what type of operand it is, and convert to cost accordingly
-function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
+function parseAndValueToken(t, i, difficulty, mk) {
     const undiscountedToken = t.replace(/'*$/, '');
     const numDiscounts = t.match(/'*$/)?.[0]?.length;
     const match = Aliases.lookupMultiple(undiscountedToken, SUPERGROUPS.TOWER);
@@ -287,33 +278,23 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
     } else if (undiscountedToken.includes('#') && (crosspath = Towers.lookupTowerCrosspath(undiscountedToken))) {
         // Catches tower upgrades with crosspaths like wiz#401
         let [tower, upgradeSet] = crosspath.split('#');
-        return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
+        return Towers.costOfTowerUpgradeSet(tower, upgradeSet, difficulty, numDiscounts, mk);
     } else if (undiscountedToken.includes('!') && (crosspath = Towers.lookupTowerCrosspath(undiscountedToken.replace('!', '#')))) {
         // Catches all other tower ugprades
         let [tower, upgradeSet] = crosspath.split('#');
-        let tmp = simpleMkDiscounts.comeOnEverybody;
-        simpleMkDiscounts.comeOnEverybody = 0;
-        let ret = Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts, simpleMkDiscounts);
-        simpleMkDiscounts.comeOnEverybody = tmp;
-        return ret;
+        return Towers.costOfTowerUpgrade(tower, upgradeSet, difficulty, numDiscounts, bHelper.withoutComeOnEverybody(mk));
     } else if (match?.kind === 'tower_upgrade') {
         // for upgrade names like "sotf" the canonical is the upgrade format "druid#050"
         let [tower, upgrade] = match.canonical.split('#');
-        let tmp = simpleMkDiscounts.comeOnEverybody;
-        simpleMkDiscounts.comeOnEverybody = 0;
-        let ret = Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts, simpleMkDiscounts);
-        simpleMkDiscounts.comeOnEverybody = tmp;
-        return ret;
+        return Towers.costOfTowerUpgrade(tower, upgrade, difficulty, numDiscounts, bHelper.withoutComeOnEverybody(mk));
     } else if (match?.kind === 'tower') {
         // Catches base tower names/aliases
-        let tmp = simpleMkDiscounts.comeOnEverybody;
-        simpleMkDiscounts.comeOnEverybody = 0;
-        let ret = Towers.costOfTowerUpgrade(match.canonical, '000', difficulty, numDiscounts, simpleMkDiscounts);
-        if (Towers.allPrimaryTowers().includes(match.canonical)) return ret;
-        simpleMkDiscounts.comeOnEverybody = tmp;
+        const ret = Towers.costOfTowerUpgrade(match.canonical, '000', difficulty, numDiscounts, bHelper.withoutComeOnEverybody(mk));
+        // Placing a primary tower uses up Come On Everybody
+        if (mk && Towers.allPrimaryTowers().includes(match.canonical)) mk.comeOnEverybody = 0;
         return ret;
     } else if (match?.kind === 'hero') {
-        return Heroes.costOfHero(match.canonical, difficulty, numDiscounts, simpleMkDiscounts.discounts.length > 0);
+        return Heroes.costOfHero(match.canonical, difficulty, numDiscounts, mk);
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }

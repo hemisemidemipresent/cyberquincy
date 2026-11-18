@@ -1,5 +1,5 @@
 import * as gHelper from './general';
-import bHelper from './bloons-general.js';
+import * as bHelper from './bloons-general';
 import * as Heroes from './heroes';
 import Aliases from '../aliases';
 import { SUPERGROUPS } from '../alias-repository';
@@ -7,6 +7,7 @@ import type { AliasMatch, TowerCategory } from '../types/aliases';
 import costs from '../jsons/costs.json';
 import costs_b2 from '../jsons/costs_b2.json';
 
+import type { MonkeyKnowledgeModifiers } from './bloons-general';
 import type { TowerCrosspathCanonical, TowerTypeCanonical, TowerUpgradeCanonical, TowerUpgradeIndexNormalForm } from '../types/towers';
 
 function towerUpgradeToTower(towerUpgrade: string): string | null {
@@ -441,17 +442,17 @@ function subUpgradesFromUpgradeSet(upgradeSet) {
     return subUpgrades;
 }
 
-function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, mkDiscounts = {}, battles2 = false) {
+function costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts = 0, mk: MonkeyKnowledgeModifiers | null = null, battles2 = false) {
     let [path, tier] = pathTierFromUpgradeSet(upgrade);
     const costData = battles2 ? costs_b2 : costs;
     const tower = costData[towerName];
     const isBaseTower = upgrade === '000';
     let cost = isBaseTower ? tower.cost : tower.upgrades[path][`${tier}`];
     numDiscounts = tier <= 3 ? numDiscounts : 0;
-    return bHelper.difficultyDiscountPriceMult(towerName, upgrade, cost, difficulty, numDiscounts, mkDiscounts);
+    return bHelper.difficultyDiscountPriceMult(towerName, upgrade, cost, difficulty, numDiscounts, mk);
 }
 
-function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, mkDiscounts = {}, battles2 = false) {
+function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts = 0, mk: MonkeyKnowledgeModifiers | null = null, battles2 = false) {
     const subUpgrades = subUpgradesFromUpgradeSet(upgradeSet);
     const [path, mainTier] = pathTierFromUpgradeSet(upgradeSet);
     const pathUpgrades = upgradesFromPath(path);
@@ -464,21 +465,15 @@ function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts =
             (pathUpgrades.includes(subUpgrade) && tier >= "4") ||
             (crossPathUpgrades.includes(subUpgrade) && mainTier >= "3")
         )) {
-            totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
+            totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mk, battles2);
         } else {
-            if ("comeOnEverybody" in mkDiscounts) {
-                let tmp = mkDiscounts.comeOnEverybody;
-                mkDiscounts.comeOnEverybody = 0;
-                totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
-                mkDiscounts.comeOnEverybody = tmp;
-            } else {
-                totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, mkDiscounts, battles2);
-            }
+            totalCost += costOfTowerUpgrade(towerName, subUpgrade, difficulty, numDiscounts, bHelper.withoutComeOnEverybody(mk), battles2);
         }
     });
 
-    if (primaryTowers.includes(towerName) && mainTier !== "3" && mainTier !== "4" && "comeOnEverybody" in mkDiscounts) {
-        mkDiscounts.comeOnEverybody = 0;
+    // Come On Everybody has now been used up
+    if (primaryTowers.includes(towerName) && mainTier !== "3" && mainTier !== "4" && mk) {
+        mk.comeOnEverybody = 0;
     }
 
     return totalCost;
@@ -487,7 +482,7 @@ function costOfTowerUpgradeSet(towerName, upgradeSet, difficulty, numDiscounts =
 function cumulativeTowerUpgradePathCosts(towerName, path, difficulty, numDiscounts = 0, battles2 = false) {
     let result = [0, 0, 0, 0, 0, 0];
     upgradesFromPath(path).forEach((upgrade, tier) => {
-        result[tier + 1] += result[tier] + costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts, {}, battles2);
+        result[tier + 1] += result[tier] + costOfTowerUpgrade(towerName, upgrade, difficulty, numDiscounts, null, battles2);
     });
     return result;
 }

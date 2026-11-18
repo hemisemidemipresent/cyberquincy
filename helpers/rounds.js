@@ -4,7 +4,7 @@ const MEDIUM_ROUNDS = [1, 60];
 const EASY_ROUNDS = [1, 40];
 const PREDET_ROUNDS = [1, 140]; // predetermined rounds
 const PREDET_CHIMPS_ROUNDS = [6, 140];
-const ALL_ROUNDS = [1, 1288555]; // will explain later
+const ALL_ROUNDS = [1, 1288555];
 
 function isValidRound(r) {
     return Number.isInteger(r) && r >= ALL_ROUNDS[0] && r <= ALL_ROUNDS[1];

@@ -10,7 +10,7 @@ const Aliases = require("../aliases");
 const Lexer = require("lex");
 const { LexicalParser, LexicalParseError } = require("../helpers/calculator/lexical_parser");
 
-const bHelper = require("../helpers/bloons-general.js");
+const bHelper = require("../helpers/bloons-general");
 const Towers = require("../helpers/towers");
 
 const { discord, justStatsFooter } = require("../aliases/misc.json");

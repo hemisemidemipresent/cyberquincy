@@ -1,4 +1,3 @@
-const axios = require('axios');
 const { isValidUpgradeSet } = require('./towers');
 const { round } = require('./general');
 const templeStats = require('../jsons/temple.json');
@@ -109,14 +108,20 @@ function cleanBloonology(description) {
     }).join("\n");
 }
 
+async function fetchBloonology(link) {
+    const res = await fetch(link);
+    if (!res.ok) throw new Error(`Failed to fetch bloonology from ${link}: HTTP ${res.status}`);
+    return res.text();
+}
+
 async function towerBloonologyData(towerName, isB2) {
     const link = isB2 ? TOWER_NAME_TO_BLOONOLOGY_LINK_B2[towerName] : TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
-    const res = await axios.get(link);
-    const version = res.data.match(/^\s*Version: ([0-9.]+)\s*$/im);
+    const body = await fetchBloonology(link);
+    const version = body.match(/^\s*Version: ([0-9.]+)\s*$/im);
     const data = {};
     let upgrade, key;
 
-    for (const line of res.data.split(/\r?\n|\r/g)) {
+    for (const line of body.split(/\r?\n|\r/g)) {
         const match = line.match(/^\s*([0-9]{3})\s*$/);
 
         if (match && isValidUpgradeSet(match[1])) {
@@ -146,9 +151,9 @@ async function towerBloonologyData(towerName, isB2) {
 }
 
 async function heroBloonologyData(heroName) {
-    const res = await axios.get(HERO_NAME_TO_BLOONOLOGY_LINK[heroName]);
-    const version = res.data.match(/^\s*Version: ([0-9.]+)\s*$/im);
-    const [levels, summary] = res.data.split(/^\s*all levels\s*$/im);
+    const body = await fetchBloonology(HERO_NAME_TO_BLOONOLOGY_LINK[heroName]);
+    const version = body.match(/^\s*Version: ([0-9.]+)\s*$/im);
+    const [levels, summary] = body.split(/^\s*all levels\s*$/im);
     const data = {};
     let level;
 
@@ -311,8 +316,7 @@ function corvusBloonology(description, page = 0) {
 }
 
 async function getRelicBloonology() {
-    res = await axios.get(RELIC_BLOONOLOGY_LINK);
-    let body = res.data;
+    let body = await fetchBloonology(RELIC_BLOONOLOGY_LINK);
     let relics = body.replace(/\r?\n|\r/g, "\n").split("\n\n");
     let relicMap = {};
     for (let relic of relics) {

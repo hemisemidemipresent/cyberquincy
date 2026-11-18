@@ -1,6 +1,5 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ComponentType, MessageFlags } = require('discord.js');
 
-const axios = require('axios');
 const FuzzySet = require('fuzzyset.js');
 
 const { dark_blue } = require('../jsons/colors.json');
@@ -54,7 +53,7 @@ async function execute(interaction) {
     let page = interaction.options.getInteger('page') || 1;
 
     async function reloadNewPage(inter, page = 1) {
-        const json = (await axios.get(`https://data.ninjakiwi.com/btd6/races/${race_id}/leaderboard?page=${page}`)).data;
+        const json = await (await fetch(`https://data.ninjakiwi.com/btd6/races/${race_id}/leaderboard?page=${page}`)).json();
         if (!json.success)
             return await inter.editReply({
                 content: `page #${page} does not exist!`,
@@ -154,8 +153,8 @@ async function onAutocomplete(interaction) {
 }
 
 async function updateRaceList() {
-    let res = await axios.get('https://data.ninjakiwi.com/btd6/races');
-    cachedRaces = res.data.body;
+    let res = await fetch('https://data.ninjakiwi.com/btd6/races');
+    cachedRaces = (await res.json()).body;
 }
 module.exports = {
     data: builder,

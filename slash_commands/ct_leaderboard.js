@@ -1,7 +1,5 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, MessageFlags, SlashCommandBuilder } = require('discord.js');
 
-const axios = require('axios');
-
 const { lightgreen } = require('../jsons/colors.json');
 
 const SCORES_PER_PAGE = 25;
@@ -23,7 +21,7 @@ function validateInput(interaction) {
     if (page < 1) return `${page} isn't a valid page number`;
 }
 async function execute(interaction) {
-    const events = (await axios.get('https://data.ninjakiwi.com/btd6/ct')).data.body;
+    const events = (await (await fetch('https://data.ninjakiwi.com/btd6/ct')).json()).body;
 
     validationFailure = validateInput(interaction);
     if (validationFailure)
@@ -57,7 +55,7 @@ async function execute(interaction) {
     let page = interaction.options.getInteger('page') || 1;
 
     async function reloadNewPage(inter, page = 1) {
-        let json = (await axios.get(`https://data.ninjakiwi.com/btd6/ct/${event.id}/leaderboard/team?page=${page}`)).data;
+        let json = await (await fetch(`https://data.ninjakiwi.com/btd6/ct/${event.id}/leaderboard/team?page=${page}`)).json();
         if (!json.success)
             return await inter.editReply({
                 content: 'That page does not exist!',

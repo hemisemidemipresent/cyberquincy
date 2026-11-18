@@ -2,7 +2,8 @@ import gHelper from './general.js';
 import bHelper from './bloons-general.js';
 import * as Heroes from './heroes';
 import Aliases from '../aliases';
-import { SUPERGROUPS, type AliasMatch, type TowerCategory } from '../alias-repository';
+import { SUPERGROUPS } from '../alias-repository';
+import type { AliasMatch, TowerCategory } from '../types/aliases';
 import costs from '../jsons/costs.json';
 import costs_b2 from '../jsons/costs_b2.json';
 

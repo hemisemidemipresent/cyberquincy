@@ -6,7 +6,7 @@ import * as Index from '../helpers/index';
 import * as Maps from '../helpers/maps';
 import * as Towers from '../helpers/towers';
 import Colors from '../helpers/colors';
-import { SUPERGROUPS, type AliasMatch } from '../alias-repository';
+import { SUPERGROUPS } from '../alias-repository';
 
 import { discord } from '../aliases/misc.json';
 
@@ -20,6 +20,7 @@ import {
 } from 'discord.js';
 
 import type { TowerEntityMatch } from '../helpers/towers';
+import type { AliasMatch } from '../types/aliases';
 import type { IndexPageResponse, TwoTCCompletion } from '../types/btd6index';
 import type { ReadInputResult } from '../types/slash-commands';
 

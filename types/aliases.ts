@@ -13,6 +13,8 @@ import type gameModesJson from "../aliases/gamemodes.json";
 import type bloonsJson from "../aliases/enemies/bloons.json";
 import type moabsJson from "../aliases/enemies/moabs.json";
 import type pathsJson from "../aliases/paths.json";
+import type miscJson from "../aliases/misc.json";
+import type { TowerTypeCanonical, TowerUpgradeCanonical } from "./towers";
 
 /** e.g. `adora`, `benjamin` */
 export type HeroCanonical = keyof typeof heroesJson;
@@ -50,3 +52,45 @@ export type EnemyCanonical = BloonCanonical | MoabCanonical;
 
 /** `top_path`, `middle_path` or `bottom_path` */
 export type PathCanonical = keyof typeof pathsJson;
+
+// misc.json mixes aliases with config values; left untyped beyond its keys for now
+export type MiscCanonical = keyof typeof miscJson;
+
+/** The canonical type each kind of alias group resolves to */
+export interface CanonicalByKind {
+    tower: TowerTypeCanonical;
+    tower_upgrade: TowerUpgradeCanonical;
+    hero: HeroCanonical;
+    geraldo_item: GeraldoShopItemCanonical;
+    map: MapCanonical;
+    map_difficulty: MapDifficultyCanonical;
+    difficulty: DifficultyCanonical;
+    game_mode: GameModeCanonical;
+    bloon: BloonCanonical;
+    moab: MoabCanonical;
+    path: PathCanonical;
+    misc: MiscCanonical;
+}
+
+export type AliasKind = keyof CanonicalByKind;
+
+export type TowerCategory = 'primary' | 'military' | 'magic' | 'support';
+
+/** Extra information some kinds record at load time */
+interface ExtraByKind {
+    tower: { towerCategory: TowerCategory };
+    tower_upgrade: { towerCategory: TowerCategory };
+    map: { mapDifficulty: MapDifficultyCanonical };
+}
+
+export type AliasGroupOf<K extends AliasKind> = {
+    kind: K;
+    canonical: CanonicalByKind[K];
+    aliases: string[];
+    sourcefile: string;
+} & (K extends keyof ExtraByKind ? ExtraByKind[K] : unknown);
+
+export type AliasGroup = { [K in AliasKind]: AliasGroupOf<K> }[AliasKind];
+
+/** Result of a lookup across several kinds: switch on `kind` to narrow `canonical` */
+export type AliasMatch<K extends AliasKind> = { [P in K]: { kind: P; canonical: CanonicalByKind[P] } }[K];

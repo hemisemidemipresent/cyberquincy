@@ -4,7 +4,7 @@ import { displayIndexPages, altMapsFields, genCompletionLink, fetchIndex, orUnkn
 import * as Maps from '../helpers/maps';
 import * as Towers from '../helpers/towers';
 import Colors from '../helpers/colors';
-import { SUPERGROUPS, type AliasMatch } from '../alias-repository';
+import { SUPERGROUPS } from '../alias-repository';
 
 import { discord } from '../aliases/misc.json';
 
@@ -14,7 +14,7 @@ import DeveloperCommandError from '../exceptions/developer-command-error.js';
 import { ChatInputCommandInteraction, EmbedBuilder, MessageFlags, SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
 
 import type { TowerEntityMatch } from '../helpers/towers';
-import type { MapCanonical, MapDifficultyCanonical } from '../types/aliases';
+import type { AliasMatch, MapCanonical, MapDifficultyCanonical } from '../types/aliases';
 import type { TowerTypeCanonical } from '../types/towers';
 import type { IndexPageResponse, TwoMPCompletion } from '../types/btd6index';
 import type { ReadInputResult } from '../types/slash-commands';

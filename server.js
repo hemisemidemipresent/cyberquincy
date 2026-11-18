@@ -9,8 +9,6 @@ function main() {
 }
 
 function globalRequirements() {
-    global.Heroes = require('./helpers/heroes.js');
-
     global.Discord = require('discord.js');
     global.client = new Client({
         intents: [GatewayIntentBits.Guilds]
@@ -57,13 +55,6 @@ function generateCommandListeners(slashCommandCenter) {
             return; // probably Missing Permissions
         }
     });
-
-    // q! commands - no longer exist as of August 2022 due to Discord making bots changes to slash commands
-    // and this bot doesnt have a valid reason to be using message content so we do not have this intent
-    // * https://support-dev.discord.com/hc/en-us/articles/4404772028055-Message-Content-Privileged-Intent-FAQ
-    // client.on('messageCreate', async (message) => {
-    //    commandCenter.handleCommand(message);
-    // });
 
     // slash commands
     client.on('interactionCreate', async (interaction) => {

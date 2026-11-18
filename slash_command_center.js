@@ -1,5 +1,7 @@
 const fs = require('fs');
 const { MessageFlags } = require('discord.js');
+const IndexAPIError = require('./exceptions/index-api-error');
+const WikiAPIError = require('./exceptions/wiki-api-error');
 
 function commandFiles() {
     const commandFiles = fs
@@ -30,10 +32,23 @@ async function handleCommand(interaction) {
         await command.execute(interaction);
     } catch (error) {
         console.error(error);
+        const content =
+            error instanceof IndexAPIError || error instanceof WikiAPIError
+                ? error.message
+                : 'There was an error while executing this command!';
+        // The command may have failed at any point, so respond in whatever way the interaction's state still allows
         try {
-            await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+            if (interaction.replied) {
+                // Keep whatever the command already sent, and add the error below it
+                await interaction.followUp({ content, flags: MessageFlags.Ephemeral });
+            } else if (interaction.deferred) {
+                // Replace "thinking...". The reply keeps the visibility chosen by deferReply()
+                await interaction.editReply({ content, embeds: [], components: [] });
+            } else {
+                await interaction.reply({ content, flags: MessageFlags.Ephemeral });
+            }
         } catch {
-            // Unknown Interaction
+            // Unknown Interaction, e.g. the interaction token expired
         }
     }
 }

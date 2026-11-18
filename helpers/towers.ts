@@ -1,6 +1,6 @@
 import gHelper from './general.js';
 import bHelper from './bloons-general.js';
-import Heroes from './heroes.js';
+import * as Heroes from './heroes';
 import Aliases from '../aliases';
 import { SUPERGROUPS, type AliasMatch, type TowerCategory } from '../alias-repository';
 import costs from '../jsons/costs.json';
@@ -93,7 +93,7 @@ function lookupTowerUpgrade(member: string): TowerUpgradeCanonical | null {
 }
 
 /** A tower, tower upgrade or hero, or (when allowed) a tower path such as `heli_pilot#top_path` */
-type TowerEntityMatch = AliasMatch<'tower' | 'tower_upgrade' | 'hero'> | { kind: 'tower_path'; canonical: string };
+export type TowerEntityMatch = AliasMatch<'tower' | 'tower_upgrade' | 'hero'> | { kind: 'tower_path'; canonical: string };
 
 // Resolves the "entity" input of the index commands
 function lookupTowerEntity(member: string, { allowTowerPaths = false } = {}): TowerEntityMatch | null {
@@ -270,7 +270,8 @@ function towerUpgradeToIndexNormalForm(upgrade: TowerUpgradeCanonical): TowerUpg
     return Aliases.toIndexNormalForm(group.aliases[0]) as TowerUpgradeIndexNormalForm;
 }
 
-function towerUpgradeFromTowerAndPathAndTier(towerMember: string, path: string, tier: string | number): TowerUpgradeIndexNormalForm {
+// Without a tier, gives the base tower's index name
+function towerUpgradeFromTowerAndPathAndTier(towerMember: string, path?: string, tier?: string | number): TowerUpgradeIndexNormalForm {
     const tower = Aliases.lookup(towerMember, 'tower');
     if (!tower) {
         throw 'First argument must be a tower';

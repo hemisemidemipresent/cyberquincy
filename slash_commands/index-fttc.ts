@@ -1,11 +1,22 @@
-const Aliases = require('../aliases');
+import Aliases from '../aliases';
 
-const { displayOneOrMultiplePagesNew, genCompletionLink } = require('../helpers/index.js');
-const Towers = require('../helpers/towers');
+import { displayIndexPages, genCompletionLink, fetchIndex } from '../helpers/index';
+import Colors from '../helpers/colors';
 
-const { paleorange } = require('../jsons/colors.json');
+import {
+    ChatInputCommandInteraction,
+    EmbedBuilder,
+    MessageFlags,
+    SlashCommandBuilder,
+    SlashCommandStringOption,
+    SlashCommandIntegerOption
+} from 'discord.js';
 
-const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption, SlashCommandIntegerOption } = require('discord.js');
+import type { MapCanonical } from '../types/aliases';
+import type { TowerTypeCanonical } from '../types/towers';
+import type { ReadInputResult } from '../types/slash-commands';
+
+const { paleorange } = Colors;
 
 const mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(false);
 
@@ -21,7 +32,7 @@ const numTowerTypesOption = new SlashCommandIntegerOption()
 
 const personOption = new SlashCommandStringOption().setName('person').setDescription('Completer').setRequired(false);
 
-builder = new SlashCommandBuilder()
+const builder = new SlashCommandBuilder()
     .setName('fttc')
     .setDescription('Search and Browse Completed FTTC Index Combos')
     .addStringOption(mapOption)
@@ -30,7 +41,14 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(numTowerTypesOption)
     .addStringOption(personOption);
 
-async function execute(interaction) {
+interface FTTCInput {
+    map: MapCanonical | null;
+    towers: TowerTypeCanonical[];
+    numTowerTypes: number | null;
+    person: string | null;
+}
+
+async function execute(interaction: ChatInputCommandInteraction) {
     const { error, input } = readInput(interaction);
     if (error) {
         return await interaction.reply({
@@ -48,16 +66,15 @@ async function execute(interaction) {
 // Reading SlashCommand Input
 ////////////////////////////////////////////////////////////
 
-// Returns either { error } or { input }; `map` and `towers` hold canonicals from alias lookups
-function readInput(interaction) {
+function readInput(interaction: ChatInputCommandInteraction): ReadInputResult<FTTCInput> {
     const mapArg = interaction.options.getString('map');
-    let map = null;
+    let map: MapCanonical | null = null;
     if (mapArg) {
         map = Aliases.lookup(mapArg, 'map');
         if (!map) return { error: `Map not valid` };
     }
 
-    const towers = [];
+    const towers: TowerTypeCanonical[] = [];
     for (const num of [1, 2]) {
         const towerArg = interaction.options.getString(`tower${num}`);
         if (!towerArg) continue;
@@ -84,7 +101,7 @@ function readInput(interaction) {
     return { input: { map, towers, numTowerTypes, person } };
 }
 
-function keepOnlyOG({ map, towers, numTowerTypes, person }) {
+function keepOnlyOG({ map, towers, numTowerTypes, person }: FTTCInput): boolean {
     const hasAny = map || towers.length > 0 || numTowerTypes || person;
     return !hasAny || (numTowerTypes && !person && towers.length === 0);
 }
@@ -93,16 +110,11 @@ function keepOnlyOG({ map, towers, numTowerTypes, person }) {
 // Fetch Combos
 ////////////////////////////////////////////////////////////
 
-async function fetchFttc(searchParams) {
-    let res = await fetch('https://btd6index.win/fetch-fttc?' + searchParams);
-    let resJson = await res.json();
-    if ('error' in resJson) {
-        throw new Error(resJson.error);
-    }
-    return resJson;
+async function fetchFttc(searchParams: URLSearchParams) {
+    return await fetchIndex('fttc', searchParams);
 }
 
-function getUrlParams(input) {
+function getUrlParams(input: FTTCInput): URLSearchParams {
     const params = new URLSearchParams();
 
     if (input.map) {
@@ -110,11 +122,11 @@ function getUrlParams(input) {
     }
 
     if (input.numTowerTypes) {
-        params.set('towercount', input.numTowerTypes);
+        params.set('towercount', String(input.numTowerTypes));
     }
 
     if (input.towers.length > 0) {
-        params.set('towerincludes', input.towers.map(t => `"${t}"`));
+        params.set('towerincludes', input.towers.map(t => `"${t}"`).join(','));
     }
 
     if (input.person) {
@@ -122,10 +134,10 @@ function getUrlParams(input) {
     }
 
     if(keepOnlyOG(input)) {
-        params.set('og', 1);
+        params.set('og', '1');
     }
 
-    params.set('count', 0);
+    params.set('count', '0');
 
     return params;
 }
@@ -134,7 +146,8 @@ function getUrlParams(input) {
 // Display Combos
 ////////////////////////////////////////////////////////////
 
-const FTTC_TOWER_ABBREVIATIONS = {
+// Keyed by tower canonical
+const FTTC_TOWER_ABBREVIATIONS: Record<string, string> = {
     dart_monkey: 'drt',
     boomerang_monkey: 'boo',
     bomb_shooter: 'bmb',
@@ -161,21 +174,21 @@ const FTTC_TOWER_ABBREVIATIONS = {
     beast_handler: 'bst',
 };
 
-async function displayFttcFilterAll(interaction, input) {
+async function displayFttcFilterAll(interaction: ChatInputCommandInteraction, input: FTTCInput) {
     const fetchParams = getUrlParams(input);
     if ((await fetchFttc(fetchParams)).count <= 0) {
         return interaction.editReply({
             embeds: [
-                new Discord.EmbedBuilder().setTitle(titleNoCombos(input))
+                new EmbedBuilder().setTitle(titleNoCombos(input))
             ]
         });
     }
     fetchParams.set('count', '10');
-    return await displayOneOrMultiplePagesNew(
+    return await displayIndexPages(
         interaction, fetchFttc, fetchParams,
         includedColumns(input),
         completion => {
-            const boldOg = (str) => completion.og ? `**${str}**` : str;
+            const boldOg = (str: string) => completion.og ? `**${str}**` : str;
 
             const towers = completion.towerset.map(tower => {
                 const towerCanonical = Aliases.lookup(tower, 'tower');
@@ -201,7 +214,7 @@ async function displayFttcFilterAll(interaction, input) {
     );
 }
 
-function includedColumns(input) {
+function includedColumns(input: FTTCInput): string[] {
     // Setup / Data consolidation
     let displayCols = ['Towers', 'Map', 'Person', 'Link'];
 
@@ -220,7 +233,7 @@ function includedColumns(input) {
     return displayCols;
 }
 
-function title(input) {
+function title(input: FTTCInput): string {
     // t = combos.length > 1 ? 'All FTTC Combos ' : 'Only FTTC Combo ';
     let t = 'All FTTC Combos ';
     if (input.person) t += `by ${input.person} `;
@@ -231,7 +244,7 @@ function title(input) {
     return t.slice(0, t.length - 1);
 }
 
-function titleNoCombos(input) {
+function titleNoCombos(input: FTTCInput): string {
     let t = 'No FTTC Combos Found ';
     if (input.person) t += `by "${input.person}" `;
     if (input.numTowerTypes) t += `with ${input.numTowerTypes} towers `;
@@ -241,7 +254,4 @@ function titleNoCombos(input) {
     return t.slice(0, t.length - 1);
 }
 
-module.exports = {
-    data: builder,
-    execute
-};
+export { builder as data, execute };

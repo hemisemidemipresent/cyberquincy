@@ -1,18 +1,29 @@
 // btw rml I kinda updated it to use the website but it is quite scuffed so sorry if i bastardized your code
-const Aliases = require('../aliases');
+import Aliases from '../aliases';
 
-const gHelper = require('../helpers/general.js');
-const Index = require('../helpers/index.js');
-const Maps = require('../helpers/maps');
-const Towers = require('../helpers/towers');
-const { SUPERGROUPS } = require('../alias-repository');
+import gHelper from '../helpers/general.js';
+import * as Index from '../helpers/index';
+import * as Maps from '../helpers/maps';
+import * as Towers from '../helpers/towers';
+import Colors from '../helpers/colors';
+import { SUPERGROUPS, type AliasMatch } from '../alias-repository';
 
-const { palered } = require('../jsons/colors.json');
-const { discord } = require('../aliases/misc.json');
+import { discord } from '../aliases/misc.json';
 
-BANNED_HEROES = ['sauda', 'geraldo', 'corvus'];
+import {
+    ChatInputCommandInteraction,
+    EmbedBuilder,
+    MessageFlags,
+    SlashCommandBuilder,
+    SlashCommandStringOption,
+    SlashCommandBooleanOption
+} from 'discord.js';
 
-const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption, SlashCommandBooleanOption } = require('discord.js');
+import type { TowerEntityMatch } from '../helpers/towers';
+import type { IndexPageResponse, TwoTCCompletion } from '../types/btd6index';
+import type { ReadInputResult } from '../types/slash-commands';
+
+const { palered } = Colors;
 
 const entity1Option = new SlashCommandStringOption()
     .setName('entity1')
@@ -30,7 +41,7 @@ const personOption = new SlashCommandStringOption().setName('person').setDescrip
 
 const ogOption = new SlashCommandBooleanOption().setName('og').setDescription('filter for only OG completions/only non-OG').setRequired(false);
 
-builder = new SlashCommandBuilder()
+const builder = new SlashCommandBuilder()
     .setName('2tc')
     .setDescription('Search and Browse Completed 2TC Index Combos')
     .addStringOption(entity1Option)
@@ -39,12 +50,19 @@ builder = new SlashCommandBuilder()
     .addStringOption(personOption)
     .addBooleanOption(ogOption);
 
-// Returns either { error } or { input }; `entities` (entity1, entity2) and `map` hold { kind, canonical } lookup results or null
-function readInput(interaction) {
-    const entities = [];
+interface TwoTCInput {
+    /** entity1 and entity2, null where not given */
+    entities: (TowerEntityMatch | null)[];
+    map: AliasMatch<'map' | 'map_difficulty'> | null;
+    person: string | null;
+    og: boolean | null;
+}
+
+function readInput(interaction: ChatInputCommandInteraction): ReadInputResult<TwoTCInput> {
+    const entities: (TowerEntityMatch | null)[] = [];
     for (const num of [1, 2]) {
         const entityArg = interaction.options.getString(`entity${num}`);
-        let entity = null;
+        let entity: TowerEntityMatch | null = null;
         if (entityArg) {
             entity = Towers.lookupTowerEntity(entityArg);
             if (!entity) return { error: `Entity${num} did not match a tower/upgrade/hero` };
@@ -54,7 +72,7 @@ function readInput(interaction) {
     }
 
     const mapArg = interaction.options.getString('map');
-    let map = null;
+    let map: AliasMatch<'map' | 'map_difficulty'> | null = null;
     if (mapArg) {
         map = Aliases.lookupMultiple(mapArg, SUPERGROUPS.MAP);
         if (!map) return { error: `Map/Difficulty not valid` };
@@ -66,16 +84,11 @@ function readInput(interaction) {
     return { input: { entities, map, person, og } };
 }
 
-async function fetch2tc(searchParams) {
-    let res = await fetch('https://btd6index.win/fetch-2tc?' + searchParams);
-    let resJson = await res.json();
-    if ('error' in resJson) {
-        throw new Error(resJson.error);
-    }
-    return resJson;
+async function fetch2tc(searchParams: URLSearchParams) {
+    return await Index.fetchIndex('2tc', searchParams);
 }
 
-async function execute(interaction) {
+async function execute(interaction: ChatInputCommandInteraction) {
     const { error, input } = readInput(interaction);
     if (error) {
         return await interaction.reply({
@@ -88,8 +101,8 @@ async function execute(interaction) {
     const towers = providedEntityNames(input);
     const map = input.map?.kind === 'map' ? Aliases.toIndexNormalForm(input.map.canonical) : null;
 
-    let og = input.og;
-    if (og) og = og + 0; // cursed way to convert true into 1 (false remains 'false' and not 0 since we don't want to exclude OGs even when false)
+    // og=1 keeps only OG completions; og=false is still sent since we don't want to exclude OGs even when false
+    const og = input.og ? '1' : input.og === false ? 'false' : null;
 
     // construct the search parameters to btd6 index API
     const searchParams = new URLSearchParams(
@@ -108,13 +121,18 @@ async function execute(interaction) {
     await displayCombos(interaction, resJson, input, searchParams);
 }
 
-async function displayCombos(interaction, resJson, input, searchParams) {
+async function displayCombos(
+    interaction: ChatInputCommandInteraction,
+    resJson: IndexPageResponse<TwoTCCompletion>,
+    input: TwoTCInput,
+    searchParams: URLSearchParams
+) {
     const combos = resJson.results;
 
     if (combos.length == 0) {
         return await interaction.editReply({
             embeds: [
-                new Discord.EmbedBuilder()
+                new EmbedBuilder()
                     .setTitle(embedTitleNoCombos(input))
                     .setColor(palered)
             ]
@@ -124,18 +142,19 @@ async function displayCombos(interaction, resJson, input, searchParams) {
     // Only one combo found
     if (combos.length == 1) {
 
-        let challengeEmbed = new Discord.EmbedBuilder()
+        let challengeEmbed = new EmbedBuilder()
             .setTitle(embedTitle(input, combos))
             .setColor(palered);
 
         const combo = combos[0];
 
         // i give up I'm hardcoding the fields to use for displaying a single combo ~hemi
-        let fields = ['tower1', 'tower2', 'map', 'person'];
+        let fields: ('tower1' | 'tower2' | 'map' | 'person' | 'version' | 'date')[] = ['tower1', 'tower2', 'map', 'person'];
         // only OG combos have version and date infomation
         if (combo.og) fields.push('version', 'date');
 
-        fields.forEach((field) => challengeEmbed.addFields([{ name: gHelper.toTitleCase(field), value: combo[field], inline: true }]));
+        const fieldValue = (field: (typeof fields)[number]) => (field === 'version' || field === 'date' ? Index.orUnknown(combo[field]) : combo[field]);
+        fields.forEach((field) => challengeEmbed.addFields([{ name: gHelper.toTitleCase(field), value: fieldValue(field), inline: true }]));
 
         challengeEmbed.addFields([{ name: 'Link', value: Index.genCompletionLink(combo), inline: true }]);
         challengeEmbed.addFields([{ name: 'OG?', value: combo.og ? 'OG' : 'ALT', inline: true }]);
@@ -150,11 +169,11 @@ async function displayCombos(interaction, resJson, input, searchParams) {
     } else {
         // Multiple combos found
         let OGSearchParams = new URLSearchParams(searchParams);
-        OGSearchParams.set('og', 1);
+        OGSearchParams.set('og', '1');
         let resJson = await fetch2tc(OGSearchParams);
         let numOGCompletions = resJson.count;
 
-        function setOtherDisplayFields(challengeEmbed) {
+        function setOtherDisplayFields(challengeEmbed: EmbedBuilder) {
             challengeEmbed
                 .setTitle(embedTitle(input, combos))
                 .setColor(palered);
@@ -175,14 +194,14 @@ async function displayCombos(interaction, resJson, input, searchParams) {
         searchParams.set('count', '10');
 
         // "Magic function" for pagination
-        return await Index.displayOneOrMultiplePagesNew(interaction, fetch2tc, searchParams, displayFields,
+        return await Index.displayIndexPages(interaction, fetch2tc, searchParams, displayFields,
             completion => {
 
-                const boldOg = (str) => completion.og ? `**${str}**` : str;
-                const italicizePending = (str) => completion.pending ? `_${str}_` : str;
-                const addTextDecoration = (str) => italicizePending(boldOg(str));
+                const boldOg = (str: string) => completion.og ? `**${str}**` : str;
+                const italicizePending = (str: string) => completion.pending ? `_${str}_` : str;
+                const addTextDecoration = (str: string) => italicizePending(boldOg(str));
 
-                let obj = {};
+                let obj: Record<string, string> = {};
 
                 // console.log(completion);
 
@@ -190,7 +209,9 @@ async function displayCombos(interaction, resJson, input, searchParams) {
 
                 displayFields.forEach((field) => {
                     if (field == 'Link') obj.Link = addTextDecoration(Index.genCompletionLink(completion));
-                    if (completion[field]) return obj[field] = addTextDecoration(completion[field]);
+                    if (field == 'version') return obj.version = addTextDecoration(Index.orUnknown(completion.version));
+                    // The remaining columns other than unspecified_tower are completion fields named the same
+                    if (completion[field]) return obj[field] = addTextDecoration(String(completion[field]));
                     if (field == 'unspecified_tower') {
                         if (completion.tower1 == specifiedTower) obj.unspecified_tower = addTextDecoration(completion.tower2);
                         else if (completion.tower2 == specifiedTower) obj.unspecified_tower = addTextDecoration(completion.tower1);
@@ -201,7 +222,7 @@ async function displayCombos(interaction, resJson, input, searchParams) {
     }
 }
 
-function getDisplayCols(input) {
+function getDisplayCols(input: TwoTCInput): string[] {
     const definiteTowers = providedDefinedEntityNames(input);
     if (input.person) {
         if (definiteTowers.length == 2) {
@@ -233,7 +254,7 @@ function getDisplayCols(input) {
 }
 
 // include sampleCombo for the correct capitalization and punctuation
-function embedTitle(input, combos) {
+function embedTitle(input: TwoTCInput, combos: TwoTCCompletion[]): string {
     const multipleCombos = combos.length > 1;
 
     const towers = providedEntityNames(input);
@@ -251,7 +272,7 @@ function embedTitle(input, combos) {
     return title.slice(0, title.length - 1);
 }
 
-function embedTitleNoCombos(input) {
+function embedTitleNoCombos(input: TwoTCInput): string {
     const towers = providedEntityNames(input);
 
     let title = 'No Combos found ';
@@ -268,17 +289,15 @@ function embedTitleNoCombos(input) {
 }
 
 // Index names of entity1 and entity2, skipping missing ones
-function providedEntityNames(input) {
+function providedEntityNames(input: TwoTCInput): string[] {
     return input.entities.map((entity) => Towers.towerEntityIndexName(entity)).filter((el) => el);
 }
 
 // Index names of the entities that pin down one tower in a combo: tower upgrades first, then heroes
-function providedDefinedEntityNames(input) {
-    const namesOfKind = (kind) => input.entities.filter((entity) => entity?.kind === kind).map((entity) => Towers.towerEntityIndexName(entity));
+function providedDefinedEntityNames(input: TwoTCInput): string[] {
+    const namesOfKind = (kind: TowerEntityMatch['kind']) =>
+        input.entities.filter((entity) => entity?.kind === kind).map((entity) => Towers.towerEntityIndexName(entity));
     return [...namesOfKind('tower_upgrade'), ...namesOfKind('hero')];
 }
 
-module.exports = {
-    data: builder,
-    execute
-};
+export { builder as data, execute };

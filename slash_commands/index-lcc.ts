@@ -1,20 +1,21 @@
-const Aliases = require('../aliases');
+import Aliases from '../aliases';
 
-const gHelper = require('../helpers/general.js');
-const { genCompletionLink } = require('../helpers/index.js');
+import gHelper from '../helpers/general.js';
+import { genCompletionLink, fetchIndex, orUnknown } from '../helpers/index';
+import Colors from '../helpers/colors';
 
-const { red, paleyellow } = require('../jsons/colors.json');
+import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
 
-const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+const { red, paleyellow } = Colors;
 
 let mapOption = new SlashCommandStringOption().setName('map').setDescription('Map').setRequired(true);
 
-builder = new SlashCommandBuilder()
+const builder = new SlashCommandBuilder()
     .setName('lcc')
     .setDescription('Search and Browse Completed LCC Index Combos')
     .addStringOption(mapOption);
 
-async function execute(interaction) {
+async function execute(interaction: ChatInputCommandInteraction) {
     const map = Aliases.lookup(interaction.options.getString('map'), 'map');
     if (!map) {
         return await interaction.reply('Map provided not valid');
@@ -27,23 +28,24 @@ async function execute(interaction) {
 
 }
 
-async function lcc(map) {
+// `map` is the map's index name, e.g. `Dark Castle`
+async function lcc(map: string): Promise<EmbedBuilder[]> {
 
-    const searchParams = new URLSearchParams({ map, count: 100 });
+    const searchParams = new URLSearchParams({ map, count: '100' });
 
     let { results } = await fetchlcc(searchParams);
 
     let result = results[0];
 
-    if (!result) return [new Discord.EmbedBuilder().setTitle('Error!').setDescription(`No LCC found for ${map}`).setColor(red)];
+    if (!result) return [new EmbedBuilder().setTitle('Error!').setDescription(`No LCC found for ${map}`).setColor(red)];
 
-    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${map} LCC (Latest Version)`).setColor(paleyellow);
+    let challengeEmbed = new EmbedBuilder().setTitle(`${map} LCC (Latest Version)`).setColor(paleyellow);
 
     let link = genCompletionLink(result);
     challengeEmbed.addFields([
         { name: 'Cost', value: gHelper.numberAsCost(result.money), inline: true },
-        { name: 'Version', value: result.version, inline: true },
-        { name: 'Date', value: result.date, inline: true },
+        { name: 'Version', value: orUnknown(result.version), inline: true },
+        { name: 'Date', value: orUnknown(result.date), inline: true },
         { name: 'Person', value: result.person, inline: true },
         { name: 'Link', value: link, inline: true }
     ]);
@@ -58,13 +60,13 @@ async function lcc(map) {
 
     result = results[0];
 
-    let challengeEmbed2 = new Discord.EmbedBuilder().setTitle(`${map} LCC (Cheapest)`).setColor(paleyellow);
+    let challengeEmbed2 = new EmbedBuilder().setTitle(`${map} LCC (Cheapest)`).setColor(paleyellow);
 
     link = genCompletionLink(result);
     challengeEmbed2.addFields([
         { name: 'Cost', value: gHelper.numberAsCost(result.money), inline: true },
-        { name: 'Version', value: result.version, inline: true },
-        { name: 'Date', value: result.date, inline: true },
+        { name: 'Version', value: orUnknown(result.version), inline: true },
+        { name: 'Date', value: orUnknown(result.date), inline: true },
         { name: 'Person', value: result.person, inline: true },
         { name: 'Link', value: link, inline: true }
     ]);
@@ -72,16 +74,9 @@ async function lcc(map) {
     return [challengeEmbed, challengeEmbed2];
 }
 
-async function fetchlcc(searchParams) {
-    let res = await fetch('https://btd6index.win/fetch-lcc?' + searchParams);
-    let resJson = await res.json();
-    if ('error' in resJson)
-        throw new Error(resJson.error);
-    return resJson;
+async function fetchlcc(searchParams: URLSearchParams) {
+    return await fetchIndex('lcc', searchParams);
 }
 
 
-module.exports = {
-    data: builder,
-    execute
-};
+export { builder as data, execute };

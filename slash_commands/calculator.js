@@ -6,6 +6,7 @@ const Lexer = require('lex');
 const gHelper = require('../helpers/general.js');
 const bHelper = require('../helpers/bloons-general');
 const Towers = require('../helpers/towers');
+const Heroes = require('../helpers/heroes');
 const { SUPERGROUPS } = require('../alias-repository');
 const mkDiscounts = require('../jsons/mk/discounts.json');
 
@@ -312,7 +313,7 @@ function parseAndValueToken(t, i, difficulty, simpleMkDiscounts) {
         simpleMkDiscounts.comeOnEverybody = tmp;
         return ret;
     } else if (match?.kind === 'hero') {
-        return Heroes.costOfHero(match.canonical, difficulty, numDiscounts, simpleMkDiscounts.discounts.length);
+        return Heroes.costOfHero(match.canonical, difficulty, numDiscounts, simpleMkDiscounts.discounts.length > 0);
     } else {
         throw new UnrecognizedTokenError(`at input ${i}: Unrecognized token "${t}"`);
     }

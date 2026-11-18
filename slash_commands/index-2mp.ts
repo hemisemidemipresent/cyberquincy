@@ -1,17 +1,26 @@
-const { WHITE_HEAVY_CHECK_MARK, RED_X, partition } = require('../helpers/general.js');
-const Aliases = require('../aliases');
-const { displayOneOrMultiplePagesNew, altMapsFields, genCompletionLink } = require('../helpers/index.js');
-const Maps = require('../helpers/maps');
-const Towers = require('../helpers/towers');
-const { SUPERGROUPS } = require('../alias-repository');
+import gHelper from '../helpers/general.js';
+import Aliases from '../aliases';
+import { displayIndexPages, altMapsFields, genCompletionLink, fetchIndex, orUnknown } from '../helpers/index';
+import * as Maps from '../helpers/maps';
+import * as Towers from '../helpers/towers';
+import Colors from '../helpers/colors';
+import { SUPERGROUPS, type AliasMatch } from '../alias-repository';
 
-const { paleblue } = require('../jsons/colors.json');
-const { discord } = require('../aliases/misc.json');
+import { discord } from '../aliases/misc.json';
 
-const UserCommandError = require('../exceptions/user-command-error.js');
-const DeveloperCommandError = require('../exceptions/developer-command-error.js');
+import UserCommandError from '../exceptions/user-command-error.js';
+import DeveloperCommandError from '../exceptions/developer-command-error.js';
 
-const { MessageFlags, SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
+import { ChatInputCommandInteraction, EmbedBuilder, MessageFlags, SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
+
+import type { TowerEntityMatch } from '../helpers/towers';
+import type { MapCanonical, MapDifficultyCanonical } from '../types/aliases';
+import type { TowerTypeCanonical } from '../types/towers';
+import type { IndexPageResponse, TwoMPCompletion } from '../types/btd6index';
+import type { ReadInputResult } from '../types/slash-commands';
+
+const { WHITE_HEAVY_CHECK_MARK, RED_X, partition } = gHelper;
+const { paleblue } = Colors;
 
 let entityOption = new SlashCommandStringOption().setName('entity').setDescription('Hero/Tower/Upgrade').setRequired(false);
 
@@ -19,23 +28,24 @@ let mapOption = new SlashCommandStringOption().setName('map').setDescription('Ma
 
 let userOption = new SlashCommandStringOption().setName('person').setDescription('Person').setRequired(false);
 
-builder = new SlashCommandBuilder()
+const builder = new SlashCommandBuilder()
     .setName('2mp')
     .setDescription('Search and Browse Completed 2MP Index Combos')
     .addStringOption(entityOption)
     .addStringOption(mapOption)
     .addStringOption(userOption);
 
-async function fetch2mp(searchParams) {
-    let res = await fetch('https://btd6index.win/fetch-2mp?' + searchParams);
-    let resJson = await res.json();
-    if ('error' in resJson) {
-        throw new Error(resJson.error);
-    }
-    return resJson;
+interface TwoMPInput {
+    entity: TowerEntityMatch | null;
+    map: AliasMatch<'map' | 'map_difficulty'> | null;
+    person: string | null;
 }
 
-async function execute(interaction) {
+async function fetch2mp(searchParams: URLSearchParams) {
+    return await fetchIndex('2mp', searchParams);
+}
+
+async function execute(interaction: ChatInputCommandInteraction) {
     const { error, input } = readInput(interaction);
     if (error)
         return await interaction.reply({
@@ -66,15 +76,15 @@ async function execute(interaction) {
         });
     } else if ((entity?.kind === 'tower_upgrade' || entity?.kind === 'hero') && !person) {
         const resJson = await fetch2mp(fetchParams);
-        let challengeEmbed;
+        let challengeEmbed: EmbedBuilder;
 
         try {
             if (map?.kind === 'map_difficulty') {
-                challengeEmbed = embed2MPMapDifficulty(resJson, entityName, map.canonical);
+                challengeEmbed = embed2MPMapDifficulty(resJson, entity, map.canonical);
             } else if (map?.kind === 'map') {
-                challengeEmbed = await embed2MPAlt(resJson, entityName, map.canonical);
+                challengeEmbed = await embed2MPAlt(resJson, entity, map.canonical);
             } else {
-                challengeEmbed = await embed2MPOG(entityName);
+                challengeEmbed = await embed2MPOG(entity);
             }
         } catch (e) {
             challengeEmbed = err(e);
@@ -98,20 +108,19 @@ async function execute(interaction) {
 // Reading SlashCommand Input
 ////////////////////////////////////////////////////////////
 
-// Returns either { error } or { input }; `entity` and `map` are { kind, canonical } lookup results
-function readInput(interaction) {
+function readInput(interaction: ChatInputCommandInteraction): ReadInputResult<TwoMPInput> {
     const entityArg = interaction.options.getString('entity');
     const mapArg = interaction.options.getString('map');
     const person = interaction.options.getString('person')?.toLowerCase() || null;
 
-    let entity = null;
+    let entity: TowerEntityMatch | null = null;
     if (entityArg) {
         entity = Towers.lookupTowerEntity(entityArg);
         if (!entity) return { error: `Entity didn't match tower/upgrade/hero, including aliases` };
         entity = Towers.baseTowerIfLowTier(entity);
     }
 
-    let map = null;
+    let map: AliasMatch<'map' | 'map_difficulty'> | null = null;
     if (mapArg) {
         map = Aliases.lookupMultiple(mapArg, SUPERGROUPS.MAP);
         if (!map) return { error: `Map/Difficulty didn't match, including aliases` };
@@ -128,14 +137,16 @@ function readInput(interaction) {
 // 2MP OG
 ////////////////////////////////////////////////////////////
 
-async function embed2MPOG(entity) {
+// `entity` is a tower upgrade or hero
+async function embed2MPOG(entity: TowerEntityMatch): Promise<EmbedBuilder> {
+    const entityName = Towers.towerEntityIndexName(entity);
     let resJson = await fetch2mp(new URLSearchParams({
-        towerquery: JSON.stringify([entity]),
+        towerquery: JSON.stringify([entityName]),
         count: '100'
     }));
 
     if (resJson.results.length === 0) {
-        throw new UserCommandError(`Entity \`${entity}\` does not yet have a 2MP`);
+        throw new UserCommandError(`Entity \`${entityName}\` does not yet have a 2MP`);
     }
 
     let ogCompletion = resJson.results.find(completion => completion.og);
@@ -143,7 +154,7 @@ async function embed2MPOG(entity) {
     const comboToEmbed = await orderAndFlatten2MPOGCompletion(ogCompletion);
 
     // Embed and send the message
-    let challengeEmbed = new Discord.EmbedBuilder().setTitle(`${entity} 2MPC Combo`).setColor(paleblue);
+    let challengeEmbed = new EmbedBuilder().setTitle(`${entityName} 2MPC Combo`).setColor(paleblue);
 
     challengeEmbed.addFields(
         Object.entries(comboToEmbed).map(([field, value]) => ({ name: field, value, inline: true }))
@@ -154,7 +165,7 @@ async function embed2MPOG(entity) {
     let completedAltMapsFields = altMapsFields(
         ogMapAbbr,
         resJson.results.map(completion => Maps.indexNormalFormToMapAbbreviation(completion.map)),
-        Maps.mapsNotPossible(entity)
+        Maps.mapsNotPossible(entity.canonical)
     );
 
     challengeEmbed.addFields([{ name: '**Alt Maps**', value: completedAltMapsFields.field }]);
@@ -166,20 +177,15 @@ async function embed2MPOG(entity) {
     return challengeEmbed;
 }
 
-async function orderAndFlatten2MPOGCompletion(ogCompletion) {
-    let ogInfo = await fetch('https://btd6index.win/fetch-2mp-og-info?' + new URLSearchParams({ entity: ogCompletion.entity }));
-    ogInfo = await ogInfo.json();
-
-    if ('error' in ogInfo) {
-        throw new Error(ogInfo.error);
-    }
+async function orderAndFlatten2MPOGCompletion(ogCompletion: TwoMPCompletion): Promise<Record<string, string>> {
+    const ogInfo = await fetchIndex('2mp-og-info', new URLSearchParams({ entity: ogCompletion.entity }));
 
     return {
         Entity: ogCompletion.entity,
         Upgrade: ogInfo.result.upgrade,
         'OG Map': ogCompletion.map,
-        Version: ogInfo.result.version,
-        Date: ogInfo.result.date,
+        Version: orUnknown(ogInfo.result.version),
+        Date: orUnknown(ogInfo.result.date),
         Person: ogCompletion.person,
         Link: genCompletionLink(ogCompletion)
     };
@@ -189,13 +195,14 @@ async function orderAndFlatten2MPOGCompletion(ogCompletion) {
 // 2MP Alt Map
 ////////////////////////////////////////////////////////////
 
-async function embed2MPAlt(resJson, entity, map) {
+async function embed2MPAlt(resJson: IndexPageResponse<TwoMPCompletion>, entity: TowerEntityMatch, map: MapCanonical): Promise<EmbedBuilder> {
+    const entityName = Towers.towerEntityIndexName(entity);
     const mapFormatted = Aliases.toIndexNormalForm(map);
 
     const altCombo = resJson.results[0];
 
     if (!altCombo) {
-        throw new UserCommandError(`\`${entity}\` hasn't been completed yet on \`${mapFormatted}\``);
+        throw new UserCommandError(`\`${entityName}\` hasn't been completed yet on \`${mapFormatted}\``);
     }
 
     // Display OG map as if map weren't in the query
@@ -206,8 +213,8 @@ async function embed2MPAlt(resJson, entity, map) {
     console.log(resJson);
 
     // Embed and send the message
-    let challengeEmbed = new Discord.EmbedBuilder()
-        .setTitle(`${entity} 2MPC Combo on ${mapFormatted}`)
+    let challengeEmbed = new EmbedBuilder()
+        .setTitle(`${entityName} 2MPC Combo on ${mapFormatted}`)
         .setColor(paleblue)
         .addFields([
             { name: 'Person', value: altCombo.person, inline: true },
@@ -222,21 +229,26 @@ async function embed2MPAlt(resJson, entity, map) {
 ////////////////////////////////////////////////////////////
 
 // Displays all 2MPCs completed on all maps specified by the map difficulty
-function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
+function embed2MPMapDifficulty(
+    resJson: IndexPageResponse<TwoMPCompletion>,
+    entity: TowerEntityMatch,
+    mapDifficulty: MapDifficultyCanonical
+): EmbedBuilder {
+    const entityName = Towers.towerEntityIndexName(entity);
     const mapDifficultyFormatted = Aliases.toIndexNormalForm(mapDifficulty);
 
     if (resJson.results.length === 0) {
-        throw new UserCommandError(`\`${entity}\` hasn't been completed yet on any \`${mapDifficulty}\` maps`);
+        throw new UserCommandError(`\`${entityName}\` hasn't been completed yet on any \`${mapDifficulty}\` maps`);
     }
 
     // Get all map abbreviations for the specified map difficulty
     const permittedMapAbbrs = Maps.allMapsFromMapDifficulty(mapDifficulty).map((map) => Maps.mapToIndexAbbreviation(map));
-    const completedMaps = resJson.results.map(completion => Maps.mapToIndexAbbreviation(Aliases.lookup(completion.map, 'map')));
+    const completedMaps = resJson.results.map(completion => Maps.indexNormalFormToMapAbbreviation(completion.map));
 
     // Format 3 columns: map, person, link
-    let mapColumn = [];
-    let personColumn = [];
-    let linkColumn = [];
+    let mapColumn: string[] = [];
+    let personColumn: string[] = [];
+    let linkColumn: string[] = [];
     for (const completion of resJson.results) {
         const bold = completion.og ? '**' : '';
 
@@ -245,32 +257,26 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
         linkColumn.push(`${bold}${genCompletionLink(completion)}${bold}`);
     }
 
+    // Split into two sets of columns when there are too many rows for one
     const numPartitions = mapColumn.length > 10 ? 2 : 1;
-    let [mapColumn1, mapColumn2] = partition(mapColumn, numPartitions);
-    let [personColumn1, personColumn2] = partition(personColumn, numPartitions);
-    let [linkColumn1, linkColumn2] = partition(linkColumn, numPartitions);
-
-    mapColumn1 = mapColumn1.join('\n');
-    personColumn1 = personColumn1.join('\n');
-    linkColumn1 = linkColumn1.join('\n');
-
-    mapColumn2 = mapColumn2?.join('\n');
-    personColumn2 = personColumn2?.join('\n');
-    linkColumn2 = linkColumn2?.join('\n');
+    const joinPartitions = (column: string[]): string[] => partition(column, numPartitions).map((part: string[]) => part.join('\n'));
+    const [mapColumn1, mapColumn2] = joinPartitions(mapColumn);
+    const [personColumn1, personColumn2] = joinPartitions(personColumn);
+    const [linkColumn1, linkColumn2] = joinPartitions(linkColumn);
 
     let mapsLeft = permittedMapAbbrs.filter((m) => !completedMaps.includes(m));
 
     // Check if tower is water tower
-    const impossibleMaps = Maps.mapsNotPossible(entity).filter(m => permittedMapAbbrs.includes(m));
+    const impossibleMaps = Maps.mapsNotPossible(entity.canonical).filter(m => permittedMapAbbrs.includes(m));
     mapsLeft = mapsLeft.filter((m) => !impossibleMaps.includes(m));
 
     // Embed and send the message
-    let challengeEmbed = new Discord.EmbedBuilder()
-        .setTitle(`${entity} 2MPCs on ${mapDifficultyFormatted} Maps`)
+    let challengeEmbed = new EmbedBuilder()
+        .setTitle(`${entityName} 2MPCs on ${mapDifficultyFormatted} Maps`)
         .setColor(paleblue);
 
     const numCombosPossible = permittedMapAbbrs.length - impossibleMaps.length;
-    let possiblePhrasing;
+    let possiblePhrasing: string;
     if (mapsLeft.length > 0) {
         possiblePhrasing = impossibleMaps.length > 0 ? ' (where placement is possible)' : '';
         challengeEmbed.addFields([
@@ -314,20 +320,20 @@ function embed2MPMapDifficulty(resJson, entity, mapDifficulty) {
 // Custom Multipage Queries
 ////////////////////////////////////////////////////////////
 
-async function display2MPFilterAll(interaction, fetchParams, input) {
+async function display2MPFilterAll(interaction: ChatInputCommandInteraction, fetchParams: URLSearchParams, input: TwoMPInput) {
     const excludedColumns = determineExcludedColumns(input);
     fetchParams.set('count', '0');
     if ((await fetch2mp(fetchParams)).count <= 0) {
         throw new UserCommandError(titleFunction(input, true));
     }
     fetchParams.set('count', '10');
-    return await displayOneOrMultiplePagesNew(
+    return await displayIndexPages(
         interaction, fetch2mp, fetchParams,
         ['Tower', 'Map', 'Person', 'Link'].filter(col => !excludedColumns.includes(col)),
         completion => {
-            const boldOg = (str) => completion.og ? `**${str}**` : str;
-            const italicizePending = (str) => completion.pending ? `_${str}_` : str;
-            const addTextDecoration = (str) => italicizePending(boldOg(str));
+            const boldOg = (str: string) => completion.og ? `**${str}**` : str;
+            const italicizePending = (str: string) => completion.pending ? `_${str}_` : str;
+            const addTextDecoration = (str: string) => italicizePending(boldOg(str));
 
             return {
                 'Tower': addTextDecoration(completion.entity),
@@ -345,8 +351,8 @@ async function display2MPFilterAll(interaction, fetchParams, input) {
     );
 }
 
-function titleFunction(input, noCombos = false) {
-    let title;
+function titleFunction(input: TwoMPInput, noCombos = false): string {
+    let title: string;
     if (noCombos) {
         title = 'No 2MPs Completed';
     } else {
@@ -371,8 +377,8 @@ function titleFunction(input, noCombos = false) {
     return title;
 }
 
-function determineExcludedColumns({ entity, map, person }) {
-    let excludedColumns = [];
+function determineExcludedColumns({ entity, map, person }: TwoMPInput): string[] {
+    let excludedColumns: string[] = [];
     const isCompletionEntity = entity?.kind === 'tower_upgrade' || entity?.kind === 'hero';
 
     if (isCompletionEntity) {
@@ -400,25 +406,24 @@ function determineExcludedColumns({ entity, map, person }) {
 
 // Displays a 3x3 grid completion checkboxes/x'es for each upgrade+tier
 // Displays base centered above grid
-function embed2MPTowerStatistics(resJson, tower) {
+function embed2MPTowerStatistics(resJson: IndexPageResponse<TwoMPCompletion>, tower: TowerTypeCanonical): EmbedBuilder {
     const towerFormatted = Aliases.toIndexNormalForm(tower);
 
-    const completedComboEntities = resJson.results.map(res => res.entity);
+    const completedComboEntities: string[] = resJson.results.map(res => res.entity);
 
     const baseTowerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower);
     const baseTowerCompletionMarking = completedComboEntities.includes(baseTowerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X;
 
-    let challengeEmbed = new Discord.EmbedBuilder()
+    let challengeEmbed = new EmbedBuilder()
         .setTitle(`2MPC Completions for ${towerFormatted}`)
         .setColor(paleblue)
         .addFields([
-            { name: '\u200b', value: '\u200b', inline: true }, // Left column placeholder
+            { name: '​', value: '​', inline: true }, // Left column placeholder
             { name: 'Base Tower', value: baseTowerCompletionMarking, inline: true }, // Tower
-            { name: '\u200b', value: '\u200b', inline: true } // Right column placeholder
+            { name: '​', value: '​', inline: true } // Right column placeholder
         ]);
 
-    let tier;
-    for (tier = 3; tier <= 5; tier++) {
+    for (let tier = 3; tier <= 5; tier++) {
         Towers.allPaths().forEach(path => {
             let towerUpgradeName = Towers.towerUpgradeFromTowerAndPathAndTier(tower, path, tier);
             let upgradeCompletionMarking = completedComboEntities.includes(towerUpgradeName) ? WHITE_HEAVY_CHECK_MARK : RED_X;
@@ -433,16 +438,14 @@ function embed2MPTowerStatistics(resJson, tower) {
 // General Helpers
 ////////////////////////////////////////////////////////////
 
-function err(e) {
+// Turns an expected "no results" error into an embed; anything else is rethrown
+function err(e: unknown): EmbedBuilder {
     // TODO: The errors being caught here aren't UserCommandErrors, more like ComboErrors
     if (e instanceof UserCommandError || e instanceof DeveloperCommandError) {
-        return new Discord.EmbedBuilder().setTitle(e.message).setColor(paleblue);
+        return new EmbedBuilder().setTitle(e.message).setColor(paleblue);
     } else {
         throw e;
     }
 }
 
-module.exports = {
-    data: builder,
-    execute
-};
+export { builder as data, execute };

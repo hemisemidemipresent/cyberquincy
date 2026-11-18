@@ -1,18 +1,28 @@
-const {
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonInteraction,
     ButtonStyle,
+    ChatInputCommandInteraction,
     ComponentType,
+    EmbedBuilder,
     MessageFlags,
     SlashCommandBuilder,
     SlashCommandBooleanOption,
     SlashCommandStringOption,
     SlashCommandIntegerOption,
-} = require('discord.js');
-const Aliases = require('../aliases');
+} from 'discord.js';
+import Aliases from '../aliases';
 
-const gHelper = require('../helpers/general.js');
-const Maps = require('../helpers/maps');
-const Heroes = require('../helpers/heroes');
-const { cyber } = require('../jsons/colors.json');
+import gHelper from '../helpers/general.js';
+import * as Maps from '../helpers/maps';
+import * as Heroes from '../helpers/heroes';
+import Colors from '../helpers/colors';
+
+import type { HeroLevel } from '../helpers/heroes';
+import type { HeroCanonical, MapDifficultyCanonical } from '../types/aliases';
+
+const { cyber } = Colors;
 
 let heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Heroes.allHeroes().forEach((hero) => {
@@ -42,7 +52,7 @@ const mkOption = new SlashCommandBooleanOption()
     .setDescription('If monkey knowledge is on or not')
     .setRequired(false);
 
-builder = new SlashCommandBuilder()
+const builder = new SlashCommandBuilder()
     .setName('herolevelby')
     .setDescription('See how late you can place a hero to reach a specified level by a specified round')
     .addStringOption(heroOption)
@@ -51,16 +61,17 @@ builder = new SlashCommandBuilder()
     .addStringOption(mapDifficultyOption)
     .addBooleanOption(mkOption);
 
-async function displayHeroPlacementRounds(interaction) {
-    hero = interaction.options.getString('hero');
-    desiredLevel = interaction.options.getInteger('desired_level');
-    goalRound = interaction.options.getInteger('goal_round');
-    mapDifficulty = interaction.options.getString('map_difficulty');
-    mk = interaction.options.getBoolean('monkey_knowledge');
+async function displayHeroPlacementRounds(interaction: ChatInputCommandInteraction) {
+    // Discord restricts hero and map_difficulty to the choices above, and validateInput() has checked desired_level
+    const hero = interaction.options.getString('hero', true) as HeroCanonical;
+    const desiredLevel = interaction.options.getInteger('desired_level', true) as HeroLevel;
+    const goalRound = interaction.options.getInteger('goal_round', true);
+    const mapDifficulty = interaction.options.getString('map_difficulty', true) as MapDifficultyCanonical;
+    const mk = interaction.options.getBoolean('monkey_knowledge') || false;
 
-    const heroPlacementRound = calculateHeroPlacementRound(hero, goalRound, desiredLevel, mapDifficulty, mk || false);
+    const heroPlacementRound = calculateHeroPlacementRound(hero, goalRound, desiredLevel, mapDifficulty, mk);
 
-    let startingRounds = [];
+    let startingRounds: number[] = [];
     if (heroPlacementRound == -Infinity)
         if (goalRound >= 40) startingRounds = [6, 10, 13, 21, 30, 40];
         else startingRounds = gHelper.range(6, 13).filter((r) => r <= goalRound);
@@ -76,14 +87,15 @@ async function displayHeroPlacementRounds(interaction) {
             startingRounds,
             goalRound,
             desiredLevel,
-            mapDifficulty
+            mapDifficulty,
+            mk
         );
 
-        let rounds = [];
-        let costs = [];
-        for (const round in laterPlacementRounds) {
+        let rounds: number[] = [];
+        let costs: string[] = [];
+        for (const [round, cost] of laterPlacementRounds) {
             rounds.push(round);
-            costs.push(gHelper.numberAsCost(Math.ceil(laterPlacementRounds[round])));
+            costs.push(gHelper.numberAsCost(Math.ceil(cost)));
         }
 
         let description = '';
@@ -93,7 +105,7 @@ async function displayHeroPlacementRounds(interaction) {
 
         if (mk) description += `\nThis includes the monkey knowledge **Monkey Education** (+8% XP) **Self Taught Heroes** (+10% XP) and **Monkeys Together Strong** (+5% for a single hero) (stacks multiplicatively)`;
 
-        const embed = new Discord.EmbedBuilder()
+        const embed = new EmbedBuilder()
             .setDescription(description)
             .addFields([
                 { name: 'Place on round', value: rounds.join('\n'), inline: true },
@@ -108,7 +120,7 @@ async function displayHeroPlacementRounds(interaction) {
             embed.setTitle(`Place ${gHelper.toTitleCase(hero)} on R${heroPlacementRound}`);
         }
 
-        const buttons = new Discord.ActionRowBuilder();
+        const buttons = new ActionRowBuilder<ButtonBuilder>();
 
         for (let leftRound = 1; leftRound < 100; leftRound += 10) {
             // Show 5 buttons max
@@ -126,9 +138,9 @@ async function displayHeroPlacementRounds(interaction) {
                 leftRound
             );
             const displayedRightRound = Math.min(leftRound + 9, goalRound);
-            label = `${displayedLeftRound}->${displayedRightRound}`;
+            const label = `${displayedLeftRound}->${displayedRightRound}`;
             buttons.addComponents(
-                new Discord.ButtonBuilder().setLabel(label).setStyle(ButtonStyle.Primary).setCustomId(label)
+                new ButtonBuilder().setLabel(label).setStyle(ButtonStyle.Primary).setCustomId(label)
             );
         }
         if (interaction.replied) {
@@ -143,7 +155,7 @@ async function displayHeroPlacementRounds(interaction) {
             });
         }
 
-        const filter = (selection) => {
+        const filter = (selection: ButtonInteraction) => {
             // Ensure user clicking button is same as the user that started the interaction
             if (selection.user.id !== interaction.user.id) {
                 return false;
@@ -177,7 +189,7 @@ async function displayHeroPlacementRounds(interaction) {
         collector.on('end', async (collected) => {
             if (collected.size == 0) {
                 await interaction.editReply({
-                    embeds: [embed.setFooter({ text: '\u200b' })],
+                    embeds: [embed.setFooter({ text: '​' })],
                     components: []
                 });
             }
@@ -187,50 +199,63 @@ async function displayHeroPlacementRounds(interaction) {
     await displayHeroLevels();
 }
 
-function calculateHeroPlacementRound(hero, goalRound, desiredHeroLevel, mapDifficulty, mk) {
+// The latest placement round that still reaches desiredHeroLevel by goalRound without paying;
+// -Infinity if even R6 needs paying, Infinity if the level is reached on every placement round
+function calculateHeroPlacementRound(
+    hero: HeroCanonical,
+    goalRound: number,
+    desiredHeroLevel: HeroLevel,
+    mapDifficulty: MapDifficultyCanonical,
+    mk: boolean
+): number {
     // Uses binary-search to find the round that produces the highest non-negative value
     // (implying that the hero has JUST reached the desiredHeroLevel by the specified goalRound)
-    roundForLevelUpTo = gHelper.binaryLambdaSearch(
+    return gHelper.binaryLambdaSearch(
         6, // min possible placement round
         goalRound, // max possible placement round
-        (startingRound) => {
+        (startingRound: number) => {
             return costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty, mk);
         }
     );
-
-    return roundForLevelUpTo;
 }
 
-function calculateLaterPlacementRounds(hero, startingRounds, goalRound, desiredHeroLevel, mapDifficulty) {
-    placementRounds = {};
-    for (let i = 0; i < startingRounds.length; i++) {
-        placementRounds[startingRounds[i]] = costToUpgrade(
-            hero,
-            startingRounds[i],
-            goalRound,
-            desiredHeroLevel,
-            mapDifficulty
-        );
+// Cost to upgrade for each starting round, in the order given
+function calculateLaterPlacementRounds(
+    hero: HeroCanonical,
+    startingRounds: number[],
+    goalRound: number,
+    desiredHeroLevel: HeroLevel,
+    mapDifficulty: MapDifficultyCanonical,
+    mk: boolean
+): Map<number, number> {
+    const placementRounds = new Map<number, number>();
+    for (const startingRound of startingRounds) {
+        placementRounds.set(startingRound, costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty, mk));
     }
-
     return placementRounds;
 }
 
 // The cost to upgrade the hero to the given desiredHeroLevel on the goalRound
 // If it's 0 or negative, that means the level has been reached naturally
 // If it's positive, it means the player needs to pay to get the level
-function costToUpgrade(hero, startingRound, goalRound, desiredHeroLevel, mapDifficulty, mk) {
-    heroLevelingChart = Heroes.levelingChart(hero, startingRound, mapDifficulty, mk);
-    return heroLevelingChart[goalRound][desiredHeroLevel];
+function costToUpgrade(
+    hero: HeroCanonical,
+    startingRound: number,
+    goalRound: number,
+    desiredHeroLevel: HeroLevel,
+    mapDifficulty: MapDifficultyCanonical,
+    mk: boolean
+): number {
+    return Heroes.xpNeededForLevel(hero, desiredHeroLevel, startingRound, goalRound, mapDifficulty, mk);
 }
 
-function validateInput(interaction) {
-    goalRound = interaction.options.getInteger('goal_round');
+function validateInput(interaction: ChatInputCommandInteraction): string | undefined {
+    const goalRound = interaction.options.getInteger('goal_round', true);
     if (goalRound < 6 || goalRound > 100) {
         return 'Goal Round must be a round in standard CHIMPS mode (6-100)';
     }
 
-    desiredLevel = interaction.options.getInteger('desired_level');
+    const desiredLevel = interaction.options.getInteger('desired_level', true);
     if (desiredLevel == 1) {
         return `Don't embarrass yourself; the answer is ${goalRound}`;
     }
@@ -239,8 +264,8 @@ function validateInput(interaction) {
     }
 }
 
-async function execute(interaction) {
-    validationFailure = validateInput(interaction);
+async function execute(interaction: ChatInputCommandInteraction) {
+    const validationFailure = validateInput(interaction);
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
@@ -250,7 +275,4 @@ async function execute(interaction) {
     await displayHeroPlacementRounds(interaction);
 }
 
-module.exports = {
-    data: builder,
-    execute
-};
+export { builder as data, execute };

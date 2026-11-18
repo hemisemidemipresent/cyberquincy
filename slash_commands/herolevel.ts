@@ -1,16 +1,22 @@
-const {
+import {
+    ChatInputCommandInteraction,
+    EmbedBuilder,
     MessageFlags,
     SlashCommandBuilder,
     SlashCommandStringOption,
     SlashCommandIntegerOption,
     SlashCommandBooleanOption
-} = require('discord.js');
-const Aliases = require('../aliases');
+} from 'discord.js';
+import Aliases from '../aliases';
 
-const gHelper = require('../helpers/general.js');
-const Maps = require('../helpers/maps');
-const Heroes = require('../helpers/heroes');
-const { cyber } = require('../jsons/colors.json');
+import gHelper from '../helpers/general.js';
+import * as Maps from '../helpers/maps';
+import * as Heroes from '../helpers/heroes';
+import Colors from '../helpers/colors';
+
+import type { HeroCanonical, MapDifficultyCanonical } from '../types/aliases';
+
+const { cyber } = Colors;
 
 const heroOption = new SlashCommandStringOption().setName('hero').setDescription('Hero').setRequired(true);
 Heroes.allHeroes().forEach((hero) => {
@@ -40,7 +46,7 @@ const mkOption = new SlashCommandBooleanOption()
     .setDescription('If monkey knowledge is on or not')
     .setRequired(false);
 
-builder = new SlashCommandBuilder()
+const builder = new SlashCommandBuilder()
     .setName('herolevel')
     .setDescription('See how heroes level based on your inputted parameters (optionally with energizer)')
     .addStringOption(heroOption)
@@ -49,29 +55,30 @@ builder = new SlashCommandBuilder()
     .addIntegerOption(energizerRoundOption)
     .addBooleanOption(mkOption);
 
-function generateHeroLevels(interaction) {
-    hero = interaction.options.getString('hero');
-    placementRound = interaction.options.getInteger('placement_round');
-    mapDifficulty = interaction.options.getString('map_difficulty');
-    energizerRound = interaction.options.getInteger('energizer_placement_round');
-    mk = interaction.options.getBoolean('monkey_knowledge');
+function generateHeroLevels(interaction: ChatInputCommandInteraction): EmbedBuilder {
+    // Discord restricts hero and map_difficulty to the choices above
+    const hero = interaction.options.getString('hero', true) as HeroCanonical;
+    const placementRound = interaction.options.getInteger('placement_round', true);
+    const mapDifficulty = interaction.options.getString('map_difficulty', true) as MapDifficultyCanonical;
+    const energizerRound = interaction.options.getInteger('energizer_placement_round');
+    const mk = interaction.options.getBoolean('monkey_knowledge');
 
-    heroLevels = Heroes.levelingCurve(hero, placementRound, mapDifficulty, energizerRound || Infinity, mk || false);
-    let res = table(gHelper.range(1, 20), heroLevels.slice(1));
+    const heroLevels = Heroes.levelingCurve(hero, placementRound, mapDifficulty, energizerRound || Infinity, mk || false);
+    let res = table(Heroes.HERO_LEVELS, Heroes.HERO_LEVELS.map((level) => heroLevels[level]));
 
     let desc = description(placementRound, mapDifficulty, energizerRound);
 
     if (mk) desc += `\nThis includes the monkey knowledge **Monkey Education** (+8% XP) **Self Taught Heroes** (+10% XP) and **Monkeys Together Strong** (+5% for a single hero) (stacks multiplicatively)`;
 
-    const embed = new Discord.EmbedBuilder()
+    const embed = new EmbedBuilder()
         .setTitle(`${gHelper.toTitleCase(hero)} Leveling Chart`)
         .setDescription(desc)
-        .addFields([{ name: '\u200b', value: `${res}` }])
+        .addFields([{ name: '​', value: `${res}` }])
         .setColor(cyber);
     return embed;
 }
 
-function description(placementRound, mapDifficulty, energizerRound) {
+function description(placementRound: number, mapDifficulty: MapDifficultyCanonical, energizerRound: number | null): string {
     let description = `Placed: **R${placementRound}**`;
     description += `\nMaps: **${gHelper.toTitleCase(mapDifficulty)}**`;
     if (energizerRound) {
@@ -80,32 +87,25 @@ function description(placementRound, mapDifficulty, energizerRound) {
     return description;
 }
 
-function addSpaces(str, max) {
-    let diff = max - str.toString().length;
-
-    for (i = 0; i < diff; i++) str += ' ';
-
-    return str;
+function addSpaces(str: number | string, max: number): string {
+    return str.toString().padEnd(max);
 }
 
-function table(lvl, round) {
+function table(lvl: readonly number[], round: (number | string)[]): string {
     let finalRes = '`level`|`round`\n';
-    let i = 0;
-    while (i < 20) {
-        // for loop doesnt work here due to black arcane magic
-        res = '';
+    for (let i = 0; i < 20; i++) {
+        let res = '';
         res += `\`${addSpaces(lvl[i], 5)}`;
         res += '|';
         res += `${addSpaces(round[i], 5)}\``;
         finalRes += res;
         finalRes += '\n';
-        i++;
     }
     return finalRes;
 }
 
-function validateInput(interaction) {
-    placementRound = interaction.options.getInteger('placement_round');
+function validateInput(interaction: ChatInputCommandInteraction): string | undefined {
+    const placementRound = interaction.options.getInteger('placement_round', true);
     if (placementRound < 1) {
         return 'Must enter a positive number for round';
     }
@@ -113,7 +113,7 @@ function validateInput(interaction) {
         return "Can't enter starting round > 100";
     }
 
-    energizerRound = interaction.options.getInteger('energizer_placement_round');
+    const energizerRound = interaction.options.getInteger('energizer_placement_round');
     if (energizerRound) {
         if (energizerRound < 1) {
             return 'Must enter a positive number for energizer round';
@@ -124,8 +124,8 @@ function validateInput(interaction) {
     }
 }
 
-async function execute(interaction) {
-    validationFailure = validateInput(interaction);
+async function execute(interaction: ChatInputCommandInteraction) {
+    const validationFailure = validateInput(interaction);
     if (validationFailure)
         return await interaction.reply({
             content: validationFailure,
@@ -137,7 +137,4 @@ async function execute(interaction) {
     });
 }
 
-module.exports = {
-    data: builder,
-    execute
-};
+export { builder as data, execute };

@@ -3,7 +3,7 @@ const Aliases = require('../aliases');
 
 // https://github.com/aaditmshah/lexer
 const Lexer = require('lex');
-const gHelper = require('../helpers/general.js');
+const gHelper = require('../helpers/general');
 const bHelper = require('../helpers/bloons-general');
 const Towers = require('../helpers/towers');
 const Heroes = require('../helpers/heroes');

@@ -14,7 +14,7 @@ import {
 } from 'discord.js';
 import Aliases from '../aliases';
 
-import gHelper from '../helpers/general.js';
+import * as gHelper from '../helpers/general';
 import * as Maps from '../helpers/maps';
 import * as Heroes from '../helpers/heroes';
 import Colors from '../helpers/colors';

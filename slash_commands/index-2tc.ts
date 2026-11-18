@@ -1,7 +1,7 @@
 // btw rml I kinda updated it to use the website but it is quite scuffed so sorry if i bastardized your code
 import Aliases from '../aliases';
 
-import gHelper from '../helpers/general.js';
+import * as gHelper from '../helpers/general';
 import * as Index from '../helpers/index';
 import * as Maps from '../helpers/maps';
 import * as Towers from '../helpers/towers';

@@ -1,5 +1,5 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
-const gHelper = require('../helpers/general.js');
+const gHelper = require('../helpers/general');
 
 const Bosses = require('../jsons/boss.json');
 

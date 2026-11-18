@@ -9,7 +9,7 @@ import {
 } from 'discord.js';
 
 import { z } from 'zod';
-import gHelper from './general.js';
+import * as gHelper from './general';
 import * as Maps from './maps';
 import IndexAPIError from '../exceptions/index-api-error';
 import {

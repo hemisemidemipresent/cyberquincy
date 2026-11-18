@@ -1,6 +1,6 @@
 // God tier reference: https://www.reddit.com/r/btd6/comments/eh47t8/how_hero_xp_works_in_game_v20/
 
-import gHelper from './general.js';
+import * as gHelper from './general';
 import bHelper from './bloons-general.js';
 import Aliases from '../aliases';
 import heroesJson from '../jsons/heroes.json';

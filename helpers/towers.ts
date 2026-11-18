@@ -1,4 +1,4 @@
-import gHelper from './general.js';
+import * as gHelper from './general';
 import bHelper from './bloons-general.js';
 import * as Heroes from './heroes';
 import Aliases from '../aliases';

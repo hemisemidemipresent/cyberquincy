@@ -1,6 +1,6 @@
 import fs from 'fs';
 import AliasError from './exceptions/alias-error.js';
-import gHelper from './helpers/general.js';
+import * as gHelper from './helpers/general';
 import filesHelper from './helpers/files.js';
 
 import type { AliasGroup, AliasGroupOf, AliasKind, AliasMatch, CanonicalByKind, TowerCategory } from './types/aliases';

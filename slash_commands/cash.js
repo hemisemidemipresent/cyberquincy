@@ -1,7 +1,7 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const income = require('../jsons/round_sets/regular.json');
 const abrincome = require('../jsons/round_sets/abr.json');
-const gHelper = require('../helpers/general.js');
+const gHelper = require('../helpers/general');
 const { cyber, orange } = require('../jsons/colors.json');
 const thriveHelper = require('../helpers/thrive.js');
 

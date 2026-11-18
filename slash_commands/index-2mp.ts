@@ -1,4 +1,4 @@
-import gHelper from '../helpers/general.js';
+import * as gHelper from '../helpers/general';
 import Aliases from '../aliases';
 import { displayIndexPages, altMapsFields, genCompletionLink, fetchIndex, orUnknown } from '../helpers/index';
 import * as Maps from '../helpers/maps';

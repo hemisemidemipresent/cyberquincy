@@ -1,6 +1,6 @@
 import Aliases from '../aliases';
 
-import gHelper from '../helpers/general.js';
+import * as gHelper from '../helpers/general';
 import { genCompletionLink, fetchIndex, orUnknown } from '../helpers/index';
 import Colors from '../helpers/colors';
 

@@ -44,25 +44,34 @@ The project is being migrated from JavaScript to TypeScript gradually, so `.js` 
 -   existing `.js` files are not type-checked unless they start with `// @ts-check`
 -   new files should preferably be written in TypeScript
 
+## Where types go
+
+1. A type used by only one file stays in that file and is not exported (e.g. a command's input interface)
+2. A type describing a module's own results is exported from that module (e.g. `HeroLevel` from `helpers/heroes.ts`, `TowerEntityMatch` from `helpers/towers.ts`)
+3. `./types` holds the vocabulary shared across the project: alias canonicals (`types/aliases.ts`, `types/towers.ts`), branding (`types/brand.ts`), slash command helpers (`types/slash-commands.ts`) and the BTD6 Index zod schemas used by both helpers and commands (`types/btd6index.ts`)
+    - files in `./types` may only import other `./types` files, JSON files (with `import type`) and npm packages such as `zod`; never the project's own runtime code. This keeps them free of circular imports
+4. A zod schema for an API used by a single service stays with that service (e.g. `services/wiki/btd6-changes.ts`)
+5. `types/*.d.ts` declarations for the globals set in `server.js` or for changes made to discord.js classes are only a temporary bridge during the migration; prefer replacing globals with imports
+
 # Project Info
 
--   existing `.js` files use CommonJS modules (`require` and `module.exports`)
--   there is now ESLint for this project - there is an `.eslintrc.json` linter file now which should hopefully enforce a somewhat consistent code standard
--   to use eslint to check for errors run `npx eslint <file or directory>`. Many text editors also have integration with eslint as well.
+-   Existing `.js` files use CommonJS modules (`require` and `module.exports`)
+-   There is now ESLint for this project - there is an `.eslintrc.json` linter file now which should hopefully enforce a somewhat consistent code standard
+-   To use ESLint to check for errors run `npx eslint <file or directory>`. Many text editors also have integration with eslint as well.
 
 ## Project Information (Where do the numbers and stats come from)
 
 -   Much of the data the bot uses is within the `./jsons` folder
--   Tower Information are from Extreme Bloonology and their pastebins ([Heroes](./helpers/heroes.js) and [Towers](./helpers/towers.js))
+-   Tower Information are from Extreme Bloonology and their pastebins ([Heroes](./helpers/heroes.ts) and [Towers](./helpers/towers.ts))
 -   This bot also uses the [Official Ninja Kiwi API](https://data.ninjakiwi.com)
 
 # Contributing Guidelines
 
--   try to use `camelCase`
--   don't use `var` to define variables. JS is weird enough
--   try not to do too much at once (for pull requests, split it into multiple PRs)
--   util functions/classes/modules _should_ go to `./helpers` (unless they are specific to only one command)
--   new data should go into `./jsons` if to be stored locally. Small nuggets of information are usually displayed via the `/tag` command
+-   Try to use `camelCase`
+-   Don't use `var` to define variables. JS is weird enough
+-   Try not to do too much at once (for pull requests, split it into multiple PRs)
+-   Util functions/classes/modules _should_ go to `./helpers` (unless they are specific to only one command)
+-   New data should go into `./jsons` if to be stored locally. Small nuggets of information are usually displayed via the `/tag` command
 
 # Aliases
 

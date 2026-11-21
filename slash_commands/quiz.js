@@ -3,7 +3,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = re
 // const { shuffle } = require('../helpers/general');
 
 const quiz = require('../jsons/quiz.json');
-const Quiz = require('../helpers/quiz.js');
+const Quiz = require('../helpers/quiz');
 
 const { cyber, orange, turq } = require('../jsons/colors.json');
 const { discord } = require('../aliases/misc.json');

@@ -3,7 +3,7 @@ const income = require('../jsons/round_sets/regular.json');
 const abrincome = require('../jsons/round_sets/abr.json');
 const gHelper = require('../helpers/general');
 const { cyber, orange } = require('../jsons/colors.json');
-const thriveHelper = require('../helpers/thrive.js');
+const thriveHelper = require('../helpers/thrive');
 
 builder = new SlashCommandBuilder()
     .setName('cash')

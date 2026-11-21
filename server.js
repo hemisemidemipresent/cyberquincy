@@ -44,7 +44,7 @@ function setupSlashCommandCenter() {
 }
 
 function generateCommandListeners(slashCommandCenter) {
-    global.Guilds = require('./helpers/guilds.js');
+    global.Guilds = require('./helpers/guilds');
 
     client.on('guildCreate', async (guild) => {
         try {

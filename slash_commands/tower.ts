@@ -15,7 +15,7 @@ import FuzzySet from "fuzzyset.js";
 
 import Aliases from "../aliases";
 import * as Towers from "../helpers/towers";
-import Bloonology from "../helpers/bloonology.js";
+import * as Bloonology from "../helpers/bloonology";
 
 import pageNames from "../jsons/tower_pages.json";
 
@@ -103,7 +103,7 @@ async function embedBloonology(towerName: string, upgrade: string, isB2: boolean
         if (towerName == "skywarden") {
             data = "[no bloonology data for skywarden yet]";
         } else {
-            ({ version, data } = await Bloonology.towerUpgradesToFullBloonology(towerName, upgrade, isB2));
+            ({ version, data } = await Bloonology.towerUpgradeToFullBloonology(towerName, upgrade, isB2));
         }
         let pageName = tier == 0 ? pageNames[towerName].pageName : pageNames[towerName].upgrades[path][tier];
         data = `## [Bloons Wiki Link](${encodeURI("https://www.bloonswiki.com/" + pageName)})\n` + data;

@@ -2,7 +2,7 @@ const { SlashCommandBuilder, SlashCommandStringOption } = require('discord.js');
 const Aliases = require('../aliases');
 
 const Towers = require('../helpers/towers');
-const Bloonology = require('../helpers/bloonology.js');
+const Bloonology = require('../helpers/bloonology');
 const { footer } = require('../aliases/misc.json');
 const { isValidEmbedField } = require('../helpers/discord');
 const { red, cyber } = require('../jsons/colors.json');

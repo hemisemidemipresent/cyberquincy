@@ -4,7 +4,7 @@ const FuzzySet = require('fuzzyset.js');
 
 const { discord, footer } = require('../aliases/misc.json');
 const { cyber } = require('../jsons/colors.json');
-const { getRelicBloonology } = require('../helpers/bloonology.js');
+const { getRelicBloonology } = require('../helpers/bloonology');
 
 let cachedRelics = {};
 

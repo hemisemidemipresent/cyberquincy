@@ -1,8 +1,30 @@
-const { isValidUpgradeSet } = require('./towers');
-const { round } = require('./general');
-const templeStats = require('../jsons/temple.json');
+import { isValidUpgradeSet } from './towers';
+import { round } from './general';
+import templeStats from '../jsons/temple.json';
 
-const TOWER_NAME_TO_BLOONOLOGY_LINK = {
+import type { LevelledParagonAttackStats } from './paragon';
+
+/** One tower upgrade's section of a bloonology pastebin, with each part cleaned by `cleanBloonology` */
+interface TowerUpgradeBloonology {
+    description: string;
+    baseChange: string;
+    tierChange: string;
+    crosspathChange: string;
+}
+
+/** Bloonology data with the game version it describes (null if the pastebin doesn't say) */
+interface VersionedBloonology<T> {
+    version: string | null;
+    data: T;
+}
+
+/** A paragon's attacks at some degree, as produced by `helpers/paragon.getLevelledObj`, keyed by attack name */
+type LevelledParagonStats = Record<string, LevelledParagonAttackStats>;
+
+/** Temple upgrades that jsons/temple.json has base stats for, e.g. `400`, `520` */
+type TempleUpgrade = Exclude<keyof typeof templeStats.base, 'missile' | 'avatar'>;
+
+const TOWER_NAME_TO_BLOONOLOGY_LINK: Record<string, string> = {
     dart_monkey: 'https://pastebin.com/raw/FK4a9ZSi',
     boomerang_monkey: 'https://pastebin.com/raw/W2x9dvPs',
     bomb_shooter: 'https://pastebin.com/raw/XaR4JafN',
@@ -29,7 +51,7 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK = {
     mermonkey: 'https://pastebin.com/raw/sS6rm5Bj',
     desperado: 'https://pastebin.com/raw/zc7nhqq0'
 };
-const TOWER_NAME_TO_BLOONOLOGY_LINK_B2 = {
+const TOWER_NAME_TO_BLOONOLOGY_LINK_B2: Record<string, string> = {
     dart_monkey: 'https://pastebin.com/raw/E4sjy0RY',
     boomerang_monkey: 'https://pastebin.com/raw/C5ZB2zFf',
     bomb_shooter: 'https://pastebin.com/raw/KnRACEau',
@@ -53,7 +75,7 @@ const TOWER_NAME_TO_BLOONOLOGY_LINK_B2 = {
     monkey_village: 'https://pastebin.com/raw/h28ruxxd',
     engineer_monkey: 'https://pastebin.com/raw/NPGKFNEv'
 };
-const HERO_NAME_TO_BLOONOLOGY_LINK = {
+const HERO_NAME_TO_BLOONOLOGY_LINK: Record<string, string> = {
     quincy: 'https://pastebin.com/raw/ASpHNduS',
     gwendolin: 'https://pastebin.com/raw/rZYjbEhX',
     striker_jones: 'https://pastebin.com/raw/hrH8q0bd',
@@ -88,18 +110,18 @@ const BLOONOLOGY_CROSSPATH_CHANGE_HEADERS = [
     "crosspath benefits:"
 ];
 
-function cleanBloonology(description) {
+function cleanBloonology(description: string): string {
     description = description.trim();
     description = description.replace(/\r?\n|\r/g, "\n"); // Normalize line endings
     description = description.replace(/[\u2000-\u200F\u202A-\u202F]/g, ""); // Remove invisible characters
     description = description.replace(/\t/g, " ".repeat(BLOONOLOGY_INDENT));
-    let firstIndent = description.match(/^( +)\S/m);
+    const firstIndent = description.match(/^( +)\S/m);
     let indentSize = BLOONOLOGY_INDENT;
     if (firstIndent) indentSize = firstIndent[1].length;
     return description.split("\n").map((line) => { // Normalize indentation
         line = line.trimEnd();
         let trimmed = line.trim();
-        let indent = Math.round((line.length - trimmed.length) / indentSize) * BLOONOLOGY_INDENT;
+        const indent = Math.round((line.length - trimmed.length) / indentSize) * BLOONOLOGY_INDENT;
         if (indent >= BLOONOLOGY_INDENT && !trimmed.startsWith("-")) {
             trimmed = "- " + trimmed;
         }
@@ -108,18 +130,19 @@ function cleanBloonology(description) {
     }).join("\n");
 }
 
-async function fetchBloonology(link) {
+async function fetchBloonology(link: string): Promise<string> {
     const res = await fetch(link);
     if (!res.ok) throw new Error(`Failed to fetch bloonology from ${link}: HTTP ${res.status}`);
     return res.text();
 }
 
-async function towerBloonologyData(towerName, isB2) {
+async function towerBloonologyData(towerName: string, isB2: boolean): Promise<VersionedBloonology<Record<string, TowerUpgradeBloonology>>> {
     const link = isB2 ? TOWER_NAME_TO_BLOONOLOGY_LINK_B2[towerName] : TOWER_NAME_TO_BLOONOLOGY_LINK[towerName];
     const body = await fetchBloonology(link);
     const version = body.match(/^\s*Version: ([0-9.]+)\s*$/im);
-    const data = {};
-    let upgrade, key;
+    const data: Record<string, TowerUpgradeBloonology> = {};
+    let upgrade: string;
+    let key: keyof TowerUpgradeBloonology;
 
     for (const line of body.split(/\r?\n|\r/g)) {
         const match = line.match(/^\s*([0-9]{3})\s*$/);
@@ -142,7 +165,7 @@ async function towerBloonologyData(towerName, isB2) {
     }
 
     for (const upgrade in data) {
-        for (const key in data[upgrade]) {
+        for (const key of Object.keys(data[upgrade]) as (keyof TowerUpgradeBloonology)[]) {
             data[upgrade][key] = cleanBloonology(data[upgrade][key]);
         }
     }
@@ -150,12 +173,14 @@ async function towerBloonologyData(towerName, isB2) {
     return { version: version ? version[1] : null, data: data };
 }
 
-async function heroBloonologyData(heroName) {
+async function heroBloonologyData(
+    heroName: string
+): Promise<VersionedBloonology<Record<string, string>> & { summary: string | null }> {
     const body = await fetchBloonology(HERO_NAME_TO_BLOONOLOGY_LINK[heroName]);
     const version = body.match(/^\s*Version: ([0-9.]+)\s*$/im);
     const [levels, summary] = body.split(/^\s*all levels\s*$/im);
-    const data = {};
-    let level;
+    const data: Record<string, string> = {};
+    let level: string;
 
     for (const line of levels.split(/\r?\n|\r/g)) {
         const match = line.match(/^\s*level\s+([1-9]|1[0-9]|20)\s*$/i);
@@ -175,42 +200,39 @@ async function heroBloonologyData(heroName) {
     return { version: version ? version[1] : null, data: data, summary: summary ? cleanBloonology(summary) : null };
 }
 
-async function towerUpgradesToFullBloonology(towerName, upgrades, isB2) {
-    if (!Array.isArray(upgrades)) {
-        upgrades = [upgrades];
-    }
+/** The full bloonology of one tower upgrade, with its change sections under their headers */
+async function towerUpgradeToFullBloonology(towerName: string, upgrade: string, isB2: boolean): Promise<VersionedBloonology<string>> {
     const { version, data } = await towerBloonologyData(towerName, isB2);
-    const bloonology = {};
 
     if (towerName === "beast_handler") {
-        return { version: version, data: beastHandlerBloonology(data, upgrades) };
+        return { version: version, data: beastHandlerBloonology(data, upgrade) };
     }
 
-    for (const upgrade of upgrades) {
-        bloonology[upgrade] = data[upgrade].description.trim();
-        if (data[upgrade].baseChange) {
-            bloonology[upgrade] += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0] + "\n" + data[upgrade].baseChange;
-        }
-        if (data[upgrade].tierChange) {
-            bloonology[upgrade] += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[upgrade].tierChange;
-        }
-        if (data[upgrade].crosspathChange) {
-            bloonology[upgrade] += "\n\n" + BLOONOLOGY_CROSSPATH_CHANGE_HEADERS[0] + "\n" + data[upgrade].crosspathChange;
-        }
+    let bloonology = data[upgrade].description.trim();
+    if (data[upgrade].baseChange) {
+        bloonology += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0] + "\n" + data[upgrade].baseChange;
     }
-
-    if (upgrades.length === 1) {
-        return { version: version, data: bloonology[upgrades[0]] };
+    if (data[upgrade].tierChange) {
+        bloonology += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[upgrade].tierChange;
+    }
+    if (data[upgrade].crosspathChange) {
+        bloonology += "\n\n" + BLOONOLOGY_CROSSPATH_CHANGE_HEADERS[0] + "\n" + data[upgrade].crosspathChange;
     }
     return { version: version, data: bloonology };
 }
 
-async function towerUpgradesToSplitBloonology(towerName, upgrades, isB2, summary = false) {
-    if (!Array.isArray(upgrades)) {
-        upgrades = [upgrades];
-    }
+/**
+ * Each upgrade's bloonology sections, keyed by upgrade. For tier 1 upgrades `tierChange` is the change from 000.
+ * @param summary turn each change line into a bullet point
+ */
+async function towerUpgradesToSplitBloonology(
+    towerName: string,
+    upgrades: string[],
+    isB2: boolean,
+    summary = false
+): Promise<VersionedBloonology<Record<string, TowerUpgradeBloonology>>> {
     const { version, data } = await towerBloonologyData(towerName, isB2);
-    const bloonology = {};
+    const bloonology: Record<string, TowerUpgradeBloonology> = {};
 
     for (const upgrade of upgrades) {
         const src = data[upgrade];
@@ -240,50 +262,45 @@ async function towerUpgradesToSplitBloonology(towerName, upgrades, isB2, summary
         }
     }
 
-    if (upgrades.length === 1) {
-        return { version: version, data: bloonology[upgrades[0]] };
-    }
     return { version: version, data: bloonology };
 }
 
-function beastHandlerBloonology(data, upgrades) {
-    const bloonology = {};
+/** Beast Handler's pastebin only lists single-path upgrades; crosspaths are pieced together from their two paths */
+function beastHandlerBloonology(data: Record<string, TowerUpgradeBloonology>, upgrade: string): string {
+    const highestTier = (upgradeSet: string) => Math.max(...[...upgradeSet].map(Number));
+    let bloonology: string;
 
-    for (const upgrade of upgrades) {
-        if (!data[upgrade]) {
-            const [main, crosspath] = [...upgrade]
-                .map((c, i) => "0".repeat(i) + c + "0".repeat(2 - i))
-                .sort((a, b) => Math.max(...b) - Math.max(...a));
+    if (!data[upgrade]) {
+        const [main, crosspath] = [...upgrade]
+            .map((c, i) => "0".repeat(i) + c + "0".repeat(2 - i))
+            .sort((a, b) => highestTier(b) - highestTier(a));
 
-            bloonology[upgrade] = data[main].description.trim();
-            bloonology[upgrade] += "\n\n" + data[crosspath].description.match(/^[0-9]+r\s*(.*)/ms)[1].trim();
+        bloonology = data[main].description.trim();
+        bloonology += "\n\n" + data[crosspath].description.match(/^[0-9]+r\s*(.*)/ms)[1].trim();
 
-            if (Math.max(...main) < 3) {
-                bloonology[upgrade] += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0]
-                    + "\n" + data[main].baseChange
-                    + "\n" + data[crosspath].crosspathChange;
-            } else {
-                bloonology[upgrade] += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[main].tierChange;
-                bloonology[upgrade] += "\n\n" + BLOONOLOGY_CROSSPATH_CHANGE_HEADERS[0] + "\n" + data[crosspath].crosspathChange;
-            }
+        if (highestTier(main) < 3) {
+            bloonology += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0]
+                + "\n" + data[main].baseChange
+                + "\n" + data[crosspath].crosspathChange;
         } else {
-            bloonology[upgrade] = data[upgrade].description.trim();
-            if (data[upgrade].baseChange) {
-                bloonology[upgrade] += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0] + "\n" + data[upgrade].baseChange;
-            }
-            if (data[upgrade].tierChange) {
-                bloonology[upgrade] += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[upgrade].tierChange;
-            }
+            bloonology += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[main].tierChange;
+            bloonology += "\n\n" + BLOONOLOGY_CROSSPATH_CHANGE_HEADERS[0] + "\n" + data[crosspath].crosspathChange;
+        }
+    } else {
+        bloonology = data[upgrade].description.trim();
+        if (data[upgrade].baseChange) {
+            bloonology += "\n\n" + BLOONOLOGY_BASE_CHANGE_HEADERS[0] + "\n" + data[upgrade].baseChange;
+        }
+        if (data[upgrade].tierChange) {
+            bloonology += "\n\n" + BLOONOLOGY_TIER_CHANGE_HEADERS[0] + "\n" + data[upgrade].tierChange;
         }
     }
 
-    if (upgrades.length === 1) {
-        return bloonology[upgrades[0]];
-    }
     return bloonology;
 }
 
-async function heroLevelToBloonology(heroName, level, page = 0) {
+/** @param page which page of Corvus's spells to show, for Corvus level 5+ */
+async function heroLevelToBloonology(heroName: string, level: number, page = 0): Promise<VersionedBloonology<string>> {
     const { version, data } = await heroBloonologyData(heroName);
     if (heroName === "corvus" && level >= 5) {
         return { version: version, data: corvusBloonology(data[level], page) };
@@ -291,12 +308,13 @@ async function heroLevelToBloonology(heroName, level, page = 0) {
     return { version: version, data: data[level] };
 }
 
-async function heroSummary(heroName) {
+async function heroSummary(heroName: string): Promise<VersionedBloonology<string | null>> {
     const { version, summary } = await heroBloonologyData(heroName);
     return { version: version, data: summary };
 }
 
-function corvusBloonology(description, page = 0) {
+/** Corvus's level description showing only the spells on `page` of his spellbook */
+function corvusBloonology(description: string, page = 0): string {
     const spellPages = [
         ["spear", "aggression", "malevolence", "storm"],
         ["repel", "echo", "haste", "trample"],
@@ -315,20 +333,21 @@ function corvusBloonology(description, page = 0) {
     return parts[0].trim() + "\n\n" + spells.trim() + "\n\n" + parts[2].trim();
 }
 
-async function getRelicBloonology() {
-    let body = await fetchBloonology(RELIC_BLOONOLOGY_LINK);
-    let relics = body.replace(/\r?\n|\r/g, "\n").split("\n\n");
-    let relicMap = {};
-    for (let relic of relics) {
-        let lines = relic.split("\n");
-        let relicName = lines[0].replace(/\*\*/g, "").trim();
-        let relicDescription = lines.slice(1).join("\n").trim();
+/** {relic name: description} */
+async function getRelicBloonology(): Promise<Record<string, string>> {
+    const body = await fetchBloonology(RELIC_BLOONOLOGY_LINK);
+    const relics = body.replace(/\r?\n|\r/g, "\n").split("\n\n");
+    const relicMap: Record<string, string> = {};
+    for (const relic of relics) {
+        const lines = relic.split("\n");
+        const relicName = lines[0].replace(/\*\*/g, "").trim();
+        const relicDescription = lines.slice(1).join("\n").trim();
         relicMap[relicName] = cleanBloonology(relicDescription);
     }
     return relicMap;
 }
 
-function damageDescription(stats) {
+function damageDescription(stats: LevelledParagonAttackStats): string {
     let desc = `${stats.d}d, `
         + (stats.cd > 0 ? `+${stats.cd}cd (${stats.tcd}), ` : "")
         + (stats.fd > 0 ? `+${stats.fd}fd (${stats.tfd}), ` : "")
@@ -343,7 +362,7 @@ function damageDescription(stats) {
     return desc.substring(0, desc.length - 2);
 }
 
-function attackDescription(stats) {
+function attackDescription(stats: LevelledParagonAttackStats): string {
     let desc = damageDescription(stats) + ", "
         + (stats.p ? `${stats.p}p, ` : "")
         + (stats.s ? `${stats.s}s, ` : "");
@@ -351,17 +370,17 @@ function attackDescription(stats) {
     return desc.substring(0, desc.length - 2);
 }
 
-function extraDamageDescription(stats) {
+function extraDamageDescription(stats: LevelledParagonAttackStats): string {
     let desc = (stats.sd ? `+${stats.sd}d (${stats.tsd}) to stunned bloons, ` : "")
         + (stats.std ? `+${stats.std}d (${stats.tstd}) to bloons with *sticky* status, ` : "");
 
     return desc.substring(0, desc.length - 2);
 }
 
-function dartParagonBloonology(stats) {
-    let { main, mini } = stats;
+function dartParagonBloonology(stats: LevelledParagonStats): string {
+    const { main, mini } = stats;
 
-    let desc = `85r
+    const desc = `85r
 *juggernaut*- ${attackDescription(main)}, 3j, normal, camo
     - expires when it hits the map border
     - can rebound off walls and rehit bloons after rebound
@@ -373,10 +392,10 @@ function dartParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function boomerParagonBloonology(stats) {
-    let { main, mainDot, orbit, press, pressExplosion, pressDot } = stats;
+function boomerParagonBloonology(stats: LevelledParagonStats): string {
+    const { main, mainDot, orbit, press, pressExplosion, pressDot } = stats;
 
-    let desc = `60r
+    const desc = `60r
 *glaive*- ${attackDescription(main)}, normal, camo
     - can jump to a nearby target after hitting
         - unlimited jump distance
@@ -405,10 +424,10 @@ function boomerParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function ninjaParagonBloonology(stats) {
-    let { shuriken, fbomb, blues, sbomb, sbombSplash } = stats;
+function ninjaParagonBloonology(stats: LevelledParagonStats): string {
+    const { shuriken, fbomb, blues, sbomb, sbombSplash } = stats;
 
-    let desc = `70r
+    const desc = `70r
 *shuriken*- ${attackDescription(shuriken)}, 8j, normal, camo
     - ${extraDamageDescription(shuriken)}
     - 15% chance to send non-blimps back 100-150 units
@@ -442,10 +461,10 @@ function ninjaParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function buccParagonBloonology(stats) {
-    let { cannonball, plasmaDarts, darts, missile, ability } = stats;
+function buccParagonBloonology(stats: LevelledParagonStats): string {
+    const { cannonball, plasmaDarts, darts, missile, ability } = stats;
 
-    let desc = `60r
+    const desc = `60r
 *battery*- 3 sets of *cannonball* (effective 9j) and *plasma-dart* (effective 18j) per side, each with a 180° field of view
     *cannonball*- ${attackDescription(cannonball)}, 3j, normal, camo
         - 40 blast radius
@@ -482,10 +501,10 @@ provides two platforms that can each accomodate 1 small or medium footprint land
     return cleanBloonology(desc);
 }
 
-function engiParagonBloonology(stats) {
-    let { nailGuns, megaExplosion, endpoint, beam, modExplosion, modPlasma, plasma, missile, explosion, megaSentry, powerGlove } = stats;
+function engiParagonBloonology(stats: LevelledParagonStats): string {
+    const { nailGuns, megaExplosion, endpoint, beam, modExplosion, modPlasma, plasma, missile, explosion, megaSentry, powerGlove } = stats;
 
-    let desc = `70r
+    const desc = `70r
 *nail-gun*- ${attackDescription(nailGuns)}, 3j, normal, camo
     - stuns bloons for 5s
     - gets +30% attack speed at the end of each round
@@ -541,10 +560,10 @@ function engiParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function aceParagonBloonology(stats) {
-    let { radial, radialExplosion, seeking, seekingExplosion, forward, carpet } = stats;
+function aceParagonBloonology(stats: LevelledParagonStats): string {
+    const { radial, radialExplosion, seeking, seekingExplosion, forward, carpet } = stats;
 
-    let desc = `∞r
+    const desc = `∞r
     - dummy 22r
 *radial-dart*- ${attackDescription(radial)}, 12j, normal, camo
     - creates *dart-explosion* when out of pierce
@@ -573,10 +592,10 @@ function aceParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function wizParagonBloonology(stats) {
-    let { arcane, drain, flamethrower, wof, flame, fireball, metamorphosis, explosion, burn, zomg, bfb } = stats;
+function wizParagonBloonology(stats: LevelledParagonStats): string {
+    const { arcane, drain, flamethrower, wof, flame, fireball, metamorphosis, explosion, burn, zomg, bfb } = stats;
 
-    let desc = `80r
+    const desc = `80r
 *mana-graveyard*- 100,000 mana capacity
     - 50%s on all attacks except *phoenix* when at least 50,000 mana is left
 
@@ -629,10 +648,10 @@ function wizParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function subParagonBloonology(stats) {
-    let { aura, preemptive, explosion, dart, airburst, strike, aftershock, fallout } = stats;
+function subParagonBloonology(stats: LevelledParagonStats): string {
+    const { aura, preemptive, explosion, dart, airburst, strike, aftershock, fallout } = stats;
 
-    let desc = `52r
+    const desc = `52r
 ### SUBMERGED
 *radiation*- ${attackDescription(aura)}, 0.28s, normal, removes camo and regrow
     - zone, 52r
@@ -670,10 +689,10 @@ function subParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function tackParagonBloonology(stats) {
-    let { blade, tack, eruption, meteor, fireball } = stats;
+function tackParagonBloonology(stats: LevelledParagonStats): string {
+    const { blade, tack, eruption, meteor, fireball } = stats;
 
-    let desc = `42.3r
+    const desc = `42.3r
 *blade*- ${attackDescription(blade)}, 4j, normal
     - emits *tack*s when out of pierce or expired
         - *tack*- ${attackDescription(tack)}, 6j, normal
@@ -694,10 +713,10 @@ function tackParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function spacParagonBloonology(stats) {
-    let { mine, mineExplosion, spike, carpet, burst, spikeageddon, spikeExplosion, spikeBall } = stats;
+function spacParagonBloonology(stats: LevelledParagonStats): string {
+    const { mine, mineExplosion, spike, carpet, burst, spikeageddon, spikeExplosion, spikeBall } = stats;
 
-    let desc = `42r
+    const desc = `42r
 *mine*- ${attackDescription(mine)}, normal, camo
     - creates *mine-explosion* for each pierce used and on expiry
         - *mine-explosion*- ${attackDescription(mineExplosion)}, normal, camo
@@ -731,7 +750,8 @@ function spacParagonBloonology(stats) {
     return cleanBloonology(desc);
 }
 
-function sacrificeToLevel(cash) {
+/** The level (0-9) of a temple sacrifice of `cash` worth of towers from one category */
+function sacrificeToLevel(cash: number): number {
     const sacrificeThresholds = [300, 1001, 2001, 4001, 7501, 10001, 15001, 25001, 50001];
     for (let i = 0; i < 9; i++) {
         if (cash < sacrificeThresholds[i]) return i;
@@ -739,13 +759,13 @@ function sacrificeToLevel(cash) {
     return 9;
 }
 
-function primaryTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = false) {
-    let level1 = sacrificeToLevel(sacrifice1);
-    let level2 = sacrificeToLevel(sacrifice2);
-    let dmgMult = vtsg ? 2 : 1;
-    let lines = [];
-    let { glaive: glaive1, buff: buff1, blade: blade1 } = templeStats.primary[level1];
-    let { glaive: glaive2, buff: buff2, blade: blade2 } = templeStats.primary[level2];
+function primaryTempleBloonology(upgrade: TempleUpgrade, sacrifice1: number, sacrifice2 = 0, vtsg = false): string[] {
+    const level1 = sacrificeToLevel(sacrifice1);
+    const level2 = sacrificeToLevel(sacrifice2);
+    const dmgMult = vtsg ? 2 : 1;
+    const lines: string[] = [];
+    const { glaive: glaive1, buff: buff1, blade: blade1 } = templeStats.primary[level1];
+    const { glaive: glaive2, buff: buff2, blade: blade2 } = templeStats.primary[level2];
 
     if (level1 > 0 && level2 > 0) {
         lines.push("### Primary Sacrifice");
@@ -754,7 +774,7 @@ function primaryTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = fal
     }
 
     if (buff1 || buff2) {
-        let rate = (buff1 ? buff1.rate : 1) * (buff2 ? buff2.rate : 1);
+        const rate = (buff1 ? buff1.rate : 1) * (buff2 ? buff2.rate : 1);
         lines.push(`*sun-blast* gets ${round(rate * 100)}%s (${round(templeStats.base[upgrade].rate * rate, 4)}s)`);
     }
 
@@ -771,13 +791,13 @@ function primaryTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = fal
     return lines;
 }
 
-function militaryTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = false) {
-    let level1 = sacrificeToLevel(sacrifice1);
-    let level2 = sacrificeToLevel(sacrifice2);
-    let dmgMult = vtsg ? 2 : 1;
-    let lines = [];
-    let { missile: missile1, buff: buff1, spectre: spectre1 } = templeStats.military[level1];
-    let { missile: missile2, buff: buff2, spectre: spectre2 } = templeStats.military[level2];
+function militaryTempleBloonology(upgrade: TempleUpgrade, sacrifice1: number, sacrifice2 = 0, vtsg = false): string[] {
+    const level1 = sacrificeToLevel(sacrifice1);
+    const level2 = sacrificeToLevel(sacrifice2);
+    const dmgMult = vtsg ? 2 : 1;
+    const lines: string[] = [];
+    const { missile: missile1, buff: buff1, spectre: spectre1 } = templeStats.military[level1];
+    const { missile: missile2, buff: buff2, spectre: spectre2 } = templeStats.military[level2];
 
     if (level1 > 0 && level2 > 0) {
         lines.push("### Military Sacrifice");
@@ -786,13 +806,13 @@ function militaryTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = fa
     }
 
     if (buff1 || buff2) {
-        let damage = (buff1 ? buff1.damage : 0) + (buff2 ? buff2.damage : 0);
-        let projSpeed = (buff1 ? buff1.projSpeed : 1) * (buff2 ? buff2.projSpeed : 1);
+        const damage = (buff1 ? buff1.damage : 0) + (buff2 ? buff2.damage : 0);
+        const projSpeed = (buff1 ? buff1.projSpeed : 1) * (buff2 ? buff2.projSpeed : 1);
         lines.push(`*sun-blast* gets +${damage}d (${(templeStats.base[upgrade].damage + damage) * dmgMult}d), ${round(projSpeed * 100)}% projectile speed`);
     }
 
-    let damage = templeStats.base.missile.damage * dmgMult;
-    let md = templeStats.base.missile.md * dmgMult;
+    const damage = templeStats.base.missile.damage * dmgMult;
+    const md = templeStats.base.missile.md * dmgMult;
     if (missile1) lines.push(`*missile1*- ${damage}d, +${md}md (${damage + md}), 50p, ${missile1.rate}s, normal
     - ∞r
     - only targets blimps
@@ -815,14 +835,14 @@ function militaryTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = fa
     return lines;
 }
 
-function magicTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = false) {
-    let level1 = sacrificeToLevel(sacrifice1);
-    let level2 = sacrificeToLevel(sacrifice2);
-    let dmgMult = vtsg ? 2 : 1;
-    let avatarDamage = templeStats.base.avatar.damage + (vtsg ? 25 : 0);
-    let lines = [];
-    let { bolt: bolt1, buff: buff1, push: push1 } = templeStats.magic[level1];
-    let { bolt: bolt2, buff: buff2, push: push2 } = templeStats.magic[level2];
+function magicTempleBloonology(upgrade: TempleUpgrade, sacrifice1: number, sacrifice2 = 0, vtsg = false): string[] {
+    const level1 = sacrificeToLevel(sacrifice1);
+    const level2 = sacrificeToLevel(sacrifice2);
+    const dmgMult = vtsg ? 2 : 1;
+    const avatarDamage = templeStats.base.avatar.damage + (vtsg ? 25 : 0);
+    const lines: string[] = [];
+    const { bolt: bolt1, buff: buff1, push: push1 } = templeStats.magic[level1];
+    const { bolt: bolt2, buff: buff2, push: push2 } = templeStats.magic[level2];
 
     if (level1 > 0 && level2 > 0) {
         lines.push("### Magic Sacrifice");
@@ -831,9 +851,9 @@ function magicTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = false
     }
 
     if (buff1 || buff2) {
-        let pierce = (buff1 ? buff1.pierce : 0) + (buff2 ? buff2.pierce : 0);
-        let projSize = (buff1 ? buff1.projSize : 1) * (buff2 ? buff2.projSize : 1);
-        let wind = (buff1 && buff1.wind ? buff1.wind : 0) + (buff2 && buff2.wind ? buff2.wind : 0);
+        const pierce = (buff1 ? buff1.pierce : 0) + (buff2 ? buff2.pierce : 0);
+        const projSize = (buff1 ? buff1.projSize : 1) * (buff2 ? buff2.projSize : 1);
+        const wind = (buff1 && buff1.wind ? buff1.wind : 0) + (buff2 && buff2.wind ? buff2.wind : 0);
         lines.push(`*sun-blast* gets +${pierce}p (${templeStats.base[upgrade].pierce + pierce}p), ${round(projSize * 100)}% projectile size`);
         if (wind > 0) lines.push(`*sun-blast* gets ${round(wind * 100)}% chance to blow back non-blimps 33-d units
     - d is the distance of the bloon from the entrance`);
@@ -868,12 +888,12 @@ function magicTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0, vtsg = false
     return lines;
 }
 
-function supportTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0) {
-    let level1 = sacrificeToLevel(sacrifice1);
-    let level2 = sacrificeToLevel(sacrifice2);
-    let lines = [];
-    let { eor: eor1, buff: buff1 } = templeStats.support[level1];
-    let { eor: eor2, buff: buff2 } = templeStats.support[level2];
+function supportTempleBloonology(upgrade: TempleUpgrade, sacrifice1: number, sacrifice2 = 0): string[] {
+    const level1 = sacrificeToLevel(sacrifice1);
+    const level2 = sacrificeToLevel(sacrifice2);
+    const lines: string[] = [];
+    const { eor: eor1, buff: buff1 } = templeStats.support[level1];
+    const { eor: eor2, buff: buff2 } = templeStats.support[level2];
 
     if (level1 > 0 && level2 > 0) {
         lines.push(`### Support Sacrifice
@@ -887,11 +907,11 @@ function supportTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0) {
     if (eor2) lines.push(`*income2*- $${eor2.income} income at the end of each round`);
 
     if (buff1 || buff2) {
-        let income = (buff1 && buff1.income ? buff1.income : 0) + (buff2 && buff2.income ? buff2.income : 0);
-        let damage = (buff1 && buff1.damage ? buff1.damage : 0) + (buff2 && buff2.damage ? buff2.damage : 0);
-        let pierce = (buff1 && buff1.pierce ? buff1.pierce : 0) + (buff2 && buff2.pierce ? buff2.pierce : 0);
-        let rate = (buff1 && buff1.rate ? buff1.rate : 1) * (buff2 && buff2.rate ? buff2.rate : 1);
-        let range = (buff1 && buff1.range ? buff1.range : 1) * (buff2 && buff2.range ? buff2.range : 1);
+        const income = (buff1 && buff1.income ? buff1.income : 0) + (buff2 && buff2.income ? buff2.income : 0);
+        const damage = (buff1 && buff1.damage ? buff1.damage : 0) + (buff2 && buff2.damage ? buff2.damage : 0);
+        const pierce = (buff1 && buff1.pierce ? buff1.pierce : 0) + (buff2 && buff2.pierce ? buff2.pierce : 0);
+        const rate = (buff1 && buff1.rate ? buff1.rate : 1) * (buff2 && buff2.rate ? buff2.rate : 1);
+        const range = (buff1 && buff1.range ? buff1.range : 1) * (buff2 && buff2.range ? buff2.range : 1);
 
         if (income > 0) lines.push(`*income-buff*- +${round(income * 100)}% income from bloons popped in range`);
         if (buff1) lines.push(`*${buff1.discount === 0.1 ? "minor" : "major"}-discount1*- ${round(buff1.discount * 100)}% discount on all towers and upgrades up to tier 5 in range
@@ -911,7 +931,23 @@ function supportTempleBloonology(upgrade, sacrifice1, sacrifice2 = 0) {
     return lines;
 }
 
-function templeBloonology(upgrade, primary1, military1, magic1, support1, primary2 = 0, military2 = 0, magic2 = 0, support2 = 0, vtsg = false) {
+/**
+ * The changes to a temple from its sacrifices
+ * @param primary1 etc. cash worth of each category sacrificed to the first temple; primary2 etc. to the second (for a True Sun God)
+ * @param vtsg whether it is the Vengeful True Sun God
+ */
+function templeBloonology(
+    upgrade: TempleUpgrade,
+    primary1: number,
+    military1: number,
+    magic1: number,
+    support1: number,
+    primary2 = 0,
+    military2 = 0,
+    magic2 = 0,
+    support2 = 0,
+    vtsg = false
+): string {
     return cleanBloonology([
         ...primaryTempleBloonology(upgrade, primary1, primary2, vtsg),
         ...militaryTempleBloonology(upgrade, military1, military2, vtsg),
@@ -920,11 +956,10 @@ function templeBloonology(upgrade, primary1, military1, magic1, support1, primar
     ].join("\n"));
 }
 
-module.exports = {
+export {
     TOWER_NAME_TO_BLOONOLOGY_LINK,
-    TOWER_NAME_TO_BLOONOLOGY_LINK_B2,
     HERO_NAME_TO_BLOONOLOGY_LINK,
-    towerUpgradesToFullBloonology,
+    towerUpgradeToFullBloonology,
     towerUpgradesToSplitBloonology,
     heroLevelToBloonology,
     heroSummary,
@@ -939,6 +974,6 @@ module.exports = {
     subParagonBloonology,
     tackParagonBloonology,
     spacParagonBloonology,
-    templeBloonology,
-    corvusBloonology
+    templeBloonology
 };
+export type { TowerUpgradeBloonology, VersionedBloonology, LevelledParagonStats, TempleUpgrade };
